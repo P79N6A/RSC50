@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+	<class name="com.shrcn.tool.rtu.model.BaseDcaPoint" abstract="true">
+		<id name="id" type="int" unsaved-value="0">
+			<column name="ID" />
+			<generator class="sequence">
+				<param name="sequence">DcaPoint_Seq</param>
+			</generator>
+		</id>
+		<property name="saddr" type="int">
+			<column name="SADDR" />
+		</property>
+		<property name="description" type="string">
+			<column name="DESCRIPTION" length="300" />
+		</property>
+		<property name="dcaindex" type="int">
+			<column name="DCAINDEX" />
+		</property>
+		<property name="dattype" type="string">
+			<column name="DATTYPE" />
+		</property>
+		<property name="val" type="string">
+			<column name="VAL" />
+		</property>
+		<property name="ref" type="string">
+			<column name="REF" length="200" />
+		</property>
+		<property name="fc" type="string">
+			<column name="FC" length="2" />
+		</property>
+		<property name="subzone" type="int">
+			<column name="SUBZONE" />
+		</property>
+		<property name="sharednums" type="int">
+			<column name="SHAREDNUMS" />
+		</property>
+		<property name="pointtype" type="int">
+			<column name="POINTTYPE" />
+		</property>
+		<property name="md5" type="string">
+			<column name="MD5" length="32" />
+		</property>
+		<property name="groupID" type="int">
+			<column name="GROUPID" />
+		</property>
+		<property name="objectID" type="int">
+			<column name="OBJECTID" />
+		</property>
+		<property name="ratio" type="float">
+			<column name="RATIO" />
+		</property>
+		<property name="bit" type="int">
+			<column name="BITP" />
+		</property>
+		<property name="len" type="int">
+			<column name="LEN" />
+		</property>
+		<property name="bytes" type="string">
+			<column name="BYTES" />
+		</property>
+		<property name="type" type="string">
+			<column name="TYPE" />
+		</property>
+		<property name="threshold" type="float">
+			<column name="THRESHOLD" />
+		</property>
+		<property name="entryID" type="int">
+			<column name="ENTRYID" />
+		</property>
+		<property name="fun" type="int">
+			<column name="FUN" />
+		</property>
+		<property name="inf" type="int">
+			<column name="INF" />
+		</property>
+		<property name="infoType" type="int">
+			<column name="INFOTYPE" />
+		</property>
+		<property name="pointNum" type="int">
+			<column name="POINTNUM" />
+		</property>
+		<property name="reporttype" type="int">
+			<column name="REPORTTYPE" />
+		</property>
+		<property name="adiotype" type="string">
+			<column name="ADIOTYPE" length="32" />
+		</property>
+		<property name="used" type="int">
+			<column name="USED" />
+		</property>
+
+		<many-to-one name="ld" column="LDID"
+			class="com.shrcn.tool.rtu.model.TDcald" not-null="false" lazy="false">
+		</many-to-one>
+		<many-to-one name="group" column="GRPID"
+			class="com.shrcn.tool.rtu.model.TDcaGroup" not-null="false" lazy="false">
+		</many-to-one>
+		<many-to-one name="obj" column="OBJID"
+			class="com.shrcn.tool.rtu.model.TDcaObject" not-null="false" lazy="false">
+		</many-to-one>
+		<many-to-one name="ied" column="IEDID"
+			class="com.shrcn.tool.rtu.model.BaseDcaied" not-null="false" lazy="proxy">
+		</many-to-one>
+
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaMx"
+			table="T_DCA_MX">
+			<property name="registerq" type="string">
+				<column name="REGISTERQ" length="10" />
+			</property>
+			<property name="registert" type="string">
+				<column name="REGISTERT" length="10" />
+			</property>
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" length="20" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" length="20" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" length="20" />
+			</property>
+			<property name="lowLimit" type="string">
+				<column name="LOWLIMIT" length="20" />
+			</property>
+			<property name="highLimit" type="string">
+				<column name="HIGHLIMIT" length="20" />
+			</property>
+			<property name="qid" type="int">
+				<column name="QID" />
+			</property>
+			<property name="tid" type="int">
+				<column name="TID" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaSt"
+			table="T_DCA_ST">
+			<property name="pointmode" type="string">
+				<column name="POINTMODE" length="20" />
+			</property>
+			<property name="registerq" type="string">
+				<column name="REGISTERQ" length="10" />
+			</property>
+			<property name="registert" type="string">
+				<column name="REGISTERT" length="10" />
+			</property>
+			<property name="qid" type="int">
+				<column name="QID" />
+			</property>
+			<property name="tid" type="int">
+				<column name="TID" />
+			</property>
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" length="20" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" length="20" />
+			</property>
+			<property name="lowLimit" type="string">
+				<column name="LOWLIMIT" length="20" />
+			</property>
+			<property name="highLimit" type="string">
+				<column name="HIGHLIMIT" length="20" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaCo"
+			table="T_DCA_CO">
+			<property name="ctlmode" type="string">
+				<column name="CTLMODE" length="100" />
+			</property>
+			<property name="sbotimeout" type="string">
+				<column name="SBOTIMEOUT" length="20" />
+			</property>
+			<property name="test" type="int">
+				<column name="TEST" />
+			</property>
+			<property name="sync" type="int">
+				<column name="SYNC" />
+			</property>
+			<property name="lock" type="int">
+				<column name="locker" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaSp"
+			table="T_DCA_SP">
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaSg"
+			table="T_DCA_SG">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" length="20" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" length="20" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" length="20" />
+			</property>
+			<property name="ctlmode" type="string">
+				<column name="CTLMODE" length="100" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaSe"
+			table="T_DCA_SE">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" length="20" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" length="20" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" length="20" />
+			</property>
+		</union-subclass>
+	</class>
+</hibernate-mapping>

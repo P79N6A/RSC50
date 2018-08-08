@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDcaChannel" abstract="true">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="sequence">
+            	<param name="sequence">Common_Seq</param>
+            </generator>
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="100" />
+        </property>
+        <property name="iedOffset" type="int">
+            <column name="iedOffset" />
+        </property>
+        <property name="iedNumber" type="int">
+            <column name="iedNumber" />
+        </property>
+		<property name="bufferSize" type="string">
+			<column name="BUFFERSIZE" />
+		</property>
+		<property name="requestIntervel" type="string">
+			<column name="REQUESTINTERVEL" />
+		</property>
+		<property name="respTimeout" type="string">
+			<column name="RESPTIMEOUT" />
+		</property>
+		<property name="endian" type="string">
+            <column name="ENDIAN" />
+        </property>
+       <set name="ieds" inverse="true" cascade="save-update" lazy="false">
+        	<key column="CHNID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.BaseDcaied" />
+        </set>
+	     
+        <many-to-one name="dca" column="DCAID" class="com.shrcn.tool.rtu.model.TDca"
+        	not-null="true" lazy="false">
+        </many-to-one>
+        
+        <union-subclass name="com.shrcn.tool.rtu.model.TDcaCom" table="T_DCACOM">
+        	<property name="comType" type="string">
+	            <column name="COMTYPE" />
+	        </property>
+	        <property name="procType" type="string">
+	            <column name="PROCTYPE" />
+	        </property>
+	        <property name="localAddr" type="string">
+	            <column name="LOCALADDR" />
+	        </property>
+	        <property name="portName" type="string">
+	            <column name="PORTNAME" />
+	        </property>
+	        <property name="baudRate" type="string">
+	            <column name="BAUDRATE" />
+	        </property>
+	        <property name="dataBit" type="string">
+	            <column name="DATABIT" />
+	        </property>
+	        <property name="stopBit" type="string">
+	            <column name="STOPBIT" />
+	        </property>
+	        <property name="parity" type="string">
+	            <column name="PARITY" />
+	        </property>
+	        <property name="tmTran" type="string">
+	            <column name="TMTRAN" />
+	        </property>
+	        <property name="tmRecv" type="string">
+	            <column name="TMRECV" />
+	        </property>
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TDcaNet" table="T_DCANET">
+        	<property name="netType" type="int">
+				<column name="NETTYPE" />
+			</property>
+			<property name="localAddr" type="string">
+				<column name="LOCALADDR" />
+			</property>
+			<property name="procType" type="string">
+				<column name="PROCTYPE" />
+			</property>
+			<property name="ipA" type="string">
+				<column name="IPA" />
+			</property>
+			<property name="ipB" type="string">
+				<column name="IPB" />
+			</property>
+			<property name="localIP" type="string">
+				<column name="LOCALIP" />
+			</property>
+			<property name="tcpSC" type="string">
+				<column name="TCPSC" />
+			</property>
+			<property name="udpSC" type="string">
+				<column name="UDPSC" />
+			</property>
+			<property name="tcpPort" type="string">
+				<column name="TCPPORT" />
+			</property>
+			<property name="udpRemotePort" type="string">
+				<column name="UDPREMOTEPORT" />
+			</property>
+			<property name="udpLocalPort" type="string">
+				<column name="UDPLOCALPORT" />
+			</property>
+			<property name="tmTran" type="string">
+				<column name="TMTRAN" />
+			</property>
+			<property name="tmRecv" type="string">
+				<column name="TMRECV" />
+			</property>
+			<property name="heartbeat" type="string">
+				<column name="HEARTBEAT" length="8" />
+			</property>
+			<property name="serverIP" type="string">
+				<column name="SERVERIP" length="15" />
+			</property>
+			<property name="serverPort" type="integer">
+				<column name="SERVERPORT"/>
+			</property>
+        </union-subclass>
+    </class>
+</hibernate-mapping>

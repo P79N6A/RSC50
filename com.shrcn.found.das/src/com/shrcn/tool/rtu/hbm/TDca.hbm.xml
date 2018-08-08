@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDca" table="T_DCA" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="dcaIndex" type="int">
+            <column name="DCAINDEX" />
+        </property>
+        <property name="dcaType" type="int">
+            <column name="DCATYPE" />
+        </property>
+        <property name="iedNumber" type="int">
+            <column name="IEDNUMBER" />
+        </property>
+        <property name="iedOffset" type="int">
+            <column name="IEDOFFSET" />
+        </property>
+         <property name="statusPointOfGUI" type="int">
+            <column name="STATUSPOINTOFGUI" />
+        </property>
+        <property name="wfskType" type="int">
+            <column name="WFSKTYPE" />
+        </property>
+        <property name="isSgpotWfsk" type="int">
+            <column name="ISSGPOTWFSK" />
+        </property>
+  		<set name="ieds" inverse="true" cascade="save-update" lazy="false">
+        	<key column="DCAID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.BaseDcaied" />
+        </set>
+  		<set name="coms" inverse="true" cascade="save-update"
+        	table="T_DCACOM" lazy="false">
+        	<key column="DCAID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaCom" />
+        </set>
+  		<set name="nets" inverse="true" cascade="save-update"
+        	table="T_DCANET" lazy="false">
+        	<key column="DCAID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaNet" />
+        </set>
+        <many-to-one unique="true" column="APPID" access="field" name="app" lazy="false"/>
+    </class>
+</hibernate-mapping>

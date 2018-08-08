@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1059SgfcdaEntity" table="tb1059_sgfcda" schema="rscapp">
+        <id name="f1059Code">
+            <column name="F1059_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1059RefAddr">
+            <column name="F1059_RefAddr" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1059Index">
+            <column name="F1059_Index" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1059DataType">
+            <column name="F1059_DataType" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1059Desc">
+            <column name="F1059_Desc" sql-type="char" length="96"/>
+        </property>
+        <property name="f1059Unit">
+            <column name="F1059_Unit" sql-type="char" length="24"/>
+        </property>
+        <property name="f1059StepSize">
+            <column name="F1059_StepSize" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1059ValueMin">
+            <column name="F1059_ValueMin" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1059ValueMax">
+            <column name="F1059_ValueMax" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1059BaseValue">
+            <column name="F1059_BaseValue" sql-type="float" precision="12"/>
+        </property>
+        <many-to-one name="tb1057SgcbByF1057Code" class="com.synet.tool.rsc.model.Tb1057SgcbEntity">
+            <column name="F1057_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

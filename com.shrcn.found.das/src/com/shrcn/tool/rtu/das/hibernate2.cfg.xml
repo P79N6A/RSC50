@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">
+			org.apache.derby.jdbc.EmbeddedDriver
+		</property>
+		<property name="hibernate.connection.url">
+			jdbc:derby:./rtudata/rtuData0;create=true
+		</property>
+		<property name="hibernate.dialect">
+			<!-- org.hibernate.dialect.DerbyDialect -->
+			com.shrcn.tool.found.das.SHRDerbyDialect
+		</property>
+		<property name="hibernate.connection.username">app</property>
+		<property name="hibernate.connection.password">123</property>
+		<property name="show_sql">false</property>
+		<property name="hibernate.jdbc.batch_size">50</property>
+		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property> 
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TApplication.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TApptype.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TProperty.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TPropertyvalue.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDca.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseDcaied.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDcald.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDcarcb2.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TCommCfg.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseDcaPoint.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDictionary.hbm.xml"/>
+
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseDpaPoint2.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseCalcPoint2.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseCalcExpr2.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDpaobject2.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TMasterip.hbm.xml"/>
+
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDcaPointRef.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/BaseDcaChannel.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDcaGroup.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDcaObject.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TBayInfo.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TInterLock.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TMasterApp.hbm.xml"/>
+        <mapping resource="com/shrcn/tool/rtu/hbm/BaseDpaChannel.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDpamaster2.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TDpalogicied2.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TLocalip2.hbm.xml"/>
+		
+		<mapping resource="com/shrcn/tool/rtu/hbm/TNetworkCards.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TRoute.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TCollection.hbm.xml"/>
+		<mapping resource="com/shrcn/tool/rtu/hbm/TMasterAppPropertyValue.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>

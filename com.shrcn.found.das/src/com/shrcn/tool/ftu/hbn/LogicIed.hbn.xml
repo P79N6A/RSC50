@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.ftu.model.LogicIed" table="T_LogicIed" schema="gzapp">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="iedName" type="string">
+            <column name="IEDNAME" />
+        </property>
+        <property name="asduAddress" type="int">
+            <column name="ASDUADDRESS" />
+        </property>
+        <property name="objectOffset" type="int">
+            <column name="OBJECTOFFSET" />
+        </property>
+        <property name="objectNumber" type="int">
+            <column name="OBJECTNUMBER" />
+        </property>
+    </class>
+</hibernate-mapping>

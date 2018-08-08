@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TCommcfg" table="T_COMMCFG" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="apname" type="string">
+            <column name="APNAME" />
+        </property>
+        <property name="ipaddr" type="string">
+            <column name="IPADDR" />
+        </property>
+         <property name="ipbaddr" type="string">
+            <column name="IPBADDR" />
+        </property>
+        <property name="port" type="string">
+            <column name="PORT" />
+        </property>
+        <property name="doublenet" type="string">
+            <column name="DOUBLENET" />
+        </property>
+       <property name="aptitle" type="string">
+            <column name="APTITLE" />
+        </property>
+        <property name="aequalifier" type="string">
+            <column name="AEQUALIFIER" />
+        </property>
+        <property name="psel" type="string">
+            <column name="PSEL" />
+        </property>
+        <property name="ssel" type="string">
+            <column name="SSEL" />
+        </property>
+         <property name="tsel" type="string">
+            <column name="TSEL" />
+        </property>
+        <property name="cremode" type="string">
+            <column name="CREMODE" />
+        </property>
+        
+        <many-to-one name="ied" column="IEDID" class="com.shrcn.tool.rtu.model.TDcaied"
+        	not-null="true" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

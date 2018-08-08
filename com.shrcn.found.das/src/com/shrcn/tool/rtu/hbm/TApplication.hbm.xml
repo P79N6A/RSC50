@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TApplication" table="T_APPLICATION" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="sequence">
+            	<param name="sequence">Common_Seq</param> 
+            </generator>
+        </id>
+        <property name="index" type="int">
+            <column name="INDEX" />
+        </property>
+        <property name="runlevel" type="string">
+            <column name="RUNLEVEL" />
+        </property>
+        <property name="runmode" type="string">
+            <column name="RUNMODE" />
+        </property>
+        <property name="mxnums" type="int">
+            <column name="MXNUMS" />
+        </property>
+        <property name="stnums" type="int">
+            <column name="STNUMS" />
+        </property>
+        <property name="conums" type="int">
+            <column name="CONUMS" />
+        </property>
+        <property name="spnums" type="int">
+            <column name="SPNUMS" />
+        </property>
+        <property name="sgnums" type="int">
+            <column name="SGNUMS" />
+        </property>
+        <property name="senums" type="int">
+            <column name="SENUMS" />
+        </property>
+        <many-to-one
+	        name="apptype"
+	        class="com.shrcn.tool.rtu.model.TApptype"
+	        column="APPTYPEID"
+	        unique="true"
+	        lazy="false"
+        />
+        <set name="properties" inverse="true" cascade="save-update"
+        	table="T_PROPERTYVALUE" lazy="false">
+        	<key column="APPID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TPropertyvalue" />
+        </set>
+    </class>
+</hibernate-mapping>

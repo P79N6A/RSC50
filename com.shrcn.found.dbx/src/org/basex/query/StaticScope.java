@@ -1,0 +1,107 @@
+package org.basex.query;
+
+import java.io.IOException;
+
+import org.basex.io.IOContent;
+import org.basex.io.in.NewlineInput;
+import org.basex.query.expr.Expr;
+import org.basex.query.expr.ExprInfo;
+import org.basex.query.func.inspect.InspectText;
+import org.basex.query.var.VarScope;
+import org.basex.util.InputInfo;
+import org.basex.util.Token;
+import org.basex.util.TokenBuilder;
+import org.basex.util.Util;
+import org.basex.util.hash.TokenObjMap;
+import org.basex.util.list.TokenList;
+
+/**
+ * Superclass for static functions, variables and the main expression.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Leo Woerteler
+ */
+public abstract class StaticScope extends ExprInfo implements Scope {
+  /** Static context. */
+  public final StaticContext sc;
+  /** Variable scope. */
+  public final VarScope vs;
+  /** Input info. */
+  public final InputInfo info;
+
+  /** Root expression of this declaration ({@code null} if this is an external function). */
+  public Expr expr;
+  /** Compilation flag. */
+  protected boolean compiled;
+  /** Documentation. */
+  private final byte[] doc;
+
+  /**
+   * Constructor.
+   * @param sc static context
+   * @param vs variable scope (can be {@code null})
+   * @param doc xqdoc documentation (can be {@code null} or empty)
+   * @param info input info (can be {@code null})
+   */
+  StaticScope(final StaticContext sc, final VarScope vs, final String doc, final InputInfo info) {
+    this.sc = sc;
+    this.vs = vs;
+    this.doc = doc != null && !doc.isEmpty() ? Token.token(doc) : null;
+    this.info = info;
+  }
+
+  @Override
+  public final boolean compiled() {
+    return compiled;
+  }
+
+  /**
+   * Returns a map with all documentation tags found for this scope or {@code null} if
+   * no documentation exists. The main description is flagged with the "description" key.
+   * The supported tags are defined in {@link InspectText#DOC_TAGS} (other tags will be
+   * included in the map, too).
+   * @return documentation
+   */
+  public final TokenObjMap<TokenList> doc() {
+    if(doc == null) return null;
+
+    final TokenObjMap<TokenList> map = new TokenObjMap<>();
+    byte[] key = null;
+    final TokenBuilder val = new TokenBuilder();
+    final TokenBuilder line = new TokenBuilder();
+    try {
+      final NewlineInput nli = new NewlineInput(new IOContent(doc));
+      while(nli.readLine(line)) {
+        String l = line.toString().replaceAll("^\\s*: ?", "");
+        if(l.startsWith("@")) {
+          add(key, val, map);
+          key = Token.token(l.replaceAll("^@(\\w*).*", "$1"));
+          l = l.replaceAll("^@\\w+ *", "");
+        }
+        val.add(l).add('\n');
+      }
+    } catch(final IOException ex) {
+      throw Util.notExpected(ex);
+    }
+    add(key, val, map);
+    return map;
+  }
+
+  /**
+   * Adds a key and a value to the specified map.
+   * @param key key
+   * @param val value
+   * @param map map
+   */
+  private static void add(final byte[] key, final TokenBuilder val,
+      final TokenObjMap<TokenList> map) {
+
+    final byte[] k = key == null ? InspectText.DOC_TAGS[0] : key;
+    TokenList tl = map.get(k);
+    if(tl == null) {
+      tl = new TokenList();
+      map.put(k, tl);
+    }
+    tl.add(val.trim().next());
+  }
+}

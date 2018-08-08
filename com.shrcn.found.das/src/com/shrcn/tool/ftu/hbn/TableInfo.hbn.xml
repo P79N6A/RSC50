@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.ftu.model.TableInfo" table="T_TableInfo" schema="gzapp">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="tableName" type="string">
+            <column name="TABLENAME" />
+        </property>
+        <property name="tableType" type="string">
+            <column name="TABLETYPE" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="defaultRecordNum" type="string">
+            <column name="DEFAULTRECORDNUM" />
+        </property>
+        <property name="maxRecordNum" type="string">
+            <column name="MAXRECORDNUM" />
+        </property>
+        <property name="minRecordNum" type="string">
+            <column name="MINRECORDNUM" />
+        </property>
+    </class>
+</hibernate-mapping>

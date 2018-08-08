@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.BaseCalcPoint" abstract="true">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="sequence">
+            	<param name="sequence">DpaPoint_Seq</param>
+            </generator>
+        </id>
+        <property name="varnum" type="int">
+            <column name="VARNUM" />
+        </property>
+        <property name="varname" type="string">
+            <column name="VARNAME" />
+        </property>
+        <property name="dbtype" type="string">
+            <column name="DBTYPE" length="2"/>
+        </property>
+        <property name="ldname" type="string">
+            <column name="LDNAME" />
+        </property>
+        
+        <many-to-one name="mx" column="MXID" class="com.shrcn.tool.rtu.model.TDcaMx"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        <many-to-one name="st" column="STID" class="com.shrcn.tool.rtu.model.TDcaSt"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        <many-to-one name="co" column="COID" class="com.shrcn.tool.rtu.model.TDcaCo"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        
+        <union-subclass name="com.shrcn.tool.rtu.model.TaiPointMap" table="T_aiPointMap">
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TaoPointMap" table="T_aoPointMap">
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TdiPointMap" table="T_diPointMap">
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TdoPointMap" table="T_doPointMap">
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TciPointMap" table="T_ciPointMap">
+        </union-subclass>
+    </class>
+</hibernate-mapping>

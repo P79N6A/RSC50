@@ -1,0 +1,58 @@
+package org.basex.query.expr.ft;
+
+import static org.basex.util.Token.TRUE;
+
+import org.basex.query.CompileContext;
+import org.basex.query.QueryContext;
+import org.basex.query.QueryText;
+import org.basex.query.util.ft.FTMatch;
+import org.basex.query.util.ft.FTStringMatch;
+import org.basex.query.value.node.FElem;
+import org.basex.query.var.Var;
+import org.basex.util.InputInfo;
+import org.basex.util.ft.FTLexer;
+import org.basex.util.hash.IntObjMap;
+
+/**
+ * FTOrder expression.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public final class FTOrder extends FTFilter {
+  /**
+   * Constructor.
+   * @param info input info
+   * @param expr expression
+   */
+  public FTOrder(final InputInfo info, final FTExpr expr) {
+    super(info, expr);
+  }
+
+  @Override
+  protected boolean filter(final QueryContext qc, final FTMatch match, final FTLexer lexer) {
+    int pos = 0, start = 0;
+    for(final FTStringMatch sm : match) {
+      if(sm.exclude || pos == sm.pos) continue;
+      if(start > sm.start) return false;
+      pos = sm.pos;
+      start = sm.start;
+    }
+    return true;
+  }
+
+  @Override
+  public FTExpr copy(final CompileContext cc, final IntObjMap<Var> vm) {
+    return new FTOrder(info, exprs[0].copy(cc, vm));
+  }
+
+  @Override
+  public void plan(final FElem plan) {
+    addPlan(plan, planElem(QueryText.ORDERED, TRUE), exprs);
+  }
+
+  @Override
+  public String toString() {
+    return super.toString() + QueryText.ORDERED;
+  }
+}

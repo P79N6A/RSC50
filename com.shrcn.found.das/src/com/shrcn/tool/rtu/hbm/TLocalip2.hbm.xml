@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TLocalip" table="T_LocalIP" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="localaddress" type="string">
+            <column name="LOCALADDRESS" length="20" />
+        </property>
+        <property name="localport" type="string">
+            <column name="LOCALPORT" length="10" />
+        </property>
+        <property name="standbycloseport" type="string">
+            <column name="STANDBYCLOSEPORT" length="10" />
+        </property>
+        <many-to-one name="masterapp" column="MASTERAPPID" class="com.shrcn.tool.rtu.model.TMasterApp"
+        	not-null="false" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

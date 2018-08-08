@@ -1,0 +1,26 @@
+package org.basex.io.in;
+
+import java.io.IOException;
+
+/**
+ * This class indicates exceptions during input stream processing.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public class InputException extends IOException {
+  /**
+   * Constructor.
+   */
+  InputException() {
+    this("Invalid input, or wrong encoding specified");
+  }
+
+  /**
+   * Constructor.
+   * @param msg error message
+   */
+  InputException(final String msg) {
+    super(msg);
+  }
+}

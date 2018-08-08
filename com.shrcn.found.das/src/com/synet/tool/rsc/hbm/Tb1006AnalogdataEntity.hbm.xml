@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" table="tb1006_analogdata" schema="rscapp">
+        <id name="f1006Code">
+            <column name="F1006_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1006Desc">
+            <column name="F1006_DESC" sql-type="char" length="96"/>
+        </property>
+        <property name="f1006Safelevel">
+            <column name="F1006_SAFELEVEL" sql-type="int"/>
+        </property>
+        <property name="f1011No">
+            <column name="F1011_NO" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Byname">
+            <column name="F1006_BYNAME" sql-type="char" length="24"/>
+        </property>
+        <property name="f0008Name">
+            <column name="F0008_NAME" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f0009Name">
+            <column name="F0009_NAME" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1006Calcflag">
+            <column name="F1006_CALCFLAG" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Picname">
+            <column name="F1006_PICNAME" sql-type="char" length="96"/>
+        </property>
+        <property name="f1006Pdrmode">
+            <column name="F1006_PDRMODE" sql-type="int"/>
+        </property>
+        <property name="f1006K">
+            <column name="F1006_K" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006B">
+            <column name="F1006_B" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006Zerodband">
+            <column name="F1006_ZERODBAND" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006Overflow">
+            <column name="F1006_OVERFLOW" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006Lowflow">
+            <column name="F1006_LOWFLOW" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006Maxinc">
+            <column name="F1006_MAXINC" sql-type="float" precision="12" not-null="true"/>
+        </property>
+        <property name="f1006Hiwarn">
+            <column name="F1006_HIWARN" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1006Lowarn">
+            <column name="F1006_LOWARN" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1006Hialarm">
+            <column name="F1006_HIALARM" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1006Loalarm">
+            <column name="F1006_LOALARM" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1006Saveperiod">
+            <column name="F1006_SAVEPERIOD" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Plantime">
+            <column name="F1006_PLANTIME" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Deadtime">
+            <column name="F1006_DEADTIME" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Alarmlevel">
+            <column name="F1006_ALARMLEVEL" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1006Savetype">
+            <column name="F1006_SAVETYPE" sql-type="int"/>
+        </property>
+        <property name="parentCode">
+            <column name="Parent_CODE" sql-type="char" length="48" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

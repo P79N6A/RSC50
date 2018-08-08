@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.synet.tool.rsc.app.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RSC-50"
+            class="com.synet.tool.rsc.app.Perspective"
+            id="com.synet.tool.rsc.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="导航视图"
+            class="com.synet.tool.rsc.view.NavigationView"
+            id="com.shrcn.sct.common.navigationview">
+      </view>
+      <view
+            name="内容视图"
+            class="com.synet.tool.rsc.view.ContentView"
+            id="com.shrcn.sct.common.contentview">
+      </view>
+      <view
+            name="信息视图"
+            class="com.shrcn.found.ui.view.ConsoleView"
+            id="com.shrcn.found.ui.view.ConsoleView">
+      </view>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.synet.tool.rsc.application"
+            name="RSC-50">
+         <property
+               name="appName"
+               value="RSC-50">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="customization.ini">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/ied16.gif,icons/ied32.gif">
+         </property>
+      </product>
+   </extension>
+
+<extension
+      point="com.shrcn.found.ui.AppMenuExtension">
+      <menu id="menu.prj" text="工程">
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.NewProjectAction"
+	              text="新建"
+	              icon="new_project.png"
+	              style="3"/>
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.OpenProjectAction"
+	              text="打开"
+	              icon="open_project.png"
+	              style="3"/>
+	      <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.CloseProjectAction" 
+	       			text="关闭"/>
+	      <action class="org.eclipse.jface.action.Separator"/> 			
+	      <action class="org.eclipse.ui.actions.ActionFactory" command="QUIT"/>
+      </menu>
+      <menu id="menu.imp" text="导入">
+           <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSSDAction"
+	              text="SSD"/>
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSCDAction"
+	              text="SCD"/>
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSPCDAction"
+	              text="SPCD"/>
+	       <menu id="menu.imp.excel" text="Excel">
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="设备台账"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="光缆清册"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="装置板卡端口描述"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="开入信号映射表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="告警与板卡关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="光强与端口关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="压板与虚端子关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="跳合闸反校关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="监控信息点表"/>
+	       </menu>
+       </menu>
+       <menu id="menu.exp" text="导出">
+       		<action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportRSAction"
+	              text="工程配置"/>
+	       	<action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportICDAction"
+	              text="ICD模型"/>
+       </menu>
+       <menu id="menu.app" text="应用">
+       		<action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ModelCheckAction"
+	              text="模型检查"/>
+	       	<action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportRuleAction"
+	              text="模型辨识规则"/>
+       </menu>
+      <menu id="menu.help" text="帮助">
+       		<action
+              class="com.synet.tool.rsc/com.synet.tool.rsc.action.AboutAction"
+              text="关于"
+              icon="help.gif"/>
+      </menu>
+   </extension>
+</plugin>

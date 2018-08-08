@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDcarcb" table="T_DCARCB" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="rptref" type="string">
+            <column name="RPTREF" />
+        </property>
+        <property name="intgpd" type="int">
+            <column name="INTGPD" />
+        </property>
+        <property name="dchg" type="string">
+            <column name="DCHG" length="10" />
+        </property>
+        <property name="qchg" type="string">
+            <column name="QCHG" length="10" />
+        </property>
+        <property name="dupd" type="string">
+            <column name="DUPD" length="10" />
+        </property>
+        <property name="integrity" type="string">
+            <column name="INTEGRITY" length="10" />
+        </property>
+        <property name="gi" type="string">
+            <column name="GI" length="10" />
+        </property>
+        <property name="indexed" type="string">
+            <column name="INDEXED" length="10" />
+        </property>
+        <property name="index" type="string">
+            <column name="INDEX" length="5" />
+        </property>
+        <property name="max" type="int">
+            <column name="INDEXMAX" />
+        </property>
+        <property name="optFlds" type="string">
+            <column name="OPTFLDS" />
+        </property>
+        <property name="IEDType" type="int">
+            <column name="IEDTYPE" />
+        </property>
+        <many-to-one name="ied" column="IEDID" class="com.shrcn.tool.rtu.model.TDcaied"
+        	not-null="true" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

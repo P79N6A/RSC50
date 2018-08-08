@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.ftu.model.Channel" table="T_Channel" schema="gzapp">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="chnName" type="string">
+            <column name="CHNNAME" />
+        </property>
+        <property name="iedName" type="string">
+            <column name="IEDNAME" />
+        </property>
+        <property name="portName" type="string">
+            <column name="PORTNAME" />
+        </property>
+        <property name="baudRate" type="int">
+            <column name="BAUDRATE" />
+        </property>
+        <property name="linkAddress" type="int">
+            <column name="LINKADDRESS" />
+        </property>
+        <property name="statusPoint" type="int">
+            <column name="STATUSPOINT" />
+        </property>
+        <property name="soeBuffSize" type="int">
+            <column name="SOEBUFFSIZE" />
+        </property>
+        <property name="selectTimeout" type="int">
+            <column name="SELECTTIMEOUT" />
+        </property>
+        <property name="recvTimeout" type="int">
+            <column name="RECVTIMEOUT" />
+        </property>
+        <property name="backScanInterval" type="int">
+            <column name="BACKSCANINTERVAL" />
+        </property>
+        <property name="integrityInterval" type="int">
+            <column name="INTEGRITYINTERVAL" />
+        </property>
+        <property name="serviceList" type="long">
+            <column name="SERVICELIST" />
+        </property>
+        <property name="maxFrameLength" type="short">
+            <column name="MAXFRAMELENGTH" />
+        </property>
+        <property name="iec101type" type="byte">
+            <column name="IEC101TYPE" />
+        </property>
+        <property name="mod" type="byte">
+            <column name="MOD" />
+        </property>
+        <property name="iedOffset" type="int">
+            <column name="IEDOFFSET" />
+        </property>
+        <property name="iedNumber" type="int">
+            <column name="IEDNUMBER" />
+        </property>
+        <property name="dataBit" type="byte">
+            <column name="DATABIT" />
+        </property>
+        <property name="stopBit" type="byte">
+            <column name="STOPBIT" />
+        </property>
+        <property name="parity" type="byte">
+            <column name="PARITY" />
+        </property>
+        <property name="singleAckSupported" type="byte">
+            <column name="SINGLEACKSUPPORTED" />
+        </property>
+        <property name="maxFCBCount" type="byte">
+            <column name="MAXFCBCOUNT" />
+        </property>
+        <property name="infoAddressLength" type="byte">
+            <column name="INFOADDRESSLENGTH" />
+        </property>
+        <property name="cotLength" type="byte">
+            <column name="COTLENGTH" />
+        </property>
+        <property name="linkAddrLength" type="byte">
+            <column name="LINKADDRLENGTH" />
+        </property>
+        <property name="asduAddressLength" type="byte">
+            <column name="ASDUADDRESSLENGTH" />
+        </property>
+        <property name="clearCOS" type="byte">
+            <column name="CLEARCOS" />
+        </property>
+        <property name="clearSOE" type="byte">
+            <column name="CLEARSOE" />
+        </property>
+        <property name="timeMode" type="byte">
+            <column name="TIMEMODE" />
+        </property>
+        <property name="giRespClass" type="byte">
+            <column name="GIRESPCLASS" />
+        </property>
+        <property name="sendDoActterm" type="byte">
+            <column name="SENDDOACTTERM" />
+        </property>
+        <many-to-one name="logicIed" column="LOGICIED" class="com.shrcn.tool.ftu.model.LogicIed"
+        	not-null="false" lazy="false">
+        </many-to-one>
+
+    </class>
+</hibernate-mapping>

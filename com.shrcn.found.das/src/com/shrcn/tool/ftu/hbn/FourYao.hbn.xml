@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.ftu.model.FourYao" abstract="true">
+	<id name="id" type="int">
+		<column name="ID" />
+		<generator class="increment" />
+	</id>
+	<property name="dbType" type="string">
+		<column name="DBTYPE" />
+	</property>
+	<property name="seqNum" type="int">
+		<column name="SEQNUM" />
+	</property>
+	<property name="sAddr" type="string">
+		<column name="SADDR" />
+	</property>
+	<many-to-one name="iedObject" column="IEDOBJECT"
+		class="com.shrcn.tool.ftu.model.IedObject" not-null="false" lazy="false">
+	</many-to-one>
+
+	<union-subclass name="com.shrcn.tool.ftu.model.Ai"
+		table="T_Ai" schema="gzapp">
+		<property name="lowLimit" type="int">
+			<column name="LOWLIMIT" />
+		</property>
+		<property name="highLimit" type="int">
+			<column name="HIGHLIMIT" />
+		</property>
+		<property name="factor" type="float">
+			<column name="FACTOR" />
+		</property>
+		<property name="offset" type="float">
+			<column name="OFFSET" />
+		</property>
+		<property name="threshold" type="float">
+			<column name="THRESHOLD" />
+		</property>
+	</union-subclass>
+
+	<union-subclass name="com.shrcn.tool.ftu.model.Ao"
+		table="T_Ao" schema="gzapp">
+		<property name="timeOut" type="int">
+			<column name="TIMEOUT" />
+		</property>
+		<property name="factor" type="float">
+			<column name="FACTOR" />
+		</property>
+		<property name="offset" type="float">
+			<column name="OFFSET" />
+		</property>
+		<property name="datType" type="byte">
+			<column name="DATTYPE" />
+		</property>
+		<property name="controlMode" type="byte">
+			<column name="CONTROLMODE" />
+		</property>
+		<property name="pointAttr" type="short">
+			<column name="POINTATTR" />
+		</property>
+	</union-subclass>
+
+	<union-subclass name="com.shrcn.tool.ftu.model.Ci"
+		table="T_Ci" schema="gzapp">
+		<property name="reportFlag" type="byte">
+			<column name="REPORTFLAG" />
+		</property>
+		<property name="pointMode" type="byte">
+			<column name="POINTMODE" />
+		</property>
+		<property name="factor" type="float">
+			<column name="FACTOR" />
+		</property>
+		<property name="offset" type="float">
+			<column name="OFFSET" />
+		</property>
+	</union-subclass>
+
+
+	<union-subclass name="com.shrcn.tool.ftu.model.Di"
+		table="T_Di" schema="gzapp">
+		<property name="pointMode" type="byte">
+			<column name="POINTMODE" />
+		</property>
+	</union-subclass>
+
+	<union-subclass name="com.shrcn.tool.ftu.model.Do"
+		table="T_Do" schema="gzapp">
+		<property name="timeout" type="int">
+			<column name="TIMEOUT" />
+		</property>
+		<property name="controlMode" type="byte">
+			<column name="CONTROLMODE" />
+		</property>
+		<property name="pointAttr" type="short">
+			<column name="POINTATTR" />
+		</property>
+	</union-subclass>
+</class>
+</hibernate-mapping>

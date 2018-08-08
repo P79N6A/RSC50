@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Premain-Class: com.shrcn.found.instru.test.HelloWorld

@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+	<class name="com.shrcn.tool.rtu.model.BaseDcaied" abstract="true">
+		<id name="id" type="int">
+			<column name="ID" />
+			<generator class="sequence">
+				<param name="sequence">Common_Seq</param>
+			</generator>
+		</id>
+		<property name="iedname" type="string">
+			<column name="IEDNAME" length="100" />
+		</property>
+		<property name="iedtype" type="string">
+			<column name="IEDTYPE" length="100" />
+		</property>
+		<property name="description" type="string">
+			<column name="DESCRIPTION" length="100" />
+		</property>
+		<property name="statuspoint" type="int">
+			<column name="STATUSPOINT" />
+		</property>
+		<many-to-one name="dca" column="DCAID"
+			class="com.shrcn.tool.rtu.model.TDca" not-null="true"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="chn" column="CHNID"
+				class="com.shrcn.tool.rtu.model.TDcaChannel" not-null="false"
+				lazy="false">
+		</many-to-one>
+
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaied"
+			table="T_Dcaied">
+			<property name="ldoffset" type="int">
+				<column name="LDOFFSET" />
+			</property>
+			<property name="ldnumber" type="int">
+				<column name="LDNUMBER" />
+			</property>
+			<property name="rcboffset" type="int">
+				<column name="RCBOFFSET" />
+			</property>
+			<property name="rcbnumber" type="int">
+				<column name="RCBNUMBER" />
+			</property>
+			<property name="autoconninterval" type="int">
+				<column name="AUTOCONNINTERVAL" />
+			</property>
+			<property name="resptimeout" type="int">
+				<column name="RESPTIMEOUT" />
+			</property>
+			<property name="cmdtermtimeout" type="int">
+				<column name="CMDTERMTIMEOUT" />
+			</property>
+			<property name="autogiinterval" type="int">
+				<column name="AUTOGIINTERVAL" />
+			</property>
+			<property name="statuspointA" type="int">
+				<column name="STATUSPOINTA" />
+			</property>
+			<property name="statuspointB" type="int">
+				<column name="STATUSPOINTB" />
+			</property>
+			<property name="netAIpAddress" type="string">
+            	<column name="NETAIPADDRESS" />
+        	</property>
+          	<property name="netBIpAddress" type="string">
+            	<column name="NETBIPADDRESS" />
+       		</property>
+          	<property name="BRCBOptFlds" type="string">
+            	<column name="BRCBOPTFLDS" />
+        	</property>
+          	<property name="URCBOptFlds" type="string">
+            	<column name="URCBOPTFLDS" />
+        	</property>
+          	<property name="urcbtime" type="string">
+            	<column name="URCBTIME" />
+        	</property>
+          	<property name="brcbtime" type="string">
+            	<column name="BRCBTIME" />
+        	</property>
+          	<property name="brcbtrg" type="string">
+            	<column name="BRCBTRG" />
+        	</property>
+          	<property name="urcbtrg" type="string">
+            	<column name="URCBTRG" />
+        	</property>
+        	<property name="RCDMadePoint" type="int">
+				<column name="RCDMADEPOINT" />
+			</property>
+          	<property name="RCDMadePath" type="string">
+            	<column name="RCDMADEPATH" />
+        	</property>
+			<set name="lds" inverse="true" cascade="save-update"
+				table="T_DCALD" lazy="false">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcald" />
+			</set>
+			<set name="rcbs" inverse="true" cascade="save-update"
+				table="T_DCARCB" lazy="false">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcarcb" />
+			</set>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaied103"
+			table="T_Dcaied103">
+			<property name="iedAddr" type="string">
+				<column name="IEDADDR" />
+			</property>
+			<property name="linkAddr" type="string">
+				<column name="LINKADDR" />
+			</property>
+			<property name="totalTime" type="string">
+				<column name="TOTALTIME" />
+			</property>
+			<property name="groupOffset" type="int">
+				<column name="GROUPOFFSET" />
+			</property>
+			<property name="groupNumber" type="int">
+				<column name="GROUPNUMBER" />
+			</property>
+			<set name="groups" inverse="true" cascade="save-update"
+				table="T_DCAGROUP" lazy="false">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaGroup" />
+			</set>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaied104"
+			table="T_Dcaied104">
+			<property name="ipA" type="string">
+				<column name="IPA" />
+			</property>
+			<property name="ipB" type="string">
+				<column name="IPB" />
+			</property>
+			<property name="tcpPort" type="string">
+				<column name="TCPPORT" />
+			</property>
+			<property name="iedAddr" type="string">
+				<column name="IEDADDR" />
+			</property>
+			<property name="totalTime" type="string">
+				<column name="TOTALTIME" />
+			</property>
+			<property name="timeInterval" type="string">
+				<column name="TIMEINTERVAL" />
+			</property>
+			<property name="asduAddress" type="string">
+				<column name="ASDUADDRESS" />
+			</property>
+			<property name="w_value" type="string">
+				<column name="W_VALUE" />
+			</property>
+			<property name="confirmTime" type="string">
+				<column name="CONFIRMTIME" />
+			</property>
+			<property name="stime" type="string">
+				<column name="STIME" />
+			</property>
+			<property name="idleTime" type="string">
+				<column name="IDLETIME" />
+			</property>
+			<property name="infoType13" type="string">
+				<column name="INFOTYPE13" />
+			</property>
+			<property name="cmdAckTimeout" type="string">
+				<column name="CMDACKTIMEOUT" />
+			</property>
+			<property name="ciScanInterval" type="string">
+				<column name="CISCANINTERVAL" />
+			</property>
+			<property name="diNumber" type="int">
+				<column name="DINUMBER" />
+			</property>
+			<property name="doNumber" type="int">
+				<column name="DONUMBER" />
+			</property>
+			<property name="aiNumber" type="int">
+				<column name="AINUMBER" />
+			</property>
+			<property name="aoNumber" type="int">
+				<column name="AONUMBER" />
+			</property>
+			<property name="ciNumber" type="int">
+				<column name="CINUMBER" />
+			</property>
+			<property name="diOffset" type="int">
+				<column name="DIOFFSET" />
+			</property>
+			<property name="doOffset" type="int">
+				<column name="DOOFFSET" />
+			</property>
+			<property name="aiOffset" type="int">
+				<column name="AIOFFSET" />
+			</property>
+			<property name="aoOffset" type="int">
+				<column name="AOOFFSET" />
+			</property>
+			<property name="ciOffset" type="int">
+				<column name="CIOFFSET" />
+			</property>
+			<set name="psMx" inverse="true" cascade="save-update"
+				table="T_DCA_MX">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaMx" />
+			</set>
+			<set name="psSt" inverse="true" cascade="save-update"
+				table="T_DCA_ST">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSt" />
+			</set>
+			<set name="psCo" inverse="true" cascade="save-update"
+				table="T_DCA_CO">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaCo" />
+			</set>
+			<set name="psSp" inverse="true" cascade="save-update"
+				table="T_DCA_SP">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSp" />
+			</set>
+			<set name="psSg" inverse="true" cascade="save-update"
+				table="T_DCA_SG">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSg" />
+			</set>
+			<set name="psSe" inverse="true" cascade="save-update"
+				table="T_DCA_SE">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSe" />
+			</set>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaiedcdt"
+			table="T_Dcaiedcdt">
+			<property name="portName" type="string">
+				<column name="PORTNAME" />
+			</property>
+			<property name="baudRate" type="string">
+				<column name="BAUDRATE" />
+			</property>
+			<property name="dataBit" type="string">
+				<column name="DATABIT" />
+			</property>
+			<property name="stopBit" type="string">
+				<column name="STOPBIT" />
+			</property>
+			<property name="parity" type="string">
+				<column name="PARITY" />
+			</property>
+			<property name="tmTran" type="string">
+				<column name="TMTRAN" />
+			</property>
+			<property name="tmRecv" type="string">
+				<column name="TMRECV" />
+			</property>
+			<property name="bufferSize" type="string">
+				<column name="BUFFERSIZE" />
+			</property>
+			<property name="remoteAddr" type="string">
+				<column name="REMOTEADDR" />
+			</property>
+			<property name="iedAddr" type="string">
+				<column name="IEDADDR" />
+			</property>
+			<property name="localAddr" type="string">
+				<column name="LOCALADDR" />
+			</property>
+			<property name="cmdSport" type="string">
+				<column name="CMDSPORT" />
+			</property>
+			<property name="cmdTimeout" type="string">
+				<column name="CMDTIMEOUT" />
+			</property>
+			<property name="setTime" type="string">
+				<column name="SETTIME" />
+			</property>
+			<property name="frozenTime" type="string">
+				<column name="FROZENTIME" />
+			</property>
+			<property name="diNumber" type="int">
+				<column name="DINUMBER" />
+			</property>
+			<property name="doNumber" type="int">
+				<column name="DONUMBER" />
+			</property>
+			<property name="aiNumber" type="int">
+				<column name="AINUMBER" />
+			</property>
+			<property name="aoNumber" type="int">
+				<column name="AONUMBER" />
+			</property>
+			<property name="ciNumber" type="int">
+				<column name="CINUMBER" />
+			</property>
+			<property name="diOffset" type="int">
+				<column name="DIOFFSET" />
+			</property>
+			<property name="doOffset" type="int">
+				<column name="DOOFFSET" />
+			</property>
+			<property name="aiOffset" type="int">
+				<column name="AIOFFSET" />
+			</property>
+			<property name="aoOffset" type="int">
+				<column name="AOOFFSET" />
+			</property>
+			<property name="ciOffset" type="int">
+				<column name="CIOFFSET" />
+			</property>
+			<set name="psMx" inverse="true" cascade="save-update"
+				table="T_DCA_MX">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaMx" />
+			</set>
+			<set name="psSt" inverse="true" cascade="save-update"
+				table="T_DCA_ST">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSt" />
+			</set>
+			<set name="psCo" inverse="true" cascade="save-update"
+				table="T_DCA_CO">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaCo" />
+			</set>
+			<set name="psSp" inverse="true" cascade="save-update"
+				table="T_DCA_SP">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSp" />
+			</set>
+			<set name="psSg" inverse="true" cascade="save-update"
+				table="T_DCA_SG">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSg" />
+			</set>
+			<set name="psSe" inverse="true" cascade="save-update"
+				table="T_DCA_SE">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaSe" />
+			</set>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaiedModbus"
+			table="T_Dcaiedmodbus">
+			<property name="transID" type="string">
+				<column name="TRANSID" />
+			</property>
+			<property name="protocolID" type="string">
+				<column name="PROTOCOLID" />
+			</property>
+			<property name="unitID" type="string">
+				<column name="UNITID" />
+			</property>
+			<property name="objectOffset" type="int">
+				<column name="OBJECTOFFSET" />
+			</property>
+			<property name="objectNumber" type="int">
+				<column name="OBJECTNUMBER" />
+			</property>
+			<property name="headType" type="int">
+				<column name="HEADTYPE" />
+			</property>
+			<property name="addrID" type="int">
+				<column name="ADDRID" />
+			</property>
+			<property name="regSize" type="int">
+				<column name="REGSIZE" />
+			</property>
+			<set name="objects" inverse="true" cascade="save-update"
+				table="T_DCAOBJECT" lazy="false">
+				<key column="IEDID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaObject" />
+			</set>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDcaiedAnswer"
+			table="T_DcaIEDAnswer">
+			<property name="objectOffset" type="int">
+				<column name="OBJECTOFFSET" />
+			</property>
+			<property name="objectNumber" type="int">
+				<column name="OBJECTNUMBER" />
+			</property>
+			<set name="objects" inverse="true" cascade="save-update"
+				table="T_DCAOBJECT" lazy="false">
+				<key column="IEDASWID"></key>
+				<one-to-many class="com.shrcn.tool.rtu.model.TDcaObject" />
+			</set>
+		</union-subclass>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-9 14:04:19 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDpaobject" table="T_DPAOBJECT" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="pointnumber" type="int">
+            <column name="POINTNUMBER" />
+        </property>
+        <property name="pointoffset" type="int">
+            <column name="POINTOFFSET" />
+        </property>
+        <property name="pointtype" type="string">
+            <column name="POINTTYPE" length="50" />
+        </property>
+        <property name="infotype" type="string">
+            <column name="INFOTYPE" length="10" />
+        </property>
+        <property name="infoaddress" type="string">
+            <column name="INFOADDRESS" length="20" />
+        </property>
+        <property name="statuschange" type="string">
+            <column name="STATUSCHANGE" length="20" />
+        </property>
+        <property name="groupno" type="string">
+            <column name="GROUPNO" length="10" />
+        </property>
+        <property name="reportclass" type="string">
+            <column name="REPORTCLASS" length="20" />
+        </property>
+        <property name="periodmode" type="string">
+            <column name="PERIODMODE" length="20" />
+        </property>
+        <property name="periodtime" type="string">
+            <column name="PERIODTIME" length="20" />
+        </property>
+         <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="groupID" type="int">
+            <column name="GROUPID" />
+        </property>
+        <property name="di2" type="string">
+            <column name="DI2" length="20" />
+        </property>
+        <property name="istotalcall" type="string">
+            <column name="ISTOTALCALL" length="5" />
+        </property>
+        <property name="istotal" type="string">
+            <column name="ISTOTAL"  />
+        </property>
+        <many-to-one name="logicied" column="IEDID" class="com.shrcn.tool.rtu.model.TDpalogicied"
+        	not-null="false" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

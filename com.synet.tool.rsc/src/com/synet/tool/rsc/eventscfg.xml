@@ -1,0 +1,17 @@
+<?eclipse version="3.2"?>
+<extension point="com.shrcn.found.common.event.EventManager">
+	<category id="Navigation Events">
+		<event name="create project" />
+		<event name="open project" />
+		<event name="close project" />
+		<handler source="com.synet.tool.rsc.view.NavigationView" />
+	</category>
+	<category id="Debug Events">
+		<event name="clear config" />
+		<event name="open config" />
+		<event name="clear deleted" />
+		<event name="refresh editor" />
+		<handler source="com.synet.tool.rsc.view.ContentView" />
+	</category>
+	
+</extension>

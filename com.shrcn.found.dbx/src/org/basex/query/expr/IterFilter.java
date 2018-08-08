@@ -1,0 +1,60 @@
+package org.basex.query.expr;
+
+import org.basex.query.CompileContext;
+import org.basex.query.QueryContext;
+import org.basex.query.QueryException;
+import org.basex.query.iter.Iter;
+import org.basex.query.value.item.Item;
+import org.basex.query.value.node.FElem;
+import org.basex.query.var.Var;
+import org.basex.util.InputInfo;
+import org.basex.util.hash.IntObjMap;
+
+/**
+ * Iterative filter expression without numeric predicates.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public final class IterFilter extends Filter {
+  /**
+   * Constructor.
+   * @param info input info
+   * @param root root expression
+   * @param preds predicates
+   */
+  IterFilter(final InputInfo info, final Expr root, final Expr... preds) {
+    super(info, root, preds);
+  }
+
+  @Override
+  public Iter iter(final QueryContext qc) {
+    return new Iter() {
+      Iter iter;
+
+      @Override
+      public Item next() throws QueryException {
+        // first call - initialize iterator
+        if(iter == null) iter = qc.iter(root);
+        // filter sequence
+        for(Item it; (it = iter.next()) != null;) {
+          qc.checkStop();
+          if(preds(it, qc)) return it;
+        }
+        return null;
+      }
+    };
+  }
+
+  @Override
+  public IterFilter copy(final CompileContext cc, final IntObjMap<Var> vm) {
+    return copyType(new IterFilter(info, root.copy(cc, vm), Arr.copyAll(cc, vm, preds)));
+  }
+
+  @Override
+  public void plan(final FElem plan) {
+    final FElem el = planElem();
+    addPlan(plan, el, root);
+    super.plan(el);
+  }
+}

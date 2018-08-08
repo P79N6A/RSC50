@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1071DauEntity" table="tb1071_dau" schema="rscapp">
+        <id name="f1071Code">
+            <column name="F1071_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1071Desc">
+            <column name="F1071_DESC" sql-type="char" length="96"/>
+        </property>
+        <property name="f1071IpAddr">
+            <column name="F1071_IPAddr" sql-type="char" length="24" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

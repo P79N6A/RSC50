@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Rsc
+Bundle-SymbolicName: com.synet.tool.rsc; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.synet.tool.rsc.Activator
+Bundle-Vendor: SYNET
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.shrcn.found.common;bundle-version="1.0.0",
+ com.shrcn.found.ui,
+ de.kupzog.ktable;bundle-version="2.1.3",
+ com.shrcn.found.das;bundle-version="1.0.0",
+ com.shrcn.found.library;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy

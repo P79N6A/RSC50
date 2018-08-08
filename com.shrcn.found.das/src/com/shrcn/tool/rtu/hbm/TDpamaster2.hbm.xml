@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDpamaster" table="T_DPAMASTER" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="100" />
+        </property>
+        <property name="iednumber" type="int">
+            <column name="IEDNUMBER" />
+        </property>
+        <property name="iedoffset" type="int">
+            <column name="IEDOFFSET" />
+         </property>
+        <property name="netnumber" type="int">
+            <column name="NETNUMBER" />
+         </property>
+         <property name="netoffset" type="int">
+            <column name="NETOFFSET" />
+         </property>
+          <property name="comnumber" type="int">
+            <column name="COMNUMBER" />
+         </property>
+         <property name="comoffset" type="int">
+            <column name="COMOFFSET" />
+         </property>
+    </class>
+</hibernate-mapping>

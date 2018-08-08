@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nl1
+Bundle-SymbolicName: com.shrcn.found.ui.nl1
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SHRCN
+Fragment-Host: com.shrcn.found.ui;bundle-version="1.0.0"

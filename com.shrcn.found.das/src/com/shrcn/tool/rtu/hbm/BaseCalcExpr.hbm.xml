@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.BaseCalcExpr" abstract="true">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="sequence">
+            	<param name="sequence">DcaPoint_Seq</param>
+            </generator>
+        </id>
+        <property name="dbtype" type="string">
+            <column name="DBTYPE" length="2"/>
+        </property>
+        <property name="desc" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="saddr" type="int">
+            <column name="SADDR" />
+        </property>
+        <property name="expression" type="string">
+            <column name="EXPRESSION" />
+        </property>
+        <property name="currentnumber" type="int">
+            <column name="CURRENTNUMBER" />
+        </property>
+        <property name="totalnumber" type="int">
+            <column name="TOTALNUMBER" />
+        </property>
+        
+        <many-to-one name="mx" column="MXID" class="com.shrcn.tool.rtu.model.TDcaMx"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        <many-to-one name="st" column="STID" class="com.shrcn.tool.rtu.model.TDcaSt"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        <many-to-one name="co" column="COID" class="com.shrcn.tool.rtu.model.TDcaCo"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        
+        <union-subclass name="com.shrcn.tool.rtu.model.TDiexpr" table="T_DIExpr">
+        	<property name="outputeventtype" type="string">
+	            <column name="OUTPUTEVENTTYPE" length="10" />
+	        </property>
+	        <property name="bayoid" type="string">
+	            <column name="BAYOID" length="100" />
+	        </property>
+	        <property name="baystate" type="string">
+	            <column name="BAYSTATE" length="10" />
+	        </property>
+	        <property name="exptype" type="string">
+	            <column name="EXPTYPE" length="10" />
+	        </property>
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TDoexpr" table="T_DOExpr">
+	        <property name="pointattr" type="string">
+	            <column name="POINTATTR" length="10" />
+	        </property>
+	        <property name="valueattr" type="string">
+	            <column name="VALUEATTR" length="10" />
+	        </property>
+	        <property name="optname" type="string">
+	            <column name="OPTNAME" length="512" />
+	        </property>
+	        <property name="bayoid" type="string">
+	            <column name="BAYOID" length="100" />
+	        </property>
+	        <property name="baystate" type="string">
+	            <column name="BAYSTATE" length="10" />
+	        </property>
+	        <property name="exemode" type="string">
+	            <column name="EXEMODE" length="10" />
+	        </property>
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TResetmap" table="T_ResetMap">
+	        <many-to-one name="yxpoint" column="YXPOINT" class="com.shrcn.tool.rtu.model.TDcaSt"
+	        	not-null="false" lazy="false">
+	        </many-to-one>
+	        <many-to-one name="sendpoint" column="SENDPOINT" class="com.shrcn.tool.rtu.model.TDcaSt"
+	        	not-null="false" lazy="false">
+	        </many-to-one>
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TOrexpr" table="T_ORExpr">
+        </union-subclass>
+        <union-subclass name="com.shrcn.tool.rtu.model.TAiexpr" table="T_AIExpr">
+        </union-subclass>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,578 @@
+package org.basex.core.parse;
+
+import static org.basex.core.Text.EXPECTING_CMD;
+import static org.basex.core.Text.ON;
+import static org.basex.core.Text.SYNTAX_X;
+import static org.basex.core.Text.S_TO;
+import static org.basex.core.Text.UNKNOWN_SIMILAR_X_X;
+import static org.basex.core.Text.UNKNOWN_TRY_X;
+import static org.basex.util.Token.digit;
+import static org.basex.util.Token.token;
+import static org.basex.util.Token.uc;
+import static org.basex.util.Token.ws;
+
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
+
+import org.basex.core.Command;
+import org.basex.core.Context;
+import org.basex.core.Databases;
+import org.basex.core.MainOptions;
+import org.basex.core.cmd.Add;
+import org.basex.core.cmd.AlterDB;
+import org.basex.core.cmd.AlterPassword;
+import org.basex.core.cmd.AlterUser;
+import org.basex.core.cmd.Check;
+import org.basex.core.cmd.Close;
+import org.basex.core.cmd.Copy;
+import org.basex.core.cmd.CreateBackup;
+import org.basex.core.cmd.CreateDB;
+import org.basex.core.cmd.CreateIndex;
+import org.basex.core.cmd.CreateUser;
+import org.basex.core.cmd.Delete;
+import org.basex.core.cmd.DropBackup;
+import org.basex.core.cmd.DropDB;
+import org.basex.core.cmd.DropIndex;
+import org.basex.core.cmd.DropUser;
+import org.basex.core.cmd.Execute;
+import org.basex.core.cmd.Exit;
+import org.basex.core.cmd.Export;
+import org.basex.core.cmd.Find;
+import org.basex.core.cmd.Flush;
+import org.basex.core.cmd.Get;
+import org.basex.core.cmd.Grant;
+import org.basex.core.cmd.Help;
+import org.basex.core.cmd.Info;
+import org.basex.core.cmd.InfoDB;
+import org.basex.core.cmd.InfoIndex;
+import org.basex.core.cmd.InfoStorage;
+import org.basex.core.cmd.Inspect;
+import org.basex.core.cmd.JobsList;
+import org.basex.core.cmd.JobsResult;
+import org.basex.core.cmd.JobsStop;
+import org.basex.core.cmd.Kill;
+import org.basex.core.cmd.List;
+import org.basex.core.cmd.Open;
+import org.basex.core.cmd.Optimize;
+import org.basex.core.cmd.OptimizeAll;
+import org.basex.core.cmd.Password;
+import org.basex.core.cmd.Rename;
+import org.basex.core.cmd.Replace;
+import org.basex.core.cmd.RepoDelete;
+import org.basex.core.cmd.RepoInstall;
+import org.basex.core.cmd.RepoList;
+import org.basex.core.cmd.Restore;
+import org.basex.core.cmd.Retrieve;
+import org.basex.core.cmd.Run;
+import org.basex.core.cmd.Set;
+import org.basex.core.cmd.ShowBackups;
+import org.basex.core.cmd.ShowSessions;
+import org.basex.core.cmd.ShowUsers;
+import org.basex.core.cmd.Store;
+import org.basex.core.cmd.Test;
+import org.basex.core.cmd.XQuery;
+import org.basex.core.parse.Commands.Cmd;
+import org.basex.core.parse.Commands.CmdAlter;
+import org.basex.core.parse.Commands.CmdCreate;
+import org.basex.core.parse.Commands.CmdDrop;
+import org.basex.core.parse.Commands.CmdIndex;
+import org.basex.core.parse.Commands.CmdIndexInfo;
+import org.basex.core.parse.Commands.CmdInfo;
+import org.basex.core.parse.Commands.CmdJobs;
+import org.basex.core.parse.Commands.CmdOptimize;
+import org.basex.core.parse.Commands.CmdPerm;
+import org.basex.core.parse.Commands.CmdRepo;
+import org.basex.core.parse.Commands.CmdShow;
+import org.basex.query.QueryException;
+import org.basex.query.value.item.QNm;
+import org.basex.util.Array;
+import org.basex.util.InputInfo;
+import org.basex.util.InputParser;
+import org.basex.util.Util;
+import org.basex.util.list.StringList;
+import org.basex.util.similarity.Levenshtein;
+
+/**
+ * This is a parser for command strings, creating {@link Command} instances.
+ * Several commands can be formulated in one string and separated by semicolons.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+final class StringParser extends CmdParser {
+  /** Current parser. */
+  private InputParser parser;
+
+  /**
+   * Constructor.
+   * @param input input
+   * @param context database context
+   */
+  StringParser(final String input, final Context context) {
+    super(input, context);
+  }
+
+  @Override
+  protected void parse(final ArrayList<Command> cmds) throws QueryException {
+    final Scanner sc = new Scanner(input).useDelimiter(single ? "\0" : "\r\n?|\n");
+    while(sc.hasNext()) {
+      final String line = sc.next().trim();
+      if(line.isEmpty() || line.startsWith("#")) continue;
+      parser = new InputParser(line);
+      parser.file = ctx.options.get(MainOptions.QUERYPATH);
+      while(parser.more()) {
+        final Cmd cmd = consume(Cmd.class, null);
+        if(cmd != null) cmds.add(parse(cmd));
+        if(parser.more() && !parser.consume(';')) throw help(null, cmd);
+      }
+    }
+  }
+
+  /**
+   * Parses a command.
+   * @param cmd command definition
+   * @return resulting command
+   * @throws QueryException query exception
+   */
+  private Command parse(final Cmd cmd) throws QueryException {
+    switch(cmd) {
+      case CREATE:
+        switch(consume(CmdCreate.class, cmd)) {
+          case BACKUP:
+            return new CreateBackup(glob(cmd));
+          case DATABASE: case DB:
+            return new CreateDB(name(cmd), remaining(null, true));
+          case INDEX:
+            return new CreateIndex(consume(CmdIndex.class, cmd));
+          case USER:
+            return new CreateUser(name(cmd), password());
+        }
+        break;
+      case COPY:
+        return new Copy(name(cmd), name(cmd));
+      case ALTER:
+        switch(consume(CmdAlter.class, cmd)) {
+          case DATABASE: case DB:
+            return new AlterDB(name(cmd), name(cmd));
+          case PASSWORD:
+            return new AlterPassword(name(cmd), password());
+          case USER:
+            return new AlterUser(name(cmd), name(cmd));
+        }
+        break;
+      case OPEN:
+        return new Open(name(cmd), string(null));
+      case CHECK:
+        return new Check(string(cmd));
+      case ADD:
+        final String aa = key(S_TO, null) ? string(cmd) : null;
+        return new Add(aa, remaining(cmd, true));
+      case STORE:
+        final String sa = key(S_TO, null) ? string(cmd) : null;
+        return new Store(sa, remaining(cmd, true));
+      case RETRIEVE:
+        return new Retrieve(string(cmd));
+      case DELETE:
+        return new Delete(string(cmd));
+      case RENAME:
+        return new Rename(string(cmd), string(cmd));
+      case REPLACE:
+        return new Replace(string(cmd), remaining(cmd, true));
+      case INFO:
+        switch(consume(CmdInfo.class, cmd)) {
+          case NULL:
+            return new Info();
+          case DATABASE: case DB:
+            return new InfoDB();
+          case INDEX:
+            return new InfoIndex(consume(CmdIndexInfo.class, null));
+          case STORAGE:
+            final String arg1 = number();
+            final String arg2 = arg1 != null ? number() : null;
+            return new InfoStorage(arg1, arg2);
+        }
+        break;
+      case INSPECT:
+        return new Inspect();
+      case CLOSE:
+        return new Close();
+      case LIST:
+        return new List(name(null), string(null));
+      case DROP:
+        switch(consume(CmdDrop.class, cmd)) {
+          case DATABASE: case DB:
+            return new DropDB(glob(cmd));
+          case INDEX:
+            return new DropIndex(consume(CmdIndex.class, cmd));
+          case USER:
+            return new DropUser(glob(cmd), key(ON, null) ? glob(cmd) : null);
+          case BACKUP:
+            return new DropBackup(glob(cmd));
+        }
+        break;
+      case OPTIMIZE:
+        switch(consume(CmdOptimize.class, cmd)) {
+          case NULL:
+            return new Optimize();
+          case ALL:
+            return new OptimizeAll();
+        }
+        break;
+      case EXPORT:
+        return new Export(string(cmd));
+      case XQUERY:
+        return new XQuery(remaining(cmd));
+      case RUN:
+        return new Run(string(cmd));
+      case TEST:
+        return new Test(string(cmd));
+      case EXECUTE:
+        return new Execute(string(cmd, false));
+      case FIND:
+        return new Find(string(cmd, false));
+      case GET:
+        return new Get(name(null));
+      case SET:
+        return new Set(name(cmd), string(null, false));
+      case PASSWORD:
+        return new Password(password());
+      case HELP:
+        return new Help(name(null));
+      case EXIT:
+      case QUIT:
+        return new Exit();
+      case FLUSH:
+        return new Flush();
+      case KILL:
+        return new Kill(string(cmd));
+      case RESTORE:
+        return new Restore(name(cmd));
+      case JOBS:
+        switch(consume(CmdJobs.class, cmd)) {
+          case LIST:
+            return new JobsList();
+          case STOP:
+            return new JobsStop(name(cmd));
+          case RESULT:
+            return new JobsResult(name(cmd));
+        }
+        break;
+      case SHOW:
+        switch(consume(CmdShow.class, cmd)) {
+          case SESSIONS:
+            return new ShowSessions();
+          case USERS:
+            return new ShowUsers(key(ON, null) ? name(cmd) : null);
+          case BACKUPS:
+            return new ShowBackups();
+        }
+        break;
+      case GRANT:
+        final CmdPerm perm = consume(CmdPerm.class, cmd);
+        if(perm == null) throw help(null, cmd);
+        final String db = key(ON, null) ? glob(cmd) : null;
+        key(S_TO, cmd);
+        return new Grant(perm, glob(cmd), db);
+      case REPO:
+        switch(consume(CmdRepo.class, cmd)) {
+          case INSTALL:
+            return new RepoInstall(string(cmd), new InputInfo(parser));
+          case DELETE:
+            return new RepoDelete(string(cmd), new InputInfo(parser));
+          case LIST:
+            return new RepoList();
+        }
+        break;
+    }
+    throw Util.notExpected("Command specified, but not implemented yet");
+  }
+
+  /**
+   * Parses and returns a string, delimited by a space or semicolon.
+   * Quotes can be used to include spaces.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @return string
+   * @throws QueryException query exception
+   */
+  private String string(final Cmd cmd) throws QueryException {
+    return string(cmd, true);
+  }
+
+  /**
+   * Parses and returns a string, delimited by a semicolon or, optionally, a space.
+   * Quotes can be used to include spaces.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @param space stop when encountering space
+   * @return string
+   * @throws QueryException query exception
+   */
+  private String string(final Cmd cmd, final boolean space) throws QueryException {
+    final StringBuilder sb = new StringBuilder();
+    consumeWS();
+    boolean q = false;
+    while(parser.more()) {
+      final char c = parser.curr();
+      if(!q && ((space ? c <= ' ' : c < ' ') || eoc())) break;
+      if(c == '"') q ^= true;
+      else sb.append(c);
+      parser.consume();
+    }
+    return finish(sb, cmd);
+  }
+
+  /**
+   * Parses and returns the remaining string.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @param quotes strip heading and trailing quotes
+   * @return remaining string
+   * @throws QueryException query exception
+   */
+  private String remaining(final Cmd cmd, final boolean quotes) throws QueryException {
+    if(single) {
+      final String arg = remaining(cmd);
+      return arg != null && quotes ? arg.replace("^\"|\"$", "") : arg;
+    }
+    return string(cmd, false);
+  }
+
+  /**
+   * Parses and returns the remaining string.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @return remaining string
+   * @throws QueryException query exception
+   */
+  private String remaining(final Cmd cmd) throws QueryException {
+    final StringBuilder sb = new StringBuilder();
+    consumeWS();
+    while(parser.more()) sb.append(parser.consume());
+    return finish(sb, cmd);
+  }
+
+  /**
+   * Parses and returns a command. A command is limited to letters.
+   * @return name
+   * @throws QueryException query exception
+   */
+  private String command() throws QueryException {
+    consumeWS();
+    final StringBuilder sb = new StringBuilder();
+    while(!eoc() && !ws(parser.curr())) {
+      sb.append(parser.consume());
+    }
+    return finish(sb, null);
+  }
+
+  /**
+   * Parses and returns a name. A name may contain letters, numbers and some special
+   * characters (see {@link Databases#DBCHARS}).
+   * @param cmd referring command; if specified, the result must not be empty
+   * @return name
+   * @throws QueryException query exception
+   */
+  private String name(final Cmd cmd) throws QueryException {
+    return name(cmd, false);
+  }
+
+  /**
+   * Parses and returns a password string.
+   * @return password string
+   * @throws QueryException query exception
+   */
+  private String password() throws QueryException {
+    final String pw = string(null);
+    return pw != null ? pw : pwReader == null ? "" : pwReader.password();
+  }
+
+  /**
+   * Parses and returns a glob expression, which extends {@link #name(Cmd)} function
+   * with asterisks, question marks and commands.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @return glob expression
+   * @throws QueryException query exception
+   */
+  private String glob(final Cmd cmd) throws QueryException {
+    return name(cmd, true);
+  }
+
+  /**
+   * Parses and returns a glob expression, which extends {@link #name(Cmd)} function
+   * with asterisks, question marks and commands.
+   * @param cmd referring command; if specified, the result must not be empty
+   * @param glob allow glob syntax
+   * @return glob expression
+   * @throws QueryException query exception
+   */
+  private String name(final Cmd cmd, final boolean glob) throws QueryException {
+    consumeWS();
+    final StringBuilder sb = new StringBuilder();
+    char last = 0;
+    while(true) {
+      final char ch = parser.curr();
+      if(!Databases.validChar(ch, sb.length() == 0) &&
+          (!glob || ch != '*' && ch != '?' && ch != ',')) {
+        return finish((eoc() || ws(ch)) && last != '.' ? sb : null, cmd);
+      }
+      sb.append(parser.consume());
+      last = ch;
+    }
+  }
+
+  /**
+   * Parses and returns the specified keyword.
+   * @param key token to be parsed
+   * @param cmd referring command; if specified, the keyword is mandatory
+   * @return result of check
+   * @throws QueryException query exception
+   */
+  private boolean key(final String key, final Cmd cmd) throws QueryException {
+    consumeWS();
+    final int p = parser.pos;
+    final boolean ok = (parser.consume(key) || parser.consume(
+        key.toLowerCase(Locale.ENGLISH))) && (parser.curr(0) || ws(parser.curr()));
+    if(!ok) {
+      parser.pos = p;
+      if(cmd != null) throw help(null, cmd);
+    }
+    return ok;
+  }
+
+  /**
+   * Parses and returns a string result.
+   * @param string input string or {@code null} if invalid
+   * @param cmd referring command; if specified, the result must not be empty
+   * @return string result or {@code null}
+   * @throws QueryException query exception
+   */
+  private String finish(final StringBuilder string, final Cmd cmd) throws QueryException {
+    if(string != null && string.length() != 0) return string.toString();
+    if(cmd != null) throw help(null, cmd);
+    return null;
+  }
+
+  /**
+   * Parses and returns a number.
+   * @return name
+   * @throws QueryException query exception
+   */
+  private String number() throws QueryException {
+    consumeWS();
+    final StringBuilder sb = new StringBuilder();
+    if(parser.curr() == '-') sb.append(parser.consume());
+    while(digit(parser.curr())) sb.append(parser.consume());
+    return finish(eoc() || ws(parser.curr()) ? sb : null, null);
+  }
+
+  /**
+   * Consumes all whitespace characters from the beginning of the remaining
+   * query.
+   */
+  private void consumeWS() {
+    final int pl = parser.length;
+    while(parser.pos < pl && parser.input.charAt(parser.pos) <= ' ') ++parser.pos;
+    parser.mark = parser.pos - 1;
+  }
+
+  /**
+   * Returns the found command or throws an exception.
+   * @param cmp possible completions
+   * @param par parent command
+   * @param <E> token type
+   * @return index
+   * @throws QueryException query exception
+   */
+  private <E extends Enum<E>> E consume(final Class<E> cmp, final Cmd par) throws QueryException {
+    final String token = command();
+    if(!suggest || token == null || !token.isEmpty()) {
+      try {
+        // return command reference; allow empty strings as input ("NULL")
+        return Enum.valueOf(cmp, token == null ? "NULL" : token.toUpperCase(Locale.ENGLISH));
+      } catch(final IllegalArgumentException ignore) { }
+    }
+
+    final Enum<?>[] alt = startWith(cmp, token);
+    // handle empty input
+    if(token == null) {
+      if(par != null) throw help(alt, par);
+      if(suggest) throw error(alt, EXPECTING_CMD);
+      return null;
+    }
+
+    // output error for similar commands
+    final byte[] name = uc(token(token));
+    final Levenshtein ls = new Levenshtein();
+    for(final Enum<?> s : startWith(cmp, null)) {
+      final byte[] sm = uc(token(s.name()));
+      if(ls.similar(name, sm) && Cmd.class.isInstance(s)) {
+        throw error(alt, UNKNOWN_SIMILAR_X_X, name, sm);
+      }
+    }
+
+    // show unknown command error or available command extensions
+    throw par == null ? error(alt, UNKNOWN_TRY_X, token) : help(alt, par);
+  }
+
+  /**
+   * Returns help output as query exception instance.
+   * Prints some command info.
+   * @param alt input alternatives
+   * @param cmd input completions
+   * @return QueryException query exception
+   */
+  private QueryException help(final Enum<?>[] alt, final Cmd cmd) {
+    return error(alt, SYNTAX_X, cmd.help(true));
+  }
+
+  /**
+   * Returns all commands that start with the specified user input.
+   * @param <T> token type
+   * @param en available commands
+   * @param prefix user input
+   * @return completions
+   */
+  private static <T extends Enum<T>> Enum<?>[] startWith(final Class<T> en, final String prefix) {
+    Enum<?>[] list = new Enum<?>[0];
+    final String t = prefix == null ? "" : prefix.toUpperCase(Locale.ENGLISH);
+    for(final Enum<?> e : en.getEnumConstants()) {
+      if(e.name().startsWith(t)) {
+        final int s = list.length;
+        list = Array.copy(list, new Enum<?>[s + 1]);
+        list[s] = e;
+      }
+    }
+    return list;
+  }
+
+  /**
+   * Checks if the end of a command has been reached.
+   * @return true if command has ended
+   */
+  private boolean eoc() {
+    return !parser.more() || parser.curr() == ';';
+  }
+
+  /**
+   * Returns a query exception instance.
+   * @param comp input completions
+   * @param msg message
+   * @param ext extension
+   * @return query exception
+   */
+  private QueryException error(final Enum<?>[] comp, final String msg, final Object... ext) {
+    return new QueryException(parser.info(), new QNm(), msg, ext).suggest(parser, list(comp));
+  }
+
+  /**
+   * Converts the specified commands into a string list.
+   * @param comp input completions
+   * @return string list
+   */
+  private static StringList list(final Enum<?>[] comp) {
+    final StringList list = new StringList();
+    if(comp != null) {
+      for(final Enum<?> c : comp) list.add(c.name().toLowerCase(Locale.ENGLISH));
+    }
+    return list;
+  }
+}
+

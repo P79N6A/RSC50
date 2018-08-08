@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1069RcdchannelaEntity" table="tb1069_rcdchannela" schema="rscapp"
+          >
+        <id name="f1069Code">
+            <column name="F1069_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1069Index">
+            <column name="F1069_Index" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1069Type">
+            <column name="F1069_Type" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1069Phase">
+            <column name="F1069_Phase" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1043Code">
+            <column name="F1043_CODE" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1061Code">
+            <column name="F1061_CODE" sql-type="char" length="48"/>
+        </property>
+        <property name="f1058Code">
+            <column name="F1058_CODE" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <many-to-one name="tb1046IedByIedCode" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="IED_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

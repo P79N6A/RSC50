@@ -1,0 +1,417 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.shrcn.tool.rtu.model.BaseDpaPoint"
+		abstract="true">
+		<id name="id" type="int" unsaved-value="0">
+			<column name="ID" />
+			<generator class="sequence">
+				<param name="sequence">DpaPoint_Seq</param>
+			</generator>
+		</id>
+		<property name="dbtype" type="string">
+			<column name="DBTYPE" length="2" />
+		</property>
+		<property name="seqnum" type="int">
+			<column name="SEQNUM" />
+		</property>
+
+		<many-to-one name="obj" column="OBJECTID"
+			class="com.shrcn.tool.rtu.model.TDpaobject" not-null="false"
+			lazy="false">
+		</many-to-one>
+
+		<many-to-one name="mx" column="MXID"
+			class="com.shrcn.tool.rtu.model.TDcaMx" not-null="false"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="st" column="STID"
+			class="com.shrcn.tool.rtu.model.TDcaSt" not-null="false"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="co" column="COID"
+			class="com.shrcn.tool.rtu.model.TDcaCo" not-null="false"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="sp" column="SPID"
+			class="com.shrcn.tool.rtu.model.TDcaSp" not-null="false"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="sg" column="SGID"
+			class="com.shrcn.tool.rtu.model.TDcaSg" not-null="false"
+			lazy="false">
+		</many-to-one>
+		<many-to-one name="se" column="SEID"
+			class="com.shrcn.tool.rtu.model.TDcaSe" not-null="false"
+			lazy="false">
+		</many-to-one>
+
+		<union-subclass name="com.shrcn.tool.rtu.model.TAipoint"
+			table="T_AIPOINT">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" />
+			</property>
+			<property name="threshold" type="string">
+				<column name="THRESHOLD" />
+			</property>
+			<property name="lowlimit" type="string">
+				<column name="LOWLIMIT" />
+			</property>
+			<property name="highlimit" type="string">
+				<column name="HIGHLIMIT" />
+			</property>
+			<property name="di0" type="string">
+				<column name="DI0" length="10" />
+			</property>
+			<property name="di1" type="string">
+				<column name="DI1" length="10" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDipoint"
+			table="T_DIPOINT">
+			<property name="pointmode" type="string">
+				<column name="POINTMODE" length="20" />
+			</property>
+			<property name="reportcos" type="string">
+				<column name="REPORTCOS" length="10" />
+			</property>
+			<property name="reportsoe" type="string">
+				<column name="REPORTSOE" length="10" />
+			</property>
+			<property name="reverse" type="string">
+				<column name="REVERSE" length="10" />
+			</property>
+			<property name="fun" type="string">
+				<column name="FUN" length="10" />
+			</property>
+			<property name="inf" type="string">
+				<column name="INF" length="10" />
+			</property>
+			<property name="entryid" type="int">
+				<column name="ENTRYID" length="10" />
+			</property>
+			<property name="groupid" type="string">
+				<column name="GROUPID" length="10" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TCipoint"
+			table="T_CIPOINT">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" />
+			</property>
+			<property name="pointmode" type="string">
+				<column name="POINTMODE" length="20" />
+			</property>
+			<property name="reportflag" type="string">
+				<column name="REPORTFLAG" length="10" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TAopoint"
+			table="T_AOPOINT">
+			<property name="controlmode" type="string">
+				<column name="CONTROLMODE" length="30" />
+			</property>
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" />
+			</property>
+			<property generated="never" name="aetype" type="string">
+				<column name="aeType" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" />
+			</property>
+			<property name="ontime" type="string">
+				<column name="ONTIME" />
+			</property>
+			<property name="offtime" type="string">
+				<column name="OFFTIME" />
+			</property>
+			<property name="counttimes" type="string">
+				<column name="COUNTTIMES" />
+			</property>
+			<property name="pointattr" type="string">
+				<column name="POINTATTR" length="1" />
+			</property>
+			<property name="tabname" type="string">
+				<column name="TABNAME" length="50" />
+			</property>
+			<property name="itemname" type="string">
+				<column name="ITEMNAME" length="50" />
+			</property>
+			<property name="segdes" type="string">
+				<column name="SEGDES" length="50" />
+			</property>
+			<property name="type" type="string">
+				<column name="TYPE" length="2" />
+			</property>
+			<property name="rw" type="string">
+				<column name="RW" length="2" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDopoint"
+			table="T_DOPOINT">
+			<property name="pointmode" type="string">
+				<column name="POINTMODE" length="20" />
+			</property>
+			<property name="ontime" type="string">
+				<column name="ONTIME" />
+			</property>
+			<property name="offtime" type="string">
+				<column name="OFFTIME" />
+			</property>
+			<property name="counttimes" type="string">
+				<column name="COUNTTIMES" />
+			</property>
+			<property name="controlmode" type="string">
+				<column name="CONTROLMODE" length="30" />
+			</property>
+			<property name="pointattr" type="string">
+				<column name="POINTATTR" length="1" />
+			</property>
+			<property name="fun" type="string">
+				<column name="FUN" length="10" />
+			</property>
+			<property name="inf" type="string">
+				<column name="INF" length="10" />
+			</property>
+			<property name="pointNum" type="int">
+				<column name="POINTNUM" />
+			</property>
+			<property name="infoType" type="string">
+				<column name="INFOTYPE"  length="20"/>
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TDmdpoint"
+			table="T_DMDPOINT">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" />
+			</property>
+			<property generated="never" name="aetype" type="string">
+				<column name="aeType" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" />
+			</property>
+			<property name="threshold" type="string">
+				<column name="THRESHOLD" />
+			</property>
+			<property name="lowlimit" type="string">
+				<column name="LOWLIMIT" />
+			</property>
+			<property name="highlimit" type="string">
+				<column name="HIGHLIMIT" />
+			</property>
+			<property name="di0" type="string">
+				<column name="DI0" length="10" />
+			</property>
+			<property name="di1" type="string">
+				<column name="DI1" length="10" />
+			</property>
+			<property name="fun" type="string">
+				<column name="FUN" length="10" />
+			</property>
+			<property name="inf" type="string">
+				<column name="INF" length="10" />
+			</property>
+			<property name="entryid" type="int">
+				<column name="ENTRYID" length="10" />
+			</property>
+			<property name="groupid" type="string">
+				<column name="GROUPID" length="10" />
+			</property>
+			<property name="ctlmode" type="string">
+	            <column name="CTLMODE" length="100" />
+	        </property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TPqpoint"
+			table="T_PQPOINT">
+			<property name="dividefactor" type="string">
+				<column name="DIVIDEFACTOR" />
+			</property>
+			<property name="multifactor" type="string">
+				<column name="MULTIFACTOR" />
+			</property>
+			<property name="offset" type="string">
+				<column name="OFFSET" />
+			</property>
+			<property name="threshold" type="string">
+				<column name="THRESHOLD" />
+			</property>
+			<property name="lowlimit" type="string">
+				<column name="LOWLIMIT" />
+			</property>
+			<property name="highlimit" type="string">
+				<column name="HIGHLIMIT" />
+			</property>
+			<property name="di0" type="string">
+				<column name="DI0" length="10" />
+			</property>
+			<property name="di1" type="string">
+				<column name="DI1" length="10" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TSgpoint"
+			table="T_SGPOINT">
+			<property generated="never" name="datalength"
+				type="string">
+				<column name="dataLength" />
+			</property>
+			<property generated="never" name="aetype" type="string">
+				<column name="aeType" />
+			</property>
+			<property generated="never" name="ontime" type="string">
+				<column name="onTime" />
+			</property>
+			<property generated="never" name="offtime" type="string">
+				<column name="offTime" />
+			</property>
+			<property generated="never" name="counttimes"
+				type="string">
+				<column name="countTimes" />
+			</property>
+			<property generated="never" name="entryid" type="int">
+				<column name="entryID" />
+			</property>
+			<property generated="never" name="groupid" type="string">
+				<column name="groupID" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TFjpoint"
+			table="T_FJPOINT">
+			<property generated="never" name="aetype" type="string">
+				<column name="aeType" />
+			</property>
+			<property generated="never" name="ontime" type="string">
+				<column name="onTime" />
+			</property>
+			<property generated="never" name="offtime" type="string">
+				<column name="offTime" />
+			</property>
+			<property generated="never" name="counttimes"
+				type="string">
+				<column name="countTimes" />
+			</property>
+			<property generated="never" name="entryid" type="int">
+				<column name="entryID" />
+			</property>
+			<property generated="never" name="groupid" type="string">
+				<column name="groupID" />
+			</property>
+			<property generated="never" name="controlmode"
+				type="string">
+				<column name="controlMode" />
+			</property>
+			<property generated="never" name="dividefactor"
+				type="string">
+				<column name="divideFactor" />
+			</property>
+			<property generated="never" name="multifactor"
+				type="string">
+				<column name="multiFactor" />
+			</property>
+			<property generated="never" name="offset" type="string">
+				<column name="offset" />
+			</property>
+			<property generated="never" name="threshold"
+				type="string">
+				<column name="threshold" />
+			</property>
+			<property generated="never" name="lowlimit" type="string">
+				<column name="lowLimit" />
+			</property>
+			<property generated="never" name="highlimit"
+				type="string">
+				<column name="highLimit" />
+			</property>
+			<property generated="never" name="reportcos"
+				type="string">
+				<column name="reportCos" />
+			</property>
+			<property generated="never" name="reportsoe"
+				type="string">
+				<column name="reportSoe" />
+			</property>
+			<property generated="never" name="pointattr"
+				type="string">
+				<column name="pointAttr" />
+			</property>
+			<property name="fun" type="string">
+				<column name="FUN" length="10" />
+			</property>
+			<property name="inf" type="string">
+				<column name="INF" length="10" />
+			</property>
+			<property generated="never" name="pointmode"
+				type="string">
+				<column name="pointMode" />
+			</property>
+			<property name="dimen" type="string">
+				<column name="DIMEN" length="10" />
+			</property>
+			<property name="minVal" type="string">
+				<column name="MINVAL" length="10" />
+			</property>
+			<property name="maxVal" type="string">
+				<column name="MAXVAL" length="10" />
+			</property>
+			<property name="step" type="string">
+				<column name="STEP" length="10" />
+			</property>
+			<property name="preciseInt" type="string">
+				<column name="PRECISEINT" length="10" />
+			</property>
+			<property name="preciseDeci" type="string">
+				<column name="PRECISEDECI" length="10" />
+			</property>
+		</union-subclass>
+		<union-subclass name="com.shrcn.tool.rtu.model.TFjsppoint"
+			table="T_FJSPPOINT">
+			<property generated="never" name="aetype" type="string">
+				<column name="aeType" />
+			</property>
+			<property name="saddr" type="int">
+				<column name="SADDR" />
+			</property>
+			<property name="entryid" type="int">
+				<column name="ENTRYID" length="10" />
+			</property>
+			<property name="groupid" type="string">
+				<column name="groupID" length="10" />
+			</property>
+			<property name="ontime" type="string">
+				<column name="onTime" />
+			</property>
+			<property name="offtime" type="string">
+				<column name="offTime" />
+			</property>
+			<property name="counttimes" type="string">
+				<column name="countTimes" />
+			</property>
+			<property name="fun" type="string">
+				<column name="FUN" length="10" />
+			</property>
+			<property name="inf" type="string">
+				<column name="INF" length="10" />
+			</property>
+			<property name="deviceid" type="int">
+				<column name="DEVICEID" length="10" />
+			</property>
+		</union-subclass>		
+	</class>
+</hibernate-mapping>

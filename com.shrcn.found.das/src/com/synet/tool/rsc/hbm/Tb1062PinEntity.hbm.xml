@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1062PinEntity" table="tb1062_pin" schema="rscapp">
+        <id name="f1062Code">
+            <column name="F1062_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1062RefAddr">
+            <column name="F1062_RefAddr" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1020No">
+            <column name="F1020_NO" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1062Desc">
+            <column name="F1062_Desc" sql-type="char" length="96"/>
+        </property>
+        <property name="f1062IsUsed">
+            <column name="F1062_IsUsed" sql-type="int" not-null="true"/>
+        </property>
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity">
+            <column name="F1064_CODE"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

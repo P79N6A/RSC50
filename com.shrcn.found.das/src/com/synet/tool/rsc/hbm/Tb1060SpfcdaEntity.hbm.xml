@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1060SpfcdaEntity" table="tb1060_spfcda" schema="rscapp">
+        <id name="f1060Code">
+            <column name="F1060_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1060RefAddr">
+            <column name="F1060_RefAddr" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1060Index">
+            <column name="F1060_Index" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1060DataType">
+            <column name="F1060_DataType" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1060Desc">
+            <column name="F1060_Desc" sql-type="char" length="96"/>
+        </property>
+        <property name="f1060Unit">
+            <column name="F1060_Unit" sql-type="char" length="24"/>
+        </property>
+        <property name="f1060StepSize">
+            <column name="F1060_StepSize" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1060ValueMin">
+            <column name="F1060_ValueMin" sql-type="float" precision="12"/>
+        </property>
+        <property name="f1060ValueMax">
+            <column name="F1060_ValueMax" sql-type="float" precision="12"/>
+        </property>
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

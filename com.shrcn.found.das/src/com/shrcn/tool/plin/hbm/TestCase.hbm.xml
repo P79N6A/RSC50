@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 9:36:32 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+	<class name="com.shrcn.tool.plin.model.TestCase" table="m_test_case">
+		<id name="id" type="int">
+			<column name="ID" />
+			<generator class="increment" />
+		</id>
+		<property name="index" type="int">
+			<column name="INDEX" />
+		</property>
+		<property name="name" type="string">
+			<column name="NAME" />
+		</property>
+		<property name="testDate" type="java.sql.Timestamp">
+			<column name="TESTDATE" />
+		</property>
+		<property name="preValue" type="string">
+			<column name="PREVALUE" />
+		</property>
+		<property name="realValue" type="string">
+			<column name="REALVALUE" />
+		</property>
+		<property name="result" type="string">
+			<column name="RESULT" />
+		</property>
+		<many-to-one name="plinTest" class="com.shrcn.tool.plin.model.PlinTest"
+			column="TEST_ID" unique="true" lazy="false"/>
+	</class>
+</hibernate-mapping>

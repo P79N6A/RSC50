@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1044TerminalEntity" table="tb1044_terminal" schema="rscapp">
+        <id name="f1044Code">
+            <column name="F1044_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1044Name">
+            <column name="F1044_Name" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1044Desc">
+            <column name="F1044_Desc" sql-type="char" length="96"/>
+        </property>
+        <many-to-one name="tb1045ConnectivitynodeByF1045Code"
+                     class="com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity">
+            <column name="F1045_CODE" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity">
+            <column name="F1043_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

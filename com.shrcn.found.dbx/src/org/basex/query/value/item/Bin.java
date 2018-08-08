@@ -1,0 +1,58 @@
+package org.basex.query.value.item;
+
+import org.basex.io.in.ArrayInput;
+import org.basex.io.in.BufferInput;
+import org.basex.query.QueryException;
+import org.basex.query.expr.Expr;
+import org.basex.query.value.type.Type;
+import org.basex.util.InputInfo;
+import org.basex.util.Token;
+
+/**
+ * Abstract class for binary items.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public abstract class Bin extends Item {
+  /** Binary data. */
+  byte[] data;
+
+  /**
+   * Constructor.
+   * @param data binary data
+   * @param type type
+   */
+  Bin(final byte[] data, final Type type) {
+    super(type);
+    this.data = data;
+  }
+
+  /**
+   * Returns the binary content.
+   * @param ii input info
+   * @return content
+   * @throws QueryException query exception
+   */
+  @SuppressWarnings("unused")
+  public byte[] binary(final InputInfo ii) throws QueryException {
+    return data;
+  }
+
+  @Override
+  public BufferInput input(final InputInfo ii) throws QueryException {
+    return new ArrayInput(data);
+  }
+
+  @Override
+  public final byte[] toJava() throws QueryException {
+    return binary(null);
+  }
+
+  @Override
+  public final boolean sameAs(final Expr cmp) {
+    if(!(cmp instanceof Bin)) return false;
+    final Bin b = (Bin) cmp;
+    return type == b.type && Token.eq(data, b.data);
+  }
+}

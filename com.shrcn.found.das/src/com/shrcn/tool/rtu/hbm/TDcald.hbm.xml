@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDcald" table="T_DCALD" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="ldname" type="string">
+            <column name="LDNAME" />
+        </property>
+        <property name="inst" type="string">
+            <column name="INST" />
+        </property>
+        <property name="mxnumber" type="int">
+            <column name="MXNUMBER" />
+        </property>
+        <property name="stnumber" type="int">
+            <column name="STNUMBER" />
+        </property>
+        <property name="conumber" type="int">
+            <column name="CONUMBER" />
+        </property>
+        <property name="spnumber" type="int">
+            <column name="SPNUMBER" />
+        </property>
+        <property name="sgnumber" type="int">
+            <column name="SGNUMBER" />
+        </property>
+        <property name="senumber" type="int">
+            <column name="SENUMBER" />
+        </property>
+        <property name="mxoffset" type="int">
+            <column name="MXOFFSET" />
+        </property>
+        <property name="stoffset" type="int">
+            <column name="STOFFSET" />
+        </property>
+        <property name="cooffset" type="int">
+            <column name="COOFFSET" />
+        </property>
+        <property name="spoffset" type="int">
+            <column name="SPOFFSET" />
+        </property>
+        <property name="sgoffset" type="int">
+            <column name="SGOFFSET" />
+        </property>
+        <property name="seoffset" type="int">
+            <column name="SEOFFSET" />
+        </property>
+        
+        <many-to-one name="ied" column="IEDID" class="com.shrcn.tool.rtu.model.TDcaied"
+        	not-null="true" lazy="false">
+        </many-to-one>
+        
+        <set name="psMx" inverse="true" cascade="save-update" table="T_DCA_MX">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaMx" />
+        </set>
+        <set name="psSt" inverse="true" cascade="save-update" table="T_DCA_ST">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSt" />
+        </set>
+        <set name="psCo" inverse="true" cascade="save-update" table="T_DCA_CO">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaCo" />
+        </set>
+        <set name="psSp" inverse="true" cascade="save-update" table="T_DCA_SP">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSp" />
+        </set>
+        <set name="psSg" inverse="true" cascade="save-update" table="T_DCA_SG">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSg" />
+        </set>
+        <set name="psSe" inverse="true" cascade="save-update" table="T_DCA_SE">
+        	<key column="LDID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSe" />
+        </set>
+    </class>
+</hibernate-mapping>

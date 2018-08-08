@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TComchannel" table="T_COMCHANNEL" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="comType" type="string">
+	            <column name="COMTYPE" />
+	        </property>
+	    <property name="localAddr" type="string">
+	            <column name="LOCALADDR" />
+	        </property>
+	    <property name="procType" type="string">
+				<column name="PROCTYPE" />
+			</property>
+	    <property name="tmTran" type="string">
+	            <column name="TMTRAN" />
+	        </property>
+	        <property name="tmRecv" type="string">
+	            <column name="TMRECV" />
+	        </property>
+	    <property name="bufferSize" type="string">
+			<column name="BUFFERSIZE" />
+		</property>
+		<property name="respTimeout" type="string">
+			<column name="RESPTIMEOUT" />
+		</property>
+        <property name="portname" type="string">
+            <column name="PORTNAME" length="10" />
+        </property>
+        <property name="baudrate" type="string">
+            <column name="BAUDRATE" />
+        </property>
+        <property name="databit" type="string">
+            <column name="DATABIT" />
+        </property>
+        <property name="stopbit" type="string">
+            <column name="STOPBIT" />
+        </property>
+        <property name="parity" type="string">
+            <column name="PARITY" length="10" />
+        </property>
+        <property name="maxframelength" type="string">
+            <column name="MAXFRAMELENGTH" />
+        </property>
+        <property name="singleacksupported" type="string">
+            <column name="SINGLEACKSUPPORTED" length="10" />
+        </property>
+        <property name="standbystartdelay" type="string">
+            <column name="STANDBYSTARTDELAY" length="10" />
+        </property>
+        <property name="maxfcbcount" type="string">
+            <column name="MAXFCBCOUNT" />
+        </property>
+        <property name="linkaddrlength" type="string">
+            <column name="LINKADDRLENGTH" />
+        </property>
+        <property name="linkaddress" type="string">
+            <column name="LINKADDRESS" length="10" />
+        </property>
+        <property name="clearcos" type="string">
+            <column name="CLEARCOS" length="10" />
+        </property>
+        <property name="clearsoe" type="string">
+            <column name="CLEARSOE" length="10" />
+        </property>
+        <property name="servicelist" type="string">
+            <column name="SERVICELIST" length="8" />
+        </property>
+        <property name="infotype13" type="string">
+            <column name="INFOTYPE13" length="20" />
+        </property>
+        <property name="txtimeout" type="string">
+            <column name="TXTIMEOUT" length="20" />
+        </property>
+        <property name="rxtimeout" type="string">
+            <column name="RXTIMEOUT" length="20" />
+        </property>
+        <property name="synchead" type="string">
+            <column name="SYNCHEAD" length="20" />
+        </property>
+        <property name="remoteaddress" type="string">
+            <column name="REMOTEADDRESS" length="60" />
+        </property>
+        <property name="iec101type" type="string">
+            <column name="IEC101TYPE" length="2" />
+        </property>
+        <property name="manuid" type="string">
+            <column name="manuID" length="2" />
+        </property>
+        <property name="statusPoint" type="int">
+            <column name="STATUSPOINT" />
+        </property>
+     	<many-to-one name="tMasterApp" column="MASTERAPPID" class="com.shrcn.tool.rtu.model.TMasterApp"
+        	not-null="false" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

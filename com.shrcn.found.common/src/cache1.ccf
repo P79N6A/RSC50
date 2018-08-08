@@ -1,0 +1,64 @@
+# CACHE REGIONS ，这里需要把硬盘缓存DC配置到此
+#jcs.region.testCache1=DC
+#jcs.region.testCache1.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+#jcs.region.testCache1.cacheattributes.MaxObjects=10
+#jcs.region.testCache1.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
+
+
+# optional region "modifyCache" specific configuration settings
+jcs.region.modifyCache=DC
+jcs.region.modifyCache.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+jcs.region.modifyCache.cacheattributes.MaxObjects=1000
+jcs.region.modifyCache.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.modifyCache.cacheattributes.UseMemoryShrinker=false
+jcs.region.modifyCache.elementattributes.IsEternal=false
+jcs.region.modifyCache.elementattributes.MaxLifeSeconds=180
+jcs.region.modifyCache.elementattributes.IsSpool=false
+jcs.region.modifyCache.elementattributes.IsLateral=false
+jcs.region.modifyCache.elementattributes.IsRemote=false
+
+# AUXILIARY CACHES
+# Indexed Disk Cache
+jcs.auxiliary.DC=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheFactory
+jcs.auxiliary.DC.attributes=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheAttributes
+jcs.auxiliary.DC.attributes.DiskPath=./jcs/raf
+# 在内存中与磁盘缓存对象所对应的个数
+jcs.auxiliary.DC.attributes.MaxPurgatorySize=10000
+# 设置key文件中缓冲对象个数
+jcs.auxiliary.DC.attributes.MaxKeySize=10000
+# 删除处理的次数超过300000后对数据文件进行整理
+jcs.auxiliary.DC.attributes.OptimizeAtRemoveCount=300000
+jcs.auxiliary.DC.attributes.OptimizeOnShutdown=true
+# 保留key文件中已在data文件被删除对象的个数，需要符合内存算法
+jcs.auxiliary.DC.attributes.MaxRecycleBinSize=7500
+
+
+
+
+
+# optional region "modifyCache" specific configuration settings
+jcs.region.modifyCache=DC
+# 设定使用的 cache 属性管理类别（复合型缓存）
+jcs.region.modifyCache.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+# 设定 cache 内对象的上限，这里指的是某区域内缓存对象的最大上限，
+#一般设定为1000，只能存储#988，另外2个对象空间被占用
+jcs.region.modifyCache.cacheattributes.MaxObjects=12
+# 设定 memory cache 的算法，LRU（近期最少使用算法）会将内存页中近期不常用的对象移除内存
+jcs.region.modifyCache.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+# 设定是否使用冗余内存清除程序
+jcs.region.modifyCache.cacheattributes.UseMemoryShrinker=false
+#UseMemoryShrinker 和 IsEternal 都是用来自动删除对象的。
+#设定是否永久有效,默认为true
+jcs.region.modifyCache.elementattributes.IsEternal=true
+# 设定缓存element最大生命周期，超过时间后去请求缓存对象则返回null
+jcs.region.modifyCache.elementattributes.MaxLifeSeconds=21600
+#下面三个配置是开启辅助缓存的，如果在第一行没有设置辅助缓存，这里则是无效的。
+#在第一行配置后，这里如果是false也是无效的，还是会进行一些辅助缓存的初始化操作等等，
+#只是不会真正的生成缓存数据。
+# 开启磁盘缓存，默认为true
+jcs.region.modifyCache.elementattributes.IsSpool=true
+# 关闭横向式的并行缓存，默认为true
+jcs.region.modifyCache.elementattributes.IsLateral=false
+# 关闭远程缓存，默认为true
+jcs.region.modifyCache.elementattributes.IsRemote=false
+

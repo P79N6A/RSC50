@@ -1,0 +1,78 @@
+package org.basex.query.func.db;
+
+import static org.basex.query.QueryError.BXDB_PATH_X;
+import static org.basex.util.Token.token;
+
+import org.basex.core.cmd.Rename;
+import org.basex.data.Data;
+import org.basex.io.IOFile;
+import org.basex.query.QueryContext;
+import org.basex.query.QueryException;
+import org.basex.query.up.Updates;
+import org.basex.query.up.primitives.db.DBDelete;
+import org.basex.query.up.primitives.db.DBRename;
+import org.basex.query.up.primitives.node.ReplaceValue;
+import org.basex.query.value.item.Item;
+import org.basex.util.InputInfo;
+import org.basex.util.list.IntList;
+
+/**
+ * Function implementation.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public final class DbRename extends DbAccess {
+  @Override
+  public Item item(final QueryContext qc, final InputInfo ii) throws QueryException {
+    final Data data = checkData(qc);
+    final String source = path(1, qc);
+    final String target = path(2, qc);
+
+    // the first step of the path should be the database name
+    final Updates updates = qc.updates();
+    final IntList il = data.resources.docs(source);
+    final int is = il.size();
+    for(int i = 0; i < is; i++) {
+      final int pre = il.get(i);
+      final String trg = Rename.target(data, pre, source, target);
+      if(trg.isEmpty() || trg.endsWith("/") || trg.endsWith(".")) throw BXDB_PATH_X.get(info, trg);
+      updates.add(new ReplaceValue(pre, data, info, token(trg)), qc);
+    }
+
+    // rename raw data
+    if(!data.inMemory()) {
+      final IOFile src = data.meta.binary(source);
+      final IOFile trg = data.meta.binary(target);
+      if(src == null || trg == null) throw BXDB_PATH_X.get(info, src);
+      if(!src.eq(trg)) {
+        rename(data, src, trg, qc);
+        updates.add(new DBDelete(data, source, info), qc);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Recursively creates rename operations for binary files.
+   * @param data data reference
+   * @param src source path
+   * @param trg target path
+   * @param qc query context
+   * @throws QueryException query exception
+   */
+  private void rename(final Data data, final IOFile src, final IOFile trg,
+      final QueryContext qc) throws QueryException {
+
+    if(src.isDir()) {
+      // dir -> file? error
+      if(trg.exists() && !trg.isDir()) throw BXDB_PATH_X.get(info, src);
+      // rename children
+      for(final IOFile f : src.children()) rename(data, f, new IOFile(trg, f.name()), qc);
+    } else if(src.exists()) {
+      // file -> dir? error
+      if(trg.isDir()) throw BXDB_PATH_X.get(info, src);
+      qc.updates().add(new DBRename(data, src.path(), trg.path(), info), qc);
+    }
+  }
+}

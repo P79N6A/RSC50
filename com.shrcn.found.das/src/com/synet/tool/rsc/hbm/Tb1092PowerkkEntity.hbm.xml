@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1092PowerkkEntity" table="tb1092_powerkk" schema="rscapp">
+        <id name="f1092Code">
+            <column name="F1092_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1092Desc">
+            <column name="F1092_DESC" sql-type="char" length="96" not-null="true"/>
+        </property>
+        <property name="f1092KkNo">
+            <column name="F1092_KKNo" sql-type="char" length="96"/>
+        </property>
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

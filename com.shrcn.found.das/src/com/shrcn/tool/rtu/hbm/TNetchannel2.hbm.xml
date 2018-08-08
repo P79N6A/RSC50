@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TNetchannel" table="T_NETCHANNEL" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+			<generator class="sequence">
+				<param name="sequence">Common_Seq</param>
+			</generator>
+        </id>
+        <property name="netType" type="int">
+			<column name="NETTYPE" />
+		</property>
+		<property name="localAddr" type="string">
+			<column name="LOCALADDR" />
+		</property>
+		<property name="procType" type="string">
+			<column name="PROCTYPE" />
+		</property>
+		<property name="localIP" type="string">
+			<column name="LOCALIP" />
+		</property>
+		<property name="tcpSC" type="string">
+			<column name="TCPSC" />
+		</property>
+		<property name="udpSC" type="string">
+			<column name="UDPSC" />
+		</property>
+		<property name="tcpPort" type="string">
+			<column name="TCPPORT" />
+		</property>
+		<property name="udpRemotePort" type="string">
+			<column name="UDPREMOTEPORT" />
+		</property>
+		<property name="udpLocalPort" type="string">
+			<column name="UDPLOCALPORT" />
+		</property>
+		<property name="tmTran" type="string">
+			<column name="TMTRAN" />
+		</property>
+		<property name="tmRecv" type="string">
+			<column name="TMRECV" />
+		</property>
+		<property name="bufferSize" type="string">
+			<column name="BUFFERSIZE" />
+		</property>
+		<property name="respTimeout" type="string">
+			<column name="RESPTIMEOUT" />
+		</property>
+        <property name="ipnumber" type="int">
+            <column name="IPNUMBER" />
+        </property>
+        <property name="allowmultiip" type="string">
+            <column name="ALLOWMULTIIP" length="10" />
+        </property>
+        <property name="netmask" type="string">
+            <column name="NETMASK" length="10" />
+        </property>
+        <property name="maxconnection" type="string">
+            <column name="MAXCONNECTION" />
+        </property>
+        <property name="confirmtime" type="string">
+            <column name="CONFIRMTIME" />
+        </property>
+        <property name="stime" type="string">
+            <column name="STIME" />
+        </property>
+        <property name="idletime" type="string">
+            <column name="IDLETIME" />
+        </property>
+        <property name="holdtime" type="string">
+            <column name="HOLDTIME" />
+        </property>
+        <property name="stopclearcounter" type="string">
+            <column name="STOPCLEARCOUNTER" length="20" />
+        </property>
+        <property name="k_value" type="string">
+            <column name="K_VALUE" />
+        </property>
+        <property name="w_value" type="string">
+            <column name="W_VALUE" />
+        </property>
+        <property name="clearcos" type="string">
+            <column name="CLEARCOS" length="10" />
+        </property>
+        <property name="clearsoe" type="string">
+            <column name="CLEARSOE" length="10" />
+        </property>
+        <property name="servicelist" type="string">
+            <column name="SERVICELIST" length="8" />
+        </property>
+        <property name="heartbeat" type="string">
+            <column name="HEARTBEAT" length="8" />
+        </property>
+        <property name="infotype13" type="string">
+            <column name="INFOTYPE13" length="20" />
+        </property>
+        <many-to-one name="tMasterApp" column="MASTERAPPID" class="com.shrcn.tool.rtu.model.TMasterApp"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        <set name="ips" inverse="true" cascade="save-update" 
+        		table="T_MASTERIP" lazy="false">
+        	<key column="NETID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TMasterip" />
+        </set>
+    </class>
+</hibernate-mapping>

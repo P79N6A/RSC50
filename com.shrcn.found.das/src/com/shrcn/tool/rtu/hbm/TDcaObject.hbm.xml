@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDcaObject" table="T_DCAObject" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+			<generator class="sequence">
+				<param name="sequence">Common_Seq</param>
+			</generator>
+        </id>
+        <property name="objectID" type="int">
+            <column name="OBJECTID" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="funcType" type="string">
+            <column name="FUNCTYPE" />
+        </property>
+        <property name="pointType" type="string">
+            <column name="POINTTYPE" />
+        </property>
+        <property name="startAddr" type="int">
+            <column name="STARTADDR" />
+        </property>
+        <property name="functionPointOffset" type="int">
+            <column name="FUNCTIONPOINTOFFSET" />
+        </property>
+        <property name="functionPointNum" type="int">
+            <column name="FUNCTIONPOINTNUM" />
+        </property>
+        
+        <many-to-one name="ied" column="IEDID" class="com.shrcn.tool.rtu.model.TDcaiedModbus"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        
+        <many-to-one name="iedAnswer" column="IEDASWID" class="com.shrcn.tool.rtu.model.TDcaiedAnswer"
+        	not-null="false" lazy="false">
+        </many-to-one>
+        
+        <set name="psMx" inverse="true" cascade="save-update" table="T_DCA_MX" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaMx" />
+        </set>
+        <set name="psSt" inverse="true" cascade="save-update" table="T_DCA_ST" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSt" />
+        </set>
+        <set name="psCo" inverse="true" cascade="save-update" table="T_DCA_CO" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaCo" />
+        </set>
+        <set name="psSp" inverse="true" cascade="save-update" table="T_DCA_SP" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSp" />
+        </set>
+        <set name="psSg" inverse="true" cascade="save-update" table="T_DCA_SG" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSg" />
+        </set>
+        <set name="psSe" inverse="true" cascade="save-update" table="T_DCA_SE" lazy="true">
+        	<key column="OBJID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSe" />
+        </set>
+    </class>
+</hibernate-mapping>

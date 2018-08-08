@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.Tb1046IedEntity" table="tb1046_ied" schema="rscapp">
+        <id name="f1046Code">
+            <column name="F1046_CODE" sql-type="char" length="48" not-null="true"/>
+        </id>
+        <property name="f1042Code">
+            <column name="F1042_CODE" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1050Code">
+            <column name="F1050_Code" sql-type="char" length="48"/>
+        </property>
+        <property name="f1046Name">
+            <column name="F1046_Name" sql-type="char" length="48" not-null="true"/>
+        </property>
+        <property name="f1046Desc">
+            <column name="F1046_Desc" sql-type="char" length="96"/>
+        </property>
+        <property name="f1046Manufacturor">
+            <column name="F1046_Manufacturor" sql-type="char" length="48"/>
+        </property>
+        <property name="f1046Model">
+            <column name="F1046_Model" sql-type="char" length="48"/>
+        </property>
+        <property name="f1046ConfigVersion">
+            <column name="F1046_ConfigVersion" sql-type="char" length="48"/>
+        </property>
+        <property name="f1046AorB">
+            <column name="F1046_AorB" sql-type="int"/>
+        </property>
+        <property name="f1046IsVirtual">
+            <column name="F1046_IsVirtual" sql-type="int" not-null="true"/>
+        </property>
+        <property name="f1046Type">
+            <column name="F1046_Type" sql-type="int"/>
+        </property>
+        <property name="f1046Crc">
+            <column name="F1046_CRC" sql-type="char" length="24"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TPropertyvalue" table="T_PROPERTYVALUE" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="value" type="string">
+            <column name="VALUE" />
+        </property>
+        <many-to-one name="application" column="APPID" class="com.shrcn.tool.rtu.model.TApplication"
+        	not-null="true" lazy="false">
+        </many-to-one>
+        <many-to-one name="property" column="PROPERTYID" class="com.shrcn.tool.rtu.model.TProperty"
+        	not-null="true" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

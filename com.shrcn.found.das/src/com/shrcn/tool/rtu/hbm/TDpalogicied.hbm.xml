@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-9 14:04:19 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TDpalogicied" table="T_DPALOGICIED" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="20" />
+        </property>
+        <property name="cmnaddrsize" type="string">
+            <column name="CMNADDRSIZE" />
+        </property>
+        <property name="cotsize" type="string">
+            <column name="COTSIZE" />
+        </property>
+        <property name="ioasize" type="string">
+            <column name="IOASIZE" />
+        </property>
+        <property name="asduaddress" type="string">
+            <column name="ASDUADDRESS" />
+        </property>
+        <property name="timemode" type="string">
+            <column name="TIMEMODE" length="30" />
+        </property>
+        <property name="soebuffsize" type="string">
+            <column name="SOEBUFFSIZE" />
+        </property>
+        <property name="delaytime" type="string">
+            <column name="DELAYTIME" />
+        </property>
+        <property name="clocksynctimeout" type="string">
+            <column name="CLOCKSYNCTIMEOUT" />
+        </property>
+        <property name="selecttimeout" type="string">
+            <column name="SELECTTIMEOUT" />
+        </property>
+        <property name="recvtimeout" type="string">
+            <column name="RECVTIMEOUT" />
+        </property>
+        <property name="backscaninterval" type="string">
+            <column name="BACKSCANINTERVAL" />
+        </property>
+        <property name="discaninterval" type="string">
+            <column name="DISCANINTERVAL" />
+        </property>
+        <property name="aiscaninterval" type="string">
+            <column name="AISCANINTERVAL" />
+        </property>
+        <property name="ciscaninterval" type="string">
+            <column name="CISCANINTERVAL" length="20" />
+        </property>
+        <property name="actrespclass" type="string">
+            <column name="ACTRESPCLASS" length="20" />
+        </property>
+        <property name="girespclass" type="string">
+            <column name="GIRESPCLASS" length="20" />
+        </property>
+        <property name="cirespclass" type="string">
+            <column name="CIRESPCLASS" length="20" />
+        </property>
+        <property name="groupgirespclass" type="string">
+            <column name="GROUPGIRESPCLASS" length="20" />
+        </property>
+        <property name="clockrespclass" type="string">
+            <column name="CLOCKRESPCLASS" length="20" />
+        </property>
+        <property name="initrespclass" type="string">
+            <column name="INITRESPCLASS" length="20" />
+        </property>
+        <property name="senddoactterm" type="string">
+            <column name="SENDDOACTTERM" length="20" />
+        </property>
+        <property name="sendaoactterm" type="string">
+            <column name="SENDAOACTTERM" length="20" />
+        </property>
+        <property name="buffercos" type="string">
+            <column name="BUFFERCOS" length="10" />
+        </property>
+        <property name="paramaddress" type="string">
+            <column name="PARAMADDRESS" length="20" />
+        </property>
+        <property name="aiaddress" type="string">
+            <column name="AIADDRESS" length="20" />
+        </property>
+        <property name="type20enable" type="string">
+            <column name="TYPE20ENABLE" length="20" />
+        </property>
+        <property name="type167enable" type="string">
+            <column name="TYPE167ENABLE" length="20" />
+        </property>
+        <property name="iec103addr" type="string">
+            <column name="IEC103ADDR" length="20" />
+        </property>
+        <property name="sendclockevent" type="string">
+            <column name="SENDCLOCKEVENT" length="20" />
+        </property>
+        <property name="sendcounterdata" type="string">
+            <column name="SENDCOUNTERDATA" length="20" />
+        </property>
+        <property name="sendchangedata" type="string">
+            <column name="SENDCHANGEDATA" length="20" />
+        </property>
+        <property name="sendmultipnt" type="string">
+            <column name="SENDMULTIPNT" length="20" />
+        </property>
+        <property name="send14groupai" type="string">
+            <column name="SEND14GROUPAI" length="20" />
+        </property>
+        <property name="sendclockai" type="string">
+            <column name="SENDCLOCKAI" length="20" />
+        </property>
+        <property name="prioritytype" type="string">
+            <column name="PRIORITYTYPE" length="50" />
+        </property>
+        <property name="localaddress" type="string">
+            <column name="LOCALADDRESS" length="20" />
+        </property>
+        <property name="iedtype" type="string">
+            <column name="IEDTYPE" length="20" />
+        </property>
+        <property name="comaddress" type="string">
+            <column name="COMADDRESS" />
+        </property>
+        <property name="iedAddr" type="string">
+			<column name="IEDADDR" />
+		</property>
+		<property name="linkAddr" type="string">
+			<column name="LINKADDR" />
+		</property>
+		<property name="totalTime" type="string">
+			<column name="TOTALTIME" />
+		</property>
+		<property name="sgupdinterval" type="string">
+			<column name="SGUPDINTERVAL" />
+		</property>
+		<property name="seqnumfjoffset" type="string">
+			<column name="SEQNUMFJOFFSET" />
+		</property>
+		<property name="seqnumaooffset" type="string">
+			<column name="SEQNUMAOOFFSET" />
+		</property>
+        <many-to-one name="master" column="MASTERID" class="com.shrcn.tool.rtu.model.TDpamaster"
+        	not-null="false" lazy="false">
+        </many-to-one>
+    </class>
+</hibernate-mapping>

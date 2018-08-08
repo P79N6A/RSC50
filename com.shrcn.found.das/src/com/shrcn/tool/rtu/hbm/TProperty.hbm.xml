@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2012-2-8 13:44:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.shrcn.tool.rtu.model.TProperty" table="T_PROPERTY" schema="APP">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="60" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="100" />
+        </property>
+        <property name="note" type="string">
+            <column name="NOTE" length="200" />
+        </property>
+        <property name="defaultvalue" type="string">
+            <column name="DEFAULTVALUE" />
+        </property>
+        <property name="seq" type="int">
+            <column name="SEQ" />
+        </property>
+        <many-to-one
+	        name="apptype"
+	        class="com.shrcn.tool.rtu.model.TApptype"
+	        column="APPTYPEID"
+	        unique="true"
+	        lazy="false"
+        />
+        <set name="apps" inverse="true" cascade="save-update"
+        	table="T_PROPERTYVALUE">
+        	<key column="PROPERTYID"></key>
+        	<one-to-many class="com.shrcn.tool.rtu.model.TPropertyvalue" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">
+			org.apache.derby.jdbc.EmbeddedDriver
+		</property>
+		<property name="hibernate.connection.url">
+			jdbc:derby:./RscData/default;create=true
+		</property>
+		<property name="hibernate.dialect">
+			<!-- org.hibernate.dialect.DerbyDialect -->
+			com.shrcn.tool.found.das.SHRDerbyDialect
+		</property>
+		<property name="hibernate.connection.username">rscapp</property>
+		<property name="hibernate.connection.password">123456</property>
+		<property name="hibernate.connection.SetBigStringTryClob">true</property>
+		<property name="show_sql">false</property>
+		<property name="hibernate.jdbc.batch_size">50</property>
+		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property> 
+		
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1046IedEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1047BoardEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1048PortEntity.hbm.xml"/>
+        
+		<mapping resource="com/synet/tool/rsc/hbm/Tb1016StatedataEntity.hbm.xml"/>
+		<mapping resource="com/synet/tool/rsc/hbm/Tb1006AnalogdataEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1026StringdataEntity.hbm.xml"/>
+		
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1064StrapEntity.hbm.xml"/>
+		
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1093VoltagekkEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1066ProtmmxuEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1056SvcbEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1055GcbEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1061PoutEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1062PinEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1067CtvtsecondaryEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1041SubstationEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1042BayEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1044TerminalEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1045ConnectivitynodeEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1043EquipmentEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1065LogicallinkEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1068ProtctrlEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1053PhysconnEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1073LlinkphyrelationEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1063CircuitEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1054RcbEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1057SgcbEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1058MmsfcdaEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1059SgfcdaEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1060SpfcdaEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1022FaultconfigEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1049RegionEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1050CubicleEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1051CableEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1052CoreEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1069RcdchannelaEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1070MmsserverEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1071DauEntity.hbm.xml"/>
+        
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1072RcdchanneldEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1090LineprotfiberEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1091IotermEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1092PowerkkEntity.hbm.xml"/>
+			
+	</session-factory>
+</hibernate-configuration>

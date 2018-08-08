@@ -1,0 +1,140 @@
+package org.basex.query.up.primitives;
+
+import static org.basex.query.QueryError.BASX_OPTIONS_X;
+import static org.basex.query.QueryError.BASX_VALUE_X_X;
+import static org.basex.query.QueryError.BASX_WHICH_X;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map.Entry;
+
+import org.basex.core.BaseXException;
+import org.basex.core.MainOptions;
+import org.basex.query.QueryException;
+import org.basex.util.InputInfo;
+import org.basex.util.Strings;
+import org.basex.util.Util;
+import org.basex.util.options.BooleanOption;
+import org.basex.util.options.EnumOption;
+import org.basex.util.options.NumberOption;
+import org.basex.util.options.Option;
+import org.basex.util.options.Options;
+import org.basex.util.options.OptionsOption;
+import org.basex.util.options.StringOption;
+
+/**
+ * Contains various helper variables and methods for database operations.
+ *
+ * @author BaseX Team 2005-16, BSD License
+ * @author Christian Gruen
+ */
+public final class DBOptions {
+  /** Parsing options. */
+  public static final Option<?>[] PARSING = { MainOptions.CREATEFILTER, MainOptions.ADDARCHIVES,
+    MainOptions.ARCHIVENAME, MainOptions.SKIPCORRUPT, MainOptions.ADDRAW, MainOptions.ADDCACHE,
+    MainOptions.CSVPARSER, MainOptions.TEXTPARSER, MainOptions.JSONPARSER, MainOptions.HTMLPARSER,
+    MainOptions.PARSER, MainOptions.CHOP, MainOptions.INTPARSE, MainOptions.STRIPNS,
+    MainOptions.DTD, MainOptions.CATFILE, MainOptions.XINCLUDE };
+  /** Indexing options. */
+  public static final Option<?>[] INDEXING = { MainOptions.MAXCATS, MainOptions.MAXLEN,
+    MainOptions.SPLITSIZE, MainOptions.LANGUAGE, MainOptions.STOPWORDS, MainOptions.TEXTINDEX,
+    MainOptions.ATTRINDEX, MainOptions.TOKENINDEX, MainOptions.FTINDEX, MainOptions.TEXTINCLUDE,
+    MainOptions.ATTRINCLUDE, MainOptions.TOKENINCLUDE, MainOptions.FTINCLUDE, MainOptions.STEMMING,
+    MainOptions.CASESENS, MainOptions.DIACRITICS, MainOptions.UPDINDEX, MainOptions.AUTOOPTIMIZE };
+
+  /** Runtime options. */
+  private final HashMap<Option<?>, Object> map = new HashMap<>();
+
+  /**
+   * Constructor.
+   * @param options query options
+   * @param supported supported options
+   * @param info input info
+   * @throws QueryException query exception
+   */
+  public DBOptions(final Options options, final List<Option<?>> supported, final InputInfo info)
+      throws QueryException {
+    this(options, supported.toArray(new Option<?>[supported.size()]), info);
+  }
+
+  /**
+   * Constructor.
+   * @param options query options
+   * @param supported supported options
+   * @param info input info
+   * @throws QueryException query exception
+   */
+  public DBOptions(final Options options, final Option<?>[] supported, final InputInfo info)
+      throws QueryException {
+
+    final HashMap<String, Option<?>> opts = new HashMap<>();
+    for(final Option<?> option : supported) {
+      opts.put(option.name().toLowerCase(Locale.ENGLISH), option);
+    }
+
+    for(final Entry<String, String> entry : options.free().entrySet()) {
+      final String key = entry.getKey();
+      final Option<?> option = opts.get(key);
+      if(option == null) throw BASX_OPTIONS_X.get(info, key);
+
+      final String value = entry.getValue();
+      if(option instanceof NumberOption) {
+        final int v = Strings.toInt(value);
+        if(v < 0) throw BASX_VALUE_X_X.get(info, key, value);
+        map.put(option, v);
+      } else if(option instanceof BooleanOption) {
+        final boolean yes = Strings.yes(value);
+        if(!yes && !Strings.no(value)) throw BASX_VALUE_X_X.get(info, key, value);
+        map.put(option, yes);
+      } else if(option instanceof StringOption) {
+        map.put(option, value);
+      } else if(option instanceof EnumOption) {
+        final EnumOption<?> eo = (EnumOption<?>) option;
+        final Object ev = eo.get(value);
+        if(ev == null) throw BASX_VALUE_X_X.get(info, key, value);
+        map.put(option, ev);
+      } else if(option instanceof OptionsOption) {
+        try {
+          final Options o = ((OptionsOption<?>) option).newInstance();
+          o.assign(value);
+          map.put(option, o);
+        } catch(final BaseXException ex) {
+          throw BASX_WHICH_X.get(info, ex);
+        }
+      } else {
+        throw Util.notExpected();
+      }
+    }
+  }
+
+  /**
+   * Returns the value of the specified option.
+   * @param option option
+   * @return main options
+   */
+  public Object get(final Option<?> option) {
+    return map.get(option);
+  }
+
+  /**
+   * Assigns the specified option if it has not been assigned before.
+   * @param option option
+   * @param value value
+   */
+  public void assignIfEmpty(final Option<?> option, final Object value) {
+    if(!map.containsKey(option)) map.put(option, value);
+  }
+
+  /**
+   * Assigns runtime options to the specified main options.
+   * @param opts main options
+   * @return main options
+   */
+  public MainOptions assignTo(final MainOptions opts) {
+    for(final Entry<Option<?>, Object> entry : map.entrySet()) {
+      opts.put(entry.getKey(), entry.getValue());
+    }
+    return opts;
+  }
+}
