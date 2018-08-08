@@ -29,6 +29,7 @@ public class SecFibreEditor extends BaseConfigEditor {
 		super.buildUI(container);
 		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
 		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//收到请回复@王敏
 		
 //		// 基本信息
 //		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
