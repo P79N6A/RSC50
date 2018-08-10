@@ -1,4 +1,14 @@
 *.class
-bin
 RscData
 .metadata
+com.shrcn.found.common/bin             
+com.shrcn.found.common.nl1/bin
+com.shrcn.found.das/bin                
+com.shrcn.found.dbx/bin                
+com.shrcn.found.dbxapi/bin
+com.shrcn.found.library/bin            
+com.shrcn.found.ui/bin                 
+com.shrcn.found.ui.nl1/bin
+com.synet.tool.rsc/bin                 
+de.kupzog.KTable/bin                   
+org.sf.feeling.swt.win32.extension/bin
