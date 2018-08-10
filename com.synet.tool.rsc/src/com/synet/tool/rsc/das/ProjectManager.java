@@ -60,10 +60,8 @@ public class ProjectManager {
 	public void initDb(String dbName) {
 		session.reset(dbName);
 		Connection conn = dbmgr.getConnection(dbName);
-		if (!exists(dbName)) {
-			InputStream is = ProjectManager.class.getClassLoader().getResourceAsStream(sqlCfg);
-			dbmgr.runScript(is, conn);
-		}
+		InputStream is = ProjectManager.class.getClassLoader().getResourceAsStream(sqlCfg);
+		dbmgr.runScript(is, conn);
 		session.init(hbCfg);
 	}
 	

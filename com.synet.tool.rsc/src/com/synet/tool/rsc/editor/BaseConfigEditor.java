@@ -13,6 +13,9 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.GlobalData;
+import com.synet.tool.rsc.ui.table.DevKTable;
 
 /**
  * 
@@ -25,6 +28,10 @@ public class BaseConfigEditor extends BaseEditor {
 //
 //	protected ProjectFileManager prjFileMgr;
 //	protected ProjectManager prjMgr;
+	
+	protected DevKTable table;
+	protected BeanDaoImpl beandao;
+	protected GlobalData globalData;
 	
 	public BaseConfigEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -47,6 +54,8 @@ public class BaseConfigEditor extends BaseEditor {
 //			device = prjMgr.getDevice(getName());
 //		}
 		super.init();
+		beandao = BeanDaoImpl.getInstance();
+		globalData = GlobalData.getIntance();
 	}
 
 	@Override

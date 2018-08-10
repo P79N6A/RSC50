@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.view;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.common.event.Context;
@@ -8,8 +10,11 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.IEDEntry;
+import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavigationView;
+import com.synet.tool.rsc.GlobalData;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.ui.EcfgTreeViewer;
 import com.synet.tool.rsc.util.NavgTreeFactory;
 
@@ -18,6 +23,8 @@ public class NavigationView extends ANavigationView {
 	public static final String ID = UIConstants.View_Navg_ID;
 
 	private NavgTreeFactory treeFactory = NavgTreeFactory.getInstance();
+	
+	private GlobalData globalData = GlobalData.getIntance();
 	
 //	private ProjectFileManager prjFileMng = ProjectFileManager.getInstance();
 //	private ProjectManager prjMng = ProjectManager.getInstance();
@@ -58,6 +65,10 @@ public class NavigationView extends ANavigationView {
 	 */
 	@Override
 	protected void createProject() {
+		String dbName = "RscData";
+		ProjectManager instance = ProjectManager.getInstance();
+		instance.initDb(dbName);
+		instance.openDb(dbName);
 //		NewProjectDialog dlg = new NewProjectDialog(SwtUtil.getDefaultShell());
 //		if (IDialogConstants.OK_ID == dlg.open()) {
 //			closeProject();
@@ -112,6 +123,7 @@ public class NavigationView extends ANavigationView {
 
 	@Override
 	public void loadProject() {
+		iniTDB();
 		treeFactory.loadProject();
 		cfgViewer.setInput(treeFactory.getProjectData());
 		cfgViewer.expandAll();
@@ -120,6 +132,31 @@ public class NavigationView extends ANavigationView {
 	@Override
 	protected void closeProject() {
 		
+	}
+	
+	@Override
+	protected void addListeners() {
+		cfgViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ITreeEntry selEntry = cfgViewer.getSelTreeEntry();
+				
+				if (selEntry == null)
+					return;
+				if (selEntry instanceof ConfigTreeEntry) {
+					globalData.setCurrentSelEntry(selEntry);
+					openConfig(selEntry);
+				}
+			}
+		});
+		
+	}
+	
+	private void iniTDB() {
+		String dbName = "RscData";
+		ProjectManager instance = ProjectManager.getInstance();
+		instance.initDb(dbName);
+		instance.openDb(dbName);
 	}
 	
 }

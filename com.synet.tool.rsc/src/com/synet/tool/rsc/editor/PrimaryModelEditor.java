@@ -5,13 +5,16 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.ui.TableFactory;
 
 /**
  * 一次拓扑模型->间隔树菜单编辑器。
@@ -27,22 +30,13 @@ public class PrimaryModelEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		Composite comp = SwtUtil.createComposite(container, gridData, 1);
+		comp.setLayout(SwtUtil.getGridLayout(1));
+		GridData gdlb = new GridData(SWT.DEFAULT,25);
+		SwtUtil.createLabel(comp, "间隔信息列表", gdlb);
+		table = TableFactory.getIntervalMsgTable(comp);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
 	protected void addListeners() {
@@ -51,5 +45,7 @@ public class PrimaryModelEditor extends BaseConfigEditor {
 	@Override
 	public void initData() {
 		super.initData();
+		List<Tb1042BayEntity> bayEntityList = globalData.getBayEntities();
+		table.setInput(bayEntityList);
 	}
 }

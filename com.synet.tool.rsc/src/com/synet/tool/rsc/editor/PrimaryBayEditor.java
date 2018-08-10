@@ -7,11 +7,21 @@ package com.synet.tool.rsc.editor;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.GlobalData;
+import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.dialog.ChanelConnectDialog;
+import com.synet.tool.rsc.ui.TableFactory;
 
 /**
  * 一次拓扑模型树菜单编辑器。
@@ -20,6 +30,8 @@ import com.shrcn.found.ui.util.SwtUtil;
  */
 public class PrimaryBayEditor extends BaseConfigEditor {
 	
+	private Button button;
+	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
 	}
@@ -27,25 +39,48 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		Composite comp = SwtUtil.createComposite(container, gridData, 1);
+		comp.setLayout(SwtUtil.getGridLayout(1));
+		String[] tabNames = new String[]{RSCConstants.TSF_SCDRAY, RSCConstants.PROTCT_SAMP, RSCConstants.SWICH_STATES};
+		CTabFolder tabFolder = SwtUtil.createTab(comp, gridData, tabNames);
+		tabFolder.setSelection(0);
+		Control[] controls = tabFolder.getChildren();
+		//互感器次级
+		Composite compTsf = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
+		compTsf.setLayout(SwtUtil.getGridLayout(3));
+		GridData gdlb = new GridData(SWT.DEFAULT,25);
 		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		String currentSelEntryName = GlobalData.getIntance().getCurrentSelEntry().getName();
+		
+		SwtUtil.createLabel(compTsf, currentSelEntryName + "互感器次级配置", gdlb);
+		SwtUtil.createLabel(compTsf, "			", gdlb);
+		button = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "通道关联");
+		SwtUtil.createLabel(compTsf, "			", new GridData(SWT.DEFAULT,10));
+		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
+		gdSpan_3.horizontalSpan = 3;
+		table = TableFactory.getTsfSecondaryTable(compTsf);
+		table.getTable().setLayoutData(gdSpan_3);
+		//保护采样值
+		Composite compProtect = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
+		compProtect.setLayout(SwtUtil.getGridLayout(1));
+		table = TableFactory.getProtectSampleTalbe(compProtect);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		//开关刀闸状态
+		Composite compSwitch = SwtUtil.createComposite((Composite) controls[2], gridData, 3);
+		compSwitch.setLayout(SwtUtil.getGridLayout(1));
+		table = TableFactory.getSwitchStatusTable(compSwitch);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
 	protected void addListeners() {
+		button.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new ChanelConnectDialog(SwtUtil.getDefaultShell()).open();
+			}
+		});
 	}
 
 	@Override

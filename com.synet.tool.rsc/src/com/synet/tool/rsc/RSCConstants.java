@@ -44,4 +44,8 @@ public interface RSCConstants {
     String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
     String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
 	
+    
+   String TSF_SCDRAY        = "互感器次级";
+   String PROTCT_SAMP       = "保护采样值";
+   String SWICH_STATES      = "开关刀闸状态";
 }

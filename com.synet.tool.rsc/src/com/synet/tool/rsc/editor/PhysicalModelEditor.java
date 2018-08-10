@@ -7,10 +7,10 @@ package com.synet.tool.rsc.editor;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.ui.TableFactory;
-import com.synet.tool.rsc.ui.table.DevKTable;
 
 /**
  * 物理信息模型树菜单编辑器。
@@ -19,7 +19,6 @@ import com.synet.tool.rsc.ui.table.DevKTable;
  */
 public class PhysicalModelEditor extends BaseConfigEditor {
 	
-	private DevKTable table;
 	
 	public PhysicalModelEditor(Composite container, IEditorInput input) {
 		super(container, input);
