@@ -5,6 +5,11 @@ import java.util.List;
 import com.shrcn.found.ui.model.ITreeEntry;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 
+/**
+ * 不是很好
+ * @author chunc
+ *
+ */
 public class GlobalData {
 	
 	private static GlobalData globalData;
