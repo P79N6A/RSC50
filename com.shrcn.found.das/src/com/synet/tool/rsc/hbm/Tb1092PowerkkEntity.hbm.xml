@@ -14,7 +14,7 @@
         <property name="f1092KkNo">
             <column name="F1092_KKNo" sql-type="char" length="96"/>
         </property>
-        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
     </class>

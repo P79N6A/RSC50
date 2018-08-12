@@ -17,7 +17,7 @@
         <property name="f1049Area">
             <column name="F1049_Area" sql-type="int"/>
         </property>
-        <many-to-one name="tb1041SubstationByF1041Code" class="com.synet.tool.rsc.model.Tb1041SubstationEntity">
+        <many-to-one name="tb1041SubstationByF1041Code" class="com.synet.tool.rsc.model.Tb1041SubstationEntity" lazy="false">
             <column name="F1041_CODE" not-null="true"/>
         </many-to-one>
     </class>
