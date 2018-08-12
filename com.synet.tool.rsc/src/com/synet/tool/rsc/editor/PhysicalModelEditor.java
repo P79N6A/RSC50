@@ -5,11 +5,16 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.List;
+
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -27,9 +32,8 @@ public class PhysicalModelEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		Composite comp = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
-		comp.setLayout(SwtUtil.getGridLayout(1));
-		table =TableFactory.getAreaListTable(comp);
+		editArea.setLayout(SwtUtil.getGridLayout(1));
+		table =TableFactory.getAreaListTable(editArea);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 	}
@@ -39,6 +43,9 @@ public class PhysicalModelEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
-		super.initData();
+		List<Tb1049RegionEntity> list= (List<Tb1049RegionEntity>) beandao.getAll(Tb1049RegionEntity.class);
+		if (list != null) {
+			table.setInput(list);
+		}
 	}
 }

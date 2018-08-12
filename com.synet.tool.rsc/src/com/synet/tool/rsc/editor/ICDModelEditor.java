@@ -6,12 +6,15 @@
 package com.synet.tool.rsc.editor;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.ui.TableFactory;
 
 /**
  * 系统ICD树菜单编辑器。
@@ -20,6 +23,13 @@ import com.shrcn.found.ui.util.SwtUtil;
  */
 public class ICDModelEditor extends BaseConfigEditor {
 	
+	private Text txtNmanuf;
+	private Text txtModel;
+	private Text txtVersion;
+	private Combo cmbLnType;
+	private Button btnAdd;
+	private Button btnExport;
+	
 	public ICDModelEditor(Composite container, IEditorInput input) {
 		super(container, input);
 	}
@@ -27,22 +37,25 @@ public class ICDModelEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		editArea.setLayout(SwtUtil.getGridLayout(1));
+		
+		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 6);
+		GridData textGridData = new GridData();
+		textGridData.widthHint = 80;
+		txtNmanuf = SwtUtil.createText(topComp, textGridData, "厂商");
+		txtModel = SwtUtil.createText(topComp, textGridData, "型号");
+		txtVersion = SwtUtil.createText(topComp, textGridData, "版本");
+		cmbLnType = SwtUtil.createCombo(topComp, textGridData, true);
+		cmbLnType.setItems(new String[]{"逻辑节点类型"});
+		cmbLnType.select(0);
+		btnAdd = SwtUtil.createButton(topComp, new GridData(), SWT.NONE, "添加");
+		btnExport = SwtUtil.createButton(topComp, new GridData(), SWT.NONE, "导出");
+		
+		Composite centerComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
+		table = TableFactory.getIcdTable(centerComp);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 	}
 	
 	protected void addListeners() {
