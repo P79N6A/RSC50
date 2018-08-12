@@ -37,6 +37,7 @@ import com.shrcn.found.ui.view.ANavgTreeFactory;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.GlobalData;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
 
 /**
  * 
@@ -131,9 +132,15 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry bayPubEntry = createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, 2);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void loadPhysical(ITreeEntry physicalEntry) {
 		/** 动态加载-begin  */
-		ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, "区域A", "bay.gif", ET_PY_AREA, 1);
+		List<Tb1049RegionEntity> regionEntities = (List<Tb1049RegionEntity>) beandao.getAll(Tb1049RegionEntity.class);
+		if (regionEntities == null || regionEntities.isEmpty()) return;
+		for (Tb1049RegionEntity regionEntity : regionEntities) {
+			createConfigEntry(physicalEntry, regionEntity.getF1049Desc(), "bay.gif", ET_PY_AREA, 1);
+		}
+//		ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, "区域A", "bay.gif", ET_PY_AREA, 1);
 		/** 动态加载-end  */
 	}
 	
