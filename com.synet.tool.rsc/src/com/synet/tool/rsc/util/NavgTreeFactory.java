@@ -27,16 +27,11 @@ import static com.synet.tool.rsc.RSCConstants.ET_SEC_LCK;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PRO;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PWR;
 
-import java.util.List;
-
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.synet.tool.rsc.GlobalData;
-import com.synet.tool.rsc.model.Tb1042BayEntity;
 
 /**
  * 
@@ -48,14 +43,10 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 //	private ProjectFileManager prjFileMgr;
 
 	private static volatile NavgTreeFactory factory;
-	private BeanDaoImpl beandao;
-	private GlobalData globalData;
 	private NavgTreeFactory() {
 //		this.prjFileMgr = ProjectFileManager.getInstance();
 //		treeBuilder = TreeViewerBuilder.create(XMLFileManager.loadXMLFile(getClass(), Constants.CFGURL));
 		treeBuilder = TreeViewerBuilder.create(null);
-		beandao = BeanDaoImpl.getInstance();
-		globalData = GlobalData.getIntance();
 	}
 	
 	public static NavgTreeFactory getInstance() {
@@ -108,8 +99,8 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	}
 	
 	private void loadPrimary(ITreeEntry primaryEntry) {
-//		@SuppressWarnings("unchecked")
-//		List<Tb1042BayEntity> bayEntityList = (List<Tb1042BayEntity>) beandao.getAll(Tb1042BayEntity.class);
+		//TODO 待数据插入后测试，勿删
+//		List<Tb1042BayEntity> bayEntityList = null;
 //		if(DataUtils.notNull(bayEntityList)){
 //			globalData.setBayEntities(bayEntityList);
 //			for (Tb1042BayEntity tb1042BayEntity : bayEntityList) {

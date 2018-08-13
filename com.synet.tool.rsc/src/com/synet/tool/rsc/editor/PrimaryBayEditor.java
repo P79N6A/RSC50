@@ -9,16 +9,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.synet.tool.rsc.GlobalData;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ChanelConnectDialog;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -31,9 +29,12 @@ import com.synet.tool.rsc.ui.TableFactory;
 public class PrimaryBayEditor extends BaseConfigEditor {
 	
 	private Button button;
+	private String curEntryName;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
+		EditorConfigData data = (EditorConfigData)input.getData();
+		this.curEntryName = data.getIedName();
 	}
 
 	@Override
@@ -51,9 +52,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		compTsf.setLayout(SwtUtil.getGridLayout(3));
 		GridData gdlb = new GridData(SWT.DEFAULT,25);
 		
-		String currentSelEntryName = GlobalData.getIntance().getCurrentSelEntry().getName();
-		
-		SwtUtil.createLabel(compTsf, currentSelEntryName + "互感器次级配置", gdlb);
+		SwtUtil.createLabel(compTsf, curEntryName + "互感器次级配置", gdlb);
 		SwtUtil.createLabel(compTsf, "			", gdlb);
 		button = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "通道关联");
 		SwtUtil.createLabel(compTsf, "			", new GridData(SWT.DEFAULT,10));

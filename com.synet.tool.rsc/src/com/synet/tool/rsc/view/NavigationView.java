@@ -24,7 +24,6 @@ public class NavigationView extends ANavigationView {
 
 	private NavgTreeFactory treeFactory = NavgTreeFactory.getInstance();
 	
-	private GlobalData globalData = GlobalData.getIntance();
 	
 //	private ProjectFileManager prjFileMng = ProjectFileManager.getInstance();
 //	private ProjectManager prjMng = ProjectManager.getInstance();
@@ -144,7 +143,6 @@ public class NavigationView extends ANavigationView {
 				if (selEntry == null)
 					return;
 				if (selEntry instanceof ConfigTreeEntry) {
-					globalData.setCurrentSelEntry(selEntry);
 					openConfig(selEntry);
 				}
 			}

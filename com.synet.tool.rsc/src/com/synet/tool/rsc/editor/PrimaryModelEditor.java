@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 
@@ -45,7 +46,7 @@ public class PrimaryModelEditor extends BaseConfigEditor {
 	@Override
 	public void initData() {
 		super.initData();
-		List<Tb1042BayEntity> bayEntityList = globalData.getBayEntities();
+		List<Tb1042BayEntity> bayEntityList = null;
 		table.setInput(bayEntityList);
 	}
 }
