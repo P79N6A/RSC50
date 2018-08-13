@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -15,9 +14,6 @@ public class Tb1041SubstationEntity {
     private Integer f1042VoltageH;
     private Integer f1042VoltageM;
     private Integer f1042VoltageL;
-    private Collection<Tb1042BayEntity> tb1042BaysByF1041Code;
-    private Collection<Tb1049RegionEntity> tb1049RegionsByF1041Code;
-    private Collection<Tb1051CableEntity> tb1051CablesByF1041Code;
 
     public String getF1041Code() {
         return f1041Code;
@@ -128,27 +124,4 @@ public class Tb1041SubstationEntity {
         return result;
     }
 
-    public Collection<Tb1042BayEntity> getTb1042BaysByF1041Code() {
-        return tb1042BaysByF1041Code;
-    }
-
-    public void setTb1042BaysByF1041Code(Collection<Tb1042BayEntity> tb1042BaysByF1041Code) {
-        this.tb1042BaysByF1041Code = tb1042BaysByF1041Code;
-    }
-
-    public Collection<Tb1049RegionEntity> getTb1049RegionsByF1041Code() {
-        return tb1049RegionsByF1041Code;
-    }
-
-    public void setTb1049RegionsByF1041Code(Collection<Tb1049RegionEntity> tb1049RegionsByF1041Code) {
-        this.tb1049RegionsByF1041Code = tb1049RegionsByF1041Code;
-    }
-
-    public Collection<Tb1051CableEntity> getTb1051CablesByF1041Code() {
-        return tb1051CablesByF1041Code;
-    }
-
-    public void setTb1051CablesByF1041Code(Collection<Tb1051CableEntity> tb1051CablesByF1041Code) {
-        this.tb1051CablesByF1041Code = tb1051CablesByF1041Code;
-    }
 }

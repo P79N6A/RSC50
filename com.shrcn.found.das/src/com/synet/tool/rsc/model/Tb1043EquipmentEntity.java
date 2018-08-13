@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -13,10 +12,8 @@ public class Tb1043EquipmentEntity {
     private int f1043IsVirtual;
     private int f1043Type;
     private Tb1042BayEntity tb1042BayByF1042Code;
-    private Collection<Tb1044TerminalEntity> tb1044TerminalsByF1043Code;
-    private Collection<Tb1066ProtmmxuEntity> tb1066ProtmmxusByF1043Code;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1043Code;
-    private Collection<Tb1068ProtctrlEntity> tb1068ProtctrlsByF1043Code;
+    
+    private Tb1016StatedataEntity statedataEntity;
 
     public String getF1043Code() {
         return f1043Code;
@@ -102,35 +99,12 @@ public class Tb1043EquipmentEntity {
         this.tb1042BayByF1042Code = tb1042BayByF1042Code;
     }
 
-    public Collection<Tb1044TerminalEntity> getTb1044TerminalsByF1043Code() {
-        return tb1044TerminalsByF1043Code;
-    }
+	public Tb1016StatedataEntity getStatedataEntity() {
+		return statedataEntity;
+	}
 
-    public void setTb1044TerminalsByF1043Code(Collection<Tb1044TerminalEntity> tb1044TerminalsByF1043Code) {
-        this.tb1044TerminalsByF1043Code = tb1044TerminalsByF1043Code;
-    }
+	public void setStatedataEntity(Tb1016StatedataEntity statedataEntity) {
+		this.statedataEntity = statedataEntity;
+	}
 
-    public Collection<Tb1066ProtmmxuEntity> getTb1066ProtmmxusByF1043Code() {
-        return tb1066ProtmmxusByF1043Code;
-    }
-
-    public void setTb1066ProtmmxusByF1043Code(Collection<Tb1066ProtmmxuEntity> tb1066ProtmmxusByF1043Code) {
-        this.tb1066ProtmmxusByF1043Code = tb1066ProtmmxusByF1043Code;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1043Code() {
-        return tb1067CtvtsecondariesByF1043Code;
-    }
-
-    public void setTb1067CtvtsecondariesByF1043Code(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1043Code) {
-        this.tb1067CtvtsecondariesByF1043Code = tb1067CtvtsecondariesByF1043Code;
-    }
-
-    public Collection<Tb1068ProtctrlEntity> getTb1068ProtctrlsByF1043Code() {
-        return tb1068ProtctrlsByF1043Code;
-    }
-
-    public void setTb1068ProtctrlsByF1043Code(Collection<Tb1068ProtctrlEntity> tb1068ProtctrlsByF1043Code) {
-        this.tb1068ProtctrlsByF1043Code = tb1068ProtctrlsByF1043Code;
-    }
 }

@@ -16,7 +16,8 @@ public class EditorConfigData {
 	private String iedType;
 	private int gin;
 	private String type;
-
+	private Object data;
+	
 	public EditorConfigData() {
 	}
 
@@ -66,6 +67,14 @@ public class EditorConfigData {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 
 }

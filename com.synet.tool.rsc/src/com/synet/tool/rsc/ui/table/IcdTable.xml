@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="CubicleTable" desc="系统ICD" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="predix" editor="none" name="f1049Code" width="100" default=""/>
+  <field desc="lnClass" editor="none" name="f1049Name" width="100" default=""/> 
+  <field desc="inst" editor="none" name="f1049Desc" width="100" default=""/> 
+  <field desc="lnType" editor="none" name="f1049Desc" width="100" default=""/> 
+  <field desc="数据集" editor="none" name="f1049Desc" width="100" default=""/> 
+  <field desc="" editor="none" name="other" width="130" default=""/> 
+</table>

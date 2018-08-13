@@ -48,4 +48,12 @@ public interface RSCConstants {
    String TSF_SCDRAY        = "互感器次级";
    String PROTCT_SAMP       = "保护采样值";
    String SWICH_STATES      = "开关刀闸状态";
+   
+   String TAB_CUBICLE       = "屏柜";
+   String TAB_CABLE      	= "光纤";
+   String TAB_PHYSCONN      = "物理回路";
+   
+   //树节点名称
+   String TREE_PHYAICAMODEL = "物理信息模型";
+   
 }

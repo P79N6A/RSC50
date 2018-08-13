@@ -64,10 +64,7 @@ public class NavigationView extends ANavigationView {
 	 */
 	@Override
 	protected void createProject() {
-		String dbName = "RscData";
-		ProjectManager instance = ProjectManager.getInstance();
-		instance.initDb(dbName);
-		instance.openDb(dbName);
+		iniTDB();
 //		NewProjectDialog dlg = new NewProjectDialog(SwtUtil.getDefaultShell());
 //		if (IDialogConstants.OK_ID == dlg.open()) {
 //			closeProject();
@@ -96,6 +93,7 @@ public class NavigationView extends ANavigationView {
 	 */
 	@Override
 	protected void openProject() {
+		iniTDB();
 //		OpenProjectDialog dlg = new OpenProjectDialog(SwtUtil.getDefaultShell());
 //		if (IDialogConstants.OK_ID == dlg.open()) {
 //			closeProject();

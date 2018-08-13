@@ -4,14 +4,92 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
+import com.synet.tool.rsc.service.BayEntityService;
 
 
 public class TestMain {
+	
+	private BeanDaoImpl beandao;
+	
+	@Before
+	public void before() {
+		String dbName = "RscData";
+		ProjectManager instance = ProjectManager.getInstance();
+		instance.initDb(dbName);
+		instance.openDb(dbName);
+		beandao = BeanDaoImpl.getInstance();
+	}
+	
+	@Test
+	public void listTest() {
+		List<Tb1049RegionEntity> list = (List<Tb1049RegionEntity>) beandao.getAll(Tb1049RegionEntity.class);
+		System.out.println(list);
+		System.out.println(list.get(0).getF1041Code());
+		System.out.println(list.get(0).getTb1041SubstationByF1041Code().getF1041Code());
+		Tb1049RegionEntity entity = new Tb1049RegionEntity();
+		entity.setF1049Code("104903");
+		entity.setF1041Code("104101");
+		entity.setF1049Name("SX");
+		entity.setF1049Desc("山西");
+		entity.setF1049Area(0);
+//		Tb1041SubstationEntity entity2 = new Tb1041SubstationEntity();
+//		entity.setF1041Code("104101");
+		entity.setTb1041SubstationByF1041Code(list.get(0).getTb1041SubstationByF1041Code());
+		beandao.insert(entity);
+	}
+	
+	@Test
+	public void testInsertBayEntry() {
+		Tb1041SubstationEntity substationEntity = new Tb1041SubstationEntity();
+		substationEntity.setF1041Code("1");
+		substationEntity.setF1041Company("xxx公司");
+		substationEntity.setF1041Desc("heheheh");
+		substationEntity.setF1041Dqdesc("Dqdesc");
+		substationEntity.setF1041DqName("DqName");
+		substationEntity.setF1041Name("name");
+		substationEntity.setF1042VoltageH(1);
+		substationEntity.setF1042VoltageM(2);
+		substationEntity.setF1042VoltageL(3);
+		beandao.insert(substationEntity);
+		
+		
+		Tb1042BayEntity bayEntity = new Tb1042BayEntity();
+		bayEntity.setF1042Code("1");
+		bayEntity.setF1041Code("1");
+		bayEntity.setF1042Name("间隔x");
+		bayEntity.setF1042Desc("xxxx");
+		bayEntity.setF1042DevType(1);
+		bayEntity.setF1042Voltage(2);
+		bayEntity.setF1042ConnType(3);
+		bayEntity.setTb1041SubstationByF1041Code(substationEntity);
+		beandao.insert(bayEntity);
+	}
+	
+	@Test
+	public void testGetBayEntryList() {
+		List<?> res = beandao.getAll(Tb1042BayEntity.class);
+		Assert.assertNotNull(res);
+		Assert.assertTrue(res.size() > 0);
+	}
+	
+	@Test
+	public void testBayEntryService() {
+		BayEntityService service = new BayEntityService();
+		List<?> res = service.getBayEntryList();
+		Assert.assertNotNull(res);
+		Assert.assertTrue(res.size() > 0);
+	}
 
 	@Test
 	public void testInsert() {
@@ -32,6 +110,8 @@ public class TestMain {
 		beandao.insert(fault);
 		List<?> testItem = beandao.getAll(Tb1022FaultconfigEntity.class);
 //				.getListLike(PlinTest.class, "name",name);
+		Tb1022FaultconfigEntity entity = (Tb1022FaultconfigEntity) testItem.get(0);
+		System.out.println(entity.getF1022Code());
 		assertTrue(testItem.size() > 0);
 				
 //		//测试正常,注意,TestCase不能打印Plintest,否则死循环

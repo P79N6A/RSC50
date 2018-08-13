@@ -11,14 +11,17 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ChanelConnectDialog;
+import com.synet.tool.rsc.dialog.SampleConnectDialog;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -28,15 +31,18 @@ import com.synet.tool.rsc.ui.TableFactory;
  */
 public class PrimaryBayEditor extends BaseConfigEditor {
 	
-	private Button button;
+	private Button btnChanelConnect;
+	private Button btnSampleConnect;
 	private String curEntryName;
+	private Button btnMove;
+	private String[] comboItems;
+	private Button btnSearch;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
-		EditorConfigData data = (EditorConfigData)input.getData();
-		this.curEntryName = data.getIedName();
 	}
 
+	
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
@@ -49,35 +55,97 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		//互感器次级
 		Composite compTsf = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
-		compTsf.setLayout(SwtUtil.getGridLayout(3));
-		GridData gdlb = new GridData(SWT.DEFAULT,25);
-		
-		SwtUtil.createLabel(compTsf, curEntryName + "互感器次级配置", gdlb);
-		SwtUtil.createLabel(compTsf, "			", gdlb);
-		button = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "通道关联");
+		compTsf.setLayout(SwtUtil.getGridLayout(2));
+		GridData gdlb = new GridData(200,25);
+		String tsfLbName = curEntryName + "互感器次级配置";
+		SwtUtil.createLabel(compTsf, tsfLbName, gdlb);
+		btnChanelConnect = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "通道关联");
 		SwtUtil.createLabel(compTsf, "			", new GridData(SWT.DEFAULT,10));
-		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
-		gdSpan_3.horizontalSpan = 3;
+		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
+		gdSpan_2.horizontalSpan = 2;
 		table = TableFactory.getTsfSecondaryTable(compTsf);
-		table.getTable().setLayoutData(gdSpan_3);
+		table.getTable().setLayoutData(gdSpan_2);
 		//保护采样值
 		Composite compProtect = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
-		compProtect.setLayout(SwtUtil.getGridLayout(1));
+		compProtect.setLayout(SwtUtil.getGridLayout(2));
+		String protLbName = curEntryName + "保护采样值配置";
+		SwtUtil.createLabel(compProtect, protLbName, gdlb);
+		btnSampleConnect = SwtUtil.createButton(compProtect, SwtUtil.bt_gd, SWT.BUTTON1, "采样关联");
+		SwtUtil.createLabel(compProtect, "			", new GridData(SWT.DEFAULT,10));
 		table = TableFactory.getProtectSampleTalbe(compProtect);
-		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		table.getTable().setLayoutData(gdSpan_2);
+		
 		//开关刀闸状态
-		Composite compSwitch = SwtUtil.createComposite((Composite) controls[2], gridData, 3);
-		compSwitch.setLayout(SwtUtil.getGridLayout(1));
-		table = TableFactory.getSwitchStatusTable(compSwitch);
+		Composite compSwitch = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
+		compSwitch.setLayout(SwtUtil.getGridLayout(2));
+		//开关刀闸状态-左侧
+		
+		Composite comLeft = SwtUtil.createComposite(compSwitch, new GridData(600,415), 1);
+		comLeft.setLayout(SwtUtil.getGridLayout(2));
+		
+		GridData gdlb_2 = new GridData(200,25);
+		gdlb_2.horizontalSpan = 2;
+		String switchLbName = curEntryName + "开关刀闸状态配置";
+		SwtUtil.createLabel(comLeft, switchLbName, gdlb_2);
+		GridData gdlbSpace_2 = new GridData(SWT.DEFAULT,10);
+		gdlbSpace_2.horizontalSpan = 2;
+		SwtUtil.createLabel(comLeft, "			", gdlbSpace_2);
+		table = TableFactory.getSwitchStatusTable(comLeft);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		
+		
+		//开关刀闸状态-右侧
+		Composite comRight = SwtUtil.createComposite(compSwitch, gridData, 1);
+		comRight.setLayout(SwtUtil.getGridLayout(3));
+		
+		Combo combo = SwtUtil.createCombo(comRight, SwtUtil.bt_hd);
+		combo.setItems(comboItems);
+		combo.select(0);
+		
+		Text text = SwtUtil.createText(comRight, SwtUtil.bt_hd);
+		text.setMessage("描述");
+		
+		btnSearch = SwtUtil.createButton(comRight, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		SwtUtil.createLabel(comRight, "			", new GridData(SWT.DEFAULT,10));
+		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
+		gdSpan_3.horizontalSpan = 3;
+		table = TableFactory.getSwitchStatusTable(comRight);
+		table.getTable().setLayoutData(gdSpan_3);
+	}
+	
+	@Override
+	public void init() {
+		EditorConfigData data = (EditorConfigData)super.getInput().getData();
+		this.curEntryName = data.getIedName();
+		comboItems = new String[]{"智能终端1"};
+		super.init();
 	}
 	
 	protected void addListeners() {
-		button.addSelectionListener(new SelectionAdapter() {
-			
+		btnChanelConnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				new ChanelConnectDialog(SwtUtil.getDefaultShell()).open();
+				new ChanelConnectDialog(SwtUtil.getDefaultShell(), curEntryName).open();
+			}
+		});
+		
+		btnSampleConnect.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new SampleConnectDialog(SwtUtil.getDefaultShell(), curEntryName).open();
+			}
+		});
+		
+		btnMove.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		
+		btnSearch.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 			}
 		});
 	}

@@ -19,6 +19,8 @@ public class Tb1061PoutEntity {
     private Tb1055GcbEntity tb1055GcbByCbCode;
     private Tb1056SvcbEntity tb1056SvcbByCbCode;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
+    
+    
     private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code;
     private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_0;
     private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_1;

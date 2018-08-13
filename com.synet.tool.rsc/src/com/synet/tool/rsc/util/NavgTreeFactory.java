@@ -27,11 +27,15 @@ import static com.synet.tool.rsc.RSCConstants.ET_SEC_LCK;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PRO;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PWR;
 
+import java.util.List;
+
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.service.BayEntityService;
 
 /**
  * 
@@ -99,16 +103,13 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	}
 	
 	private void loadPrimary(ITreeEntry primaryEntry) {
-		//TODO 待数据插入后测试，勿删
-//		List<Tb1042BayEntity> bayEntityList = null;
-//		if(DataUtils.notNull(bayEntityList)){
-//			globalData.setBayEntities(bayEntityList);
-//			for (Tb1042BayEntity tb1042BayEntity : bayEntityList) {
-//				createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Desc(), "bay.gif", ET_PR_BAY, 1);
-//			}
-//		}
-		
-		ConfigTreeEntry bayEntry = createConfigEntry(primaryEntry, "间隔1", "bay.gif", ET_PR_BAY, 1);
+		BayEntityService service = new BayEntityService();
+		List<Tb1042BayEntity> bayEntityList = service.getBayEntryList();
+		if(DataUtils.notNull(bayEntityList)){
+			for (int i = 0; i < bayEntityList.size(); i++) {
+				createConfigEntry(primaryEntry, bayEntityList.get(i).getF1042Desc(), "bay.gif", ET_PR_BAY, i+1);
+			}
+		}
 	}
 	
 	private void loadProtect(ITreeEntry protectEntry) {
