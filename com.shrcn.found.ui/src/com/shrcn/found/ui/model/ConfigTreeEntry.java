@@ -36,6 +36,7 @@ public class ConfigTreeEntry extends ContainerEntry {
 	protected String iedName;
 	protected String editorId;
 	private int gin;
+	private Object data;
 	
 	public ConfigTreeEntry(String name, String desc, String icon, 
 			String editorId) {
@@ -66,6 +67,14 @@ public class ConfigTreeEntry extends ContainerEntry {
 
 	public void setGin(int gin) {
 		this.gin = gin;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 
 	@Override
