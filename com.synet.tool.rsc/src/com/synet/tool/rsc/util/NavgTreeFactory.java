@@ -34,7 +34,9 @@ import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 
 /**
@@ -43,6 +45,8 @@ import com.synet.tool.rsc.service.BayEntityService;
  * @version 1.0, 2013-4-6
  */
 public class NavgTreeFactory extends ANavgTreeFactory {
+	
+	private static BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 
 //	private ProjectFileManager prjFileMgr;
 
@@ -123,17 +127,25 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry bayPubEntry = createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, 2);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void loadPhysical(ITreeEntry physicalEntry) {
 		/** 动态加载-begin  */
-		ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, "区域A", "bay.gif", ET_PY_AREA, 1);
+		List<Tb1049RegionEntity> list = (List<Tb1049RegionEntity>) beanDao.getAll(Tb1049RegionEntity.class);
+		if (list != null && !list.isEmpty()) {
+			int index = 1;
+			for(Tb1049RegionEntity entity : list) {
+				ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, entity.getF1049Desc(), "bay.gif", ET_PY_AREA, index++);
+				areaEntry.setData(entity);
+			}
+		}
 		/** 动态加载-end  */
 	}
 	
 	private void loadSecurity(ITreeEntry securityEntry) {
 		ConfigTreeEntry ftEntry = createConfigEntry(securityEntry, "保护纵联光纤", "bay.gif", ET_SEC_FIB, 1);
-		ConfigTreeEntry lockEntry = createConfigEntry(securityEntry, "重合回路闭锁", "bay.gif", ET_SEC_LCK, 1);
-		ConfigTreeEntry pwBrkEntry = createConfigEntry(securityEntry, "装置电源空开", "bay.gif", ET_SEC_PWR, 1);
-		ConfigTreeEntry rtBrkEntry = createConfigEntry(securityEntry, "保护电压回路空开", "bay.gif", ET_SEC_PRO, 1);
+		ConfigTreeEntry lockEntry = createConfigEntry(securityEntry, "重合回路闭锁", "bay.gif", ET_SEC_LCK, 2);
+		ConfigTreeEntry pwBrkEntry = createConfigEntry(securityEntry, "装置电源空开", "bay.gif", ET_SEC_PWR, 3);
+		ConfigTreeEntry rtBrkEntry = createConfigEntry(securityEntry, "保护电压回路空开", "bay.gif", ET_SEC_PRO, 4);
 	}
 	
 	private void loadIcd(ITreeEntry icdEntry) {

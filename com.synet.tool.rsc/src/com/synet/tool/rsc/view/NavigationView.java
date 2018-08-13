@@ -37,6 +37,7 @@ public class NavigationView extends ANavigationView {
 //		BayIEDEntry bayEntry = (BayIEDEntry) iedEntry;
 //		EditorConfigData data = new EditorConfigData(bayEntry.getName(), null, 0, ((IEDEntry)bayEntry.getParent()).getType());
 		EditorConfigData data = new EditorConfigData(configEntry.getName(), null, 0, configEntry.getName());
+		data.setData(configEntry.getData());
 		return new ConfigEditorInput(configEntry.getName(), configEntry.getIcon(), editorId, data);
 	}
 	
