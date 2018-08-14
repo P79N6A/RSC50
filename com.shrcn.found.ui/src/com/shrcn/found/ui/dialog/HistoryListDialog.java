@@ -165,7 +165,6 @@ public abstract class HistoryListDialog extends WrappedDialog {
 		}
 		boolean confDel = MessageDialog.openConfirm(getShell(), Messages.getString("HistoryListDialog.confirm.del"), Messages.getString("HistoryListDialog.del.warn"));
 		if (confDel){
-//			deleteSelectItem(dbs[0]);
 			deleteSelectItems(dbs);
 		}
 	}
