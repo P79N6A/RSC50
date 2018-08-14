@@ -5,9 +5,12 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -15,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.service.SecLockBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -77,6 +81,30 @@ public class SecLockEditor extends BaseConfigEditor {
 	}
 	
 	protected void addListeners() {
+		
+		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Object evnet = e.getSource();
+				if (evnet == btnSearch) {
+					search();
+				} else if (evnet == btnImport) {
+					importData();
+				} else if (evnet == btnExport) {
+					exportData();
+				} else if (evnet == btnAdd) {
+					add();
+				} else if (evnet == btnDelete) {
+					delete();
+				}
+				super.widgetSelected(e);
+			}
+		};
+		btnSearch.addSelectionListener(listener);
+		btnImport.addSelectionListener(listener);
+		btnExport.addSelectionListener(listener);
+		btnAdd.addSelectionListener(listener);
+		btnDelete.addSelectionListener(listener);
 	}
 
 	@Override
@@ -85,5 +113,60 @@ public class SecLockEditor extends BaseConfigEditor {
 		if (list != null){
 			table.setInput(list);
 		}
+		List<Tb1046IedEntity> ieds = secLockBrkService.getIedList();
+		if (ieds != null && !ieds.isEmpty()) {
+			List<String> typeItems = new ArrayList<>();
+			List<String> nameItems = new ArrayList<>();
+			typeItems.add(DEV_TYPE_TITLE);
+			nameItems.add(DEV_NAME_TITLE);
+			for (Tb1046IedEntity ied : ieds) {
+				typeItems.add(ied.getF1046Model());
+				nameItems.add(ied.getF1046Name());
+			}
+			cmbDevType.setItems(typeItems.toArray(new String[0]));
+			cmbDevName.setItems(nameItems.toArray(new String[0]));
+			cmbDevType.select(0);
+			cmbDevName.select(0);
+		}
 	}
+	
+	private void search() {
+		String f1046Model = cmbDevType.getText().trim();
+		String f1046Name = cmbDevName.getText().trim();
+		if (DEV_TYPE_TITLE.equals(f1046Model)) {
+			f1046Model = null;
+		}
+		if (DEV_NAME_TITLE.equals(f1046Name)) {
+			f1046Name = null;
+		}
+		List<Tb1091IotermEntity> list = secLockBrkService.getIotermListByIedParams(f1046Model, f1046Name);
+		if (list != null) {
+			table.setInput(list);
+		}
+	}
+	
+	private void importData() {
+		
+	}
+	
+	private void exportData() {
+//		String filePath = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
+//		if (filePath == null || "".equals(filePath)){
+//			DialogHelper.showAsynError("请选择保存路径");
+//		}
+//		@SuppressWarnings("unchecked")
+//		List<Tb1091IotermEntity> list = (List<Tb1091IotermEntity>) table.getInput();
+		
+	}
+	
+	private void add() {
+		table.addRow(new Tb1091IotermEntity());
+	}
+	
+	private void delete() {
+		Tb1091IotermEntity entity = (Tb1091IotermEntity) table.getSelection();
+		secLockBrkService.delete(entity);
+		table.removeSelected();
+	}
+	
 }
