@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PrimaryEquipments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <Category type="ExtensionEquipment" desc="扩展设备"> 
+    <Equipment type="Busbar" mtype="Bay" desc="母线" lnode="" terminal="0" graph="false"/>  
+    <!-- Equipment type="GROUNDED" mtype="" desc="接地" lnode="" terminal="0" graph="false"/ -->  
+    <Equipment type="Function" mtype="Function" desc="功能" lnode="" terminal="0" graph="false"/> 
+    <Equipment type="SubFunction" mtype="SubFunction" desc="子功能" lnode="" terminal="0" graph="false"/> 
+  </Category>  
+  <Category type="ConductingEquipment" desc="导电设备"> 
+    <Equipment type="DIS" mtype="DIS" desc="隔离刀闸" lnode="XSWI,CILO,CSWI" terminal="2" graph="true"/>  
+    <Equipment type="DDIS" mtype="DIS" desc="接地刀闸" lnode="XSWI" terminal="2" graph="true"/>  
+    <Equipment type="CBR" mtype="CBR" desc="断路器" lnode="XCBR,CILO,CSWI" terminal="2" graph="true"/>  
+    <Equipment type="VTR" mtype="VTR" desc="电压互感器" lnode="MMXU,TVTR" terminal="1" graph="true"/>  
+    <Equipment type="CTR" mtype="CTR" desc="电流互感器" lnode="MMXU,TCTR" terminal="2" graph="true"/>  
+    <Equipment type="LTC" mtype="LTC" desc="有载分接开关" lnode="YLTC" terminal="1" graph="false"/>  
+    <Equipment type="CAP" mtype="CAP" desc="电容器" lnode="ZCAP" terminal="2" graph="true"/>  
+    <Equipment type="BCAP" mtype="CAP" desc="并联电容器" lnode="ZCAP" terminal="1" graph="true"/>  
+    <Equipment type="REA" mtype="REA" desc="电抗器" lnode="ZREA" terminal="2" graph="true"/>  
+    <Equipment type="SAR" mtype="SAR" desc="避雷器" lnode="ZSAR" terminal="2" graph="true"/>  
+    <Equipment type="IFL" mtype="IFL" desc="馈入线路" lnode="PTRC" terminal="1" graph="true"/>  
+    <Equipment type="EFN" mtype="EFN" desc="中性点接地装置" lnode="ANCR,YEFN" terminal="1" graph="false"/>  
+    <Equipment type="PSH" mtype="PSH" desc="并联电抗器" lnode="YPSH" terminal="2" graph="false"/>  
+    <Equipment type="BAT" mtype="BAT" desc="电池" lnode="ZBAT" terminal="1" graph="false"/>  
+    <Equipment type="RRC" mtype="RRC" desc="旋转无功元件" lnode="ZRRC" terminal="2" graph="false"/>  
+    <Equipment type="TCF" mtype="TCF" desc="晶闸管控制变频器" lnode="ZTCF" terminal="2" graph="false"/>  
+    <Equipment type="TCR" mtype="TCR" desc="晶闸管控制无功元件" lnode="ZTCR" terminal="2" graph="false"/>  
+    <Equipment type="BSH" mtype="BSH" desc="套管" lnode="ZBSH" terminal="2" graph="false"/>  
+    <Equipment type="CAB" mtype="CAB" desc="电力电缆" lnode="ZCAB" terminal="2" graph="false"/>  
+    <Equipment type="GIL" mtype="GIL" desc="电气绝缘线" lnode="SIMG,ZGIL" terminal="2" graph="false"/>  
+    <Equipment type="LIN" mtype="LIN" desc="电力架空线" lnode="ZLIN" terminal="2" graph="false"/>  
+    <Equipment type="GEN" mtype="GEN" desc="发电机" lnode="ZGEN" terminal="1" graph="false"/>
+    <Equipment type="GROUNDED" mtype="" desc="接地" lnode="" terminal="0" graph="true"/>
+  </Category>  
+  <Category type="GeneralEquipment" desc="通用设备"> 
+    <Equipment type="AXN" mtype="AXN" desc="辅助网络设备" lnode="ZAXN" graph="false"/>  
+    <Equipment type="BAT" mtype="BAT" desc="电池" lnode="ZBAT" graph="false"/>  
+    <Equipment type="MOT" mtype="MOT" desc="电动机" lnode="ZMOT" graph="false"/> 
+    <Equipment type="CON" mtype="CON" desc="换流器" lnode="ZCON" graph="false"/>
+  </Category>  
+  <Category type="PowerTransformer" desc="变压器"> 
+    <Equipment type="PTR" mtype="PTR" desc="变压器" lnode="" graph="false"/>  
+    <Equipment type="PTR2" mtype="PTR" desc="2卷变" lnode="" graph="true"/>  
+    <Equipment type="PTR3" mtype="PTR" desc="3卷变" lnode="" graph="true"/> 
+  </Category> 
+</PrimaryEquipments>

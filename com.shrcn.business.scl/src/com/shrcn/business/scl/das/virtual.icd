@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SCL xmlns="http://www.iec.ch/61850/2003/SCL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iec.ch/61850/2003/SCL SCL.xsd" revision="A" version="2007">
+	<Header id="SHR" nameStructure="IEDName" version="1.0"/>
+	<IED configVersion="1.0" desc="" manufacturer="SHR" name="Template" type="VIRTUAL_IED">
+		<Services/>
+		<AccessPoint name="S1">
+			<Server>
+				<Authentication none="true"/>
+				<LDevice inst="LD0">
+					<LN0 inst="" lnClass="LLN0" lnType="VIRTUAL_LD0_LLN0">
+						<DataSet desc="" name="dsTemp"/>
+						<ReportControl bufTime="1000" buffered="true" confRev="1" datSet="dsTemp" desc="" intgPd="5000" name="brcbDin" rptID="LD0/LLN0$BR$brcbDin"> 
+			              <TrgOps dchg="true" period="true"/>  
+			              <OptFields configRef="true" dataRef="true" dataSet="true" entryID="true" reasonCode="true" seqNum="true" timeStamp="true"/>  
+			              <RptEnabled max="8"/> 
+			            </ReportControl>
+					</LN0>
+					<LN prefix="" lnClass="IHMI" inst="1" lnType="VIRTUAL_LD0_IHMI"/>
+				</LDevice>
+			</Server>
+		</AccessPoint>
+	</IED>
+	<DataTypeTemplates>
+		<LNodeType id="VIRTUAL_LD0_LLN0" lnClass="LLN0">
+			<DO type="VIRTUAL_INC_Mod" name="Mod"/>
+			<DO type="VIRTUAL_INS_Beh" name="Beh"/>
+			<DO type="VIRTUAL_INS_Health" name="Health"/>
+			<DO type="VIRTUAL_LPL_LN0" name="NamPlt"/>
+		</LNodeType>
+		<LNodeType id="VIRTUAL_LD0_IHMI" lnClass="IHMI">
+			<DO type="VIRTUAL_INC_Mod" name="Mod"/>
+			<DO type="VIRTUAL_INS_Beh" name="Beh"/>
+			<DO type="VIRTUAL_INS_Health" name="Health"/>
+			<DO type="VIRTUAL_LPL" name="NamPlt"/>
+		</LNodeType>
+		<DOType id="VIRTUAL_INC_Mod" cdc="INC">
+			<DA bType="Enum" type="Mod" name="stVal" fc="ST" dchg="true"/>
+			<DA qchg="true" bType="Quality" name="q" fc="ST"/>
+			<DA bType="Timestamp" name="t" fc="ST"/>
+			<DA bType="Enum" type="ctlModel" name="ctlModel" fc="CF">
+				<Val>0</Val>
+			</DA>
+		</DOType>
+		<DOType id="VIRTUAL_INS_Beh" cdc="INS">
+			<DA bType="Enum" type="Beh" name="stVal" fc="ST" dchg="true"/>
+			<DA qchg="true" bType="Quality" name="q" fc="ST"/>
+			<DA bType="Timestamp" name="t" fc="ST"/>
+		</DOType>
+		<DOType id="VIRTUAL_INS_Health" cdc="INS">
+			<DA bType="Enum" type="Health" name="stVal" fc="ST" dchg="true"/>
+			<DA qchg="true" bType="Quality" name="q" fc="ST"/>
+			<DA bType="Timestamp" name="t" fc="ST"/>
+		</DOType>
+		<DOType id="VIRTUAL_LPL" cdc="LPL">
+			<DA bType="VisString255" name="vendor" fc="DC"/>
+			<DA bType="VisString255" name="swRev" fc="DC"/>
+			<DA bType="VisString255" name="d" fc="DC"/>
+			<DA bType="Unicode255" name="dU" fc="DC"/>
+		</DOType>
+		<DOType id="VIRTUAL_LPL_LN0" cdc="LPL">
+			<DA bType="VisString255" name="vendor" fc="DC"/>
+			<DA bType="VisString255" name="swRev" fc="DC"/>
+			<DA bType="VisString255" name="d" fc="DC"/>
+			<DA bType="Unicode255" name="dU" fc="DC"/>
+			<DA bType="VisString255" name="configRev" fc="DC"/>
+			<DA bType="VisString255" name="ldNs" fc="EX">
+				<Val>IEC 61850-7-4:2003</Val>
+			</DA>
+		</DOType>
+		<EnumType id="Beh">
+			<EnumVal ord="1">on</EnumVal>
+			<EnumVal ord="2">blocked</EnumVal>
+			<EnumVal ord="3">test</EnumVal>
+			<EnumVal ord="4">test/blocked</EnumVal>
+			<EnumVal ord="5">off</EnumVal>
+		</EnumType>
+		<EnumType id="Mod">
+			<EnumVal ord="1">on</EnumVal>
+			<EnumVal ord="2">blocked</EnumVal>
+			<EnumVal ord="3">test</EnumVal>
+			<EnumVal ord="4">test/blocked</EnumVal>
+			<EnumVal ord="5">off</EnumVal>
+		</EnumType>
+		<EnumType id="Health">
+			<EnumVal ord="1">Ok</EnumVal>
+			<EnumVal ord="2">Warning</EnumVal>
+			<EnumVal ord="3">Alarm</EnumVal>
+		</EnumType>
+		<EnumType id="ctlModel">
+			<EnumVal ord="0">status-only</EnumVal>
+			<EnumVal ord="1">direct-with-normal-security</EnumVal>
+			<EnumVal ord="2">sbo-with-normal-security</EnumVal>
+			<EnumVal ord="3">direct-with-enhanced-security</EnumVal>
+			<EnumVal ord="4">sbo-with-enhanced-security</EnumVal>
+		</EnumType>
+	</DataTypeTemplates>
+</SCL>
