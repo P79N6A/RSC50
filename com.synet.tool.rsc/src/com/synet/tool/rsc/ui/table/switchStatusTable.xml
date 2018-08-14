@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<table name="areaListTable" desc="区域列表" 
-class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1042BayEntity" 
+<table name="areaListTable" desc="开关刀闸状态列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1043EquipmentEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
-  <field desc="对象Name" editor="none" name="f1042Name" datType="string" width="200" default=""/>
-  <field desc="对象名称" editor="none" name="f1042Desc" datType="string" width="200" default=""/> 
-  <field desc="设备类型" editor="none" name="f1042Voltage" datType="int" width="100" default=""/> 
-  <field desc="智能终端Name" editor="none" name="f1042ConnType" datType="int" width="160" default=""/> 
-  <field desc="智能终端名称" editor="none" name="f1042DevType" datType="int" width="130" default=""/>
-  <field desc="虚端子通道参引" editor="none" name="f1042DevType" datType="int" width="130" default=""/> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field desc="对象Name" editor="none" name="f1043Name" datType="string" width="80" default=""/>
+  <field desc="对象名称" editor="none" name="f1043Desc" datType="string" width="80" default=""/> 
+  <field desc="设备类型" editor="none" name="f1043Type" datType="int" width="80" default=""/> 
+  <field desc="智能终端Name" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.tb1046IedByF1046Code.f1046Name" datType="int" width="100" default=""/> 
+  <field desc="智能终端名称" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.tb1046IedByF1046Code.f1046Desc" datType="int" width="100" default=""/>
+  <field desc="虚端子通道参引" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.f1061RefAddr" datType="int" width="100" default=""/> 
 </table>

@@ -26,8 +26,7 @@ public class Tb1016StatedataEntity {
     private String f1016Sgprocname;
     private Integer f1016Revflag;
     private Integer f1016Issta;
-    
-    private Tb1061PoutEntity poutEntity;
+    private Tb1061PoutEntity tb1061PoutEntity;
     
 
     public String getF1016Code() {
@@ -271,12 +270,12 @@ public class Tb1016StatedataEntity {
         return result;
     }
 
-	public Tb1061PoutEntity getPoutEntity() {
-		return poutEntity;
+	public Tb1061PoutEntity getTb1061PoutEntity() {
+		return tb1061PoutEntity;
 	}
 
-	public void setPoutEntity(Tb1061PoutEntity poutEntity) {
-		this.poutEntity = poutEntity;
+	public void setTb1061PoutEntity(Tb1061PoutEntity tb1061PoutEntity) {
+		this.tb1061PoutEntity = tb1061PoutEntity;
 	}
 
 }

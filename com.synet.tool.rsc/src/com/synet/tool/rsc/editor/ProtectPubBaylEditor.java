@@ -7,11 +7,19 @@ package com.synet.tool.rsc.editor;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.ui.table.DevKTable;
 
 /**
  * 保护信息模型->公用间隔树菜单编辑器。
@@ -20,32 +28,63 @@ import com.shrcn.found.ui.util.SwtUtil;
  */
 public class ProtectPubBaylEditor extends BaseConfigEditor {
 	
+	private DevKTable tableGatherDev;
+	private DevKTable tableOtherDev;
+	private Button btnSearch;
+	private String[] comboItems;
+
 	public ProtectPubBaylEditor(Composite container, IEditorInput input) {
 		super(container, input);
+	}
+	
+	@Override
+	public void init() {
+		comboItems = new String[]{"装置类型"};
+		super.init();
 	}
 
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		Composite comp = SwtUtil.createComposite(container, gridData, 1);
+		comp.setLayout(SwtUtil.getGridLayout(1));
+		String[] tabNames = new String[]{"采集单元", "其他设备"};
+		CTabFolder tabFolder = SwtUtil.createTab(comp, gridData, tabNames);
+		tabFolder.setSelection(0);
+		Control[] controls = tabFolder.getChildren();
+		//采集设备
+		Composite cmpGatherDev = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
+		cmpGatherDev.setLayout(SwtUtil.getGridLayout(1));
+		tableGatherDev = TableFactory.getAnalogTable(cmpGatherDev);
+		tableGatherDev.getTable().setLayoutData(gridData);
 		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		//其他设备
+		Composite cmpOtherDev = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
+		cmpOtherDev.setLayout(SwtUtil.getGridLayout(3));
+		Combo combo = SwtUtil.createCombo(cmpOtherDev, SwtUtil.bt_hd);
+		combo.setItems(comboItems);
+		combo.select(0);
+		Text text = SwtUtil.createText(cmpOtherDev, SwtUtil.bt_hd);
+		text.setMessage("装置名称");
+		btnSearch = SwtUtil.createButton(cmpOtherDev, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		SwtUtil.createLabel(cmpOtherDev, "			", new GridData(SWT.DEFAULT,10));
+		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
+		gdSpan_3.horizontalSpan = 3;
+		tableOtherDev = TableFactory.getAnalogTable(cmpOtherDev);
+		tableOtherDev.getTable().setLayoutData(gdSpan_3);
+		
+		
 	}
 	
 	protected void addListeners() {
+		btnSearch.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				super.widgetSelected(e);
+			}
+		});
 	}
 
 	@Override

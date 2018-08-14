@@ -89,26 +89,18 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		projectEntry.addChild(securityEntry);
 		projectEntry.addChild(icdEntry);
 		projectEntry.addChild(importEntry);
-//		// 加载装置
-//		for (DeviceData data : prjFileMgr.getDevices()) {
-//			BayIEDEntry devEntry = newDevice(data.getName(), data.getIedInScd());
-//			if (data.getType().equals(DevConstants.DEV_BUS)) {
-//				busRoot.addChild(devEntry);
-//			} else if (data.getType().equals(DevConstants.DEV_BAY)) {
-//				bayRoot.addChild(devEntry);
-//			}
-//		}
-		loadPrimary(primaryEntry);
-		loadProtect(protectEntry);
+		
+		BayEntityService service = new BayEntityService();
+		List<Tb1042BayEntity> bayEntityList = service.getBayEntryList();
+		loadPrimary(primaryEntry, bayEntityList);
+		loadProtect(protectEntry, bayEntityList);
 		loadPhysical(physicalEntry);
 		loadSecurity(securityEntry);
 		loadIcd(icdEntry);
 		loadImport(importEntry);
 	}
 	
-	private void loadPrimary(ITreeEntry primaryEntry) {
-		BayEntityService service = new BayEntityService();
-		List<Tb1042BayEntity> bayEntityList = service.getBayEntryList();
+	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.notNull(bayEntityList)){
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				createConfigEntry(primaryEntry, bayEntityList.get(i).getF1042Desc(), "bay.gif", ET_PR_BAY, i+1);
@@ -116,15 +108,19 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		}
 	}
 	
-	private void loadProtect(ITreeEntry protectEntry) {
+	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
-		ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, "间隔1", "bay.gif", ET_PT_BAY, 1);
-		ConfigTreeEntry proEntry = createConfigEntry(bayEntry, "保护", "device.png", ET_PT_IED, 1);
-		ConfigTreeEntry muEntry = createConfigEntry(bayEntry, "合并单元", "device.png", ET_PT_IED, 2);
-		ConfigTreeEntry tmEntry = createConfigEntry(bayEntry, "智能终端", "device.png", ET_PT_IED, 3);
+		if(DataUtils.notNull(bayEntityList)){
+			for (int i = 0; i < bayEntityList.size(); i++) {
+				ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntityList.get(i).getF1042Desc(), "bay.gif", ET_PT_BAY, i+1);
+				createConfigEntry(bayEntry, "保护", "device.png", ET_PT_IED, 1);//ConfigTreeEntry proEntry = 
+				createConfigEntry(bayEntry, "合并单元", "device.png", ET_PT_IED, 2);//ConfigTreeEntry muEntry = 
+				createConfigEntry(bayEntry, "智能终端", "device.png", ET_PT_IED, 3);//ConfigTreeEntry tmEntry = 
+			}
+		}
 		/** 动态加载-end  */
 		
-		ConfigTreeEntry bayPubEntry = createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, 2);
+		createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);//ConfigTreeEntry bayPubEntry = 
 	}
 	
 	@SuppressWarnings("unchecked")
