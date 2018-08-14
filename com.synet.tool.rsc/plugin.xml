@@ -62,40 +62,50 @@
       point="com.shrcn.found.ui.AppMenuExtension">
       <menu id="menu.prj" text="工程">
 	       <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.NewProjectAction"
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.prj.NewProjectAction"
 	              text="新建"
 	              icon="new_project.png"
 	              style="3"/>
 	       <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.OpenProjectAction"
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.prj.OpenProjectAction"
 	              text="打开"
 	              icon="open_project.png"
 	              style="3"/>
-	      <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.CloseProjectAction" 
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.prj.ExportProjectAction"
+	              text="导出"
+	              icon="editExport.gif"
+	              style="1"/>
+	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.prj.ImportProjectAction"
+	              text="导入"
+	              icon="editImport.gif"
+	              style="1"/>
+	      <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.prj.CloseProjectAction" 
 	       			text="关闭"/>
 	      <action class="org.eclipse.jface.action.Separator"/> 			
 	      <action class="org.eclipse.ui.actions.ActionFactory" command="QUIT"/>
       </menu>
       <menu id="menu.imp" text="导入">
            <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSSDAction"
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSSDAction"
 	              text="SSD"/>
 	       <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSCDAction"
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSCDAction"
 	              text="SCD"/>
 	       <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportSPCDAction"
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSPCDAction"
 	              text="SPCD"/>
 	       <menu id="menu.imp.excel" text="Excel">
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="设备台账"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="光缆清册"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="装置板卡端口描述"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="开入信号映射表"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="告警与板卡关联表"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="光强与端口关联表"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="压板与虚端子关联表"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="跳合闸反校关联表"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportExcelAction" text="监控信息点表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="设备台账"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="光缆清册"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="装置板卡端口描述"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="开入信号映射表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="告警与板卡关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="光强与端口关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="压板与虚端子关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="跳合闸反校关联表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="监控信息点表"/>
 	       </menu>
        </menu>
        <menu id="menu.exp" text="导出">
