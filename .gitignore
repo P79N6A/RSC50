@@ -12,4 +12,6 @@ com.shrcn.found.ui.nl1/bin
 com.synet.tool.rsc/bin                 
 de.kupzog.KTable/bin                   
 org.sf.feeling.swt.win32.extension/bin
-com.synet.tool.rsc/src/com/synet/tool/rsc/das/rsc_test.sql
+com.shrcn.business.scl/bin
+com.shrcn.business.scl/test
+com.shrcn.business.scl.nl1/bin

@@ -12,12 +12,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.shrcn.found.ui.app.WrappedTitleAreaDialog;
+import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
-public class ChanelConnectDialog extends WrappedTitleAreaDialog{
+public class ChanelConnectDialog extends WrappedDialog{
 
 	private DevKTable tableState;
 	private DevKTable tableChanel;
@@ -43,22 +43,16 @@ public class ChanelConnectDialog extends WrappedTitleAreaDialog{
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
-		
 		//左侧
-		
 		Composite comLeft = SwtUtil.createComposite(composite, gridData, 1);
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
-		
 		GridData gdlb_2 = new GridData(200,25);
 		gdlb_2.horizontalSpan = 2;
 		String switchLbName = curEntryName + "互感器次级：";
 		SwtUtil.createLabel(comLeft, switchLbName, gdlb_2);
-		
-		tableChanel = TableFactory.getSwitchStatusTable(comLeft);
+		tableChanel = TableFactory.getCtvtPoutTable(comLeft);
 		tableChanel.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
-		
-		
 		//右侧
 		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
@@ -70,14 +64,12 @@ public class ChanelConnectDialog extends WrappedTitleAreaDialog{
 		Combo comboSvControl = SwtUtil.createCombo(comRight, SwtUtil.bt_hd);
 		comboSvControl.setItems(comboSvItems);
 		comboSvControl.select(0);
-		
-		SwtUtil.createLabel(comRight, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
 		gdSpan_2.horizontalSpan = 2;
-		tableState = TableFactory.getSwitchStatusTable(comRight);
+		tableState = TableFactory.getPoutTable(comRight);
 		tableState.getTable().setLayoutData(gdSpan_2);
 		addListeners();
-		return parent;
+		return composite;
 	}
 	
 	
@@ -108,4 +100,5 @@ public class ChanelConnectDialog extends WrappedTitleAreaDialog{
 		return new Point(800, 550);
 	}
 
+	
 }

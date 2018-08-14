@@ -56,6 +56,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		//互感器次级
 		Composite compTsf = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
 		compTsf.setLayout(SwtUtil.getGridLayout(2));
+		
 		GridData gdlb = new GridData(200,25);
 		String tsfLbName = curEntryName + "互感器次级配置";
 		SwtUtil.createLabel(compTsf, tsfLbName, gdlb);
@@ -74,15 +75,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		SwtUtil.createLabel(compProtect, "			", new GridData(SWT.DEFAULT,10));
 		table = TableFactory.getProtectSampleTalbe(compProtect);
 		table.getTable().setLayoutData(gdSpan_2);
-		
 		//开关刀闸状态
 		Composite compSwitch = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
 		compSwitch.setLayout(SwtUtil.getGridLayout(2));
 		//开关刀闸状态-左侧
-		
-		Composite comLeft = SwtUtil.createComposite(compSwitch, new GridData(600,415), 1);
+		Composite comLeft = SwtUtil.createComposite(compSwitch, new GridData(640,405), 1);
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
-		
 		GridData gdlb_2 = new GridData(200,25);
 		gdlb_2.horizontalSpan = 2;
 		String switchLbName = curEntryName + "开关刀闸状态配置";
@@ -110,7 +108,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		SwtUtil.createLabel(comRight, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = 3;
-		table = TableFactory.getSwitchStatusTable(comRight);
+		table = TableFactory.getSluiceStatusTable(comRight);
 		table.getTable().setLayoutData(gdSpan_3);
 	}
 	

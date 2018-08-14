@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LNClass>
+	<LNType name="A组" desc="自动控制">
+		<LNClass value="ANCR" desc="中性点电流调节"/>
+		<LNClass value="ARCO" desc="无功控制"/>
+		<LNClass value="ATCC" desc="自动分接头调节控制"/>
+		<LNClass value="AVCO" desc="电压控制"/>
+	</LNType>
+	<LNType name="C组" desc="监控">
+		<LNClass value="CALH" desc="告警处理"/>
+		<LNClass value="CCGR" desc="冷却成组控制"/>
+		<LNClass value="CILO" desc="联闭锁"/>
+		<LNClass value="CPOW" desc="定点分合"/>
+		<LNClass value="CSWI" desc="开关控制器"/>
+	</LNType>
+	<LNType name="G组" desc="通用功能引用">
+		<LNClass value="GAPC" desc="通用自动过程控制"/>
+		<LNClass value="GGIO" desc="通用过程I/O"/>
+		<LNClass value="GSAL" desc="通用安全应用"/>
+	</LNType>
+	<LNType name="I组" desc="接口和存档">
+		<LNClass value="IARC" desc="存档"/>
+		<LNClass value="IHMI" desc="人机接口"/>
+		<LNClass value="ITCI" desc="遥控接口"/>
+		<LNClass value="ITMI" desc="远方监控接口"/>
+	</LNType>
+	<LNType name="L组" desc="系统逻辑节点">
+		<LNClass value="LPHD" desc="物理装置信息"/>
+		<LNClass value="LLN0" desc="逻辑节点零"/>
+	</LNType>
+	<LNType name="M组" desc="计量和测量">
+		<LNClass value="MDIF" desc="差动测量"/>
+		<LNClass value="MHAI" desc="谐波和间谐波"/>
+		<LNClass value="MHAN" desc="相别无关谐波和间谐波"/>
+		<LNClass value="MMTR" desc="计量"/>
+		<LNClass value="MMXN" desc="相别无关值测量"/>
+		<LNClass value="MMXU" desc="测量"/>
+		<LNClass value="MSQI" desc="相序和不平衡"/>
+		<LNClass value="MSTA" desc="计量统计"/>
+	</LNType>
+	<LNType name="P组" desc="保护功能">
+		<LNClass value="PDIF" desc="差动保护"/>
+		<LNClass value="PDIR" desc="方向比较"/>
+		<LNClass value="PDIS" desc="距离保护"/>
+		<LNClass value="PDOP" desc="过功率方向"/>
+		<LNClass value="PDUP" desc="欠功率方向"/>
+		<LNClass value="PFRC" desc="频率变化率"/>
+		<LNClass value="PHAR" desc="谐波制动"/>
+		<LNClass value="PHIZ" desc="接地检测"/>
+		<LNClass value="PIOC" desc="瞬时过流"/>
+		<LNClass value="PMRI" desc="禁止电动机从新启动"/>
+		<LNClass value="PMSS" desc="电动机启动时间监视"/>
+		<LNClass value="POPF" desc="过功率因素"/>
+		<LNClass value="PPAM" desc="相角测量"/>
+		<LNClass value="PSCH" desc="保护通道"/>
+		<LNClass value="PSDE" desc="灵敏方向接地故障"/>
+		<LNClass value="PTEF" desc="瞬时接地故障"/>
+		<LNClass value="PTOC" desc="带时限过电流"/>
+		<LNClass value="PTOF" desc="高周(频率)"/>
+		<LNClass value="PTOV" desc="过电压保护"/>
+		<LNClass value="PTRC" desc="保护跳闸"/>
+		<LNClass value="PTTR" desc="过热"/>
+		<LNClass value="PTUC" desc="欠电流"/>
+		<LNClass value="PTUV" desc="欠电压"/>
+		<LNClass value="PUPF" desc="欠功率因数"/>
+		<LNClass value="PTUF" desc="低周"/>
+		<LNClass value="PVOC" desc="复压闭锁过流保护"/>
+		<LNClass value="PVPH" desc="过励磁保护"/>
+		<LNClass value="PZSU" desc="零速或欠速保护"/>
+	</LNType>
+	<LNType name="R组" desc="保护相关功能">
+		<LNClass value="RDRE" desc="扰动记录功能"/>
+		<LNClass value="RADR" desc="扰动记录模拟通道"/>
+		<LNClass value="RBDR" desc="扰动记录状态两通道"/>
+		<LNClass value="RDRS" desc="扰动记录处理"/>
+		<LNClass value="RBRF" desc="断路器失灵"/>
+		<LNClass value="RDIR" desc="方向元件"/>
+		<LNClass value="RFLO" desc="故障定位"/>
+		<LNClass value="RPSB" desc="振荡闭锁"/>
+		<LNClass value="RREC" desc="自动重合闸"/>
+		<LNClass value="RSYN" desc="同期检查或同期"/>
+	</LNType>
+	<LNType name="S组" desc="传感器，监视">
+		<LNClass value="SARC" desc="电弧监视和诊断"/>
+		<LNClass value="SCAS" desc="冷控失电"/>
+		<LNClass value="SIMG" desc="绝缘介质监视(气体)"/>
+		<LNClass value="SIML" desc="绝缘介质监视(液体)"/>
+		<LNClass value="SPDC" desc="局部放电监视和诊断"/>
+	</LNType>
+	<LNType name="T组" desc="仪用互感器">
+		<LNClass value="TCTR" desc="电流互感器"/>
+		<LNClass value="TVTR" desc="电压互感器"/>
+	</LNType>
+	<LNType name="X组" desc="开关设备">
+		<LNClass value="XCBR" desc="断路器"/>
+		<LNClass value="XSWI" desc="隔离开关"/>
+	</LNType>
+	<LNType name="Y组" desc="其他变压器和相关功能">
+		<LNClass value="YEFN" desc="接地故障中性点补偿(消狐线圈)"/>
+		<LNClass value="YLTC" desc="分接头"/>
+		<LNClass value="YPSH" desc="功率分流"/>
+		<LNClass value="YPTR" desc="电压变压器"/>
+	</LNType>
+	<LNType name="Z组" desc="其他(电力系统)设备">
+		<LNClass value="ZAXN" desc="辅助网络"/>
+		<LNClass value="ZBAT" desc="电池"/>
+		<LNClass value="ZBSH" desc="套管"/>
+		<LNClass value="ZCAB" desc="电力电缆"/>
+		<LNClass value="ZCAP" desc="电容器组"/>
+		<LNClass value="ZCON" desc="转换器"/>
+		<LNClass value="ZGEN" desc="发电机"/>
+		<LNClass value="ZGIL" desc="气体绝缘线路"/>
+		<LNClass value="ZLIN" desc="电力架空线"/>
+		<LNClass value="ZMOT" desc="电动机"/>
+		<LNClass value="ZREA" desc="电抗器"/>
+		<LNClass value="ZRRC" desc="旋转无功元件"/>
+		<LNClass value="ZSAR" desc="浪涌抑制器"/>
+		<LNClass value="ZTCF" desc="晶闸管控制频率转换器"/>
+		<LNClass value="ZTCR" desc="晶闸管控制无功元件"/>
+	</LNType>
+</LNClass>
