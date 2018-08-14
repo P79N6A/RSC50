@@ -17,6 +17,7 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
+import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.PhyscialAreaService;
 
@@ -40,11 +41,11 @@ public class TestMain {
 	public void listTest() {
 		List<Tb1049RegionEntity> list = (List<Tb1049RegionEntity>) beandao.getAll(Tb1049RegionEntity.class);
 		System.out.println(list);
-		System.out.println(list.get(0).getF1041Code());
+//		System.out.println(list.get(0).getF1041Code());
 		System.out.println(list.get(0).getTb1041SubstationByF1041Code().getF1041Code());
 		Tb1049RegionEntity entity = new Tb1049RegionEntity();
 		entity.setF1049Code("104903");
-		entity.setF1041Code("104101");
+//		entity.setF1041Code("104101");
 		entity.setF1049Name("SX");
 		entity.setF1049Desc("山西");
 		entity.setF1049Area(0);
@@ -163,6 +164,12 @@ public class TestMain {
 		System.out.println(list);
 		List<Tb1051CableEntity> result = service.getCableList(list);
 		System.out.println(result);
+	}
+	
+	@Test
+	public void test1090() {
+		List<Tb1090LineprotfiberEntity> list = (List<Tb1090LineprotfiberEntity>) beandao.getAll(Tb1090LineprotfiberEntity.class);
+		System.out.println(list);
 	}
 	
 
