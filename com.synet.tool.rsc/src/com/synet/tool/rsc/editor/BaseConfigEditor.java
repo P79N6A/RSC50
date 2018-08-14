@@ -23,6 +23,9 @@ import com.synet.tool.rsc.ui.table.DevKTable;
  */
 public class BaseConfigEditor extends BaseEditor {
 	
+	protected static final String DEV_TYPE_TITLE = "装置类型";
+	protected static final String DEV_NAME_TITLE = "装置名称";
+	
 //	protected DeviceConfig device;
 //
 //	protected ProjectFileManager prjFileMgr;
