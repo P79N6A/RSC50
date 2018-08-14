@@ -121,14 +121,16 @@ public abstract class ANavigationView extends ViewPart implements IEventHandler 
 		MenuToolFactory menuToolFactory = MenuToolFactory.getInstance();
 		if (EventConstants.PROJECT_CREATE.equals(event)) {
 			createProject();
-			menuToolFactory.enableActions();
 		} else if (EventConstants.PROJECT_OPEN.equals(event)) {
 			openProject();
-			menuToolFactory.enableActions();
 		} else if (EventConstants.PROJECT_CLOSE.equals(event)) {
 			closeProject();
-			menuToolFactory.disableActions();
+		} else if (EventConstants.PROJECT_OPEN_EXP.equals(event)) {
+			exportProject();
+		} else if (EventConstants.PROJECT_OPEN_IMP.equals(event)) {
+			importProject();
 		}
+		menuToolFactory.disableActions();
 	}
 	
 	/**
@@ -141,6 +143,16 @@ public abstract class ANavigationView extends ViewPart implements IEventHandler 
 	 * 打开工程。
 	 */
 	protected abstract void openProject();
+
+	/**
+	 * 导出工程。
+	 */
+	protected abstract void exportProject();
+	
+	/**
+	 * 导入工程。
+	 */
+	protected abstract void importProject();
 	
 	/**
 	 * 关闭工程操作.

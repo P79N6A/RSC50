@@ -8,6 +8,7 @@ public interface EventConstants {
 	String PROJECT_CREATE 		= "create project";
 	String PROJECT_OPEN 		= "open project";
 	String PROJECT_CLOSE 		= "close project";
+	String PROJECT_OPEN_EXP		= "open export project";
 	String PROJECT_OPEN_IMP		= "open import project";
 	
 	// Device

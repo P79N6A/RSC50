@@ -134,7 +134,7 @@ public class InputDialog extends WrappedDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(550, 150);
+		return new Point(550, 220);
 	}
 
     /*

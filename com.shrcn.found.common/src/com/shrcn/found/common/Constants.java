@@ -126,7 +126,7 @@ public class Constants {
 
 	// DEMO版使用的临时常量-----------------------------------------------
 	public static String oldFile 				= null;
-	public static String DEFAULT_PRJECT_NAME  	= null;		// 工程名
+	public static String DEFAULT_PRJECT_NAME  	= "default";		// 工程名
 	public static String DEFAULT_SCD_DOC_NAME 	= "SCD";	// 保存.scd文件的doc名称 //$NON-NLS-1$
 	public static String DEFAULT_PRJ_NAME  	    = null;		// 工程名（仅用于工程名称，与SCD文件名称无关）
 	public static String CURRENT_RTU_NAME     	= null;		// 当前RTU名称

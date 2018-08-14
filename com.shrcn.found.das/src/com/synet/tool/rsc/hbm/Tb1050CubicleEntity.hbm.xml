@@ -14,7 +14,7 @@
         <property name="f1050Desc">
             <column name="F1050_Desc" sql-type="char" length="96"/>
         </property>
-        <many-to-one name="tb1049RegionByF1049Code" class="com.synet.tool.rsc.model.Tb1049RegionEntity">
+        <many-to-one name="tb1049RegionByF1049Code" class="com.synet.tool.rsc.model.Tb1049RegionEntity" lazy="false">
             <column name="F1049_CODE" not-null="true"/>
         </many-to-one>
     </class>

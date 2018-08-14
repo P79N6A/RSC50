@@ -8,21 +8,18 @@ package com.synet.tool.rsc.das;
 import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.util.List;
 
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.tool.found.das.DBManager;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.RSCConstants;
-import com.synet.tool.rsc.model.Tb1042BayEntity;
 
 public class ProjectManager {
 	
-	protected SessionComponent session = null;
-	protected DBManager dbmgr = null;
-	protected String hbCfg = "";
-	protected String sqlCfg = "";
-	protected String prjName = "";
+	private SessionComponent session = null;
+	private DBManager dbmgr = null;
+	private String hbCfg = "";
+	private String sqlCfg = "";
+	private static final String dataDir = RSCConstants.RSC_PRJ_NAME;
 	
 	private static ProjectManager inst;
 	
@@ -41,12 +38,11 @@ public class ProjectManager {
 		setAttr();
 	}
 
-	protected void setAttr() {
+	private void setAttr() {
 		session = SessionRsc.getInstance();
 		dbmgr = RscDbManagerImpl.getInstance();
 		hbCfg = RSCConstants.RSC_HB_CFG;
 		sqlCfg = RSCConstants.RSC_SQL;
-		prjName = RSCConstants.RSC_PRJ_NAME;
 	}
 	
 	/**
@@ -87,7 +83,7 @@ public class ProjectManager {
 	 * @return
 	 */
 	public boolean exists(String dbName) {
-		return new File(getProjectDir() + dbName).exists();
+		return new File(getDataDir() + dbName).exists();
 	}
 	
 	/**
@@ -97,7 +93,7 @@ public class ProjectManager {
 	 */
 	public boolean removeDb(String devName) {
 		dbmgr.shutdown();
-		String path = getProjectDir() + devName;
+		String path = getDataDir() + devName;
 		return FileManipulate.deleteDir(path);
 	}
 	
@@ -105,8 +101,8 @@ public class ProjectManager {
 	 * 得到程序根目录
 	 * @return
 	 */
-	private String getRootDir(){
-		return RSCConstants.USR_DIR + File.separator;
+	private static String getRootDir(){
+		return RSCConstants.USR_DIR;
 	}
 	
 	/**
@@ -114,9 +110,27 @@ public class ProjectManager {
 	 * @param prjname
 	 * @return
 	 */
-	public String getProjectDir() {
-		return getRootDir() + prjName + File.separator;
+	public static String getDataDir() {
+		return getRootDir() + dataDir + File.separator;
 	}
 
+	/**
+	 * 得到rtu工程路径
+	 * @param prjname
+	 * @return
+	 */
+	public static String getProjectDir(String prjname) {
+		return getDataDir() + prjname;
+	}
+	
+	/**
+	 * 得到工程管理文件路径.
+	 * 
+	 * @return
+	 */
+	public static String getProjectFilePath() {
+		return getDataDir() + ".project";
+	}
+	
 }
 

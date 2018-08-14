@@ -15,12 +15,16 @@ import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
+import com.synet.tool.rsc.model.Tb1050CubicleEntity;
+import com.synet.tool.rsc.model.Tb1051CableEntity;
 import com.synet.tool.rsc.service.BayEntityService;
+import com.synet.tool.rsc.service.PhyscialAreaService;
 
 
 public class TestMain {
 	
 	private BeanDaoImpl beandao;
+	private PhyscialAreaService service;
 	
 	@Before
 	public void before() {
@@ -29,6 +33,7 @@ public class TestMain {
 		instance.initDb(dbName);
 		instance.openDb(dbName);
 		beandao = BeanDaoImpl.getInstance();
+		service = new PhyscialAreaService();
 	}
 	
 	@Test
@@ -146,5 +151,19 @@ public class TestMain {
 //		System.out.print(plinTest2);
 //		assertTrue(plinTest2.getTestCases().size() > 0);
 	}
+	
+	@Test
+	public void test1050() {
+//		List<Tb1050CubicleEntity> list = (List<Tb1050CubicleEntity>) beandao.getAll(Tb1050CubicleEntity.class);
+		Tb1049RegionEntity entity = new Tb1049RegionEntity();
+		entity.setF1049Code("104901");
+		List<Tb1050CubicleEntity> list = 
+		(List<Tb1050CubicleEntity>) beandao.getListByCriteria(Tb1050CubicleEntity.class,
+				"tb1049RegionByF1049Code", entity);
+		System.out.println(list);
+		List<Tb1051CableEntity> result = service.getCableList(list);
+		System.out.println(result);
+	}
+	
 
 }
