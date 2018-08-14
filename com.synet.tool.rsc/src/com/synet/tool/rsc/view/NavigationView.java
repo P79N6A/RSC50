@@ -1,32 +1,47 @@
 package com.synet.tool.rsc.view;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.widgets.Composite;
+import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+
+import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.event.Context;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.common.valid.NewNameValidator;
+import com.shrcn.found.file.util.FileManipulate;
+import com.shrcn.found.file.util.ZipUtil;
 import com.shrcn.found.ui.UIConstants;
+import com.shrcn.found.ui.dialog.InputDialog;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.IEDEntry;
-import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
+import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ANavigationView;
-import com.synet.tool.rsc.GlobalData;
+import com.shrcn.found.ui.view.ConsoleManager;
+import com.synet.tool.rsc.RscEventConstants;
 import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.dialog.HistoryProjectDialog;
 import com.synet.tool.rsc.ui.EcfgTreeViewer;
 import com.synet.tool.rsc.util.NavgTreeFactory;
+import com.synet.tool.rsc.util.ProjectFileManager;
 
 public class NavigationView extends ANavigationView {
 	
 	public static final String ID = UIConstants.View_Navg_ID;
 
+	private ProjectManager prjmgr = ProjectManager.getInstance();
+	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 	private NavgTreeFactory treeFactory = NavgTreeFactory.getInstance();
-	
-	
-//	private ProjectFileManager prjFileMng = ProjectFileManager.getInstance();
-//	private ProjectManager prjMng = ProjectManager.getInstance();
 	
 	protected void createTV(Composite parent){
 		TreeViewerBuilder treeBuilder = treeFactory.getTreeBuilder();
@@ -53,9 +68,14 @@ public class NavigationView extends ANavigationView {
 		super.execute(context);
 		String event = context.getEventName();
 		Object data = context.getData();
-//		if (EventConstants.PROJECT_OPEN_IMP.equals(event)) {
-//			Constants.CURRENT_PRJ_PATH = DeviceDirManager.getWorkspacePrjPath(Constants.CURRENT_PRJ_NAME);
-//			openPrj();
+//		if (RscEventConstants.PROJECT_NEW.equals(event)) {
+//			String priName = (String) data;
+//			prjmgr.initDb(priName);
+//			loadProject();
+//		} else if (RscEventConstants.PROJECT_OPEN.equals(event)) {
+//			String priName = (String) data;
+//			prjmgr.openDb(priName);
+//			loadProject();
 //		}
 	}
 	
@@ -65,27 +85,33 @@ public class NavigationView extends ANavigationView {
 	 */
 	@Override
 	protected void createProject() {
-		iniTDB();
-//		NewProjectDialog dlg = new NewProjectDialog(SwtUtil.getDefaultShell());
-//		if (IDialogConstants.OK_ID == dlg.open()) {
-//			closeProject();
-//			
-//			String projectName = dlg.getName();
-//			String projectPath = dlg.getPath();
-//			String note = dlg.getNote();
-//			// 新建节点
-//			prePrjOpen();
-//			
-//			//初始化数据库
-//			Constants.CURRENT_PRJ_NAME  = projectName;
-//			Constants.CURRENT_PRJ_PATH = DeviceDirManager.getProjectPath(projectName, projectPath);
-//			NeoDBManager neoDbManager = NeoDBManager.getInstance();
-//			neoDbManager.openDB(DeviceDirManager.getProjectFilePath());
-//			prjFileMng.createProject(projectName, note, Constants.CURRENT_PRJ_PATH);
-//			treeFactory.loadProject();
-//			loadProject();
-//			EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
-//		}
+		NewNameValidator validator = new NewNameValidator(prjFileMgr.getHistoryItems());
+		InputDialog dlg = new InputDialog(SwtUtil.getDefaultShell(), "新建工程", "请输入工程名称", "", validator);
+		if (IDialogConstants.OK_ID == dlg.open()) {
+			closeProject();
+			final String prjName = dlg.getValue();
+			Constants.CURRENT_PRJ_NAME  = prjName;
+			prjFileMgr.addProject(prjName, null);
+			prjFileMgr.setClosed(false);
+			ProgressManager.execute(new IRunnableWithProgress() {
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					monitor.beginTask("正在创建...", 3);
+					monitor.worked(1);
+					prjmgr.initDb(prjName);
+					prjmgr.openDb(prjName);
+					monitor.worked(1);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							loadProject();
+							EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
+							monitor.done();
+						}});
+				}
+			});
+		}
 	}
 
 	
@@ -94,34 +120,35 @@ public class NavigationView extends ANavigationView {
 	 */
 	@Override
 	protected void openProject() {
-		iniTDB();
-//		OpenProjectDialog dlg = new OpenProjectDialog(SwtUtil.getDefaultShell());
-//		if (IDialogConstants.OK_ID == dlg.open()) {
-//			closeProject();
-//			
-//			String name = dlg.getName();
-//			String path = dlg.getPath();
-//			boolean isPath = (name == null);
-//			// 加载节点
-//			prePrjOpen();
-//			
-//			if (isPath) {
-//				String prjname = new File(path).getName();
-//				Constants.CURRENT_PRJ_NAME = prjname;
-//			} else {
-//				Constants.CURRENT_PRJ_NAME = name;
-//			}
-//			Constants.CURRENT_PRJ_PATH = DeviceDirManager.getProjectPath(Constants.CURRENT_PRJ_NAME, path);
-//			
-//			// 打开工程操作
-//			openPrj();
-//		}
+		HistoryProjectDialog dlg = new HistoryProjectDialog(SwtUtil.getDefaultShell());
+		if (IDialogConstants.OK_ID == dlg.open()) {
+			closeProject();
+			final String prjName = dlg.getValue();
+			Constants.CURRENT_PRJ_NAME  = prjName;
+			prjFileMgr.setClosed(false);
+			ProgressManager.execute(new IRunnableWithProgress() {
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					monitor.beginTask("正在打开...", 3);
+					monitor.worked(1);
+					prjmgr.openDb(prjName);
+					monitor.worked(1);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							loadProject();
+							EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
+							monitor.done();
+						}});
+				}
+			});
+		}
 	}
 	
 
 	@Override
 	public void loadProject() {
-		iniTDB();
 		treeFactory.loadProject();
 		cfgViewer.setInput(treeFactory.getProjectData());
 		cfgViewer.expandAll();
@@ -129,31 +156,59 @@ public class NavigationView extends ANavigationView {
 
 	@Override
 	protected void closeProject() {
-		
+		Constants.CURRENT_PRJ_NAME  = null;
+		prjFileMgr.setClosed(true);
+		prjmgr.closeDB();
+		loadProject();
+		EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
 	}
-	
+
 	@Override
-	protected void addListeners() {
-		cfgViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+	protected void exportProject() {
+		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.SAVE, "*.data");
+		ProgressManager.execute(new IRunnableWithProgress() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				ITreeEntry selEntry = cfgViewer.getSelTreeEntry();
-				
-				if (selEntry == null)
-					return;
-				if (selEntry instanceof ConfigTreeEntry) {
-					openConfig(selEntry);
-				}
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				monitor.beginTask("正在打开...", 3);
+				monitor.worked(1);
+				ZipUtil.zip(ProjectManager.getProjectDir(Constants.CURRENT_PRJ_NAME), path);
+				monitor.worked(1);
+				ConsoleManager.getInstance().append("当前工程已导出至 " + path);
+				monitor.done();
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+					}});
 			}
 		});
-		
 	}
-	
-	private void iniTDB() {
-		String dbName = "RscData";
-		ProjectManager instance = ProjectManager.getInstance();
-		instance.initDb(dbName);
-		instance.openDb(dbName);
+
+	@Override
+	protected void importProject() {
+		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.OPEN, "*.data");
+		final String prjName = FileManipulate.getName(path);
+		ProgressManager.execute(new IRunnableWithProgress() {
+			@Override
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				monitor.beginTask("正在导入...", 3);
+				monitor.worked(1);
+				ZipUtil.unzip(path, ProjectManager.getProjectDir(prjName));
+				Constants.CURRENT_PRJ_NAME  = prjName;
+				prjFileMgr.addProject(prjName, null);
+				prjFileMgr.setClosed(false);
+				prjmgr.openDb(prjName);
+				monitor.worked(1);
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						loadProject();
+						EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
+						monitor.done();
+					}});
+			}
+		});
 	}
 	
 }

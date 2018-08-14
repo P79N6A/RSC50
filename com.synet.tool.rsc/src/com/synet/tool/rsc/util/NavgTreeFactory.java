@@ -48,11 +48,11 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	
 	private static BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 
-//	private ProjectFileManager prjFileMgr;
+	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 
 	private static volatile NavgTreeFactory factory;
+	
 	private NavgTreeFactory() {
-//		this.prjFileMgr = ProjectFileManager.getInstance();
 //		treeBuilder = TreeViewerBuilder.create(XMLFileManager.loadXMLFile(getClass(), Constants.CFGURL));
 		treeBuilder = TreeViewerBuilder.create(null);
 	}
@@ -72,8 +72,8 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	public void loadProject() {
 		super.loadProject();
 		
-//		if (prjFileMgr.isClosed())
-//			return;
+		if (prjFileMgr.isClosed())
+			return;
 //		ProjectEntry projectEntry = new ProjectEntry(prjFileMgr.getProjectName(), "project.gif", 1);
 		ProjectEntry projectEntry = new ProjectEntry("变电站", "", "project.gif");
 		data.add(projectEntry);
