@@ -512,9 +512,9 @@ create table TB1067_CTVTSecondary
    F1061_CODE_B2        varchar(48),
    F1061_CODE_C1        varchar(48),
    F1061_CODE_C2        varchar(48),
-   F1061_TermNo         varchar(96),
-   F1061_CircNo         varchar(96),
-   F1061_Desc           varchar(96),
+   F1067_TermNo         varchar(96),
+   F1067_CircNo         varchar(96),
+   F1067_Desc           varchar(96),
    primary key (F1067_Code)
 );
 
