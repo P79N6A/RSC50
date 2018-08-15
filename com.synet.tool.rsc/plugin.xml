@@ -109,12 +109,16 @@
 	       </menu>
        </menu>
        <menu id="menu.exp" text="导出">
-       		<action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportRSAction"
-	              text="工程配置"/>
 	       	<action
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportICDAction"
-	              text="ICD模型"/>
+	              text="ICD模型"
+	              icon="file.gif"
+	              style="3"/>
+       		<action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportRSAction"
+	              text="工程配置"
+	              icon="editExport.gif"
+	              style="3"/>
        </menu>
        <menu id="menu.app" text="应用">
        		<action
