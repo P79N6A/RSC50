@@ -3,7 +3,6 @@
 
 <product name="RSC50" uid="com.synet.tool.rsc.product" id="com.synet.tool.rsc.product" application="com.synet.tool.rsc.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -25,25 +24,21 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.shrcn.business.common"/>
-      <plugin id="com.shrcn.business.common.nl1" fragment="true"/>
-      <plugin id="com.shrcn.business.model"/>
-      <plugin id="com.shrcn.business.net"/>
+      <plugin id="com.shrcn.business.scl"/>
+      <plugin id="com.shrcn.business.scl.nl1" fragment="true"/>
       <plugin id="com.shrcn.found.common"/>
       <plugin id="com.shrcn.found.common.nl1" fragment="true"/>
       <plugin id="com.shrcn.found.das"/>
+      <plugin id="com.shrcn.found.dbx"/>
+      <plugin id="com.shrcn.found.dbxapi"/>
       <plugin id="com.shrcn.found.library"/>
-      <plugin id="com.shrcn.found.net"/>
       <plugin id="com.shrcn.found.ui"/>
       <plugin id="com.shrcn.found.ui.nl1" fragment="true"/>
-      <plugin id="com.sieyuan.shr.u21.common"/>
-      <plugin id="com.sieyuan.shr.u21.ui"/>
       <plugin id="com.synet.tool.rsc"/>
       <plugin id="de.kupzog.ktable"/>
       <plugin id="javax.servlet"/>
