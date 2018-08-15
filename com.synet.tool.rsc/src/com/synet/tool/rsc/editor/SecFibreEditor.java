@@ -5,16 +5,21 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.SecFibreService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -59,11 +64,7 @@ public class SecFibreEditor extends BaseConfigEditor {
 		btnGridData.heightHint = 25;
 		btnGridData.widthHint = 40;
 		cmbDevType = SwtUtil.createCombo(topComp, textGridData, true);
-		cmbDevType.setItems(new String[]{"装置类型"});
-		cmbDevType.select(0);
 		cmbDevName = SwtUtil.createCombo(topComp, textGridData, true);
-		cmbDevName.setItems(new String[]{"装置名称"});
-		cmbDevName.select(0);
 		btnSearch = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "查询");
 		SwtUtil.createLabel(topComp, "", textGridData); 
 		btnImport = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "导入");
@@ -77,6 +78,30 @@ public class SecFibreEditor extends BaseConfigEditor {
 	}
 	
 	protected void addListeners() {
+		
+		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Object evnet = e.getSource();
+				if (evnet == btnSearch) {
+					search();
+				} else if (evnet == btnImport) {
+					importData();
+				} else if (evnet == btnExport) {
+					exportData();
+				} else if (evnet == btnAdd) {
+					add();
+				} else if (evnet == btnDelete) {
+					delete();
+				}
+				super.widgetSelected(e);
+			}
+		};
+		btnSearch.addSelectionListener(listener);
+		btnImport.addSelectionListener(listener);
+		btnExport.addSelectionListener(listener);
+		btnAdd.addSelectionListener(listener);
+		btnDelete.addSelectionListener(listener);
 	}
 
 	@Override
@@ -85,5 +110,60 @@ public class SecFibreEditor extends BaseConfigEditor {
 		if (list != null) {
 			table.setInput(list);
 		}
+		List<Tb1046IedEntity> ieds = secFibreService.getIedList();
+		if (ieds != null && !ieds.isEmpty()) {
+			List<String> typeItems = new ArrayList<>();
+			List<String> nameItems = new ArrayList<>();
+			typeItems.add(DEV_TYPE_TITLE);
+			nameItems.add(DEV_NAME_TITLE);
+			for (Tb1046IedEntity ied : ieds) {
+				typeItems.add(ied.getF1046Model());
+				nameItems.add(ied.getF1046Name());
+			}
+			cmbDevType.setItems(typeItems.toArray(new String[0]));
+			cmbDevName.setItems(nameItems.toArray(new String[0]));
+			cmbDevType.select(0);
+			cmbDevName.select(0);
+		}
 	}
+	
+	private void search() {
+		String f1046Model = cmbDevType.getText().trim();
+		String f1046Name = cmbDevName.getText().trim();
+		if (DEV_TYPE_TITLE.equals(f1046Model)) {
+			f1046Model = null;
+		}
+		if (DEV_NAME_TITLE.equals(f1046Name)) {
+			f1046Name = null;
+		}
+		List<Tb1090LineprotfiberEntity> list = secFibreService.getLineListByIedParams(f1046Model, f1046Name);
+		if (list != null) {
+			table.setInput(list);
+		}
+	}
+	
+	private void importData() {
+		
+	}
+	
+	private void exportData() {
+		String filePath = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
+		if (filePath == null || "".equals(filePath)){
+			DialogHelper.showAsynError("请选择保存路径");
+		}
+		@SuppressWarnings("unchecked")
+		List<Tb1090LineprotfiberEntity> list = (List<Tb1090LineprotfiberEntity>) table.getInput();
+		secFibreService.exportData(list, filePath);
+	}
+	
+	private void add() {
+		table.addRow(new Tb1090LineprotfiberEntity());
+	}
+	
+	private void delete() {
+		Tb1090LineprotfiberEntity entity = (Tb1090LineprotfiberEntity) table.getSelection();
+		secFibreService.delete(entity);
+		table.removeSelected();
+	}
+	
 }

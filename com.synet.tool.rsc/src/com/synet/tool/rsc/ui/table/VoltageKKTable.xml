@@ -3,12 +3,12 @@
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1093VoltagekkEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>
   <field desc="空开代码" editor="none" name="f1093Code" width="100" default=""/>
-  <!-- 待定 -->
-  <field desc="互感器代码" editor="none" name="tb1067CtvtsecondaryByF1067Code" width="100" default=""/>
-  <field desc="互感器Name" editor="none" name="tb1067CtvtsecondaryByF1067Code" width="100" default=""/> 
-  <field desc="互感器名称" editor="none" name="tb1067CtvtsecondaryByF1067Code" width="100" default=""/> 
-  <field desc="次级编号" editor="none" name="f1067Code" width="100" default=""/> 
+  <field desc="互感器代码" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.f1043Code" width="100" default=""/>
+  <field desc="互感器Name" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.f1043Name" width="100" default=""/> 
+  <field desc="互感器名称" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.f1043Desc" width="100" default=""/> 
+  <field desc="次级编号" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1067CtvtsecondaryByF1067Code.f1067Code" width="100" default=""/> 
   <field desc="空开描述" editor="none" name="f1093Desc" width="100" default=""/> 
   <field desc="空开编号" editor="none" name="f1093KkNo" width="100" default=""/> 
   <field desc="" editor="none" name="other" width="130" default=""/> 

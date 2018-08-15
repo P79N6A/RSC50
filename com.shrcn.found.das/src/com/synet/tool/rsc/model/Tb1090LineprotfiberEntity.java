@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1090LineprotfiberEntity {
     private String f1090Code;
-    private String f1046Code;
+//    private String f1046Code;
     private String f1090Desc;
     private String f1090FiberNo;
     private String f1090PortNo;
@@ -19,13 +19,13 @@ public class Tb1090LineprotfiberEntity {
         this.f1090Code = f1090Code;
     }
 
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
-    }
+//    public String getF1046Code() {
+//        return f1046Code;
+//    }
+//
+//    public void setF1046Code(String f1046Code) {
+//        this.f1046Code = f1046Code;
+//    }
 
     public String getF1090Desc() {
         return f1090Desc;
@@ -58,7 +58,7 @@ public class Tb1090LineprotfiberEntity {
 
         Tb1090LineprotfiberEntity that = (Tb1090LineprotfiberEntity) o;
 
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
+//        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1090Code != null ? !f1090Code.equals(that.f1090Code) : that.f1090Code != null) return false;
         if (f1090Desc != null ? !f1090Desc.equals(that.f1090Desc) : that.f1090Desc != null) return false;
         if (f1090FiberNo != null ? !f1090FiberNo.equals(that.f1090FiberNo) : that.f1090FiberNo != null) return false;
@@ -70,7 +70,7 @@ public class Tb1090LineprotfiberEntity {
     @Override
     public int hashCode() {
         int result = f1090Code != null ? f1090Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
+//        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1090Desc != null ? f1090Desc.hashCode() : 0);
         result = 31 * result + (f1090FiberNo != null ? f1090FiberNo.hashCode() : 0);
         result = 31 * result + (f1090PortNo != null ? f1090PortNo.hashCode() : 0);
