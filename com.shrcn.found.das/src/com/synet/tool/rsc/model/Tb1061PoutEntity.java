@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -21,16 +20,6 @@ public class Tb1061PoutEntity {
     private Tb1064StrapEntity tb1064StrapByF1064Code;
     
     
-    private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code;
-    private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_0;
-    private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_1;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_0;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_1;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_2;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_3;
-    private Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_4;
-
     public String getF1061Code() {
         return f1061Code;
     }
@@ -169,75 +158,4 @@ public class Tb1061PoutEntity {
         this.tb1064StrapByF1064Code = tb1064StrapByF1064Code;
     }
 
-    public Collection<Tb1063CircuitEntity> getTb1063CircuitsByF1061Code() {
-        return tb1063CircuitsByF1061Code;
-    }
-
-    public void setTb1063CircuitsByF1061Code(Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code) {
-        this.tb1063CircuitsByF1061Code = tb1063CircuitsByF1061Code;
-    }
-
-    public Collection<Tb1063CircuitEntity> getTb1063CircuitsByF1061Code_0() {
-        return tb1063CircuitsByF1061Code_0;
-    }
-
-    public void setTb1063CircuitsByF1061Code_0(Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_0) {
-        this.tb1063CircuitsByF1061Code_0 = tb1063CircuitsByF1061Code_0;
-    }
-
-    public Collection<Tb1063CircuitEntity> getTb1063CircuitsByF1061Code_1() {
-        return tb1063CircuitsByF1061Code_1;
-    }
-
-    public void setTb1063CircuitsByF1061Code_1(Collection<Tb1063CircuitEntity> tb1063CircuitsByF1061Code_1) {
-        this.tb1063CircuitsByF1061Code_1 = tb1063CircuitsByF1061Code_1;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code() {
-        return tb1067CtvtsecondariesByF1061Code;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code) {
-        this.tb1067CtvtsecondariesByF1061Code = tb1067CtvtsecondariesByF1061Code;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code_0() {
-        return tb1067CtvtsecondariesByF1061Code_0;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code_0(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_0) {
-        this.tb1067CtvtsecondariesByF1061Code_0 = tb1067CtvtsecondariesByF1061Code_0;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code_1() {
-        return tb1067CtvtsecondariesByF1061Code_1;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code_1(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_1) {
-        this.tb1067CtvtsecondariesByF1061Code_1 = tb1067CtvtsecondariesByF1061Code_1;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code_2() {
-        return tb1067CtvtsecondariesByF1061Code_2;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code_2(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_2) {
-        this.tb1067CtvtsecondariesByF1061Code_2 = tb1067CtvtsecondariesByF1061Code_2;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code_3() {
-        return tb1067CtvtsecondariesByF1061Code_3;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code_3(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_3) {
-        this.tb1067CtvtsecondariesByF1061Code_3 = tb1067CtvtsecondariesByF1061Code_3;
-    }
-
-    public Collection<Tb1067CtvtsecondaryEntity> getTb1067CtvtsecondariesByF1061Code_4() {
-        return tb1067CtvtsecondariesByF1061Code_4;
-    }
-
-    public void setTb1067CtvtsecondariesByF1061Code_4(Collection<Tb1067CtvtsecondaryEntity> tb1067CtvtsecondariesByF1061Code_4) {
-        this.tb1067CtvtsecondariesByF1061Code_4 = tb1067CtvtsecondariesByF1061Code_4;
-    }
 }
