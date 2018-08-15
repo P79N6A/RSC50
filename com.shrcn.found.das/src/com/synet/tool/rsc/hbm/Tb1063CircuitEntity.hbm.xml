@@ -6,7 +6,7 @@
 
     <class name="com.synet.tool.rsc.model.Tb1063CircuitEntity" table="tb1063_circuit" schema="rscapp">
         <id name="f1063Code">
-            <column name="F1063_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1063_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1020No">
             <column name="F1020_NO" sql-type="int" not-null="true"/>

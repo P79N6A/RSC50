@@ -6,16 +6,16 @@
 
     <class name="com.synet.tool.rsc.model.Tb1054RcbEntity" table="tb1054_rcb" schema="rscapp">
         <id name="f1054Code">
-            <column name="F1054_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1054_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1054Rptid">
-            <column name="F1054_RPTID" sql-type="char" length="48" not-null="true"/>
+            <column name="F1054_RPTID" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1054Dataset">
-            <column name="F1054_Dataset" sql-type="char" length="48" not-null="true"/>
+            <column name="F1054_Dataset" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1054DsDesc">
-            <column name="F1054_DSDesc" sql-type="char" length="96"/>
+            <column name="F1054_DSDesc" sql-type="varchar" length="96"/>
         </property>
         <property name="f1054IsBrcb">
             <column name="F1054_IsBRCB" sql-type="int" not-null="true"/>

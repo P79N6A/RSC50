@@ -6,25 +6,25 @@
 
     <class name="com.synet.tool.rsc.model.Tb1061PoutEntity" table="tb1061_pout" schema="rscapp">
         <id name="f1061Code">
-            <column name="F1061_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1061_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="cbCode">
-            <column name="CB_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="CB_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1061RefAddr">
-            <column name="F1061_RefAddr" sql-type="char" length="48" not-null="true"/>
+            <column name="F1061_RefAddr" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1061Index">
             <column name="F1061_Index" sql-type="int" not-null="true"/>
         </property>
         <property name="f1061Desc">
-            <column name="F1061_Desc" sql-type="char" length="96"/>
+            <column name="F1061_Desc" sql-type="varchar" length="96"/>
         </property>
         <property name="f1061Type">
             <column name="F1061_Type" sql-type="int"/>
         </property>
         <property name="dataCode">
-            <column name="DATA_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="DATA_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>

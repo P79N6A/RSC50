@@ -10,9 +10,9 @@ public class Tb1067CtvtsecondaryEntity {
     private Integer f1067Index;
     private String f1067Model;
     private String f1067Type;
-    private String f1061TermNo;
-    private String f1061CircNo;
-    private String f1061Desc;
+    private String f1067TermNo;
+    private String f1067CircNo;
+    private String f1067Desc;
     private Tb1061PoutEntity tb1061PoutByF1061CodeA1;
     private Tb1061PoutEntity tb1061PoutByF1061CodeA2;
     private Tb1061PoutEntity tb1061PoutByF1061CodeB1;
@@ -61,32 +61,31 @@ public class Tb1067CtvtsecondaryEntity {
         this.f1067Type = f1067Type;
     }
 
+    public String getF1067TermNo() {
+		return f1067TermNo;
+	}
 
-    public String getF1061TermNo() {
-        return f1061TermNo;
-    }
+	public void setF1067TermNo(String f1067TermNo) {
+		this.f1067TermNo = f1067TermNo;
+	}
 
-    public void setF1061TermNo(String f1061TermNo) {
-        this.f1061TermNo = f1061TermNo;
-    }
+	public String getF1067CircNo() {
+		return f1067CircNo;
+	}
 
-    public String getF1061CircNo() {
-        return f1061CircNo;
-    }
+	public void setF1067CircNo(String f1067CircNo) {
+		this.f1067CircNo = f1067CircNo;
+	}
 
-    public void setF1061CircNo(String f1061CircNo) {
-        this.f1061CircNo = f1061CircNo;
-    }
+	public String getF1067Desc() {
+		return f1067Desc;
+	}
 
-    public String getF1061Desc() {
-        return f1061Desc;
-    }
+	public void setF1067Desc(String f1067Desc) {
+		this.f1067Desc = f1067Desc;
+	}
 
-    public void setF1061Desc(String f1061Desc) {
-        this.f1061Desc = f1061Desc;
-    }
-
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -94,9 +93,9 @@ public class Tb1067CtvtsecondaryEntity {
         Tb1067CtvtsecondaryEntity that = (Tb1067CtvtsecondaryEntity) o;
 
         if (f1043Code != null ? !f1043Code.equals(that.f1043Code) : that.f1043Code != null) return false;
-        if (f1061CircNo != null ? !f1061CircNo.equals(that.f1061CircNo) : that.f1061CircNo != null) return false;
-        if (f1061Desc != null ? !f1061Desc.equals(that.f1061Desc) : that.f1061Desc != null) return false;
-        if (f1061TermNo != null ? !f1061TermNo.equals(that.f1061TermNo) : that.f1061TermNo != null) return false;
+        if (f1067CircNo != null ? !f1067CircNo.equals(that.f1067CircNo) : that.f1067CircNo != null) return false;
+        if (f1067Desc != null ? !f1067Desc.equals(that.f1067Desc) : that.f1067Desc != null) return false;
+        if (f1067TermNo != null ? !f1067TermNo.equals(that.f1067TermNo) : that.f1067TermNo != null) return false;
         if (f1067Code != null ? !f1067Code.equals(that.f1067Code) : that.f1067Code != null) return false;
         if (f1067Index != null ? !f1067Index.equals(that.f1067Index) : that.f1067Index != null) return false;
         if (f1067Model != null ? !f1067Model.equals(that.f1067Model) : that.f1067Model != null) return false;
@@ -112,9 +111,9 @@ public class Tb1067CtvtsecondaryEntity {
         result = 31 * result + (f1067Index != null ? f1067Index.hashCode() : 0);
         result = 31 * result + (f1067Model != null ? f1067Model.hashCode() : 0);
         result = 31 * result + (f1067Type != null ? f1067Type.hashCode() : 0);
-        result = 31 * result + (f1061TermNo != null ? f1061TermNo.hashCode() : 0);
-        result = 31 * result + (f1061CircNo != null ? f1061CircNo.hashCode() : 0);
-        result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
+        result = 31 * result + (f1067TermNo != null ? f1067TermNo.hashCode() : 0);
+        result = 31 * result + (f1067CircNo != null ? f1067CircNo.hashCode() : 0);
+        result = 31 * result + (f1067Desc != null ? f1067Desc.hashCode() : 0);
         return result;
     }
 

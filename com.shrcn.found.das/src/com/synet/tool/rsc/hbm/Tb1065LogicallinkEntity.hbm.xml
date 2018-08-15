@@ -7,13 +7,13 @@
     <class name="com.synet.tool.rsc.model.Tb1065LogicallinkEntity" table="tb1065_logicallink" schema="rscapp"
           >
         <id name="f1065Code">
-            <column name="F1065_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1065_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1065Type">
             <column name="F1065_Type" sql-type="int" not-null="true"/>
         </property>
         <property name="f1065Appid">
-            <column name="F1065_APPID" sql-type="char" length="24" not-null="true"/>
+            <column name="F1065_APPID" sql-type="varchar" length="24" not-null="true"/>
         </property>
         <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE_IEDRecv"/>

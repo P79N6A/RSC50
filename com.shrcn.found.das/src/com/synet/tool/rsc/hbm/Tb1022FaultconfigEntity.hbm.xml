@@ -7,7 +7,7 @@
     <class name="com.synet.tool.rsc.model.Tb1022FaultconfigEntity" table="tb1022_faultconfig" schema="rscapp"
           >
         <id name="f1022Code">
-            <column name="F1022_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1022_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1011No">
             <column name="F1011_NO" sql-type="int" not-null="true"/>

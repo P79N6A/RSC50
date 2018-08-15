@@ -6,13 +6,13 @@
 
     <class name="com.synet.tool.rsc.model.Tb1070MmsserverEntity" table="tb1070_mmsserver" schema="rscapp">
         <id name="f1070Code">
-            <column name="F1070_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1070_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1070IpA">
-            <column name="F1070_IP_A" sql-type="char" length="24" not-null="true"/>
+            <column name="F1070_IP_A" sql-type="varchar" length="24" not-null="true"/>
         </property>
         <property name="f1070IpB">
-            <column name="F1070_IP_B" sql-type="char" length="24"/>
+            <column name="F1070_IP_B" sql-type="varchar" length="24"/>
         </property>
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>

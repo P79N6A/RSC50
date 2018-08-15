@@ -6,7 +6,7 @@
 
     <class name="com.synet.tool.rsc.model.Tb1052CoreEntity" table="tb1052_core" schema="rscapp">
         <id name="f1052Code">
-            <column name="F1052_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1052_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1052Type">
             <column name="F1052_Type" sql-type="int" not-null="true"/>
@@ -15,13 +15,13 @@
             <column name="F1052_No" sql-type="int"/>
         </property>
         <property name="f1048CodeA">
-            <column name="F1048_CODE_A" sql-type="char" length="48"/>
+            <column name="F1048_CODE_A" sql-type="varchar" length="48"/>
         </property>
         <property name="f1048CodeB">
-            <column name="F1048_CODE_B" sql-type="char" length="48"/>
+            <column name="F1048_CODE_B" sql-type="varchar" length="48"/>
         </property>
         <property name="parentCode">
-            <column name="Parent_CODE" sql-type="char" length="48"/>
+            <column name="Parent_CODE" sql-type="varchar" length="48"/>
         </property>
         <many-to-one name="tb1051CableByParentCode" class="com.synet.tool.rsc.model.Tb1051CableEntity" insert="false" update="false">
             <column name="Parent_CODE" not-null="true"/>

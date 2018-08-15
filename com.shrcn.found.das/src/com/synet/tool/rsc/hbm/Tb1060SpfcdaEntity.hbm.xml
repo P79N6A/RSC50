@@ -6,10 +6,10 @@
 
     <class name="com.synet.tool.rsc.model.Tb1060SpfcdaEntity" table="tb1060_spfcda" schema="rscapp">
         <id name="f1060Code">
-            <column name="F1060_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1060_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1060RefAddr">
-            <column name="F1060_RefAddr" sql-type="char" length="48" not-null="true"/>
+            <column name="F1060_RefAddr" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1060Index">
             <column name="F1060_Index" sql-type="int" not-null="true"/>
@@ -18,10 +18,10 @@
             <column name="F1060_DataType" sql-type="int" not-null="true"/>
         </property>
         <property name="f1060Desc">
-            <column name="F1060_Desc" sql-type="char" length="96"/>
+            <column name="F1060_Desc" sql-type="varchar" length="96"/>
         </property>
         <property name="f1060Unit">
-            <column name="F1060_Unit" sql-type="char" length="24"/>
+            <column name="F1060_Unit" sql-type="varchar" length="24"/>
         </property>
         <property name="f1060StepSize">
             <column name="F1060_StepSize" sql-type="float" precision="12"/>

@@ -6,13 +6,13 @@
 
     <class name="com.synet.tool.rsc.model.Tb1051CableEntity" table="tb1051_cable" schema="rscapp">
         <id name="f1051Code">
-            <column name="F1051_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1051_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1051Name">
-            <column name="F1051_Name" sql-type="char" length="48" not-null="true"/>
+            <column name="F1051_Name" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1051Desc">
-            <column name="F1051_Desc" sql-type="char" length="96"/>
+            <column name="F1051_Desc" sql-type="varchar" length="96"/>
         </property>
         <property name="f1051Length">
             <column name="F1051_Length" sql-type="int"/>

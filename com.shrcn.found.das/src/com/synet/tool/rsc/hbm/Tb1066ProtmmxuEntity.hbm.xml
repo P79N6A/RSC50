@@ -6,19 +6,19 @@
 
     <class name="com.synet.tool.rsc.model.Tb1066ProtmmxuEntity" table="tb1066_protmmxu" schema="rscapp">
         <id name="f1066Code">
-            <column name="F1066_CODE" sql-type="char" length="48" not-null="true"/>
+            <column name="F1066_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1066Type">
             <column name="F1066_Type" sql-type="int" not-null="true"/>
         </property>
         <property name="f1006CodeA">
-            <column name="F1006_CODE_A" sql-type="char" length="48" not-null="true"/>
+            <column name="F1006_CODE_A" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <property name="f1006CodeB">
-            <column name="F1006_CODE_B" sql-type="char" length="48"/>
+            <column name="F1006_CODE_B" sql-type="varchar" length="48"/>
         </property>
         <property name="f1006CodeC">
-            <column name="F1006_CODE_C" sql-type="char" length="48"/>
+            <column name="F1006_CODE_C" sql-type="varchar" length="48"/>
         </property>
         <many-to-one name="tb1067CtvtsecondaryByF1067Code" class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity">
             <column name="F1067_CODE"/>
