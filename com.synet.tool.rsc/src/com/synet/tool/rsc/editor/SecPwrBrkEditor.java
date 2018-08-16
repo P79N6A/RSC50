@@ -22,6 +22,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
 import com.synet.tool.rsc.service.SecPwrBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 /**
  * 安措->装置电源空开树菜单编辑器。
@@ -148,7 +149,7 @@ public class SecPwrBrkEditor extends BaseConfigEditor {
 	}
 	
 	private void add() {
-		table.addRow(new Tb1092PowerkkEntity());
+		table.addRow(RscObjectUtils.createTb1092());
 	}
 	
 	private void delete() {

@@ -23,6 +23,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.SecFibreService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 /**
  * 安措->保护纵联光纤树菜单编辑器。
@@ -149,7 +150,7 @@ public class SecFibreEditor extends BaseConfigEditor {
 	}
 	
 	private void add() {
-		table.addRow(new Tb1090LineprotfiberEntity());
+		table.addRow(RscObjectUtils.createTb1090());
 	}
 	
 	private void delete() {

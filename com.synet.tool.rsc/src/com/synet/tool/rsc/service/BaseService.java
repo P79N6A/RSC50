@@ -5,6 +5,7 @@ import java.util.List;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
 public abstract class BaseService {
 	
@@ -16,7 +17,12 @@ public abstract class BaseService {
 		return (List<Tb1046IedEntity>) beanDao.getAll(Tb1046IedEntity.class);
 	}
 	
-	public void add(Object entity) {
+	@SuppressWarnings("unchecked")
+	public List<Tb1067CtvtsecondaryEntity> getCtvtList() {
+		return (List<Tb1067CtvtsecondaryEntity>) beanDao.getAll(Tb1067CtvtsecondaryEntity.class);
+	}
+	
+	public void save(Object entity) {
 		beanDao.save(entity);
 	}
 	

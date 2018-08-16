@@ -22,6 +22,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
 import com.synet.tool.rsc.service.SecProBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 /**
  * 安措->保护电压回路空开树菜单编辑器。
@@ -149,7 +150,7 @@ public class SecProBrkEditor extends BaseConfigEditor {
 	}
 	
 	private void add() {
-		table.addRow(new Tb1093VoltagekkEntity());
+		table.addRow(RscObjectUtils.createTb1093());
 	}
 	
 	private void delete() {

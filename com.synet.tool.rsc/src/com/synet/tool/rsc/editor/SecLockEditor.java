@@ -19,9 +19,11 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.service.SecLockBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 /**
  * 安措->重合闸闭锁树菜单编辑器。
@@ -148,7 +150,7 @@ public class SecLockEditor extends BaseConfigEditor {
 	}
 	
 	private void add() {
-		table.addRow(new Tb1091IotermEntity());
+		table.addRow(RscObjectUtils.createTb1091());
 	}
 	
 	private void delete() {
