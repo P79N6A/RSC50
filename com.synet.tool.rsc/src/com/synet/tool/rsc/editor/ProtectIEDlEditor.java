@@ -209,7 +209,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createBoardPortCmp(Composite com) {
 		Composite cmpBoardPort = SwtUtil.createComposite(com, gridData, 1);
 		cmpBoardPort.setLayout(SwtUtil.getGridLayout(1));
-		tableBoardPort = TableFactory.getAnalogTable(cmpBoardPort);
+		tableBoardPort = TableFactory.getBoardPortTable(cmpBoardPort);
 		tableBoardPort.getTable().setLayoutData(gridData);
 		return cmpBoardPort;
 	}
@@ -228,23 +228,23 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		//保护定值
 		Composite cmpProtValue = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
-		tableProtectValue = TableFactory.getAnalogTable(cmpProtValue);
+		tableProtectValue = TableFactory.getProtectValueTable(cmpProtValue);
 		tableProtectValue.getTable().setLayoutData(gridData);
 		//保护参数
 		Composite cmpProtParam = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
-		tableProtParam = TableFactory.getAnalogTable(cmpProtParam);
+		tableProtParam = TableFactory.getProtectParamTable(cmpProtParam);
 		tableProtParam.getTable().setLayoutData(gridData);
 		//保护压板
 		Composite cmpProtPlate = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
-		tableProtectPlate = TableFactory.getAnalogTable(cmpProtPlate);
+		tableProtectPlate = TableFactory.getProtectBoardTable(cmpProtPlate);
 		tableProtectPlate.getTable().setLayoutData(gridData);
 		//保护动作
 		Composite cmpProtAction = SwtUtil.createComposite((Composite) controls[3], gridData, 1);
-		tableProtectAction = TableFactory.getAnalogTable(cmpProtAction);
+		tableProtectAction = TableFactory.getProtectActionTable(cmpProtAction);
 		tableProtectAction.getTable().setLayoutData(gridData);
 		//保护测量量
 		Composite cmpProtMeaQuantity = SwtUtil.createComposite((Composite) controls[4], gridData, 1);
-		tableProtectMeaQuantity = TableFactory.getAnalogTable(cmpProtMeaQuantity);
+		tableProtectMeaQuantity = TableFactory.getProtectMeaQuantityTable(cmpProtMeaQuantity);
 		tableProtectMeaQuantity.getTable().setLayoutData(gridData);
 		
 		return cmpProtMsg;
@@ -259,7 +259,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpDeviceWarning = SwtUtil.createComposite(com, gridData, 1);
 		cmpDeviceWarning.setLayout(SwtUtil.getGridLayout(1));
 		btnConnectDeviceWarning = SwtUtil.createButton(cmpDeviceWarning, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
-		tableDeviceWarning = TableFactory.getAnalogTable(cmpDeviceWarning);
+		tableDeviceWarning = TableFactory.getDeviceWarnTable(cmpDeviceWarning);
 		tableDeviceWarning.getTable().setLayoutData(gridData);
 		return cmpDeviceWarning;
 	}
@@ -273,7 +273,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
 		btnConnectRunState = SwtUtil.createButton(cmpRunState, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
-		tableRunState = TableFactory.getAnalogTable(cmpRunState);
+		tableRunState = TableFactory.getRunStateTable(cmpRunState);
 		tableRunState.getTable().setLayoutData(gridData);
 		return cmpRunState;
 	}
@@ -292,11 +292,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		//开出虚端子
 		Composite cmpVirtualTerminalOut = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
-		tableVirtualTerminalOut = TableFactory.getAnalogTable(cmpVirtualTerminalOut);
+		tableVirtualTerminalOut = TableFactory.getVirtualTerminalOutTable(cmpVirtualTerminalOut);
 		tableVirtualTerminalOut.getTable().setLayoutData(gridData);
 		//开入虚端子
 		Composite cmpVirtualTerminalIn = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
-		tableVirtualTerminalIn = TableFactory.getAnalogTable(cmpVirtualTerminalIn);
+		tableVirtualTerminalIn = TableFactory.getVirtualTerminalInTable(cmpVirtualTerminalIn);
 		tableVirtualTerminalIn.getTable().setLayoutData(gridData);
 		
 		return cmpVirtualTerminalPlate;
@@ -311,7 +311,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpLogicalLink = SwtUtil.createComposite(com, gridData, 1);
 		cmpLogicalLink.setLayout(SwtUtil.getGridLayout(1));
 		btnConnectLogicalLink = SwtUtil.createButton(cmpLogicalLink, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
-		tableLogicalLink = TableFactory.getAnalogTable(cmpLogicalLink);
+		tableLogicalLink = TableFactory.getLogicalLinkTable(cmpLogicalLink);
 		tableLogicalLink.getTable().setLayoutData(gridData);
 		return cmpLogicalLink;
 	}
@@ -330,11 +330,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		//模拟量通道
 		Composite cmpAnalogChn = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
-		tableAnalogChn = TableFactory.getAnalogTable(cmpAnalogChn);
+		tableAnalogChn = TableFactory.getAnalogChnTable(cmpAnalogChn);
 		tableAnalogChn.getTable().setLayoutData(gridData);
 		//状态量通道
 		Composite cmpCriteriaChn = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
-		tableCriteriaChn = TableFactory.getAnalogTable(cmpCriteriaChn);
+		tableCriteriaChn = TableFactory.getCriteriaChnTable(cmpCriteriaChn);
 		tableCriteriaChn.getTable().setLayoutData(gridData);
 		
 		return cmpProtWave;

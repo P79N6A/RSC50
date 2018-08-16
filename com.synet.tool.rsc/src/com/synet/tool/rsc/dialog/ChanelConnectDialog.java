@@ -1,9 +1,13 @@
 package com.synet.tool.rsc.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -14,6 +18,14 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1056SvcbEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
+import com.synet.tool.rsc.service.EnumIedType;
+import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -25,21 +37,33 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private String curEntryName;
 	private String[] comboDevItems;
 	private String[] comboSvItems;
+	private Tb1067CtvtsecondaryEntity curSel;
+	private Combo comboSvControl;
+	private Combo comboDevice;
+	private int preComboDevSelIdx = 0;
+	private int preComboSvSelIdx = 0;
+	private List<Tb1046IedEntity> iedEntities;
+	private SvcbEntityService svcbService;
+	private PoutEntityService poutService;
+	private List<Tb1056SvcbEntity> svcbEntities;
+	private Composite comRight;
+	private List<Tb1061PoutEntity> chanelTableData;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
 	}
 	
-	public ChanelConnectDialog(Shell parentShell, String curEntryName) {
+	public ChanelConnectDialog(Shell parentShell, String curEntryName, Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
 		super(parentShell);
 		this.curEntryName = curEntryName;
-		comboDevItems = new String[]{"装置"};
-		comboSvItems = new String[]{"SV控制块"};
+		this.curSel = ctvtsecondaryEntity;
+		
 	}
 	
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		initComboData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
@@ -54,14 +78,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 		tableChanel.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
 		//右侧
-		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
+		comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
-		
-		Combo comboDevice = SwtUtil.createCombo(comRight, SwtUtil.bt_hd);
+		GridData textGridData = new GridData();
+		textGridData.heightHint = 25;
+		textGridData.widthHint = 80;
+		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
 		comboDevice.setItems(comboDevItems);
 		comboDevice.select(0);
 		
-		Combo comboSvControl = SwtUtil.createCombo(comRight, SwtUtil.bt_hd);
+		comboSvControl = SwtUtil.createCombo(comRight, textGridData, true);
 		comboSvControl.setItems(comboSvItems);
 		comboSvControl.select(0);
 		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
@@ -69,9 +95,65 @@ public class ChanelConnectDialog extends WrappedDialog{
 		tableState = TableFactory.getPoutTable(comRight);
 		tableState.getTable().setLayoutData(gdSpan_2);
 		addListeners();
+		initTableData();
 		return composite;
 	}
 	
+	private void initComboData() {
+		int[] iedTypes = EnumIedType.UNIT_DEVICE.getTypes();
+		IedEntityService iedService = new IedEntityService();
+		iedEntities = iedService.getIedEntityByTypes(iedTypes);
+		if(iedEntities.size() < 1) {
+			comboDevItems = new String[]{"装置为空"};
+		} else {
+			List<String> lstComboDevItem = new ArrayList<>();
+			for (Tb1046IedEntity tb1046IedEntity : iedEntities) {
+				lstComboDevItem.add(tb1046IedEntity.getF1046Desc());
+			}
+			comboDevItems = new String[lstComboDevItem.size()];
+			comboDevItems = lstComboDevItem.toArray(comboDevItems);
+		}
+		
+		if(iedEntities.size() < 1 || comboDevItems.length < 1) {
+			comboSvItems = new String[]{""};
+			return;
+		} else {
+			Tb1046IedEntity iedEntity = iedEntities.get(0);
+			svcbService = new SvcbEntityService();
+			
+			initComboSvItems(iedEntity);
+		}
+		poutService = new PoutEntityService();
+		
+	}
+
+	private void initComboSvItems(Tb1046IedEntity iedEntity) {
+		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
+		List<String> lstComboSvItem = new ArrayList<>();
+		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
+			lstComboSvItem.add(tb1056SvcbEntity.getF1056CbName());
+		}
+		comboSvItems = new String[lstComboSvItem.size()];
+		comboSvItems = lstComboSvItem.toArray(comboSvItems);
+	}
+
+	/**
+	 * 初始化表格数据
+	 */
+	private void initTableData() {
+		//测试用
+//		if(curSel == null) {
+//			return;
+//		}
+		List<Tb1061PoutEntity> tableChanelData = new ArrayList<>();
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeA1());
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeA2());
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeB1());
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeB2());
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeC1());
+		tableChanelData.add(curSel.getTb1061PoutByF1061CodeC2());
+		tableChanel.setInput(tableChanelData);
+	}
 	
 	@Override
 	protected void configureShell(Shell newShell) {
@@ -80,15 +162,67 @@ public class ChanelConnectDialog extends WrappedDialog{
 	}
 	
 	private void addListeners() {
-		btnMove.addSelectionListener(new SelectionAdapter() {
+		SelectionListener selectionListener = new SelectionAdapter() {
+			private Tb1046IedEntity curSelIedEntity;
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				super.widgetSelected(e);
+				Object obj = e.getSource();
+				if(obj == btnMove) {
+					Object objSel = tableState.getSelection();
+					if(objSel != null) {
+						tableChanel.addRow(objSel);
+					}
+					tableChanel.getTable().layout();
+				} else if(obj == comboDevice) {
+					int curComboDevSelIdx = comboDevice.getSelectionIndex();
+					if(curComboDevSelIdx == preComboDevSelIdx) {
+						return;
+					}
+					preComboDevSelIdx = curComboDevSelIdx;
+					String selDevName = comboDevItems[curComboDevSelIdx];
+					curSelIedEntity = getIedEntityByName(selDevName);
+					initComboSvItems(curSelIedEntity);
+					//TODO 局部刷新SV控制块下拉框数据
+//					comRight.layout();
+					comboDevice.redraw();
+				} else if(obj == comboSvControl) {
+					int curComboSvSelIdx = comboSvControl.getSelectionIndex();
+					if(curComboSvSelIdx == preComboSvSelIdx) {
+						return;
+					}
+					preComboSvSelIdx = curComboSvSelIdx;
+					Tb1056SvcbEntity svcbEntity = getSvcbEntityByName(comboSvControl.getItem(curComboSvSelIdx));
+					List<Tb1061PoutEntity> poutEntities = poutService.getPoutEntityByProperties(curSelIedEntity, svcbEntity);
+					//TODO 刷新表格数据
+					tableState.setInput(poutEntities);
+					tableState.getTable().layout();
+				}
 			}
-		});
-		
+		};
+		btnMove.addSelectionListener(selectionListener);
+		comboDevice.addSelectionListener(selectionListener);
+		comboSvControl.addSelectionListener(selectionListener);
 	}
 
+	private Tb1056SvcbEntity getSvcbEntityByName(String selSvName) {
+		for (Tb1056SvcbEntity svcbEntity : svcbEntities) {
+			if(svcbEntity.getF1056CbName().equals(selSvName)) {
+				return svcbEntity;
+			}
+		}
+		return null;
+	}
+	
+	private Tb1046IedEntity getIedEntityByName(String iedName) {
+		for (Tb1046IedEntity iedEntity : iedEntities) {
+			if(iedEntity.getF1046Desc().equals(iedName)) {
+				return iedEntity;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, "OK", true);
@@ -99,6 +233,21 @@ public class ChanelConnectDialog extends WrappedDialog{
 	protected Point getInitialSize() {
 		return new Point(800, 550);
 	}
-
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void buttonPressed(int buttonId) {
+		if(buttonId == IDialogConstants.OK_ID){
+			setChanelTableData((List<Tb1061PoutEntity>) tableChanel.getInput());
+		}
+		super.buttonPressed(buttonId);
+	}
+
+	public List<Tb1061PoutEntity> getChanelTableData() {
+		return chanelTableData;
+	}
+
+	private void setChanelTableData(List<Tb1061PoutEntity> chanelTableData) {
+		this.chanelTableData = chanelTableData;
+	}
 }

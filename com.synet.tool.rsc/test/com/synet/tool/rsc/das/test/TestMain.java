@@ -58,8 +58,8 @@ public class TestMain {
 	@Test
 	public void testInsertBayEntry() {
 		Tb1041SubstationEntity substationEntity = new Tb1041SubstationEntity();
-		substationEntity.setF1041Code("1");
-		substationEntity.setF1041Company("xxx公司");
+		substationEntity.setF1041Code("2");
+		substationEntity.setF1041Company("思源电气股份有限公司");
 		substationEntity.setF1041Desc("heheheh");
 		substationEntity.setF1041Dqdesc("Dqdesc");
 		substationEntity.setF1041DqName("DqName");
@@ -71,10 +71,10 @@ public class TestMain {
 		
 		
 		Tb1042BayEntity bayEntity = new Tb1042BayEntity();
-		bayEntity.setF1042Code("1");
-		bayEntity.setF1041Code("1");
-		bayEntity.setF1042Name("间隔x");
-		bayEntity.setF1042Desc("xxxx");
+		bayEntity.setF1042Code("2");
+		bayEntity.setF1041Code("2");
+		bayEntity.setF1042Name("间隔2");
+		bayEntity.setF1042Desc("间隔2");
 		bayEntity.setF1042DevType(1);
 		bayEntity.setF1042Voltage(2);
 		bayEntity.setF1042ConnType(3);

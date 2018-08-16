@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="LogicalLinkTable" desc="逻辑链路列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field desc="链路编号" editor="none" name="f1050Code" width="100" default=""/>
+  <field desc="发送装置" editor="none" name="f1050Name" width="100" default=""/> 
+  <field desc="(GOOSE/SV)ID" editor="none" name="f1050Name" width="110" default=""/>
+  <field desc="物理回路数量" editor="none" name="f1050Name" width="120" default=""/>
+  <field desc="物理回路1" editor="none" name="f1050Name" width="110" default=""/> 
+  <field desc="物理回路……" editor="none" name="f1050Desc" width="110" default=""/> 
+  <field desc="物理回路9" editor="none" name="f1050Desc" width="110" default=""/>
+</table>

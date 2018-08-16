@@ -56,13 +56,16 @@ public class ProtectPubBaylEditor extends BaseConfigEditor {
 		//采集设备
 		Composite cmpGatherDev = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
 		cmpGatherDev.setLayout(SwtUtil.getGridLayout(1));
-		tableGatherDev = TableFactory.getAnalogTable(cmpGatherDev);
+		tableGatherDev = TableFactory.getGatherTable(cmpGatherDev);
 		tableGatherDev.getTable().setLayoutData(gridData);
 		
 		//其他设备
 		Composite cmpOtherDev = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
 		cmpOtherDev.setLayout(SwtUtil.getGridLayout(3));
-		Combo combo = SwtUtil.createCombo(cmpOtherDev, SwtUtil.bt_hd);
+		GridData textGridData = new GridData();
+		textGridData.heightHint = 25;
+		textGridData.widthHint = 80;
+		Combo combo = SwtUtil.createCombo(cmpOtherDev, textGridData, true);
 		combo.setItems(comboItems);
 		combo.select(0);
 		Text text = SwtUtil.createText(cmpOtherDev, SwtUtil.bt_hd);
@@ -71,7 +74,7 @@ public class ProtectPubBaylEditor extends BaseConfigEditor {
 		SwtUtil.createLabel(cmpOtherDev, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = 3;
-		tableOtherDev = TableFactory.getAnalogTable(cmpOtherDev);
+		tableOtherDev = TableFactory.getProtectIntervalTable(cmpOtherDev);
 		tableOtherDev.getTable().setLayoutData(gdSpan_3);
 		
 		

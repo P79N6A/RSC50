@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -11,11 +10,8 @@ public class Tb1065LogicallinkEntity {
     private String f1046CodeIedSend;
     private String f1046CodeIedRecv;
     private String f1065Appid;
-    private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1065Code;
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
     private Tb1046IedEntity tb1046IedByF1046CodeIedSend;
-    private Collection<Tb1068ProtctrlEntity> tb1068ProtctrlsByF1065Code;
-    private Collection<Tb1073LlinkphyrelationEntity> tb1073LlinkphyrelationsByF1065Code;
 
     public String getF1065Code() {
         return f1065Code;
@@ -85,14 +81,6 @@ public class Tb1065LogicallinkEntity {
         return result;
     }
 
-    public Collection<Tb1063CircuitEntity> getTb1063CircuitsByF1065Code() {
-        return tb1063CircuitsByF1065Code;
-    }
-
-    public void setTb1063CircuitsByF1065Code(Collection<Tb1063CircuitEntity> tb1063CircuitsByF1065Code) {
-        this.tb1063CircuitsByF1065Code = tb1063CircuitsByF1065Code;
-    }
-
     public Tb1046IedEntity getTb1046IedByF1046CodeIedRecv() {
         return tb1046IedByF1046CodeIedRecv;
     }
@@ -109,19 +97,4 @@ public class Tb1065LogicallinkEntity {
         this.tb1046IedByF1046CodeIedSend = tb1046IedByF1046CodeIedSend;
     }
 
-    public Collection<Tb1068ProtctrlEntity> getTb1068ProtctrlsByF1065Code() {
-        return tb1068ProtctrlsByF1065Code;
-    }
-
-    public void setTb1068ProtctrlsByF1065Code(Collection<Tb1068ProtctrlEntity> tb1068ProtctrlsByF1065Code) {
-        this.tb1068ProtctrlsByF1065Code = tb1068ProtctrlsByF1065Code;
-    }
-
-    public Collection<Tb1073LlinkphyrelationEntity> getTb1073LlinkphyrelationsByF1065Code() {
-        return tb1073LlinkphyrelationsByF1065Code;
-    }
-
-    public void setTb1073LlinkphyrelationsByF1065Code(Collection<Tb1073LlinkphyrelationEntity> tb1073LlinkphyrelationsByF1065Code) {
-        this.tb1073LlinkphyrelationsByF1065Code = tb1073LlinkphyrelationsByF1065Code;
-    }
 }
