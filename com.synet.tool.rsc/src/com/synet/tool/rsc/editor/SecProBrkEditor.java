@@ -52,28 +52,16 @@ public class SecProBrkEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-
-		editArea.setLayout(SwtUtil.getGridLayout(1));
-		
+		container.setLayout(SwtUtil.getGridLayout(1));
 		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 8);
-		GridData textGridData = new GridData();
-		textGridData.heightHint = 25;
-		textGridData.widthHint = 80;
-		GridData btnGridData = new GridData();
-		btnGridData.heightHint = 25;
-		btnGridData.widthHint = 40;
-		cmbDevType = SwtUtil.createCombo(topComp, textGridData, true);
-		cmbDevType.setItems(new String[]{"装置类型"});
-		cmbDevType.select(0);
-		cmbDevName = SwtUtil.createCombo(topComp, textGridData, true);
-		cmbDevName.setItems(new String[]{"装置名称"});
-		cmbDevName.select(0);
-		btnSearch = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "查询");
-		SwtUtil.createLabel(topComp, "", textGridData); 
-		btnImport = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "导入");
-		btnExport = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "导出");
-		btnAdd = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "添加");
-		btnDelete = SwtUtil.createButton(topComp, btnGridData, SWT.NONE, "删除");
+		cmbDevType = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
+		cmbDevName = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
+		btnSearch = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		SwtUtil.createLabel(topComp, "", SwtUtil.bt_hd); 
+		btnImport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导入");
+		btnExport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导出");
+		btnAdd = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
+		btnDelete = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
 		
 		Composite centerComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
 		table = TableFactory.getVoltageKKTable(centerComp);
@@ -114,20 +102,20 @@ public class SecProBrkEditor extends BaseConfigEditor {
 			table.setInput(list);
 		}
 		List<Tb1046IedEntity> ieds = secProBrkService.getIedList();
+		List<String> typeItems = new ArrayList<>();
+		List<String> nameItems = new ArrayList<>();
+		typeItems.add(DEV_TYPE_TITLE);
+		nameItems.add(DEV_NAME_TITLE);
 		if (ieds != null && !ieds.isEmpty()) {
-			List<String> typeItems = new ArrayList<>();
-			List<String> nameItems = new ArrayList<>();
-			typeItems.add(DEV_TYPE_TITLE);
-			nameItems.add(DEV_NAME_TITLE);
 			for (Tb1046IedEntity ied : ieds) {
 				typeItems.add(ied.getF1046Model());
 				nameItems.add(ied.getF1046Name());
 			}
-			cmbDevType.setItems(typeItems.toArray(new String[0]));
-			cmbDevName.setItems(nameItems.toArray(new String[0]));
-			cmbDevType.select(0);
-			cmbDevName.select(0);
 		}
+		cmbDevType.setItems(typeItems.toArray(new String[0]));
+		cmbDevName.setItems(nameItems.toArray(new String[0]));
+		cmbDevType.select(0);
+		cmbDevName.select(0);
 		super.initData();
 	}
 	

@@ -41,16 +41,14 @@ public class ICDModelEditor extends BaseConfigEditor {
 		editArea.setLayout(SwtUtil.getGridLayout(1));
 		
 		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 6);
-		GridData textGridData = new GridData();
-		textGridData.widthHint = 80;
-		txtNmanuf = SwtUtil.createText(topComp, textGridData, "厂商");
-		txtModel = SwtUtil.createText(topComp, textGridData, "型号");
-		txtVersion = SwtUtil.createText(topComp, textGridData, "版本");
-		cmbLnType = SwtUtil.createCombo(topComp, textGridData, true);
+		txtNmanuf = SwtUtil.createText(topComp, SwtUtil.bt_hd, "厂商");
+		txtModel = SwtUtil.createText(topComp, SwtUtil.bt_hd, "型号");
+		txtVersion = SwtUtil.createText(topComp, SwtUtil.bt_hd, "版本");
+		cmbLnType = SwtUtil.createCombo(topComp, SwtUtil.bt_hd, true);
 		cmbLnType.setItems(new String[]{"逻辑节点类型"});
 		cmbLnType.select(0);
-		btnAdd = SwtUtil.createButton(topComp, new GridData(), SWT.NONE, "添加");
-		btnExport = SwtUtil.createButton(topComp, new GridData(), SWT.NONE, "导出");
+		btnAdd = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.NONE, "添加");
+		btnExport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.NONE, "导出");
 		
 		Composite centerComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
 		table = TableFactory.getIcdTable(centerComp);
