@@ -29,6 +29,8 @@ public class TableFactory {
 	public static String ANALOG_TABLE 						= "AnalogTable";
 	public static String PROT_ANALOG_TABLE 					= "ProtAnalogTable";
 	public static String PROT_INTERVAL_TABLE 					= "ProtectIntervalTable";
+	public static String IED_CHOOSE_TABLE                   = "IedChooseTable";
+	public static String CTVT_CHOOSE_TABLE              	= "CtvtChooseTable";
 
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
@@ -127,4 +129,13 @@ public class TableFactory {
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 
+	public static DevKTable getIEDChooseTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(IED_CHOOSE_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getCtvtChooseTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(CTVT_CHOOSE_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
 }
