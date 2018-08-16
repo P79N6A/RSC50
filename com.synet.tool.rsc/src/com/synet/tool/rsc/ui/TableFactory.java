@@ -28,9 +28,93 @@ public class TableFactory {
 	public static String POUT_TABLE 						= "PoutTable";
 	public static String ANALOG_TABLE 						= "AnalogTable";
 	public static String PROT_ANALOG_TABLE 					= "ProtAnalogTable";
-	public static String PROT_INTERVAL_TABLE 					= "ProtectIntervalTable";
-
+	public static String PROT_INTERVAL_TABLE 				= "ProtectIntervalTable";
+	public static String GATHER_TABLE 						= "GatherTable";
+	public static String BOARD_PORT_TABLE 					= "BoardPortTable";
+	public static String PROTECT_PORT_TABLE 				= "ProtectValueTable";
+	public static String PROTECT_PARAM_TABLE 				= "ProtectParamTable";
+	public static String PROTECT_BOARD_TABLE 				= "ProtectBoardTable";
+	public static String PROTECT_ACTION_TABLE 				= "ProtectActionTable";
+	public static String PROTECT_QUANT_TABLE 				= "ProtectMeaQuantityTable";
+	public static String DEVICE_WARN_TABLE 					= "DeviceWarnTable";
+	public static String RUN_STATE_TABLE 					= "RunStateTable";
+	public static String VIRTER_IN_TABLE 					= "VirtualTerminalOutTable";
+	public static String VIRTER_OUT_TABLE 					= "VirtualTerminalInTable";
+	public static String LOGICAL_LINK_TABLE 				= "LogicalLinkTable";
+	public static String ANALOG_CHN_TABLE 					= "AnalogChnTable";
+	public static String CRITER_CHN_TABLE 					= "CriteriaChnTable";
+	
 	private static UIConfig uicfg = UIConfig.getInstance();
+	
+	
+	public static DevKTable getDeviceWarnTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_WARN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getRunStateTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(RUN_STATE_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getVirtualTerminalOutTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_IN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getVirtualTerminalInTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_OUT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getLogicalLinkTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(LOGICAL_LINK_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getAnalogChnTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(ANALOG_CHN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getCriteriaChnTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(CRITER_CHN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	public static DevKTable getProtectValueTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_PORT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getProtectParamTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_PARAM_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getProtectBoardTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_BOARD_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getProtectActionTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_ACTION_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getProtectMeaQuantityTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_QUANT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getBoardPortTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(BOARD_PORT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getGatherTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(GATHER_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
 	
 	public static DevKTable getProtectIntervalTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(PROT_INTERVAL_TABLE);

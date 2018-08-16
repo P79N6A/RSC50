@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="DeviceWarnTable" desc="装置告警列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field desc="信号名称" editor="none" name="f1050Code" width="100" default=""/>
+  <field desc="信号参引" editor="none" name="f1050Name" width="100" default=""/> 
+  <field desc="所属数据集" editor="none" name="f1050Name" width="120" default=""/> 
+  <field desc="数据集中的序号" editor="none" name="f1050Desc" width="150" default=""/> 
+  <field desc="告警类型" editor="none" name="f1050Name" width="100" default=""/> 
+  <field desc="所属对象(装置/板卡/逻辑链路)" editor="none" name="f1050Desc" width="150" default=""/> 
+</table>

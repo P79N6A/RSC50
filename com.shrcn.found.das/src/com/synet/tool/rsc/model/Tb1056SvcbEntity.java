@@ -1,8 +1,8 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
+ * Sv控制块
  * Created by chunc on 2018/8/7.
  */
 public class Tb1056SvcbEntity {
@@ -18,7 +18,6 @@ public class Tb1056SvcbEntity {
     private String f1056DsDesc;
     private String f1071Code;
     private Tb1046IedEntity tb1046IedByF1046Code;
-    private Collection<Tb1061PoutEntity> tb1061PoutsByF1056Code;
 
     public String getF1056Code() {
         return f1056Code;
@@ -153,13 +152,5 @@ public class Tb1056SvcbEntity {
 
     public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
-    }
-
-    public Collection<Tb1061PoutEntity> getTb1061PoutsByF1056Code() {
-        return tb1061PoutsByF1056Code;
-    }
-
-    public void setTb1061PoutsByF1056Code(Collection<Tb1061PoutEntity> tb1061PoutsByF1056Code) {
-        this.tb1061PoutsByF1056Code = tb1061PoutsByF1056Code;
     }
 }

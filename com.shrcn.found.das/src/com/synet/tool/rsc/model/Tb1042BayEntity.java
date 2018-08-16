@@ -1,8 +1,8 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
+ * 间隔
  * Created by chunc on 2018/8/7.
  */
 public class Tb1042BayEntity {

@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -13,8 +12,6 @@ public class Tb1048PortEntity {
     private int f1048Direction;
     private int f1048Plug;
     private Tb1047BoardEntity tb1047BoardByF1047Code;
-    private Collection<Tb1053PhysconnEntity> tb1053PhysconnsByF1048Code;
-    private Collection<Tb1053PhysconnEntity> tb1053PhysconnsByF1048Code_0;
 
     public String getF1048Code() {
         return f1048Code;
@@ -100,19 +97,4 @@ public class Tb1048PortEntity {
         this.tb1047BoardByF1047Code = tb1047BoardByF1047Code;
     }
 
-    public Collection<Tb1053PhysconnEntity> getTb1053PhysconnsByF1048Code() {
-        return tb1053PhysconnsByF1048Code;
-    }
-
-    public void setTb1053PhysconnsByF1048Code(Collection<Tb1053PhysconnEntity> tb1053PhysconnsByF1048Code) {
-        this.tb1053PhysconnsByF1048Code = tb1053PhysconnsByF1048Code;
-    }
-
-    public Collection<Tb1053PhysconnEntity> getTb1053PhysconnsByF1048Code_0() {
-        return tb1053PhysconnsByF1048Code_0;
-    }
-
-    public void setTb1053PhysconnsByF1048Code_0(Collection<Tb1053PhysconnEntity> tb1053PhysconnsByF1048Code_0) {
-        this.tb1053PhysconnsByF1048Code_0 = tb1053PhysconnsByF1048Code_0;
-    }
 }

@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -9,7 +8,6 @@ public class Tb1045ConnectivitynodeEntity {
     private String f1045Code;
     private String f1045Name;
     private String f1045Desc;
-    private Collection<Tb1044TerminalEntity> tb1044TerminalsByF1045Code;
 
     public String getF1045Code() {
         return f1045Code;
@@ -55,13 +53,5 @@ public class Tb1045ConnectivitynodeEntity {
         result = 31 * result + (f1045Name != null ? f1045Name.hashCode() : 0);
         result = 31 * result + (f1045Desc != null ? f1045Desc.hashCode() : 0);
         return result;
-    }
-
-    public Collection<Tb1044TerminalEntity> getTb1044TerminalsByF1045Code() {
-        return tb1044TerminalsByF1045Code;
-    }
-
-    public void setTb1044TerminalsByF1045Code(Collection<Tb1044TerminalEntity> tb1044TerminalsByF1045Code) {
-        this.tb1044TerminalsByF1045Code = tb1044TerminalsByF1045Code;
     }
 }

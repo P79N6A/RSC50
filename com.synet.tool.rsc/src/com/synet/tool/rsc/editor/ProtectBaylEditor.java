@@ -44,8 +44,10 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
 		comp.setLayout(SwtUtil.getGridLayout(3));
-		
-		Combo combo = SwtUtil.createCombo(comp, SwtUtil.bt_hd);
+		GridData textGridData = new GridData();
+		textGridData.heightHint = 25;
+		textGridData.widthHint = 80;
+		Combo combo = SwtUtil.createCombo(comp, textGridData, true);
 		combo.setItems(comboItems);
 		combo.select(0);
 		

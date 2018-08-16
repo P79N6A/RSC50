@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -18,7 +17,6 @@ public class Tb1055GcbEntity {
     private String f1055Desc;
     private String f1071Code;
     private Tb1046IedEntity tb1046IedByF1046Code;
-    private Collection<Tb1061PoutEntity> tb1061PoutsByF1055Code;
 
     public String getF1055Code() {
         return f1055Code;
@@ -153,13 +151,5 @@ public class Tb1055GcbEntity {
 
     public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
-    }
-
-    public Collection<Tb1061PoutEntity> getTb1061PoutsByF1055Code() {
-        return tb1061PoutsByF1055Code;
-    }
-
-    public void setTb1061PoutsByF1055Code(Collection<Tb1061PoutEntity> tb1061PoutsByF1055Code) {
-        this.tb1061PoutsByF1055Code = tb1061PoutsByF1055Code;
     }
 }

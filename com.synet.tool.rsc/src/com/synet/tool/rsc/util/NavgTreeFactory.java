@@ -103,7 +103,8 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.notNull(bayEntityList)){
 			for (int i = 0; i < bayEntityList.size(); i++) {
-				createConfigEntry(primaryEntry, bayEntityList.get(i).getF1042Desc(), "bay.gif", ET_PR_BAY, i+1);
+				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
+				createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Desc(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
 			}
 		}
 	}

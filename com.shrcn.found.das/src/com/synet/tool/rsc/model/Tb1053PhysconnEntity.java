@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -12,7 +11,6 @@ public class Tb1053PhysconnEntity {
     private String f1048CodeB;
     private Tb1048PortEntity tb1048PortByF1048CodeA;
     private Tb1048PortEntity tb1048PortByF1048CodeB;
-    private Collection<Tb1073LlinkphyrelationEntity> tb1073LlinkphyrelationsByF1053Code;
 
     public String getF1053Code() {
         return f1053Code;
@@ -86,11 +84,4 @@ public class Tb1053PhysconnEntity {
         this.tb1048PortByF1048CodeB = tb1048PortByF1048CodeB;
     }
 
-    public Collection<Tb1073LlinkphyrelationEntity> getTb1073LlinkphyrelationsByF1053Code() {
-        return tb1073LlinkphyrelationsByF1053Code;
-    }
-
-    public void setTb1073LlinkphyrelationsByF1053Code(Collection<Tb1073LlinkphyrelationEntity> tb1073LlinkphyrelationsByF1053Code) {
-        this.tb1073LlinkphyrelationsByF1053Code = tb1073LlinkphyrelationsByF1053Code;
-    }
 }

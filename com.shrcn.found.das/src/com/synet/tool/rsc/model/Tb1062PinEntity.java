@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Collection;
 
 /**
  * Created by chunc on 2018/8/7.
@@ -15,7 +14,6 @@ public class Tb1062PinEntity {
     private String f1064Code;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
-    private Collection<Tb1063CircuitEntity> tb1063CircuitsByF1062Code;
 
     public String getF1062Code() {
         return f1062Code;
@@ -117,13 +115,5 @@ public class Tb1062PinEntity {
 
     public void setTb1064StrapByF1064Code(Tb1064StrapEntity tb1064StrapByF1064Code) {
         this.tb1064StrapByF1064Code = tb1064StrapByF1064Code;
-    }
-
-    public Collection<Tb1063CircuitEntity> getTb1063CircuitsByF1062Code() {
-        return tb1063CircuitsByF1062Code;
-    }
-
-    public void setTb1063CircuitsByF1062Code(Collection<Tb1063CircuitEntity> tb1063CircuitsByF1062Code) {
-        this.tb1063CircuitsByF1062Code = tb1063CircuitsByF1062Code;
     }
 }

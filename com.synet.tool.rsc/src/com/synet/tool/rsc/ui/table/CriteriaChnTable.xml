@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="CriteriaChnTable" desc="状态量通道列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field desc="代码" editor="none" name="f1050Code" width="50" default=""/>
+  <field desc="装置名称" editor="none" name="f1050Name" width="100" default=""/> 
+  <field desc="序号" editor="none" name="f1050Name" width="50" default=""/>
+  <field desc="类型" editor="none" name="f1050Name" width="50" default=""/>
+  <field desc="相别" editor="none" name="f1050Name" width="50" default=""/> 
+  <field desc="GOOSE虚端子代码" editor="none" name="f1050Name" width="210" default=""/> 
+  <field desc="MMS点代码" editor="none" name="f1050Desc" width="110" default=""/> 
+</table>

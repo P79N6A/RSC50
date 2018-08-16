@@ -6,18 +6,14 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1051CableEntity {
     private String f1051Code;
-//    private String f1041Code;
     private String f1051Name;
     private String f1051Desc;
     private Integer f1051Length;
     private Integer f1051CoreNum;
-//    private String f1050CodeA;
-//    private String f1050CodeB;
     private int f1051Type;
     private Tb1050CubicleEntity tb1050CubicleByF1050CodeA;
     private Tb1050CubicleEntity tb1050CubicleByF1050CodeB;
     private Tb1041SubstationEntity tb1041SubstationByF1041Code;
-//    private Collection<Tb1052CoreEntity> tb1052CoresByF1051Code;
 
     public String getF1051Code() {
         return f1051Code;
@@ -99,9 +95,6 @@ public class Tb1051CableEntity {
         Tb1051CableEntity that = (Tb1051CableEntity) o;
 
         if (f1051Type != that.f1051Type) return false;
-//        if (f1041Code != null ? !f1041Code.equals(that.f1041Code) : that.f1041Code != null) return false;
-//        if (f1050CodeA != null ? !f1050CodeA.equals(that.f1050CodeA) : that.f1050CodeA != null) return false;
-//        if (f1050CodeB != null ? !f1050CodeB.equals(that.f1050CodeB) : that.f1050CodeB != null) return false;
         if (f1051Code != null ? !f1051Code.equals(that.f1051Code) : that.f1051Code != null) return false;
         if (f1051CoreNum != null ? !f1051CoreNum.equals(that.f1051CoreNum) : that.f1051CoreNum != null) return false;
         if (f1051Desc != null ? !f1051Desc.equals(that.f1051Desc) : that.f1051Desc != null) return false;
@@ -114,13 +107,10 @@ public class Tb1051CableEntity {
     @Override
     public int hashCode() {
         int result = f1051Code != null ? f1051Code.hashCode() : 0;
-//        result = 31 * result + (f1041Code != null ? f1041Code.hashCode() : 0);
         result = 31 * result + (f1051Name != null ? f1051Name.hashCode() : 0);
         result = 31 * result + (f1051Desc != null ? f1051Desc.hashCode() : 0);
         result = 31 * result + (f1051Length != null ? f1051Length.hashCode() : 0);
         result = 31 * result + (f1051CoreNum != null ? f1051CoreNum.hashCode() : 0);
-//        result = 31 * result + (f1050CodeA != null ? f1050CodeA.hashCode() : 0);
-//        result = 31 * result + (f1050CodeB != null ? f1050CodeB.hashCode() : 0);
         result = 31 * result + f1051Type;
         return result;
     }
@@ -149,11 +139,4 @@ public class Tb1051CableEntity {
         this.tb1041SubstationByF1041Code = tb1041SubstationByF1041Code;
     }
 
-//    public Collection<Tb1052CoreEntity> getTb1052CoresByF1051Code() {
-//        return tb1052CoresByF1051Code;
-//    }
-//
-//    public void setTb1052CoresByF1051Code(Collection<Tb1052CoreEntity> tb1052CoresByF1051Code) {
-//        this.tb1052CoresByF1051Code = tb1052CoresByF1051Code;
-//    }
 }

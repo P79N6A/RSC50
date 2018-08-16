@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.model;
 
 /**
+ * 模拟量
  * Created by chunc on 2018/8/7.
  */
 public class Tb1006AnalogdataEntity {
