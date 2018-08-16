@@ -15,3 +15,7 @@ org.sf.feeling.swt.win32.extension/bin
 com.shrcn.business.scl/bin
 com.shrcn.business.scl/test
 com.shrcn.business.scl.nl1/bin
+com.synet.tool.rsc/.config
+com.synet.tool.rsc/derby.log
+*.scd
+*.log

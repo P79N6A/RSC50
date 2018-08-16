@@ -4,6 +4,28 @@
  */
 package com.synet.tool.rsc.io;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.dom4j.Element;
+
+import com.shrcn.business.scl.das.FcdaDAO;
+import com.shrcn.business.scl.das.IEDDAO;
+import com.shrcn.business.scl.model.SCL;
+import com.shrcn.found.common.Constants;
+import com.shrcn.found.xmldb.XMLDBHelper;
+import com.shrcn.tool.found.das.BeanDaoService;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.parser.IIedParser;
+import com.synet.tool.rsc.io.parser.RcbParser;
+import com.synet.tool.rsc.io.parser.GooseParser;
+import com.synet.tool.rsc.io.parser.SmvParser;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.util.ProjectFileManager;
+
  /**
  * 
  * @author 陈春(mailto:chench80@126.com)
@@ -11,10 +33,62 @@ package com.synet.tool.rsc.io;
  */
 public class SCDImporter implements IImporter {
 
+	private String scdPath;
+	private RSCProperties rscp = RSCProperties.getInstance();
+	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
+	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
+	
+	public SCDImporter(String scdPath) {
+		this.scdPath = scdPath;
+		FcdaDAO.getInstance().clear();
+	}
+
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
+		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
+		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
+		if (iedNds == null || iedNds.size() < 1) {
+			return;
+		}
+		for (Element iedNd : iedNds) {
+			Tb1046IedEntity ied = new Tb1046IedEntity();
+			String iedName = iedNd.attributeValue("name");
+			ied.setF1046Name(iedName);
+			ied.setF1046Desc(iedNd.attributeValue("desc"));
+			ied.setF1046Model(iedNd.attributeValue("type"));
+			ied.setF1046Manufacturor(iedNd.attributeValue("manufacturer"));
+			ied.setF1046ConfigVersion(iedNd.attributeValue("configVersion"));
+			ied.setF1046Crc(iedNd.attributeValue("crc"));
+			// code
+			ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
+			// A/B
+			int aOrb = iedName.endsWith("B") ? 2 : 1;
+			ied.setF1046AorB(aOrb);
+			ied.setF1046IsVirtual(0);
+			beanDao.insert(ied);
+			Map<String, IIedParser> pmap = new HashMap<String, IIedParser>();
+			pmap.put("goose", new GooseParser(ied));
+			pmap.put("smv", new SmvParser(ied));
+			pmap.put("rcb", new RcbParser(ied));
+			for (IIedParser parser : pmap.values()) {
+				parser.parse();
+			}
+			// 根据解析结果修改类型
+			if (pmap.get("rcb").getItems().size() > 0) {
+				String ldXpath = SCL.getLDXPath(iedName, "PROT");
+				int type = XMLDBHelper.existsNode(ldXpath) ?
+						DBConstants.IED_PROT : DBConstants.IED_MONI;
+				ied.setF1046Type(type);
+			} else {
+				if (pmap.get("smv").getItems().size() > 0) {
+					ied.setF1046Type(DBConstants.IED_MU);
+				} else {
+					ied.setF1046Type(DBConstants.IED_TERM);
+				}
+			}
+			beanDao.update(ied);
+		}
 	}
 
 }

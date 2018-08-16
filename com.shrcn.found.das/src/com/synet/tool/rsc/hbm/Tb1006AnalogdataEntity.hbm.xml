@@ -20,13 +20,13 @@
             <column name="F1006_BYNAME" sql-type="varchar" length="24"/>
         </property>
         <property name="f0008Name">
-            <column name="F0008_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0008_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f0009Name">
-            <column name="F0009_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0009_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f1006Calcflag">
-            <column name="F1006_CALCFLAG" sql-type="int" not-null="true"/>
+            <column name="F1006_CALCFLAG" sql-type="int"/>
         </property>
         <property name="f1006Picname">
             <column name="F1006_PICNAME" sql-type="varchar" length="96"/>
@@ -35,22 +35,22 @@
             <column name="F1006_PDRMODE" sql-type="int"/>
         </property>
         <property name="f1006K">
-            <column name="F1006_K" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_K" sql-type="float" precision="12"/>
         </property>
         <property name="f1006B">
-            <column name="F1006_B" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_B" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Zerodband">
-            <column name="F1006_ZERODBAND" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_ZERODBAND" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Overflow">
-            <column name="F1006_OVERFLOW" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_OVERFLOW" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Lowflow">
-            <column name="F1006_LOWFLOW" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_LOWFLOW" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Maxinc">
-            <column name="F1006_MAXINC" sql-type="float" precision="12" not-null="true"/>
+            <column name="F1006_MAXINC" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Hiwarn">
             <column name="F1006_HIWARN" sql-type="float" precision="12"/>
@@ -65,16 +65,16 @@
             <column name="F1006_LOALARM" sql-type="float" precision="12"/>
         </property>
         <property name="f1006Saveperiod">
-            <column name="F1006_SAVEPERIOD" sql-type="int" not-null="true"/>
+            <column name="F1006_SAVEPERIOD" sql-type="int"/>
         </property>
         <property name="f1006Plantime">
-            <column name="F1006_PLANTIME" sql-type="int" not-null="true"/>
+            <column name="F1006_PLANTIME" sql-type="int"/>
         </property>
         <property name="f1006Deadtime">
-            <column name="F1006_DEADTIME" sql-type="int" not-null="true"/>
+            <column name="F1006_DEADTIME" sql-type="int"/>
         </property>
         <property name="f1006Alarmlevel">
-            <column name="F1006_ALARMLEVEL" sql-type="int" not-null="true"/>
+            <column name="F1006_ALARMLEVEL" sql-type="int"/>
         </property>
         <property name="f1006Savetype">
             <column name="F1006_SAVETYPE" sql-type="int"/>

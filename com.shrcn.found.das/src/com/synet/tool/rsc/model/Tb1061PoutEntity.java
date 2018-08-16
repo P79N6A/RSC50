@@ -6,18 +6,18 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1061PoutEntity {
     private String f1061Code;
-    private String f1046Code;
     private String cbCode;
     private String f1061RefAddr;
     private int f1061Index;
     private String f1061Desc;
     private Integer f1061Type;
-    private String f1064Code;
     private String dataCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1055GcbEntity tb1055GcbByCbCode;
     private Tb1056SvcbEntity tb1056SvcbByCbCode;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
+    private Tb1016StatedataEntity stdata;
+    private Tb1006AnalogdataEntity algdata;
     
     
     public String getF1061Code() {
@@ -26,14 +26,6 @@ public class Tb1061PoutEntity {
 
     public void setF1061Code(String f1061Code) {
         this.f1061Code = f1061Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
     }
 
     public String getCbCode() {
@@ -76,14 +68,6 @@ public class Tb1061PoutEntity {
         this.f1061Type = f1061Type;
     }
 
-    public String getF1064Code() {
-        return f1064Code;
-    }
-
-    public void setF1064Code(String f1064Code) {
-        this.f1064Code = f1064Code;
-    }
-
     public String getDataCode() {
         return dataCode;
     }
@@ -92,7 +76,23 @@ public class Tb1061PoutEntity {
         this.dataCode = dataCode;
     }
 
-    @Override
+    public Tb1016StatedataEntity getStdata() {
+		return stdata;
+	}
+
+	public void setStdata(Tb1016StatedataEntity stdata) {
+		this.stdata = stdata;
+	}
+
+	public Tb1006AnalogdataEntity getAlgdata() {
+		return algdata;
+	}
+
+	public void setAlgdata(Tb1006AnalogdataEntity algdata) {
+		this.algdata = algdata;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,12 +102,10 @@ public class Tb1061PoutEntity {
         if (f1061Index != that.f1061Index) return false;
         if (cbCode != null ? !cbCode.equals(that.cbCode) : that.cbCode != null) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1061Code != null ? !f1061Code.equals(that.f1061Code) : that.f1061Code != null) return false;
         if (f1061Desc != null ? !f1061Desc.equals(that.f1061Desc) : that.f1061Desc != null) return false;
         if (f1061RefAddr != null ? !f1061RefAddr.equals(that.f1061RefAddr) : that.f1061RefAddr != null) return false;
         if (f1061Type != null ? !f1061Type.equals(that.f1061Type) : that.f1061Type != null) return false;
-        if (f1064Code != null ? !f1064Code.equals(that.f1064Code) : that.f1064Code != null) return false;
 
         return true;
     }
@@ -115,13 +113,11 @@ public class Tb1061PoutEntity {
     @Override
     public int hashCode() {
         int result = f1061Code != null ? f1061Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (cbCode != null ? cbCode.hashCode() : 0);
         result = 31 * result + (f1061RefAddr != null ? f1061RefAddr.hashCode() : 0);
         result = 31 * result + f1061Index;
         result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
         result = 31 * result + (f1061Type != null ? f1061Type.hashCode() : 0);
-        result = 31 * result + (f1064Code != null ? f1064Code.hashCode() : 0);
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);
         return result;
     }

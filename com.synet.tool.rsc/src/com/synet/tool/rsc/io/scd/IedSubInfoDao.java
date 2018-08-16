@@ -18,7 +18,6 @@ import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
-import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 
  /**
@@ -26,90 +25,90 @@ import com.shrcn.found.xmldb.XMLDBHelper;
  * @author 陈春(mailto:cchun@shrcn.com)
  * @version 1.0, 2016-12-27
  */
-public class SclDao {
+public class IedSubInfoDao {
 
-	private static ConsoleManager console = ConsoleManager.getInstance();
-	
-	/**
-	 * 查询IED类型
-	 * @param iedInScd
-	 * @return
-	 */
-	public static String getIEDType(String iedInScd) {
-		return XMLDBHelper.getAttributeValue(SCL.getIEDXPath(iedInScd) + "/@type");
-	}
-
-	/**
-	 * 读取界面GOOSE数据.
-	 * 
-	 * @param iedName
-	 * @return
-	 */
-	public static List<Element> getGooseCfgPub(String iedName) {
-		if (Constants.XQUERY) {
-			String xquery = "let $root:="
-					+ XMLDBHelper.getDocXPath()
-					+ "/scl:SCL, $ied:=$root/scl:IED[@name='"
-					+ iedName
-					+ "'] return for $ap in $ied/scl:AccessPoint return for $LD in "
-					+ "$ap/scl:Server/scl:LDevice return for $gse in $LD/scl:LN0/scl:GSEControl return "
-					+ "let $ds:=$LD/*/scl:DataSet[@name=$gse/@datSet] return element cb {attribute cbName{$gse/@name}, attribute ldInst{$LD/@inst}, "
-					+ "for $fcda in $ds/scl:FCDA return let $ln:=$LD/*"
-					+ "[((@prefix=$fcda/@prefix or ((not(@prefix) or @prefix='') and (not($fcda/@prefix) or $fcda/@prefix=''))) and (@lnClass=$fcda/@lnClass)"
-					+ "and (@inst=$fcda/@lnInst or ((not(@inst) or @inst='') and (not($fcda/@lnInst) or $fcda/@lnInst='')))) or (@lnClass=$fcda/@lnClass and @lnClass='LLN0')]"
-					+ " return element fcda {$fcda/@*}}";
-			return XMLDBHelper.queryNodes(xquery);
-		} 
-		return getCfgPub(iedName, "scl:GSEControl");
-	}
-
-	/**
-	 * 读取界面SMV数据.
-	 * 
-	 * @param iedName
-	 * @return
-	 */
-	public static List<Element> getSmvCfgPub(String iedName) {
-		if (Constants.XQUERY) {
-			String xquery = "let $root:="
-					+ XMLDBHelper.getDocXPath()
-					+ "/scl:SCL, $ied:=$root/scl:IED[@name='"
-					+ iedName
-					+ "'] return for $ap in $ied/scl:AccessPoint return for $LD in "
-					+ "$ap/scl:Server/scl:LDevice return for $smv in $LD/scl:LN0/scl:SampledValueControl return "
-					+ "let $ds:=$LD/*/scl:DataSet[@name=$smv/@datSet] return element cb {attribute cbName {$smv/@name}, attribute ldInst{$LD/@inst}, "
-					+ "for $fcda at $i in $ds/scl:FCDA return let $ln:=$LD/*"
-					+ "[((@prefix=$fcda/@prefix or ((not(@prefix) or @prefix='') and (not($fcda/@prefix) or $fcda/@prefix=''))) and (@lnClass=$fcda/@lnClass)"
-					+ "and (@inst=$fcda/@lnInst or ((not(@inst) or @inst='') and (not($fcda/@lnInst) or $fcda/@lnInst='')))) or (@lnClass=$fcda/@lnClass and @lnClass='LLN0')] "
-					+ "return element fcda {$fcda/@*}}";
-			return XMLDBHelper.queryNodes(xquery);
-		} 
-		return getCfgPub(iedName, "scl:SampledValueControl");
-	}
-	
-	private static List<Element> getCfgPub(String iedName, String blockName) {
-		List<Element> list = new ArrayList<Element>();
-		List<Element> ldEls = XMLDBHelper.selectNodes(SCL.XPATH_IED + "[@name='" + iedName + "']/scl:AccessPoint/scl:Server/scl:LDevice[count(./scl:LN0/"+blockName+")>0]");
-		for (Element ldEl : ldEls) {
-			String ldInst = ldEl.attributeValue("inst");
-			List<Element> cbEls = DOM4JNodeHelper.selectNodes(ldEl, "./scl:LN0/" + blockName + "");
-			for (Element cbEl : cbEls) {
-				Element el = DOM4JNodeHelper.createSCLNode("cb");
-				String cbName = cbEl.attributeValue("name");
-				String dsName = cbEl.attributeValue("datSet");
-				el.addAttribute("cbName", cbName);
-				el.addAttribute("ldInst", ldInst);
-				List<Element> fcdaEls = DOM4JNodeHelper.selectNodes(ldEl, "./scl:LN0/scl:DataSet[@name='"+ dsName +"']/scl:FCDA");
-				for (Element fcdaEl : fcdaEls) {
-					Element createCopy = fcdaEl.createCopy();
-					createCopy.setName("fcda");
-					el.add(createCopy);
-				}
-				list.add(el);
-			}
-		}
-		return list;
-	}
+//	/**
+//	 * 查询IED类型
+//	 * @param iedInScd
+//	 * @return
+//	 */
+//	public static String getIEDType(String iedInScd) {
+//		return XMLDBHelper.getAttributeValue(SCL.getIEDXPath(iedInScd) + "/@type");
+//	}
+//
+//	/**
+//	 * 读取界面GOOSE数据.
+//	 * 
+//	 * @param iedName
+//	 * @return
+//	 */
+//	public static List<Element> getGooseCfgPub(String iedName) {
+//		if (Constants.XQUERY) {
+//			String xquery = "let $root:="
+//					+ XMLDBHelper.getDocXPath()
+//					+ "/scl:SCL, $ied:=$root/scl:IED[@name='"
+//					+ iedName
+//					+ "'] return for $ap in $ied/scl:AccessPoint return for $LD in "
+//					+ "$ap/scl:Server/scl:LDevice return for $gse in $LD/scl:LN0/scl:GSEControl return "
+//					+ "let $ds:=$LD/*/scl:DataSet[@name=$gse/@datSet] return element cb {attribute cbName{$gse/@name}, attribute cbId{$gse/@appID}, attribute ldInst{$LD/@inst}, "
+//					+ "for $fcda in $ds/scl:FCDA return let $ln:=$LD/*"
+//					+ "[((@prefix=$fcda/@prefix or ((not(@prefix) or @prefix='') and (not($fcda/@prefix) or $fcda/@prefix=''))) and (@lnClass=$fcda/@lnClass)"
+//					+ "and (@inst=$fcda/@lnInst or ((not(@inst) or @inst='') and (not($fcda/@lnInst) or $fcda/@lnInst='')))) or (@lnClass=$fcda/@lnClass and @lnClass='LLN0')]"
+//					+ " return element fcda {$fcda/@*}}";
+//			return XMLDBHelper.queryNodes(xquery);
+//		} 
+//		return getCfgPub(iedName, "scl:GSEControl");
+//	}
+//
+//	/**
+//	 * 读取界面SMV数据.
+//	 * 
+//	 * @param iedName
+//	 * @return
+//	 */
+//	public static List<Element> getSmvCfgPub(String iedName) {
+//		if (Constants.XQUERY) {
+//			String xquery = "let $root:="
+//					+ XMLDBHelper.getDocXPath()
+//					+ "/scl:SCL, $ied:=$root/scl:IED[@name='"
+//					+ iedName
+//					+ "'] return for $ap in $ied/scl:AccessPoint return for $LD in "
+//					+ "$ap/scl:Server/scl:LDevice return for $smv in $LD/scl:LN0/scl:SampledValueControl return "
+//					+ "let $ds:=$LD/*/scl:DataSet[@name=$smv/@datSet] return element cb {attribute cbName{$smv/@name}, attribute cbId{$smv/@smvID}, attribute ldInst{$LD/@inst}, "
+//					+ "for $fcda at $i in $ds/scl:FCDA return let $ln:=$LD/*"
+//					+ "[((@prefix=$fcda/@prefix or ((not(@prefix) or @prefix='') and (not($fcda/@prefix) or $fcda/@prefix=''))) and (@lnClass=$fcda/@lnClass)"
+//					+ "and (@inst=$fcda/@lnInst or ((not(@inst) or @inst='') and (not($fcda/@lnInst) or $fcda/@lnInst='')))) or (@lnClass=$fcda/@lnClass and @lnClass='LLN0')] "
+//					+ "return element fcda {$fcda/@*}}";
+//			return XMLDBHelper.queryNodes(xquery);
+//		} 
+//		return getCfgPub(iedName, "scl:SampledValueControl");
+//	}
+//	
+//	private static List<Element> getCfgPub(String iedName, String blockName) {
+//		List<Element> list = new ArrayList<Element>();
+//		List<Element> ldEls = XMLDBHelper.selectNodes(SCL.XPATH_IED + "[@name='" + iedName + "']/scl:AccessPoint/scl:Server/scl:LDevice[count(./scl:LN0/"+blockName+")>0]");
+//		for (Element ldEl : ldEls) {
+//			String ldInst = ldEl.attributeValue("inst");
+//			List<Element> cbEls = DOM4JNodeHelper.selectNodes(ldEl, "./scl:LN0/" + blockName + "");
+//			for (Element cbEl : cbEls) {
+//				Element el = DOM4JNodeHelper.createSCLNode("cb");
+//				String cbName = cbEl.attributeValue("name");
+//				String dsName = cbEl.attributeValue("datSet");
+//				String cbId = "GSEControl".equals(cbEl.getName()) ? cbEl.attributeValue("appID") : cbEl.attributeValue("smvID");
+//				el.addAttribute("cbName", cbName);
+//				el.addAttribute("cbId", cbId);
+//				el.addAttribute("ldInst", ldInst);
+//				List<Element> fcdaEls = DOM4JNodeHelper.selectNodes(ldEl, "./scl:LN0/scl:DataSet[@name='"+ dsName +"']/scl:FCDA");
+//				for (Element fcdaEl : fcdaEls) {
+//					Element createCopy = fcdaEl.createCopy();
+//					createCopy.setName("fcda");
+//					el.add(createCopy);
+//				}
+//				list.add(el);
+//			}
+//		}
+//		return list;
+//	}
 
 	/**
 	 * 读取界面GOOSE数据.
@@ -130,8 +129,8 @@ public class SclDao {
 					+ "$ds:=$LD/*/scl:DataSet[@name=$gse/@datSet] "
 					+ " where exists($cp/scl:GSE[@cbName=$gse/@name]) return element cb {attribute iedName {$ied/@name}, attribute iedDesc {$ied/@desc}, attribute AP {$ap/@name}, "
 					+ "attribute cbRef {concat('" + iedName
-					+ "', $LD/@inst, '/LLN0$GO$', $gse/@name)}, attribute cbId {$gse/@appID}, "
-					+ "attribute dsRef {concat('" + iedName + "', $LD/@inst, '/LLN0$', $ds/@name)}, "
+					+ "', $LD/@inst, '/LLN0$GO$', $gse/@name)}, attribute cbName {$gse/@name}, attribute cbId {$gse/@appID}, "
+					+ "attribute dsRef {concat('" + iedName + "', $LD/@inst, '/LLN0$', $ds/@name)}, attribute dsName {$ds/@name}, attribute dsDesc {$ds/@desc}, "
 					+ "attribute appID {$addr/scl:P[@type='APPID']/text()}, attribute mac {$addr/scl:P[@type='MAC-Address']/text()}, "
 					+ "attribute vlanID {$addr/scl:P[@type='VLAN-ID']/text()}, attribute priority {$addr/scl:P[@type='VLAN-PRIORITY']/text()}, "
 					+ "attribute T0 {$cpGse/scl:MaxTime/text()}, attribute T1 {$cpGse/scl:MinTime/text()}, attribute confRev {$gse/@confRev}, attribute entryNum {count($ds/scl:FCDA)}, "
@@ -153,7 +152,7 @@ public class SclDao {
 	 * @return
 	 */
 	public static List<Element> getSmvConfigPub(String iedName) {
-		List<Element> cbEls = SclDao.querySmvConfigPub(iedName);
+		List<Element> cbEls = IedSubInfoDao.querySmvConfigPub(iedName);
 		// 更正通道号
 		for (Element cbEl : cbEls) {
 			boolean existQ = DOM4JNodeHelper.existsNode(cbEl,
@@ -207,8 +206,8 @@ public class SclDao {
 					+ "$cpSmv:=$cp/scl:SMV[@cbName=$smv/@name and @ldInst=$LD/@inst], $addr:=$cpSmv/scl:Address, "
 					+ "$ds:=$LD/*/scl:DataSet[@name=$smv/@datSet]"
 					+ " where exists($cp/scl:SMV[@cbName=$smv/@name]) return element cb {attribute iedName {$ied/@name}, attribute iedDesc {$ied/@desc}, attribute AP {$ap/@name}, "
-					+ "attribute cbRef {concat('" + iedName + "', $LD/@inst, '/LLN0$MS$', $smv/@name)}, attribute cbId {$smv/@smvID}, "
-					+ "attribute dsRef {concat('" + iedName + "', $LD/@inst, '/LLN0$', $ds/@name)}, "
+					+ "attribute cbRef {concat('" + iedName + "', $LD/@inst, '/LLN0$MS$', $smv/@name)}, attribute cbName {$smv/@name}, attribute cbId {$smv/@smvID}, "
+					+ "attribute dsRef {concat('" + iedName + "', $LD/@inst, '/LLN0$', $ds/@name)}, attribute dsName {$ds/@name}, attribute dsDesc {$ds/@desc}, "
 					+ "attribute appID {$addr/scl:P[@type='APPID']/text()}, attribute mac {$addr/scl:P[@type='MAC-Address']/text()}, "
 					+ "attribute vlanID {$addr/scl:P[@type='VLAN-ID']/text()}, attribute priority {$addr/scl:P[@type='VLAN-PRIORITY']/text()}, "
 					+ "attribute confRev {$smv/@confRev}, attribute asduNum {$smv/@nofASDU}, attribute entryNum {count($ds/scl:FCDA)}, "
@@ -243,6 +242,7 @@ public class SclDao {
 				String cbName = cbEl.attributeValue("name");
 				String dsName = cbEl.attributeValue("datSet");
 				
+				Element dsEl = DOM4JNodeHelper.selectSingleNode(ldEl, "./*/scl:DataSet[@name='"+ dsName +"']");
 				Element commEl = map.get(ldInst + ":" + cbName);
 				if (commEl == null)
 					continue;
@@ -250,8 +250,11 @@ public class SclDao {
 				el.addAttribute("iedDesc", iedDesc);
 				el.addAttribute("AP", ldEl.getParent().getParent().attributeValue("name"));
 				el.addAttribute("cbRef", iedName + ldInst+"/LLN0$"+fc+"$"+ cbName);
+				el.addAttribute("cbName", cbName);
 				el.addAttribute("cbId", cbEl.attributeValue(cbId));
 				el.addAttribute("dsRef", iedName + ldInst+ "/LLN0$"+ dsName);
+				el.addAttribute("dsName", dsEl.attributeValue("name")); 
+				el.addAttribute("dsDesc", dsEl.attributeValue("desc")); 
 				Element addEl = commEl.element("Address");
 				el.addAttribute("appID", CommunicationDAO.getTypeValue(addEl, "APPID"));
 				el.addAttribute("mac", CommunicationDAO.getTypeValue(addEl, "MAC-Address"));
@@ -266,7 +269,7 @@ public class SclDao {
 					el.addAttribute("asduNum", cbEl.attributeValue("nofASDU"));
 				}
 				el.addAttribute("confRev", cbEl.attributeValue("confRev"));
-				List<Element> fcdaEls = DOM4JNodeHelper.selectNodes(ldEl, "./*/scl:DataSet[@name='"+ dsName +"']/scl:FCDA");
+				List<Element> fcdaEls = dsEl.elements("FCDA");
 				int i = 0;
 				for (Element fcdaEl : fcdaEls) {
 					Element fcda = fcdaEl.createCopy();
