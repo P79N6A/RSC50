@@ -100,4 +100,7 @@ public interface ITagSG {
 	
 	String EL_GMRP				= "GMRP";
 	String EL_MULTICAST		= "multicast";
+	
+	String FC_BRCB 		= "BR";
+	String FC_URCB 		= "RP";
 }

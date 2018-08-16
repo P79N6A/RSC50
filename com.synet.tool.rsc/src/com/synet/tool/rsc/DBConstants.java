@@ -15,9 +15,12 @@ public interface DBConstants {
 	
 	String PR_State 		= "State";
 	String PR_Analog 		= "Analog";
+	String PR_String 		= "String";
 	String PR_IED 			= "IED";
+	String PR_MMSSvr 		= "MMSSvr";
 	String PR_GCB 			= "GCB";
 	String PR_POUT 			= "POUT";
+	String PR_RCB 			= "RCB";
 	
 	// A、B套
 	int SUITE_A = 1;
@@ -25,6 +28,7 @@ public interface DBConstants {
 	// POUT类型
 	int DATA_ST = 1;
 	int DATA_MX = 2;
+	int DATA_STR = 3;
 	
 	// 装置类型
 	int IED_PROT 	= 00; 	//通用保护装置
@@ -60,7 +64,5 @@ public interface DBConstants {
 	int DAT_WK_VOL	 	= 104;	//装置工作电压
 	int DAT_PORT_POWER	 	= 105;	//光口光强
 
-
-	
 }
 

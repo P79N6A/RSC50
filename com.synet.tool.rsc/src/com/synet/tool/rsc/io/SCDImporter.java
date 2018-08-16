@@ -23,7 +23,10 @@ import com.synet.tool.rsc.io.parser.IIedParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
+import com.synet.tool.rsc.io.scd.IedInfoDao;
+import com.synet.tool.rsc.model.Tb1026StringdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
  /**
@@ -59,14 +62,23 @@ public class SCDImporter implements IImporter {
 			ied.setF1046Model(iedNd.attributeValue("type"));
 			ied.setF1046Manufacturor(iedNd.attributeValue("manufacturer"));
 			ied.setF1046ConfigVersion(iedNd.attributeValue("configVersion"));
-			ied.setF1046Crc(iedNd.attributeValue("crc"));
+			String vtcrc = iedNd.attributeValue("crc");
+			ied.setF1046Crc(vtcrc);
 			// code
-			ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
+			String iedCode = rscp.nextTbCode(DBConstants.PR_IED);
+			ied.setF1046Code(iedCode);
 			// A/B
 			int aOrb = iedName.endsWith("B") ? 2 : 1;
 			ied.setF1046AorB(aOrb);
 			ied.setF1046IsVirtual(0);
 			beanDao.insert(ied);
+			
+			Tb1026StringdataEntity strData = new Tb1026StringdataEntity();
+			strData.setF1026Code(rscp.nextTbCode(DBConstants.PR_String));
+			strData.setF1026Desc(vtcrc);
+			strData.setParentCode(iedCode);
+			beanDao.insert(strData);
+			
 			Map<String, IIedParser> pmap = new HashMap<String, IIedParser>();
 			pmap.put("goose", new GooseParser(ied));
 			pmap.put("smv", new SmvParser(ied));
@@ -80,6 +92,19 @@ public class SCDImporter implements IImporter {
 				int type = XMLDBHelper.existsNode(ldXpath) ?
 						DBConstants.IED_PROT : DBConstants.IED_MONI;
 				ied.setF1046Type(type);
+				Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
+				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
+				mmsServer.setTb1046IedByF1046Code(ied);
+				String[] ips = IedInfoDao.getIPs(iedName);
+				if (ips.length > 0) {
+					mmsServer.setF1070IpA(ips[0]);
+					if (ips.length > 1) {
+						mmsServer.setF1070IpB(ips[1]);
+					}
+				} else {
+					mmsServer.setF1070IpA("");
+				}
+				beanDao.insert(mmsServer);
 			} else {
 				if (pmap.get("smv").getItems().size() > 0) {
 					ied.setF1046Type(DBConstants.IED_MU);

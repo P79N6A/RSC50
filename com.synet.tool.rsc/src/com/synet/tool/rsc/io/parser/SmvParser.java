@@ -10,7 +10,7 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.io.scd.IedSubInfoDao;
+import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -28,7 +28,7 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 
 	@Override
 	public void parse() {
-		List<Element> smvNds = IedSubInfoDao.getSmvConfigPub(iedName);
+		List<Element> smvNds = IedInfoDao.getSmvConfigPub(iedName);
 		for (Element cbNd : smvNds) {
 			Tb1056SvcbEntity smv = new Tb1056SvcbEntity();
 			items.add(smv);
@@ -47,7 +47,7 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 			smv.setTb1061PoutsByF1056Code(pouts);
 			parsePOuts(cbNd, smv.getF1056Code(), pouts);
 		}
-		beanDao.insertBatch(items);
+		saveItems();
 	}
 
 }

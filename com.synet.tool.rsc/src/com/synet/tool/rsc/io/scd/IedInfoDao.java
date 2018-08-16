@@ -25,7 +25,7 @@ import com.shrcn.found.xmldb.XMLDBHelper;
  * @author 陈春(mailto:cchun@shrcn.com)
  * @version 1.0, 2016-12-27
  */
-public class IedSubInfoDao {
+public class IedInfoDao {
 
 //	/**
 //	 * 查询IED类型
@@ -152,7 +152,7 @@ public class IedSubInfoDao {
 	 * @return
 	 */
 	public static List<Element> getSmvConfigPub(String iedName) {
-		List<Element> cbEls = IedSubInfoDao.querySmvConfigPub(iedName);
+		List<Element> cbEls = IedInfoDao.querySmvConfigPub(iedName);
 		// 更正通道号
 		for (Element cbEl : cbEls) {
 			boolean existQ = DOM4JNodeHelper.existsNode(cbEl,
@@ -288,70 +288,108 @@ public class IedSubInfoDao {
 		return list;
 	}
 
+	/**
+	 * 查询当前装置下所有报告控制块的FCDA
+	 * @param iedName
+	 * @return
+	 */
+	public static List<Element> getReportControlFCDA(String iedName) {
+		if (Constants.XQUERY) {
+			String xquery = "let $ied:=" + XMLDBHelper.getDocXPath() +
+			        "/SCL/IED[@name='" + iedName + "'], $lds:=$ied/AccessPoint/Server/LDevice"+
+					" return for $ld in $lds" +
+					" return for $ln in $ld/*" +
+					" return for $rcb in $ln/ReportControl" +
+					" return <RCB ldName='{concat('" + iedName + "', $ld/@inst/string())}'" +
+							" name='{$rcb/@name/string()}' " +
+							" datSet='{$rcb/@datSet/string()}' " +
+					"lnprefix='{$ln/@prefix/string()}' " +
+					"lnclass ='{$ln/@lnClass/string()}' " +
+					"lninst ='{$ln/@inst/string()}' " +
+					"buffered='{$rcb/@buffered/string()}' " +
+					"indexed='{$rcb/@indexed/string()}' " +
+					"max='{$rcb/RptEnabled/@max/string()}'> {" +
+					"for $fcda in $ln/DataSet[@name=$rcb/@datSet]/FCDA return $fcda" +
+					"} </RCB>";
+			return XMLDBHelper.queryNodes(xquery);
+		} else {
+			List<Element> rcbList = new ArrayList<>();
+			String ldXpath = "/SCL/IED[@name='" + iedName + "']/AccessPoint/Server/LDevice";
+			List<Element> elLds = XMLDBHelper.selectNodes(ldXpath);
+			for (Element elLd : elLds) {
+				List<Element> elLNs = elLd.elements("LN0");
+				for (Element elLN : elLNs) {
+					List<Element> elRcbs = elLN.elements("ReportControl");
+				}
+			}
+			return rcbList;
+		}
+	}
+	
 //	/**
-//	 * @param saddrA
-//	 * @param infoA
+//	 * 获取指定报告控制块参引。
+//	 * @param rcb
 //	 * @return
 //	 */
-//	public static String getDesc(String saddr, Map<String, DSInfo> addrMap) {
-//		if (saddr.endsWith("DataPP.bit_zero")) {
-//			return "0";
-//		} else if (saddr.endsWith("DataPP.bit_one")) {
-//			return "1";
-//		} else if (saddr.equals("NULL")) {
-//			return "NULL";
-//		}
-//		if (addrMap.get(saddr) == null) {
-//			console.append("警告：CID模型的dsDin数据集中找不到单点信号" + saddr + "。");
-//			return saddr;
-//		}
-//		String nullToEmpty = StringUtil.nullToEmpty(addrMap.get(saddr).getDesc());
-//		return StringUtil.isEmpty(nullToEmpty) ? StringUtil.nullToEmpty(saddr) : nullToEmpty;
+//	public static String getRCBRef(Element rcb) {
+//		String fc = isBrcb(rcb) ? ITagSG.FC_BRCB : ITagSG.FC_URCB;
+//		String ln = rcb.attributeValue("lnprefix") + rcb.attributeValue("lnclass")
+//				+ rcb.attributeValue("lninst");
+//		return rcb.attributeValue("ldName") + "/" + ln +"$" + fc + "$" + rcb.attributeValue("name");
 //	}
-
+	
+	/**
+	 * 报告是否缓存
+	 * @param rcb
+	 * @return
+	 */
+	public static boolean isBrcb(Element rcb) {
+		String buffered = rcb.attributeValue("buffered");
+		if (StringUtil.isEmpty(buffered)) {
+			return false;
+		}
+		return Boolean.parseBoolean(buffered);
+	}
+	
 	/**
 	 * 查询装置IP
 	 * @param iedName
 	 * @return
 	 */
-	public static String getIPs(String iedName) {
+	public static String[] getIPs(String iedName) {
+		List<String> ips = new ArrayList<>();
 		String xpath = "/scl:SCL/scl:Communication/scl:SubNetwork/scl:ConnectedAP[@iedName='"
 				+ iedName + "']/scl:Address/scl:P[@type='IP']";
-		if (Constants.XQUERY) {
-			return XMLDBHelper.getAttributeValue(xpath + "/text()");
-		} else {
-			return XMLDBHelper.getNodeValue(xpath);
+		List<Element> elIPs = XMLDBHelper.selectNodes(xpath);
+		for (Element elIP : elIPs) {
+			String ip = elIP.getTextTrim();
+			ips.add(ip);
 		}
+		return ips.toArray(new String[elIPs.size()]);
 	}
 
 	/**
-	 * 检查IP地址.
-	 * 
-	 * @param iedName
+	 * 获取报告类型
+	 * 0-Din：遥信
+	 * 1-Ain：遥测
+	 * 2-Alarm：装置故障
+	 * 3-Warning：装置告警
+	 * 4-Trip：保护动作
+	 * 5-Enable：压板
+	 * 6-其他（类型枚举值可继续补充）
+	 * @param datSet
 	 * @return
 	 */
-	public static boolean checkIP(String iedName) {
-		return StringUtil.isEmpty(getIPs(iedName));
-	}
-	
-	/**
-	 * 查询CB MAC地址
-	 * @param type
-	 * @param iedName
-	 * @param ldInst
-	 * @param cbName
-	 * @return
-	 */
-	public static String getMac(String type, String iedName, String ldInst, String cbName) {
-		String xpath = "/scl:SCL/scl:Communication/scl:SubNetwork/scl:ConnectedAP[@iedName='"
-						+ iedName + "']/scl:" + type + "[@ldInst='" + ldInst + "'][@cbName='" + cbName
-						+ "']/scl:Address/scl:P[@type='MAC-Address']";
-		if (Constants.XQUERY) {
-			return XMLDBHelper.getAttributeValue(xpath + "/text()");
-		} else {
-			return XMLDBHelper.getNodeValue(xpath);
+	public static int getRcbType(String datSet) {
+		EnumRcbType rcbType = null;
+		for (EnumRcbType type : EnumRcbType.values()) {
+			String name = type.name();
+			if (datSet.indexOf(name) > 0) {
+				rcbType = type;
+				break;
+			}
 		}
+		return (rcbType == null) ? EnumRcbType.Unknow.getCbtype() : rcbType.getCbtype();
 	}
-	
 }
 

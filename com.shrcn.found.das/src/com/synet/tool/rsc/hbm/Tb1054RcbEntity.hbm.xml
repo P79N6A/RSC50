@@ -26,5 +26,10 @@
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
+        <list name="tb1058MmsfcdasByF1054Code" inverse="false" cascade="save-update" table="tb1058_mmsfcda" lazy="false">
+        	<key column="F1054_CODE"></key>
+        	<index column="F1058_Index" type="integer"></index>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1058MmsfcdaEntity" />
+        </list>
     </class>
 </hibernate-mapping>

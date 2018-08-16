@@ -17,7 +17,6 @@ public class Tb1026StringdataEntity {
     private int f1026Ispdr;
     private Integer f1026Pdrno;
     private Integer f1026Issta;
-    private Tb1046IedEntity tb1046IedByParentCode;
 
     public String getF1026Code() {
         return f1026Code;
@@ -166,11 +165,4 @@ public class Tb1026StringdataEntity {
         return result;
     }
 
-    public Tb1046IedEntity getTb1046IedByParentCode() {
-        return tb1046IedByParentCode;
-    }
-
-    public void setTb1046IedByParentCode(Tb1046IedEntity tb1046IedByParentCode) {
-        this.tb1046IedByParentCode = tb1046IedByParentCode;
-    }
 }

@@ -88,11 +88,11 @@ create table TB1026_StringData
    Parent_CODE          varchar(48) not null,
    F1011_NO             INT not null,
    F1026_BYNAME         varchar(24),
-   F0008_NAME           varchar(48) not null,
-   F0009_NAME           varchar(48) not null,
-   F1026_CALCFLAG       INT not null,
+   F0008_NAME           varchar(48),
+   F0009_NAME           varchar(48),
+   F1026_CALCFLAG       INT,
    F1026_PICNAME        varchar(96),
-   F1026_ISPDR          INT not null,
+   F1026_ISPDR          INT,
    F1026_PDRNO          INT,
    F1026_ISSTA          INT,
    primary key (F1026_CODE)
@@ -313,7 +313,7 @@ create table TB1055_GCB
    F1055_VLANPriority   varchar(24) not null,
    F1055_APPID          varchar(24) not null,
    F1055_DATASET        varchar(24) not null,
-   F1055_DESC           varchar(96),
+   F1055_DSDesc         varchar(96),
    F1071_CODE           varchar(48),
    primary key (F1055_CODE)
 );

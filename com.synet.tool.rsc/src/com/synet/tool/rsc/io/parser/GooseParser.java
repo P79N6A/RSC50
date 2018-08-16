@@ -10,7 +10,7 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.io.scd.IedSubInfoDao;
+import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -28,7 +28,7 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 
 	@Override
 	public void parse() {
-		List<Element> gseNds = IedSubInfoDao.getGooseConfigPub(iedName);
+		List<Element> gseNds = IedInfoDao.getGooseConfigPub(iedName);
 		for (Element gseNd : gseNds) {
 			Tb1055GcbEntity gcb = new Tb1055GcbEntity();
 			items.add(gcb);
@@ -37,7 +37,7 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 			gcb.setF1055Cbname(gseNd.attributeValue("cbName"));
 			gcb.setF1055Cbid(gseNd.attributeValue("cbId"));
 			gcb.setF1055Dataset(gseNd.attributeValue("dsName"));
-			gcb.setF1055Desc(gseNd.attributeValue("dsDesc"));
+			gcb.setF1055DsDesc(gseNd.attributeValue("dsDesc"));
 			gcb.setF1055MacAddr(gseNd.attributeValue("mac"));
 			gcb.setF1055Vlanid(gseNd.attributeValue("vlanID"));
 			gcb.setF1055VlanPriority(gseNd.attributeValue("priority"));
@@ -47,7 +47,7 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 			gcb.setTb1061PoutsByF1055Code(pouts);
 			parsePOuts(gseNd, gcb.getF1055Code(), pouts);
 		}
-		beanDao.insertBatch(items);
+		saveItems();
 	}
 
 }

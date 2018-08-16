@@ -51,6 +51,16 @@ public abstract class IedParserBase<T> implements IIedParser {
 	public List<T> getItems() {
 		return items;
 	}
+	
+	protected void saveItems() {
+		beanDao.insertBatch(items);
+	}
+
+	protected void saveData() {
+		beanDao.insertBatch(agls);
+		beanDao.insertBatch(sts);
+		beanDao.insertBatch(strs);
+	}
 
 	protected void parsePOuts(Element cbNd, String cbCode, List<Tb1061PoutEntity> pouts) {
 		List<Element> fcdaEls = cbNd.elements("fcda");
@@ -67,31 +77,52 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String fc = fcdaEl.attributeValue("fc");
 			if ("ST".equals(fc)) {
 				pout.setF1061Type(DBConstants.DATA_ST);
-				String dataCode = rscp.nextTbCode(DBConstants.PR_State);
-				pout.setDataCode(dataCode);
-				Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
-				stdata.setF1016Code(dataCode);
-				stdata.setF1016Desc(fcdaDesc);
-				stdata.setF1016Safelevel(0);
-				stdata.setParentCode(ied.getF1046Code());
-				stdata.setF1011No(DBConstants.DAT_BRK); // TODO 需根据描述进一步分析
-				sts.add(stdata);
+				pout.setDataCode(addStatedata(fcdaEl, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
 			} else {
 				pout.setF1061Type(DBConstants.DATA_MX);
-				String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
-				pout.setDataCode(dataCode);
-				Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
-				algdata.setF1006Code(dataCode);
-				algdata.setF1006Desc(fcdaDesc);
-				algdata.setF1006Safelevel(0);
-				algdata.setParentCode(ied.getF1046Code());
-				algdata.setF1011No(DBConstants.DAT_PROT_MX); // TODO 需根据描述进一步分析
-				agls.add(algdata);
+				pout.setDataCode(addAlgdata(fcdaEl, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
 			}
 		}
-		beanDao.insertBatch(agls);
-		beanDao.insertBatch(sts);
+		saveData();
 	}
 	
+	protected String addStatedata(Element fcdaEl, int f1011No) {
+		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
+		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
+		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
+		stdata.setF1016Code(dataCode);
+		stdata.setF1016Desc(fcdaDesc);
+		stdata.setF1016Safelevel(0);
+		stdata.setParentCode(ied.getF1046Code());
+		stdata.setF1011No(f1011No);
+		sts.add(stdata);
+		return dataCode;
+	}
+	
+	protected String addAlgdata(Element fcdaEl, int f1011No) {
+		String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
+		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
+		Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
+		algdata.setF1006Code(dataCode);
+		algdata.setF1006Desc(fcdaDesc);
+		algdata.setF1006Safelevel(0);
+		algdata.setParentCode(ied.getF1046Code());
+		algdata.setF1011No(f1011No);
+		agls.add(algdata);
+		return dataCode;
+	}
+	
+	protected String addStringdata(Element fcdaEl, int f1011No) {
+		String dataCode = rscp.nextTbCode(DBConstants.PR_String);
+		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
+		Tb1026StringdataEntity strdata = new Tb1026StringdataEntity();
+		strdata.setF1026Code(dataCode);
+		strdata.setF1026Desc(fcdaDesc);
+		strdata.setF1026Safelevel(0);
+		strdata.setParentCode(ied.getF1046Code());
+		strdata.setF1011No(f1011No);
+		strs.add(strdata);
+		return dataCode;
+	}
 }
 
