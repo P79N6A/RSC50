@@ -292,7 +292,7 @@ public class BeanDaoImpl implements BeanDaoService {
 				
 				return exists(obj.getClass(), id);
 			} else if (property instanceof String) {
-				int id = Integer.valueOf((String)property);
+				String id = (String)property;
 				
 				return exists(obj.getClass(), id);
 			}
@@ -388,6 +388,17 @@ public class BeanDaoImpl implements BeanDaoService {
 		return obj;
 	}
 	
+	public Object getById(Class<?> po, String id) {
+		Session _session = service.get();
+		Object obj = null;
+		try {
+			obj = _session.get(po, id);
+		} finally {
+			service.flush();
+		}
+		return obj;
+	}
+	
 	/**
 	 * 刷新对象
 	 * @param obj
@@ -398,6 +409,10 @@ public class BeanDaoImpl implements BeanDaoService {
 
 	@Override
 	public boolean exists(Class<?> po, int id) {
+		return getById(po, id) != null;
+	}
+	
+	public boolean exists(Class<?> po, String id) {
 		return getById(po, id) != null;
 	}
 	
