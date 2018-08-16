@@ -21,25 +21,25 @@
             <column name="F1016_BYNAME" sql-type="varchar" length="24"/>
         </property>
         <property name="f0008Name">
-            <column name="F0008_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0008_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f0009Name">
-            <column name="F0009_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0009_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f1016Calcflag">
-            <column name="F1016_CALCFLAG" sql-type="int" not-null="true"/>
+            <column name="F1016_CALCFLAG" sql-type="int"/>
         </property>
         <property name="f1016Picname">
             <column name="F1016_PICNAME" sql-type="varchar" length="96"/>
         </property>
         <property name="f1016Ispdr">
-            <column name="F1016_ISPDR" sql-type="int" not-null="true"/>
+            <column name="F1016_ISPDR" sql-type="int"/>
         </property>
         <property name="f1016Pdrno">
             <column name="F1016_PDRNO" sql-type="int"/>
         </property>
         <property name="f1016Dpsflag">
-            <column name="F1016_DPSFLAG" sql-type="int" not-null="true"/>
+            <column name="F1016_DPSFLAG" sql-type="int"/>
         </property>
         <property name="f1016Mainstflag">
             <column name="F1016_MAINSTFLAG" sql-type="int"/>
@@ -51,10 +51,10 @@
             <column name="F1016_SOE" sql-type="varchar" length="48"/>
         </property>
         <property name="f1016Sglimitval">
-            <column name="F1016_SGLIMITVAL" sql-type="int" not-null="true"/>
+            <column name="F1016_SGLIMITVAL" sql-type="int"/>
         </property>
         <property name="f1016Alarmprocmode">
-            <column name="F1016_ALARMPROCMODE" sql-type="int" not-null="true"/>
+            <column name="F1016_ALARMPROCMODE" sql-type="int"/>
         </property>
         <property name="f1016Procband">
             <column name="F1016_PROCBAND" sql-type="int"/>

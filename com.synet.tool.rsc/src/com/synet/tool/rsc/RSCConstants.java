@@ -55,5 +55,16 @@ public interface RSCConstants {
    
    //树节点名称
    String TREE_PHYAICAMODEL = "物理信息模型";
+
+   // Excel表名称
+   String EXCEL_IED 		= "设备台账";
+   String EXCEL_FIBER 		= "光缆清册";
+   String EXCEL_IED_BOARD	= "装置板卡端口描述";
+   String EXCEL_INPUT 		= "开入信号映射表";
+   String EXCEL_BOARD_WARN	= "告警与板卡关联表";
+   String EXCEL_PORT_POWER	= "光强与端口关联表";
+   String EXCEL_PIN_TRAP	= "压板与虚端子关联表";
+   String EXCEL_BRK_CFM		= "跳合闸反校关联表";
+   String EXCEL_STA_POINTS	= "监控信息点表";
    
 }

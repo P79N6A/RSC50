@@ -10,9 +10,9 @@ public class Tb1066ProtmmxuEntity {
     private String f1046CodeMu;
     private String f1046CodeProt;
     private int f1066Type;
-    private String f1006CodeA;
-    private String f1006CodeB;
-    private String f1006CodeC;
+    private Tb1006AnalogdataEntity f1006CodeA;
+    private Tb1006AnalogdataEntity f1006CodeB;
+    private Tb1006AnalogdataEntity f1006CodeC;
     private Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code;
     private Tb1043EquipmentEntity tb1043EquipmentByF1043Code;
     private Tb1046IedEntity tb1046IedByF1046CodeMu;
@@ -66,31 +66,31 @@ public class Tb1066ProtmmxuEntity {
         this.f1066Type = f1066Type;
     }
 
-    public String getF1006CodeA() {
-        return f1006CodeA;
-    }
+    public Tb1006AnalogdataEntity getF1006CodeA() {
+		return f1006CodeA;
+	}
 
-    public void setF1006CodeA(String f1006CodeA) {
-        this.f1006CodeA = f1006CodeA;
-    }
+	public void setF1006CodeA(Tb1006AnalogdataEntity f1006CodeA) {
+		this.f1006CodeA = f1006CodeA;
+	}
 
-    public String getF1006CodeB() {
-        return f1006CodeB;
-    }
+	public Tb1006AnalogdataEntity getF1006CodeB() {
+		return f1006CodeB;
+	}
 
-    public void setF1006CodeB(String f1006CodeB) {
-        this.f1006CodeB = f1006CodeB;
-    }
+	public void setF1006CodeB(Tb1006AnalogdataEntity f1006CodeB) {
+		this.f1006CodeB = f1006CodeB;
+	}
 
-    public String getF1006CodeC() {
-        return f1006CodeC;
-    }
+	public Tb1006AnalogdataEntity getF1006CodeC() {
+		return f1006CodeC;
+	}
 
-    public void setF1006CodeC(String f1006CodeC) {
-        this.f1006CodeC = f1006CodeC;
-    }
+	public void setF1006CodeC(Tb1006AnalogdataEntity f1006CodeC) {
+		this.f1006CodeC = f1006CodeC;
+	}
 
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

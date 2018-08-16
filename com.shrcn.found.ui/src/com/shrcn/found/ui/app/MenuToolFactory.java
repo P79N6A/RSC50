@@ -6,6 +6,7 @@
 package com.shrcn.found.ui.app;
 
 import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -233,6 +234,15 @@ public class MenuToolFactory {
 			return ViewManager.getWorkBenchPage().getPerspective().getId();
 	}
 	
+	private String getActionId(IConfigurationElement cfgChild) {
+		String className = cfgChild.getAttribute("class");
+		int idx = className.indexOf('/');
+		if (idx != -1)
+			className = className.substring(idx + 1);
+		String text = cfgChild.getAttribute("text");
+		return className + "." + text;
+	}
+	
 	/**
 	 * 初始化系统菜单
 	 * @param configuration
@@ -268,7 +278,7 @@ public class MenuToolFactory {
 					String viewId = cfgChild.getAttribute("viewId");
 					action = getAction(viewId);
 				} else {
-					action = getAction(className + "." + text);
+					action = getAction(getActionId(cfgChild));
 				}
 				if (null != action && isMenu(action)) {
 					menu.add(action);
@@ -339,7 +349,7 @@ public class MenuToolFactory {
 					String viewId = cfgChild.getAttribute("viewId");
 					action = getAction(viewId);
 				} else {
-					action = getAction(className);
+					action = getAction(getActionId(cfgChild));
 				}
 				if (null != action && isTool(action)) {
 					actions.add(action);

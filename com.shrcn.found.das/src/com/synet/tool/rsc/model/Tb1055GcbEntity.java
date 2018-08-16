@@ -1,12 +1,12 @@
 package com.synet.tool.rsc.model;
 
+import java.util.List;
 
 /**
  * Created by chunc on 2018/8/7.
  */
 public class Tb1055GcbEntity {
     private String f1055Code;
-    private String f1046Code;
     private String f1055Cbname;
     private String f1055Cbid;
     private String f1055MacAddr;
@@ -14,9 +14,10 @@ public class Tb1055GcbEntity {
     private String f1055VlanPriority;
     private String f1055Appid;
     private String f1055Dataset;
-    private String f1055Desc;
+    private String f1055DsDesc;
     private String f1071Code;
     private Tb1046IedEntity tb1046IedByF1046Code;
+    private List<Tb1061PoutEntity> tb1061PoutsByF1055Code;
 
     public String getF1055Code() {
         return f1055Code;
@@ -24,14 +25,6 @@ public class Tb1055GcbEntity {
 
     public void setF1055Code(String f1055Code) {
         this.f1055Code = f1055Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
     }
 
     public String getF1055Cbname() {
@@ -90,15 +83,15 @@ public class Tb1055GcbEntity {
         this.f1055Dataset = f1055Dataset;
     }
 
-    public String getF1055Desc() {
-        return f1055Desc;
-    }
+    public String getF1055DsDesc() {
+		return f1055DsDesc;
+	}
 
-    public void setF1055Desc(String f1055Desc) {
-        this.f1055Desc = f1055Desc;
-    }
+	public void setF1055DsDesc(String f1055DsDesc) {
+		this.f1055DsDesc = f1055DsDesc;
+	}
 
-    public String getF1071Code() {
+	public String getF1071Code() {
         return f1071Code;
     }
 
@@ -113,13 +106,12 @@ public class Tb1055GcbEntity {
 
         Tb1055GcbEntity that = (Tb1055GcbEntity) o;
 
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1055Appid != null ? !f1055Appid.equals(that.f1055Appid) : that.f1055Appid != null) return false;
         if (f1055Cbid != null ? !f1055Cbid.equals(that.f1055Cbid) : that.f1055Cbid != null) return false;
         if (f1055Cbname != null ? !f1055Cbname.equals(that.f1055Cbname) : that.f1055Cbname != null) return false;
         if (f1055Code != null ? !f1055Code.equals(that.f1055Code) : that.f1055Code != null) return false;
         if (f1055Dataset != null ? !f1055Dataset.equals(that.f1055Dataset) : that.f1055Dataset != null) return false;
-        if (f1055Desc != null ? !f1055Desc.equals(that.f1055Desc) : that.f1055Desc != null) return false;
+        if (f1055DsDesc != null ? !f1055DsDesc.equals(that.f1055DsDesc) : that.f1055DsDesc != null) return false;
         if (f1055MacAddr != null ? !f1055MacAddr.equals(that.f1055MacAddr) : that.f1055MacAddr != null) return false;
         if (f1055VlanPriority != null ? !f1055VlanPriority.equals(that.f1055VlanPriority) : that.f1055VlanPriority != null)
             return false;
@@ -132,7 +124,6 @@ public class Tb1055GcbEntity {
     @Override
     public int hashCode() {
         int result = f1055Code != null ? f1055Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1055Cbname != null ? f1055Cbname.hashCode() : 0);
         result = 31 * result + (f1055Cbid != null ? f1055Cbid.hashCode() : 0);
         result = 31 * result + (f1055MacAddr != null ? f1055MacAddr.hashCode() : 0);
@@ -140,7 +131,7 @@ public class Tb1055GcbEntity {
         result = 31 * result + (f1055VlanPriority != null ? f1055VlanPriority.hashCode() : 0);
         result = 31 * result + (f1055Appid != null ? f1055Appid.hashCode() : 0);
         result = 31 * result + (f1055Dataset != null ? f1055Dataset.hashCode() : 0);
-        result = 31 * result + (f1055Desc != null ? f1055Desc.hashCode() : 0);
+        result = 31 * result + (f1055DsDesc != null ? f1055DsDesc.hashCode() : 0);
         result = 31 * result + (f1071Code != null ? f1071Code.hashCode() : 0);
         return result;
     }
@@ -151,5 +142,13 @@ public class Tb1055GcbEntity {
 
     public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
+    }
+
+    public List<Tb1061PoutEntity> getTb1061PoutsByF1055Code() {
+        return tb1061PoutsByF1055Code;
+    }
+
+    public void setTb1061PoutsByF1055Code(List<Tb1061PoutEntity> tb1061PoutsByF1055Code) {
+        this.tb1061PoutsByF1055Code = tb1061PoutsByF1055Code;
     }
 }

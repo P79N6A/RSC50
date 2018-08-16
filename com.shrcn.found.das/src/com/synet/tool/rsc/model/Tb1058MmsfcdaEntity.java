@@ -5,8 +5,6 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1058MmsfcdaEntity {
     private String f1058Code;
-    private String f1046Code;
-    private String f1054Code;
     private String f1058RefAddr;
     private int f1058Index;
     private String f1058Desc;
@@ -21,22 +19,6 @@ public class Tb1058MmsfcdaEntity {
 
     public void setF1058Code(String f1058Code) {
         this.f1058Code = f1058Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
-    }
-
-    public String getF1054Code() {
-        return f1054Code;
-    }
-
-    public void setF1054Code(String f1054Code) {
-        this.f1054Code = f1054Code;
     }
 
     public String getF1058RefAddr() {
@@ -89,8 +71,6 @@ public class Tb1058MmsfcdaEntity {
         if (f1058DataType != that.f1058DataType) return false;
         if (f1058Index != that.f1058Index) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
-        if (f1054Code != null ? !f1054Code.equals(that.f1054Code) : that.f1054Code != null) return false;
         if (f1058Code != null ? !f1058Code.equals(that.f1058Code) : that.f1058Code != null) return false;
         if (f1058Desc != null ? !f1058Desc.equals(that.f1058Desc) : that.f1058Desc != null) return false;
         if (f1058RefAddr != null ? !f1058RefAddr.equals(that.f1058RefAddr) : that.f1058RefAddr != null) return false;
@@ -101,8 +81,6 @@ public class Tb1058MmsfcdaEntity {
     @Override
     public int hashCode() {
         int result = f1058Code != null ? f1058Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
-        result = 31 * result + (f1054Code != null ? f1054Code.hashCode() : 0);
         result = 31 * result + (f1058RefAddr != null ? f1058RefAddr.hashCode() : 0);
         result = 31 * result + f1058Index;
         result = 31 * result + (f1058Desc != null ? f1058Desc.hashCode() : 0);

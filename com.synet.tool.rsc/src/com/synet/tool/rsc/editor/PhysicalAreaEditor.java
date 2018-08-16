@@ -51,7 +51,7 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
+		tab = SwtUtil.createTabFolder(container, SWT.TOP | SWT.BORDER);
 		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Composite cubicleComp = SwtUtil.createComposite(tab, new GridData(), 1);
 		SwtUtil.addTabItem(tab, RSCConstants.TAB_CUBICLE, cubicleComp);

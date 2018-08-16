@@ -5,7 +5,6 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1070MmsserverEntity {
     private String f1070Code;
-    private String f1046Code;
     private String f1070IpA;
     private String f1070IpB;
     private Tb1046IedEntity tb1046IedByF1046Code;
@@ -16,14 +15,6 @@ public class Tb1070MmsserverEntity {
 
     public void setF1070Code(String f1070Code) {
         this.f1070Code = f1070Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
     }
 
     public String getF1070IpA() {
@@ -49,7 +40,6 @@ public class Tb1070MmsserverEntity {
 
         Tb1070MmsserverEntity that = (Tb1070MmsserverEntity) o;
 
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1070Code != null ? !f1070Code.equals(that.f1070Code) : that.f1070Code != null) return false;
         if (f1070IpA != null ? !f1070IpA.equals(that.f1070IpA) : that.f1070IpA != null) return false;
         if (f1070IpB != null ? !f1070IpB.equals(that.f1070IpB) : that.f1070IpB != null) return false;
@@ -60,7 +50,6 @@ public class Tb1070MmsserverEntity {
     @Override
     public int hashCode() {
         int result = f1070Code != null ? f1070Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1070IpA != null ? f1070IpA.hashCode() : 0);
         result = 31 * result + (f1070IpB != null ? f1070IpB.hashCode() : 0);
         return result;

@@ -8,7 +8,7 @@
             <column name="F1046_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
         <property name="f1042Code">
-            <column name="F1042_CODE" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F1042_CODE" sql-type="varchar" length="48"/>
         </property>
         <property name="f1050Code">
             <column name="F1050_Code" sql-type="varchar" length="48"/>
@@ -32,7 +32,7 @@
             <column name="F1046_AorB" sql-type="int"/>
         </property>
         <property name="f1046IsVirtual">
-            <column name="F1046_IsVirtual" sql-type="int" not-null="true"/>
+            <column name="F1046_IsVirtual" sql-type="int"/>
         </property>
         <property name="f1046Type">
             <column name="F1046_Type" sql-type="int"/>

@@ -7,7 +7,6 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1056SvcbEntity {
     private String f1056Code;
-    private String f1046Code;
     private String f1056CbName;
     private String f1056Cbid;
     private String f1056MacAddr;
@@ -25,14 +24,6 @@ public class Tb1056SvcbEntity {
 
     public void setF1056Code(String f1056Code) {
         this.f1056Code = f1056Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
     }
 
     public String getF1056CbName() {
@@ -114,7 +105,6 @@ public class Tb1056SvcbEntity {
 
         Tb1056SvcbEntity that = (Tb1056SvcbEntity) o;
 
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1056Appid != null ? !f1056Appid.equals(that.f1056Appid) : that.f1056Appid != null) return false;
         if (f1056CbName != null ? !f1056CbName.equals(that.f1056CbName) : that.f1056CbName != null) return false;
         if (f1056Cbid != null ? !f1056Cbid.equals(that.f1056Cbid) : that.f1056Cbid != null) return false;
@@ -133,7 +123,6 @@ public class Tb1056SvcbEntity {
     @Override
     public int hashCode() {
         int result = f1056Code != null ? f1056Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1056CbName != null ? f1056CbName.hashCode() : 0);
         result = 31 * result + (f1056Cbid != null ? f1056Cbid.hashCode() : 0);
         result = 31 * result + (f1056MacAddr != null ? f1056MacAddr.hashCode() : 0);

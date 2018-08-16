@@ -21,19 +21,19 @@
             <column name="F1026_BYNAME" sql-type="varchar" length="24"/>
         </property>
         <property name="f0008Name">
-            <column name="F0008_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0008_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f0009Name">
-            <column name="F0009_NAME" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F0009_NAME" sql-type="varchar" length="48"/>
         </property>
         <property name="f1026Calcflag">
-            <column name="F1026_CALCFLAG" sql-type="int" not-null="true"/>
+            <column name="F1026_CALCFLAG" sql-type="int"/>
         </property>
         <property name="f1026Picname">
             <column name="F1026_PICNAME" sql-type="varchar" length="96"/>
         </property>
         <property name="f1026Ispdr">
-            <column name="F1026_ISPDR" sql-type="int" not-null="true"/>
+            <column name="F1026_ISPDR" sql-type="int"/>
         </property>
         <property name="f1026Pdrno">
             <column name="F1026_PDRNO" sql-type="int"/>
