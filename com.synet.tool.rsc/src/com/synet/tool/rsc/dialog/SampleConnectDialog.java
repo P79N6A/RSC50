@@ -140,10 +140,10 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 	private void initTableData() {
 		List<String> f1066codes = new ArrayList<>();
-		String f1006CodeA = curSel.getF1006CodeA();
-		String f1006CodeB = curSel.getF1006CodeB();
-		String f1006CodeC = curSel.getF1006CodeC();
-		String[] temp = new String[]{f1006CodeA, f1006CodeB, f1006CodeC};
+//		String f1006CodeA = curSel.getF1006CodeA();
+//		String f1006CodeB = curSel.getF1006CodeB();
+//		String f1006CodeC = curSel.getF1006CodeC();
+		String[] temp = new String[]{};
 		for (String code : temp) {
 			if(!code.isEmpty()) {
 				f1066codes.add(code);
