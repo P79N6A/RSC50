@@ -21,6 +21,9 @@ public interface DBConstants {
 	String PR_GCB 			= "GCB";
 	String PR_POUT 			= "POUT";
 	String PR_RCB 			= "RCB";
+	String PR_SGCB 			= "SGCB";
+	String PR_SG 			= "SG";
+	String PR_SP 			= "SP";
 	
 	// A、B套
 	int SUITE_A = 1;
@@ -29,6 +32,9 @@ public interface DBConstants {
 	int DATA_ST = 1;
 	int DATA_MX = 2;
 	int DATA_STR = 3;
+
+	int DAT_TYP_INT = 1;
+	int DAT_TYP_FLOAT = 2;
 	
 	// 装置类型
 	int IED_PROT 	= 00; 	//通用保护装置
