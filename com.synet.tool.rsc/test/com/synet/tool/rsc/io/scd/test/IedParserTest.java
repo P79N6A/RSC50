@@ -17,13 +17,16 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.parser.GooseParser;
+import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 
  /**
@@ -32,6 +35,9 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
  * @version 1.0, 2018-8-15
  */
 public class IedParserTest {
+	
+	private BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+	private RSCProperties rscp = RSCProperties.getInstance();
 	
 	@Before
 	public void before() {
@@ -48,9 +54,14 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1016StatedataEntity.class);
 			beanDao.deleteAll(Tb1026StringdataEntity.class);
 			beanDao.deleteAll(Tb1046IedEntity.class);
+			
 			beanDao.deleteAll(Tb1055GcbEntity.class);
 			beanDao.deleteAll(Tb1056SvcbEntity.class);
 			beanDao.deleteAll(Tb1061PoutEntity.class);
+
+			beanDao.deleteAll(Tb1054RcbEntity.class);
+			beanDao.deleteAll(Tb1058MmsfcdaEntity.class);
+			
 		}
 	}
 
@@ -59,9 +70,6 @@ public class IedParserTest {
 //		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 //		assertNotNull(iedNds);
 //		assertTrue(iedNds.size() > 1);
-
-		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
-		RSCProperties rscp = RSCProperties.getInstance();
 
 		Tb1046IedEntity ied = new Tb1046IedEntity();
 		ied.setF1046Name("PT1101A");
@@ -75,14 +83,12 @@ public class IedParserTest {
 		assertTrue(items.size() == cbs.size());
 		List<Tb1061PoutEntity> pouts = (List<Tb1061PoutEntity>) beanDao.getAll(Tb1061PoutEntity.class);
 		assertTrue(pouts.size() > 0);
+		List<?> sts = beanDao.getAll(Tb1016StatedataEntity.class);
+		assertTrue(sts.size() > 0);
 	}
 
 	@Test
 	public void testSmvParser() {
-
-		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
-		RSCProperties rscp = RSCProperties.getInstance();
-
 		Tb1046IedEntity ied = new Tb1046IedEntity();
 		ied.setF1046Name("PE101_DPU08");
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
@@ -95,6 +101,32 @@ public class IedParserTest {
 		assertTrue(items.size() == cbs.size());
 		List<Tb1061PoutEntity> pouts = (List<Tb1061PoutEntity>) beanDao.getAll(Tb1061PoutEntity.class);
 		assertTrue(pouts.size() > 0);
+		List<?> agls = beanDao.getAll(Tb1006AnalogdataEntity.class);
+		assertTrue(agls.size() > 0);
+	}
+	
+	@Test
+	public void testRcbParser() {
+		Tb1046IedEntity ied = new Tb1046IedEntity();
+		ied.setF1046Name("PT1101A");
+		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
+		beanDao.insert(ied);
+		RcbParser iedSubParser = new RcbParser(ied);
+		iedSubParser.parse();
+		List<Tb1054RcbEntity> items = iedSubParser.getItems();
+		assertTrue(items.size() > 0);
+		List<Tb1054RcbEntity> cbs = (List<Tb1054RcbEntity>) beanDao.getAll(Tb1054RcbEntity.class);
+		assertTrue(items.size() == cbs.size());
+		List<Tb1058MmsfcdaEntity> pouts = (List<Tb1058MmsfcdaEntity>) beanDao.getAll(Tb1058MmsfcdaEntity.class);
+		assertTrue(pouts.size() > 0);
+		checkDatas();
+	}
+	
+	private void checkDatas() {
+		List<?> sts = beanDao.getAll(Tb1016StatedataEntity.class);
+		List<?> agls = beanDao.getAll(Tb1006AnalogdataEntity.class);
+		List<?> strs = beanDao.getAll(Tb1026StringdataEntity.class);
+		assertTrue(sts.size() + agls.size() + strs.size() > 0);
 	}
 }
 

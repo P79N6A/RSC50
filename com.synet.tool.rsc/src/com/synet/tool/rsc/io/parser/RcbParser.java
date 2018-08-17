@@ -67,17 +67,17 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						String fc = fcdaEl.attributeValue("fc");
 						if ("ST".equals(fc)) {
 							mmsFcda.setF1058DataType(DBConstants.DATA_ST);
-							mmsFcda.setDataCode(addStatedata(fcdaEl, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
+							mmsFcda.setDataCode(addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
-							mmsFcda.setDataCode(addAlgdata(fcdaEl, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
+							mmsFcda.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
 						}
 						i++;
 					}
 				}
 			}
 		}
-		saveItems();
+		saveAll();
 	}
 
 }

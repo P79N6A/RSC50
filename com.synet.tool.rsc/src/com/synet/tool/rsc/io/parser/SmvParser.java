@@ -47,7 +47,7 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 			smv.setTb1061PoutsByF1056Code(pouts);
 			parsePOuts(cbNd, smv.getF1056Code(), pouts);
 		}
-		saveItems();
+		saveAll();
 	}
 
 }

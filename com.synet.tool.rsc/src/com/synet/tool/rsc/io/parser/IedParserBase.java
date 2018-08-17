@@ -52,14 +52,19 @@ public abstract class IedParserBase<T> implements IIedParser {
 		return items;
 	}
 	
-	protected void saveItems() {
+	private void saveItems() {
 		beanDao.insertBatch(items);
 	}
 
-	protected void saveData() {
+	private void saveData() {
 		beanDao.insertBatch(agls);
 		beanDao.insertBatch(sts);
 		beanDao.insertBatch(strs);
+	}
+	
+	protected void saveAll() {
+		saveItems();
+		saveData();
 	}
 
 	protected void parsePOuts(Element cbNd, String cbCode, List<Tb1061PoutEntity> pouts) {
@@ -77,18 +82,16 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String fc = fcdaEl.attributeValue("fc");
 			if ("ST".equals(fc)) {
 				pout.setF1061Type(DBConstants.DATA_ST);
-				pout.setDataCode(addStatedata(fcdaEl, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
+				pout.setDataCode(addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
 			} else {
 				pout.setF1061Type(DBConstants.DATA_MX);
-				pout.setDataCode(addAlgdata(fcdaEl, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
+				pout.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
 			}
 		}
-		saveData();
 	}
 	
-	protected String addStatedata(Element fcdaEl, int f1011No) {
+	protected String addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
-		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
 		stdata.setF1016Code(dataCode);
 		stdata.setF1016Desc(fcdaDesc);
@@ -99,9 +102,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 		return dataCode;
 	}
 	
-	protected String addAlgdata(Element fcdaEl, int f1011No) {
+	protected String addAlgdata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
-		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 		Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
 		algdata.setF1006Code(dataCode);
 		algdata.setF1006Desc(fcdaDesc);
@@ -112,9 +114,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 		return dataCode;
 	}
 	
-	protected String addStringdata(Element fcdaEl, int f1011No) {
+	protected String addStringdata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_String);
-		String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 		Tb1026StringdataEntity strdata = new Tb1026StringdataEntity();
 		strdata.setF1026Code(dataCode);
 		strdata.setF1026Desc(fcdaDesc);

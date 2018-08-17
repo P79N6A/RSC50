@@ -47,7 +47,7 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 			gcb.setTb1061PoutsByF1055Code(pouts);
 			parsePOuts(gseNd, gcb.getF1055Code(), pouts);
 		}
-		saveItems();
+		saveAll();
 	}
 
 }

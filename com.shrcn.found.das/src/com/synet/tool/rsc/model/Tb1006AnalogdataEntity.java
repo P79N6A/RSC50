@@ -31,7 +31,6 @@ public class Tb1006AnalogdataEntity {
     private int f1006Deadtime;
     private int f1006Alarmlevel;
     private Integer f1006Savetype;
-    private Tb1046IedEntity tb1046IedByParentCode;
 
     public String getF1006Code() {
         return f1006Code;
@@ -311,11 +310,4 @@ public class Tb1006AnalogdataEntity {
         return result;
     }
 
-    public Tb1046IedEntity getTb1046IedByParentCode() {
-        return tb1046IedByParentCode;
-    }
-
-    public void setTb1046IedByParentCode(Tb1046IedEntity tb1046IedByParentCode) {
-        this.tb1046IedByParentCode = tb1046IedByParentCode;
-    }
 }
