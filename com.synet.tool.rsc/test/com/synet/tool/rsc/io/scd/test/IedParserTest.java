@@ -16,9 +16,11 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.io.SCDImporter;
 import com.synet.tool.rsc.io.parser.DsParameterParser;
 import com.synet.tool.rsc.io.parser.DsSettingParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
+import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
@@ -33,6 +35,9 @@ import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 
  /**
  * 
@@ -70,7 +75,12 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1057SgcbEntity.class);
 			beanDao.deleteAll(Tb1059SgfcdaEntity.class);
 			
+			beanDao.deleteAll(Tb1065LogicallinkEntity.class);
+			beanDao.deleteAll(Tb1063CircuitEntity.class);
+			beanDao.deleteAll(Tb1062PinEntity.class);
 		}
+		
+		new SCDImporter(scdPath).execute();
 	}
 
 	@Test
@@ -166,5 +176,24 @@ public class IedParserTest {
 		List<Tb1060SpfcdaEntity> cbs = (List<Tb1060SpfcdaEntity>) beanDao.getAll(Tb1060SpfcdaEntity.class);
 		assertTrue(items.size() == cbs.size());
 	}
+	
+	@Test
+	public void testLogicLinkParser() {
+//		Tb1046IedEntity ied = new Tb1046IedEntity();
+//		ied.setF1046Name("PT1101A");
+//		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
+//		beanDao.insert(ied);
+//		LogicLinkParser iedSubParser = new LogicLinkParser(ied);
+//		iedSubParser.parse();
+//		List<Tb1065LogicallinkEntity> items = iedSubParser.getItems();
+//		assertTrue(items.size() > 0);
+		List<Tb1065LogicallinkEntity> cbs = (List<Tb1065LogicallinkEntity>) beanDao.getAll(Tb1065LogicallinkEntity.class);
+		assertTrue(cbs.size() > 0);
+		List<Tb1063CircuitEntity> cts = (List<Tb1063CircuitEntity>) beanDao.getAll(Tb1063CircuitEntity.class);
+		assertTrue(cts.size() > 0);
+		List<Tb1062PinEntity> pins = (List<Tb1062PinEntity>) beanDao.getAll(Tb1062PinEntity.class);
+		assertTrue(pins.size() > 0);
+	}
+	
 }
 

@@ -253,8 +253,6 @@ public class IedInfoDao {
 				el.addAttribute("cbName", cbName);
 				el.addAttribute("cbId", cbEl.attributeValue(cbId));
 				el.addAttribute("dsRef", iedName + ldInst+ "/LLN0$"+ dsName);
-				el.addAttribute("dsName", dsEl.attributeValue("name")); 
-				el.addAttribute("dsDesc", dsEl.attributeValue("desc")); 
 				Element addEl = commEl.element("Address");
 				el.addAttribute("appID", CommunicationDAO.getTypeValue(addEl, "APPID"));
 				el.addAttribute("mac", CommunicationDAO.getTypeValue(addEl, "MAC-Address"));
@@ -263,12 +261,16 @@ public class IedInfoDao {
 				if (cbId.equals("appID")) {
 					Element maxEl = commEl.element("MaxTime");
 					Element minEl = commEl.element("MinTime");
-					el.addAttribute("T0", StringUtil.nullToEmpty(maxEl.getText()));
-					el.addAttribute("T1", StringUtil.nullToEmpty(minEl.getText()));
+					el.addAttribute("T0", (maxEl==null) ? "0" : StringUtil.nullToEmpty(maxEl.getText()));
+					el.addAttribute("T1", (minEl==null) ? "0" : StringUtil.nullToEmpty(minEl.getText()));
 				} else {
 					el.addAttribute("asduNum", cbEl.attributeValue("nofASDU"));
 				}
 				el.addAttribute("confRev", cbEl.attributeValue("confRev"));
+				if (dsEl == null)
+					continue;
+				el.addAttribute("dsName", dsEl.attributeValue("name")); 
+				el.addAttribute("dsDesc", dsEl.attributeValue("desc")); 
 				List<Element> fcdaEls = dsEl.elements("FCDA");
 				int i = 0;
 				for (Element fcdaEl : fcdaEls) {
@@ -276,7 +278,7 @@ public class IedInfoDao {
 					fcda.setName("fcda");
 					String lnType = ExportUtil.getLnType(fcda.attributeValue("prefix"), fcda.attributeValue("lnClass"), fcda.attributeValue("lnInst"), ldEl);
 					fcda.addAttribute("lnType", lnType);
-					fcda.addAttribute("ref", SclUtil.getCfgRef(iedName, fcda));
+					fcda.addAttribute("ref", SclUtil.getFcdaRef(fcda));
 					fcda.addAttribute("idx", String.valueOf(i++));
 					el.add(fcda);
 				}

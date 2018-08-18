@@ -63,7 +63,7 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						mmsFcda.setTb1054RcbByF1054Code(rcb);
 						mmsFcda.setF1058Index(i);
 						mmsFcda.setF1058Desc(fcdaDesc);
-						mmsFcda.setF1058RefAddr(SclUtil.getCfgRef(iedName, fcdaEl));
+						mmsFcda.setF1058RefAddr(SclUtil.getFcdaRef(fcdaEl));
 						String fc = fcdaEl.attributeValue("fc");
 						if ("ST".equals(fc)) {
 							mmsFcda.setF1058DataType(DBConstants.DATA_ST);

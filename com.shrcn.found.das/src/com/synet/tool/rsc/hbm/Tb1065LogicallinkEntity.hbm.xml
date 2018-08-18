@@ -21,5 +21,10 @@
         <many-to-one name="tb1046IedByF1046CodeIedSend" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE_IEDSend" not-null="true"/>
         </many-to-one>
+  		<set name="tb1063CircuitsByF1065Code" inverse="true" cascade="save-update"
+        	table="tb1063_circuit" lazy="false">
+        	<key column="F1065_CODE"></key>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1063CircuitEntity" />
+        </set>
     </class>
 </hibernate-mapping>
