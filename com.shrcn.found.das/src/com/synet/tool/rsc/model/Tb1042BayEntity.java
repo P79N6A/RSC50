@@ -1,8 +1,8 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
 
 /**
- * 间隔
  * Created by chunc on 2018/8/7.
  */
 public class Tb1042BayEntity {
@@ -15,6 +15,7 @@ public class Tb1042BayEntity {
     private Integer f1042DevType;
     private Integer f1042IedSolution;
     private Tb1041SubstationEntity tb1041SubstationByF1041Code;
+    private Set<Tb1043EquipmentEntity> tb1043EquipmentsByF1042Code;
 
     public String getF1042Code() {
         return f1042Code;
@@ -120,5 +121,13 @@ public class Tb1042BayEntity {
 
     public void setTb1041SubstationByF1041Code(Tb1041SubstationEntity tb1041SubstationByF1041Code) {
         this.tb1041SubstationByF1041Code = tb1041SubstationByF1041Code;
+    }
+
+    public Set<Tb1043EquipmentEntity> getTb1043EquipmentsByF1042Code() {
+        return tb1043EquipmentsByF1042Code;
+    }
+
+    public void setTb1043EquipmentsByF1042Code(Set<Tb1043EquipmentEntity> tb1043EquipmentsByF1042Code) {
+        this.tb1043EquipmentsByF1042Code = tb1043EquipmentsByF1042Code;
     }
 }

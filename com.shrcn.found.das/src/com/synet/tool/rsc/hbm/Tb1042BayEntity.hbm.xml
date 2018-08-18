@@ -29,5 +29,9 @@
         <many-to-one name="tb1041SubstationByF1041Code" class="com.synet.tool.rsc.model.Tb1041SubstationEntity">
             <column name="F1041_CODE" not-null="true"/>
         </many-to-one>
+        <set name="tb1043EquipmentsByF1042Code" inverse="true" cascade="save-update" table="tb1043_equipment">
+        	<key column="F1042_CODE"></key>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" />
+        </set>
     </class>
 </hibernate-mapping>
