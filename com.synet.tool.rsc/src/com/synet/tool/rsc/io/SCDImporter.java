@@ -19,13 +19,28 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.parser.DsParameterParser;
+import com.synet.tool.rsc.io.parser.DsSettingParser;
 import com.synet.tool.rsc.io.parser.IIedParser;
+import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1054RcbEntity;
+import com.synet.tool.rsc.model.Tb1055GcbEntity;
+import com.synet.tool.rsc.model.Tb1056SvcbEntity;
+import com.synet.tool.rsc.model.Tb1057SgcbEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
@@ -44,6 +59,24 @@ public class SCDImporter implements IImporter {
 	public SCDImporter(String scdPath) {
 		this.scdPath = scdPath;
 		FcdaDAO.getInstance().clear();
+		beanDao.deleteAll(Tb1006AnalogdataEntity.class);
+		beanDao.deleteAll(Tb1016StatedataEntity.class);
+		beanDao.deleteAll(Tb1026StringdataEntity.class);
+		beanDao.deleteAll(Tb1046IedEntity.class);
+		
+		beanDao.deleteAll(Tb1055GcbEntity.class);
+		beanDao.deleteAll(Tb1056SvcbEntity.class);
+		beanDao.deleteAll(Tb1061PoutEntity.class);
+
+		beanDao.deleteAll(Tb1054RcbEntity.class);
+		beanDao.deleteAll(Tb1058MmsfcdaEntity.class);
+
+		beanDao.deleteAll(Tb1057SgcbEntity.class);
+		beanDao.deleteAll(Tb1059SgfcdaEntity.class);
+		
+		beanDao.deleteAll(Tb1065LogicallinkEntity.class);
+		beanDao.deleteAll(Tb1063CircuitEntity.class);
+		beanDao.deleteAll(Tb1062PinEntity.class);
 	}
 
 	@Override
@@ -83,6 +116,8 @@ public class SCDImporter implements IImporter {
 			pmap.put("goose", new GooseParser(ied));
 			pmap.put("smv", new SmvParser(ied));
 			pmap.put("rcb", new RcbParser(ied));
+			pmap.put("set", new DsSettingParser(ied));
+			pmap.put("param", new DsParameterParser(ied));
 			for (IIedParser parser : pmap.values()) {
 				parser.parse();
 			}
@@ -113,6 +148,11 @@ public class SCDImporter implements IImporter {
 				}
 			}
 			beanDao.update(ied);
+		}
+		for (Element iedNd : iedNds) {
+			String iedName = iedNd.attributeValue("name");
+			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
+			new LogicLinkParser(ied).parse();
 		}
 	}
 

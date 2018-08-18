@@ -59,25 +59,27 @@ public class DsSettingParser extends IedParserBase<Tb1057SgcbEntity> {
 				sgFcda.setTb1057SgcbByF1057Code(sgcb);
 				sgFcda.setF1059Index(i);
 				sgFcda.setF1059Desc(fcdaDesc);
-				sgFcda.setF1059RefAddr(SclUtil.getCfgRef(iedName, fcdaEl));
+				sgFcda.setF1059RefAddr(SclUtil.getFcdaRef(fcdaEl));
 				sgFcda.setF1059DataType(DBConstants.DAT_TYP_FLOAT);		// TODO 待定
 				String doName = fcdaEl.attributeValue("doName");
 				Element doEl = DOM4JNodeHelper.selectSingleNode(elLN, "./DOI[@name='" + doName + "']");
-				String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
-				String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
-				String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
-				String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
-				if (!StringUtil.isEmpty(step)) {
-					sgFcda.setF1059StepSize(Float.valueOf(step));
-				}
-				if (!StringUtil.isEmpty(min)) {
-					sgFcda.setF1059ValueMin(Float.valueOf(min));
-				}
-				if (!StringUtil.isEmpty(max)) {
-					sgFcda.setF1059ValueMax(Float.valueOf(max));
-				}
-				if (!StringUtil.isEmpty(units)) {
-					sgFcda.setF1059Unit(units);
+				if (doEl != null) {
+					String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
+					String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
+					String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
+					String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
+					if (!StringUtil.isEmpty(step)) {
+						sgFcda.setF1059StepSize(Float.valueOf(step));
+					}
+					if (!StringUtil.isEmpty(min)) {
+						sgFcda.setF1059ValueMin(Float.valueOf(min));
+					}
+					if (!StringUtil.isEmpty(max)) {
+						sgFcda.setF1059ValueMax(Float.valueOf(max));
+					}
+					if (!StringUtil.isEmpty(units)) {
+						sgFcda.setF1059Unit(units);
+					}
 				}
 				i++;
 			}

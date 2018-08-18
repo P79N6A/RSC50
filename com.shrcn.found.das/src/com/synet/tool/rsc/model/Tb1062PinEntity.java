@@ -6,12 +6,10 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1062PinEntity {
     private String f1062Code;
-    private String f1046Code;
     private String f1062RefAddr;
-    private String f1020No;
+    private int f1062Type;
     private String f1062Desc;
     private int f1062IsUsed;
-    private String f1064Code;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
 
@@ -23,14 +21,6 @@ public class Tb1062PinEntity {
         this.f1062Code = f1062Code;
     }
 
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
-    }
-
     public String getF1062RefAddr() {
         return f1062RefAddr;
     }
@@ -39,15 +29,15 @@ public class Tb1062PinEntity {
         this.f1062RefAddr = f1062RefAddr;
     }
 
-    public String getF1020No() {
-        return f1020No;
-    }
+	public int getF1062Type() {
+		return f1062Type;
+	}
 
-    public void setF1020No(String f1020No) {
-        this.f1020No = f1020No;
-    }
+	public void setF1062Type(int f1062Type) {
+		this.f1062Type = f1062Type;
+	}
 
-    public String getF1062Desc() {
+	public String getF1062Desc() {
         return f1062Desc;
     }
 
@@ -63,14 +53,6 @@ public class Tb1062PinEntity {
         this.f1062IsUsed = f1062IsUsed;
     }
 
-    public String getF1064Code() {
-        return f1064Code;
-    }
-
-    public void setF1064Code(String f1064Code) {
-        this.f1064Code = f1064Code;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,12 +61,10 @@ public class Tb1062PinEntity {
         Tb1062PinEntity that = (Tb1062PinEntity) o;
 
         if (f1062IsUsed != that.f1062IsUsed) return false;
-        if (f1020No != null ? !f1020No.equals(that.f1020No) : that.f1020No != null) return false;
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
+        if (f1062Type != that.f1062Type) return false;
         if (f1062Code != null ? !f1062Code.equals(that.f1062Code) : that.f1062Code != null) return false;
         if (f1062Desc != null ? !f1062Desc.equals(that.f1062Desc) : that.f1062Desc != null) return false;
         if (f1062RefAddr != null ? !f1062RefAddr.equals(that.f1062RefAddr) : that.f1062RefAddr != null) return false;
-        if (f1064Code != null ? !f1064Code.equals(that.f1064Code) : that.f1064Code != null) return false;
 
         return true;
     }
@@ -92,12 +72,10 @@ public class Tb1062PinEntity {
     @Override
     public int hashCode() {
         int result = f1062Code != null ? f1062Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1062RefAddr != null ? f1062RefAddr.hashCode() : 0);
-        result = 31 * result + (f1020No != null ? f1020No.hashCode() : 0);
         result = 31 * result + (f1062Desc != null ? f1062Desc.hashCode() : 0);
         result = 31 * result + f1062IsUsed;
-        result = 31 * result + (f1064Code != null ? f1064Code.hashCode() : 0);
+        result = 31 * result + f1062Type;
         return result;
     }
 

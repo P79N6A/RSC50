@@ -24,6 +24,9 @@ public interface DBConstants {
 	String PR_SGCB 			= "SGCB";
 	String PR_SG 			= "SG";
 	String PR_SP 			= "SP";
+	String PR_LOGICLINK 	= "LOGICLINK";
+	String PR_CIRCUIT 		= "CIRCUIT";
+	String PR_PIN 		= "PIN";
 	
 	// A、B套
 	int SUITE_A = 1;
@@ -33,8 +36,13 @@ public interface DBConstants {
 	int DATA_MX = 2;
 	int DATA_STR = 3;
 
+	// 虚端子数据类型
 	int DAT_TYP_INT = 1;
 	int DAT_TYP_FLOAT = 2;
+	
+	// 逻辑链路类型
+	int LINK_GOOSE = 1;
+	int LINK_SMV = 2;
 	
 	// 装置类型
 	int IED_PROT 	= 00; 	//通用保护装置
@@ -69,6 +77,17 @@ public interface DBConstants {
 	int DAT_TEMP	 	= 103;	//装置监测温度
 	int DAT_WK_VOL	 	= 104;	//装置工作电压
 	int DAT_PORT_POWER	 	= 105;	//光口光强
+
+	// 虚回路类型
+	int CIRCUIT_OPEN = 01;	//跳闸回路
+	int CIRCUIT_CLOSE = 02;	//重合闸回路
+	int CIRCUIT_FIAL_START = 03;	//启动失灵回路
+	int CIRCUIT_LBRK = 04;	//联跳回路
+	int CIRCUIT_LOCK = 05;	//闭锁回路
+	int CIRCUIT_I = 06;	//电流采样回路
+	int CIRCUIT_U = 07;	//电压采样回路
+	int CIRCUIT_ST = 8;	//遥信开入
+	int CIRCUIT_OTHER = 9;	//其它
 
 }
 

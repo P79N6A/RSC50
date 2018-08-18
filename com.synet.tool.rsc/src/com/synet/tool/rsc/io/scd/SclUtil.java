@@ -26,6 +26,10 @@ public class SclUtil {
 	 * @return
 	 */
 	public static String getCfgRef(String iedName, Element el) {
+		return iedName + getFcdaRef(el);
+	}
+	
+	public static String getFcdaRef(Element el) {
 		String ldInst = el.attributeValue("ldInst");
 		String prefix = el.attributeValue("prefix");
 		String lnClass = el.attributeValue("lnClass");
@@ -34,7 +38,7 @@ public class SclUtil {
 		String daName = el.attributeValue("daName");
 		String fc = el.attributeValue("fc");
 		StringBuffer sb = new StringBuffer();
-		sb.append(iedName + ldInst + "/");
+		sb.append(ldInst + "/");
 		if (!StringUtil.isEmpty(prefix))
 			sb.append(prefix);
 		sb.append(lnClass);
