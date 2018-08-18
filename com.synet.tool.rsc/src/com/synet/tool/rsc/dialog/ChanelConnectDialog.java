@@ -23,8 +23,6 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
-import com.synet.tool.rsc.service.EnumIedType;
-import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -60,10 +58,12 @@ public class ChanelConnectDialog extends WrappedDialog{
 		super(parentShell);
 	}
 	
-	public ChanelConnectDialog(Shell parentShell, String curEntryName, Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
+	public ChanelConnectDialog(Shell parentShell, String curEntryName, 
+			Tb1067CtvtsecondaryEntity ctvtsecondaryEntity, List<Tb1046IedEntity> iedEntities) {
 		super(parentShell);
 		this.curEntryName = curEntryName;
 		this.curSel = ctvtsecondaryEntity;
+		this.iedEntities = iedEntities;
 		
 	}
 	
@@ -111,9 +111,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 	}
 	
 	private void initComboData() {
-		int[] iedTypes = EnumIedType.UNIT_DEVICE.getTypes();
-		IedEntityService iedService = new IedEntityService();
-		iedEntities = iedService.getIedEntityByTypes(iedTypes);
 		if(iedEntities.size() < 1) {
 			comboDevItems = new String[]{"装置为空"};
 		} else {
@@ -153,9 +150,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 */
 	private void initTableData() {
 		//测试用
-		if(curSel == null) {
-			return;
-		}
+//		if(curSel == null) {
+//			return;
+//		}
 		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA1());
 		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA2());
 		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeB1());

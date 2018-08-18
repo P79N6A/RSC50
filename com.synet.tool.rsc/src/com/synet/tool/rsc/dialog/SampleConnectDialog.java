@@ -25,8 +25,6 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
-import com.synet.tool.rsc.service.EnumIedType;
-import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -60,11 +58,12 @@ public class SampleConnectDialog extends WrappedDialog {
 		super(parentShell);
 	}
 
-	public SampleConnectDialog(Shell defaultShell, String curEntryName, Tb1066ProtmmxuEntity protmmxuEntity) {
+	public SampleConnectDialog(Shell defaultShell, String curEntryName, 
+			Tb1066ProtmmxuEntity protmmxuEntity, List<Tb1046IedEntity> iedEntities) {
 		super(defaultShell);
 		this.curEntryName = curEntryName;
 		this.curSel = protmmxuEntity;
-		comboItems = new String[]{"智能终端1"};
+		this.iedEntities = iedEntities;
 	}
 	
 	@Override
@@ -114,9 +113,6 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 	private void initComboData() {
-		IedEntityService iedEntityService  = new IedEntityService();
-		int[] types = EnumIedType.UNIT_DEVICE.getTypes();
-		iedEntities = iedEntityService.getIedEntityByTypes(types);
 		if(!DataUtils.notNull(iedEntities)) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -153,9 +149,9 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 	private void initTableData() {
 		//测试用
-		if(curSel == null) {
-			return;
-		}
+//		if(curSel == null) {
+//			return;
+//		}
 		tableProtctSample.addRow(curSel.getF1006CodeA());
 		tableProtctSample.addRow(curSel.getF1006CodeB());
 		tableProtctSample.addRow(curSel.getF1006CodeC());

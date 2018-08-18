@@ -35,7 +35,6 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
-import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
@@ -154,9 +153,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		EditorConfigData data = (EditorConfigData)super.getInput().getData();
 		this.curEntryName = data.getIedName();
 		bayEntity = (Tb1042BayEntity) data.getData();
-		int[] iedTypes = EnumIedType.UNIT_DEVICE.getTypes();
 		IedEntityService iedService = new IedEntityService();
-		iedEntities = iedService.getIedEntityByTypes(iedTypes);
+		iedEntities = iedService.getIedEntityByBay(bayEntity.getF1042Code());
 		if(iedEntities.size() < 1) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -178,20 +176,22 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				if(object == btnChanelConnect) {
 					Object obj = tableCtvtsecondary.getSelection();
 					if(obj == null) {
-//						return;
+						return;
 					}
 					Tb1067CtvtsecondaryEntity ctvtsecondaryEntity = (Tb1067CtvtsecondaryEntity) obj;
-					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), curEntryName, ctvtsecondaryEntity);
+					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), 
+							curEntryName, ctvtsecondaryEntity, iedEntities);
 					if(chnDialog.open() == IDialogConstants.OK_ID) {
 						//TODO 设置虚端子
 					}
 				} else if(object == btnSampleConnect) {
 					Object obj = tableProtectSample.getSelection();
 					if(obj == null) {
-//						return;
+						return;
 					}
 					Tb1066ProtmmxuEntity protmmxuEntity = (Tb1066ProtmmxuEntity) obj;
-					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(), curEntryName, protmmxuEntity);
+					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
+							curEntryName, protmmxuEntity, iedEntities);
 					if(sampleDialog.open() == IDialogConstants.OK_ID) {
 					//TODO 设置模拟量	
 					}

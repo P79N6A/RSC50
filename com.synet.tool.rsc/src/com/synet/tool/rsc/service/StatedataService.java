@@ -41,7 +41,7 @@ public class StatedataService extends BaseService {
 		@SuppressWarnings("unchecked")
 		List<Tb1016StatedataEntity> statedataEntities = 
 		(List<Tb1016StatedataEntity>) hqlDao.selectInObjects(
-				Tb1016StatedataEntity.class, "f1043Code", equitCodes);
+				Tb1016StatedataEntity.class, "parentCode", equitCodes);
 		return statedataEntities;
 
 	}
