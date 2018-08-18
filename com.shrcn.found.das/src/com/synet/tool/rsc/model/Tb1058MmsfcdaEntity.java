@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.model;
 
 /**
+ * 报告FCDA点
  * Created by chunc on 2018/8/7.
  */
 public class Tb1058MmsfcdaEntity {

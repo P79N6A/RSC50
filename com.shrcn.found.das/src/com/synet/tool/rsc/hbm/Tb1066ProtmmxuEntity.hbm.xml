@@ -14,9 +14,8 @@
         <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity">
             <column name="F1043_CODE" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1067CtvtsecondaryByF1067Code" class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity">
-            <column name="F1067_CODE"/>
-        </many-to-one>
+        <one-to-one name="tb1067CtvtsecondaryByF1067Code" constrained="true">
+        </one-to-one>
         <many-to-one name="tb1046IedByF1046CodeMu" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_Code_MU"/>
         </many-to-one>

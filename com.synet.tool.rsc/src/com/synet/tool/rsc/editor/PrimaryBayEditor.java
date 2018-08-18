@@ -55,7 +55,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private Button btnChanelConnect;
 	private Button btnSampleConnect;
 	private String curEntryName;
-	private Button btnMove;
+	private Button btnAdd;
 	private String[] comboItems;
 	private Button btnSearch;
 	private DevKTable tableCtvtsecondary;
@@ -70,6 +70,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private StatedataService statedataService;
 	private List<Tb1016StatedataEntity> tableSluiceStatuData;
 	private Text textDesc;
+	private Button btnDel;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -122,7 +123,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		SwtUtil.createLabel(comLeft, "			", gdlbSpace_2);
 		tableSwitchStatus = TableFactory.getSwitchStatusTable(comLeft);
 		tableSwitchStatus.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		
+		GridData gridBtnCom = new GridData(41, SWT.DEFAULT);
+		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
+		comBtn.setLayout(SwtUtil.getGridLayout(1));
+		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		
 		//开关刀闸状态-右侧
 		Composite comRight = SwtUtil.createComposite(compSwitch, gridData, 1);
@@ -172,25 +178,24 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				if(object == btnChanelConnect) {
 					Object obj = tableCtvtsecondary.getSelection();
 					if(obj == null) {
-						return;
+//						return;
 					}
 					Tb1067CtvtsecondaryEntity ctvtsecondaryEntity = (Tb1067CtvtsecondaryEntity) obj;
 					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), curEntryName, ctvtsecondaryEntity);
-					chnDialog.open();
 					if(chnDialog.open() == IDialogConstants.OK_ID) {
 						//TODO 设置虚端子
 					}
 				} else if(object == btnSampleConnect) {
 					Object obj = tableProtectSample.getSelection();
 					if(obj == null) {
-						return;
+//						return;
 					}
 					Tb1066ProtmmxuEntity protmmxuEntity = (Tb1066ProtmmxuEntity) obj;
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(), curEntryName, protmmxuEntity);
 					if(sampleDialog.open() == IDialogConstants.OK_ID) {
 					//TODO 设置模拟量	
 					}
-				} else if(object == btnMove) {
+				} else if(object == btnAdd) {
 					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
 					if(statedataEntity != null) {
 						//找到1043
@@ -198,6 +203,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 						Tb1043EquipmentEntity res = equipmentService.getEquipmentByStateData(statedataEntity);
 						if(res != null) {
 							tableSwitchStatus.addRow(res);
+							tableSluiceStatus.removeSelected();
+							tableSluiceStatus.refresh();
+							tableSwitchStatus.refresh();
 						}
 					}
 					tableSwitchStatus.getTable().layout();
@@ -216,12 +224,23 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					tableSluiceStatuData = getStateDataByIed(iedEntity);
 					tableSluiceStatus.setInput(tableSluiceStatuData);
 					tableSluiceStatus.getTable().layout();
+				} else if(object == btnDel) {
+					Tb1043EquipmentEntity equipmentEntity = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
+					if(equipmentEntity == null) {
+						return;
+					}
+					Tb1016StatedataEntity statedataEntity = equipmentEntity.getTb1016StatedataEntity();
+					tableSluiceStatus.addRow(statedataEntity);
+					tableSwitchStatus.removeSelected();
+					tableSwitchStatus.refresh();
+					tableSluiceStatus.refresh();
 				}
 			}
 		};
+		btnDel.addSelectionListener(sleListener);
 		btnChanelConnect.addSelectionListener(sleListener);
 		btnSampleConnect.addSelectionListener(sleListener);
-		btnMove.addSelectionListener(sleListener);
+		btnAdd.addSelectionListener(sleListener);
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
 	}
@@ -256,7 +275,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
 		ProtmmxuService protmmxuService = new ProtmmxuService();
 		//查找互感器集合下关联的所有保护采样
-		List<Tb1066ProtmmxuEntity> protmmxuEntities = protmmxuService.getProtmmxuByEquEntity(entities);
+		List<Tb1066ProtmmxuEntity> protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
 		tableProtectSample.setInput(protmmxuEntities);
 		//初始化开关刀闸状态右表
 		statedataService = new StatedataService();

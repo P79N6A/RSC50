@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.app.WrappedDialog;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -31,11 +32,16 @@ import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
 
+/**
+ * 采样关联
+ * @author Administrator
+ *
+ */
 public class SampleConnectDialog extends WrappedDialog {
 
 	private String curEntryName;
 	private DevKTable tableProtctSample;
-	private Button btnMove;
+	private Button btnAdd;
 	private Button btnSearch;
 	private DevKTable tableSample;
 	private String[] comboItems;
@@ -48,6 +54,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	private List<Tb1006AnalogdataEntity> analogdataEntities;
 	private Text textDesc;
 	private List<Tb1006AnalogdataEntity> tableData;
+	private Button btnDel;
 	
 	public SampleConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -76,7 +83,13 @@ public class SampleConnectDialog extends WrappedDialog {
 		
 		tableProtctSample = TableFactory.getProtAnalogTable(comLeft);
 		tableProtctSample.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		
+		GridData gridBtnCom = new GridData(41, SWT.DEFAULT);
+		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
+		comBtn.setLayout(SwtUtil.getGridLayout(1));
+		
+		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
 		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(3));
@@ -139,19 +152,14 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 	private void initTableData() {
-		List<String> f1066codes = new ArrayList<>();
-//		String f1006CodeA = curSel.getF1006CodeA();
-//		String f1006CodeB = curSel.getF1006CodeB();
-//		String f1006CodeC = curSel.getF1006CodeC();
-		String[] temp = new String[]{};
-		for (String code : temp) {
-			if(!code.isEmpty()) {
-				f1066codes.add(code);
-			}
+		//测试用
+		if(curSel == null) {
+			return;
 		}
-		//根据1006codes,查找1006
-		List<Tb1006AnalogdataEntity> analogdataEntities = analogdataService.getAnologByCodes(f1066codes);
-		tableProtctSample.setInput(analogdataEntities);
+		tableProtctSample.addRow(curSel.getF1006CodeA());
+		tableProtctSample.addRow(curSel.getF1006CodeB());
+		tableProtctSample.addRow(curSel.getF1006CodeC());
+		tableProtctSample.getTable().layout();
 	}
 	
 	
@@ -176,9 +184,9 @@ public class SampleConnectDialog extends WrappedDialog {
 					analogdataEntities = getAnalogByIed(curSelIed);
 					tableSample.setInput(analogdataEntities);
 					tableSample.getTable().layout();
-				} else if(obj == btnMove) {
+				} else if(obj == btnAdd) {
 					Object tableData = tableSample.getSelection();
-					if(tableData != null) {
+					if(tableData != null && tableProtctSample.getItemCount() < 4) {
 						tableProtctSample.addRow(tableData);
 					}
 					tableProtctSample.getTable().layout();
@@ -192,12 +200,20 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					tableSample.setInput(searchRes);
 					tableSample.getTable().layout();
+				} else if(obj == btnDel) {
+					Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) tableProtctSample.getSelection();
+					if(analogdataEntity == null) {
+						return;
+					}
+					tableSample.addRow(analogdataEntity);
+					tableProtctSample.removeSelected();
+					tableSample.refresh();
+					tableProtctSample.refresh();
 				}
 			}
-
-			
 		};
-		btnMove.addSelectionListener(selectionListener);
+		btnDel.addSelectionListener(selectionListener);
+		btnAdd.addSelectionListener(selectionListener);
 		btnSearch.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
 		
@@ -227,8 +243,16 @@ public class SampleConnectDialog extends WrappedDialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID) {
-			setTableData((List<Tb1006AnalogdataEntity>) tableProtctSample.getInput());
-			
+			if(tableProtctSample.getItemCount() == 3) {
+				List<Tb1006AnalogdataEntity> input = (List<Tb1006AnalogdataEntity>) tableProtctSample.getInput();
+				setTableData(input);
+				curSel.setF1006CodeA(input.get(0));
+				curSel.setF1006CodeB(input.get(1));
+				curSel.setF1006CodeC(input.get(2));
+			} else {
+				 DialogHelper.showInformation("请关联3个模拟量对象");
+				 return;
+			}
 		}
 		super.buttonPressed(buttonId);
 	}

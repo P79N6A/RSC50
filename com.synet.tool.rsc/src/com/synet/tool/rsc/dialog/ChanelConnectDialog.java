@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
@@ -29,11 +30,16 @@ import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
+/**
+ * 通道关联
+ * @author Administrator
+ *
+ */
 public class ChanelConnectDialog extends WrappedDialog{
 
 	private DevKTable tableState;
 	private DevKTable tableChanel;
-	private Button btnMove;
+	private Button btnAdd;
 	private String curEntryName;
 	private String[] comboDevItems;
 	private String[] comboSvItems;
@@ -48,6 +54,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private List<Tb1056SvcbEntity> svcbEntities;
 	private Composite comRight;
 	private List<Tb1061PoutEntity> chanelTableData;
+	private Button btnDel;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -76,7 +83,11 @@ public class ChanelConnectDialog extends WrappedDialog{
 		SwtUtil.createLabel(comLeft, switchLbName, gdlb_2);
 		tableChanel = TableFactory.getCtvtPoutTable(comLeft);
 		tableChanel.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		btnMove = SwtUtil.createButton(comLeft, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		GridData gridBtnCom = new GridData(41, SWT.DEFAULT);
+		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
+		comBtn.setLayout(SwtUtil.getGridLayout(1));
+		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
 		comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
@@ -142,17 +153,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 */
 	private void initTableData() {
 		//测试用
-//		if(curSel == null) {
-//			return;
-//		}
-		List<Tb1061PoutEntity> tableChanelData = new ArrayList<>();
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeA1());
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeA2());
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeB1());
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeB2());
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeC1());
-		tableChanelData.add(curSel.getTb1061PoutByF1061CodeC2());
-		tableChanel.setInput(tableChanelData);
+		if(curSel == null) {
+			return;
+		}
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA1());
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA2());
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeB1());
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeB2());
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeC1());
+		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeC2());
+		tableChanel.getTable().layout();
 	}
 	
 	@Override
@@ -168,10 +178,11 @@ public class ChanelConnectDialog extends WrappedDialog{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
-				if(obj == btnMove) {
+				if(obj == btnAdd) {
 					Object objSel = tableState.getSelection();
-					if(objSel != null) {
+					if(objSel != null && tableChanel.getItemCount() < 7) {
 						tableChanel.addRow(objSel);
+						tableState.removeSelected();
 					}
 					tableChanel.getTable().layout();
 				} else if(obj == comboDevice) {
@@ -197,10 +208,20 @@ public class ChanelConnectDialog extends WrappedDialog{
 					//TODO 刷新表格数据
 					tableState.setInput(poutEntities);
 					tableState.getTable().layout();
+				} else if(obj == btnDel) {
+					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) tableChanel.getSelection();
+					if(poutEntity == null) {
+						return;
+					}
+					tableState.addRow(poutEntity);
+					tableChanel.removeSelected();
+					tableChanel.refresh();
+					tableState.refresh();
 				}
 			}
 		};
-		btnMove.addSelectionListener(selectionListener);
+		btnDel.addSelectionListener(selectionListener);
+		btnAdd.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
 		comboSvControl.addSelectionListener(selectionListener);
 	}
@@ -238,7 +259,19 @@ public class ChanelConnectDialog extends WrappedDialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID){
-			setChanelTableData((List<Tb1061PoutEntity>) tableChanel.getInput());
+			if(tableChanel.getItemCount() == 6) {
+				List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
+				setChanelTableData(input);
+				curSel.setTb1061PoutByF1061CodeA1(input.get(0));
+				curSel.setTb1061PoutByF1061CodeA2(input.get(1));
+				curSel.setTb1061PoutByF1061CodeB1(input.get(2));
+				curSel.setTb1061PoutByF1061CodeA2(input.get(3));
+				curSel.setTb1061PoutByF1061CodeC1(input.get(4));
+				curSel.setTb1061PoutByF1061CodeC2(input.get(5));
+			} else {
+				DialogHelper.showInformation("请关联6个虚端子对象");
+				return;
+			}
 		}
 		super.buttonPressed(buttonId);
 	}
