@@ -42,9 +42,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableDeviceWarning;
 	private Button btnConnectDeviceWarning;
 	private DevKTable tableRunState;
-	private Button btnConnectRunState;
 	private DevKTable tableLogicalLink;
-	private Button btnConnectLogicalLink;
 	private DevKTable tableVirtualTerminalOut;
 	private DevKTable tableVirtualTerminalIn;
 	private DevKTable tableAnalogChn;
@@ -180,20 +178,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 		btnConnectDeviceWarning.addSelectionListener(selectionListener);
-		btnConnectRunState.addSelectionListener(selectionListener);
-		switch (editorName) {
-		case "保护":
-			btnConnectLogicalLink.addSelectionListener(selectionListener);
-			break;
-		case "合并单元":
-			
-			break;
-		case "智能终端":
-			btnConnectLogicalLink.addSelectionListener(selectionListener);
-			break;
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -272,7 +256,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createRunStateCmp(Composite com) {
 		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
-		btnConnectRunState = SwtUtil.createButton(cmpRunState, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
 		tableRunState = TableFactory.getRunStateTable(cmpRunState);
 		tableRunState.getTable().setLayoutData(gridData);
 		return cmpRunState;
@@ -310,7 +293,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createLogicalLinkCmp(Composite com) {
 		Composite cmpLogicalLink = SwtUtil.createComposite(com, gridData, 1);
 		cmpLogicalLink.setLayout(SwtUtil.getGridLayout(1));
-		btnConnectLogicalLink = SwtUtil.createButton(cmpLogicalLink, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
 		tableLogicalLink = TableFactory.getLogicalLinkTable(cmpLogicalLink);
 		tableLogicalLink.getTable().setLayoutData(gridData);
 		return cmpLogicalLink;

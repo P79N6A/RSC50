@@ -14,9 +14,11 @@ import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.PhyscialAreaService;
@@ -55,31 +57,98 @@ public class TestMain {
 		beandao.insert(entity);
 	}
 	
+	
 	@Test
 	public void testInsertBayEntry() {
-		Tb1041SubstationEntity substationEntity = new Tb1041SubstationEntity();
-		substationEntity.setF1041Code("2");
-		substationEntity.setF1041Company("思源电气股份有限公司");
-		substationEntity.setF1041Desc("heheheh");
-		substationEntity.setF1041Dqdesc("Dqdesc");
-		substationEntity.setF1041DqName("DqName");
-		substationEntity.setF1041Name("name");
-		substationEntity.setF1042VoltageH(1);
-		substationEntity.setF1042VoltageM(2);
-		substationEntity.setF1042VoltageL(3);
-		beandao.insert(substationEntity);
+		//创建变电站
+		Tb1041SubstationEntity substationEntity1 = new Tb1041SubstationEntity();
+		substationEntity1.setF1041Code("substation1");
+		substationEntity1.setF1041Company("思源电气股份有限公司");
+		substationEntity1.setF1041Desc("变电站1");
+		substationEntity1.setF1041Dqdesc("变电站1");
+		substationEntity1.setF1041DqName("变电站1");
+		substationEntity1.setF1041Name("变电站1");
+		substationEntity1.setF1042VoltageH(1);
+		substationEntity1.setF1042VoltageM(2);
+		substationEntity1.setF1042VoltageL(3);
+		beandao.insert(substationEntity1);
+		//间隔1
+		Tb1042BayEntity bayEntity1 = new Tb1042BayEntity();
+		bayEntity1.setF1042Code(" bay1");
+		bayEntity1.setF1041Code(substationEntity1.getF1041Code());
+		bayEntity1.setF1042Name("间隔1");
+		bayEntity1.setF1042Desc("间隔1");
+		bayEntity1.setF1042DevType(1);
+		bayEntity1.setF1042Voltage(2);
+		bayEntity1.setF1042ConnType(3);
+		bayEntity1.setTb1041SubstationByF1041Code(substationEntity1);
+		beandao.insert(bayEntity1);
+		//互感器1
+		Tb1043EquipmentEntity equipmentEntity1 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment1");
+		equipmentEntity1.setF1042Code(bayEntity1.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity1);
+		equipmentEntity1.setTb1016StatedataEntity(null);
+		
+		//互感器次级
+		Tb1067CtvtsecondaryEntity ctvtsecondaryEntity1  = new Tb1067CtvtsecondaryEntity();
+		ctvtsecondaryEntity1.setF1067Code("Ctvtsecondary1");
+		ctvtsecondaryEntity1.setF1067Desc("ctvtsecondary1");
+		ctvtsecondaryEntity1.setF1043Code(equipmentEntity1.getF1043Code());
+		ctvtsecondaryEntity1.setTb1043EquipmentByF1043Code(equipmentEntity1);
+		
+		//虚端子1
+		//虚端子2
+		//虚端子3
+		//虚端子4
+		//虚端子5
+		//虚端子6
 		
 		
-		Tb1042BayEntity bayEntity = new Tb1042BayEntity();
-		bayEntity.setF1042Code("2");
-		bayEntity.setF1041Code("2");
-		bayEntity.setF1042Name("间隔2");
-		bayEntity.setF1042Desc("间隔2");
-		bayEntity.setF1042DevType(1);
-		bayEntity.setF1042Voltage(2);
-		bayEntity.setF1042ConnType(3);
-		bayEntity.setTb1041SubstationByF1041Code(substationEntity);
-		beandao.insert(bayEntity);
+		//互感器2
+		Tb1043EquipmentEntity equipmentEntity2 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment2");
+		equipmentEntity1.setF1042Code(bayEntity1.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity1);
+		equipmentEntity1.setTb1016StatedataEntity(null);
+		
+		//互感器3
+		Tb1043EquipmentEntity equipmentEntity3 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment3");
+		equipmentEntity1.setF1042Code(bayEntity1.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity1);
+		equipmentEntity1.setTb1016StatedataEntity(null);
+		//间隔2
+		Tb1042BayEntity bayEntity2 = new Tb1042BayEntity();
+		bayEntity2.setF1042Code(" bay2");
+		bayEntity2.setF1041Code(substationEntity1.getF1041Code());
+		bayEntity2.setF1042Name("间隔2");
+		bayEntity2.setF1042Desc("间隔2");
+		bayEntity2.setF1042DevType(1);
+		bayEntity2.setF1042Voltage(2);
+		bayEntity2.setF1042ConnType(3);
+		bayEntity2.setTb1041SubstationByF1041Code(substationEntity1);
+		beandao.insert(bayEntity2);
+		//互感器4
+		Tb1043EquipmentEntity equipmentEntity4 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment4");
+		equipmentEntity1.setF1042Code(bayEntity2.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity2);
+		equipmentEntity1.setTb1016StatedataEntity(null);
+		
+		//互感器5
+		Tb1043EquipmentEntity equipmentEntity5 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment5");
+		equipmentEntity1.setF1042Code(bayEntity2.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity2);
+		equipmentEntity1.setTb1016StatedataEntity(null);
+		
+		//互感器6
+		Tb1043EquipmentEntity equipmentEntity6 = new Tb1043EquipmentEntity();
+		equipmentEntity1.setF1043Code("Equipment6");
+		equipmentEntity1.setF1042Code(bayEntity2.getF1042Code());
+		equipmentEntity1.setTb1042BayByF1042Code(bayEntity2);
+		equipmentEntity1.setTb1016StatedataEntity(null);
 	}
 	
 	@Test

@@ -23,5 +23,15 @@ public class IedEntityService extends BaseService {
 		}
 		return (List<Tb1046IedEntity>) hqlDao.selectInObjects(Tb1046IedEntity.class, "f1046Type", lstType);
 	}
+	
+	/**
+	 * 根据所属间隔查询IED
+	 * @param bayEntityCode
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1046IedEntity> getIedEntityByBay(String bayEntityCode) {
+		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, "f1042Code", bayEntityCode);
+	}
 
 }
