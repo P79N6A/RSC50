@@ -23,8 +23,6 @@ public class TableFactory {
 	public static String POWERKK_TABLE 						= "PowerKKTable";
 	public static String VOLTAGEKK_TABLE 					= "VoltageKKTable";
 	public static String ICD_TABLE 							= "IcdTable";
-	public static String IEDACCOUNT_TABLE 					= "IEDAccountTable";
-	public static String CTVT_POUT_TABLE 					= "CtvtPoutTable";
 	public static String POUT_TABLE 						= "PoutTable";
 	public static String ANALOG_TABLE 						= "AnalogTable";
 	public static String PROT_ANALOG_TABLE 					= "ProtAnalogTable";
@@ -45,6 +43,16 @@ public class TableFactory {
 	public static String LOGICAL_LINK_TABLE 				= "LogicalLinkTable";
 	public static String ANALOG_CHN_TABLE 					= "AnalogChnTable";
 	public static String CRITER_CHN_TABLE 					= "CriteriaChnTable";
+	public static String CTVT_POUT_TABLE 					= "CtvtPoutTable";
+	private static String IED_LIST_TABLE                    = "IEDListTable";
+	private static String BOARD_WARN_TABLE                  = "BoardWarnTableTable";
+	private static String FIBRE_LIST_TABLE                  = "FibreListTable";
+	private static String IED_BOARD_TABLE                   = "IEDBoardTable";
+	private static String STATUS_IN_TABLE                   = "StatusInTable";
+	private static String STA_INFO_TABLE                    = "StaInfoTable";
+	private static String PORT_LIGHT_YABLE                  = "PortLightTable";
+	private static String TER_STRAP_TABLE                   = "TerStrapTable";
+	private static String BRK_CFM_TABLE                     = "BrkCfmTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
@@ -208,10 +216,6 @@ public class TableFactory {
 		TableConfig tableCfg = uicfg.getDefinedTable(ICD_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
-	public static DevKTable getIEDAccountTable(Composite container) {
-		TableConfig tableCfg = uicfg.getDefinedTable(IEDACCOUNT_TABLE);
-		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
-	}
 
 	public static DevKTable getIEDChooseTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(IED_CHOOSE_TABLE);
@@ -220,6 +224,51 @@ public class TableFactory {
 	
 	public static DevKTable getCtvtChooseTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(CTVT_CHOOSE_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getIEDListTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(IED_LIST_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getBoardWarnTableTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(BOARD_WARN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getFibreListTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(FIBRE_LIST_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getIEDBoardTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(IED_BOARD_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getStatusInTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(STATUS_IN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getStaInfoTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(STA_INFO_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getPortLightTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PORT_LIGHT_YABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getTerStrapTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(TER_STRAP_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getBrkCfmTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(BRK_CFM_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 }
