@@ -5,14 +5,14 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
+import com.synet.tool.rsc.ui.TableFactory;
 
 /**
  * 导入信息->开入信号映射表 树菜单编辑器。
@@ -28,22 +28,14 @@ public class ImpStatusInEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
+		container.setLayout(SwtUtil.getGridLayout(2));
 		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		GridData gridData = new GridData(GridData.FILL_VERTICAL);
+		gridData.widthHint = 150;
+		List titleList = SwtUtil.createList(container, gridData);
+		titleList.setItems(new String[]{"开入信号映射文件1"});
+		table =TableFactory.getStatusInTable(container);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
 	protected void addListeners() {

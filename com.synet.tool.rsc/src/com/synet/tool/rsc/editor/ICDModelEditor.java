@@ -41,9 +41,12 @@ public class ICDModelEditor extends BaseConfigEditor {
 		editArea.setLayout(SwtUtil.getGridLayout(1));
 		
 		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 6);
-		txtNmanuf = SwtUtil.createText(topComp, SwtUtil.bt_hd, "厂商");
-		txtModel = SwtUtil.createText(topComp, SwtUtil.bt_hd, "型号");
-		txtVersion = SwtUtil.createText(topComp, SwtUtil.bt_hd, "版本");
+		txtNmanuf = SwtUtil.createText(topComp, SwtUtil.bt_hd);
+		txtNmanuf.setMessage("厂商");
+		txtModel = SwtUtil.createText(topComp, SwtUtil.bt_hd);
+		txtModel.setMessage("型号");
+		txtVersion = SwtUtil.createText(topComp, SwtUtil.bt_hd);
+		txtVersion.setMessage("版本");
 		cmbLnType = SwtUtil.createCombo(topComp, SwtUtil.bt_hd, true);
 		cmbLnType.setItems(new String[]{"逻辑节点类型"});
 		cmbLnType.select(0);

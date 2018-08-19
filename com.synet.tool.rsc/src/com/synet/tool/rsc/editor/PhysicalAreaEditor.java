@@ -19,6 +19,7 @@ import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
+import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.service.PhyscialAreaService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -82,15 +83,18 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 				(List<Tb1050CubicleEntity>) areaService.getCubicleList(entity);
 		if (cubicleList != null) {
 			cubicleTable.setInput(cubicleList);
-			List<Tb1051CableEntity> cableList = 
-					(List<Tb1051CableEntity>) areaService.getCableList(cubicleList);
-			if (cableList != null)
-				cableTable.setInput(cableList);
 		}
-//		List<Tb1053PhysconnEntity> physconnList = 
-//				(List<Tb1053PhysconnEntity>) areaService.getListByCriteriaRegionCode(Tb1053PhysconnEntity.class, "f1049Code", "104901");
-//		
-//		if (physconnList != null)
-//			physConnTable.setInput(physconnList);
+		
+		List<Tb1051CableEntity> cableList = 
+				(List<Tb1051CableEntity>) areaService.getCableList(cubicleList);
+		if (cableList != null){
+			cableTable.setInput(cableList);
+		}
+		
+		List<Tb1053PhysconnEntity> physconnList = 
+				(List<Tb1053PhysconnEntity>) areaService.getPhysconnList(cubicleList,cableList);
+		
+		if (physconnList != null)
+			physConnTable.setInput(physconnList);
 	}
 }
