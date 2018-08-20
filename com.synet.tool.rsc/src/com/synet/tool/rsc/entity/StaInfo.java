@@ -7,9 +7,16 @@ package com.synet.tool.rsc.entity;
  */
 public class StaInfo {
 	
+	private int index; 			//序号
 	private String description; //描述
 	private String refAddr;		//参引
 	
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	public String getDescription() {
 		return description;
 	}
