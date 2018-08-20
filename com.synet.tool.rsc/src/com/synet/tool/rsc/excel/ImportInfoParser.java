@@ -11,11 +11,15 @@ import org.apache.poi.xssf.model.StylesTable;
 
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.file.excel.Xls2007Parser;
+import com.synet.tool.rsc.entity.IEDBoard;
+import com.synet.tool.rsc.entity.StaInfo;
+import com.synet.tool.rsc.excel.handler.IEDBoardHandler;
 import com.synet.tool.rsc.excel.handler.RscSheetHandler;
 import com.synet.tool.rsc.excel.handler.SecFibreListHandler;
 import com.synet.tool.rsc.excel.handler.SecLockHandler;
 import com.synet.tool.rsc.excel.handler.SecProBrkHandler;
 import com.synet.tool.rsc.excel.handler.SecPwrBrkHandler;
+import com.synet.tool.rsc.excel.handler.StaInfoHandler;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
@@ -41,6 +45,7 @@ public class ImportInfoParser {
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
 				result = (List<Tb1090LineprotfiberEntity>) handler.getResult();
 	            stream.close();  
+	            break;
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
@@ -65,6 +70,7 @@ public class ImportInfoParser {
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
 				result = (List<Tb1091IotermEntity>) handler.getResult();
 	            stream.close();  
+	            break;
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
@@ -88,7 +94,8 @@ public class ImportInfoParser {
             	setHandler(handler);
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
 				result = (List<Tb1092PowerkkEntity>) handler.getResult();
-	            stream.close();  
+	            stream.close(); 
+	            break;
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
@@ -113,6 +120,57 @@ public class ImportInfoParser {
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
 				result = (List<Tb1093VoltagekkEntity>) handler.getResult();
 	            stream.close();  
+	            break;
+	        }
+	        xlsxPackage.close();
+		} catch (Throwable e) {
+			SCTLogger.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<StaInfo> getStaInfoList(String xlspath) {
+		 List<StaInfo> result = null;
+		try {
+			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
+			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
+	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
+	        StylesTable styles = xssfReader.getStylesTable();  
+	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
+	        while (iter.hasNext()) {  
+	            InputStream stream = iter.next();
+            	StaInfoHandler handler = new StaInfoHandler();
+            	setHandler(handler);
+            	Xls2007Parser.processSheet(styles, strings, handler, stream);
+				result = (List<StaInfo>) handler.getResult();
+	            stream.close();  
+	            break;
+	        }
+	        xlsxPackage.close();
+		} catch (Throwable e) {
+			SCTLogger.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IEDBoard> getIEDBoardList(String xlspath) {
+		 List<IEDBoard> result = null;
+		try {
+			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
+			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage); 
+	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
+	        StylesTable styles = xssfReader.getStylesTable();  
+	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
+	        while (iter.hasNext()) {  
+	            InputStream stream = iter.next();
+	            IEDBoardHandler handler = new IEDBoardHandler();
+            	setHandler(handler);
+            	Xls2007Parser.processSheet(styles, strings, handler, stream);
+				result = (List<IEDBoard>) handler.getResult();
+	            stream.close();  
+	            break;
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
