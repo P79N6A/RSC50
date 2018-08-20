@@ -19,6 +19,7 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -79,14 +80,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_4 = new GridData(GridData.FILL_BOTH);
 		gdSpan_4.horizontalSpan = 4;
-		switch (editorName) {
-		case "保护":
+		int type = iedEntity.getF1046Type();
+		switch (type) {
+		case DBConstants.IED_PROT:
 			createProtectCmp(comp, gdSpan_4);
 			break;
-		case "合并单元":
+		case DBConstants.IED_MU:
+		case DBConstants.IED_MT:
 			createMergeUnitCmp(comp, gdSpan_4);
 			break;
-		case "智能终端":
+		case DBConstants.IED_TERM:
 			createIedCmp(comp, gdSpan_4);
 			break;
 		default:
