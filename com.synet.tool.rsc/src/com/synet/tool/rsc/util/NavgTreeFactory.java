@@ -28,6 +28,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_SEC_PRO;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PWR;
 
 import java.util.List;
+import java.util.Set;
 
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.ITreeEntry;
@@ -35,9 +36,13 @@ import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.service.BayEntityService;
+import com.synet.tool.rsc.service.IedEntityService;
 
 /**
  * 
@@ -51,6 +56,8 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 
 	private static volatile NavgTreeFactory factory;
+	
+	private IedEntityService iedService = new IedEntityService();
 	
 	private NavgTreeFactory() {
 //		treeBuilder = TreeViewerBuilder.create(XMLFileManager.loadXMLFile(getClass(), Constants.CFGURL));
@@ -74,8 +81,15 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		
 		if (prjFileMgr.isClosed())
 			return;
-//		ProjectEntry projectEntry = new ProjectEntry(prjFileMgr.getProjectName(), "project.gif", 1);
-		ProjectEntry projectEntry = new ProjectEntry("变电站", "", "project.gif");
+		List<Tb1041SubstationEntity> staList = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
+		String staName = null;
+		if (staList!=null && staList.size()>0) {
+			staName = staList.get(0).getF1041Name();
+		}
+		if (staName == null) {
+			staName = "变电站";
+		}
+		ProjectEntry projectEntry = new ProjectEntry(staName, "", "project.gif");
 		data.add(projectEntry);
 		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", ET_PR_MDL, 1);
 		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", "", 2);
@@ -100,23 +114,41 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		loadImport(importEntry);
 	}
 	
+	/**
+	 * 加载一次拓扑模型
+	 * @param primaryEntry
+	 * @param bayEntityList
+	 */
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.notNull(bayEntityList)){
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
-				createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Desc(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
+				Set<Tb1043EquipmentEntity> equipments = tb1042BayEntity.getTb1043EquipmentsByF1042Code();
+				if (equipments!= null && equipments.size()>0) {
+					createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Name(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
+				}
 			}
 		}
 	}
 	
+	/**
+	 * 加载保护信息模型
+	 * @param protectEntry
+	 * @param bayEntityList
+	 */
 	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
 		if(DataUtils.notNull(bayEntityList)){
 			for (int i = 0; i < bayEntityList.size(); i++) {
-				ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntityList.get(i).getF1042Desc(), "bay.gif", ET_PT_BAY, i+1);
-				createConfigEntry(bayEntry, "保护", "device.png", ET_PT_IED, 1);//ConfigTreeEntry proEntry = 
-				createConfigEntry(bayEntry, "合并单元", "device.png", ET_PT_IED, 2);//ConfigTreeEntry muEntry = 
-				createConfigEntry(bayEntry, "智能终端", "device.png", ET_PT_IED, 3);//ConfigTreeEntry tmEntry = 
+				Tb1042BayEntity bayEntity = bayEntityList.get(i);
+				List<Tb1046IedEntity> iedEntities = iedService.getIedEntityByBay(bayEntity);
+				if (iedEntities != null && iedEntities.size() > 0) {
+					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
+					for (Tb1046IedEntity iedEntity : iedEntities) {
+						ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
+						proEntry.setData(iedEntity);
+					}
+				}
 			}
 		}
 		/** 动态加载-end  */
@@ -124,6 +156,10 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);//ConfigTreeEntry bayPubEntry = 
 	}
 	
+	/**
+	 * 加载物理信息模型
+	 * @param physicalEntry
+	 */
 	@SuppressWarnings("unchecked")
 	private void loadPhysical(ITreeEntry physicalEntry) {
 		/** 动态加载-begin  */
@@ -138,6 +174,10 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		/** 动态加载-end  */
 	}
 	
+	/**
+	 * 加载安措配置
+	 * @param securityEntry
+	 */
 	private void loadSecurity(ITreeEntry securityEntry) {
 		ConfigTreeEntry ftEntry = createConfigEntry(securityEntry, "保护纵联光纤", "bay.gif", ET_SEC_FIB, 1);
 		ConfigTreeEntry lockEntry = createConfigEntry(securityEntry, "重合回路闭锁", "bay.gif", ET_SEC_LCK, 2);
@@ -145,10 +185,18 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry rtBrkEntry = createConfigEntry(securityEntry, "保护电压回路空开", "bay.gif", ET_SEC_PRO, 4);
 	}
 	
+	/**
+	 * 加载系统ICD
+	 * @param icdEntry
+	 */
 	private void loadIcd(ITreeEntry icdEntry) {
 		// 暂无
 	}
 	
+	/**
+	 * 加载导入信息
+	 * @param importEntry
+	 */
 	private void loadImport(ITreeEntry importEntry) {
 		ConfigTreeEntry iedEntry = createConfigEntry(importEntry, "设备台账", "bay.gif", ET_IMP_IED, 1);
 		ConfigTreeEntry ftListEntry = createConfigEntry(importEntry, "光缆清册", "bay.gif", ET_IMP_FIB, 2);
@@ -173,67 +221,4 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		return configTreeEntry;
 	}
 	
-//	/**
-//	 * 创建装置节点.
-//	 * 
-//	 * @param prjEntry
-//	 *            工程节点.
-//	 * @param iedName
-//	 *            装置名称.
-//	 */
-//	public BayIEDEntry createDevice(String iedName, String type){
-//		if (primaryEntry == null || protectEntry == null)
-//			return null;
-//		BayIEDEntry device = newDevice(iedName, null);
-//		if (type.equals(DevConstants.DEV_BUS)) {
-//			primaryEntry.addChild(device);
-//		} else if (type.equals(DevConstants.DEV_BAY)) {
-//			protectEntry.addChild(device);
-//		}
-//		return device;
-//	}
-//	
-//	/**
-//	 * 装置重命名
-//	 * @param oldName
-//	 * @param newName
-//	 */
-//	public ITreeEntry renameDevice(String oldName, String newName) {
-//		if (primaryEntry == null || protectEntry == null)
-//			return null;
-//		ITreeEntry iedEntry = findDevice(oldName);
-//		iedEntry.setName(newName);
-//		return iedEntry;
-//	}
-//	
-//	/**
-//	 * 删除装置
-//	 * @param devName
-//	 */
-//	public void removeDevice(String devName) {
-//		if (primaryEntry == null || protectEntry == null)
-//			return;
-//		ITreeEntry iedEntry = findDevice(devName);
-//		iedEntry.getParent().removeChild(iedEntry);
-//	}
-//
-//	public ITreeEntry findDevice(String devName) {
-//		ITreeEntry iedEntry = null;
-//		List<ITreeEntry> children = new ArrayList<ITreeEntry>();
-//		children.addAll(protectEntry.getChildren());
-//		children.addAll(primaryEntry.getChildren());
-//		for (ITreeEntry entry : children) {
-//			if (entry.getName().equals(devName)) {
-//				iedEntry = entry;
-//				break;
-//			}
-//		}
-//		return iedEntry;
-//	}
-//
-//	private BayIEDEntry newDevice(String iedName, String iedInScd) {
-//		BayIEDEntry bayIEDEntry = createParentEntry(null, iedName, "device.png", 1);
-//		bayIEDEntry.setSyned(iedInScd != null);
-//		return bayIEDEntry;
-//	}
 }

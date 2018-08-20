@@ -23,9 +23,13 @@
         <many-to-one name="tb1042BayByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity">
             <column name="F1042_CODE" not-null="true"/>
         </many-to-one>
-        <set name="tb1044TerminalsByF1043Code" inverse="true" cascade="save-update" table="tb1044_terminal">
+        <set name="tb1044TerminalsByF1043Code" inverse="true" cascade="save-update" table="tb1044_terminal" lazy="false">
         	<key column="F1043_CODE"></key>
         	<one-to-many class="com.synet.tool.rsc.model.Tb1044TerminalEntity" />
+        </set>
+        <set name="tb1067SecondarysByF1043Code" inverse="true" cascade="save-update" table="tb1067_ctvtsecondary" lazy="false">
+        	<key column="F1043_CODE"></key>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" />
         </set>
     </class>
 </hibernate-mapping>

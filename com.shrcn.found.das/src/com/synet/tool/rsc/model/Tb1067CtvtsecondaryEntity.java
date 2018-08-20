@@ -7,11 +7,9 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1067CtvtsecondaryEntity {
     private String f1067Code;
-    private String f1043Code;
     private Integer f1067Index;
     private String f1067Model;
     private String f1067Type;
-    private String f1067TermNo;
     private String f1067CircNo;
     private String f1067Desc;
     private Tb1061PoutEntity tb1061PoutByF1061CodeA1;
@@ -21,6 +19,7 @@ public class Tb1067CtvtsecondaryEntity {
     private Tb1061PoutEntity tb1061PoutByF1061CodeC1;
     private Tb1061PoutEntity tb1061PoutByF1061CodeC2;
     private Tb1043EquipmentEntity tb1043EquipmentByF1043Code;
+    private Tb1044TerminalEntity tb1044TerminalByF1044Code;
 
     public String getF1067Code() {
         return f1067Code;
@@ -28,14 +27,6 @@ public class Tb1067CtvtsecondaryEntity {
 
     public void setF1067Code(String f1067Code) {
         this.f1067Code = f1067Code;
-    }
-
-    public String getF1043Code() {
-        return f1043Code;
-    }
-
-    public void setF1043Code(String f1043Code) {
-        this.f1043Code = f1043Code;
     }
 
     public Integer getF1067Index() {
@@ -62,14 +53,6 @@ public class Tb1067CtvtsecondaryEntity {
         this.f1067Type = f1067Type;
     }
 
-    public String getF1067TermNo() {
-		return f1067TermNo;
-	}
-
-	public void setF1067TermNo(String f1067TermNo) {
-		this.f1067TermNo = f1067TermNo;
-	}
-
 	public String getF1067CircNo() {
 		return f1067CircNo;
 	}
@@ -93,10 +76,8 @@ public class Tb1067CtvtsecondaryEntity {
 
         Tb1067CtvtsecondaryEntity that = (Tb1067CtvtsecondaryEntity) o;
 
-        if (f1043Code != null ? !f1043Code.equals(that.f1043Code) : that.f1043Code != null) return false;
         if (f1067CircNo != null ? !f1067CircNo.equals(that.f1067CircNo) : that.f1067CircNo != null) return false;
         if (f1067Desc != null ? !f1067Desc.equals(that.f1067Desc) : that.f1067Desc != null) return false;
-        if (f1067TermNo != null ? !f1067TermNo.equals(that.f1067TermNo) : that.f1067TermNo != null) return false;
         if (f1067Code != null ? !f1067Code.equals(that.f1067Code) : that.f1067Code != null) return false;
         if (f1067Index != null ? !f1067Index.equals(that.f1067Index) : that.f1067Index != null) return false;
         if (f1067Model != null ? !f1067Model.equals(that.f1067Model) : that.f1067Model != null) return false;
@@ -108,11 +89,9 @@ public class Tb1067CtvtsecondaryEntity {
     @Override
     public int hashCode() {
         int result = f1067Code != null ? f1067Code.hashCode() : 0;
-        result = 31 * result + (f1043Code != null ? f1043Code.hashCode() : 0);
         result = 31 * result + (f1067Index != null ? f1067Index.hashCode() : 0);
         result = 31 * result + (f1067Model != null ? f1067Model.hashCode() : 0);
         result = 31 * result + (f1067Type != null ? f1067Type.hashCode() : 0);
-        result = 31 * result + (f1067TermNo != null ? f1067TermNo.hashCode() : 0);
         result = 31 * result + (f1067CircNo != null ? f1067CircNo.hashCode() : 0);
         result = 31 * result + (f1067Desc != null ? f1067Desc.hashCode() : 0);
         return result;
@@ -173,4 +152,13 @@ public class Tb1067CtvtsecondaryEntity {
     public void setTb1043EquipmentByF1043Code(Tb1043EquipmentEntity tb1043EquipmentByF1043Code) {
         this.tb1043EquipmentByF1043Code = tb1043EquipmentByF1043Code;
     }
+
+	public Tb1044TerminalEntity getTb1044TerminalByF1044Code() {
+		return tb1044TerminalByF1044Code;
+	}
+
+	public void setTb1044TerminalByF1044Code(
+			Tb1044TerminalEntity tb1044TerminalByF1044Code) {
+		this.tb1044TerminalByF1044Code = tb1044TerminalByF1044Code;
+	}
 }

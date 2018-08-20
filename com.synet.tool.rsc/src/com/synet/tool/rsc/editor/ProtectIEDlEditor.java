@@ -16,8 +16,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.shrcn.found.ui.editor.ConfigEditorInput;
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -47,6 +49,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableVirtualTerminalIn;
 	private DevKTable tableAnalogChn;
 	private DevKTable tableCriteriaChn;
+	private Tb1046IedEntity iedEntity;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -55,6 +58,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	@Override
 	public void init() {
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
+		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		editorName = input.getEditorName();
 		gridData = new GridData(GridData.FILL_BOTH);
 		super.init();
@@ -177,7 +181,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
-		btnConnectDeviceWarning.addSelectionListener(selectionListener);
+		if (btnConnectDeviceWarning != null) {
+			btnConnectDeviceWarning.addSelectionListener(selectionListener);
+		}
 	}
 
 	@Override

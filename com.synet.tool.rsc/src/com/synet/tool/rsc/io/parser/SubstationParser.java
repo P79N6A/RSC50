@@ -24,6 +24,7 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
  /**
  * 
@@ -118,6 +119,10 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 							}
 						} else {
 							addTerminals(equipment, eqpEl);
+							if (EnumEquipmentType.VTR == type ||
+									EnumEquipmentType.CTR == type) {
+								addSecondary(equipment, eqpEl);
+							}
 						}
 					}
 				}
@@ -126,6 +131,11 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		saveAll();
 	}
 	
+	/**
+	 * 解析连接端子
+	 * @param equipment
+	 * @param eqpEl
+	 */
 	private void addTerminals(Tb1043EquipmentEntity equipment, Element eqpEl) {
 		Set<Tb1044TerminalEntity> terminals = new HashSet<>();
 		List<Element> tmEls = eqpEl.elements("Terminal");
@@ -150,4 +160,24 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		equipment.setTb1044TerminalsByF1043Code(terminals);
 	}
 
+	/**
+	 * 添加互感器次级
+	 * @param equipment
+	 * @param eqpEl
+	 */
+	private void addSecondary(Tb1043EquipmentEntity equipment, Element eqpEl) {
+		Set<Tb1067CtvtsecondaryEntity> secs = new HashSet<>();
+		Tb1067CtvtsecondaryEntity sec = new Tb1067CtvtsecondaryEntity();
+		sec.setF1067Code(rscp.nextTbCode(DBConstants.PR_SEC));
+		sec.setTb1043EquipmentByF1043Code(equipment);
+		Tb1044TerminalEntity tml = equipment.getTb1044TerminalsByF1043Code().iterator().next();
+		sec.setTb1044TerminalByF1044Code(tml);
+		sec.setF1067Index(null);
+		sec.setF1067CircNo(null);
+		sec.setF1067Model(null);
+		sec.setF1067Desc(null);
+		sec.setF1067Type(null);
+		secs.add(sec);
+		equipment.setTb1067SecondarysByF1043Code(secs);
+	}
 }

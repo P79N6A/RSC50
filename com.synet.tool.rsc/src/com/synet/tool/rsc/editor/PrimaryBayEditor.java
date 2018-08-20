@@ -71,6 +71,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private Text textDesc;
 	private Button btnDel;
 	
+	private IedEntityService iedService;
+	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
 	}
@@ -152,9 +154,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	public void init() {
 		EditorConfigData data = (EditorConfigData)super.getInput().getData();
 		this.curEntryName = data.getIedName();
-		bayEntity = (Tb1042BayEntity) data.getData();
-		IedEntityService iedService = new IedEntityService();
-		iedEntities = iedService.getIedEntityByBay(bayEntity.getF1042Code());
+		this.bayEntity = (Tb1042BayEntity) data.getData();
+		this.iedService = new IedEntityService();
+		this.iedEntities = iedService.getIedEntityByBay(bayEntity);
 		if(iedEntities.size() < 1) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -229,11 +231,11 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					if(equipmentEntity == null) {
 						return;
 					}
-					Tb1016StatedataEntity statedataEntity = equipmentEntity.getTb1016StatedataEntity();
-					tableSluiceStatus.addRow(statedataEntity);
-					tableSwitchStatus.removeSelected();
-					tableSwitchStatus.refresh();
-					tableSluiceStatus.refresh();
+//					Tb1016StatedataEntity statedataEntity = equipmentEntity.getTb1016StatedataEntity();
+//					tableSluiceStatus.addRow(statedataEntity);
+//					tableSwitchStatus.removeSelected();
+//					tableSwitchStatus.refresh();
+//					tableSluiceStatus.refresh();
 				}
 			}
 		};

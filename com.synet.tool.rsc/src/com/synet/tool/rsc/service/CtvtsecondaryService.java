@@ -18,12 +18,12 @@ public class CtvtsecondaryService extends BaseService{
 		if(!DataUtils.notNull(equipmentEntities)) {
 			return new ArrayList<>();
 		}
-		List<String> lstF1043Code = new ArrayList<>();
+		List<Tb1067CtvtsecondaryEntity> res = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : equipmentEntities) {
-			lstF1043Code.add(tb1043EquipmentEntity.getF1043Code());
+//			List<?> its = beanDao.getListByCriteria(Tb1067CtvtsecondaryEntity.class, "tb1043EquipmentByF1043Code", tb1043EquipmentEntity);
+//			List<?> its = beanDao.getAll(Tb1067CtvtsecondaryEntity.class);
+			res.addAll(tb1043EquipmentEntity.getTb1067SecondarysByF1043Code());
 		}
-		@SuppressWarnings("unchecked")
-		List<Tb1067CtvtsecondaryEntity> res = (List<Tb1067CtvtsecondaryEntity>)hqlDao.selectInObjects(Tb1067CtvtsecondaryEntity.class, "f1043Code", lstF1043Code);
 		return res;
 	}
 

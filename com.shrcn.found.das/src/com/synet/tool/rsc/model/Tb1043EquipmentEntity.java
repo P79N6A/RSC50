@@ -15,6 +15,7 @@ public class Tb1043EquipmentEntity {
     private int f1043Type;
     private Tb1042BayEntity tb1042BayByF1042Code;
     private Set<Tb1044TerminalEntity> tb1044TerminalsByF1043Code;
+    private Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code;
 
     public String getF1043Code() {
         return f1043Code;
@@ -97,6 +98,15 @@ public class Tb1043EquipmentEntity {
 	public void setTb1044TerminalsByF1043Code(
 			Set<Tb1044TerminalEntity> tb1044TerminalsByF1043Code) {
 		this.tb1044TerminalsByF1043Code = tb1044TerminalsByF1043Code;
+	}
+
+	public Set<Tb1067CtvtsecondaryEntity> getTb1067SecondarysByF1043Code() {
+		return tb1067SecondarysByF1043Code;
+	}
+
+	public void setTb1067SecondarysByF1043Code(
+			Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code) {
+		this.tb1067SecondarysByF1043Code = tb1067SecondarysByF1043Code;
 	}
 
 }

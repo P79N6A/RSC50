@@ -31,7 +31,11 @@ public interface DBConstants {
 	String PR_BAY 			= "Bay";
 	String PR_EQP 			= "Equipment";
 	String PR_CNode 		= "CNode";
-	String PR_Term 		= "Term";
+	String PR_Term 			= "Term";
+	String PR_SEC 			= "CVTSnd";
+
+	String BAY_PROT			= "保护间隔";
+	String BAY_PUB 			= "公共间隔";
 	
 	// A、B套
 	int SUITE_A = 1;

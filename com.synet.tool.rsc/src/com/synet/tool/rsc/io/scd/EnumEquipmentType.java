@@ -11,12 +11,12 @@ package com.synet.tool.rsc.io.scd;
  */
 public enum EnumEquipmentType {
 
-	BRK(1, "断路器"),
+	CBR(1, "断路器"),
 	DIS(2, "刀闸"),
 	BUS(3, "母线"),
 	PTR(4, "变压器"),
-	LINE(5, "线路"),
-	CBR(6, "电流互感器"),
+	IFL(5, "线路"),
+	CTR(6, "电流互感器"),
 	VTR(7, "电压互感器"),
 	REA(8, "电抗器"),
 	CAP(9, "电容器"),

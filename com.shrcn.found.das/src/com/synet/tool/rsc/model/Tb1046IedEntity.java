@@ -1,12 +1,13 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
+
 
 /**
  * Created by chunc on 2018/8/7.
  */
 public class Tb1046IedEntity {
     private String f1046Code;
-    private String f1042Code;
     private String f1050Code;
     private String f1046Name;
     private String f1046Desc;
@@ -17,6 +18,7 @@ public class Tb1046IedEntity {
     private int f1046IsVirtual;
     private Integer f1046Type;
     private String f1046Crc;
+    private Tb1042BayEntity tb1042BaysByF1042Code;
 
     public String getF1046Code() {
         return f1046Code;
@@ -24,14 +26,6 @@ public class Tb1046IedEntity {
 
     public void setF1046Code(String f1046Code) {
         this.f1046Code = f1046Code;
-    }
-
-    public String getF1042Code() {
-        return f1042Code;
-    }
-
-    public void setF1042Code(String f1042Code) {
-        this.f1042Code = f1042Code;
     }
 
     public String getF1050Code() {
@@ -122,7 +116,6 @@ public class Tb1046IedEntity {
         Tb1046IedEntity that = (Tb1046IedEntity) o;
 
         if (f1046IsVirtual != that.f1046IsVirtual) return false;
-        if (f1042Code != null ? !f1042Code.equals(that.f1042Code) : that.f1042Code != null) return false;
         if (f1046AorB != null ? !f1046AorB.equals(that.f1046AorB) : that.f1046AorB != null) return false;
         if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1046ConfigVersion != null ? !f1046ConfigVersion.equals(that.f1046ConfigVersion) : that.f1046ConfigVersion != null)
@@ -142,7 +135,6 @@ public class Tb1046IedEntity {
     @Override
     public int hashCode() {
         int result = f1046Code != null ? f1046Code.hashCode() : 0;
-        result = 31 * result + (f1042Code != null ? f1042Code.hashCode() : 0);
         result = 31 * result + (f1050Code != null ? f1050Code.hashCode() : 0);
         result = 31 * result + (f1046Name != null ? f1046Name.hashCode() : 0);
         result = 31 * result + (f1046Desc != null ? f1046Desc.hashCode() : 0);
@@ -155,5 +147,13 @@ public class Tb1046IedEntity {
         result = 31 * result + (f1046Crc != null ? f1046Crc.hashCode() : 0);
         return result;
     }
+
+	public Tb1042BayEntity getTb1042BaysByF1042Code() {
+		return tb1042BaysByF1042Code;
+	}
+
+	public void setTb1042BaysByF1042Code(Tb1042BayEntity tb1042BaysByF1042Code) {
+		this.tb1042BaysByF1042Code = tb1042BaysByF1042Code;
+	}
 
 }

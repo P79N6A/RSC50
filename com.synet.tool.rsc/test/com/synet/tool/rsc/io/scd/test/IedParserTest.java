@@ -42,6 +42,7 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
  /**
  * 
@@ -88,6 +89,7 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1043EquipmentEntity.class);
 			beanDao.deleteAll(Tb1044TerminalEntity.class);
 			beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
+			beanDao.deleteAll(Tb1067CtvtsecondaryEntity.class);
 		}
 		
 //		new SCDImporter(scdPath).execute();
@@ -219,6 +221,8 @@ public class IedParserTest {
 		assertTrue(tts.size() > 0);
 		List<Tb1045ConnectivitynodeEntity> ccs = (List<Tb1045ConnectivitynodeEntity>) beanDao.getAll(Tb1045ConnectivitynodeEntity.class);
 		assertTrue(ccs.size() > 0);
+		List<Tb1067CtvtsecondaryEntity> secs = (List<Tb1067CtvtsecondaryEntity>) beanDao.getAll(Tb1067CtvtsecondaryEntity.class);
+		assertTrue(secs.size() > 0);
 		
 	}
 	
