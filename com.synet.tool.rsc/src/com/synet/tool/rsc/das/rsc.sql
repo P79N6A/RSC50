@@ -142,6 +142,7 @@ create table TB1043_Equipment
    F1043_Desc           varchar(96),
    F1043_IsVirtual      INT not null,
    F1043_Type           INT not null,
+   F1016_Code			varchar(48),
    primary key (F1043_CODE)
 );
 
