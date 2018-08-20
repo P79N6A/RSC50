@@ -6,13 +6,17 @@
 package com.synet.tool.rsc.editor.imp;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
+import com.synet.tool.rsc.ui.TableFactory;
 
 /**
  * 导入信息->压板与虚端子关联表 树菜单编辑器。
@@ -21,6 +25,8 @@ import com.synet.tool.rsc.editor.BaseConfigEditor;
  */
 public class ImpTerStrapEditor extends BaseConfigEditor {
 	
+	private List titleList;
+	
 	public ImpTerStrapEditor(Composite container, IEditorInput input) {
 		super(container, input);
 	}
@@ -28,22 +34,14 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		CTabFolder tab = SwtUtil.createTabFolder(editArea, SWT.TOP | SWT.BORDER);
-		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-//		// 基本信息
-//		Composite baseCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_VERTICAL), 1);
-//		SwtUtil.addTabItem(tab, "基本信息", baseCmp);
-//		baseInfoTbl = TableFactory.getBaseInfoTable(baseCmp);
-//		baseInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		// 板卡信息
-//		Composite cardCmp = SwtUtil.createComposite(tab, new GridData(GridData.FILL_BOTH), 1);
-//		SwtUtil.addTabItem(tab, "板卡信息", cardCmp);
-//		cardInfoTbl = TableFactory.getCardInfoTable(cardCmp);
-//		cardInfoTbl.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
-//		tab.setSelection(0);
+		container.setLayout(SwtUtil.getGridLayout(2));
+	
+		GridData gridData = new GridData(GridData.FILL_VERTICAL);
+		gridData.widthHint = 150;
+		titleList = SwtUtil.createList(container, gridData);
+		titleList.setItems(new String[]{"压板与虚端子关联文件1"});
+		table =TableFactory.getTerStrapTable(container);
+		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
 	protected void addListeners() {

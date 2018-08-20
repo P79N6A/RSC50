@@ -16,8 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.shrcn.found.ui.editor.ConfigEditorInput;
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -31,7 +34,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Button btnTempCamp;
 	private Button btnTempQuote;
 	private Button btnTempSave;
-	private String editorName;
 	private GridData gridData;
 	private DevKTable tableBoardPort;
 	private DevKTable tableProtectValue;
@@ -51,6 +53,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableDeviceName;
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkTable;
+	private Tb1046IedEntity iedEntity;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -59,7 +62,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	@Override
 	public void init() {
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
-		editorName = input.getEditorName();
+		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		gridData = new GridData(GridData.FILL_BOTH);
 		super.init();
 	}
@@ -79,14 +82,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_4 = new GridData(GridData.FILL_BOTH);
 		gdSpan_4.horizontalSpan = 4;
-		switch (editorName) {
-		case "保护":
+		int type = iedEntity.getF1046Type();
+		switch (type) {
+		case DBConstants.IED_PROT:
 			createProtectCmp(comp, gdSpan_4);
 			break;
-		case "合并单元":
+		case DBConstants.IED_MU:
+		case DBConstants.IED_MT:
 			createMergeUnitCmp(comp, gdSpan_4);
 			break;
-		case "智能终端":
+		case DBConstants.IED_TERM:
 			createIedCmp(comp, gdSpan_4);
 			break;
 		default:

@@ -1,13 +1,12 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
 
 /**
- * 间隔
  * Created by chunc on 2018/8/7.
  */
 public class Tb1042BayEntity {
     private String f1042Code;
-    private String f1041Code;
     private String f1042Name;
     private String f1042Desc;
     private int f1042Voltage;
@@ -15,6 +14,7 @@ public class Tb1042BayEntity {
     private Integer f1042DevType;
     private Integer f1042IedSolution;
     private Tb1041SubstationEntity tb1041SubstationByF1041Code;
+    private Set<Tb1043EquipmentEntity> tb1043EquipmentsByF1042Code;
 
     public String getF1042Code() {
         return f1042Code;
@@ -22,14 +22,6 @@ public class Tb1042BayEntity {
 
     public void setF1042Code(String f1042Code) {
         this.f1042Code = f1042Code;
-    }
-
-    public String getF1041Code() {
-        return f1041Code;
-    }
-
-    public void setF1041Code(String f1041Code) {
-        this.f1041Code = f1041Code;
     }
 
     public String getF1042Name() {
@@ -88,7 +80,6 @@ public class Tb1042BayEntity {
         Tb1042BayEntity that = (Tb1042BayEntity) o;
 
         if (f1042Voltage != that.f1042Voltage) return false;
-        if (f1041Code != null ? !f1041Code.equals(that.f1041Code) : that.f1041Code != null) return false;
         if (f1042Code != null ? !f1042Code.equals(that.f1042Code) : that.f1042Code != null) return false;
         if (f1042ConnType != null ? !f1042ConnType.equals(that.f1042ConnType) : that.f1042ConnType != null)
             return false;
@@ -104,7 +95,6 @@ public class Tb1042BayEntity {
     @Override
     public int hashCode() {
         int result = f1042Code != null ? f1042Code.hashCode() : 0;
-        result = 31 * result + (f1041Code != null ? f1041Code.hashCode() : 0);
         result = 31 * result + (f1042Name != null ? f1042Name.hashCode() : 0);
         result = 31 * result + (f1042Desc != null ? f1042Desc.hashCode() : 0);
         result = 31 * result + f1042Voltage;
@@ -120,5 +110,13 @@ public class Tb1042BayEntity {
 
     public void setTb1041SubstationByF1041Code(Tb1041SubstationEntity tb1041SubstationByF1041Code) {
         this.tb1041SubstationByF1041Code = tb1041SubstationByF1041Code;
+    }
+
+    public Set<Tb1043EquipmentEntity> getTb1043EquipmentsByF1042Code() {
+        return tb1043EquipmentsByF1042Code;
+    }
+
+    public void setTb1043EquipmentsByF1042Code(Set<Tb1043EquipmentEntity> tb1043EquipmentsByF1042Code) {
+        this.tb1043EquipmentsByF1042Code = tb1043EquipmentsByF1042Code;
     }
 }

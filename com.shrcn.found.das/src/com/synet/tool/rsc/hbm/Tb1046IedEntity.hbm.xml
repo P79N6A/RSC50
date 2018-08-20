@@ -7,9 +7,6 @@
         <id name="f1046Code">
             <column name="F1046_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
-        <property name="f1042Code">
-            <column name="F1042_CODE" sql-type="varchar" length="48"/>
-        </property>
         <property name="f1050Code">
             <column name="F1050_Code" sql-type="varchar" length="48"/>
         </property>
@@ -40,5 +37,8 @@
         <property name="f1046Crc">
             <column name="F1046_CRC" sql-type="varchar" length="24"/>
         </property>
+        <many-to-one name="tb1042BaysByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity" lazy="false">
+            <column name="F1042_CODE"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

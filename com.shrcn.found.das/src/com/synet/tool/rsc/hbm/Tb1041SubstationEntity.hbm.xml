@@ -15,7 +15,7 @@
             <column name="F1041_Desc" sql-type="varchar" length="96"/>
         </property>
         <property name="f1041DqName">
-            <column name="F1041_DQName" sql-type="varchar" length="48" not-null="true"/>
+            <column name="F1041_DQName" sql-type="varchar" length="48"/>
         </property>
         <property name="f1041Dqdesc">
             <column name="F1041_DQDESC" sql-type="varchar" length="96"/>

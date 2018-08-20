@@ -15,10 +15,10 @@
             <column name="F1044_Desc" sql-type="varchar" length="96"/>
         </property>
         <many-to-one name="tb1045ConnectivitynodeByF1045Code"
-                     class="com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity">
-            <column name="F1045_CODE" not-null="true"/>
+                     class="com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity" lazy="false">
+            <column name="F1045_CODE" not-null="false"/>
         </many-to-one>
-        <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity">
+        <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" lazy="false">
             <column name="F1043_CODE" not-null="true"/>
         </many-to-one>
     </class>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="PortLightTable" desc="光强与端口" 
+class="com.synet.tool.rsc/com.synet.tool.rsc.entity.PortLight" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="装置Name" editor="none" name="devName" width="100" default=""/>
+  <field desc="光强信息参引" editor="none" name="opticalRefAddr" width="100" default=""/>
+  <field desc="光强信息描述" editor="none" name="opticalDedc" width="100" default=""/> 
+  <field desc="板卡编号" editor="none" name="boardCode" width="100" default=""/> 
+  <field desc="端口编号" editor="none" name="portCode" width="100" default=""/> 
+  <field desc="是否匹配" editor="none" name="matched" width="100" default=""/> 
+  <field desc="" editor="none" name="other" width="10" default=""/> 
+</table>

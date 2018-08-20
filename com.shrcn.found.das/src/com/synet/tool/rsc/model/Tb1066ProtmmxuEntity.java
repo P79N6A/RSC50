@@ -7,7 +7,6 @@ package com.synet.tool.rsc.model;
 public class Tb1066ProtmmxuEntity {
     private String f1066Code;
     private String f1043Code;
-    private String f1067Code;
     private String f1046CodeMu;
     private String f1046CodeProt;
     private int f1066Type;
@@ -33,14 +32,6 @@ public class Tb1066ProtmmxuEntity {
 
     public void setF1043Code(String f1043Code) {
         this.f1043Code = f1043Code;
-    }
-
-    public String getF1067Code() {
-        return f1067Code;
-    }
-
-    public void setF1067Code(String f1067Code) {
-        this.f1067Code = f1067Code;
     }
 
     public String getF1046CodeMu() {
@@ -107,7 +98,6 @@ public class Tb1066ProtmmxuEntity {
         if (f1046CodeProt != null ? !f1046CodeProt.equals(that.f1046CodeProt) : that.f1046CodeProt != null)
             return false;
         if (f1066Code != null ? !f1066Code.equals(that.f1066Code) : that.f1066Code != null) return false;
-        if (f1067Code != null ? !f1067Code.equals(that.f1067Code) : that.f1067Code != null) return false;
 
         return true;
     }
@@ -116,7 +106,6 @@ public class Tb1066ProtmmxuEntity {
     public int hashCode() {
         int result = f1066Code != null ? f1066Code.hashCode() : 0;
         result = 31 * result + (f1043Code != null ? f1043Code.hashCode() : 0);
-        result = 31 * result + (f1067Code != null ? f1067Code.hashCode() : 0);
         result = 31 * result + (f1046CodeMu != null ? f1046CodeMu.hashCode() : 0);
         result = 31 * result + (f1046CodeProt != null ? f1046CodeProt.hashCode() : 0);
         result = 31 * result + f1066Type;

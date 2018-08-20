@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="IEDListTable" desc="设备台帐" 
+class="com.synet.tool.rsc/com.synet.tool.rsc.entity.IEDList" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="装置Name" editor="none" name="devName" width="100" default=""/>
+  <field desc="装置名称" editor="none" name="devDesc" width="100" default=""/>
+  <field desc="所属间隔" editor="none" name="bay" width="100" default=""/> 
+  <field desc="所属屏柜" editor="none" name="cubicle" width="100" default=""/> 
+  <field desc="生产厂家" editor="none" name="manufacturor" width="100" default=""/> 
+  <field desc="装置型号" editor="none" name="devType" width="100" default=""/> 
+  <field desc="装置版本号" editor="none" name="devVersion" width="100" default=""/> 
+  <field desc="A/B套" editor="none" name="AorB" width="100" default=""/> 
+  <field desc="保护分类（国产、进口）" editor="none" name="protClassify" width="100" default=""/> 
+  <field desc="保护型号" editor="none" name="protModel" width="100" default=""/> 
+  <field desc="保护类型" editor="none" name="protType" width="100" default=""/> 
+  <field desc="投运日期" editor="none" name="dateService" width="100" default=""/> 
+  <field desc="出厂日期" editor="none" name="dateProduct" width="100" default=""/> 
+  <field desc="出厂编号" editor="none" name="productCode" width="100" default=""/> 
+  <field desc="数据采集方式" editor="none" name="dataCollectType" width="100" default=""/> 
+  <field desc="出口方式" editor="none" name="outType" width="100" default=""/> 
+  <field desc="板卡数量" editor="none" name="boardNum" width="100" default=""/> 
+  <field desc="匹配装置代码" editor="none" name="matchedIedCode" width="100" default=""/> 
+  <field desc="" editor="none" name="other" width="10" default=""/> 
+</table>
