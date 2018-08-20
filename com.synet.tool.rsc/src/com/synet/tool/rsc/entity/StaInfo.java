@@ -7,34 +7,20 @@ package com.synet.tool.rsc.entity;
  */
 public class StaInfo {
 	
-	private String devName;		//装置Name
-	private String devDesc;		//装置名称
-	private String boardCode;	//板卡编号
-	private String portCode;	//端口编号
+	private String description; //描述
+	private String refAddr;		//参引
 	
-	public String getDevName() {
-		return devName;
+	public String getDescription() {
+		return description;
 	}
-	public void setDevName(String devName) {
-		this.devName = devName;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	public String getDevDesc() {
-		return devDesc;
+	public String getRefAddr() {
+		return refAddr;
 	}
-	public void setDevDesc(String devDesc) {
-		this.devDesc = devDesc;
-	}
-	public String getBoardCode() {
-		return boardCode;
-	}
-	public void setBoardCode(String boardCode) {
-		this.boardCode = boardCode;
-	}
-	public String getPortCode() {
-		return portCode;
-	}
-	public void setPortCode(String portCode) {
-		this.portCode = portCode;
+	public void setRefAddr(String refAddr) {
+		this.refAddr = refAddr;
 	}
 
 }
