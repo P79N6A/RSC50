@@ -42,10 +42,11 @@ public abstract class IedParserBase<T> implements IIedParser {
 	protected BeanDaoService beanDao = BeanDaoImpl.getInstance();
 
 	public IedParserBase(Tb1046IedEntity ied) {
-		super();
-		this.ied = ied;
-		this.iedName = ied.getF1046Name();
-		this.iedXpath = SCL.getIEDXPath(iedName);
+		if (ied != null) {
+			this.ied = ied;
+			this.iedName = ied.getF1046Name();
+			this.iedXpath = SCL.getIEDXPath(iedName);
+		}
 	}
 
 	public List<T> getItems() {

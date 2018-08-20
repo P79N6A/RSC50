@@ -26,10 +26,16 @@ import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
+import com.synet.tool.rsc.io.parser.SubstationParser;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
+import com.synet.tool.rsc.model.Tb1044TerminalEntity;
+import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
@@ -58,6 +64,10 @@ public class SCDImporter implements IImporter {
 	
 	public SCDImporter(String scdPath) {
 		this.scdPath = scdPath;
+		clearHistory();
+	}
+
+	private void clearHistory() {
 		FcdaDAO.getInstance().clear();
 		beanDao.deleteAll(Tb1006AnalogdataEntity.class);
 		beanDao.deleteAll(Tb1016StatedataEntity.class);
@@ -77,12 +87,22 @@ public class SCDImporter implements IImporter {
 		beanDao.deleteAll(Tb1065LogicallinkEntity.class);
 		beanDao.deleteAll(Tb1063CircuitEntity.class);
 		beanDao.deleteAll(Tb1062PinEntity.class);
+
+		beanDao.deleteAll(Tb1041SubstationEntity.class);
+		beanDao.deleteAll(Tb1042BayEntity.class);
+		beanDao.deleteAll(Tb1043EquipmentEntity.class);
+		beanDao.deleteAll(Tb1044TerminalEntity.class);
+		beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
 	}
 
 	@Override
 	public void execute() {
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
+		// 一次部分
+		SubstationParser sp = new SubstationParser();
+		sp.parse();
+		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 		if (iedNds == null || iedNds.size() < 1) {
 			return;

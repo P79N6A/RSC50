@@ -106,7 +106,7 @@ create table TB1041_Substation
    F1041_CODE           varchar(48) not null,
    F1041_Name           varchar(48) not null,
    F1041_Desc           varchar(96),
-   F1041_DQName         varchar(48) not null,
+   F1041_DQName         varchar(48),
    F1041_DQDESC         varchar(96),
    F1041_Company        varchar(96),
    F1042_VoltageH       INT,
@@ -123,7 +123,7 @@ create table TB1042_Bay
    F1042_CODE           varchar(48) not null,
    F1041_CODE           varchar(48) not null,
    F1042_Name           varchar(48) not null,
-   F1042_Desc           varchar(96) not null,
+   F1042_Desc           varchar(96),
    F1042_Voltage        INT not null,
    F1042_ConnType       INT,
    F1042_DevType        INT,
@@ -152,7 +152,7 @@ create table TB1044_Terminal
 (
    F1044_CODE           varchar(48) not null,
    F1043_CODE           varchar(48) not null,
-   F1045_CODE           varchar(48) not null,
+   F1045_CODE           varchar(48),
    F1044_Name           varchar(48) not null,
    F1044_Desc           varchar(96),
    primary key (F1044_CODE)

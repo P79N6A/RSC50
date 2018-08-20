@@ -26,7 +26,12 @@ public interface DBConstants {
 	String PR_SP 			= "SP";
 	String PR_LOGICLINK 	= "LOGICLINK";
 	String PR_CIRCUIT 		= "CIRCUIT";
-	String PR_PIN 		= "PIN";
+	String PR_PIN 			= "PIN";
+	String PR_STA 			= "Substation";
+	String PR_BAY 			= "Bay";
+	String PR_EQP 			= "Equipment";
+	String PR_CNode 		= "CNode";
+	String PR_Term 		= "Term";
 	
 	// A、B套
 	int SUITE_A = 1;
@@ -88,6 +93,18 @@ public interface DBConstants {
 	int CIRCUIT_U = 07;	//电压采样回路
 	int CIRCUIT_ST = 8;	//遥信开入
 	int CIRCUIT_OTHER = 9;	//其它
+
+	int Equipment_BRK = 01; //断路器
+	int Equipment_DIS = 02; //刀闸
+	int Equipment_BUS = 03; //母线
+	int Equipment_PTR = 04; //变压器
+	int Equipment_LINE = 05; //线路
+	int Equipment_CBR = 06; //电流互感器
+	int Equipment_VTR = 07; //电压互感器
+	int Equipment_REA = 8; //电抗器
+	int Equipment_CAP = 9; //电容器
+	int Equipment_GPTR = 10; //站用变、接地变
+	int Equipment_SHORT_L = 11; //短引线
 
 }
 

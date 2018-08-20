@@ -16,16 +16,20 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.ProjectManager;
-import com.synet.tool.rsc.io.SCDImporter;
 import com.synet.tool.rsc.io.parser.DsParameterParser;
 import com.synet.tool.rsc.io.parser.DsSettingParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
-import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
+import com.synet.tool.rsc.io.parser.SubstationParser;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
+import com.synet.tool.rsc.model.Tb1044TerminalEntity;
+import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
@@ -78,9 +82,15 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1065LogicallinkEntity.class);
 			beanDao.deleteAll(Tb1063CircuitEntity.class);
 			beanDao.deleteAll(Tb1062PinEntity.class);
+
+			beanDao.deleteAll(Tb1041SubstationEntity.class);
+			beanDao.deleteAll(Tb1042BayEntity.class);
+			beanDao.deleteAll(Tb1043EquipmentEntity.class);
+			beanDao.deleteAll(Tb1044TerminalEntity.class);
+			beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
 		}
 		
-		new SCDImporter(scdPath).execute();
+//		new SCDImporter(scdPath).execute();
 	}
 
 	@Test
@@ -193,6 +203,23 @@ public class IedParserTest {
 		assertTrue(cts.size() > 0);
 		List<Tb1062PinEntity> pins = (List<Tb1062PinEntity>) beanDao.getAll(Tb1062PinEntity.class);
 		assertTrue(pins.size() > 0);
+	}
+	
+	@Test
+	public void testSubstationParser() {
+		SubstationParser sp = new SubstationParser();
+		sp.parse();
+		List<Tb1041SubstationEntity> sts = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
+		assertTrue(sts.size() > 0);
+		List<Tb1042BayEntity> bas = (List<Tb1042BayEntity>) beanDao.getAll(Tb1042BayEntity.class);
+		assertTrue(bas.size() > 0);
+		List<Tb1043EquipmentEntity> eqs = (List<Tb1043EquipmentEntity>) beanDao.getAll(Tb1043EquipmentEntity.class);
+		assertTrue(eqs.size() > 0);
+		List<Tb1044TerminalEntity> tts = (List<Tb1044TerminalEntity>) beanDao.getAll(Tb1044TerminalEntity.class);
+		assertTrue(tts.size() > 0);
+		List<Tb1045ConnectivitynodeEntity> ccs = (List<Tb1045ConnectivitynodeEntity>) beanDao.getAll(Tb1045ConnectivitynodeEntity.class);
+		assertTrue(ccs.size() > 0);
+		
 	}
 	
 }
