@@ -2,6 +2,7 @@ package com.synet.tool.rsc.model;
 
 
 /**
+ * 变电站
  * Created by chunc on 2018/8/7.
  */
 public class Tb1041SubstationEntity {

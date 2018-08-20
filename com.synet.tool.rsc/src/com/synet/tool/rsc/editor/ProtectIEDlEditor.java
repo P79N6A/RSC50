@@ -16,8 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.shrcn.found.ui.editor.ConfigEditorInput;
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -31,7 +34,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Button btnTempCamp;
 	private Button btnTempQuote;
 	private Button btnTempSave;
-	private String editorName;
 	private GridData gridData;
 	private DevKTable tableBoardPort;
 	private DevKTable tableProtectValue;
@@ -40,13 +42,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableProtectAction;
 	private DevKTable tableProtectMeaQuantity;
 	private DevKTable tableDeviceWarning;
-	private Button btnConnectDeviceWarning;
 	private DevKTable tableRunState;
 	private DevKTable tableLogicalLink;
 	private DevKTable tableVirtualTerminalOut;
 	private DevKTable tableVirtualTerminalIn;
 	private DevKTable tableAnalogChn;
 	private DevKTable tableCriteriaChn;
+	private Button btnAdd;
+	private Button btnDel;
+	private DevKTable tableDeviceName;
+	private DevKTable tableBoardName;
+	private DevKTable tableLogLinkTable;
+	private Tb1046IedEntity iedEntity;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -55,7 +62,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	@Override
 	public void init() {
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
-		editorName = input.getEditorName();
+		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		gridData = new GridData(GridData.FILL_BOTH);
 		super.init();
 	}
@@ -75,14 +82,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_4 = new GridData(GridData.FILL_BOTH);
 		gdSpan_4.horizontalSpan = 4;
-		switch (editorName) {
-		case "保护":
+		int type = iedEntity.getF1046Type();
+		switch (type) {
+		case DBConstants.IED_PROT:
 			createProtectCmp(comp, gdSpan_4);
 			break;
-		case "合并单元":
+		case DBConstants.IED_MU:
+		case DBConstants.IED_MT:
 			createMergeUnitCmp(comp, gdSpan_4);
 			break;
-		case "智能终端":
+		case DBConstants.IED_TERM:
 			createIedCmp(comp, gdSpan_4);
 			break;
 		default:
@@ -174,10 +183,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				super.widgetSelected(e);
 			}
 		};
+		btnAdd.addSelectionListener(selectionListener);
+		btnDel.addSelectionListener(selectionListener);
 		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
-		btnConnectDeviceWarning.addSelectionListener(selectionListener);
 	}
 
 	@Override
@@ -241,10 +251,39 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private Composite createDeviceWarningCmp(Composite com) {
 		Composite cmpDeviceWarning = SwtUtil.createComposite(com, gridData, 1);
-		cmpDeviceWarning.setLayout(SwtUtil.getGridLayout(1));
-		btnConnectDeviceWarning = SwtUtil.createButton(cmpDeviceWarning, SwtUtil.bt_gd, SWT.BUTTON1, "关联");
-		tableDeviceWarning = TableFactory.getDeviceWarnTable(cmpDeviceWarning);
+		cmpDeviceWarning.setLayout(SwtUtil.getGridLayout(3));
+		
+		Composite cmpLeft = SwtUtil.createComposite(cmpDeviceWarning, gridData, 1);
+		cmpLeft.setLayout(SwtUtil.getGridLayout(1));
+		
+		tableDeviceWarning = TableFactory.getDeviceWarnTable(cmpLeft);
 		tableDeviceWarning.getTable().setLayoutData(gridData);
+		
+		GridData gdCentor = new GridData(41, SWT.DEFAULT);
+		Composite cmpCentor = SwtUtil.createComposite(cmpDeviceWarning, gdCentor, 1);
+		cmpCentor.setLayout(SwtUtil.getGridLayout(1));
+		
+		btnAdd = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnDel = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
+		
+		
+		GridData gdRight = new GridData(220, 400);
+		Composite cmpRight = SwtUtil.createComposite(cmpDeviceWarning, gdRight, 1);
+		cmpRight.setLayout(SwtUtil.getGridLayout(1));
+		
+		String[] tabNames = new String[]{"装置", "板卡", "逻辑链路"};
+		CTabFolder tabFolder = SwtUtil.createTab(cmpRight, gridData, tabNames);
+		tabFolder.setSelection(0);
+		Control[] contros = tabFolder.getChildren();
+		tableDeviceName = TableFactory.getDeviceNameTable((Composite) contros[0]);
+		tableDeviceName.getTable().setLayoutData(gridData);
+		
+		tableBoardName = TableFactory.getBoardNameTable((Composite) contros[1]);
+		tableBoardName.getTable().setLayoutData(gridData);
+		
+		tableLogLinkTable = TableFactory.getLogicalLinkNameTable((Composite) contros[2]);
+		tableLogLinkTable.getTable().setLayoutData(gridData);
+		
 		return cmpDeviceWarning;
 	}
 	

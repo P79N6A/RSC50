@@ -3,6 +3,7 @@ package com.synet.tool.rsc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 
 public class IedEntityService extends BaseService {
@@ -30,8 +31,8 @@ public class IedEntityService extends BaseService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Tb1046IedEntity> getIedEntityByBay(String bayEntityCode) {
-		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, "f1042Code", bayEntityCode);
+	public List<Tb1046IedEntity> getIedEntityByBay(Tb1042BayEntity bayEntity) {
+		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, "tb1042BaysByF1042Code", bayEntity);
 	}
 
 }

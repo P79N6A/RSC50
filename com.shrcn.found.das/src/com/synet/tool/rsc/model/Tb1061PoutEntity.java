@@ -2,7 +2,7 @@ package com.synet.tool.rsc.model;
 
 
 /**
- * 虚端子
+ * 输出虚端子
  * Created by chunc on 2018/8/7.
  */
 public class Tb1061PoutEntity {

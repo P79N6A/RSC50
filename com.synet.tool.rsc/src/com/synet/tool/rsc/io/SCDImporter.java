@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.dom4j.Element;
 
+import sun.security.pkcs11.Secmod.DbMode;
+
 import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
@@ -26,10 +28,16 @@ import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
+import com.synet.tool.rsc.io.parser.SubstationParser;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
+import com.synet.tool.rsc.model.Tb1044TerminalEntity;
+import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
@@ -41,6 +49,7 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
@@ -55,9 +64,14 @@ public class SCDImporter implements IImporter {
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
+	private Map<String, Tb1042BayEntity> bayCache = new HashMap<>();
 	
 	public SCDImporter(String scdPath) {
 		this.scdPath = scdPath;
+		clearHistory();
+	}
+
+	private void clearHistory() {
 		FcdaDAO.getInstance().clear();
 		beanDao.deleteAll(Tb1006AnalogdataEntity.class);
 		beanDao.deleteAll(Tb1016StatedataEntity.class);
@@ -77,12 +91,41 @@ public class SCDImporter implements IImporter {
 		beanDao.deleteAll(Tb1065LogicallinkEntity.class);
 		beanDao.deleteAll(Tb1063CircuitEntity.class);
 		beanDao.deleteAll(Tb1062PinEntity.class);
+
+		beanDao.deleteAll(Tb1041SubstationEntity.class);
+		beanDao.deleteAll(Tb1042BayEntity.class);
+		beanDao.deleteAll(Tb1043EquipmentEntity.class);
+		beanDao.deleteAll(Tb1044TerminalEntity.class);
+		beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
+		beanDao.deleteAll(Tb1067CtvtsecondaryEntity.class);
+	}
+	
+	private Tb1042BayEntity getBayByName(String bayName) {
+		if (bayCache.containsKey(bayName)) {
+			return bayCache.get(bayName);
+		}
+		Tb1042BayEntity bay = (Tb1042BayEntity) beanDao.getObject(Tb1042BayEntity.class, "f1042Name", bayName);
+		if (bay == null) {
+			bay = new Tb1042BayEntity();
+			bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
+			bay.setF1042Name(bayName);
+			List<Tb1041SubstationEntity> staList = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
+			if (staList != null && staList.size() > 0) {
+				bay.setTb1041SubstationByF1041Code(staList.get(0));
+			}
+			beanDao.insert(bay);
+		}
+		return bay;
 	}
 
 	@Override
 	public void execute() {
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
+		// 一次部分
+		SubstationParser sp = new SubstationParser();
+		sp.parse();
+		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 		if (iedNds == null || iedNds.size() < 1) {
 			return;
@@ -127,6 +170,13 @@ public class SCDImporter implements IImporter {
 				int type = XMLDBHelper.existsNode(ldXpath) ?
 						DBConstants.IED_PROT : DBConstants.IED_MONI;
 				ied.setF1046Type(type);
+				if (type == DBConstants.IED_PROT) {
+					Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PROT);
+					ied.setTb1042BaysByF1042Code(bay);
+				} else {
+					Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PUB);
+					ied.setTb1042BaysByF1042Code(bay);
+				}
 				Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
 				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
 				mmsServer.setTb1046IedByF1046Code(ied);
@@ -146,6 +196,8 @@ public class SCDImporter implements IImporter {
 				} else {
 					ied.setF1046Type(DBConstants.IED_TERM);
 				}
+				Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PROT);
+				ied.setTb1042BaysByF1042Code(bay);
 			}
 			beanDao.update(ied);
 		}

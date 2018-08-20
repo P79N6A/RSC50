@@ -7,7 +7,6 @@ import java.util.Set;
  */
 public class Tb1042BayEntity {
     private String f1042Code;
-    private String f1041Code;
     private String f1042Name;
     private String f1042Desc;
     private int f1042Voltage;
@@ -23,14 +22,6 @@ public class Tb1042BayEntity {
 
     public void setF1042Code(String f1042Code) {
         this.f1042Code = f1042Code;
-    }
-
-    public String getF1041Code() {
-        return f1041Code;
-    }
-
-    public void setF1041Code(String f1041Code) {
-        this.f1041Code = f1041Code;
     }
 
     public String getF1042Name() {
@@ -89,7 +80,6 @@ public class Tb1042BayEntity {
         Tb1042BayEntity that = (Tb1042BayEntity) o;
 
         if (f1042Voltage != that.f1042Voltage) return false;
-        if (f1041Code != null ? !f1041Code.equals(that.f1041Code) : that.f1041Code != null) return false;
         if (f1042Code != null ? !f1042Code.equals(that.f1042Code) : that.f1042Code != null) return false;
         if (f1042ConnType != null ? !f1042ConnType.equals(that.f1042ConnType) : that.f1042ConnType != null)
             return false;
@@ -105,7 +95,6 @@ public class Tb1042BayEntity {
     @Override
     public int hashCode() {
         int result = f1042Code != null ? f1042Code.hashCode() : 0;
-        result = 31 * result + (f1041Code != null ? f1041Code.hashCode() : 0);
         result = 31 * result + (f1042Name != null ? f1042Name.hashCode() : 0);
         result = 31 * result + (f1042Desc != null ? f1042Desc.hashCode() : 0);
         result = 31 * result + f1042Voltage;

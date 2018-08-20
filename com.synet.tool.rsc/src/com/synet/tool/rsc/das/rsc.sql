@@ -106,7 +106,7 @@ create table TB1041_Substation
    F1041_CODE           varchar(48) not null,
    F1041_Name           varchar(48) not null,
    F1041_Desc           varchar(96),
-   F1041_DQName         varchar(48) not null,
+   F1041_DQName         varchar(48),
    F1041_DQDESC         varchar(96),
    F1041_Company        varchar(96),
    F1042_VoltageH       INT,
@@ -123,7 +123,7 @@ create table TB1042_Bay
    F1042_CODE           varchar(48) not null,
    F1041_CODE           varchar(48) not null,
    F1042_Name           varchar(48) not null,
-   F1042_Desc           varchar(96) not null,
+   F1042_Desc           varchar(96),
    F1042_Voltage        INT not null,
    F1042_ConnType       INT,
    F1042_DevType        INT,
@@ -142,6 +142,7 @@ create table TB1043_Equipment
    F1043_Desc           varchar(96),
    F1043_IsVirtual      INT not null,
    F1043_Type           INT not null,
+   F1016_Code			varchar(48),
    primary key (F1043_CODE)
 );
 
@@ -152,7 +153,7 @@ create table TB1044_Terminal
 (
    F1044_CODE           varchar(48) not null,
    F1043_CODE           varchar(48) not null,
-   F1045_CODE           varchar(48) not null,
+   F1045_CODE           varchar(48),
    F1044_Name           varchar(48) not null,
    F1044_Desc           varchar(96),
    primary key (F1044_CODE)
@@ -505,14 +506,14 @@ create table TB1067_CTVTSecondary
    F1043_CODE           varchar(48) not null,
    F1067_Index          INT,
    F1067_Model          varchar(24),
-   F1067_Type           varchar(48) not null,
-   F1061_CODE_A1        varchar(48) not null,
-   F1061_CODE_A2        varchar(48) not null,
+   F1067_Type           varchar(48),
+   F1061_CODE_A1        varchar(48),
+   F1061_CODE_A2        varchar(48),
    F1061_CODE_B1        varchar(48),
    F1061_CODE_B2        varchar(48),
    F1061_CODE_C1        varchar(48),
    F1061_CODE_C2        varchar(48),
-   F1067_TermNo         varchar(96),
+   F1067_TermNo         varchar(96) not null,
    F1067_CircNo         varchar(96),
    F1067_Desc           varchar(96),
    primary key (F1067_Code)

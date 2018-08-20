@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
+
 
 /**
  * 互感器
@@ -7,13 +9,13 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1043EquipmentEntity {
     private String f1043Code;
-    private String f1042Code;
     private String f1043Name;
     private String f1043Desc;
     private int f1043IsVirtual;
     private int f1043Type;
     private Tb1042BayEntity tb1042BayByF1042Code;
-    private Tb1016StatedataEntity tb1016StatedataEntity;
+    private Set<Tb1044TerminalEntity> tb1044TerminalsByF1043Code;
+    private Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code;
 
     public String getF1043Code() {
         return f1043Code;
@@ -21,14 +23,6 @@ public class Tb1043EquipmentEntity {
 
     public void setF1043Code(String f1043Code) {
         this.f1043Code = f1043Code;
-    }
-
-    public String getF1042Code() {
-        return f1042Code;
-    }
-
-    public void setF1042Code(String f1042Code) {
-        this.f1042Code = f1042Code;
     }
 
     public String getF1043Name() {
@@ -72,7 +66,6 @@ public class Tb1043EquipmentEntity {
 
         if (f1043IsVirtual != that.f1043IsVirtual) return false;
         if (f1043Type != that.f1043Type) return false;
-        if (f1042Code != null ? !f1042Code.equals(that.f1042Code) : that.f1042Code != null) return false;
         if (f1043Code != null ? !f1043Code.equals(that.f1043Code) : that.f1043Code != null) return false;
         if (f1043Desc != null ? !f1043Desc.equals(that.f1043Desc) : that.f1043Desc != null) return false;
         if (f1043Name != null ? !f1043Name.equals(that.f1043Name) : that.f1043Name != null) return false;
@@ -83,7 +76,6 @@ public class Tb1043EquipmentEntity {
     @Override
     public int hashCode() {
         int result = f1043Code != null ? f1043Code.hashCode() : 0;
-        result = 31 * result + (f1042Code != null ? f1042Code.hashCode() : 0);
         result = 31 * result + (f1043Name != null ? f1043Name.hashCode() : 0);
         result = 31 * result + (f1043Desc != null ? f1043Desc.hashCode() : 0);
         result = 31 * result + f1043IsVirtual;
@@ -99,12 +91,22 @@ public class Tb1043EquipmentEntity {
         this.tb1042BayByF1042Code = tb1042BayByF1042Code;
     }
 
-	public Tb1016StatedataEntity getTb1016StatedataEntity() {
-		return tb1016StatedataEntity;
+	public Set<Tb1044TerminalEntity> getTb1044TerminalsByF1043Code() {
+		return tb1044TerminalsByF1043Code;
 	}
 
-	public void setTb1016StatedataEntity(Tb1016StatedataEntity tb1016StatedataEntity) {
-		this.tb1016StatedataEntity = tb1016StatedataEntity;
+	public void setTb1044TerminalsByF1043Code(
+			Set<Tb1044TerminalEntity> tb1044TerminalsByF1043Code) {
+		this.tb1044TerminalsByF1043Code = tb1044TerminalsByF1043Code;
+	}
+
+	public Set<Tb1067CtvtsecondaryEntity> getTb1067SecondarysByF1043Code() {
+		return tb1067SecondarysByF1043Code;
+	}
+
+	public void setTb1067SecondarysByF1043Code(
+			Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code) {
+		this.tb1067SecondarysByF1043Code = tb1067SecondarysByF1043Code;
 	}
 
 }
