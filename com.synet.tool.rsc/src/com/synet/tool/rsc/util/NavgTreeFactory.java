@@ -36,6 +36,7 @@ import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
@@ -139,21 +140,25 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
 		if(DataUtils.notNull(bayEntityList)){
+			Tb1042BayEntity pbayEntity = null;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);
+				String bayName = bayEntity.getF1042Name();
 				List<Tb1046IedEntity> iedEntities = iedService.getIedEntityByBay(bayEntity);
 				if (iedEntities != null && iedEntities.size() > 0) {
-					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
-					for (Tb1046IedEntity iedEntity : iedEntities) {
-						ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
-						proEntry.setData(iedEntity);
+					if (!DBConstants.BAY_PUB.equals(bayName)) {
+						ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
+						for (Tb1046IedEntity iedEntity : iedEntities) {
+							ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
+							proEntry.setData(iedEntity);
+						}
+					} else {
+						createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_PBAY, bayEntityList.size());
 					}
 				}
 			}
 		}
 		/** 动态加载-end  */
-		
-		createConfigEntry(protectEntry, "公用间隔", "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);//ConfigTreeEntry bayPubEntry = 
 	}
 	
 	/**
