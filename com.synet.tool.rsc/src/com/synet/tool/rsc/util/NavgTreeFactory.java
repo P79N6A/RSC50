@@ -153,7 +153,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 							proEntry.setData(iedEntity);
 						}
 					} else {
-						createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_PBAY, bayEntityList.size());
+						createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);
 					}
 				}
 			}
