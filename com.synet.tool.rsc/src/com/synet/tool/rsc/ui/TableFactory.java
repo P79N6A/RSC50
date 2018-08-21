@@ -18,32 +18,38 @@ public class TableFactory {
 	public static final String CUBICLE_TABLE                = "CubicleTable";
 	public static final String CABLE_TABLE                  = "CableTable";
 	public static final String PHYSCONNE_TABLE              = "PhysconnTable";		
-	public static String LINEPORTFIBER_TABLE				= "LineProtFiberTable";
-	public static String IOTERM_TABLE 						= "IOTermTable";
-	public static String POWERKK_TABLE 						= "PowerKKTable";
-	public static String VOLTAGEKK_TABLE 					= "VoltageKKTable";
-	public static String ICD_TABLE 							= "IcdTable";
-	public static String POUT_TABLE 						= "PoutTable";
-	public static String ANALOG_TABLE 						= "AnalogTable";
-	public static String PROT_ANALOG_TABLE 					= "ProtAnalogTable";
-	public static String PROT_INTERVAL_TABLE 				= "ProtectIntervalTable";
-	public static String IED_CHOOSE_TABLE                   = "IedChooseTable";
-	public static String CTVT_CHOOSE_TABLE              	= "CtvtChooseTable";
-	public static String GATHER_TABLE 						= "GatherTable";
-	public static String BOARD_PORT_TABLE 					= "BoardPortTable";
-	public static String PROTECT_PORT_TABLE 				= "ProtectValueTable";
-	public static String PROTECT_PARAM_TABLE 				= "ProtectParamTable";
-	public static String PROTECT_BOARD_TABLE 				= "ProtectBoardTable";
-	public static String PROTECT_ACTION_TABLE 				= "ProtectActionTable";
-	public static String PROTECT_QUANT_TABLE 				= "ProtectMeaQuantityTable";
-	public static String DEVICE_WARN_TABLE 					= "DeviceWarnTable";
-	public static String RUN_STATE_TABLE 					= "RunStateTable";
-	public static String VIRTER_IN_TABLE 					= "VirtualTerminalOutTable";
-	public static String VIRTER_OUT_TABLE 					= "VirtualTerminalInTable";
-	public static String LOGICAL_LINK_TABLE 				= "LogicalLinkTable";
-	public static String ANALOG_CHN_TABLE 					= "AnalogChnTable";
-	public static String CRITER_CHN_TABLE 					= "CriteriaChnTable";
-	public static String CTVT_POUT_TABLE 					= "CtvtPoutTable";
+	public static final String LINEPORTFIBER_TABLE			= "LineProtFiberTable";
+	public static final String IOTERM_TABLE 				= "IOTermTable";
+	public static final String POWERKK_TABLE 				= "PowerKKTable";
+	public static final String VOLTAGEKK_TABLE 				= "VoltageKKTable";
+	public static final String ICD_TABLE 					= "IcdTable";
+	public static final String IEDACCOUNT_TABLE 			= "IEDAccountTable";
+	public static final String CTVT_POUT_TABLE 				= "CtvtPoutTable";
+	public static final String POUT_TABLE 					= "PoutTable";
+	public static final String ANALOG_TABLE 				= "AnalogTable";
+	public static final String PROT_ANALOG_TABLE 			= "ProtAnalogTable";
+	public static final String PROT_INTERVAL_TABLE 			= "ProtectIntervalTable";
+	public static final String IED_CHOOSE_TABLE             = "IedChooseTable";
+	public static final String CTVT_CHOOSE_TABLE            = "CtvtChooseTable";
+	public static final String GATHER_TABLE 				= "GatherTable";
+	public static final String BOARD_PORT_TABLE 			= "BoardPortTable";
+	public static final String PROTECT_PORT_TABLE 			= "ProtectValueTable";
+	public static final String PROTECT_PARAM_TABLE 			= "ProtectParamTable";
+	public static final String PROTECT_BOARD_TABLE 			= "ProtectBoardTable";
+	public static final String PROTECT_ACTION_TABLE 		= "ProtectActionTable";
+	public static final String PROTECT_QUANT_TABLE 			= "ProtectMeaQuantityTable";
+	public static final String DEVICE_WARN_TABLE 			= "DeviceWarnTable";
+	public static final String RUN_STATE_TABLE 				= "RunStateTable";
+	public static final String VIRTER_IN_TABLE 				= "VirtualTerminalOutTable";
+	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalInTable";
+	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";
+	public static final String ANALOG_CHN_TABLE 			= "AnalogChnTable";
+	public static final String CRITER_CHN_TABLE 			= "CriteriaChnTable";
+	
+	public static final String DEVICE_NAME_TABLE 			= "DeviceNameTable";
+	public static final String BOARD_NAME_TABLE 			= "BoardNameTable";
+	public static final String LOGLINK_NAME_TABLE 			= "LogicalLinkNameTable";
+	
 	private static String IED_LIST_TABLE                    = "IEDListTable";
 	private static String BOARD_WARN_TABLE                  = "BoardWarnTableTable";
 	private static String FIBRE_LIST_TABLE                  = "FibreListTable";
@@ -56,6 +62,20 @@ public class TableFactory {
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
+	public static DevKTable getDeviceNameTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_NAME_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getBoardNameTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(BOARD_NAME_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getLogicalLinkNameTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(LOGLINK_NAME_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
 	
 	public static DevKTable getDeviceWarnTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_WARN_TABLE);

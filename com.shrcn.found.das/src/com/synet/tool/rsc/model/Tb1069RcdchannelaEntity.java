@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.model;
 
 /**
+ * 保护录波模拟量通道
  * Created by chunc on 2018/8/7.
  */
 public class Tb1069RcdchannelaEntity {

@@ -33,4 +33,12 @@ public abstract class BaseService {
 	public void update(Object entity) {
 		beanDao.update(entity);
 	}
+	
+	public Object getById(Class<?> po, int id) {
+		return beanDao.getById(po, id);
+	}
+	
+	public Object getById(Class<?> po, String id) {
+		return beanDao.getById(po, id);
+	}
 }
