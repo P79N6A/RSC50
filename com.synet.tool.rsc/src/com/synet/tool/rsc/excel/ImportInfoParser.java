@@ -1,7 +1,9 @@
 package com.synet.tool.rsc.excel;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
@@ -11,8 +13,10 @@ import org.apache.poi.xssf.model.StylesTable;
 
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.file.excel.Xls2007Parser;
+import com.synet.tool.rsc.entity.FibreList;
 import com.synet.tool.rsc.entity.IEDBoard;
 import com.synet.tool.rsc.entity.StaInfo;
+import com.synet.tool.rsc.excel.handler.FibreListHandler;
 import com.synet.tool.rsc.excel.handler.IEDBoardHandler;
 import com.synet.tool.rsc.excel.handler.RscSheetHandler;
 import com.synet.tool.rsc.excel.handler.SecFibreListHandler;
@@ -174,6 +178,32 @@ public class ImportInfoParser {
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
+			SCTLogger.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, List<FibreList>> getFibreList(String xlspath) {
+		Map<String, List<FibreList>> result = new HashMap<String, List<FibreList>>();
+		try {
+			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
+			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage); 
+	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
+	        StylesTable styles = xssfReader.getStylesTable();  
+	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
+	        while (iter.hasNext()) {  
+	            InputStream stream = iter.next();
+	            String sheetName = iter.getSheetName();
+	            FibreListHandler handler = new FibreListHandler();
+            	setHandler(handler);
+            	Xls2007Parser.processSheet(styles, strings, handler, stream);
+				result.put(sheetName, (List<FibreList>) handler.getResult());
+	            stream.close();  
+	        }
+	        xlsxPackage.close();
+		} catch (Throwable e) {
+			e.printStackTrace();
 			SCTLogger.error(e.getMessage());
 		}
 		return result;
