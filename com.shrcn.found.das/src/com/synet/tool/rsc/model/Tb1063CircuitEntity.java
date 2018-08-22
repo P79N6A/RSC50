@@ -8,10 +8,13 @@ public class Tb1063CircuitEntity {
     private int f1063Type;
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
     private Tb1046IedEntity tb1046IedByF1046CodeIedSend;
+    
     private Tb1061PoutEntity tb1061PoutByF1061CodePSend;
     private Tb1062PinEntity tb1062PinByF1062CodePRecv;
+    
     private Tb1061PoutEntity tb1061PoutByF1061CodeConvChk1;
     private Tb1061PoutEntity tb1061PoutByF1061CodeConvChk2;
+    
     private Tb1065LogicallinkEntity tb1065LogicallinkByF1065Code;
 
     public String getF1063Code() {

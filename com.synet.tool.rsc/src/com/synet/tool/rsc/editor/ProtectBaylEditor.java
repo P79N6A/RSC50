@@ -5,9 +5,13 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -16,6 +20,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.service.EnumIedType;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -26,7 +33,10 @@ import com.synet.tool.rsc.ui.TableFactory;
 public class ProtectBaylEditor extends BaseConfigEditor {
 	
 	private Button btnSearch;
-	private String[] comboItems;
+	private Combo comboDevType;
+	private int comboPreSel = 0;
+	private IedEntityService iedEntityService;
+	private Text textDesc;
 
 	public ProtectBaylEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -34,8 +44,8 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 
 	@Override
 	public void init() {
-		comboItems = new String[]{"装置"};
 		super.init();
+		iedEntityService = new IedEntityService();
 	}
 	
 	@Override
@@ -47,12 +57,13 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
 		textGridData.widthHint = 80;
-		Combo combo = SwtUtil.createCombo(comp, textGridData, true);
-		combo.setItems(comboItems);
-		combo.select(0);
+		String[] comboItems = new String[]{"保护装置", "智能终端", "合并单元", "合并智能终端"};
+		comboDevType = SwtUtil.createCombo(comp, textGridData, true);
+		comboDevType.setItems(comboItems);
+		comboDevType.select(0);
 		
-		Text text = SwtUtil.createText(comp, SwtUtil.bt_hd);
-		text.setMessage("描述");
+		textDesc = SwtUtil.createText(comp, SwtUtil.bt_hd);
+		textDesc.setMessage("描述");
 		
 		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
 		SwtUtil.createLabel(comp, "			", new GridData(SWT.DEFAULT,10));
@@ -63,15 +74,46 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 	}
 	
 	protected void addListeners() {
-		btnSearch.addSelectionListener(new SelectionAdapter() {
+		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				Object source = e.getSource();
+				if(source == btnSearch) {
+					String desc = textDesc.getText().trim();
+					List<Tb1046IedEntity> searchRes = new ArrayList<>();
+					@SuppressWarnings("unchecked")
+					List<Tb1046IedEntity> iedEntityByTypes = (List<Tb1046IedEntity>) table.getInput();
+					for (Tb1046IedEntity tb1046IedEntity : iedEntityByTypes) {
+						if(tb1046IedEntity.getF1046Desc().contains(desc)) {
+							searchRes.add(tb1046IedEntity);
+						}
+					}
+					table.setInput(searchRes);
+					table.refresh();
+				} else if(source == comboDevType) {
+					int comboCurSel = comboDevType.getSelectionIndex();
+					if(comboPreSel == comboCurSel) {
+						return;
+					}
+					comboPreSel = comboCurSel;
+					initTableData(comboCurSel);
+				}
 			}
-		});
+		};
+		
+		btnSearch.addSelectionListener(listener);
+		comboDevType.addSelectionListener(listener);
 	}
 
 	@Override
 	public void initData() {
+		initTableData(0);
 		super.initData();
+	}
+
+	private void initTableData(int comboIdx) {
+		int[] devTypes = EnumIedType.values()[comboIdx].getTypes();
+		List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedEntityByTypes(devTypes);
+		table.setInput(iedEntityByTypes);
 	}
 }

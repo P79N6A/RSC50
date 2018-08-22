@@ -9,6 +9,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="信号类型(开关量/模拟量)" editor="none" name="f1062Type" width="200" default=""/>
   
   <field desc="压板(对保护)" editor="none" name="tb1064StrapByF1064Code.f1064Code" width="120" default=""/>
+  
   <field desc="发送装置" editor="none" name="f1050Name" width="100" default=""/> 
   <field desc="发送虚端子参引" editor="none" name="f1050Desc" width="150" default=""/> 
   <field desc="命令确认信号(参引，对智能终端)" editor="none" name="f1050Desc" width="250" default=""/>

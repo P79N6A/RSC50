@@ -231,11 +231,11 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					if(equipmentEntity == null) {
 						return;
 					}
-//					Tb1016StatedataEntity statedataEntity = equipmentEntity.getTb1016StatedataEntity();
-//					tableSluiceStatus.addRow(statedataEntity);
-//					tableSwitchStatus.removeSelected();
-//					tableSwitchStatus.refresh();
-//					tableSluiceStatus.refresh();
+					Tb1016StatedataEntity statedataEntity = equipmentEntity.getTb1016StatedataEntity();
+					tableSluiceStatus.addRow(statedataEntity);
+					tableSwitchStatus.removeSelected();
+					tableSwitchStatus.refresh();
+					tableSluiceStatus.refresh();
 				}
 			}
 		};

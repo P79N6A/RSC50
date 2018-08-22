@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.model;
 
 /**
+ * 定值FCDA点TB1059_SGFCDA
  * Created by chunc on 2018/8/7.
  */
 public class Tb1059SgfcdaEntity {

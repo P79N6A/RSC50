@@ -4,11 +4,11 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1072RcdchanneldEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
-  <field desc="代码" editor="none" name="f1050Code" width="50" default=""/>
-  <field desc="装置名称" editor="none" name="f1050Name" width="100" default=""/> 
-  <field desc="序号" editor="none" name="f1050Name" width="50" default=""/>
-  <field desc="类型" editor="none" name="f1050Name" width="50" default=""/>
-  <field desc="相别" editor="none" name="f1050Name" width="50" default=""/> 
-  <field desc="GOOSE虚端子代码" editor="none" name="f1050Name" width="210" default=""/> 
-  <field desc="MMS点代码" editor="none" name="f1050Desc" width="110" default=""/> 
+  <field desc="代码" editor="none" name="f1072Code" width="50" default=""/>
+  <field desc="装置名称" editor="none" name="tb1046IedByIedCode.f1046Name" width="100" default=""/> 
+  <field desc="序号" editor="none" name="f1072Index" width="50" default=""/>
+  <field desc="类型" editor="none" name="f1072Type" width="50" default=""/>
+  <field desc="相别" editor="none" name="f1072Phase" width="50" default=""/> 
+  <field desc="GOOSE虚端子代码" editor="none" name="f1061Code" width="210" default=""/> 
+  <field desc="MMS点代码" editor="none" name="f1058Code" width="110" default=""/> 
 </table>

@@ -11,6 +11,7 @@ public class Tb1072RcdchanneldEntity {
     private int f1072Type;
     private String f1061Code;
     private String f1058Code;
+    private String f1072Phase;
     private Tb1046IedEntity tb1046IedByIedCode;
 
     public String getF1072Code() {
@@ -96,4 +97,12 @@ public class Tb1072RcdchanneldEntity {
     public void setTb1046IedByIedCode(Tb1046IedEntity tb1046IedByIedCode) {
         this.tb1046IedByIedCode = tb1046IedByIedCode;
     }
+
+	public String getF1072Phase() {
+		return f1072Phase;
+	}
+
+	public void setF1072Phase(String f1072Phase) {
+		this.f1072Phase = f1072Phase;
+	}
 }

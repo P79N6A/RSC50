@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <table name="ProtectParamTable" desc="保护参数列表" 
-class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1060SpfcdaEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
-  <field desc="参数名称" editor="none" name="f1050Code" width="100" default=""/>
-  <field desc="参数参引" editor="none" name="f1050Name" width="100" default=""/> 
-  <field desc="参数序号" editor="none" name="f1050Desc" width="100" default=""/> 
-  <field desc="参数类型" editor="none" name="f1050Code" width="100" default=""/>
-  <field desc="单位" editor="none" name="f1050Name" width="60" default=""/> 
-  <field desc="步长" editor="none" name="f1050Desc" width="60" default=""/> 
-  <field desc="最大值" editor="none" name="f1050Code" width="80" default=""/>
+  <field desc="参数名称" editor="none" name="f1060Desc" width="100" default=""/>
+  <field desc="参数参引" editor="none" name="f1060RefAddr" width="100" default=""/> 
+  <field desc="参数序号" editor="none" name="f1060Index" width="100" default=""/> 
+  <field desc="参数类型" editor="none" name="f1060DataType" width="100" default=""/>
+  <field desc="单位" editor="none" name="f1060Unit" width="60" default=""/> 
+  <field desc="步长" editor="none" name="f1060StepSize" width="60" default=""/> 
+  <field desc="最大值" editor="none" name="f1060ValueMax" width="80" default=""/>
+  <field desc="最小值" editor="none" name="f1060ValueMin" width="80" default=""/>
 </table>

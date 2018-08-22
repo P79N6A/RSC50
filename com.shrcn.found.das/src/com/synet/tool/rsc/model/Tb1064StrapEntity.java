@@ -2,6 +2,7 @@ package com.synet.tool.rsc.model;
 
 
 /**
+ * 保护压板
  * Created by chunc on 2018/8/7.
  */
 public class Tb1064StrapEntity {

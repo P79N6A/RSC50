@@ -8,6 +8,9 @@
         <id name="f1043Code">
             <column name="F1043_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
+        <property name="f1016Code">
+            <column name="F1016_Code" sql-type="varchar" length="48"/>
+        </property>
         <property name="f1043Name">
             <column name="F1043_Name" sql-type="varchar" length="48" not-null="true"/>
         </property>

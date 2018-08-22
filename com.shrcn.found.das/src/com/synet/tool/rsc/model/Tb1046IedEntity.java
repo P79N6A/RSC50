@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import java.util.Set;
 
 
 /**
@@ -20,8 +19,148 @@ public class Tb1046IedEntity {
     private Integer f1046Type;
     private String f1046Crc;
     private Tb1042BayEntity tb1042BaysByF1042Code;
+    private Tb1050CubicleEntity tb1050CubicleEntity;
+    
+    //手动配置属性
+    private String f1046aNetIp;//A王IP
+    private String f1046bNetIp;//B王IP
+    private String f1046firm;//厂商
+    private String f1046type;//型号
+    private String f1046version;//版本
+    private String f1046suite;//套
+    private String f1046protectCategory;//保护分类
+    private String f1046protectType;//保护型号
+    private String f1046protectModel;//保护类型
+    private String f1046protectCrc;//保护CRC码
+    private String f1046OperateData;//投运日期
+    private String f1046productData;//出厂日期
+    private String f1046productNo;//出厂编号
+    private String f1046dataGatType;//数据采集方式
+    private String f1046OutType;//出口方式
+    private String f1046boardNum;//板卡数量
+    
+    public String getF1046aNetIp() {
+		return f1046aNetIp;
+	}
 
-    public String getF1046Code() {
+	public void setF1046aNetIp(String f1046aNetIp) {
+		this.f1046aNetIp = f1046aNetIp;
+	}
+
+	public String getF1046bNetIp() {
+		return f1046bNetIp;
+	}
+
+	public void setF1046bNetIp(String f1046bNetIp) {
+		this.f1046bNetIp = f1046bNetIp;
+	}
+
+	public String getF1046firm() {
+		return f1046firm;
+	}
+
+	public void setF1046firm(String f1046firm) {
+		this.f1046firm = f1046firm;
+	}
+
+	public String getF1046type() {
+		return f1046type;
+	}
+
+	public void setF1046type(String f1046type) {
+		this.f1046type = f1046type;
+	}
+
+	public String getF1046version() {
+		return f1046version;
+	}
+
+	public void setF1046version(String f1046version) {
+		this.f1046version = f1046version;
+	}
+
+	public String getF1046suite() {
+		return f1046suite;
+	}
+
+	public void setF1046suite(String f1046suite) {
+		this.f1046suite = f1046suite;
+	}
+
+	public String getF1046protectCategory() {
+		return f1046protectCategory;
+	}
+
+	public void setF1046protectCategory(String f1046protectCategory) {
+		this.f1046protectCategory = f1046protectCategory;
+	}
+
+	public String getF1046protectType() {
+		return f1046protectType;
+	}
+
+	public void setF1046protectType(String f1046protectType) {
+		this.f1046protectType = f1046protectType;
+	}
+
+	public String getF1046protectCrc() {
+		return f1046protectCrc;
+	}
+
+	public void setF1046protectCrc(String f1046protectCrc) {
+		this.f1046protectCrc = f1046protectCrc;
+	}
+
+	public String getF1046OperateData() {
+		return f1046OperateData;
+	}
+
+	public void setF1046OperateData(String f1046OperateData) {
+		this.f1046OperateData = f1046OperateData;
+	}
+
+	public String getF1046productData() {
+		return f1046productData;
+	}
+
+	public void setF1046productData(String f1046productData) {
+		this.f1046productData = f1046productData;
+	}
+
+	public String getF1046productNo() {
+		return f1046productNo;
+	}
+
+	public void setF1046productNo(String f1046productNo) {
+		this.f1046productNo = f1046productNo;
+	}
+
+	public String getF1046dataGatType() {
+		return f1046dataGatType;
+	}
+
+	public void setF1046dataGatType(String f1046dataGatType) {
+		this.f1046dataGatType = f1046dataGatType;
+	}
+
+	public String getF1046OutType() {
+		return f1046OutType;
+	}
+
+	public void setF1046OutType(String f1046OutType) {
+		this.f1046OutType = f1046OutType;
+	}
+
+	public String getF1046boardNum() {
+		return f1046boardNum;
+	}
+
+	public void setF1046boardNum(String f1046boardNum) {
+		this.f1046boardNum = f1046boardNum;
+	}
+
+
+	public String getF1046Code() {
         return f1046Code;
     }
 
@@ -155,6 +294,22 @@ public class Tb1046IedEntity {
 
 	public void setTb1042BaysByF1042Code(Tb1042BayEntity tb1042BaysByF1042Code) {
 		this.tb1042BaysByF1042Code = tb1042BaysByF1042Code;
+	}
+
+	public Tb1050CubicleEntity getTb1050CubicleEntity() {
+		return tb1050CubicleEntity;
+	}
+
+	public void setTb1050CubicleEntity(Tb1050CubicleEntity tb1050CubicleEntity) {
+		this.tb1050CubicleEntity = tb1050CubicleEntity;
+	}
+
+	public String getF1046protectModel() {
+		return f1046protectModel;
+	}
+
+	public void setF1046protectModel(String f1046protectModel) {
+		this.f1046protectModel = f1046protectModel;
 	}
 
 }

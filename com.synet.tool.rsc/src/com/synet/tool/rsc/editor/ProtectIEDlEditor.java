@@ -5,6 +5,8 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,6 +23,28 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1047BoardEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
+import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
+import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.model.Tb1069RcdchannelaEntity;
+import com.synet.tool.rsc.model.Tb1072RcdchanneldEntity;
+import com.synet.tool.rsc.service.BoardEntityService;
+import com.synet.tool.rsc.service.BoardPortService;
+import com.synet.tool.rsc.service.LogicallinkEntityService;
+import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PinEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.RcdchannelaEntityService;
+import com.synet.tool.rsc.service.RcdchanneldEntityService;
+import com.synet.tool.rsc.service.SgfcdaEntityService;
+import com.synet.tool.rsc.service.SpfcdaEntityService;
+import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -52,11 +76,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Button btnDel;
 	private DevKTable tableDeviceName;
 	private DevKTable tableBoardName;
-	private DevKTable tableLogLinkTable;
+	private DevKTable tableLogLinkName;
 	private Tb1046IedEntity iedEntity;
+	private Tb1046IedEntity curSelIedEntity;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
+		EditorConfigData editorConfigData = (EditorConfigData) input.getData();
+		curSelIedEntity = (Tb1046IedEntity) editorConfigData.getData();
 	}
 	
 	@Override
@@ -192,6 +219,65 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
+		//板卡，告警，运行工况，TODO 判断表格是否未初始化
+		
+		//板卡端口
+		BoardPortService portService = new BoardPortService();
+		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(curSelIedEntity);
+		tableBoardPort.setInput(portEntities);
+		
+		//保护信息-保护定值
+		SgfcdaEntityService sgfcdaEntityService = new SgfcdaEntityService();
+		List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(curSelIedEntity);
+		tableProtectValue.setInput(sgfcdaEntities);
+		//保护信息-保护参数
+		SpfcdaEntityService spfcdaEntityService = new SpfcdaEntityService();
+		List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(curSelIedEntity);
+		tableProtParam.setInput(spfcdaEntities);
+		//保护信息-保护压板
+		StrapEntityService strapEntityService = new StrapEntityService();
+		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(curSelIedEntity);
+		tableProtectPlate.setInput(staEntities);
+		//保护信息-保护动作
+		tableProtectAction.setInput(null);
+		//保护信息-保护测量量
+		tableProtectMeaQuantity.setInput(null);
+		
+		//装置告警
+		MmsfcdaService mmsfcdaService = new MmsfcdaService();
+		List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet("dsWarning");
+		tableDeviceWarning.setInput(mmsfcdaEntities);
+		
+		tableDeviceName.addRow(curSelIedEntity);
+		
+		BoardEntityService boardEntityService = new BoardEntityService();
+		List<Tb1047BoardEntity> boardEntities = boardEntityService.getByIed(curSelIedEntity);
+		tableBoardName.setInput(boardEntities);
+		
+//		tableLogLinkName.setInput(input);//TODO
+		//运行工况
+		List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = mmsfcdaService.getMmsdcdaByDataSet("dsCommState");
+		tableRunState.setInput(mmsfcdaEntitiesRun);
+		//虚端子压板
+		PoutEntityService poutEntityService = new PoutEntityService();
+		List<Tb1061PoutEntity> poutEntities = poutEntityService.getPoutEntityByProperties(curSelIedEntity, null);
+		tableVirtualTerminalOut.setInput(poutEntities);
+		PinEntityService pinEntityService = new PinEntityService();
+		List<Tb1062PinEntity> pinEntities = pinEntityService.getByIed(curSelIedEntity);
+		tableVirtualTerminalIn.setInput(pinEntities);
+		//逻辑链路
+		LogicallinkEntityService logicallinkEntityService = new LogicallinkEntityService();
+		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getAll();
+		tableLogicalLink.setInput(logicallinkEntities);
+		
+		//保护录波-模拟量通道
+		RcdchannelaEntityService rcdChnlaService = new RcdchannelaEntityService();
+		List<Tb1069RcdchannelaEntity> rcdchannelaEntities = rcdChnlaService.getByIed(curSelIedEntity);
+		tableAnalogChn.setInput(rcdchannelaEntities);
+		//保护录波-状态量通道
+		RcdchanneldEntityService rcdChnLdService = new RcdchanneldEntityService();
+		List<Tb1072RcdchanneldEntity> rcdchanneldEntities = rcdChnLdService.getByIed(curSelIedEntity);
+		tableCriteriaChn.setInput(rcdchanneldEntities);
 		super.initData();
 	}
 	
@@ -281,8 +367,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tableBoardName = TableFactory.getBoardNameTable((Composite) contros[1]);
 		tableBoardName.getTable().setLayoutData(gridData);
 		
-		tableLogLinkTable = TableFactory.getLogicalLinkNameTable((Composite) contros[2]);
-		tableLogLinkTable.getTable().setLayoutData(gridData);
+		tableLogLinkName = TableFactory.getLogicalLinkNameTable((Composite) contros[2]);
+		tableLogLinkName.getTable().setLayoutData(gridData);
 		
 		return cmpDeviceWarning;
 	}

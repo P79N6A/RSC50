@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 定值数据集和控制块TB1057_SGCB
  * Created by chunc on 2018/8/7.
  */
 public class Tb1057SgcbEntity {

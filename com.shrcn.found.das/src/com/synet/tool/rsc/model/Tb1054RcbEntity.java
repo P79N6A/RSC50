@@ -3,6 +3,7 @@ package com.synet.tool.rsc.model;
 import java.util.List;
 
 /**
+ * 报告数据集和控制块
  * Created by chunc on 2018/8/7.
  */
 public class Tb1054RcbEntity {

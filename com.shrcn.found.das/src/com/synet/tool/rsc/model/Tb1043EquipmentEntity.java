@@ -11,8 +11,10 @@ public class Tb1043EquipmentEntity {
     private String f1043Code;
     private String f1043Name;
     private String f1043Desc;
+    private String f1016Code;
     private int f1043IsVirtual;
     private int f1043Type;
+    private Tb1016StatedataEntity tb1016StatedataEntity;
     private Tb1042BayEntity tb1042BayByF1042Code;
     private Set<Tb1044TerminalEntity> tb1044TerminalsByF1043Code;
     private Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code;
@@ -109,4 +111,19 @@ public class Tb1043EquipmentEntity {
 		this.tb1067SecondarysByF1043Code = tb1067SecondarysByF1043Code;
 	}
 
+	public Tb1016StatedataEntity getTb1016StatedataEntity() {
+		return tb1016StatedataEntity;
+	}
+
+	public void setTb1016StatedataEntity(Tb1016StatedataEntity tb1016StatedataEntity) {
+		this.tb1016StatedataEntity = tb1016StatedataEntity;
+	}
+
+	public String getF1016Code() {
+		return f1016Code;
+	}
+
+	public void setF1016Code(String f1016Code) {
+		this.f1016Code = f1016Code;
+	}
 }
