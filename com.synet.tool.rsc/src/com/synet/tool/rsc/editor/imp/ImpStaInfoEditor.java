@@ -7,6 +7,7 @@ package com.synet.tool.rsc.editor.imp;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
@@ -27,7 +28,12 @@ public class ImpStaInfoEditor extends BaseConfigEditor {
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
-		container.setLayout(SwtUtil.getGridLayout(1));
+		container.setLayout(SwtUtil.getGridLayout(2));
+		
+		GridData gridData = new GridData(GridData.FILL_VERTICAL);
+		gridData.widthHint = 150;
+		List titleList = SwtUtil.createList(container, gridData);
+		titleList.setItems(new String[]{"监控信息点表1"});
 		table =TableFactory.getStaInfoTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
