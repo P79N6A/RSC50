@@ -27,6 +27,7 @@ public class Tb1016StatedataEntity {
     private String f1016Sgprocname;
     private Integer f1016Revflag;
     private Integer f1016Issta;
+    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
     private Tb1061PoutEntity tb1061PoutEntity;
     
 
@@ -270,6 +271,14 @@ public class Tb1016StatedataEntity {
         result = 31 * result + (f1016Issta != null ? f1016Issta.hashCode() : 0);
         return result;
     }
+
+	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
+		return tb1058FcdaByF1058Code;
+	}
+
+	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
+		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
+	}
 
 	public Tb1061PoutEntity getTb1061PoutEntity() {
 		return tb1061PoutEntity;

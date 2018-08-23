@@ -31,6 +31,8 @@ public class Tb1006AnalogdataEntity {
     private int f1006Deadtime;
     private int f1006Alarmlevel;
     private Integer f1006Savetype;
+    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
+    private Tb1061PoutEntity tb1061PoutByF1061Code;
 
     public String getF1006Code() {
         return f1006Code;
@@ -309,5 +311,21 @@ public class Tb1006AnalogdataEntity {
         result = 31 * result + (f1006Savetype != null ? f1006Savetype.hashCode() : 0);
         return result;
     }
+
+	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
+		return tb1058FcdaByF1058Code;
+	}
+
+	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
+		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
+	}
+
+	public Tb1061PoutEntity getTb1061PoutByF1061Code() {
+		return tb1061PoutByF1061Code;
+	}
+
+	public void setTb1061PoutByF1061Code(Tb1061PoutEntity tb1061PoutByF1061Code) {
+		this.tb1061PoutByF1061Code = tb1061PoutByF1061Code;
+	}
 
 }

@@ -13,6 +13,7 @@ public class Tb1048PortEntity {
     private int f1048Direction;
     private int f1048Plug;
     private Tb1047BoardEntity tb1047BoardByF1047Code;
+    private Tb1006AnalogdataEntity tb1006AnalogdataByF1048Code;
 
     public String getF1048Code() {
         return f1048Code;
@@ -97,5 +98,14 @@ public class Tb1048PortEntity {
     public void setTb1047BoardByF1047Code(Tb1047BoardEntity tb1047BoardByF1047Code) {
         this.tb1047BoardByF1047Code = tb1047BoardByF1047Code;
     }
+
+	public Tb1006AnalogdataEntity getTb1006AnalogdataByF1048Code() {
+		return tb1006AnalogdataByF1048Code;
+	}
+
+	public void setTb1006AnalogdataByF1048Code(
+			Tb1006AnalogdataEntity tb1006AnalogdataByF1048Code) {
+		this.tb1006AnalogdataByF1048Code = tb1006AnalogdataByF1048Code;
+	}
 
 }
