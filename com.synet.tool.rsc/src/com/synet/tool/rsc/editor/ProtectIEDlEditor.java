@@ -221,7 +221,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	public void initData() {
 		//板卡，告警，运行工况，TODO 判断表格是否未初始化
 		
-		//板卡端口
+		//板卡端口 TODO 光强参引
 		BoardPortService portService = new BoardPortService();
 		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(curSelIedEntity);
 		tableBoardPort.setInput(portEntities);
