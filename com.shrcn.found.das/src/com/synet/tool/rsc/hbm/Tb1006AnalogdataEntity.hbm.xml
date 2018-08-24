@@ -83,10 +83,10 @@
             <column name="Parent_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>
         <many-to-one name="tb1058FcdaByF1058Code" class="com.synet.tool.rsc.model.Tb1058MmsfcdaEntity" insert="false" update="false">
-            <column name="F1016_CODE" not-null="true"/>
+            <column name="F1006_CODE" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1061PoutEntity" class="com.synet.tool.rsc.model.Tb1061PoutEntity" insert="false" update="false">
-            <column name="F1016_CODE" not-null="true"/>
+        <many-to-one name="tb1061PoutByF1061Code" class="com.synet.tool.rsc.model.Tb1061PoutEntity" insert="false" update="false">
+            <column name="F1006_CODE" not-null="true"/>
         </many-to-one>
     </class>
 </hibernate-mapping>
