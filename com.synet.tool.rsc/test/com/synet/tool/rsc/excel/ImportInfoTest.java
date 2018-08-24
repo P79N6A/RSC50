@@ -1,12 +1,14 @@
 package com.synet.tool.rsc.excel;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.entity.FibreList;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.PhyscialAreaService;
 
@@ -16,18 +18,26 @@ public class ImportInfoTest {
 	
 	@Before
 	public void before() {
-		String dbName = "RscData";
-		ProjectManager instance = ProjectManager.getInstance();
-		instance.initDb(dbName);
-		instance.openDb(dbName);
-		beandao = BeanDaoImpl.getInstance();
-		service = new PhyscialAreaService();
+//		String dbName = "RscData";
+//		ProjectManager instance = ProjectManager.getInstance();
+//		instance.initDb(dbName);
+//		instance.openDb(dbName);
+//		beandao = BeanDaoImpl.getInstance();
+//		service = new PhyscialAreaService();
 	}
 	
 	@Test
 	public void testRead1090() {
 		ImportInfoParser parser = new ImportInfoParser();
 		List<Tb1090LineprotfiberEntity> result = parser.getLineprotfiberList("C:\\Users\\36576\\Desktop\\Test.xlsx");
+		System.out.println(result);
+		System.out.println(parser.getHandler().getErrorMsg());
+	}
+	
+	@Test
+	public void testImpFibreList() {
+		ImportInfoParser parser = new ImportInfoParser();
+		Map<String, List<FibreList>> result = parser.getFibreList("C:\\Users\\36576\\Desktop\\光缆清册test.xlsx");
 		System.out.println(result);
 		System.out.println(parser.getHandler().getErrorMsg());
 	}

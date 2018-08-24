@@ -3,7 +3,6 @@ package com.synet.tool.rsc.excel.handler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.entity.IEDBoard;
-import com.synet.tool.rsc.entity.StaInfo;
 
 public class IEDBoardHandler extends RscSheetHandler {
 
