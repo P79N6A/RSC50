@@ -121,7 +121,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 * @param bayEntityList
 	 */
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
-		if(DataUtils.notNull(bayEntityList)){
+		if(DataUtils.listNotNull(bayEntityList)){
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
 				Set<Tb1043EquipmentEntity> equipments = tb1042BayEntity.getTb1043EquipmentsByF1042Code();
@@ -139,7 +139,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 */
 	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
-		if(DataUtils.notNull(bayEntityList)){
+		if(DataUtils.listNotNull(bayEntityList)){
 			Tb1042BayEntity pbayEntity = null;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);

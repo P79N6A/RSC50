@@ -3,8 +3,10 @@ package com.synet.tool.rsc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shrcn.found.ui.widget.Tab;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.util.DataUtils;
 
 public class StatedataService extends BaseService {
@@ -15,7 +17,7 @@ public class StatedataService extends BaseService {
 	 * @return
 	 */
 	public List<Tb1016StatedataEntity> getStatedataByDataCodes(List<String> dataCodes) {
-		if(!DataUtils.notNull(dataCodes)) {
+		if(!DataUtils.listNotNull(dataCodes)) {
 			return new ArrayList<>();
 		}
 		@SuppressWarnings("unchecked")
@@ -31,7 +33,7 @@ public class StatedataService extends BaseService {
 	 * @return
 	 */
 	public List<Tb1016StatedataEntity> getStateDataByEquips(List<Tb1043EquipmentEntity> equEntities) {
-		if(!DataUtils.notNull(equEntities)) {
+		if(!DataUtils.listNotNull(equEntities)) {
 			return new ArrayList<>();
 		}
 		List<String> equitCodes = new ArrayList<>();
@@ -44,6 +46,22 @@ public class StatedataService extends BaseService {
 				Tb1016StatedataEntity.class, "parentCode", equitCodes);
 		return statedataEntities;
 
+	}
+	
+	/**
+	 * 根据IED获取
+	 * @param iedEntity
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> getStateDataByIed(Tb1046IedEntity iedEntity) {
+		String parentCode = iedEntity.getF1046Code();
+		List<Tb1016StatedataEntity> temp = (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", parentCode);
+		List<String> result = new ArrayList<>();
+		for (Tb1016StatedataEntity tb1016StatedataEntity : temp) {
+			result.add(tb1016StatedataEntity.getF1016Desc());
+		}
+		return result;
 	}
 
 }

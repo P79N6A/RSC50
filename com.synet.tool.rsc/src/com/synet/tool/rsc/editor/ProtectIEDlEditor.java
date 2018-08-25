@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -28,22 +29,23 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
-import com.synet.tool.rsc.model.Tb1061PoutEntity;
-import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1069RcdchannelaEntity;
 import com.synet.tool.rsc.model.Tb1072RcdchanneldEntity;
+import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.BoardPortService;
+import com.synet.tool.rsc.service.CircuitEntityService;
+import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
-import com.synet.tool.rsc.service.PinEntityService;
-import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.RcdchannelaEntityService;
 import com.synet.tool.rsc.service.RcdchanneldEntityService;
 import com.synet.tool.rsc.service.SgfcdaEntityService;
 import com.synet.tool.rsc.service.SpfcdaEntityService;
+import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -78,12 +80,10 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkName;
 	private Tb1046IedEntity iedEntity;
-	private Tb1046IedEntity curSelIedEntity;
+	private CircuitEntityService circuitEntityService;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
-		EditorConfigData editorConfigData = (EditorConfigData) input.getData();
-		curSelIedEntity = (Tb1046IedEntity) editorConfigData.getData();
 	}
 	
 	@Override
@@ -219,68 +219,122 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
-		//板卡，告警，运行工况，TODO 判断表格是否未初始化
-		
-		//板卡端口 TODO 光强参引
-		BoardPortService portService = new BoardPortService();
-		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(curSelIedEntity);
-		tableBoardPort.setInput(portEntities);
+		//desc为空，引发空指针异常，暂时关闭
+//		initTableDict();
+		//板卡端口 
+		if(tableBoardPort != null) {
+			BoardPortService portService = new BoardPortService();
+			List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(iedEntity);
+			tableBoardPort.setInput(portEntities);
+		}
 		
 		//保护信息-保护定值
 		SgfcdaEntityService sgfcdaEntityService = new SgfcdaEntityService();
-		List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(curSelIedEntity);
+		List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
 		tableProtectValue.setInput(sgfcdaEntities);
 		//保护信息-保护参数
 		SpfcdaEntityService spfcdaEntityService = new SpfcdaEntityService();
-		List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(curSelIedEntity);
+		List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
 		tableProtParam.setInput(spfcdaEntities);
 		//保护信息-保护压板
 		StrapEntityService strapEntityService = new StrapEntityService();
-		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(curSelIedEntity);
+		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(iedEntity);
 		tableProtectPlate.setInput(staEntities);
 		//保护信息-保护动作
 		tableProtectAction.setInput(null);
 		//保护信息-保护测量量
 		tableProtectMeaQuantity.setInput(null);
 		
-		//装置告警
 		MmsfcdaService mmsfcdaService = new MmsfcdaService();
-		List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet("dsWarning");
-		tableDeviceWarning.setInput(mmsfcdaEntities);
 		
-		tableDeviceName.addRow(curSelIedEntity);
 		
-		BoardEntityService boardEntityService = new BoardEntityService();
-		List<Tb1047BoardEntity> boardEntities = boardEntityService.getByIed(curSelIedEntity);
-		tableBoardName.setInput(boardEntities);
 		
-//		tableLogLinkName.setInput(input);//TODO
+		
 		//运行工况
-		List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = mmsfcdaService.getMmsdcdaByDataSet("dsCommState");
-		tableRunState.setInput(mmsfcdaEntitiesRun);
+		if(tableRunState != null) {
+			List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
+			tableRunState.setInput(mmsfcdaEntitiesRun);	
+		}
+		
 		//虚端子压板
-		PoutEntityService poutEntityService = new PoutEntityService();
-		List<Tb1061PoutEntity> poutEntities = poutEntityService.getPoutEntityByProperties(curSelIedEntity, null);
-		tableVirtualTerminalOut.setInput(poutEntities);
-		PinEntityService pinEntityService = new PinEntityService();
-		List<Tb1062PinEntity> pinEntities = pinEntityService.getByIed(curSelIedEntity);
-		tableVirtualTerminalIn.setInput(pinEntities);
+		circuitEntityService = new CircuitEntityService();
+		List<Tb1063CircuitEntity> circuitEntities = circuitEntityService.getByIed(iedEntity);
+		//开出
+		tableVirtualTerminalOut.setInput(circuitEntities);
+		//开入
+		tableVirtualTerminalIn.setInput(circuitEntities);
 		//逻辑链路
 		LogicallinkEntityService logicallinkEntityService = new LogicallinkEntityService();
-		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getAll();
+		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getByRecvIed(iedEntity);
 		tableLogicalLink.setInput(logicallinkEntities);
+		
+		//装置告警
+		if(tableDeviceWarning != null) {
+			
+			List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
+			tableDeviceWarning.setInput(mmsfcdaEntities);
+			
+			tableDeviceName.addRow(iedEntity);
+			
+			BoardEntityService boardEntityService = new BoardEntityService();
+			List<Tb1047BoardEntity> boardEntities = boardEntityService.getByIed(iedEntity);
+			//查询为空
+			tableBoardName.setInput(boardEntities);	
+			tableLogLinkName.setInput(logicallinkEntities);
+		}
+		
 		
 		//保护录波-模拟量通道
 		RcdchannelaEntityService rcdChnlaService = new RcdchannelaEntityService();
-		List<Tb1069RcdchannelaEntity> rcdchannelaEntities = rcdChnlaService.getByIed(curSelIedEntity);
+		List<Tb1069RcdchannelaEntity> rcdchannelaEntities = rcdChnlaService.getByIed(iedEntity);
 		tableAnalogChn.setInput(rcdchannelaEntities);
 		//保护录波-状态量通道
 		RcdchanneldEntityService rcdChnLdService = new RcdchanneldEntityService();
-		List<Tb1072RcdchanneldEntity> rcdchanneldEntities = rcdChnLdService.getByIed(curSelIedEntity);
+		List<Tb1072RcdchanneldEntity> rcdchanneldEntities = rcdChnLdService.getByIed(iedEntity);
 		tableCriteriaChn.setInput(rcdchanneldEntities);
 		super.initData();
 	}
 	
+	private void initTableDict() {
+		DictManager dic = DictManager.getInstance();
+		dic.removeDict("EQU_ANALOG");
+		dic.removeDict("SV_ANALOG");
+		dic.removeDict("MMS_ANALOG");
+		dic.removeDict("GOOSE_CIRCUIT");
+		dic.removeDict("MMS__CIRCUIT");
+		EquipmentEntityService qEntityService = new EquipmentEntityService();
+		//互感器字典
+		List<String> equDescs = qEntityService.getEquipmentByType();
+		dic.addDict("EQU_ANALOG", "EQU_ANALOG", createDict(equDescs));
+		//SV虚端子字典
+		List<String> svPoutDescs = circuitEntityService.getByIedAndTypes(iedEntity, true);
+		dic.addDict("SV_ANALOG", "SV_ANALOG", createDict(svPoutDescs));
+		//MMS模拟量字典
+		AnalogdataService analogdataService = new AnalogdataService();
+		List<String> mmsAnalog = analogdataService.getAnologByIed(iedEntity);
+		dic.addDict("MMS_ANALOG", "MMS_ANALOG", createDict(mmsAnalog));
+		//GOOSE虚端子字典
+		List<String> goosePoutDescs = circuitEntityService.getByIedAndTypes(iedEntity, false);
+		dic.addDict("GOOSE_CIRCUIT", "GOOSE_CIRCUIT", createDict(goosePoutDescs));
+		//MMS状态量字典 
+		StatedataService statedataService = new StatedataService();
+		List<String> mmsCircuit = statedataService.getStateDataByIed(iedEntity);
+		dic.addDict("MMS__CIRCUIT", "MMS__CIRCUIT", createDict(mmsCircuit));
+		
+	}
+
+	private String[][] createDict(List<String> equDescs) {
+		int size = equDescs.size();
+		String [ ][ ] arr = new String [ size ][ ];  
+		for (int i = 0; i < size; i++) {
+			arr[i] = new String[2];
+			for (int j = 0; j < 2; j++) {
+				arr [i][j] = equDescs.get(i);
+			}
+		}
+		return arr;
+	}
+
 	/**
 	 * 创建板卡端口界面
 	 * @param com

@@ -16,7 +16,7 @@ public class ProtmmxuService extends BaseService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1066ProtmmxuEntity> getProtmmxuByCtvtsecondary(List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities) {
-		if(!DataUtils.notNull(ctvtsecondaryEntities)) {
+		if(!DataUtils.listNotNull(ctvtsecondaryEntities)) {
 			return new ArrayList<>();
 		}
 		List<String> lstF1067Code = new ArrayList<>();

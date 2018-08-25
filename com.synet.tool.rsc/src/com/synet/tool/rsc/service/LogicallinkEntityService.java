@@ -12,9 +12,16 @@ public class LogicallinkEntityService extends BaseService {
 		return (List<Tb1065LogicallinkEntity>) beanDao.getAll(Tb1065LogicallinkEntity.class);
 	}
 	
+	/**
+	 * 根据当前装置查询
+	 * 逻辑链路的接收装置为当前装置
+	 * @param iedEntity
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1065LogicallinkEntity> getByRecvIed(Tb1046IedEntity iedEntity) {
-		return (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedRecv", iedEntity);
+		return (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(Tb1065LogicallinkEntity.class, 
+				"tb1046IedByF1046CodeIedRecv", iedEntity);
 	}
 	
 }

@@ -32,9 +32,26 @@ public class EquipmentEntityService extends BaseService{
 	public Tb1043EquipmentEntity getEquipmentByStateData(Tb1016StatedataEntity statedataEntity) {
 		String code = statedataEntity.getParentCode();
 		List<Tb1043EquipmentEntity> res = (List<Tb1043EquipmentEntity>) beanDao.getListByCriteria(Tb1043EquipmentEntity.class, "f1043Code", code);
-		if(DataUtils.notNull(res)) {
+		if(DataUtils.listNotNull(res)) {
 			return res.get(0);
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取模拟量通道互感器 06 07
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> getEquipmentByType() {
+		List<Integer> types = new ArrayList<>();
+		types.add(6);
+		types.add(7);
+		List<Tb1043EquipmentEntity> temp = (List<Tb1043EquipmentEntity>) hqlDao.selectInObjects(Tb1043EquipmentEntity.class, "f1043Type", types);
+		List<String> result = new ArrayList<>();
+		for (Tb1043EquipmentEntity tb1043EquipmentEntity : temp) {
+			result.add(tb1043EquipmentEntity.getF1043Desc());
+		}
+		return result;
 	}
 }

@@ -15,7 +15,7 @@ public class CtvtsecondaryService extends BaseService{
 	 * @return
 	 */
 	public List<Tb1067CtvtsecondaryEntity> getCtvtsecondaryEntitiesByEquEntity(List<Tb1043EquipmentEntity> equipmentEntities) {
-		if(!DataUtils.notNull(equipmentEntities)) {
+		if(!DataUtils.listNotNull(equipmentEntities)) {
 			return new ArrayList<>();
 		}
 		List<Tb1067CtvtsecondaryEntity> res = new ArrayList<>();

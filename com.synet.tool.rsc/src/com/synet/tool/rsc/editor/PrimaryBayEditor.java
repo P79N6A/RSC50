@@ -281,7 +281,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		tableProtectSample.setInput(protmmxuEntities);
 		//初始化开关刀闸状态右表
 		statedataService = new StatedataService();
-		if(DataUtils.notNull(iedEntities)) {
+		if(DataUtils.listNotNull(iedEntities)) {
 			Tb1046IedEntity iedEntity = iedEntities.get(0);
 			poutEntityService = new PoutEntityService();
 			tableSluiceStatuData = getStateDataByIed(iedEntity);
@@ -298,7 +298,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			Tb1046IedEntity iedEntity) {
 		List<Tb1016StatedataEntity> statedataEntities = null;
 		List<Tb1061PoutEntity> poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
-		if(DataUtils.notNull(poutEntities)) {
+		if(DataUtils.listNotNull(poutEntities)) {
 			List<String> stateDataCodes = new ArrayList<>();
 			for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
 				stateDataCodes.add(tb1061PoutEntity.getDataCode());
