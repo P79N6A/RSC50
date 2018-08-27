@@ -17,6 +17,7 @@ import com.shrcn.found.common.valid.NewNameValidator;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.file.util.ZipUtil;
 import com.shrcn.found.ui.UIConstants;
+import com.shrcn.found.ui.app.MenuToolFactory;
 import com.shrcn.found.ui.dialog.InputDialog;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
@@ -77,6 +78,7 @@ public class NavigationView extends ANavigationView {
 //			prjmgr.openDb(priName);
 //			loadProject();
 //		}
+		MenuToolFactory.getInstance().refreshMenuTools();
 	}
 	
 	

@@ -405,12 +405,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnDel = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		
 		
-		GridData gdRight = new GridData(220, 400);
+		GridData gdRight = new GridData(GridData.FILL_VERTICAL);
+		gdRight.widthHint = 320;
 		Composite cmpRight = SwtUtil.createComposite(cmpDeviceWarning, gdRight, 1);
 		cmpRight.setLayout(SwtUtil.getGridLayout(1));
 		
 		String[] tabNames = new String[]{"装置", "板卡", "逻辑链路"};
-		CTabFolder tabFolder = SwtUtil.createTab(cmpRight, gridData, tabNames);
+		CTabFolder tabFolder = SwtUtil.createTab(cmpRight, new GridData(GridData.FILL_BOTH), tabNames);
 		tabFolder.setSelection(0);
 		Control[] contros = tabFolder.getChildren();
 		tableDeviceName = TableFactory.getDeviceNameTable((Composite) contros[0]);

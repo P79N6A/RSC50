@@ -122,13 +122,15 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 */
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.listNotNull(bayEntityList)){
+			ITreeEntry structEntry = createConfigEntry(primaryEntry, "结构", "history_list.gif", null, 1);
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
 				Set<Tb1043EquipmentEntity> equipments = tb1042BayEntity.getTb1043EquipmentsByF1042Code();
 				if (equipments!= null && equipments.size()>0) {
-					createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Name(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
+					createConfigEntry(structEntry, tb1042BayEntity.getF1042Name(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
 				}
 			}
+			createConfigEntry(primaryEntry, "功能", "function.gif", ET_PR_BAY, 2).setData(null);
 		}
 	}
 	
