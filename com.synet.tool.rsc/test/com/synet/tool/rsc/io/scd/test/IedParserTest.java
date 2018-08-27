@@ -6,11 +6,16 @@ package com.synet.tool.rsc.io.scd.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.shrcn.business.scl.check.InstResolver;
+import com.shrcn.business.scl.check.Problem;
+import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -162,10 +167,13 @@ public class IedParserTest {
 	@Test
 	public void testSgcbParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		String f1046Name = "SY_XHK1";
+		ied.setF1046Name(f1046Name);
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
-		DsSettingParser iedSubParser = new DsSettingParser(ied);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		InstResolver irs = new InstResolver(dtTypeNd, f1046Name, new ArrayList<Problem>());
+		DsSettingParser iedSubParser = new DsSettingParser(ied, irs.getLnTypeMap());
 		iedSubParser.parse();
 		List<Tb1057SgcbEntity> items = iedSubParser.getItems();
 		assertTrue(items.size() > 0);
@@ -178,10 +186,13 @@ public class IedParserTest {
 	@Test
 	public void testSpParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		String f1046Name = "PZ101";
+		ied.setF1046Name(f1046Name);
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
-		DsParameterParser iedSubParser = new DsParameterParser(ied);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		InstResolver irs = new InstResolver(dtTypeNd, f1046Name, new ArrayList<Problem>());
+		DsParameterParser iedSubParser = new DsParameterParser(ied, irs.getLnTypeMap());
 		iedSubParser.parse();
 		List<Tb1060SpfcdaEntity> items = iedSubParser.getItems();
 		assertTrue(items.size() > 0);

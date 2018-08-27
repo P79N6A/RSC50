@@ -4,6 +4,7 @@
  */
 package com.synet.tool.rsc.io;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import org.dom4j.Element;
 
 import sun.security.pkcs11.Secmod.DbMode;
 
+import com.shrcn.business.scl.check.InstResolver;
+import com.shrcn.business.scl.check.Problem;
 import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
@@ -130,6 +133,7 @@ public class SCDImporter implements IImporter {
 		if (iedNds == null || iedNds.size() < 1) {
 			return;
 		}
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
 		for (Element iedNd : iedNds) {
 			Tb1046IedEntity ied = new Tb1046IedEntity();
 			String iedName = iedNd.attributeValue("name");
@@ -140,6 +144,7 @@ public class SCDImporter implements IImporter {
 			ied.setF1046ConfigVersion(iedNd.attributeValue("configVersion"));
 			String vtcrc = iedNd.attributeValue("crc");
 			ied.setF1046Crc(vtcrc);
+			InstResolver irs = new InstResolver(dtTypeNd, iedName, new ArrayList<Problem>());
 			// code
 			String iedCode = rscp.nextTbCode(DBConstants.PR_IED);
 			ied.setF1046Code(iedCode);
@@ -159,8 +164,8 @@ public class SCDImporter implements IImporter {
 			pmap.put("goose", new GooseParser(ied));
 			pmap.put("smv", new SmvParser(ied));
 			pmap.put("rcb", new RcbParser(ied));
-			pmap.put("set", new DsSettingParser(ied));
-			pmap.put("param", new DsParameterParser(ied));
+			pmap.put("set", new DsSettingParser(ied, irs.getLnTypeMap()));
+			pmap.put("param", new DsParameterParser(ied, irs.getLnTypeMap()));
 			for (IIedParser parser : pmap.values()) {
 				parser.parse();
 			}

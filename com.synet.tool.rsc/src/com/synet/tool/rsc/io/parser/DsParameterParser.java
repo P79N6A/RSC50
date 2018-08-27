@@ -5,6 +5,7 @@
 package com.synet.tool.rsc.io.parser;
 
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Element;
 
@@ -25,8 +26,9 @@ public class DsParameterParser extends IedParserBase<Tb1060SpfcdaEntity> {
 
 	private static final String datSet = "dsParameter";
 	
-	public DsParameterParser(Tb1046IedEntity ied) {
+	public DsParameterParser(Tb1046IedEntity ied, Map<String, Map<String, Object[]>> lnTypeMap) {
 		super(ied);
+		this.lnTypeMap = lnTypeMap;
 	}
 
 	@Override
@@ -49,27 +51,27 @@ public class DsParameterParser extends IedParserBase<Tb1060SpfcdaEntity> {
 				sgFcda.setF1060Index(i);
 				sgFcda.setF1060Desc(fcdaDesc);
 				sgFcda.setF1060RefAddr(SclUtil.getFcdaRef(fcdaEl));
-				sgFcda.setF1060DataType(DBConstants.DAT_TYP_FLOAT);	// TODO 待定
-				String doName = fcdaEl.attributeValue("doName");
-				Element doEl = DOM4JNodeHelper.selectSingleNode(elLN, "./DOI[@name='" + doName + "']");
-				if (doEl != null) {
-					String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
-					String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
-					String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
-					String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
-					if (!StringUtil.isEmpty(step)) {
-						sgFcda.setF1060StepSize(Float.valueOf(step));
-					}
-					if (!StringUtil.isEmpty(min)) {
-						sgFcda.setF1060ValueMin(Float.valueOf(min));
-					}
-					if (!StringUtil.isEmpty(max)) {
-						sgFcda.setF1060ValueMax(Float.valueOf(max));
-					}
-					if (!StringUtil.isEmpty(units)) {
-						sgFcda.setF1060Unit(units);
-					}
-				}
+				sgFcda.setF1060DataType(getBType(fcdaEl));
+//				String doName = fcdaEl.attributeValue("doName");
+//				Element doEl = DOM4JNodeHelper.selectSingleNode(elLN, "./DOI[@name='" + doName + "']");
+//				if (doEl != null) {
+//					String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
+//					String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
+//					String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
+//					String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
+//					if (!StringUtil.isEmpty(step)) {
+//						sgFcda.setF1060StepSize(Float.valueOf(step));
+//					}
+//					if (!StringUtil.isEmpty(min)) {
+//						sgFcda.setF1060ValueMin(Float.valueOf(min));
+//					}
+//					if (!StringUtil.isEmpty(max)) {
+//						sgFcda.setF1060ValueMax(Float.valueOf(max));
+//					}
+//					if (!StringUtil.isEmpty(units)) {
+//						sgFcda.setF1060Unit(units);
+//					}
+//				}
 				i++;
 			}
 		}
