@@ -23,7 +23,7 @@ public class ProtmmxuService extends BaseService {
 		for (Tb1067CtvtsecondaryEntity ctvtsecondaryEntity : ctvtsecondaryEntities) {
 			lstF1067Code.add(ctvtsecondaryEntity.getF1067Code());
 		}
-		//TODO
+		//TODO 
 		return (List<Tb1066ProtmmxuEntity>) hqlDao.selectInObjects(Tb1066ProtmmxuEntity.class, "f1067Code", lstF1067Code);
 	}
 

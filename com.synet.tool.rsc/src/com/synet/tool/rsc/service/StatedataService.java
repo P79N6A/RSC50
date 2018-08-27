@@ -3,7 +3,6 @@ package com.synet.tool.rsc.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.shrcn.found.ui.widget.Tab;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -59,7 +58,7 @@ public class StatedataService extends BaseService {
 		List<Tb1016StatedataEntity> temp = (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", parentCode);
 		List<String> result = new ArrayList<>();
 		for (Tb1016StatedataEntity tb1016StatedataEntity : temp) {
-			result.add(tb1016StatedataEntity.getF1016Desc());
+			result.add(tb1016StatedataEntity.getF1016Byname());
 		}
 		return result;
 	}

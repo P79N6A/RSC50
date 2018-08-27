@@ -212,6 +212,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					}
 					tableSwitchStatus.getTable().layout();
 				} else if(object == btnSearch) {
+					if(tableSluiceStatuData == null) {
+						return;
+					}
 					String desc = textDesc.getText().trim();
 					List<Tb1016StatedataEntity> searchResult = searchByDesc(desc);
 					tableSluiceStatus.setInput(searchResult);

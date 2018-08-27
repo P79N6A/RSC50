@@ -33,7 +33,7 @@ public class AnalogdataService extends BaseService {
 		List<String> result = new ArrayList<>();
 		List<Tb1006AnalogdataEntity> temp = (List<Tb1006AnalogdataEntity>) beanDao.getListByCriteria(Tb1006AnalogdataEntity.class, "parentCode", parentCode);
 		for (Tb1006AnalogdataEntity tb1006AnalogdataEntity : temp) {
-			result.add(tb1006AnalogdataEntity.getF1006Desc());
+			result.add(tb1006AnalogdataEntity.getF1006Byname());
 		}
 		return result;
 	}

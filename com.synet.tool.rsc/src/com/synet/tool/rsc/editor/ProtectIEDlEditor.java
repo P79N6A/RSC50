@@ -247,9 +247,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		
 		MmsfcdaService mmsfcdaService = new MmsfcdaService();
 		
-		
-		
-		
 		//运行工况
 		if(tableRunState != null) {
 			List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
@@ -277,6 +274,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			tableDeviceName.addRow(iedEntity);
 			
 			BoardEntityService boardEntityService = new BoardEntityService();
+			
 			List<Tb1047BoardEntity> boardEntities = boardEntityService.getByIed(iedEntity);
 			//查询为空
 			tableBoardName.setInput(boardEntities);	
@@ -304,11 +302,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		dic.removeDict("MMS__CIRCUIT");
 		EquipmentEntityService qEntityService = new EquipmentEntityService();
 		//互感器字典
-		List<String> equDescs = qEntityService.getEquipmentByType();
-		dic.addDict("EQU_ANALOG", "EQU_ANALOG", createDict(equDescs));
+		List<String> equNames = qEntityService.getEquipmentByType();
+		dic.addDict("EQU_ANALOG", "EQU_ANALOG", createDict(equNames));
 		//SV虚端子字典
-		List<String> svPoutDescs = circuitEntityService.getByIedAndTypes(iedEntity, true);
-		dic.addDict("SV_ANALOG", "SV_ANALOG", createDict(svPoutDescs));
+		List<String> svPoutNames = circuitEntityService.getByIedAndTypes(iedEntity, true);
+		dic.addDict("SV_ANALOG", "SV_ANALOG", createDict(svPoutNames));
 		//MMS模拟量字典
 		AnalogdataService analogdataService = new AnalogdataService();
 		List<String> mmsAnalog = analogdataService.getAnologByIed(iedEntity);

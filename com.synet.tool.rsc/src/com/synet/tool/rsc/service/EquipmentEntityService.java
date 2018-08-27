@@ -50,7 +50,7 @@ public class EquipmentEntityService extends BaseService{
 		List<Tb1043EquipmentEntity> temp = (List<Tb1043EquipmentEntity>) hqlDao.selectInObjects(Tb1043EquipmentEntity.class, "f1043Type", types);
 		List<String> result = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : temp) {
-			result.add(tb1043EquipmentEntity.getF1043Desc());
+			result.add(tb1043EquipmentEntity.getF1043Name());
 		}
 		return result;
 	}

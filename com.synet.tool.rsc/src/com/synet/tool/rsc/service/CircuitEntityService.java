@@ -37,7 +37,7 @@ public class CircuitEntityService extends BaseService {
 		
 		List<String> result = new ArrayList<>();
 		for (Tb1063CircuitEntity tb1063CircuitEntity : temp) {
-			result.add(tb1063CircuitEntity.getTb1061PoutByF1061CodePSend().getF1061Desc());
+			result.add(tb1063CircuitEntity.getTb1061PoutByF1061CodePSend().getF1061Code());
 		}
 		return result;
 	}
