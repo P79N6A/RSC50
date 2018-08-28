@@ -21,12 +21,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.opensymphony.util.DataUtil;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ChanelConnectDialog;
 import com.synet.tool.rsc.dialog.SampleConnectDialog;
+import com.synet.tool.rsc.dialog.SelectEquiDialog;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
@@ -74,6 +76,15 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private IedEntityService iedService;
 	private Button btnAddTsf;
 	private Button btnDelTsf;
+	private CTabFolder tabFolder;
+	private CtvtsecondaryService ctvtsecondaryService;
+	private EquipmentEntityService equipmentEntityService;
+	private ProtmmxuService protmmxuService;
+	
+	
+	private List<Tb1066ProtmmxuEntity> protmmxuEntities = null;
+	private List<Tb1016StatedataEntity> statedataEntities = null;
+	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities = null;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -87,7 +98,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
 		comp.setLayout(SwtUtil.getGridLayout(1));
 		String[] tabNames = new String[]{RSCConstants.TSF_SCDRAY, RSCConstants.PROTCT_SAMP, RSCConstants.SWICH_STATES};
-		CTabFolder tabFolder = SwtUtil.createTab(comp, gridData, tabNames);
+		tabFolder = SwtUtil.createTab(comp, gridData, tabNames);
 		tabFolder.setSelection(0);
 		Control[] controls = tabFolder.getChildren();
 		//互感器次级
@@ -160,6 +171,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	
 	@Override
 	public void init() {
+		ctvtsecondaryService = new CtvtsecondaryService();
+        equipmentEntityService = new EquipmentEntityService();
+		protmmxuService = new ProtmmxuService();
+		statedataService = new StatedataService();
+		poutEntityService = new PoutEntityService();
+		
 		EditorConfigData data = (EditorConfigData)super.getInput().getData();
 		this.curEntryName = data.getIedName();
 		this.bayEntity = (Tb1042BayEntity) data.getData();
@@ -253,13 +270,27 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					tableSwitchStatus.refresh();
 					tableSluiceStatus.refresh();
 				} else if(object == btnAddTsf) {
-					tableCtvtsecondary.addRow(tableCtvtsecondary.getDefaultRow());
+					Tb1043EquipmentEntity select = null;
+					SelectEquiDialog dialog = new SelectEquiDialog(getShell(), bayEntity);
+					if(dialog.open() == IDialogConstants.OK_ID) {
+						select = dialog.getSelect();
+					}
+					if(select == null) {
+						 return;
+					}
+					Tb1067CtvtsecondaryEntity defaultRow = (Tb1067CtvtsecondaryEntity) tableCtvtsecondary.getDefaultRow();
+					ctvtsecondaryService.addCtvtsecondary(select, defaultRow);
+					tableCtvtsecondary.addRow(defaultRow);
 					tableCtvtsecondary.refresh();
-					//TODO 数据绑定
+					
 				} else if(object == btnDelTsf) {
+					ctvtsecondaryService.delCtvtsecondary((Tb1067CtvtsecondaryEntity) 
+							tableCtvtsecondary.getSelection());
 					tableCtvtsecondary.removeSelected();
 					tableCtvtsecondary.refresh();
-					//TODO 数据解绑
+					
+				} else if(object == tabFolder) {
+					loadDataByTbItem(tabFolder.getSelectionIndex());
 				}
 			}
 		};
@@ -272,6 +303,82 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
 	}
+	
+	private void loadDataByTbItem(int idx) {
+		List<Tb1043EquipmentEntity> entities = null;
+		if(this.bayEntity == null) {
+			switch (idx) {
+			case 0:
+				//查询所有间隔下所有互感器
+				entities = equipmentEntityService.getEquipmentList();
+				//查询互感器集合下关联的所有互感器次级
+				if(!DataUtils.listNotNull(ctvtsecondaryEntities)) {
+					ctvtsecondaryEntities = 
+							ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
+				}
+				break;
+			case 1:
+				//查找互感器集合下关联的所有保护采样
+				if(!DataUtils.listNotNull(protmmxuEntities)) {
+					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+				}
+				break;
+			case 2:
+				//初始化开关刀闸状态左表
+				if(!DataUtils.listNotNull(statedataEntities)) {
+					statedataEntities = statedataService.getStateDataByEquips(entities);
+				}
+				//初始化开关刀闸状态右表
+				initTableSluiceStatus();
+				break;
+			default:
+				break;
+			}
+		} else {
+			switch (idx) {
+			case 0:
+				//根据当前节点：间隔，查询间隔下所有互感器
+				entities = equipmentEntityService.getEquipmentEntitysByBayEntity(bayEntity);
+				//查询互感器集合下关联的所有互感器次级
+				if(!DataUtils.listNotNull(ctvtsecondaryEntities)) {
+				ctvtsecondaryEntities = 
+						ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
+					}
+				break;
+			case 1:
+				//查找互感器集合下关联的所有保护采样
+				if(!DataUtils.listNotNull(protmmxuEntities)) {
+				protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+				}
+				break;
+			case 2:
+				//初始化开关刀闸状态左表
+				if(!DataUtils.listNotNull(statedataEntities)) {
+				statedataEntities = statedataService.getStateDataByEquips(entities);
+					}
+				initTableSluiceStatus();
+				break;
+			default:
+				break;
+			}
+		}
+		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
+		tableProtectSample.setInput(protmmxuEntities);
+		tableSwitchStatus.setInput(statedataEntities);
+	}
+
+
+	private void initTableSluiceStatus() {
+		if(DataUtils.listNotNull(iedEntities)) {
+			Tb1046IedEntity iedEntity = iedEntities.get(0);
+			if(!DataUtils.listNotNull(tableSluiceStatuData)) {
+				tableSluiceStatuData = getStateDataByIed(iedEntity);
+			}
+			tableSluiceStatus.setInput(tableSluiceStatuData);
+		}
+	}
+	
+	
 
 	private List<Tb1016StatedataEntity> searchByDesc(String desc) {
 		List<Tb1016StatedataEntity> res = new ArrayList<>();
@@ -294,48 +401,22 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	
 	@Override
 	public void initData() {
-		EquipmentEntityService equipmentEntityService = new EquipmentEntityService();
-		CtvtsecondaryService ctvtsecondaryService = new CtvtsecondaryService();
-		ProtmmxuService protmmxuService = new ProtmmxuService();
-		statedataService = new StatedataService();
-		poutEntityService = new PoutEntityService();
-		
 		List<Tb1043EquipmentEntity> entities;
-		List<Tb1066ProtmmxuEntity> protmmxuEntities;
-		List<Tb1016StatedataEntity> statedataEntities;
 		if(this.bayEntity == null) {
 			//查询所有间隔下所有互感器
 			entities = equipmentEntityService.getEquipmentList();
 			//查询互感器集合下关联的所有互感器次级
-			List<Tb1067CtvtsecondaryEntity> allCtvtsecondarys = 
+			ctvtsecondaryEntities = 
 					ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
-			//查找互感器集合下关联的所有保护采样
-			protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(allCtvtsecondarys);
-			//初始化开关刀闸状态左表
-			statedataEntities = statedataService.getStateDataByEquips(entities);
-			
 		} else {
 			//根据当前节点：间隔，查询间隔下所有互感器
 			entities = equipmentEntityService.getEquipmentEntitysByBayEntity(bayEntity);
 			//查询互感器集合下关联的所有互感器次级
-			List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities = 
+			ctvtsecondaryEntities = 
 					ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
-			//查找互感器集合下关联的所有保护采样
-			protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-			//初始化开关刀闸状态左表
-			statedataEntities = statedataService.getStateDataByEquips(entities);
 		}
-		//初始化开关刀闸状态右表
-		if(DataUtils.listNotNull(iedEntities)) {
-			Tb1046IedEntity iedEntity = iedEntities.get(0);
-			
-			tableSluiceStatuData = getStateDataByIed(iedEntity);
-			tableSluiceStatus.setInput(tableSluiceStatuData);
-		}
-		tableCtvtsecondary.setInput(entities);
-		tableProtectSample.setInput(protmmxuEntities);
-		tableSwitchStatus.setInput(statedataEntities);
-		
+		initTableSluiceStatus();
+		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
 		super.initData();
 	}
 

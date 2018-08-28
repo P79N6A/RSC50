@@ -23,6 +23,7 @@ import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -49,6 +50,7 @@ import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.util.DataUtils;
 
 /**
  * 保护信息模型->装置树菜单编辑器。
@@ -81,6 +83,33 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableLogLinkName;
 	private Tb1046IedEntity iedEntity;
 	private CircuitEntityService circuitEntityService;
+	private CTabFolder tabFolder;
+	private MmsfcdaService mmsfcdaService;
+	private BoardPortService portService;
+	private SgfcdaEntityService sgfcdaEntityService;
+	private SpfcdaEntityService spfcdaEntityService;
+	private StrapEntityService strapEntityService;
+	private BoardEntityService boardEntityService;
+	private LogicallinkEntityService logicallinkEntityService;
+	private RcdchannelaEntityService rcdChnlaService;
+	private RcdchanneldEntityService rcdChnLdService;
+	//
+	private List<Tb1048PortEntity> portEntities;
+	private List<Tb1059SgfcdaEntity> sgfcdaEntities;
+	private List<Tb1060SpfcdaEntity> spfcdaEntities;
+	private List<Tb1064StrapEntity> staEntities;
+	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction;
+	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua;
+	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun;
+	private List<Tb1058MmsfcdaEntity> mmsfcdaEntities;
+	private List<Tb1047BoardEntity> boardEntities;
+	private List<Tb1065LogicallinkEntity> logicallinkEntities;
+	private List<Tb1063CircuitEntity> circuitEntities;
+	private List<Tb1069RcdchannelaEntity> rcdchannelaEntities;
+	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
+	private CTabFolder tabFProtect;
+	
+	
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -88,6 +117,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	@Override
 	public void init() {
+		mmsfcdaService = new MmsfcdaService();
+		portService = new BoardPortService();
+		sgfcdaEntityService = new SgfcdaEntityService();
+		spfcdaEntityService = new SpfcdaEntityService();
+		strapEntityService = new StrapEntityService();
+		circuitEntityService = new CircuitEntityService();
+		boardEntityService = new BoardEntityService();
+		logicallinkEntityService = new LogicallinkEntityService();
+		rcdChnlaService = new RcdchannelaEntityService();
+		rcdChnLdService = new RcdchanneldEntityService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		gridData = new GridData(GridData.FILL_BOTH);
@@ -133,7 +172,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param gdSpan_4
 	 */
 	private void createIedCmp(Composite comp, GridData gdSpan_4) {
-		String[] tabNames = new String[]{"板卡端口", "装置告警", "运行工况", "虚端子压板", "逻辑链路"};
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, RSCConstants.LOGICAL_LINK};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
@@ -153,7 +192,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param gdSpan_4
 	 */
 	private void createMergeUnitCmp(Composite comp, GridData gdSpan_4) {
-		String[] tabNames = new String[]{"板卡端口", "装置告警", "运行工况"};
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
@@ -169,7 +208,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param gdSpan_4
 	 */
 	private void createProtectCmp(Composite comp, GridData gdSpan_4) {
-		String[] tabNames = new String[]{"板卡端口", "保护信息", "装置告警", "运行工况", "虚端子压板", "逻辑链路", "保护录波"};
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.PROTECT_MSG,
+				RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, 
+				RSCConstants.LOGICAL_LINK, RSCConstants.PROTECT_WAVE};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
@@ -196,7 +237,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private Control[] getControls(Composite comp, GridData gdSpan_4,
 			String[] tabNames) {
-		CTabFolder tabFolder = SwtUtil.createTab(comp, gdSpan_4, tabNames);
+		tabFolder = SwtUtil.createTab(comp, gdSpan_4, tabNames);
 		tabFolder.setSelection(0);
 		Control[] controls = tabFolder.getChildren();
 		return controls;
@@ -206,97 +247,151 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		SelectionListener selectionListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				super.widgetSelected(e);
+				Object obj = e.getSource();
+				if(obj == tabFolder) {
+					initTbDataByTbName(tabFolder.getSelection().getText());
+				} else if(obj == tabFProtect) {
+					initProTbDataByTbName(tabFProtect.getSelection().getText());
+				}
 			}
 		};
+		if(tabFProtect != null) {
+			tabFProtect.addSelectionListener(selectionListener);
+		}
+		tabFolder.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
 		btnDel.addSelectionListener(selectionListener);
 		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 	}
+	
 
+	private void initProTbDataByTbName(String text) {
+		switch (text) {
+		case RSCConstants.PROTECT_VALUE:
+			if(!DataUtils.listNotNull(sgfcdaEntities)) {
+				//保护信息-保护定值
+				sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
+				tableProtectValue.setInput(sgfcdaEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_PARAM:
+			if(!DataUtils.listNotNull(spfcdaEntities)) {
+				//保护信息-保护参数
+				spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
+				tableProtParam.setInput(spfcdaEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_BOARD:
+			if(!DataUtils.listNotNull(staEntities)) {
+				//保护信息-保护压板
+				staEntities = strapEntityService.getByIed(iedEntity);
+				tableProtectPlate.setInput(staEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_ACTION:
+			if(!DataUtils.listNotNull(mmsfcdasProtcAction)) {
+				//保护信息-保护动作
+				mmsfcdasProtcAction = 
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
+				tableProtectAction.setInput(mmsfcdasProtcAction);
+			}
+			break;
+		case RSCConstants.PROTECT_MEAQU:
+			if(!DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
+				//保护信息-保护测量量
+				mmsfcdasProtcMeaQua = 
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
+				tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
+			}
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+	
+	private void initTbDataByTbName(String tabName) {
+		switch (tabName) {
+		case RSCConstants.BOARD_PORT:
+			if(!DataUtils.listNotNull(portEntities)) {
+				portEntities = portService.getBoardPortByIed(iedEntity);
+				tableBoardPort.setInput(portEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_MSG:
+			if(!DataUtils.listNotNull(sgfcdaEntities)) {
+				//保护信息-保护定值
+				sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
+				tableProtectValue.setInput(sgfcdaEntities);
+			}
+			break;
+		case RSCConstants.RUN_STATE:
+			if(!DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
+				mmsfcdaEntitiesRun = 
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
+					tableRunState.setInput(mmsfcdaEntitiesRun);	
+			}
+			
+			break;
+		case RSCConstants.DEV_WARNING:
+			if(!DataUtils.listNotNull(mmsfcdaEntities)) {
+				mmsfcdaEntities = 
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
+					tableDeviceWarning.setInput(mmsfcdaEntities);
+					tableDeviceName.addRow(iedEntity);
+			}
+			if(!DataUtils.listNotNull(boardEntities)) {
+					boardEntities = boardEntityService.getByIed(iedEntity);
+					tableBoardName.setInput(boardEntities);	
+			}
+			if(!DataUtils.listNotNull(logicallinkEntities)) {
+				logicallinkEntities  = logicallinkEntityService.getByRecvIed(iedEntity);
+				tableLogLinkName.setInput(logicallinkEntities);
+			}
+			
+			break;
+		case RSCConstants.CIRCUI_BOARD:
+			if(!DataUtils.listNotNull(circuitEntities)) {
+				//虚端子压板
+				circuitEntities = circuitEntityService.getByIed(iedEntity);
+				//开出
+				tableVirtualTerminalOut.setInput(circuitEntities);
+				//开入
+				tableVirtualTerminalIn.setInput(circuitEntities);
+			}
+			break;
+		case RSCConstants.LOGICAL_LINK:
+			if(!DataUtils.listNotNull(logicallinkEntities)) {
+				//逻辑链路
+				logicallinkEntities = logicallinkEntityService.getByRecvIed(iedEntity);
+				tableLogicalLink.setInput(logicallinkEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_WAVE:
+			if(!DataUtils.listNotNull(rcdchannelaEntities)) {
+				//保护录波-模拟量通道
+				rcdchannelaEntities = rcdChnlaService.getByIed(iedEntity);
+				tableAnalogChn.setInput(rcdchannelaEntities);
+			}
+			if(!DataUtils.listNotNull(rcdchanneldEntities)) {
+				//保护录波-状态量通道
+				rcdchanneldEntities = rcdChnLdService.getByIed(iedEntity);
+				tableCriteriaChn.setInput(rcdchanneldEntities);
+			}
+			break;
+		default:
+			break;
+		}
+		
+	}
 	@Override
 	public void initData() {
-		//desc为空，引发空指针异常，暂时关闭
-//		initTableDict();
-		MmsfcdaService mmsfcdaService = new MmsfcdaService();
 		//板卡端口 
-		if(tableBoardPort != null) {
-			BoardPortService portService = new BoardPortService();
-			List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(iedEntity);
-			tableBoardPort.setInput(portEntities);
-		}
-		
-		//保护信息-保护定值
-		SgfcdaEntityService sgfcdaEntityService = new SgfcdaEntityService();
-		List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
-		tableProtectValue.setInput(sgfcdaEntities);
-		//保护信息-保护参数
-		SpfcdaEntityService spfcdaEntityService = new SpfcdaEntityService();
-		List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
-		tableProtParam.setInput(spfcdaEntities);
-		//保护信息-保护压板
-		StrapEntityService strapEntityService = new StrapEntityService();
-		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(iedEntity);
-		tableProtectPlate.setInput(staEntities);
-		//保护信息-保护动作
-		List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction = 
-				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
-		tableProtectAction.setInput(mmsfcdasProtcAction);
-		//保护信息-保护测量量
-		List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua = 
-				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
-		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
-		
-		
-		
-		//运行工况
-		if(tableRunState != null) {
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = 
-					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
-			tableRunState.setInput(mmsfcdaEntitiesRun);	
-		}
-		
-		//虚端子压板
-		circuitEntityService = new CircuitEntityService();
-		List<Tb1063CircuitEntity> circuitEntities = circuitEntityService.getByIed(iedEntity);
-		//开出
-		tableVirtualTerminalOut.setInput(circuitEntities);
-		//开入
-		tableVirtualTerminalIn.setInput(circuitEntities);
-		//逻辑链路
-		LogicallinkEntityService logicallinkEntityService = new LogicallinkEntityService();
-		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getByRecvIed(iedEntity);
-		tableLogicalLink.setInput(logicallinkEntities);
-		
-		//装置告警
-		if(tableDeviceWarning != null) {
-			
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntities = 
-					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
-			tableDeviceWarning.setInput(mmsfcdaEntities);
-			
-			tableDeviceName.addRow(iedEntity);
-			
-			BoardEntityService boardEntityService = new BoardEntityService();
-			
-			List<Tb1047BoardEntity> boardEntities = boardEntityService.getByIed(iedEntity);
-			//查询为空
-			tableBoardName.setInput(boardEntities);	
-			tableLogLinkName.setInput(logicallinkEntities);
-		}
-		
-		
-		//保护录波-模拟量通道
-		RcdchannelaEntityService rcdChnlaService = new RcdchannelaEntityService();
-		List<Tb1069RcdchannelaEntity> rcdchannelaEntities = rcdChnlaService.getByIed(iedEntity);
-		tableAnalogChn.setInput(rcdchannelaEntities);
-		//保护录波-状态量通道
-		RcdchanneldEntityService rcdChnLdService = new RcdchanneldEntityService();
-		List<Tb1072RcdchanneldEntity> rcdchanneldEntities = rcdChnLdService.getByIed(iedEntity);
-		tableCriteriaChn.setInput(rcdchanneldEntities);
+		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(iedEntity);
+		tableBoardPort.setInput(portEntities);
 		super.initData();
 	}
 	
@@ -361,10 +456,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createProtMsgCmp(Composite com) {
 		Composite cmpProtMsg = SwtUtil.createComposite(com, gridData, 1);
 		cmpProtMsg.setLayout(SwtUtil.getGridLayout(1));
-		String[] tabNames = new String[]{"保护定值", "保护参数", "保护压板", "保护动作", "保护测量量"};
-		CTabFolder tabFolder = SwtUtil.createTab(cmpProtMsg, gridData, tabNames );
-		tabFolder.setSelection(0);
-		Control[] controls = tabFolder.getChildren();
+		String[] tabNames = new String[]{RSCConstants.PROTECT_VALUE, 
+				RSCConstants.PROTECT_PARAM, RSCConstants.PROTECT_BOARD,
+				RSCConstants.PROTECT_ACTION, RSCConstants.PROTECT_MEAQU};
+		
+		tabFProtect = SwtUtil.createTab(cmpProtMsg, gridData, tabNames );
+		tabFProtect.setSelection(0);
+		Control[] controls = tabFProtect.getChildren();
 		//保护定值
 		Composite cmpProtValue = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
 		tableProtectValue = TableFactory.getProtectValueTable(cmpProtValue);
@@ -417,7 +515,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpRight = SwtUtil.createComposite(cmpDeviceWarning, gdRight, 1);
 		cmpRight.setLayout(SwtUtil.getGridLayout(1));
 		
-		String[] tabNames = new String[]{"装置", "板卡", "逻辑链路"};
+		String[] tabNames = new String[]{"装置", "板卡", RSCConstants.LOGICAL_LINK};
 		CTabFolder tabFolder = SwtUtil.createTab(cmpRight, new GridData(GridData.FILL_BOTH), tabNames);
 		tabFolder.setSelection(0);
 		Control[] contros = tabFolder.getChildren();

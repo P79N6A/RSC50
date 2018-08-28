@@ -123,7 +123,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 							addTerminals(equipment, eqpEl);
 							if (EnumEquipmentType.VTR == type ||
 									EnumEquipmentType.CTR == type) {
-								secService.addCtvtsecondary(equipment);
+								secService.addCtvtsecondary(equipment, null);
 							}
 						}
 					}

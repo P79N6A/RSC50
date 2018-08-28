@@ -33,12 +33,28 @@ public class CtvtsecondaryService extends BaseService{
 	}
 
 	/**
+	 * 删除互感器次级
+	 * @param ctvtsecondaryEntity
+	 */
+	public void delCtvtsecondary(Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
+		Tb1066ProtmmxuEntity portmmsuEntity = (Tb1066ProtmmxuEntity) beanDao.getObject(Tb1066ProtmmxuEntity.class, "tb1067CtvtsecondaryByF1067Code", ctvtsecondaryEntity);
+		beanDao.delete(portmmsuEntity);
+		Tb1043EquipmentEntity equipmentEntity = ctvtsecondaryEntity.getTb1043EquipmentByF1043Code();
+		Set<Tb1067CtvtsecondaryEntity> setCtvtsecondaryEntities = equipmentEntity.getTb1067SecondarysByF1043Code();
+		setCtvtsecondaryEntities.remove(ctvtsecondaryEntity);
+		beanDao.update(equipmentEntity);
+		beanDao.delete(ctvtsecondaryEntity);
+	}
+	
+	/**
 	 * 添加互感器次级
 	 * @param equipment
 	 */
-	public void addCtvtsecondary(Tb1043EquipmentEntity equipment) {
+	public void addCtvtsecondary(Tb1043EquipmentEntity equipment, Tb1067CtvtsecondaryEntity sec) {
 		Set<Tb1067CtvtsecondaryEntity> secs = new HashSet<>();
-		Tb1067CtvtsecondaryEntity sec = new Tb1067CtvtsecondaryEntity();
+		if(sec == null) {
+			sec = new Tb1067CtvtsecondaryEntity();
+		}
 		sec.setF1067Code(rscp.nextTbCode(DBConstants.PR_SEC));
 		sec.setTb1043EquipmentByF1043Code(equipment);
 		Tb1044TerminalEntity tml = equipment.getTb1044TerminalsByF1043Code().iterator().next();
