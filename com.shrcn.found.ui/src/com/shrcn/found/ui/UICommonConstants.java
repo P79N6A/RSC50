@@ -13,5 +13,6 @@ package com.shrcn.found.ui;
 public class UICommonConstants {
 
 	public static final String EXCEL_COMM_EXPORT 		= "/com/shrcn/business/ui/common.xls";
+	public static final String EXCEL_COMM_EXPORT_2007 	= "/com/shrcn/business/ui/common.xlsx";
 	
 }
