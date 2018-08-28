@@ -89,7 +89,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String fc = fcdaEl.attributeValue("fc");
 			if ("ST".equals(fc)) {
 				pout.setF1061Type(DBConstants.DATA_ST);
-				pout.setDataCode(addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
+				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK);
+				pout.setDataCode(statedata.getF1016Code()); // TODO 需根据描述进一步分析
 			} else {
 				pout.setF1061Type(DBConstants.DATA_MX);
 				pout.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
@@ -104,7 +105,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @param f1011No
 	 * @return
 	 */
-	protected String addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
+	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
 		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
 		stdata.setF1016Code(dataCode);
@@ -113,7 +114,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 		stdata.setParentCode(ied.getF1046Code());
 		stdata.setF1011No(f1011No);
 		sts.add(stdata);
-		return dataCode;
+		return stdata;
 	}
 	
 	/**

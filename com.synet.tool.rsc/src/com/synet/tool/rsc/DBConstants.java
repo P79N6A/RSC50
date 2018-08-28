@@ -34,6 +34,7 @@ public interface DBConstants {
 	String PR_Term 			= "Term";
 	String PR_SEC 			= "CVTSnd";
 	String PR_MMXU 			= "Meas";
+	String PR_STRAP 		= "Strap";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";
@@ -116,5 +117,10 @@ public interface DBConstants {
 	int MMXU_3U = 3; //三相电压
 	int MMXU_U = 4; //零序和单相电压
 
+	int STRAP_FUN = 1; //保护功能软压板
+	int STRAP_IO = 2; //输入输出软压板
+	int STRAP_CHECK = 3; //检修硬压板
+	int STRAP_REMOTE = 4; //远方操作硬压板
+	int STRAP_BRK = 5; //跳合闸出口硬压板
 }
 

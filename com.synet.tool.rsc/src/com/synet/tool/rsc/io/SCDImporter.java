@@ -51,6 +51,7 @@ import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
@@ -103,6 +104,7 @@ public class SCDImporter implements IImporter {
 		beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
 		beanDao.deleteAll(Tb1067CtvtsecondaryEntity.class);
 		beanDao.deleteAll(Tb1066ProtmmxuEntity.class);
+		beanDao.deleteAll(Tb1064StrapEntity.class);
 	}
 	
 	private Tb1042BayEntity getBayByName(String bayName) {
