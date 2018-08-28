@@ -8,9 +8,6 @@
         <id name="f1064Code">
             <column name="F1064_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
-        <property name="f1021No">
-            <column name="F1021_NO" sql-type="int" not-null="true"/>
-        </property>
         <property name="f1064Num">
             <column name="F1064_NUM" sql-type="varchar" length="48"/>
         </property>
@@ -25,10 +22,6 @@
         </property>
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="tb1058MmsByF1058Code" property-ref="parentCode"
-        	class="com.synet.tool.rsc.model.Tb1058MmsfcdaEntity" insert="false" update="false">
-            <column name="F1058_CODE" not-null="true"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

@@ -460,8 +460,6 @@ create table TB1064_Strap
 (
    F1064_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
-   F1058_CODE			varchar(48) not null,
-   F1021_NO             INT not null,
    F1064_TYPE           INT not null,
    F1064_NUM            varchar(48),
    F1064_DESC           varchar(96) not null,

@@ -8,10 +8,9 @@ package com.synet.tool.rsc.model;
 public class Tb1064StrapEntity {
     private String f1064Code;
     private String f1046Code;
-    private int f1021No;
+    private int f1064Type;
     private String f1064Num;
     private String f1064Desc;
-    private String f1064Type;
     private String f1042CodeRelatedBay;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1058MmsfcdaEntity tb1058MmsByF1058Code;
@@ -30,14 +29,6 @@ public class Tb1064StrapEntity {
 
     public void setF1046Code(String f1046Code) {
         this.f1046Code = f1046Code;
-    }
-
-    public int getF1021No() {
-        return f1021No;
-    }
-
-    public void setF1021No(int f1021No) {
-        this.f1021No = f1021No;
     }
 
     public String getF1064Num() {
@@ -71,7 +62,6 @@ public class Tb1064StrapEntity {
 
         Tb1064StrapEntity that = (Tb1064StrapEntity) o;
 
-        if (f1021No != that.f1021No) return false;
         if (f1042CodeRelatedBay != null ? !f1042CodeRelatedBay.equals(that.f1042CodeRelatedBay) : that.f1042CodeRelatedBay != null)
             return false;
         if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
@@ -86,7 +76,6 @@ public class Tb1064StrapEntity {
     public int hashCode() {
         int result = f1064Code != null ? f1064Code.hashCode() : 0;
         result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
-        result = 31 * result + f1021No;
         result = 31 * result + (f1064Num != null ? f1064Num.hashCode() : 0);
         result = 31 * result + (f1064Desc != null ? f1064Desc.hashCode() : 0);
         result = 31 * result + (f1042CodeRelatedBay != null ? f1042CodeRelatedBay.hashCode() : 0);
@@ -101,19 +90,19 @@ public class Tb1064StrapEntity {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
     }
 
-	public String getF1064Type() {
-		return f1064Type;
-	}
-
-	public void setF1064Type(String f1064Type) {
-		this.f1064Type = f1064Type;
-	}
-
 	public Tb1058MmsfcdaEntity getTb1058MmsByF1058Code() {
 		return tb1058MmsByF1058Code;
 	}
 
 	public void setTb1058MmsByF1058Code(Tb1058MmsfcdaEntity tb1058MmsByF1058Code) {
 		this.tb1058MmsByF1058Code = tb1058MmsByF1058Code;
+	}
+
+	public int getF1064Type() {
+		return f1064Type;
+	}
+
+	public void setF1064Type(int f1064Type) {
+		this.f1064Type = f1064Type;
 	}
 }
