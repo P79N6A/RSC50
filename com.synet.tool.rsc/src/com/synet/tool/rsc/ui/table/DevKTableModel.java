@@ -4,8 +4,12 @@ import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
+import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
+import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
+import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
+import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.ui.TableFactory;
 
@@ -33,18 +37,38 @@ public class DevKTableModel extends RKTableModel {
 	
 	@Override
 	public KTableCellEditor getCellEditor(int col, int row) {
-		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
-				|| TableFactory.IOTERM_TABLE.equals(tableName) 
-				|| TableFactory.POWERKK_TABLE.equals(tableName)) {
-			if (col == 2 && row > 0) {
-				KTableCellEditor editor = new KTableDialogEditor(IedChooseDialog.class);
-				return editor;
+		if (row > 0) {
+			if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
+					|| TableFactory.IOTERM_TABLE.equals(tableName) 
+					|| TableFactory.POWERKK_TABLE.equals(tableName)) {
+				if (col == 2) {
+					KTableCellEditor editor = new KTableDialogEditor(IedChooseDialog.class);
+					return editor;
+				}
+			} 
+			if (TableFactory.VOLTAGEKK_TABLE.equals(tableName)) {
+				if (col == 2) {
+					KTableCellEditor editor = new KTableDialogEditor(CtvtChooseDialog.class);
+					return editor;
+				}
 			}
-		} 
-		if (TableFactory.VOLTAGEKK_TABLE.equals(tableName)) {
-			if (col == 2 && row > 0) {
-				KTableCellEditor editor = new KTableDialogEditor(CtvtChooseDialog.class);
-				return editor;
+			if (TableFactory.CABLE_TABLE.equals(tableName)) {
+				if (col == 6) {
+					KTableCellEditor editor = new KTableDialogEditor(CableByCubicleADialog.class);
+					return editor;
+				} else if (col == 8) {
+					KTableCellEditor editor = new KTableDialogEditor(CableByCubicleBDialog.class);
+					return editor;
+				}
+			}
+			if (TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
+				if (col == 5) {
+					KTableCellEditor editor = new KTableDialogEditor(PhyConnByPortADialog.class);
+					return editor;
+				} else if (col == 9) {
+					KTableCellEditor editor = new KTableDialogEditor(PhyConnByPortBDialog.class);
+					return editor;
+				}
 			}
 		}
 		return super.getCellEditor(col, row);
@@ -66,7 +90,11 @@ public class DevKTableModel extends RKTableModel {
 		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
 				|| TableFactory.IOTERM_TABLE.equals(tableName)
 				|| TableFactory.POWERKK_TABLE.equals(tableName)
-				|| TableFactory.VOLTAGEKK_TABLE.equals(tableName)) {
+				|| TableFactory.VOLTAGEKK_TABLE.equals(tableName) 
+				|| TableFactory.REGION_LIST_TABLE.equals(tableName) 
+				|| TableFactory.CUBICLE_TABLE.equals(tableName) 
+				|| TableFactory.CABLE_TABLE.equals(tableName) 
+				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
 		}
 	}
