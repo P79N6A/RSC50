@@ -20,6 +20,7 @@ public class Tb1067CtvtsecondaryEntity {
     private Tb1061PoutEntity tb1061PoutByF1061CodeC2;
     private Tb1043EquipmentEntity tb1043EquipmentByF1043Code;
     private Tb1044TerminalEntity tb1044TerminalByF1044Code;
+    private Tb1066ProtmmxuEntity tb1066ProtMmxuByF1067Code;
 
     public String getF1067Code() {
         return f1067Code;
@@ -160,5 +161,14 @@ public class Tb1067CtvtsecondaryEntity {
 	public void setTb1044TerminalByF1044Code(
 			Tb1044TerminalEntity tb1044TerminalByF1044Code) {
 		this.tb1044TerminalByF1044Code = tb1044TerminalByF1044Code;
+	}
+
+	public Tb1066ProtmmxuEntity getTb1066ProtMmxuByF1067Code() {
+		return tb1066ProtMmxuByF1067Code;
+	}
+
+	public void setTb1066ProtMmxuByF1067Code(
+			Tb1066ProtmmxuEntity tb1066ProtMmxuByF1067Code) {
+		this.tb1066ProtMmxuByF1067Code = tb1066ProtMmxuByF1067Code;
 	}
 }

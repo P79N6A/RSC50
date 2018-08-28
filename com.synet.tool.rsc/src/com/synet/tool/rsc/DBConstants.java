@@ -33,6 +33,7 @@ public interface DBConstants {
 	String PR_CNode 		= "CNode";
 	String PR_Term 			= "Term";
 	String PR_SEC 			= "CVTSnd";
+	String PR_MMXU 			= "Meas";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";
@@ -109,6 +110,11 @@ public interface DBConstants {
 	int Equipment_CAP = 9; //电容器
 	int Equipment_GPTR = 10; //站用变、接地变
 	int Equipment_SHORT_L = 11; //短引线
+	
+	int MMXU_3I = 1; //三相电流
+	int MMXU_I = 2; //零序或单相电流
+	int MMXU_3U = 3; //三相电压
+	int MMXU_U = 4; //零序和单相电压
 
 }
 
