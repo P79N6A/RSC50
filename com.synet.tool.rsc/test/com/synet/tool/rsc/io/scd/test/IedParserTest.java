@@ -6,11 +6,16 @@ package com.synet.tool.rsc.io.scd.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.shrcn.business.scl.check.InstResolver;
+import com.shrcn.business.scl.check.Problem;
+import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -41,7 +46,9 @@ import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
  /**
@@ -90,6 +97,8 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1044TerminalEntity.class);
 			beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
 			beanDao.deleteAll(Tb1067CtvtsecondaryEntity.class);
+			beanDao.deleteAll(Tb1066ProtmmxuEntity.class);
+			beanDao.deleteAll(Tb1064StrapEntity.class);
 		}
 		
 //		new SCDImporter(scdPath).execute();
@@ -138,7 +147,7 @@ public class IedParserTest {
 	@Test
 	public void testRcbParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		ied.setF1046Name("CT102B");
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
 		RcbParser iedSubParser = new RcbParser(ied);
@@ -154,6 +163,8 @@ public class IedParserTest {
 	
 	private void checkDatas() {
 		List<?> sts = beanDao.getAll(Tb1016StatedataEntity.class);
+		List<?> traps = beanDao.getAll(Tb1064StrapEntity.class);
+		assertTrue(traps.size() > 0);
 		List<?> agls = beanDao.getAll(Tb1006AnalogdataEntity.class);
 		List<?> strs = beanDao.getAll(Tb1026StringdataEntity.class);
 		assertTrue(sts.size() + agls.size() + strs.size() > 0);
@@ -162,10 +173,13 @@ public class IedParserTest {
 	@Test
 	public void testSgcbParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		String f1046Name = "SY_XHK1";
+		ied.setF1046Name(f1046Name);
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
-		DsSettingParser iedSubParser = new DsSettingParser(ied);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		InstResolver irs = new InstResolver(dtTypeNd, f1046Name, new ArrayList<Problem>());
+		DsSettingParser iedSubParser = new DsSettingParser(ied, irs.getLnTypeMap());
 		iedSubParser.parse();
 		List<Tb1057SgcbEntity> items = iedSubParser.getItems();
 		assertTrue(items.size() > 0);
@@ -178,10 +192,13 @@ public class IedParserTest {
 	@Test
 	public void testSpParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		String f1046Name = "PZ101";
+		ied.setF1046Name(f1046Name);
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
-		DsParameterParser iedSubParser = new DsParameterParser(ied);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		InstResolver irs = new InstResolver(dtTypeNd, f1046Name, new ArrayList<Problem>());
+		DsParameterParser iedSubParser = new DsParameterParser(ied, irs.getLnTypeMap());
 		iedSubParser.parse();
 		List<Tb1060SpfcdaEntity> items = iedSubParser.getItems();
 		assertTrue(items.size() > 0);
@@ -223,7 +240,8 @@ public class IedParserTest {
 		assertTrue(ccs.size() > 0);
 		List<Tb1067CtvtsecondaryEntity> secs = (List<Tb1067CtvtsecondaryEntity>) beanDao.getAll(Tb1067CtvtsecondaryEntity.class);
 		assertTrue(secs.size() > 0);
-		
+		List<Tb1066ProtmmxuEntity> mms = (List<Tb1066ProtmmxuEntity>) beanDao.getAll(Tb1066ProtmmxuEntity.class);
+		assertTrue(mms.size() > 0);
 	}
 	
 }

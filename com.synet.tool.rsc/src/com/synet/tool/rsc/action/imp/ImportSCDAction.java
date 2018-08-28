@@ -12,7 +12,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 
 import com.shrcn.found.common.Constants;
-import com.shrcn.found.ui.action.ConfigAction;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -25,7 +24,7 @@ import com.synet.tool.rsc.util.ProjectFileManager;
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2018-8-7
  */
-public class ImportSCDAction extends ConfigAction {
+public class ImportSCDAction extends BaseImportAction {
 	
 	public ImportSCDAction(String title) {
 		super(title);

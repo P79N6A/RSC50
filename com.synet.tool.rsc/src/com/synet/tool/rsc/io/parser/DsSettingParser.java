@@ -5,10 +5,13 @@
 package com.synet.tool.rsc.io.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Element;
 
+import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.xmldb.XMLDBHelper;
@@ -27,8 +30,9 @@ public class DsSettingParser extends IedParserBase<Tb1057SgcbEntity> {
 
 	private static final String datSet = "dsSetting";
 	
-	public DsSettingParser(Tb1046IedEntity ied) {
+	public DsSettingParser(Tb1046IedEntity ied, Map<String, Map<String, Object[]>> lnTypeMap) {
 		super(ied);
+		this.lnTypeMap = lnTypeMap;
 	}
 
 	@Override
@@ -43,7 +47,7 @@ public class DsSettingParser extends IedParserBase<Tb1057SgcbEntity> {
 			Tb1057SgcbEntity sgcb = new Tb1057SgcbEntity();
 			sgcb.setF1057Code(rscp.nextTbCode(DBConstants.PR_SGCB));
 			sgcb.setTb1046IedByF1046Code(ied);
-			sgcb.setF1057CbName("");	// TODO 待定
+			sgcb.setF1057CbName("SGCB");
 			sgcb.setF1057Dataset(datSet);
 			sgcb.setF1057DsDesc(elDat.attributeValue("desc"));
 			items.add(sgcb);
@@ -60,27 +64,27 @@ public class DsSettingParser extends IedParserBase<Tb1057SgcbEntity> {
 				sgFcda.setF1059Index(i);
 				sgFcda.setF1059Desc(fcdaDesc);
 				sgFcda.setF1059RefAddr(SclUtil.getFcdaRef(fcdaEl));
-				sgFcda.setF1059DataType(DBConstants.DAT_TYP_FLOAT);		// TODO 待定
-				String doName = fcdaEl.attributeValue("doName");
-				Element doEl = DOM4JNodeHelper.selectSingleNode(elLN, "./DOI[@name='" + doName + "']");
-				if (doEl != null) {
-					String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
-					String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
-					String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
-					String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
-					if (!StringUtil.isEmpty(step)) {
-						sgFcda.setF1059StepSize(Float.valueOf(step));
-					}
-					if (!StringUtil.isEmpty(min)) {
-						sgFcda.setF1059ValueMin(Float.valueOf(min));
-					}
-					if (!StringUtil.isEmpty(max)) {
-						sgFcda.setF1059ValueMax(Float.valueOf(max));
-					}
-					if (!StringUtil.isEmpty(units)) {
-						sgFcda.setF1059Unit(units);
-					}
-				}
+				sgFcda.setF1059DataType(getBType(fcdaEl));
+//				String doName = fcdaEl.attributeValue("doName");
+//				Element doEl = DOM4JNodeHelper.selectSingleNode(elLN, "./DOI[@name='" + doName + "']");
+//				if (doEl != null) {
+//					String step = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='stepSize']/*[@name='f']/Val");
+//					String min = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='minVal']/*[@name='f']/Val");
+//					String max = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='maxVal']/*[@name='f']/Val");
+//					String units = DOM4JNodeHelper.getNodeValue(doEl, "./*[@name='units']/*[@name='SIUnit']/Val");	// TODO 待定
+//					if (!StringUtil.isEmpty(step)) {
+//						sgFcda.setF1059StepSize(Float.valueOf(step));
+//					}
+//					if (!StringUtil.isEmpty(min)) {
+//						sgFcda.setF1059ValueMin(Float.valueOf(min));
+//					}
+//					if (!StringUtil.isEmpty(max)) {
+//						sgFcda.setF1059ValueMax(Float.valueOf(max));
+//					}
+//					if (!StringUtil.isEmpty(units)) {
+//						sgFcda.setF1059Unit(units);
+//					}
+//				}
 				i++;
 			}
 		}

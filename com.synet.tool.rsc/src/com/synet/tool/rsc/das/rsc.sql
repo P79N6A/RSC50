@@ -460,9 +460,9 @@ create table TB1064_Strap
 (
    F1064_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
-   F1021_NO             INT not null,
+   F1064_TYPE           INT not null,
    F1064_NUM            varchar(48),
-   F1064_DESC           varchar(96) not null,
+   F1064_DESC           varchar(96),
    F1042_CODE_RelatedBay varchar(48),
    primary key (F1064_CODE)
 );
@@ -486,12 +486,10 @@ create table TB1065_LogicalLink
 create table TB1066_ProtMMXU
 (
    F1066_CODE           varchar(48) not null,
-   F1043_CODE           varchar(48) not null,
    F1067_CODE           varchar(48),
-   F1046_Code_MU        varchar(48),
-   F1046_Code_Prot      varchar(48) not null,
    F1066_Type           INT not null,
-   F1006_CODE_A         varchar(48) not null,
+   F1046_Code_Prot      varchar(48),
+   F1006_CODE_A         varchar(48),
    F1006_CODE_B         varchar(48),
    F1006_CODE_C         varchar(48),
    primary key (F1066_CODE)

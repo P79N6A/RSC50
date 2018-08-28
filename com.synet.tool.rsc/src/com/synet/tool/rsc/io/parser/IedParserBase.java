@@ -5,12 +5,16 @@
 package com.synet.tool.rsc.io.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Element;
 
 import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.model.SCL;
+import com.shrcn.found.common.util.StringUtil;
+import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -35,6 +39,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 	protected List<Tb1006AnalogdataEntity> agls = new ArrayList<>();
 	protected List<Tb1016StatedataEntity> sts = new ArrayList<>();
 	protected List<Tb1026StringdataEntity> strs = new ArrayList<>();
+	// key: lnType, value: (key:dodaName, value:bType/cdc)
+	protected Map<String, Map<String, Object[]>> lnTypeMap = new HashMap<String, Map<String, Object[]>>();
 	
 	
 	protected RSCProperties rscp = RSCProperties.getInstance();
@@ -83,7 +89,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String fc = fcdaEl.attributeValue("fc");
 			if ("ST".equals(fc)) {
 				pout.setF1061Type(DBConstants.DATA_ST);
-				pout.setDataCode(addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
+				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK);
+				pout.setDataCode(statedata.getF1016Code()); // TODO 需根据描述进一步分析
 			} else {
 				pout.setF1061Type(DBConstants.DATA_MX);
 				pout.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
@@ -91,7 +98,14 @@ public abstract class IedParserBase<T> implements IIedParser {
 		}
 	}
 	
-	protected String addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
+	/**
+	 * 添加状态量数据
+	 * @param fcdaEl
+	 * @param fcdaDesc
+	 * @param f1011No
+	 * @return
+	 */
+	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
 		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
 		stdata.setF1016Code(dataCode);
@@ -100,9 +114,16 @@ public abstract class IedParserBase<T> implements IIedParser {
 		stdata.setParentCode(ied.getF1046Code());
 		stdata.setF1011No(f1011No);
 		sts.add(stdata);
-		return dataCode;
+		return stdata;
 	}
 	
+	/**
+	 * 添加模拟量数据
+	 * @param fcdaEl
+	 * @param fcdaDesc
+	 * @param f1011No
+	 * @return
+	 */
 	protected String addAlgdata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
 		Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
@@ -115,6 +136,13 @@ public abstract class IedParserBase<T> implements IIedParser {
 		return dataCode;
 	}
 	
+	/**
+	 * 添加字符串数据
+	 * @param fcdaEl
+	 * @param fcdaDesc
+	 * @param f1011No
+	 * @return
+	 */
 	protected String addStringdata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_String);
 		Tb1026StringdataEntity strdata = new Tb1026StringdataEntity();
@@ -125,6 +153,31 @@ public abstract class IedParserBase<T> implements IIedParser {
 		strdata.setF1011No(f1011No);
 		strs.add(strdata);
 		return dataCode;
+	}
+
+	/**
+	 * 得到fcda的数据类型bType
+	 * @param fcdaEl
+	 * @return
+	 */
+	protected int getBType(Element fcdaEl) {
+		String ldXpath = SCL.getLDXPath(iedName, fcdaEl.attributeValue("ldInst"));
+		String fLnXpath = ldXpath + SCL.getFcdaLNXPath(fcdaEl) + "/@lnType";
+		String lnType = XMLDBHelper.getAttributeValue(fLnXpath);
+		Map<String, Object[]> dodaTypeMap = lnTypeMap.get(lnType);
+		if (dodaTypeMap == null) {
+			return DBConstants.DAT_TYP_FLOAT;
+		}
+		String doName = fcdaEl.attributeValue(SCL.FCDA_DONAME);
+		String daName = fcdaEl.attributeValue(SCL.FCDA_DANAME);
+		boolean isSV = StringUtil.isEmpty(daName);
+		String outDodaName = isSV ? doName : (doName + "." + daName);
+		Object[] dodatype = dodaTypeMap.get(outDodaName);
+		if (dodatype == null || dodatype.length < 1) {
+			return DBConstants.DAT_TYP_FLOAT;
+		}
+		String bType = (String) dodatype[0];
+		return "FLOAT32".equalsIgnoreCase(bType) ? DBConstants.DAT_TYP_FLOAT : DBConstants.DAT_TYP_INT;
 	}
 }
 

@@ -14,9 +14,11 @@ import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.io.scd.SclUtil;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.service.StrapEntityService;
 
  /**
  * 
@@ -25,6 +27,8 @@ import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
  */
 public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 
+	private StrapEntityService strapService = new StrapEntityService();
+	
 	public RcbParser(Tb1046IedEntity ied) {
 		super(ied);
 	}
@@ -67,7 +71,11 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						String fc = fcdaEl.attributeValue("fc");
 						if ("ST".equals(fc)) {
 							mmsFcda.setF1058DataType(DBConstants.DATA_ST);
-							mmsFcda.setDataCode(addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK)); // TODO 需根据描述进一步分析
+							Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK);
+							mmsFcda.setDataCode(statedata.getF1016Code()); // TODO 需根据描述进一步分析
+							if (isStrap(datSet)) { // 添加压板
+								strapService.addStrap(statedata, fcdaDesc);
+							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
 							mmsFcda.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
@@ -80,5 +88,8 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 		saveAll();
 	}
 
+	private boolean isStrap(String datSet) {
+		return "dsEna".equals(datSet);
+	}
+	
 }
-

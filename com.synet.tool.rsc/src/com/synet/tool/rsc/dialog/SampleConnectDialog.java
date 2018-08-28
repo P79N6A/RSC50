@@ -113,7 +113,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 	private void initComboData() {
-		if(!DataUtils.notNull(iedEntities)) {
+		if(!DataUtils.listNotNull(iedEntities)) {
 			comboItems = new String[]{"装置为空"};
 		} else {
 			List<String> lstIedName = new ArrayList<>();
@@ -132,14 +132,14 @@ public class SampleConnectDialog extends WrappedDialog {
 
 	private List<Tb1006AnalogdataEntity> getAnalogByIed(Tb1046IedEntity defSel) {
 		List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsfcdaByIed(defSel);
-		if(!DataUtils.notNull(mmsfcdaEntities)) {
+		if(!DataUtils.listNotNull(mmsfcdaEntities)) {
 			return new ArrayList<>();
 		}
 		List<String> lstAnalogDataCodes = new ArrayList<>();
 		for (Tb1058MmsfcdaEntity tb1058MmsfcdaEntity : mmsfcdaEntities) {
 			lstAnalogDataCodes.add(tb1058MmsfcdaEntity.getDataCode());
 		}
-		if(!DataUtils.notNull(lstAnalogDataCodes)) {
+		if(!DataUtils.listNotNull(lstAnalogDataCodes)) {
 			return new ArrayList<>();
 		}
 		analogdataService = new AnalogdataService();

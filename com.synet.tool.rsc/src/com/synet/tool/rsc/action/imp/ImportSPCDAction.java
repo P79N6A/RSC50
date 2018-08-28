@@ -4,14 +4,13 @@
  */
 package com.synet.tool.rsc.action.imp;
 
-import com.shrcn.found.ui.action.ConfigAction;
 
  /**
  * 
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2018-8-7
  */
-public class ImportSPCDAction extends ConfigAction {
+public class ImportSPCDAction extends BaseImportAction {
 	
 	public ImportSPCDAction(String title) {
 		super(title);
