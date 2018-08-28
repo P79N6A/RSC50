@@ -17,7 +17,7 @@ public class SecProBrkHandler extends RscSheetHandler {
 	
 	@Override
 	public void endRow(int rowNum) {
-		if (rowNum <= 0) return;
+		if (rowNum <= 5) return;
 		if (entity == null) {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
@@ -31,7 +31,7 @@ public class SecProBrkHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow > 0 && !isEmpty(formattedValue)) {
+		if (currentRow > 5 && !isEmpty(formattedValue)) {
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -40,7 +40,7 @@ public class SecProBrkHandler extends RscSheetHandler {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 0: 
+			case 1: 
 				if (value != null) {
 					Tb1093VoltagekkEntity temp = 
 							(Tb1093VoltagekkEntity) service.getById(Tb1093VoltagekkEntity.class, value.trim());
@@ -51,7 +51,7 @@ public class SecProBrkHandler extends RscSheetHandler {
 				}
 				entity = null;
 				break;
-			case 1: 
+			case 2: 
 				if (value != null) {
 					String id = value.trim();
 					Tb1067CtvtsecondaryEntity ctv = (Tb1067CtvtsecondaryEntity) service.getById(Tb1067CtvtsecondaryEntity.class, id);
@@ -62,29 +62,29 @@ public class SecProBrkHandler extends RscSheetHandler {
 				}
 				entity = null;
 				break;
-			case 2: 
+			case 3: 
 				if (!entity.getTb1067CtvtsecondaryByF1067Code().getTb1043EquipmentByF1043Code().getF1043Name().equals(value.trim())) {
 					entity = null;
 				}
 				break;
-			case 3: 
+			case 4: 
 				if (!entity.getTb1067CtvtsecondaryByF1067Code().getTb1043EquipmentByF1043Code().getF1043Desc().equals(value.trim())) {
 					entity = null;
 				}
 				break;
-			case 4: 
+			case 5: 
 				if (!entity.getTb1067CtvtsecondaryByF1067Code().getF1067Code().equals(value.trim())) {
 					entity = null;
 				}
 				break;
-			case 5: 
+			case 6: 
 				if (value != null) {
 					entity.setF1093Desc(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 6: 
+			case 7: 
 				if (value != null) {
 					entity.setF1093KkNo(value);
 					break;

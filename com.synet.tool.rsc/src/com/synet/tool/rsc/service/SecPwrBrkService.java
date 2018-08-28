@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.excel.ImportInfoParser;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
 
@@ -35,6 +36,17 @@ public class SecPwrBrkService extends BaseService {
 		result = (List<Tb1092PowerkkEntity>) hqlDao.selectInObjects(Tb1092PowerkkEntity.class,
 				"tb1046IedByF1046Code", temp);
 		return result;
+	}
+	
+	public List<Tb1092PowerkkEntity> importData(String filePath) {
+		List<Tb1092PowerkkEntity> result = new ArrayList<>();
+		result = new ImportInfoParser().getPowerkkList(filePath);
+		return result;
+		
+	}
+	
+	public void exportData(List<Tb1092PowerkkEntity> list, String filePath) {
+//		ExcelUtils.e
 	}
 
 }

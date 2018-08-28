@@ -53,6 +53,7 @@ public class ImportInfoParser {
 	        }
 	        xlsxPackage.close();
 		} catch (Throwable e) {
+			e.printStackTrace();
 			SCTLogger.error(e.getMessage());
 		}
 		return result;
