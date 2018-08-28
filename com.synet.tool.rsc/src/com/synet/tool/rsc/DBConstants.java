@@ -33,6 +33,14 @@ public interface DBConstants {
 	String PR_CNode 		= "CNode";
 	String PR_Term 			= "Term";
 	String PR_SEC 			= "CVTSnd";
+	String PR_LINEPF        = "Lineprotfiber";
+	String PR_IOTERM        = "Ioterm";
+	String PR_POWERKK       = "Powerkk";
+	String PR_VOLTAGEKK     = "Voltagekk";
+	String PR_REGION        = "Region";
+	String PR_CUBICLE       = "Cubicle";
+	String PR_CABLE         = "Cable";
+	String PR_PHYSCONN      = "Physconn";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";
@@ -109,6 +117,10 @@ public interface DBConstants {
 	int Equipment_CAP = 9; //电容器
 	int Equipment_GPTR = 10; //站用变、接地变
 	int Equipment_SHORT_L = 11; //短引线
+	
+	//区域类型
+	int IN_DOOR = 0; //户内
+	int OUT_DOOR = 1; //户外
 
 }
 
