@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<table name="areaListTable" desc="物理回路" 
+<table name="PhysconnTable" desc="物理回路" 
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1049RegionEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
@@ -8,10 +8,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口A装置名称" editor="none" name="f1048CodeA" width="100" default=""/> 
   <field desc="端口A装置描述" editor="none" name="tb1048PortByF1048CodeA.f1048Desc" width="100" default=""/> 
   <field desc="端口A板卡编号" editor="none" name="tb1048PortByF1048CodeA.tb1047BoardByF1047Code.f1047Code" width="100" default=""/> 
-  <field desc="端口A端口编号" editor="none" name="tb1048PortByF1048CodeA.f1048No" width="100" default=""/> 
+  <field desc="端口A端口编号" editor="text" name="tb1048PortByF1048CodeA.f1048No" width="100" default=""/> 
   <field desc="端口B装置名称" editor="none" name="f1048CodeB" width="100" default=""/> 
   <field desc="端口B装置描述" editor="none" name="tb1048PortByF1048CodeB.f1048Desc" width="100" default=""/> 
   <field desc="端口B板卡编号" editor="none" name="tb1048PortByF1048CodeB.tb1047BoardByF1047Code.f1047Code" width="100" default=""/> 
-  <field desc="端口B端口编号" editor="none" name="tb1048PortByF1048CodeB.f1048No" width="100" default=""/> 
+  <field desc="端口B端口编号" editor="text" name="tb1048PortByF1048CodeB.f1048No" width="100" default=""/> 
   <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

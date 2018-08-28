@@ -50,15 +50,18 @@ public class TableFactory {
 	public static final String BOARD_NAME_TABLE 			= "BoardNameTable";
 	public static final String LOGLINK_NAME_TABLE 			= "LogicalLinkNameTable";
 	
-	private static String IED_LIST_TABLE                    = "IEDListTable";
-	private static String BOARD_WARN_TABLE                  = "BoardWarnTableTable";
-	private static String FIBRE_LIST_TABLE                  = "FibreListTable";
-	private static String IED_BOARD_TABLE                   = "IEDBoardTable";
-	private static String STATUS_IN_TABLE                   = "StatusInTable";
-	private static String STA_INFO_TABLE                    = "StaInfoTable";
-	private static String PORT_LIGHT_YABLE                  = "PortLightTable";
-	private static String TER_STRAP_TABLE                   = "TerStrapTable";
-	private static String BRK_CFM_TABLE                     = "BrkCfmTable";
+	public static String IED_LIST_TABLE                     = "IEDListTable";
+	public static String BOARD_WARN_TABLE                   = "BoardWarnTableTable";
+	public static String FIBRE_LIST_TABLE                   = "FibreListTable";
+	public static String IED_BOARD_TABLE                    = "IEDBoardTable";
+	public static String STATUS_IN_TABLE                    = "StatusInTable";
+	public static String STA_INFO_TABLE                     = "StaInfoTable";
+	public static String PORT_LIGHT_YABLE                   = "PortLightTable";
+	public static String TER_STRAP_TABLE                    = "TerStrapTable";
+	public static String BRK_CFM_TABLE                      = "BrkCfmTable";
+	
+	public static String SUBSTATION_TABLE			    	= "SubstationTable";
+	public static String PORT_TABLE							= "PortTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
@@ -289,6 +292,16 @@ public class TableFactory {
 	
 	public static DevKTable getBrkCfmTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(BRK_CFM_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getSubstationTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(SUBSTATION_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getPortTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PORT_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 }
