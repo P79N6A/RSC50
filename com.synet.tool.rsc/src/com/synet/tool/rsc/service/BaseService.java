@@ -6,6 +6,7 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
+import com.synet.tool.rsc.util.CheckEntityUtils;
 
 public abstract class BaseService {
 	
@@ -26,6 +27,10 @@ public abstract class BaseService {
 		beanDao.save(entity);
 	}
 	
+	public void insert(Object obj) {
+		beanDao.insert(obj);
+	}
+	
 	public void delete(Object entity) {
 		beanDao.delete(entity);
 	}
@@ -40,5 +45,28 @@ public abstract class BaseService {
 	
 	public Object getById(Class<?> po, String id) {
 		return beanDao.getById(po, id);
+	}
+	
+	public List<?> getAll(Class<?> clazz) {
+		return beanDao.getAll(clazz);
+	}
+	
+	/**
+	 * 检查并保存Table数据
+	 * @param obj
+	 * @return 失败：-1，成功：0，不合法：1
+	 */
+	public int saveTableData(Object obj) {
+		if (obj == null) return -1;
+		try {
+			if (CheckEntityUtils.check(obj)){
+				save(obj);
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			return -1;
+		}
+		return 1;
 	}
 }
