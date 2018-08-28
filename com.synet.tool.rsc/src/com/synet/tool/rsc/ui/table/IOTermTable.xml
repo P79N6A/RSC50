@@ -11,5 +11,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端子描述" editor="text" name="f1091Desc" width="100" default=""/> 
   <field desc="端子编号" editor="text" name="f1091TermNo" width="100" default=""/> 
   <field desc="虚回路编号" editor="text" name="f1091CircNo" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

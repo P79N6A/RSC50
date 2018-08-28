@@ -18,18 +18,18 @@ public class ImportInfoTest {
 	
 	@Before
 	public void before() {
-//		String dbName = "RscData";
-//		ProjectManager instance = ProjectManager.getInstance();
-//		instance.initDb(dbName);
-//		instance.openDb(dbName);
-//		beandao = BeanDaoImpl.getInstance();
-//		service = new PhyscialAreaService();
+		String dbName = "RscData";
+		ProjectManager instance = ProjectManager.getInstance();
+		instance.initDb(dbName);
+		instance.openDb(dbName);
+		beandao = BeanDaoImpl.getInstance();
+		service = new PhyscialAreaService();
 	}
 	
 	@Test
 	public void testRead1090() {
 		ImportInfoParser parser = new ImportInfoParser();
-		List<Tb1090LineprotfiberEntity> result = parser.getLineprotfiberList("C:\\Users\\36576\\Desktop\\Test.xlsx");
+		List<Tb1090LineprotfiberEntity> result = parser.getLineprotfiberList("C:\\Users\\36576\\Desktop\\sub_cyb20180306\\test.xlsx");
 		System.out.println(result);
 		System.out.println(parser.getHandler().getErrorMsg());
 	}
