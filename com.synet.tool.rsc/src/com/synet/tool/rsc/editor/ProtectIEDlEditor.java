@@ -229,28 +229,28 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			tableBoardPort.setInput(portEntities);
 		}
 		
-		//保护信息-保护定值
-		SgfcdaEntityService sgfcdaEntityService = new SgfcdaEntityService();
-		List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
-		tableProtectValue.setInput(sgfcdaEntities);
-		//保护信息-保护参数
-		SpfcdaEntityService spfcdaEntityService = new SpfcdaEntityService();
-		List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
-		tableProtParam.setInput(spfcdaEntities);
-		//保护信息-保护压板
-		StrapEntityService strapEntityService = new StrapEntityService();
-		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(iedEntity);
-		tableProtectPlate.setInput(staEntities);
-		//保护信息-保护动作
-		List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction = 
-				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
-		tableProtectAction.setInput(mmsfcdasProtcAction);
-		//保护信息-保护测量量
-		List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua = 
-				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
-		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
-		
-		
+		if (tableProtectValue != null) {
+			//保护信息-保护定值
+			SgfcdaEntityService sgfcdaEntityService = new SgfcdaEntityService();
+			List<Tb1059SgfcdaEntity> sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
+			tableProtectValue.setInput(sgfcdaEntities);
+			//保护信息-保护参数
+			SpfcdaEntityService spfcdaEntityService = new SpfcdaEntityService();
+			List<Tb1060SpfcdaEntity> spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
+			tableProtParam.setInput(spfcdaEntities);
+			//保护信息-保护压板
+			StrapEntityService strapEntityService = new StrapEntityService();
+			List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(iedEntity);
+			tableProtectPlate.setInput(staEntities);
+			//保护信息-保护动作
+			List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
+			tableProtectAction.setInput(mmsfcdasProtcAction);
+			//保护信息-保护测量量
+			List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
+			tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
+		}
 		
 		//运行工况
 		if(tableRunState != null) {

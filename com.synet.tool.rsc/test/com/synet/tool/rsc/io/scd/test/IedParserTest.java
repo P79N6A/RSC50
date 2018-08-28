@@ -46,6 +46,7 @@ import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
@@ -97,6 +98,7 @@ public class IedParserTest {
 			beanDao.deleteAll(Tb1045ConnectivitynodeEntity.class);
 			beanDao.deleteAll(Tb1067CtvtsecondaryEntity.class);
 			beanDao.deleteAll(Tb1066ProtmmxuEntity.class);
+			beanDao.deleteAll(Tb1064StrapEntity.class);
 		}
 		
 //		new SCDImporter(scdPath).execute();
@@ -145,7 +147,7 @@ public class IedParserTest {
 	@Test
 	public void testRcbParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		ied.setF1046Name("CT102B");
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
 		RcbParser iedSubParser = new RcbParser(ied);
@@ -161,6 +163,8 @@ public class IedParserTest {
 	
 	private void checkDatas() {
 		List<?> sts = beanDao.getAll(Tb1016StatedataEntity.class);
+		List<?> traps = beanDao.getAll(Tb1064StrapEntity.class);
+		assertTrue(traps.size() > 0);
 		List<?> agls = beanDao.getAll(Tb1006AnalogdataEntity.class);
 		List<?> strs = beanDao.getAll(Tb1026StringdataEntity.class);
 		assertTrue(sts.size() + agls.size() + strs.size() > 0);
