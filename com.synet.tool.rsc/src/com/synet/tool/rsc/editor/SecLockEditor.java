@@ -17,9 +17,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.service.SecLockBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -136,17 +136,23 @@ public class SecLockEditor extends BaseConfigEditor {
 	}
 	
 	private void importData() {
-		
+		String filePath = DialogHelper.getSaveFilePath("文件", "", new String[]{"*.xlsx"});
+		if (filePath == null || "".equals(filePath)){
+			DialogHelper.showAsynError("请选择要导入文件路径");
+		}
+		List<Tb1091IotermEntity> list = secLockBrkService.importData(filePath);
+		if (list != null) {
+			table.setInput(list);
+		}
 	}
 	
 	private void exportData() {
-//		String filePath = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
-//		if (filePath == null || "".equals(filePath)){
-//			DialogHelper.showAsynError("请选择保存路径");
-//		}
-//		@SuppressWarnings("unchecked")
-//		List<Tb1091IotermEntity> list = (List<Tb1091IotermEntity>) table.getInput();
-		
+		try {
+			table.exportExcel(table.getTableDesc());
+			DialogHelper.showAsynInformation("导出成功");
+		} catch (Exception e) {
+			DialogHelper.showAsynError("导出失败！");
+		}
 	}
 	
 	private void add() {

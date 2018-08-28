@@ -136,17 +136,23 @@ public class SecFibreEditor extends BaseConfigEditor {
 	}
 	
 	private void importData() {
-		
+		String filePath = DialogHelper.getSaveFilePath("文件", "", new String[]{"*.xlsx"});
+		if (filePath == null || "".equals(filePath)){
+			DialogHelper.showAsynError("请选择要导入文件路径");
+		}
+		List<Tb1090LineprotfiberEntity> list = secFibreService.importData(filePath);
+		if (list != null) {
+			table.setInput(list);
+		}
 	}
 	
 	private void exportData() {
-		String filePath = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
-		if (filePath == null || "".equals(filePath)){
-			DialogHelper.showAsynError("请选择保存路径");
+		try {
+			table.exportExcel(table.getTableDesc());
+			DialogHelper.showAsynInformation("导出成功");
+		} catch (Exception e) {
+			DialogHelper.showAsynError("导出失败！");
 		}
-		@SuppressWarnings("unchecked")
-		List<Tb1090LineprotfiberEntity> list = (List<Tb1090LineprotfiberEntity>) table.getInput();
-		secFibreService.exportData(list, filePath);
 	}
 	
 	private void add() {
