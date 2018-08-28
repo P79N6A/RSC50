@@ -11,8 +11,10 @@ public class Tb1064StrapEntity {
     private int f1021No;
     private String f1064Num;
     private String f1064Desc;
+    private String f1064Type;
     private String f1042CodeRelatedBay;
     private Tb1046IedEntity tb1046IedByF1046Code;
+    private Tb1058MmsfcdaEntity tb1058MmsByF1058Code;
 
     public String getF1064Code() {
         return f1064Code;
@@ -98,4 +100,20 @@ public class Tb1064StrapEntity {
     public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
     }
+
+	public String getF1064Type() {
+		return f1064Type;
+	}
+
+	public void setF1064Type(String f1064Type) {
+		this.f1064Type = f1064Type;
+	}
+
+	public Tb1058MmsfcdaEntity getTb1058MmsByF1058Code() {
+		return tb1058MmsByF1058Code;
+	}
+
+	public void setTb1058MmsByF1058Code(Tb1058MmsfcdaEntity tb1058MmsByF1058Code) {
+		this.tb1058MmsByF1058Code = tb1058MmsByF1058Code;
+	}
 }

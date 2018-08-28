@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
@@ -15,6 +16,11 @@ public abstract class BaseService {
 	@SuppressWarnings("unchecked")
 	public List<Tb1046IedEntity> getIedList(){
 		return (List<Tb1046IedEntity>) beanDao.getAll(Tb1046IedEntity.class);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Tb1043EquipmentEntity> getEquipmentList() {
+		return (List<Tb1043EquipmentEntity>) beanDao.getAll(Tb1043EquipmentEntity.class);
 	}
 	
 	@SuppressWarnings("unchecked")

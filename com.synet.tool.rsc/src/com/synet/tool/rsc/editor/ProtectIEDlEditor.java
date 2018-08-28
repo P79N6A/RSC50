@@ -221,6 +221,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	public void initData() {
 		//desc为空，引发空指针异常，暂时关闭
 //		initTableDict();
+		MmsfcdaService mmsfcdaService = new MmsfcdaService();
 		//板卡端口 
 		if(tableBoardPort != null) {
 			BoardPortService portService = new BoardPortService();
@@ -241,15 +242,20 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		List<Tb1064StrapEntity> staEntities = strapEntityService.getByIed(iedEntity);
 		tableProtectPlate.setInput(staEntities);
 		//保护信息-保护动作
-		tableProtectAction.setInput(null);
+		List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction = 
+				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
+		tableProtectAction.setInput(mmsfcdasProtcAction);
 		//保护信息-保护测量量
-		tableProtectMeaQuantity.setInput(null);
+		List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua = 
+				mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
+		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
 		
-		MmsfcdaService mmsfcdaService = new MmsfcdaService();
+		
 		
 		//运行工况
 		if(tableRunState != null) {
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
+			List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
 			tableRunState.setInput(mmsfcdaEntitiesRun);	
 		}
 		
@@ -268,7 +274,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		//装置告警
 		if(tableDeviceWarning != null) {
 			
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
+			List<Tb1058MmsfcdaEntity> mmsfcdaEntities = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
 			tableDeviceWarning.setInput(mmsfcdaEntities);
 			
 			tableDeviceName.addRow(iedEntity);

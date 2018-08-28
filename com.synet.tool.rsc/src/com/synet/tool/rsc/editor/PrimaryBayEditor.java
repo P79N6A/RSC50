@@ -72,6 +72,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private Button btnDel;
 	
 	private IedEntityService iedService;
+	private Button btnAddTsf;
+	private Button btnDelTsf;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -90,16 +92,21 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		//互感器次级
 		Composite compTsf = SwtUtil.createComposite((Composite) controls[0], gridData, 1);
-		compTsf.setLayout(SwtUtil.getGridLayout(2));
+		compTsf.setLayout(SwtUtil.getGridLayout(4));
 		GridData gdlb = new GridData(200,25);
 		String tsfLbName = curEntryName + "互感器次级配置";
 		SwtUtil.createLabel(compTsf, tsfLbName, gdlb);
 		btnChanelConnect = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "通道关联");
+		btnAddTsf = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "添加次级");
+		btnDelTsf = SwtUtil.createButton(compTsf, SwtUtil.bt_gd, SWT.BUTTON1, "删除次级");
 		SwtUtil.createLabel(compTsf, "			", new GridData(SWT.DEFAULT,10));
-		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
-		gdSpan_2.horizontalSpan = 2;
+		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
+		gdSpan_3.horizontalSpan = 3;
+		
+		GridData gdSpan_4 = new GridData(GridData.FILL_BOTH);
+		gdSpan_4.horizontalSpan = 4;
 		tableCtvtsecondary = TableFactory.getTsfSecondaryTable(compTsf);
-		tableCtvtsecondary.getTable().setLayoutData(gdSpan_2);
+		tableCtvtsecondary.getTable().setLayoutData(gdSpan_4);
 		//保护采样值
 		Composite compProtect = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
 		compProtect.setLayout(SwtUtil.getGridLayout(2));
@@ -108,7 +115,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		btnSampleConnect = SwtUtil.createButton(compProtect, SwtUtil.bt_gd, SWT.BUTTON1, "采样关联");
 		SwtUtil.createLabel(compProtect, "			", new GridData(SWT.DEFAULT,10));
 		tableProtectSample = TableFactory.getProtectSampleTalbe(compProtect);
-		tableProtectSample.getTable().setLayoutData(gdSpan_2);
+		tableProtectSample.getTable().setLayoutData(gdSpan_3);
 		//开关刀闸状态
 		Composite compSwitch = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
 		compSwitch.setLayout(SwtUtil.getGridLayout(2));
@@ -146,8 +153,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		textDesc.setMessage("描述");
 		btnSearch = SwtUtil.createButton(comRight, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
 		SwtUtil.createLabel(comRight, "			", new GridData(SWT.DEFAULT,10));
-		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
-		gdSpan_3.horizontalSpan = 3;
+		
 		tableSluiceStatus = TableFactory.getSluiceStatusTable(comRight);
 		tableSluiceStatus.getTable().setLayoutData(gdSpan_3);
 	}
@@ -158,7 +164,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		this.curEntryName = data.getIedName();
 		this.bayEntity = (Tb1042BayEntity) data.getData();
 		this.iedService = new IedEntityService();
-		this.iedEntities = iedService.getIedEntityByBay(bayEntity);
+		if(bayEntity == null) {
+			this.iedEntities = iedService.getIedList();
+		} else {
+			this.iedEntities = iedService.getIedEntityByBay(bayEntity);
+		}
+		
 		if(iedEntities.size() < 1) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -241,9 +252,19 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					tableSwitchStatus.removeSelected();
 					tableSwitchStatus.refresh();
 					tableSluiceStatus.refresh();
+				} else if(object == btnAddTsf) {
+					tableCtvtsecondary.addRow(tableCtvtsecondary.getDefaultRow());
+					tableCtvtsecondary.refresh();
+					//TODO 数据绑定
+				} else if(object == btnDelTsf) {
+					tableCtvtsecondary.removeSelected();
+					tableCtvtsecondary.refresh();
+					//TODO 数据解绑
 				}
 			}
 		};
+		btnDelTsf.addSelectionListener(sleListener);
+		btnAddTsf.addSelectionListener(sleListener);
 		btnDel.addSelectionListener(sleListener);
 		btnChanelConnect.addSelectionListener(sleListener);
 		btnSampleConnect.addSelectionListener(sleListener);
@@ -274,30 +295,49 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	@Override
 	public void initData() {
 		EquipmentEntityService equipmentEntityService = new EquipmentEntityService();
-		//根据当前节点：间隔，查询间隔下所有互感器
-		List<Tb1043EquipmentEntity> entities = equipmentEntityService.getEquipmentEntitysByBayEntity(bayEntity);
 		CtvtsecondaryService ctvtsecondaryService = new CtvtsecondaryService();
-		//查询互感器集合下关联的所有互感器次级
-		List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities = ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
-		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
 		ProtmmxuService protmmxuService = new ProtmmxuService();
-		//查找互感器集合下关联的所有保护采样
-		List<Tb1066ProtmmxuEntity> protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-		tableProtectSample.setInput(protmmxuEntities);
-		//初始化开关刀闸状态右表
 		statedataService = new StatedataService();
+		poutEntityService = new PoutEntityService();
+		
+		List<Tb1043EquipmentEntity> entities;
+		List<Tb1066ProtmmxuEntity> protmmxuEntities;
+		List<Tb1016StatedataEntity> statedataEntities;
+		if(this.bayEntity == null) {
+			//查询所有间隔下所有互感器
+			entities = equipmentEntityService.getEquipmentList();
+			//查询互感器集合下关联的所有互感器次级
+			List<Tb1067CtvtsecondaryEntity> allCtvtsecondarys = 
+					ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
+			//查找互感器集合下关联的所有保护采样
+			protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(allCtvtsecondarys);
+			//初始化开关刀闸状态左表
+			statedataEntities = statedataService.getStateDataByEquips(entities);
+			
+		} else {
+			//根据当前节点：间隔，查询间隔下所有互感器
+			entities = equipmentEntityService.getEquipmentEntitysByBayEntity(bayEntity);
+			//查询互感器集合下关联的所有互感器次级
+			List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities = 
+					ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
+			//查找互感器集合下关联的所有保护采样
+			protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+			//初始化开关刀闸状态左表
+			statedataEntities = statedataService.getStateDataByEquips(entities);
+		}
+		//初始化开关刀闸状态右表
 		if(DataUtils.listNotNull(iedEntities)) {
 			Tb1046IedEntity iedEntity = iedEntities.get(0);
-			poutEntityService = new PoutEntityService();
+			
 			tableSluiceStatuData = getStateDataByIed(iedEntity);
 			tableSluiceStatus.setInput(tableSluiceStatuData);
 		}
-		//初始化开关刀闸状态左表
-		List<Tb1016StatedataEntity> statedataEntities = statedataService.getStateDataByEquips(entities);
+		tableCtvtsecondary.setInput(entities);
+		tableProtectSample.setInput(protmmxuEntities);
 		tableSwitchStatus.setInput(statedataEntities);
+		
 		super.initData();
 	}
-
 
 	private List<Tb1016StatedataEntity> getStateDataByIed(
 			Tb1046IedEntity iedEntity) {
