@@ -11,16 +11,15 @@
         <property name="f1066Type">
             <column name="F1066_Type" sql-type="int" not-null="true"/>
         </property>
-        <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity">
-            <column name="F1043_CODE" not-null="true"/>
-        </many-to-one>
-        <one-to-one name="tb1067CtvtsecondaryByF1067Code" constrained="true">
-        </one-to-one>
-        <many-to-one name="tb1046IedByF1046CodeMu" class="com.synet.tool.rsc.model.Tb1046IedEntity">
-            <column name="F1046_Code_MU"/>
+        <property name="f1067Code">
+            <column name="F1067_CODE" sql-type="varchar" not-null="true"/>
+        </property>
+        <many-to-one name="tb1067CtvtsecondaryByF1067Code" class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" 
+        	insert="false" update="false">
+            <column name="F1067_CODE"/>
         </many-to-one>
         <many-to-one name="tb1046IedByF1046CodeProt" class="com.synet.tool.rsc.model.Tb1046IedEntity">
-            <column name="F1046_Code_Prot" not-null="true"/>
+            <column name="F1046_Code_Prot"/>
         </many-to-one>
         <many-to-one name="f1006CodeA" class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity">
             <column name="F1006_CODE_A"/>

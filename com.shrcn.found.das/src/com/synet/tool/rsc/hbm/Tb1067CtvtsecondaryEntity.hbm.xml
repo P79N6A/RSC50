@@ -4,8 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" table="tb1067_ctvtsecondary" schema="rscapp"
-          >
+    <class name="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" table="tb1067_ctvtsecondary" schema="rscapp">
         <id name="f1067Code">
             <column name="F1067_Code" sql-type="varchar" length="48" not-null="true"/>
         </id>
@@ -47,6 +46,10 @@
         </many-to-one>
         <many-to-one name="tb1044TerminalByF1044Code" class="com.synet.tool.rsc.model.Tb1044TerminalEntity" lazy="false">
             <column name="F1067_TermNo" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="tb1066ProtMmxuByF1067Code" property-ref="tb1067CtvtsecondaryByF1067Code"
+        	class="com.synet.tool.rsc.model.Tb1066ProtmmxuEntity" insert="false" update="false">
+            <column name="F1067_Code" not-null="true"/>
         </many-to-one>
     </class>
 </hibernate-mapping>
