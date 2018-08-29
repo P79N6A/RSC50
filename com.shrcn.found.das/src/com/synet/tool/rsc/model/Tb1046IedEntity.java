@@ -8,6 +8,7 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1046IedEntity {
     private String f1046Code;
+    private String f1042Code;
     private String f1050Code;
     private String f1046Name;
     private String f1046Desc;
@@ -25,7 +26,6 @@ public class Tb1046IedEntity {
     private String f1046aNetIp;//A王IP
     private String f1046bNetIp;//B王IP
     private String f1046firm;//厂商
-    private String f1046type;//型号
     private String f1046version;//版本
     private String f1046suite;//套
     private String f1046protectCategory;//保护分类
@@ -39,7 +39,15 @@ public class Tb1046IedEntity {
     private String f1046OutType;//出口方式
     private String f1046boardNum;//板卡数量
     
-    public String getF1046aNetIp() {
+    public String getF1042Code() {
+		return f1042Code;
+	}
+
+	public void setF1042Code(String f1042Code) {
+		this.f1042Code = f1042Code;
+	}
+
+	public String getF1046aNetIp() {
 		return f1046aNetIp;
 	}
 
@@ -61,14 +69,6 @@ public class Tb1046IedEntity {
 
 	public void setF1046firm(String f1046firm) {
 		this.f1046firm = f1046firm;
-	}
-
-	public String getF1046type() {
-		return f1046type;
-	}
-
-	public void setF1046type(String f1046type) {
-		this.f1046type = f1046type;
 	}
 
 	public String getF1046version() {
@@ -258,6 +258,7 @@ public class Tb1046IedEntity {
         if (f1046IsVirtual != that.f1046IsVirtual) return false;
         if (f1046AorB != null ? !f1046AorB.equals(that.f1046AorB) : that.f1046AorB != null) return false;
         if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
+        if (f1042Code != null ? !f1042Code.equals(that.f1042Code) : that.f1042Code != null) return false;
         if (f1046ConfigVersion != null ? !f1046ConfigVersion.equals(that.f1046ConfigVersion) : that.f1046ConfigVersion != null)
             return false;
         if (f1046Crc != null ? !f1046Crc.equals(that.f1046Crc) : that.f1046Crc != null) return false;
@@ -276,6 +277,7 @@ public class Tb1046IedEntity {
     public int hashCode() {
         int result = f1046Code != null ? f1046Code.hashCode() : 0;
         result = 31 * result + (f1050Code != null ? f1050Code.hashCode() : 0);
+        result = 31 * result + (f1042Code != null ? f1042Code.hashCode() : 0);
         result = 31 * result + (f1046Name != null ? f1046Name.hashCode() : 0);
         result = 31 * result + (f1046Desc != null ? f1046Desc.hashCode() : 0);
         result = 31 * result + (f1046Manufacturor != null ? f1046Manufacturor.hashCode() : 0);

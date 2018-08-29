@@ -11,8 +11,6 @@ import java.util.Map;
 
 import org.dom4j.Element;
 
-import sun.security.pkcs11.Secmod.DbMode;
-
 import com.shrcn.business.scl.check.InstResolver;
 import com.shrcn.business.scl.check.Problem;
 import com.shrcn.business.scl.das.FcdaDAO;
@@ -26,10 +24,10 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.io.parser.DsParameterParser;
 import com.synet.tool.rsc.io.parser.DsSettingParser;
+import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.IIedParser;
 import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
-import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
 import com.synet.tool.rsc.io.parser.SubstationParser;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
@@ -56,6 +54,7 @@ import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
+import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
  /**
@@ -69,6 +68,7 @@ public class SCDImporter implements IImporter {
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
+	private SubstationService staServ = new SubstationService();
 	private Map<String, Tb1042BayEntity> bayCache = new HashMap<>();
 	
 	public SCDImporter(String scdPath) {
@@ -78,6 +78,7 @@ public class SCDImporter implements IImporter {
 
 	private void clearHistory() {
 		FcdaDAO.getInstance().clear();
+		bayCache.clear();
 		beanDao.deleteAll(Tb1006AnalogdataEntity.class);
 		beanDao.deleteAll(Tb1016StatedataEntity.class);
 		beanDao.deleteAll(Tb1026StringdataEntity.class);
@@ -116,12 +117,13 @@ public class SCDImporter implements IImporter {
 			bay = new Tb1042BayEntity();
 			bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
 			bay.setF1042Name(bayName);
-			List<Tb1041SubstationEntity> staList = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
-			if (staList != null && staList.size() > 0) {
-				bay.setTb1041SubstationByF1041Code(staList.get(0));
+			Tb1041SubstationEntity station = staServ.getCurrSubstation();
+			if (station != null) {
+				bay.setTb1041SubstationByF1041Code(station);
 			}
 			beanDao.insert(bay);
 		}
+		bayCache.put(bayName, bay);
 		return bay;
 	}
 
@@ -129,9 +131,13 @@ public class SCDImporter implements IImporter {
 	public void execute() {
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
-		// 一次部分
-		SubstationParser sp = new SubstationParser();
-		sp.parse();
+		Element staEl = XMLDBHelper.selectSingleNode("/SCL/Substation");
+		// 变电站
+		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
+		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
+		station.setF1041Name(staEl.attributeValue("name"));
+		station.setF1041Desc(staEl.attributeValue("desc"));
+		beanDao.insert(station);
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 		if (iedNds == null || iedNds.size() < 1) {
@@ -173,18 +179,15 @@ public class SCDImporter implements IImporter {
 			for (IIedParser parser : pmap.values()) {
 				parser.parse();
 			}
-			// 根据解析结果修改类型
-			if (pmap.get("rcb").getItems().size() > 0) {
+			// 根据解析结果修改装置类型和间隔类型
+			Tb1042BayEntity bay = null;
+			if (pmap.get("rcb").getItems().size() > 0) {		// 保护测控
 				String ldXpath = SCL.getLDXPath(iedName, "PROT");
 				int type = XMLDBHelper.existsNode(ldXpath) ?
 						DBConstants.IED_PROT : DBConstants.IED_MONI;
 				ied.setF1046Type(type);
-				if (type == DBConstants.IED_PROT) {
-					Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PROT);
-					ied.setTb1042BaysByF1042Code(bay);
-				} else {
-					Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PUB);
-					ied.setTb1042BaysByF1042Code(bay);
+				if (type == DBConstants.IED_MONI) {
+					bay = getBayByName(DBConstants.BAY_PUB);
 				}
 				Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
 				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
@@ -200,21 +203,29 @@ public class SCDImporter implements IImporter {
 				}
 				beanDao.insert(mmsServer);
 			} else {
-				if (pmap.get("smv").getItems().size() > 0) {
+				if (pmap.get("smv").getItems().size() > 0) {	// 合并单元
 					ied.setF1046Type(DBConstants.IED_MU);
-				} else {
+				} else {										// 智能终端
 					ied.setF1046Type(DBConstants.IED_TERM);
 				}
-				Tb1042BayEntity bay = getBayByName(DBConstants.BAY_PROT);
-				ied.setTb1042BaysByF1042Code(bay);
 			}
+			bay = (bay==null) ? getBayByName(DBConstants.BAY_PROT) : bay;
+			ied.setF1042Code(bay.getF1042Code());
 			beanDao.update(ied);
+//			ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", "CL1101");
+//			if (ied != null) {
+//				System.out.println(ied.getTb1042BaysByF1042Code()!=null);
+//			}
 		}
+		// 虚链路与虚回路
 		for (Element iedNd : iedNds) {
 			String iedName = iedNd.attributeValue("name");
 			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 			new LogicLinkParser(ied).parse();
 		}
+		// 一次部分
+		SubstationParser sp = new SubstationParser();
+		sp.parse();
 	}
 
 }

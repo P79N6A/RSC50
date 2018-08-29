@@ -24,8 +24,10 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
-import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
+import com.synet.tool.rsc.service.SubstationService;
 
  /**
  * 
@@ -36,6 +38,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 
 	private Map<String, Tb1045ConnectivitynodeEntity> connMap = new HashMap<>();
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
+	private SubstationService staServ = new SubstationService();
 	
 	public SubstationParser() {
 		super(null);
@@ -44,6 +47,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	@Override
 	public void parse() {
 		Element staEl = XMLDBHelper.selectSingleNode("/SCL/Substation");
+		Tb1041SubstationEntity station = staServ.getCurrSubstation();
 		// 连接点
 		List<Element> connEls = DOM4JNodeHelper.selectNodes(staEl, "./VoltageLevel/Bay/ConnectivityNode");
 		for (Element connEl : connEls) {
@@ -59,12 +63,6 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			beanDao.insert(conn);
 			connMap.put(cnode, conn);
 		}
-		// 变电站
-		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
-		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
-		station.setF1041Name(staEl.attributeValue("name"));
-		station.setF1041Desc(staEl.attributeValue("desc"));
-		beanDao.insert(station);
 		List<Element> volEls = staEl.elements("VoltageLevel");
 		for (Element volEl : volEls) {
 			String vol = DOM4JNodeHelper.getNodeValue(volEl, "./Voltage");
@@ -75,7 +73,6 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			List<Element> bayEls = volEl.elements("Bay");
 			for (Element bayEl : bayEls) {
 				Tb1042BayEntity bay = new Tb1042BayEntity();
-				items.add(bay);
 				bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
 				String bayName = bayEl.attributeValue("name");
 				bay.setF1042Name(bayName);
@@ -85,6 +82,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				Set<Tb1043EquipmentEntity> equipments = new HashSet<>();
 				bay.setTb1041SubstationByF1041Code(station);
 				bay.setTb1043EquipmentsByF1042Code(equipments);
+				beanDao.insert(bay);	// 避免IED更新bay信息后查询出错
 				for (Element eqpEl : eqpEls) {
 					String stype = eqpEl.attributeValue("type");
 					EnumEquipmentType type = null;
@@ -114,23 +112,35 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 						}
 						equipment.setF1043IsVirtual(isv ? 1 : 0);
 						equipment.setF1043Type(type.getCode());
-						if (EnumEquipmentType.PTR == type) {
+						if (EnumEquipmentType.PTR == type) {	// 变压器
 							List<Element> twEls = eqpEl.elements("TransformerWinding");
 							for (Element twEl : twEls) {
-								addTerminals(equipment, eqpEl);
+								addTerminals(equipment, eqpEl); // 连接端子
 							}
-						} else {
-							addTerminals(equipment, eqpEl);
+						} else {								// 其它设备
+							addTerminals(equipment, eqpEl); // 连接端子
 							if (EnumEquipmentType.VTR == type ||
 									EnumEquipmentType.CTR == type) {
-								secService.addCtvtsecondary(equipment, null);
+								secService.addCtvtsecondary(equipment, null); // 互感器次级
 							}
+						}
+						// 一二次关联信息
+						String lnodeXpath = null;
+						if (EnumEquipmentType.VTR == type ||
+								EnumEquipmentType.CTR == type) {
+							lnodeXpath = "./SubEquipment/LNode";
+						} else {
+							lnodeXpath = "./LNode";
+						}
+						List<Element> lnodeEls = DOM4JNodeHelper.selectNodes(eqpEl, lnodeXpath);
+						for (Element lnodeEl : lnodeEls) {
+							updateIEDBayInfo(lnodeEl, bay);
 						}
 					}
 				}
+				beanDao.update(bay);
 			}
 		}
-		saveAll();
 	}
 	
 	/**
@@ -163,4 +173,32 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		equipment.setTb1044TerminalsByF1043Code(terminals);
 	}
 
+	private void updateIEDBayInfo(Element lnodeEl, Tb1042BayEntity bay) {
+		String iedName = lnodeEl.attributeValue("iedName");
+		if (!StringUtil.isEmpty(iedName) && !"None".equalsIgnoreCase(iedName) && !"null".equalsIgnoreCase(iedName)) {
+			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
+			String bayName = ied.getTb1042BaysByF1042Code().getF1042Name();
+			if (DBConstants.BAY_PROT.equals(bayName)) {
+				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
+				String bayCode = bay.getF1042Code();
+				ied.setF1042Code(bayCode);
+				bayIeds.add(ied);
+				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
+						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedRecv", ied);
+				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
+					ied = logiclink.getTb1046IedByF1046CodeIedSend();
+					ied.setF1042Code(bayCode);
+					bayIeds.add(ied);
+				}
+				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
+						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedSend", ied);
+				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
+					ied = logiclink.getTb1046IedByF1046CodeIedRecv();
+					ied.setF1042Code(bayCode);
+					bayIeds.add(ied);
+				}
+				beanDao.updateBatch(bayIeds);
+			}
+		}
+	}
 }

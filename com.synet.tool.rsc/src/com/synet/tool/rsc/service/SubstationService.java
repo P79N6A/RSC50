@@ -10,4 +10,12 @@ public class SubstationService extends BaseService {
 	public List<Tb1041SubstationEntity> getAllSubstation() {
 		return (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 	}
+	
+	public Tb1041SubstationEntity getCurrSubstation() {
+		List<Tb1041SubstationEntity> staList = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
+		if (staList != null && staList.size() > 0) {
+			return staList.get(0);
+		}
+		return null;
+	}
 }
