@@ -12,6 +12,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -32,8 +34,6 @@ public class ImportSCDAction extends BaseImportAction {
 
 	@Override
 	public void run() {
-		//TODO 未打开工程或者创建工程时不能导入，数据库未初始化；
-		//导入后需要刷新导航树，重新生成导航树节点
 		final String path = DialogHelper.selectFile(getShell(), SWT.OPEN, "*.scd;*.SCD");
 		if (path != null) {
 			ProgressManager.execute(new IRunnableWithProgress() {
@@ -47,6 +47,7 @@ public class ImportSCDAction extends BaseImportAction {
 					List<Tb1065LogicallinkEntity> cbs = (List<Tb1065LogicallinkEntity>) BeanDaoImpl.getInstance().getAll(Tb1065LogicallinkEntity.class);
 					if (cbs.size() > 0) {
 						DialogHelper.showAsynInformation("SCD导入成功！");
+						EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 					}
 				}
 			});

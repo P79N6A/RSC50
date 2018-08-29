@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import com.shrcn.found.common.event.Context;
@@ -129,7 +130,13 @@ public abstract class ANavigationView extends ViewPart implements IEventHandler 
 			exportProject();
 		} else if (EventConstants.PROJECT_OPEN_IMP.equals(event)) {
 			importProject();
-		}
+		} else if (EventConstants.PROJECT_RELOAD.equals(event)) {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					loadProject();
+				}});
+		} 
 		menuToolFactory.disableActions();
 	}
 	

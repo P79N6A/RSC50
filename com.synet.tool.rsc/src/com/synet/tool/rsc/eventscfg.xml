@@ -6,6 +6,7 @@
 		<event name="open export project" />
 		<event name="open import project" />
 		<event name="close project" />
+		<event name="reload project" />
 		<handler source="com.synet.tool.rsc.view.NavigationView" />
 	</category>
 	<category id="Debug Events">

@@ -10,6 +10,7 @@ public interface EventConstants {
 	String PROJECT_CLOSE 		= "close project";
 	String PROJECT_OPEN_EXP		= "open export project";
 	String PROJECT_OPEN_IMP		= "open import project";
+	String PROJECT_RELOAD		= "reload project";
 	
 	// Device
 	String DEVICE_CREATE 		= "create device";
@@ -37,4 +38,5 @@ public interface EventConstants {
 	
 	//Manager IED  装置管理
 	String REFRESH_IED_MANAGER  = "refresh ied manager";
+
 }
