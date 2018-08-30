@@ -55,6 +55,10 @@ public abstract class BaseService {
 		return beanDao.getById(po, id);
 	}
 	
+	public Object getListByCriteria(Class<?> clazz, String property, Object value){
+		return beanDao.getListByCriteria(clazz, property, value);
+	}
+	
 	public List<?> getAll(Class<?> clazz) {
 		return beanDao.getAll(clazz);
 	}
