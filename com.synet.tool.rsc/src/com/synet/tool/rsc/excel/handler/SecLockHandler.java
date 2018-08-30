@@ -1,9 +1,12 @@
 package com.synet.tool.rsc.excel.handler;
 
+import java.util.List;
+
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 public class SecLockHandler extends RscSheetHandler {
 
@@ -12,7 +15,7 @@ public class SecLockHandler extends RscSheetHandler {
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new Tb1091IotermEntity();
+		this.entity = RscObjectUtils.createTb1091();
 	}
 	
 	@Override
@@ -36,37 +39,20 @@ public class SecLockHandler extends RscSheetHandler {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 1: 
-				if (value != null) {
-					Tb1091IotermEntity temp = 
-							(Tb1091IotermEntity) service.getById(Tb1091IotermEntity.class, value.trim());
-					if (temp == null) {
-						entity.setF1091Code(value);
-						break;
-					}
-				}
-				entity = null;
-				break;
-			case 2: 
-				if (value != null) {
-					String id = value.trim();
-					Tb1046IedEntity ied = (Tb1046IedEntity) service.getById(Tb1046IedEntity.class, id);
-					if (ied != null) {
-						entity.setTb1046IedByF1046Code(ied);
-						break;
-					}
-				}
-				entity = null;
-				break;
 			case 3: 
-				if (!entity.getTb1046IedByF1046Code().getF1046Name().equals(value.trim())) {
-					entity = null;
+				if (value != null){
+					List<Tb1046IedEntity> iedList = (List<Tb1046IedEntity>) service.getListByCriteria(Tb1046IedEntity.class, "f1046Name", value.trim());
+					if (iedList != null) {
+						entity.setTb1046IedByF1046Code(iedList.get(0));
+						break;
+					}
 				}
-				break;
+				entity = null;
 			case 4: 
 				if (!entity.getTb1046IedByF1046Code().getF1046Desc().equals(value.trim())) {
 					entity = null;
