@@ -20,6 +20,9 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 
@@ -49,6 +52,20 @@ public class SCDImporterTest {
 		String scdPath = "./test/sub_shangwu.scd";
 		new SCDImporter(scdPath).execute();
 		
+		assertLogiclinks();
+		assertEquipments();
+	}
+
+	private void assertLogiclinks() {
+		List<Tb1065LogicallinkEntity> cbs = (List<Tb1065LogicallinkEntity>) beanDao.getAll(Tb1065LogicallinkEntity.class);
+		assertTrue(cbs.size() > 0);
+		List<Tb1063CircuitEntity> cts = (List<Tb1063CircuitEntity>) beanDao.getAll(Tb1063CircuitEntity.class);
+		assertTrue(cts.size() > 0);
+		List<Tb1062PinEntity> pins = (List<Tb1062PinEntity>) beanDao.getAll(Tb1062PinEntity.class);
+		assertTrue(pins.size() > 0);
+	}
+	
+	private void assertEquipments() {
 		List<Tb1041SubstationEntity> sts = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 		assertTrue(sts.size() > 0);
 		List<Tb1042BayEntity> bas = (List<Tb1042BayEntity>) beanDao.getAll(Tb1042BayEntity.class);
@@ -64,6 +81,5 @@ public class SCDImporterTest {
 		List<Tb1066ProtmmxuEntity> mms = (List<Tb1066ProtmmxuEntity>) beanDao.getAll(Tb1066ProtmmxuEntity.class);
 		assertTrue(mms.size() > 0);
 	}
-
 }
 

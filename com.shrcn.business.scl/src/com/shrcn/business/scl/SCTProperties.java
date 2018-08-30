@@ -343,7 +343,8 @@ public class SCTProperties extends AProperties {
 		if (!isSmailiar) {
 			return type1!=null && type1.equals(type2);
 		} else {
-			return type1.equals(type2) || (isInt(type1) && isInt(type2)) || (isFloat(type1) && isFloat(type2));
+			return type1.equals(type2) || (isSv(type1) && isSv(type2))
+					|| (isInt(type1) && isInt(type2)) || (isFloat(type1) && isFloat(type2));
 		}
 	}
 	
@@ -354,6 +355,10 @@ public class SCTProperties extends AProperties {
 	 */
 	private boolean isInt(String type) {
 		return getRelationCheckMode() && ("Tcmd".equals(type) || "Dbpos".equals(type) || (type!=null && type.startsWith("INT")));
+	}
+	
+	private boolean isSv(String type) {
+		return "SAV".equals(type) || "MV".equals(type);
 	}
 	
 	/**

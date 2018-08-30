@@ -27,6 +27,7 @@ import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.SubstationService;
 
  /**
@@ -39,6 +40,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	private Map<String, Tb1045ConnectivitynodeEntity> connMap = new HashMap<>();
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
 	private SubstationService staServ = new SubstationService();
+	private IedEntityService iedServ = new IedEntityService();
 	
 	public SubstationParser() {
 		super(null);
@@ -179,25 +181,23 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 			String bayName = ied.getTb1042BaysByF1042Code().getF1042Name();
 			if (DBConstants.BAY_PROT.equals(bayName)) {
-				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
 				String bayCode = bay.getF1042Code();
 				ied.setF1042Code(bayCode);
-				bayIeds.add(ied);
+				iedServ.updateIEDBayCode(ied);
 				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
 						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedRecv", ied);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
 					ied = logiclink.getTb1046IedByF1046CodeIedSend();
 					ied.setF1042Code(bayCode);
-					bayIeds.add(ied);
+					iedServ.updateIEDBayCode(ied);
 				}
 				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
 						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedSend", ied);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
 					ied = logiclink.getTb1046IedByF1046CodeIedRecv();
 					ied.setF1042Code(bayCode);
-					bayIeds.add(ied);
+					iedServ.updateIEDBayCode(ied);
 				}
-				beanDao.updateBatch(bayIeds);
 			}
 		}
 	}
