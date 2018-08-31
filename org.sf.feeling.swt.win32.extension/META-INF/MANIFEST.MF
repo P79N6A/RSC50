@@ -53,3 +53,4 @@ Export-Package: org.sf.feeling.swt.win32.extension,
  org.sf.feeling.swt.win32.internal.extension.graphics,
  org.sf.feeling.swt.win32.internal.extension.util,
  org.sf.feeling.swt.win32.internal.extension.widgets
+Bundle-ClassPath: lib/ext.jar

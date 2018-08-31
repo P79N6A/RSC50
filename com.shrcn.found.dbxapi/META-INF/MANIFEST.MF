@@ -86,4 +86,5 @@ Bundle-ClassPath: .,
  lib/jts-1.13.jar,
  lib/milton-api-1.8.1.4.jar,
  lib/xmldb-api-1.0.jar,
- lib/xqj2-0.2.0.jar
+ lib/xqj2-0.2.0.jar,
+ lib/fdbxapi.jar

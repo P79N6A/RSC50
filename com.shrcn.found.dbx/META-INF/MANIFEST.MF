@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Dbx
 Bundle-SymbolicName: com.shrcn.found.dbx
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/fdbx.jar
 Bundle-Activator: com.shrcn.found.dbx.Activator
 Bundle-Vendor: SHRCN
 Export-Package: com.shrcn.found.dbx,

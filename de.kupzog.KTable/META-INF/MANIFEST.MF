@@ -12,3 +12,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true
 Bundle-Activator: de.kupzog.ktable.Activator
+Bundle-ClassPath: lib/ktable.jar,
+ .
