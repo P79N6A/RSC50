@@ -2,14 +2,14 @@ package com.synet.tool.rsc.entity;
 
 import java.util.List;
 
-import com.synet.tool.rsc.model.BoardWarnEntity;
-import com.synet.tool.rsc.model.BrkCfmEntity;
-import com.synet.tool.rsc.model.FibreListEntity;
-import com.synet.tool.rsc.model.IEDBoardEntity;
-import com.synet.tool.rsc.model.IEDListEntity;
-import com.synet.tool.rsc.model.PortLightEntity;
-import com.synet.tool.rsc.model.StaInfoEntity;
-import com.synet.tool.rsc.model.TerStrapEntity;
+import com.synet.tool.rsc.model.IM105BoardWarnEntity;
+import com.synet.tool.rsc.model.IM108BrkCfmEntity;
+import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM101IEDListEntity;
+import com.synet.tool.rsc.model.IM106PortLightEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.model.IM107TerStrapEntity;
 
 /**
  * 
@@ -18,32 +18,32 @@ import com.synet.tool.rsc.model.TerStrapEntity;
  */
 public class ImpInfoData {
 	
-	private IEDListEntity iedList;
-	private List<FibreListEntity> fibreLists;
-	private List<IEDBoardEntity> iedBoards;
+	private IM101IEDListEntity iedList;
+	private List<IM102FibreListEntity> fibreLists;
+	private List<IM103IEDBoardEntity> iedBoards;
 	private List<StatusIn> statusIns;
-	private List<BoardWarnEntity> boardWarns;
-	private List<PortLightEntity> portLights;
-	private List<TerStrapEntity> terStraps;
-	private List<BrkCfmEntity> brkCfms;
-	private List<StaInfoEntity> staInfos;
+	private List<IM105BoardWarnEntity> boardWarns;
+	private List<IM106PortLightEntity> portLights;
+	private List<IM107TerStrapEntity> terStraps;
+	private List<IM108BrkCfmEntity> brkCfms;
+	private List<IM109StaInfoEntity> staInfos;
 	
-	public IEDListEntity getIedList() {
+	public IM101IEDListEntity getIedList() {
 		return iedList;
 	}
-	public void setIedList(IEDListEntity iedList) {
+	public void setIedList(IM101IEDListEntity iedList) {
 		this.iedList = iedList;
 	}
-	public List<FibreListEntity> getFibreLists() {
+	public List<IM102FibreListEntity> getFibreLists() {
 		return fibreLists;
 	}
-	public void setFibreLists(List<FibreListEntity> fibreLists) {
+	public void setFibreLists(List<IM102FibreListEntity> fibreLists) {
 		this.fibreLists = fibreLists;
 	}
-	public List<IEDBoardEntity> getIedBoards() {
+	public List<IM103IEDBoardEntity> getIedBoards() {
 		return iedBoards;
 	}
-	public void setIedBoards(List<IEDBoardEntity> iedBoards) {
+	public void setIedBoards(List<IM103IEDBoardEntity> iedBoards) {
 		this.iedBoards = iedBoards;
 	}
 	public List<StatusIn> getStatusIns() {
@@ -52,34 +52,34 @@ public class ImpInfoData {
 	public void setStatusIns(List<StatusIn> statusIns) {
 		this.statusIns = statusIns;
 	}
-	public List<BoardWarnEntity> getBoardWarns() {
+	public List<IM105BoardWarnEntity> getBoardWarns() {
 		return boardWarns;
 	}
-	public void setBoardWarns(List<BoardWarnEntity> boardWarns) {
+	public void setBoardWarns(List<IM105BoardWarnEntity> boardWarns) {
 		this.boardWarns = boardWarns;
 	}
-	public List<PortLightEntity> getPortLights() {
+	public List<IM106PortLightEntity> getPortLights() {
 		return portLights;
 	}
-	public void setPortLights(List<PortLightEntity> portLights) {
+	public void setPortLights(List<IM106PortLightEntity> portLights) {
 		this.portLights = portLights;
 	}
-	public List<TerStrapEntity> getTerStraps() {
+	public List<IM107TerStrapEntity> getTerStraps() {
 		return terStraps;
 	}
-	public void setTerStraps(List<TerStrapEntity> terStraps) {
+	public void setTerStraps(List<IM107TerStrapEntity> terStraps) {
 		this.terStraps = terStraps;
 	}
-	public List<BrkCfmEntity> getBrkCfms() {
+	public List<IM108BrkCfmEntity> getBrkCfms() {
 		return brkCfms;
 	}
-	public void setBrkCfms(List<BrkCfmEntity> brkCfms) {
+	public void setBrkCfms(List<IM108BrkCfmEntity> brkCfms) {
 		this.brkCfms = brkCfms;
 	}
-	public List<StaInfoEntity> getStaInfos() {
+	public List<IM109StaInfoEntity> getStaInfos() {
 		return staInfos;
 	}
-	public void setStaInfos(List<StaInfoEntity> staInfos) {
+	public void setStaInfos(List<IM109StaInfoEntity> staInfos) {
 		this.staInfos = staInfos;
 	}
 	

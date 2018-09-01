@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.das.ProjectManager;
-import com.synet.tool.rsc.model.FibreListEntity;
+import com.synet.tool.rsc.model.IM102FibreListEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.service.PhyscialAreaService;
 
@@ -37,7 +37,7 @@ public class ImportInfoTest {
 	@Test
 	public void testImpFibreList() {
 		ImportInfoParser parser = new ImportInfoParser();
-		Map<String, List<FibreListEntity>> result = parser.getFibreList("C:\\Users\\36576\\Desktop\\光缆清册test.xlsx");
+		Map<String, List<IM102FibreListEntity>> result = parser.getFibreList("C:\\Users\\36576\\Desktop\\光缆清册test.xlsx");
 		System.out.println(result);
 		System.out.println(parser.getHandler().getErrorMsg());
 	}

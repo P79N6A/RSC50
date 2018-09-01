@@ -667,6 +667,7 @@ create table IM101_Ied_List
    DEV_DESC           	varchar(96),
    BAY           		varchar(96),
    CUBICLE           	varchar(96),
+   MANUFACTUROR			varchar(96),
    DEV_TYPE           	varchar(96),
    DEV_VERSION          varchar(96),
    A_OR_B           	varchar(96),

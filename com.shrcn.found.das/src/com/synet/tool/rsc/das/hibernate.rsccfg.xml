@@ -74,16 +74,16 @@
         <mapping resource="com/synet/tool/rsc/hbm/Tb1091IotermEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1092PowerkkEntity.hbm.xml"/>
         
-        <mapping resource="com/synet/tool/rsc/hbm/BoardWarnEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/BrkCfmEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/FibreListEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/FileInfoEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/IEDBoardEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/IEDListEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/PortLightEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/StaInfoEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/StatusInEntity.hbm.xml"/>
-        <mapping resource="com/synet/tool/rsc/hbm/TerStrapEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM100FileInfoEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM101IEDListEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM102FibreListEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM103IEDBoardEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM104StatusInEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM105BoardWarnEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM106PortLightEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM107TerStrapEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM108BrkCfmEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM109StaInfoEntity.hbm.xml"/>
 			
 	</session-factory>
 </hibernate-configuration>

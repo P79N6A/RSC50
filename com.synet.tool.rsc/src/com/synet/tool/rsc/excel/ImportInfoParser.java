@@ -21,9 +21,9 @@ import com.synet.tool.rsc.excel.handler.SecLockHandler;
 import com.synet.tool.rsc.excel.handler.SecProBrkHandler;
 import com.synet.tool.rsc.excel.handler.SecPwrBrkHandler;
 import com.synet.tool.rsc.excel.handler.StaInfoHandler;
-import com.synet.tool.rsc.model.FibreListEntity;
-import com.synet.tool.rsc.model.IEDBoardEntity;
-import com.synet.tool.rsc.model.StaInfoEntity;
+import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
@@ -135,8 +135,8 @@ public class ImportInfoParser {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<StaInfoEntity> getStaInfoList(String xlspath) {
-		 List<StaInfoEntity> result = null;
+	public List<IM109StaInfoEntity> getStaInfoList(String xlspath) {
+		 List<IM109StaInfoEntity> result = null;
 		try {
 			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
 			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
@@ -148,7 +148,7 @@ public class ImportInfoParser {
             	StaInfoHandler handler = new StaInfoHandler();
             	setHandler(handler);
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<StaInfoEntity>) handler.getResult();
+				result = (List<IM109StaInfoEntity>) handler.getResult();
 	            stream.close();  
 	            break;
 	        }
@@ -160,8 +160,8 @@ public class ImportInfoParser {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<IEDBoardEntity> getIEDBoardList(String xlspath) {
-		 List<IEDBoardEntity> result = null;
+	public List<IM103IEDBoardEntity> getIEDBoardList(String xlspath) {
+		 List<IM103IEDBoardEntity> result = null;
 		try {
 			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
 			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage); 
@@ -173,7 +173,7 @@ public class ImportInfoParser {
 	            IEDBoardHandler handler = new IEDBoardHandler();
             	setHandler(handler);
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<IEDBoardEntity>) handler.getResult();
+				result = (List<IM103IEDBoardEntity>) handler.getResult();
 	            stream.close();  
 	            break;
 	        }
@@ -185,8 +185,8 @@ public class ImportInfoParser {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Map<String, List<FibreListEntity>> getFibreList(String xlspath) {
-		Map<String, List<FibreListEntity>> result = new HashMap<String, List<FibreListEntity>>();
+	public Map<String, List<IM102FibreListEntity>> getFibreList(String xlspath) {
+		Map<String, List<IM102FibreListEntity>> result = new HashMap<String, List<IM102FibreListEntity>>();
 		try {
 			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
 			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage); 
@@ -199,7 +199,7 @@ public class ImportInfoParser {
 	            FibreListHandler handler = new FibreListHandler();
             	setHandler(handler);
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result.put(sheetName, (List<FibreListEntity>) handler.getResult());
+				result.put(sheetName, (List<IM102FibreListEntity>) handler.getResult());
 	            stream.close();  
 	        }
 	        xlsxPackage.close();

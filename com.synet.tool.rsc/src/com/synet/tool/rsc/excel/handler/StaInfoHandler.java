@@ -2,16 +2,16 @@ package com.synet.tool.rsc.excel.handler;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
-import com.synet.tool.rsc.model.StaInfoEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
 
 public class StaInfoHandler extends RscSheetHandler {
 
-	private StaInfoEntity entity = null;
+	private IM109StaInfoEntity entity = null;
 	
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new StaInfoEntity();
+		this.entity = new IM109StaInfoEntity();
 	}
 	
 	@Override
