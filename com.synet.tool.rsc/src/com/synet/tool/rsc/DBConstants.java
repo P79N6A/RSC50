@@ -43,6 +43,10 @@ public interface DBConstants {
 	String PR_CUBICLE       = "Cubicle";
 	String PR_CABLE         = "Cable";
 	String PR_PHYSCONN      = "Physconn";
+	String PR_BOARD			= "Board";
+	String PR_PORT			= "Port";
+	String PR_IEDBOARD		= "IEDBoard";
+	String PR_FILEINFO	    = "fileInfo";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";
@@ -137,5 +141,15 @@ public interface DBConstants {
 	
 	int MATCHED_OK = 0;//匹配
 	int MATCHED_NO = 1;//未匹配
+	
+	int FILE_TYPE101 = 101;//设备台账
+	int FILE_TYPE102 = 102;//光缆清册
+	int FILE_TYPE103 = 103;//装置板卡端口描述
+	int FILE_TYPE104 = 104;//开入信号映射表
+	int FILE_TYPE105 = 105;//告警与板卡关联表
+	int FILE_TYPE106 = 106;//光强与端口关联表
+	int FILE_TYPE107 = 107;//压板与虚端子关联表
+	int FILE_TYPE108 = 108;//跳合闸反校关联表
+	int FILE_TYPE109 = 109;//监控信息点表
 }
 

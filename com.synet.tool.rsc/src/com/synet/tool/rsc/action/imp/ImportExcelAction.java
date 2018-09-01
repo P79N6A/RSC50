@@ -4,12 +4,17 @@
  */
 package com.synet.tool.rsc.action.imp;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.ui.util.DialogHelper;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
+import com.synet.tool.rsc.excel.ImportInfoParser;
+import com.synet.tool.rsc.excel.ImportResult;
+import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.processor.ImportIEDBoardProcessor;
 
 
  /**
@@ -25,51 +30,89 @@ public class ImportExcelAction extends BaseImportAction {
 
 	@Override
 	public void run() {
+		String filePath = DialogHelper.getSaveFilePath(getTitle() + "文件", "", new String[]{"*.xlsx"});
+		if (filePath == null || "".equals(filePath)){
+			return;
+		}
 		ChooseTableHeadDialog headDialog = new ChooseTableHeadDialog(getShell());
-		ChooseTableColDialog colDialog = new ChooseTableColDialog(getShell());
+		headDialog.setExcelFilPath(filePath);
 		if (headDialog.open() == 0) {
-			Map<Integer, String> map = new HashMap<Integer, String>();
-			map.put(1, "A");
-			map.put(2, "B");
-			map.put(3, "C");
-			map.put(4, "D");
-			map.put(5, "D");
-			switch (getTitle()) {
-			case ExcelConstants.IED_LIST:
-				colDialog.setFieldList(ExcelConstants.IED_LIST_FIELDS);
-				break;
-			case ExcelConstants.FIBRE_LIST:
-				colDialog.setFieldList(ExcelConstants.FIBRE_LIST_FIELDS);
-				break;
-			case ExcelConstants.IED_BOARD:
-				colDialog.setFieldList(ExcelConstants.IED_BOARD_FIELDS);
-				break;
-			case ExcelConstants.STATUS_IN:
-				colDialog.setFieldList(ExcelConstants.STATUS_IN_FIELDS);
-				break;
-			case ExcelConstants.BOARD_WARN:
-				colDialog.setFieldList(ExcelConstants.BOARD_WARN_FIELDS);
-				break;
-			case ExcelConstants.PORT_LIGHT:
-				colDialog.setFieldList(ExcelConstants.PORT_LIGHT_FIELDS);
-				break;
-			case ExcelConstants.TER_STRAP:
-				colDialog.setFieldList(ExcelConstants.TER_STRAP_FIELDS);
-				break;
-			case ExcelConstants.BRK_CFM:
-				colDialog.setFieldList(ExcelConstants.BRK_CFM_FIELDS);
-				break;
-			case ExcelConstants.STA_INFO:
-				colDialog.setFieldList(ExcelConstants.STA_INFO_FIELDS);
-				break;
-
-			default:
-				break;
+			ChooseTableColDialog colDialog = new ChooseTableColDialog(getShell());
+			//表头信息
+			Map<Integer, String> excelColName = headDialog.getExcelColName();
+			int excelHeadRow = headDialog.getTableHeadRow();
+			if (excelColName == null) {
+				DialogHelper.showAsynError("文件异常");
+				return;
 			}
-			colDialog.setExcelColMap(map);
+			colDialog.setExcelColMap(excelColName);
+			String[] fields = getExcelFields();
+			if (fields == null) {
+				DialogHelper.showAsynError("系统异常");
+				return;
+			}
+			colDialog.setFields(fields);
 			if (colDialog.open() == 0) {
-				System.out.println(colDialog.getMap());
+				Map<Integer, String> excelColInfo = colDialog.getMap();
+				boolean b = importExcelData(filePath, excelHeadRow, excelColInfo);
+				if (b) {
+					
+				}
 			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private boolean importExcelData(String filePath, int excelHeadRow, Map<Integer, String> excelColInfo) {
+		ImportInfoParser parser = new ImportInfoParser();
+		switch (getTitle()) {
+		case ExcelConstants.IM101_IED_LIST:
+			return false;
+		case ExcelConstants.IM102_FIBRE_LIST:
+			return false;
+		case ExcelConstants.IM103_IED_BOARD:
+			ImportResult result = parser.getIEDBoardList(filePath, excelHeadRow, excelColInfo);
+			return new ImportIEDBoardProcessor().processor(result.getFileInfoEntity(), 
+					(List<IM103IEDBoardEntity>) result.getResult());
+		case ExcelConstants.IM104_STATUS_IN:
+			return false;
+		case ExcelConstants.IM105_BOARD_WARN:
+			return false;
+		case ExcelConstants.IM106_PORT_LIGHT:
+			return false;
+		case ExcelConstants.IM107_TER_STRAP:
+			return false;
+		case ExcelConstants.IM108_BRK_CFM:
+			return false;
+		case ExcelConstants.IM109_STA_INFO:
+			return false;
+		default:
+			return false;
+		}
+	}
+
+	private String[] getExcelFields() {
+		switch (getTitle()) {
+		case ExcelConstants.IM101_IED_LIST:
+			return ExcelConstants.IM101_IED_LIST_FIELDS;
+		case ExcelConstants.IM102_FIBRE_LIST:
+			return ExcelConstants.IM102_FIBRE_LIST_FIELDS;
+		case ExcelConstants.IM103_IED_BOARD:
+			return ExcelConstants.IM103_IED_BOARD_FIELDS;
+		case ExcelConstants.IM104_STATUS_IN:
+			return ExcelConstants.IM104_STATUS_IN_FIELDS;
+		case ExcelConstants.IM105_BOARD_WARN:
+			return ExcelConstants.IM105_BOARD_WARN_FIELDS;
+		case ExcelConstants.IM106_PORT_LIGHT:
+			return ExcelConstants.IM106_PORT_LIGHT_FIELDS;
+		case ExcelConstants.IM107_TER_STRAP:
+			return ExcelConstants.IM107_TER_STRAP_FIELDS;
+		case ExcelConstants.IM108_BRK_CFM:
+			return ExcelConstants.IM108_BRK_CFM_FIELDS;
+		case ExcelConstants.IM109_STA_INFO:
+			return ExcelConstants.IM109_STA_INFO_FIELDS;
+		default:
+			return null;
 		}
 	}
 

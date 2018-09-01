@@ -24,8 +24,8 @@ import com.shrcn.found.ui.util.SwtUtil;
 public class ChooseTableColDialog extends WrappedDialog {
 	
 	private static final String DEF_COMBO_TEXT = "--请选择--";
-	//字段与列的对应关系
-	private Map<String, Integer> map = new HashMap<String, Integer>();
+	//列与字段的对应关系(key=-1，表示字段无导入信息)
+	private Map<Integer, String> map = new HashMap<Integer, String>();
 	//字段
 	private String[] fieldList = null;
 	//Excel列属性 key:第colNum列[colName]， value：colNum
@@ -52,16 +52,27 @@ public class ChooseTableColDialog extends WrappedDialog {
 		scrolledComposite.setMinSize(scrolledComposite.computeSize(280, 280));
 		SwtUtil.createLabel(composite, "导入字段", new GridData());
 		SwtUtil.createLabel(composite, "Excel列属性", new GridData());
+		GridData gridData = new GridData();
+		gridData.widthHint = 150;
 		if (fieldList != null && fieldList.length > 0) {
 			for (String field : fieldList) {
 				labelList.add(SwtUtil.createLabel(composite, field, new GridData()));
-				Combo combo = SwtUtil.createCombo(composite, SwtUtil.bt_gd, true);
+				Combo combo = SwtUtil.createCombo(composite,gridData, true);
 				combo.setItems(comboItem);
 				combo.select(0);
 				comboList.add(combo);
 			}
 		}
-		
+		for (int i = 0; i < labelList.size(); i++) {
+			String field = labelList.get(i).getText();
+			Combo combo = comboList.get(i);
+			for (int j = 0; j < comboItem.length; j++) {
+				String item = comboItem[j];
+				if (item.contains(field)) {
+					combo.select(j);
+				}
+			}
+		}
 		return super.createDialogArea(parent);
 	}
 	
@@ -95,7 +106,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(280, 340);
+		return new Point(380, 340);
 	}
 	
 	@Override
@@ -106,10 +117,10 @@ public class ChooseTableColDialog extends WrappedDialog {
 					String field = labelList.get(i).getText();
 					String comboText = comboList.get(i).getText().trim();
 					if (DEF_COMBO_TEXT.endsWith(comboText)){
-						map.put(field, null);
+						map.put(-1, field);
 					} else {
 						Integer col = excelColMap.get(comboText);
-						map.put(field, col);
+						map.put(col, field);
 					}
 				}
 			} catch (Exception e) {
@@ -119,7 +130,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 		super.buttonPressed(buttonId);
 	}
 	
-	public void setFieldList(String[] fieldList) {
+	public void setFields(String[] fieldList) {
 		this.fieldList = fieldList;
 	}
 
@@ -134,7 +145,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 		}
 	}
 
-	public Map<String, Integer> getMap() {
+	public Map<Integer, String> getMap() {
 		return map;
 	}
 }

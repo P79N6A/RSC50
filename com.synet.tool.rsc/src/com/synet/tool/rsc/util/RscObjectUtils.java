@@ -6,6 +6,7 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
@@ -89,5 +90,17 @@ public class RscObjectUtils {
 			return list.get(0);
 		}
 		return null;
+	}
+	
+	public static Tb1047BoardEntity createBoardEntity(){
+		Tb1047BoardEntity boardEntity = new Tb1047BoardEntity();
+		boardEntity.setF1047Code(rscp.getProperty(DBConstants.PR_BOARD));
+		return boardEntity;
+	}
+	
+	public static Tb1048PortEntity createPortEntity() {
+		Tb1048PortEntity portEntity = new Tb1048PortEntity();
+		portEntity.setF1048Code(rscp.getProperty(DBConstants.PR_PORT));
+		return portEntity;
 	}
 }

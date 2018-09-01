@@ -12,6 +12,10 @@ public class SecFibreListHandler extends RscSheetHandler {
 
 	private Tb1090LineprotfiberEntity entity = null;
 	
+	public SecFibreListHandler(int headRowNum) {
+		super(headRowNum, null);
+	}
+
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);

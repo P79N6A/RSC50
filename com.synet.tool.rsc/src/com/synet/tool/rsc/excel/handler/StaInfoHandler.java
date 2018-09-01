@@ -1,13 +1,19 @@
 package com.synet.tool.rsc.excel.handler;
 
+import java.util.Map;
+
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
 
 public class StaInfoHandler extends RscSheetHandler {
-
+	
 	private IM109StaInfoEntity entity = null;
 	
+	public StaInfoHandler(int headRowNum, Map<Integer, String> excelColInfo) {
+		super(headRowNum, excelColInfo);
+	}
+
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);

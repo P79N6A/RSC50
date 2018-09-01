@@ -11,7 +11,7 @@ import com.synet.tool.rsc.util.RscObjectUtils;
 public class SecLockHandler extends RscSheetHandler {
 
 	private Tb1091IotermEntity entity = null;
-	
+
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);

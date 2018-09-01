@@ -1,10 +1,16 @@
 package com.synet.tool.rsc.excel.handler;
 
+import java.util.Map;
+
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.model.IM102FibreListEntity;
 
 public class FibreListHandler extends RscSheetHandler {
+
+	public FibreListHandler(int headRowNum, Map<Integer, String> excelColInfo) {
+		super(headRowNum, excelColInfo);
+	}
 
 	private IM102FibreListEntity entity = null;
 	
