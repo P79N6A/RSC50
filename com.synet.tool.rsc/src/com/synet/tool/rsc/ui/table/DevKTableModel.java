@@ -1,12 +1,14 @@
 package com.synet.tool.rsc.ui.table;
 
 import com.shrcn.business.ui.NetPortUtil;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
+import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
-import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
@@ -96,6 +98,13 @@ public class DevKTableModel extends RKTableModel {
 				|| TableFactory.CABLE_TABLE.equals(tableName) 
 				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
+			reloadPrj();
+		}
+	}
+	
+	private void reloadPrj() {
+		if (TableFactory.REGION_LIST_TABLE.equals(tableName)) {
+			EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 		}
 	}
 	
