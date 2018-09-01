@@ -723,6 +723,7 @@ create table IM103_Ied_Board
 (
    IM103_CODE           varchar(48) not null,
    IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
    DEV_DESC           	varchar(96),
    BOARD_CODE           varchar(96),
    PORT_CODE           	varchar(96),
