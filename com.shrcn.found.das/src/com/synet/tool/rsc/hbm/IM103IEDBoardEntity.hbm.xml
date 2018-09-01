@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.IM103IEDBoardEntity" table="IM103_Ied_Board" schema="rscapp">
+  		<id name="im103Code">
+            <column name="IM103_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48" />
+        </property>
+        <property name="devDesc">
+            <column name="DEV_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="manufacturor">
+            <column name="MANUFACTUROR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="configVersion">
+            <column name="CONFIG_VERSION" sql-type="varchar" length="96" />
+        </property>
+        <property name="boardCode">
+            <column name="BOARD_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardIndex">
+            <column name="BOARD_INDEX" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardModel">
+            <column name="BOARD_MODEL" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardType">
+            <column name="BOARD_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="portNum">
+            <column name="PORT_NUM" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.IM100FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

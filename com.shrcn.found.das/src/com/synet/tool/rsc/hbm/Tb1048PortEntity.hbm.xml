@@ -25,7 +25,7 @@
         </many-to-one>
         <many-to-one name="tb1006AnalogdataByF1048Code" property-ref="parentCode"
         	class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" insert="false" update="false">
-            <column name="F1048_CODE" not-null="true"/>
+            <column name="F1048_CODE"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

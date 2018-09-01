@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.IM102FibreListEntity" table="IM102_Fibre_List" schema="rscapp">
+         <id name="im102Code">
+            <column name="IM102_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="cableCode">
+            <column name="CABLE_CODE" sql-type="varchar" length="48"/>
+        </property>
+        <property name="coreCode">
+            <column name="CORE_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devCodeA">
+            <column name="DEV_CODEA" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devNameA">
+            <column name="DEV_NAMEA" sql-type="varchar" length="96"/>
+        </property>
+         <property name="devDescA">
+            <column name="DEV_DESCA" sql-type="varchar" length="96"/>
+        </property>
+         <property name="boardCodeA">
+            <column name="BOARD_CODEA" sql-type="varchar" length="96"/>
+        </property>
+         <property name="portCodeA">
+            <column name="PORT_CODEA" sql-type="varchar" length="96"/>
+        </property>
+         <property name="cubicleCodeA">
+            <column name="CUBICLE_CODEA" sql-type="varchar" length="96"/>
+        </property>
+         <property name="cubicleDescA">
+            <column name="CUBICLE_DESCA" sql-type="varchar" length="96"/>
+        </property>
+        <property name="coreCodeA">
+            <column name="CORE_CODEA" sql-type="varchar" length="96"/>
+        </property>
+        <property name="distribFrameCodeA">
+            <column name="DISTRIB_FRAME_CODEA" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devCodeB">
+            <column name="DEV_CODEB" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devNameB">
+            <column name="DEV_NAMEB" sql-type="varchar" length="96"/>
+        </property>
+         <property name="devDescB">
+            <column name="DEV_DESCB" sql-type="varchar" length="96"/>
+        </property>
+         <property name="boardCodeB">
+            <column name="BOARD_CODEB" sql-type="varchar" length="96"/>
+        </property>
+         <property name="portCodeB">
+            <column name="PORT_CODEB" sql-type="varchar" length="96"/>
+        </property>
+         <property name="cubicleCodeB">
+            <column name="CUBICLE_CODEB" sql-type="varchar" length="96"/>
+        </property>
+         <property name="cubicleDescB">
+            <column name="CUBICLE_DESCB" sql-type="varchar" length="96"/>
+        </property>
+        <property name="coreCodeB">
+            <column name="CORE_CODEB" sql-type="varchar" length="96"/>
+        </property>
+        <property name="distribFrameCodeB">
+            <column name="DISTRIB_FRAME_CODEB" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.IM100FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

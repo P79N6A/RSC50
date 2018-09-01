@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.IM105BoardWarnEntity" table="IM105_Board_Warn" schema="rscapp">
+        <id name="im105Code">
+            <column name="IM105_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48"/>
+        </property>
+        <property name="alarmRefAddr">
+            <column name="ALARM_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="alarmDesc">
+            <column name="ALARM_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardCode">
+            <column name="BOARD_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.IM100FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

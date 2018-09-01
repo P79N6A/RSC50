@@ -651,8 +651,8 @@ create table IM100_File_Info
 (
    IM100_CODE           varchar(48) not null,
    FILE_NAME           	varchar(96) not null,
-   FILE_DESC           	varchar(96),
-   FILE_TYPE           		INT not null,
+   FILE_PATH           	varchar(96),
+   FILE_TYPE           	INT not null,
    primary key (IM100_CODE)
 );
 
@@ -725,8 +725,13 @@ create table IM103_Ied_Board
    IM100_CODE           varchar(48) not null,
    DEV_NAME           	varchar(96),
    DEV_DESC           	varchar(96),
+   MANUFACTUROR			varchar(96),
+   CONFIG_VERSION		varchar(96),
    BOARD_CODE           varchar(96),
-   PORT_CODE           	varchar(96),
+   BOARD_INDEX			varchar(96),
+   BOARD_MODEL			varchar(96),	
+   BOARD_TYPE			varchar(96),	
+   PORT_NUM       		varchar(96),
    MATCHED           	INT,
    primary key (IM103_CODE)
 );
