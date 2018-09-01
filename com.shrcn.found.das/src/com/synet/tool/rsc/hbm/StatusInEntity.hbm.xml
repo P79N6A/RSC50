@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.StatusInEntity" table="IM104_Status_In" schema="rscapp">
+  		<id name="im104Code">
+            <column name="IM104_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="pinRefAddr">
+            <column name="PIN_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="pinDesc">
+            <column name="PIN_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="mmsSignal">
+            <column name="MMS_SIGNAL" sql-type="varchar" length="96"/>
+        </property>
+        <property name="signalDesc">
+            <column name="SIGNAL_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

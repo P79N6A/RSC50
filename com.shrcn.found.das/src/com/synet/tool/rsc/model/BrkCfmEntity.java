@@ -1,21 +1,29 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 跳合闸反校关联
  *
  */
-public class BrkCfm {
+public class BrkCfmEntity {
 	
+	private String im108Code;
 	private String devName;				//装置Name
 	private String pinRefAddr;			//开入虚端子参引
 	private String pinDesc;				//开入虚端子描述
 	private String cmdAckVpRefAddr;		//命令确认虚端子参引
 	private String cmdAckVpDesc;		//命令确认虚端子描述
-	private String cmdoutVpRefAddr;		//命令出口虚端子参引
-	private String cmdouVptDesc;		//命令出口虚端子描述
-	private boolean matched;			//是否匹配
+	private String cmdOutVpRefAddr;		//命令出口虚端子参引
+	private String cmdOutVpDesc;		//命令出口虚端子描述
+	private Integer matched;			//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
+	public String getIm108Code() {
+		return im108Code;
+	}
+	public void setIm108Code(String im108Code) {
+		this.im108Code = im108Code;
+	}
 	public String getDevName() {
 		return devName;
 	}
@@ -46,22 +54,28 @@ public class BrkCfm {
 	public void setCmdAckVpDesc(String cmdAckVpDesc) {
 		this.cmdAckVpDesc = cmdAckVpDesc;
 	}
-	public String getCmdoutVpRefAddr() {
-		return cmdoutVpRefAddr;
+	public String getCmdOutVpRefAddr() {
+		return cmdOutVpRefAddr;
 	}
-	public void setCmdoutVpRefAddr(String cmdoutVpRefAddr) {
-		this.cmdoutVpRefAddr = cmdoutVpRefAddr;
+	public void setCmdOutVpRefAddr(String cmdOutVpRefAddr) {
+		this.cmdOutVpRefAddr = cmdOutVpRefAddr;
 	}
-	public String getCmdouVptDesc() {
-		return cmdouVptDesc;
+	public String getCmdOutVpDesc() {
+		return cmdOutVpDesc;
 	}
-	public void setCmdouVptDesc(String cmdouVptDesc) {
-		this.cmdouVptDesc = cmdouVptDesc;
+	public void setCmdOutVpDesc(String cmdOutVpDesc) {
+		this.cmdOutVpDesc = cmdOutVpDesc;
 	}
-	public boolean isMatched() {
+	public Integer getMatched() {
 		return matched;
 	}
-	public void setMatched(boolean matched) {
+	public void setMatched(Integer matched) {
 		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 }

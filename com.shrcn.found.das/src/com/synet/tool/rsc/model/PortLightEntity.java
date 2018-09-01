@@ -1,19 +1,27 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 光强与端口
  *
  */
-public class PortLight {
+public class PortLightEntity {
 	
+	private String im106Code;
 	private String devName;			//装置Name
 	private String opticalRefAddr;	//光强信息参引
-	private String opticalDedc;		//光强信息描述
+	private String opticalDesc;		//光强信息描述
 	private String boardCode;		//板卡编号
 	private String portCode;		//端口编号
-	private boolean matched;		//是否匹配
+	private Integer matched;		//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
+	public String getIm106Code() {
+		return im106Code;
+	}
+	public void setIm106Code(String im106Code) {
+		this.im106Code = im106Code;
+	}
 	public String getDevName() {
 		return devName;
 	}
@@ -26,11 +34,11 @@ public class PortLight {
 	public void setOpticalRefAddr(String opticalRefAddr) {
 		this.opticalRefAddr = opticalRefAddr;
 	}
-	public String getOpticalDedc() {
-		return opticalDedc;
+	public String getOpticalDesc() {
+		return opticalDesc;
 	}
-	public void setOpticalDedc(String opticalDedc) {
-		this.opticalDedc = opticalDedc;
+	public void setOpticalDesc(String opticalDesc) {
+		this.opticalDesc = opticalDesc;
 	}
 	public String getBoardCode() {
 		return boardCode;
@@ -44,10 +52,16 @@ public class PortLight {
 	public void setPortCode(String portCode) {
 		this.portCode = portCode;
 	}
-	public boolean isMatched() {
+	public Integer getMatched() {
 		return matched;
 	}
-	public void setMatched(boolean matched) {
+	public void setMatched(Integer matched) {
 		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 }

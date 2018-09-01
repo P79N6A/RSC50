@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.PortLightEntity" table="IM106_Port_Light" schema="rscapp">
+  		<id name="im106Code">
+            <column name="IM106_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="opticalRefAddr">
+            <column name="OPTICAL_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="opticalDesc">
+            <column name="OPTICAL_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardCode">
+            <column name="BOARD_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="portCode">
+            <column name="PORT_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

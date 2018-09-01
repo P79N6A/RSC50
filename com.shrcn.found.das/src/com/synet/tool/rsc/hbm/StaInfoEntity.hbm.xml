@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.StaInfoEntity" table="IM109_Sta_Info" schema="rscapp">
+  		<id name="im109Code">
+            <column name="IM109_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="description">
+            <column name="DESCRIPTION" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="refAddr">
+            <column name="REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

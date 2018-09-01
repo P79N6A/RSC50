@@ -2,18 +2,16 @@ package com.synet.tool.rsc.excel.handler;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
-import com.synet.tool.rsc.entity.FibreList;
-import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
+import com.synet.tool.rsc.model.FibreListEntity;
 
 public class FibreListHandler extends RscSheetHandler {
 
-	private FibreList entity = null;
+	private FibreListEntity entity = null;
 	
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new FibreList();
+		this.entity = new FibreListEntity();
 	}
 	
 	@Override

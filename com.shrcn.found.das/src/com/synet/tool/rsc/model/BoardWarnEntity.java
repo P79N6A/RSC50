@@ -1,18 +1,26 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 告警与板卡关联
  *
  */
-public class BoardWarn {
+public class BoardWarnEntity {
 	
+	private String im105Code;
 	private String devName;			//装置Name
 	private String alarmRefAddr;	//告警信息参引
 	private String alarmDesc;		//告警信息描述
 	private String boardCode;		//板卡编号
-	private boolean matched;		//是否匹配
+	private Integer matched;		//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
+	public String getIm105Code() {
+		return im105Code;
+	}
+	public void setIm105Code(String im105Code) {
+		this.im105Code = im105Code;
+	}
 	public String getDevName() {
 		return devName;
 	}
@@ -37,10 +45,17 @@ public class BoardWarn {
 	public void setBoardCode(String boardCode) {
 		this.boardCode = boardCode;
 	}
-	public boolean isMatched() {
+	public Integer getMatched() {
 		return matched;
 	}
-	public void setMatched(boolean matched) {
+	public void setMatched(Integer matched) {
 		this.matched = matched;
 	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
+	}
+	
 }

@@ -1,13 +1,14 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 设备台账
  *
  */
-public class IEDList {
+public class IEDListEntity {
 
-	private int index;					//序号
+	private String im101Code;
+	private Integer index;					//序号
 	private String devName;				//装置Name
 	private String devDesc;				//装置名称
 	private String bay;					//所属间隔
@@ -26,11 +27,19 @@ public class IEDList {
 	private String outType;				//出口方式
 	private int boardNum;				//板卡数量
 	private String matchedIedCode;		//匹配装置代码
+	private Integer matched;			//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
-	public int getIndex() {
+	public String getIm101Code() {
+		return im101Code;
+	}
+	public void setIm101Code(String im101Code) {
+		this.im101Code = im101Code;
+	}
+	public Integer getIndex() {
 		return index;
 	}
-	public void setIndex(int index) {
+	public void setIndex(Integer index) {
 		this.index = index;
 	}
 	public String getDevName() {
@@ -140,6 +149,18 @@ public class IEDList {
 	}
 	public void setMatchedIedCode(String matchedIedCode) {
 		this.matchedIedCode = matchedIedCode;
+	}
+	public Integer getMatched() {
+		return matched;
+	}
+	public void setMatched(Integer matched) {
+		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 	
 }

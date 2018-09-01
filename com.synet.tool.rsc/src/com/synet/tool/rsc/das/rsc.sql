@@ -643,3 +643,184 @@ create table TB1093_VoltageKK
    F1093_KKNo           varchar(96),
    primary key (F1093_CODE)
 );
+
+/*==============================================================*/
+/* Table: IM100_File_Info                                     */
+/*==============================================================*/
+create table IM100_File_Info
+(
+   IM100_CODE           varchar(48) not null,
+   FILE_NAME           	varchar(96) not null,
+   FILE_DESC           	varchar(96),
+   FILE_TYPE           		INT not null,
+   primary key (IM100_CODE)
+);
+
+/*==============================================================*/
+/* Table: IED_LIST                                      */
+/*==============================================================*/
+create table IM101_Ied_List
+(
+   IM101_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   DEV_DESC           	varchar(96),
+   BAY           		varchar(96),
+   CUBICLE           	varchar(96),
+   DEV_TYPE           	varchar(96),
+   DEV_VERSION          varchar(96),
+   A_OR_B           	varchar(96),
+   PROT_CLASSIFY        varchar(96),
+   PROT_MODEL           varchar(96),
+   PROT_TYPE           	varchar(96),
+   DATE_SERVICE         varchar(96),
+   DATE_PRODUCT         varchar(96),
+   PRODUCT_CODE         varchar(96),
+   DATA_COLLECT_TYPE    varchar(96),
+   OUT_TYPE           	varchar(96),
+   BOARD_NUM           	varchar(96),
+   MATCHED_IED_CODE     varchar(96),
+   MATCHED           	INT,
+   primary key (IM101_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM102_Fibre_List                                      */
+/*==============================================================*/
+create table IM102_Fibre_List
+(
+   IM102_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   CABLE_CODE           varchar(48),
+   CORE_CODE           	varchar(96),
+   DEV_CODEA           	varchar(96),
+   DEV_NAMEA           	varchar(96),
+   DEV_DESCA           	varchar(96),
+   BOARD_CODEA          varchar(96),
+   PORT_CODEA           varchar(96),
+   CUBICLE_CODEA        varchar(96),
+   CUBICLE_DESCA        varchar(96),
+   CORE_CODEA           varchar(96),
+   DISTRIB_FRAME_CODEA  varchar(96),
+   DEV_CODEB           	varchar(96),
+   DEV_NAMEB          	varchar(96),
+   DEV_DESCB           	varchar(96),
+   BOARD_CODEB          varchar(96),
+   PORT_CODEB           varchar(96),
+   CUBICLE_CODEB        varchar(96),
+   CUBICLE_DESCB        varchar(96),
+   CORE_CODEB           varchar(96),
+   DISTRIB_FRAME_CODEB  varchar(96),
+   MATCHED           	INT,
+   primary key (IM102_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM103_Ied_Board                                      */
+/*==============================================================*/
+create table IM103_Ied_Board
+(
+   IM103_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_DESC           	varchar(96),
+   BOARD_CODE           varchar(96),
+   PORT_CODE           	varchar(96),
+   MATCHED           	INT,
+   primary key (IM103_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM104_Status_In                                      */
+/*==============================================================*/
+create table IM104_Status_In
+(
+   IM104_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   PIN_REF_ADDR         varchar(96),
+   PIN_DESC           	varchar(96),
+   MMS_SIGNAL           varchar(96),
+   SIGNAL_DESC          varchar(96),
+   MATCHED           	INT,
+   primary key (IM104_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM105_Board_Warn                                      */
+/*==============================================================*/
+create table IM105_Board_Warn
+(
+   IM105_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   ALARM_REF_ADDR       varchar(96),
+   ALARM_DESC           varchar(96),
+   BOARD_CODE           varchar(96),
+   MATCHED           	INT,
+   primary key (IM105_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM106_Port_Light                                      */
+/*==============================================================*/
+create table IM106_Port_Light
+(
+   IM106_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   OPTICAL_REF_ADDR     varchar(96),
+   OPTICAL_DESC         varchar(96),
+   BOARD_CODE           varchar(96),
+   PORT_CODE            varchar(96),
+   MATCHED           	INT,
+   primary key (IM106_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM107_Ter_Strap                                      */
+/*==============================================================*/
+create table IM107_Ter_Strap
+(
+   IM107_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   STRAP_REF_ADDR     	varchar(96),
+   STRAP_DESC         	varchar(96),
+   STRAP_TYPE         	varchar(96),
+   VP_REF_ADDR     		varchar(96),
+   VP_DESC         		varchar(96),
+   VP_TYPE         		varchar(96),
+   MATCHED           	INT,
+   primary key (IM107_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM108_Brk_Cfm                                      */
+/*==============================================================*/
+create table IM108_Brk_Cfm
+(
+   IM108_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DEV_NAME           	varchar(96),
+   PIN_REF_ADDR     	varchar(96),
+   PIN_DESC         	varchar(96),
+   CMDACKVP_REF_ADDR    varchar(96),
+   CMDACKVP_DESC        varchar(96),
+   CMDOUTVP_REF_ADDR    varchar(96),
+   CMDOUTVP_DESC        varchar(96),
+   MATCHED           	INT,
+   primary key (IM108_CODE)
+);
+
+/*==============================================================*/
+/* Table: IM109_Sta_Info                                      */
+/*==============================================================*/
+create table IM109_Sta_Info
+(
+   IM109_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   DESCRIPTION          varchar(96),
+   REF_ADDR     		varchar(96),
+   MATCHED           	INT,
+   primary key (IM109_CODE)
+);

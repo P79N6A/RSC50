@@ -1,11 +1,11 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 开入信号映射
  *
  */
-public class StatusIn {
+public class StatusInEntity {
 	
 	private String im104Code;
 	private String devName;		//装置Name
@@ -14,6 +14,7 @@ public class StatusIn {
 	private String mmsSignal;	//MMS信号参引
 	private String signalDesc;	//信号描述
 	private Integer matched;	//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
 	public String getIm104Code() {
 		return im104Code;
@@ -56,6 +57,12 @@ public class StatusIn {
 	}
 	public void setMatched(Integer matched) {
 		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 	
 }

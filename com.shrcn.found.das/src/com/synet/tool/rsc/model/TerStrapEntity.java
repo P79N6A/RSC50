@@ -1,12 +1,13 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  * 
  * 压板与虚端子
  *
  */
-public class TerStrap {
+public class TerStrapEntity {
 	
+	private String im107Code;
 	private String devName;			//装置Name
 	private String strapRefAddr;	//压板参引
 	private String strapDesc;		//压板描述
@@ -14,8 +15,15 @@ public class TerStrap {
 	private String vpRefAddr;		//虚端子参引
 	private String vpDesc;			//虚端子描述
 	private String vpType;			//虚端子类型（开入、开出）
-	private boolean matched;		//是否匹配
+	private Integer matched;		//是否匹配
+	private FileInfoEntity fileInfoEntity;
 	
+	public String getIm107Code() {
+		return im107Code;
+	}
+	public void setIm107Code(String im107Code) {
+		this.im107Code = im107Code;
+	}
 	public String getDevName() {
 		return devName;
 	}
@@ -58,10 +66,16 @@ public class TerStrap {
 	public void setVpType(String vpType) {
 		this.vpType = vpType;
 	}
-	public boolean isMatched() {
+	public Integer getMatched() {
 		return matched;
 	}
-	public void setMatched(boolean matched) {
+	public void setMatched(Integer matched) {
 		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 }

@@ -2,16 +2,16 @@ package com.synet.tool.rsc.excel.handler;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
-import com.synet.tool.rsc.entity.IEDBoard;
+import com.synet.tool.rsc.model.IEDBoardEntity;
 
 public class IEDBoardHandler extends RscSheetHandler {
 
-	private IEDBoard entity = null;
+	private IEDBoardEntity entity = null;
 	
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new IEDBoard();
+		this.entity = new IEDBoardEntity();
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class IEDBoardHandler extends RscSheetHandler {
 				entity.setDevName(value);
 				break;
 			case 5: 
-				entity.setIedDesc(value);
+				entity.setDevDesc(value);
 				break;
 			case 32:
 				entity.setBoardCode(value);

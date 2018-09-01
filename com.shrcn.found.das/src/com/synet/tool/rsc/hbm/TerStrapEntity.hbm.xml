@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.TerStrapEntity" table="IM107_Ter_Strap" schema="rscapp">
+ 		 <id name="im107Code">
+            <column name="IM107_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="strapRefAddr">
+            <column name="STRAP_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="strapDesc">
+            <column name="STRAP_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="strapType">
+            <column name="STRAP_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="vpRefAddr">
+            <column name="VP_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="vpDesc">
+            <column name="VP_DESC" sql-type="varchar" length="96"/>
+        </property>
+        <property name="vpType">
+            <column name="VP_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

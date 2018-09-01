@@ -1,9 +1,11 @@
-package com.synet.tool.rsc.entity;
+package com.synet.tool.rsc.model;
 
 /**
  *光缆清册
  */
-public class FibreList {
+public class FibreListEntity {
+	
+	private String im102Code;
 	private String cableCode;			//光缆编号
 	private String coreCode;			//纤芯编号
 	private String devCodeA;			//端口A装置代码
@@ -24,6 +26,15 @@ public class FibreList {
 	private String cubicleDescB;
 	private String coreCodeB;
 	private String distribFrameCodeB;
+	private Integer matched;
+	private FileInfoEntity fileInfoEntity;
+	
+	public String getIm102Code() {
+		return im102Code;
+	}
+	public void setIm102Code(String im102Code) {
+		this.im102Code = im102Code;
+	}
 	public String getCableCode() {
 		return cableCode;
 	}
@@ -143,6 +154,18 @@ public class FibreList {
 	}
 	public void setDistribFrameCodeB(String distribFrameCodeB) {
 		this.distribFrameCodeB = distribFrameCodeB;
+	}
+	public Integer getMatched() {
+		return matched;
+	}
+	public void setMatched(Integer matched) {
+		this.matched = matched;
+	}
+	public FileInfoEntity getFileInfoEntity() {
+		return fileInfoEntity;
+	}
+	public void setFileInfoEntity(FileInfoEntity fileInfoEntity) {
+		this.fileInfoEntity = fileInfoEntity;
 	}
 	
 }

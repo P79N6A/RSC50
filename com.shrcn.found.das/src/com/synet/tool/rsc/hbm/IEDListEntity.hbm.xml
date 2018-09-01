@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.synet.tool.rsc.model.IEDListEntity" table="IM101_Ied_List" schema="rscapp">
+    	<id name="im101Code">
+            <column name="IM101_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="devDesc">
+            <column name="DEV_DESC" sql-type="varchar" length="48" not-null="true"/>
+        </property>
+        <property name="bay">
+            <column name="BAY" sql-type="varchar" length="96"/>
+        </property>
+        <property name="cubicle">
+            <column name="CUBICLE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devType">
+            <column name="DEV_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="devVersion">
+            <column name="DEV_VERSION" sql-type="varchar" length="96"/>
+        </property>
+        <property name="AorB">
+            <column name="A_OR_B" sql-type="varchar" length="96"/>
+        </property>
+        <property name="protClassify">
+            <column name="PROT_CLASSIFY" sql-type="varchar" length="96"/>
+        </property>
+        <property name="protModel">
+            <column name="PROT_MODEL" sql-type="varchar" length="96"/>
+        </property>
+        <property name="protType">
+            <column name="PROT_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="dateService">
+            <column name="DATE_SERVICE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="dateProduct">
+            <column name="DATE_PRODUCT" sql-type="varchar" length="96"/>
+        </property>
+        <property name="productCode">
+            <column name="PRODUCT_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="dataCollectType">
+            <column name="DATA_COLLECT_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="outType">
+            <column name="OUT_TYPE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="boardNum">
+            <column name="BOARD_NUM" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matchedIedCode">
+            <column name="MATCHED_IED_CODE" sql-type="varchar" length="96"/>
+        </property>
+        <property name="matched">
+            <column name="MATCHED" sql-type="int"/>
+        </property>
+        <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.FileInfoEntity" lazy="false">
+            <column name="IM100_CODE" not-null="true"/>
+        </many-to-one>
+  </class>
+</hibernate-mapping>

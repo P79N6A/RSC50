@@ -134,5 +134,8 @@ public interface DBConstants {
 	//区域类型
 	int IN_DOOR = 0; //户内
 	int OUT_DOOR = 1; //户外
+	
+	int MATCHED_OK = 0;//匹配
+	int MATCHED_NO = 1;//未匹配
 }
 
