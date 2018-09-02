@@ -6,21 +6,22 @@ import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
-import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM104StatusInEntity;
 
-public class IEDBoardHandler extends RscSheetHandler {
+public class StatusInHandler extends RscSheetHandler {
+
+	private IM104StatusInEntity entity;
 	
-	private IM103IEDBoardEntity entity = null;
-	
-	public IEDBoardHandler(int headRowNum, Map<Integer, String> excelColInfo) {
+	public StatusInHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
+		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new IM103IEDBoardEntity();
-		this.entity.setIm103Code(rscp.nextTbCode(DBConstants.PR_IEDBOARD));
+		this.entity = new IM104StatusInEntity();
+		this.entity.setIm104Code(rscp.nextTbCode(DBConstants.PR_STATUSIN));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -52,35 +53,25 @@ public class IEDBoardHandler extends RscSheetHandler {
 		if (fieldName == null)
 			return;
 		switch(fieldName) {
-			case ExcelConstants.IM103_DEV_NAME: 
+			case ExcelConstants.IM104_DEV_NAME: 
 				entity.setDevName(value);
 				break;
-			case ExcelConstants.IM103_DEV_DESC: 
-				entity.setDevDesc(value);
+			case ExcelConstants.IM104_PIN_REF_ADDR: 
+				entity.setPinRefAddr(value);
 				break;
-			case ExcelConstants.IM103_MANUFACTUROR: 
-				entity.setManufacturor(value);
+			case ExcelConstants.IM104_PIN_DESC: 
+				entity.setPinDesc(value);
 				break;
-			case ExcelConstants.IM103_CONFIG_VERSION: 
-				entity.setConfigVersion(value);
+			case ExcelConstants.IM104_MMS_SIGNAL: 
+				entity.setMmsRefAddr(value);
 				break;
-			case ExcelConstants.IM103_BOARD_CODE:
-				entity.setBoardCode(value);
+			case ExcelConstants.IM104_SIGNAL_DESC: 
+				entity.setMmsDesc(value);
 				break;
-			case ExcelConstants.IM103_BOARD_INDEX:
-				entity.setBoardIndex(value);
-				break;
-			case ExcelConstants.IM103_BOARD_MODEL:
-				entity.setBoardModel(value);
-				break;
-			case ExcelConstants.IM103_BOARD_TYPE:
-				entity.setBoardType(value);
-				break;
-			case ExcelConstants.IM103_PORT_NUM:
-				entity.setPortNum(value);
 			default:
 				break;
 		}
 	}
+
 
 }

@@ -6,21 +6,22 @@ import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
-import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM107TerStrapEntity;
 
-public class IEDBoardHandler extends RscSheetHandler {
+public class TerStrapHandler extends RscSheetHandler {
+
+	private IM107TerStrapEntity entity;
 	
-	private IM103IEDBoardEntity entity = null;
-	
-	public IEDBoardHandler(int headRowNum, Map<Integer, String> excelColInfo) {
+	public TerStrapHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
+		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new IM103IEDBoardEntity();
-		this.entity.setIm103Code(rscp.nextTbCode(DBConstants.PR_IEDBOARD));
+		this.entity = new IM107TerStrapEntity();
+		this.entity.setIm107Code(rscp.nextTbCode(DBConstants.PR_TERSTRAP));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -52,35 +53,31 @@ public class IEDBoardHandler extends RscSheetHandler {
 		if (fieldName == null)
 			return;
 		switch(fieldName) {
-			case ExcelConstants.IM103_DEV_NAME: 
+			case ExcelConstants.IM107_DEV_NAME: 
 				entity.setDevName(value);
 				break;
-			case ExcelConstants.IM103_DEV_DESC: 
-				entity.setDevDesc(value);
+			case ExcelConstants.IM107_STRAP_REF_ADDR: 
+				entity.setStrapRefAddr(value);
 				break;
-			case ExcelConstants.IM103_MANUFACTUROR: 
-				entity.setManufacturor(value);
+			case ExcelConstants.IM107_STRAP_DESC: 
+				entity.setStrapDesc(value);
 				break;
-			case ExcelConstants.IM103_CONFIG_VERSION: 
-				entity.setConfigVersion(value);
+			case ExcelConstants.IM107_STRAP_TYPE: 
+				entity.setStrapType(value);
 				break;
-			case ExcelConstants.IM103_BOARD_CODE:
-				entity.setBoardCode(value);
+			case ExcelConstants.IM107_VP_REF_ADDR: 
+				entity.setVpRefAddr(value);
 				break;
-			case ExcelConstants.IM103_BOARD_INDEX:
-				entity.setBoardIndex(value);
+			case ExcelConstants.IM107_VP_DESC: 
+				entity.setVpDesc(value);
 				break;
-			case ExcelConstants.IM103_BOARD_MODEL:
-				entity.setBoardModel(value);
+			case ExcelConstants.IM107_VP_TYPE: 
+				entity.setVpType(value);
 				break;
-			case ExcelConstants.IM103_BOARD_TYPE:
-				entity.setBoardType(value);
-				break;
-			case ExcelConstants.IM103_PORT_NUM:
-				entity.setPortNum(value);
 			default:
 				break;
 		}
 	}
+
 
 }

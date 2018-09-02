@@ -45,8 +45,17 @@ public interface DBConstants {
 	String PR_PHYSCONN      = "Physconn";
 	String PR_BOARD			= "Board";
 	String PR_PORT			= "Port";
+	//导入信息表主键
 	String PR_IEDBOARD		= "IEDBoard";
 	String PR_FILEINFO	    = "fileInfo";
+	String PR_BOARDWARN		= "BoardWarn";
+	String PR_STATUSIN		= "StatusIn";
+	String PR_IEDLIST		= "IEDList";
+	String PR_FIBRELIST		= "FibreList";
+	String PR_STAINFO		= "StaInfo";
+	String PR_BRKCFM		= "BrkCfm";
+	String PR_TERSTRAP		= "TerStrap";
+	String PR_PORTLIGHT		= "PortLight";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";
@@ -141,6 +150,11 @@ public interface DBConstants {
 	
 	int MATCHED_OK = 0;//匹配
 	int MATCHED_NO = 1;//未匹配
+	
+	int CABLE_TYPE_GL = 1;	//光缆
+	int CABLE_TYPE_WL = 2;	//尾缆
+	int CABLE_TYPE_TL = 3;	//跳缆
+	int CABLE_TYPE_SJX = 4;	//双绞线
 	
 	int FILE_TYPE101 = 101;//设备台账
 	int FILE_TYPE102 = 102;//光缆清册

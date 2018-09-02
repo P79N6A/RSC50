@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
 
 public class FibreListHandler extends RscSheetHandler {
@@ -18,11 +20,12 @@ public class FibreListHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM102FibreListEntity();
+		this.entity.setIm102Code(rscp.nextTbCode(DBConstants.PR_FIBRELIST));
 	}
 	
 	@Override
 	public void endRow(int rowNum) {
-		if (rowNum <= 2) return;
+		if (rowNum <= headRowNum) return;
 		if (entity == null) {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
@@ -36,7 +39,7 @@ public class FibreListHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow > 2 && !isEmpty(formattedValue)) {
+		if (currentRow > headRowNum && !isEmpty(formattedValue)) {
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -44,89 +47,104 @@ public class FibreListHandler extends RscSheetHandler {
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
-		switch(col) {
-			case 0: 
-				if (value != null) {
-					String[] strs = null;
-					if (value.contains("/")) {
-						 strs = value.split("/");
-					} else if (value.contains("-")) {
-						strs = value.split("-");
-					}
-					if (strs != null && strs.length >= 2) {
-						entity.setBoardCodeA(strs[0]);
-						entity.setPortCodeA(strs[1]);
-					}
-					break;
-				}
-				entity = null;
+		String fieldName = excelColInfo.get(col);
+		if (fieldName == null) return;
+		switch(fieldName) {
+			case ExcelConstants.IM102_CABLE_CODE: 
+				entity.setCableCode(value);
 				break;
-			case 1: 
+			case ExcelConstants.IM102_CORE_CODE: 
+				entity.setCoreCode(value);
+				break;
+			case ExcelConstants.IM102_DEV_CODEA: 
 				entity.setDevCodeA(value);
 				break;
-			case 2: 
+			case ExcelConstants.IM102_DEV_NAMEA: 
 				entity.setDevNameA(value);
 				break;
-			case 3: 
+			case ExcelConstants.IM102_DEV_DESCA: 
 				entity.setDevDescA(value);
 				break;
-			case 4: 
+			case ExcelConstants.IM102_BOARD_PORT_CODEA:
+				if (value != null) {
+					String[] values = null;
+					if (value.contains("/")) {
+						values = value.split("/");
+					} else if (value.contains("-")) {
+						values = value.split("-");
+					} else if (value.contains("/")) {//中文
+						values = value.split("/");
+					} else if (value.contains("—")) {//中文
+						values = value.split("—");
+					}
+					if (values != null && values.length >= 2) {
+						entity.setBoardCodeA(values[0]);
+						entity.setPortCodeA(values[1]);
+					}
+				}
+				break;
+//			case ExcelConstants.IM102_BOARD_CODEA: 
+//				entity.setBoardCodeA(value);
+//				break;
+//			case ExcelConstants.IM102_PORT_CODEA: 
+//				entity.setPortCodeA(value);
+//				break;
+			case ExcelConstants.IM102_CUBICLE_CODEA: 
 				entity.setCubicleCodeA(value);
 				break;
-			case 5: 
+			case ExcelConstants.IM102_CUBICLE_DESCA: 
 				entity.setCubicleDescA(value);
 				break;
-			case 7: 
-				entity.setDistribFrameCodeA(value);
-				entity.setDistribFrameCodeB(value);
-				break;
-			case 10:
-				entity.setCoreCode(value);
+			case ExcelConstants.IM102_CORE_CODEA: 
 				entity.setCoreCodeA(value);
-				entity.setCoreCodeB(value);
 				break;
-			case 11:
-				if (value != null) {
-					if(value.contains(" ")) {
-						String[] strs = value.split(" ");
-						if (strs != null && strs.length >= 2) {
-							entity.setCableCode(strs[1]);
-						}
-					}
-					break;
-				}
-				entity = null;
+			case ExcelConstants.IM102_DISTRIB_FRAME_CODEA: 
+				entity.setDistribFrameCodeA(value);
 				break;
-			case 15:
+			case ExcelConstants.IM102_DEV_CODEB: 
 				entity.setDevCodeB(value);
 				break;
-			case 16: 
-				entity.setDevNameB(value);
+			case ExcelConstants.IM102_DEV_NAMEB: 
+				entity.setDevNameA(value);
 				break;
-			case 17: 
+			case ExcelConstants.IM102_DEV_DESCB: 
 				entity.setDevDescB(value);
 				break;
-			case 18: 
+			case ExcelConstants.IM102_BOARD_PORT_CODEB: 
+				if (value != null) {
+					String[] values = null;
+					if (value.contains("/")) {
+						values = value.split("/");
+					} else if (value.contains("-")) {
+						values = value.split("-");
+					} else if (value.contains("/")) {//中文
+						values = value.split("/");
+					} else if (value.contains("—")) {//中文
+						values = value.split("—");
+					}
+					if (values != null && values.length >= 2) {
+						entity.setBoardCodeB(values[0]);
+						entity.setPortCodeB(values[1]);
+					}
+				}
+				break;
+//			case ExcelConstants.IM102_BOARD_CODEB: 
+//				entity.setBoardCodeB(value);
+//				break;
+//			case ExcelConstants.IM102_PORT_CODEB: 
+//				entity.setPortCodeB(value);
+//				break;
+			case ExcelConstants.IM102_CUBICLE_CODEB: 
 				entity.setCubicleCodeB(value);
 				break;
-			case 19: 
+			case ExcelConstants.IM102_CUBICLE_DESCB: 
 				entity.setCubicleDescB(value);
 				break;
-			case 20:
-				if (value != null) {
-					String[] strs = null;
-					if (value.contains("/")) {
-						 strs = value.split("/");
-					} else if (value.contains("-")) {
-						strs = value.split("-");
-					}
-					if (strs != null && strs.length >= 2) {
-						entity.setBoardCodeB(strs[0]);
-						entity.setPortCodeB(strs[1]);
-					}
-					break;
-				}
-				entity = null;
+			case ExcelConstants.IM102_CORE_CODEB: 
+				entity.setCoreCodeB(value);
+				break;
+			case ExcelConstants.IM102_DISTRIB_FRAME_CODEB: 
+				entity.setDistribFrameCodeB(value);
 				break;
 			default:
 				break;
