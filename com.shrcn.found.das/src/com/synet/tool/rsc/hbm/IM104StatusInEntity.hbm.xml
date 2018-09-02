@@ -16,11 +16,11 @@
         <property name="pinDesc">
             <column name="PIN_DESC" sql-type="varchar" length="96"/>
         </property>
-        <property name="mmsSignal">
-            <column name="MMS_SIGNAL" sql-type="varchar" length="96"/>
+        <property name="mmsRefAddr">
+            <column name="MMS_REF_ADDR" sql-type="varchar" length="96"/>
         </property>
-        <property name="signalDesc">
-            <column name="SIGNAL_DESC" sql-type="varchar" length="96"/>
+        <property name="mmsDesc">
+            <column name="MMS_DESC" sql-type="varchar" length="96"/>
         </property>
         <property name="matched">
             <column name="MATCHED" sql-type="int"/>

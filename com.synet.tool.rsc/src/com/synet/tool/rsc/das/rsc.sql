@@ -746,8 +746,8 @@ create table IM104_Status_In
    DEV_NAME           	varchar(96),
    PIN_REF_ADDR         varchar(96),
    PIN_DESC           	varchar(96),
-   MMS_SIGNAL           varchar(96),
-   SIGNAL_DESC          varchar(96),
+   MMS_REF_ADDR         varchar(96),
+   MMS_DESC          	varchar(96),
    MATCHED           	INT,
    primary key (IM104_CODE)
 );
@@ -826,8 +826,9 @@ create table IM109_Sta_Info
 (
    IM109_CODE           varchar(48) not null,
    IM100_CODE           varchar(48) not null,
-   DESCRIPTION          varchar(96),
-   REF_ADDR     		varchar(96),
+   DEV_NAME           	varchar(96),
+   MMS_DESC	            varchar(96),
+   MMS_REF_ADDR     	varchar(96),
    MATCHED           	INT,
    primary key (IM109_CODE)
 );

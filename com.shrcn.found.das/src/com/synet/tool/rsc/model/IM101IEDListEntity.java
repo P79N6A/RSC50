@@ -25,7 +25,7 @@ public class IM101IEDListEntity {
 	private String productCode;			//出厂编号
 	private String dataCollectType;		//数据采集方式
 	private String outType;				//出口方式
-	private int boardNum;				//板卡数量
+	private String boardNum;			//板卡数量
 	private String matchedIedCode;		//匹配装置代码
 	private Integer matched;			//是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
@@ -138,10 +138,10 @@ public class IM101IEDListEntity {
 	public void setOutType(String outType) {
 		this.outType = outType;
 	}
-	public int getBoardNum() {
+	public String getBoardNum() {
 		return boardNum;
 	}
-	public void setBoardNum(int boardNum) {
+	public void setBoardNum(String boardNum) {
 		this.boardNum = boardNum;
 	}
 	public String getMatchedIedCode() {

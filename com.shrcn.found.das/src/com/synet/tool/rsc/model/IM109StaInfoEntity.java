@@ -8,35 +8,34 @@ package com.synet.tool.rsc.model;
 public class IM109StaInfoEntity {
 	
 	private String im109Code;
-	private Integer index; 		//序号
-	private String description; //描述
-	private String refAddr;		//参引
-	private Integer matched;     //是否匹配
+	private String devName;		//装置Name
+	private String mmsDesc; 	//信号描述
+	private String mmsRefAddr;	//MMS信号参引
+	private Integer matched;    //是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
-	
 	public String getIm109Code() {
 		return im109Code;
 	}
 	public void setIm109Code(String im109Code) {
 		this.im109Code = im109Code;
 	}
-	public Integer getIndex() {
-		return index;
+	public String getDevName() {
+		return devName;
 	}
-	public void setIndex(Integer index) {
-		this.index = index;
+	public void setDevName(String devName) {
+		this.devName = devName;
 	}
-	public String getDescription() {
-		return description;
+	public String getMmsDesc() {
+		return mmsDesc;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setMmsDesc(String mmsDesc) {
+		this.mmsDesc = mmsDesc;
 	}
-	public String getRefAddr() {
-		return refAddr;
+	public String getMmsRefAddr() {
+		return mmsRefAddr;
 	}
-	public void setRefAddr(String refAddr) {
-		this.refAddr = refAddr;
+	public void setMmsRefAddr(String mmsRefAddr) {
+		this.mmsRefAddr = mmsRefAddr;
 	}
 	public Integer getMatched() {
 		return matched;
@@ -50,5 +49,5 @@ public class IM109StaInfoEntity {
 	public void setFileInfoEntity(IM100FileInfoEntity fileInfoEntity) {
 		this.fileInfoEntity = fileInfoEntity;
 	}
-
+	
 }

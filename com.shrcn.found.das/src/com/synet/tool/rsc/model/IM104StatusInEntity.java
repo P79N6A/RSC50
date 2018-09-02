@@ -11,8 +11,8 @@ public class IM104StatusInEntity {
 	private String devName;		//装置Name
 	private String pinRefAddr;	//开入虚端子参引
 	private String pinDesc;		//端子描述
-	private String mmsSignal;	//MMS信号参引
-	private String signalDesc;	//信号描述
+	private String mmsRefAddr;//MMS信号参引
+	private String mmsDesc;	//信号描述
 	private Integer matched;	//是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
 	
@@ -40,17 +40,17 @@ public class IM104StatusInEntity {
 	public void setPinDesc(String pinDesc) {
 		this.pinDesc = pinDesc;
 	}
-	public String getMmsSignal() {
-		return mmsSignal;
+	public String getMmsRefAddr() {
+		return mmsRefAddr;
 	}
-	public void setMmsSignal(String mmsSignal) {
-		this.mmsSignal = mmsSignal;
+	public void setMmsRefAddr(String mmsRefAddr) {
+		this.mmsRefAddr = mmsRefAddr;
 	}
-	public String getSignalDesc() {
-		return signalDesc;
+	public String getMmsDesc() {
+		return mmsDesc;
 	}
-	public void setSignalDesc(String signalDesc) {
-		this.signalDesc = signalDesc;
+	public void setMmsDesc(String mmsDesc) {
+		this.mmsDesc = mmsDesc;
 	}
 	public Integer getMatched() {
 		return matched;
