@@ -8,7 +8,7 @@ package com.synet.tool.rsc.model;
 public class IM101IEDListEntity {
 
 	private String im101Code;
-	private Integer index;					//序号
+	private Integer index;				//序号
 	private String devName;				//装置Name
 	private String devDesc;				//装置名称
 	private String bay;					//所属间隔

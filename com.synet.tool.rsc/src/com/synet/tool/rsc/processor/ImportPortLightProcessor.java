@@ -23,9 +23,9 @@ public class ImportPortLightProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM106PortLightEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM106PortLightEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM106PortLightEntity entity : list) {
+			try {
 				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
 						entity.getBoardCode(), entity.getPortCode());
 				if (portEntity != null) {
@@ -39,12 +39,12 @@ public class ImportPortLightProcessor {
 						}
 					}
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}

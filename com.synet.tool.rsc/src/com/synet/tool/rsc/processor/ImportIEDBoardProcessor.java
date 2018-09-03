@@ -24,9 +24,9 @@ public class ImportIEDBoardProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM103IEDBoardEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM103IEDBoardEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM103IEDBoardEntity entity : list) {
+			try {
 				IM103IEDBoardEntity tempIEDBoard = improtInfoService.existsEntity(entity);
 				if (tempIEDBoard != null){
 					continue;
@@ -56,8 +56,8 @@ public class ImportIEDBoardProcessor {
 								Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
 								portEntity.setTb1047BoardByF1047Code(boardEntity);
 								portEntity.setF1048No("" + c);
-								portEntity.setF1048Direction(3);
-								portEntity.setF1048Plug(4);
+								portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
+								portEntity.setF1048Plug(DBConstants.PLUG_FC);
 								if (portEntityService.existsEntity(portEntity) == null) {
 									portEntityService.insert(portEntity);
 									System.out.println("添加端口成功");
@@ -67,12 +67,12 @@ public class ImportIEDBoardProcessor {
 						}
 					}
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.insert(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.insert(entity);
 		}
 		return true;
 	}

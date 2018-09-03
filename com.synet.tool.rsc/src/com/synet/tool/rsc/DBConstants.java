@@ -42,6 +42,7 @@ public interface DBConstants {
 	String PR_REGION        = "Region";
 	String PR_CUBICLE       = "Cubicle";
 	String PR_CABLE         = "Cable";
+	String PR_CORE		    = "Core";
 	String PR_PHYSCONN      = "Physconn";
 	String PR_BOARD			= "Board";
 	String PR_PORT			= "Port";
@@ -165,5 +166,19 @@ public interface DBConstants {
 	int FILE_TYPE107 = 107;//压板与虚端子关联表
 	int FILE_TYPE108 = 108;//跳合闸反校关联表
 	int FILE_TYPE109 = 109;//监控信息点表
+	
+	int DIRECTION_TX = 1; //表示发送
+	int DIRECTION_RX = 2; //表示接收
+	int DIRECTION_RT = 3; //表示收发
+	
+	int PLUG_LC = 1;
+	int PLUG_ST = 2;
+	int PLUG_SC = 3;
+	int PLUG_FC = 4;
+	int PLUG_RJ45 = 5;
+	
+	int CORE_TYPE_XX = 1;//芯线
+	int CORE_TYPE_TX = 2;//跳纤
+	int CORE_TYPE_SJX = 3;//双绞线
 }
 

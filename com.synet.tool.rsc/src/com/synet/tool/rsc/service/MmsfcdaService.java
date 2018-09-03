@@ -65,7 +65,7 @@ public class MmsfcdaService extends BaseService {
 	}
 
 	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String devName, String f1058RefAddr) {
-		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "devDesc", devName);
+		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 		if (iedEntity != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("tb1046IedByF1046Code", iedEntity);

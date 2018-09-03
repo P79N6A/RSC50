@@ -10,5 +10,9 @@ public class BayEntityService extends BaseService {
 	public List<Tb1042BayEntity> getBayEntryList() {
 		return (List<Tb1042BayEntity>) beanDao.getAll(Tb1042BayEntity.class);
 	}
+	
+	public Tb1042BayEntity getBayEntityByName(String f1042Name) {
+		return (Tb1042BayEntity) beanDao.getObject(Tb1042BayEntity.class, "f1042Name", f1042Name);
+	}
 
 }

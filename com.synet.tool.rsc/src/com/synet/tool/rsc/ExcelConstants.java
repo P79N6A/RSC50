@@ -62,7 +62,7 @@ public interface ExcelConstants {
 //	String IM102_PORT_CODEA = "端口A端口编号";
 	String IM102_CUBICLE_CODEA = "端口A屏柜代码";
 	String IM102_CUBICLE_DESCA = "端口A屏柜名称";
-	String IM102_CORE_CODEA = "端口A芯线编号";
+//	String IM102_CORE_CODEA = "端口A芯线编号";
 	String IM102_DISTRIB_FRAME_CODEA = "端口A光配架端口编号";
 	String IM102_DEV_CODEB = "端口B装置代码";
 	String IM102_DEV_NAMEB = "端口B装置Name";
@@ -72,7 +72,7 @@ public interface ExcelConstants {
 //	String IM102_PORT_CODEB = "端口B端口编号";
 	String IM102_CUBICLE_CODEB = "端口B屏柜代码";
 	String IM102_CUBICLE_DESCB = "端口B屏柜名称";
-	String IM102_CORE_CODEB = "端口B芯线编号";
+//	String IM102_CORE_CODEB = "端口B芯线编号";
 	String IM102_DISTRIB_FRAME_CODEB = "端口B光配架端口编号";
 	String[] IM102_FIBRE_LIST_FIELDS = {
 			IM102_CABLE_CODE,
@@ -85,7 +85,7 @@ public interface ExcelConstants {
 //			IM102_PORT_CODEA,
 			IM102_CUBICLE_CODEA,
 			IM102_CUBICLE_DESCA,
-			IM102_CORE_CODEA,
+//			IM102_CORE_CODEA,
 			IM102_DISTRIB_FRAME_CODEA,
 			IM102_DEV_CODEB,
 			IM102_DEV_NAMEB,
@@ -95,7 +95,7 @@ public interface ExcelConstants {
 //			IM102_PORT_CODEB,
 			IM102_CUBICLE_CODEB,
 			IM102_CUBICLE_DESCB,
-			IM102_CORE_CODEB,
+//			IM102_CORE_CODEB,
 			IM102_DISTRIB_FRAME_CODEB
 	};
 	
@@ -198,4 +198,8 @@ public interface ExcelConstants {
 			IM109_DESCRIPTION,
 			IM109_REF_ADDR
 	};
+	
+	String PORT_TYPE_RX = "TX";//表示发送
+	String PORT_TYPE_TX = "RX";//表示接收
+	String PORT_TYPE_RT = "RT";//表示收发
 }

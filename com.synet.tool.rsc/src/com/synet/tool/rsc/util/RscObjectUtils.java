@@ -94,13 +94,13 @@ public class RscObjectUtils {
 	
 	public static Tb1047BoardEntity createBoardEntity(){
 		Tb1047BoardEntity boardEntity = new Tb1047BoardEntity();
-		boardEntity.setF1047Code(rscp.getProperty(DBConstants.PR_BOARD));
+		boardEntity.setF1047Code(rscp.nextTbCode(DBConstants.PR_BOARD));
 		return boardEntity;
 	}
 	
 	public static Tb1048PortEntity createPortEntity() {
 		Tb1048PortEntity portEntity = new Tb1048PortEntity();
-		portEntity.setF1048Code(rscp.getProperty(DBConstants.PR_PORT));
+		portEntity.setF1048Code(rscp.nextTbCode(DBConstants.PR_PORT));
 		return portEntity;
 	}
 }

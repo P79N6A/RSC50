@@ -50,11 +50,17 @@ public class FibreListHandler extends RscSheetHandler {
 		String fieldName = excelColInfo.get(col);
 		if (fieldName == null) return;
 		switch(fieldName) {
-			case ExcelConstants.IM102_CABLE_CODE: 
+			case ExcelConstants.IM102_CABLE_CODE: //只处理光缆部分，不处理跳缆部分
+				if (value == null || "".equals(value)) {
+					entity = null;
+					break;
+				}
 				entity.setCableCode(value);
 				break;
 			case ExcelConstants.IM102_CORE_CODE: 
 				entity.setCoreCode(value);
+				entity.setCoreCodeA(value);
+				entity.setCoreCodeB(value);
 				break;
 			case ExcelConstants.IM102_DEV_CODEA: 
 				entity.setDevCodeA(value);
@@ -95,9 +101,9 @@ public class FibreListHandler extends RscSheetHandler {
 			case ExcelConstants.IM102_CUBICLE_DESCA: 
 				entity.setCubicleDescA(value);
 				break;
-			case ExcelConstants.IM102_CORE_CODEA: 
-				entity.setCoreCodeA(value);
-				break;
+//			case ExcelConstants.IM102_CORE_CODEA: 
+//				entity.setCoreCodeA(value);
+//				break;
 			case ExcelConstants.IM102_DISTRIB_FRAME_CODEA: 
 				entity.setDistribFrameCodeA(value);
 				break;
@@ -140,9 +146,9 @@ public class FibreListHandler extends RscSheetHandler {
 			case ExcelConstants.IM102_CUBICLE_DESCB: 
 				entity.setCubicleDescB(value);
 				break;
-			case ExcelConstants.IM102_CORE_CODEB: 
-				entity.setCoreCodeB(value);
-				break;
+//			case ExcelConstants.IM102_CORE_CODEB: 
+//				entity.setCoreCodeB(value);
+//				break;
 			case ExcelConstants.IM102_DISTRIB_FRAME_CODEB: 
 				entity.setDistribFrameCodeB(value);
 				break;

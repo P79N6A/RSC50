@@ -20,9 +20,9 @@ public class ImportStatusInProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM104StatusInEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM104StatusInEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM104StatusInEntity entity : list) {
+			try {
 				Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getPinRefAddr());
 				if (pinEntity != null) {
 					pinEntity.setF1062Desc(entity.getPinDesc());
@@ -33,12 +33,12 @@ public class ImportStatusInProcessor {
 					mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}

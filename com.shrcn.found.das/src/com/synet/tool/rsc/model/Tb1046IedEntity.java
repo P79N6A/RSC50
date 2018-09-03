@@ -25,15 +25,13 @@ public class Tb1046IedEntity {
     //手动配置属性
     private String f1046aNetIp;//A王IP
     private String f1046bNetIp;//B王IP
-    private String f1046firm;//厂商
     private String f1046version;//版本
-    private String f1046suite;//套
     private String f1046protectCategory;//保护分类
     private String f1046protectType;//保护型号
     private String f1046protectModel;//保护类型
     private String f1046protectCrc;//保护CRC码
-    private String f1046OperateData;//投运日期
-    private String f1046productData;//出厂日期
+    private String f1046OperateDate;//投运日期
+    private String f1046productDate;//出厂日期
     private String f1046productNo;//出厂编号
     private String f1046dataGatType;//数据采集方式
     private String f1046OutType;//出口方式
@@ -62,15 +60,7 @@ public class Tb1046IedEntity {
 	public void setF1046bNetIp(String f1046bNetIp) {
 		this.f1046bNetIp = f1046bNetIp;
 	}
-
-	public String getF1046firm() {
-		return f1046firm;
-	}
-
-	public void setF1046firm(String f1046firm) {
-		this.f1046firm = f1046firm;
-	}
-
+	
 	public String getF1046version() {
 		return f1046version;
 	}
@@ -78,15 +68,7 @@ public class Tb1046IedEntity {
 	public void setF1046version(String f1046version) {
 		this.f1046version = f1046version;
 	}
-
-	public String getF1046suite() {
-		return f1046suite;
-	}
-
-	public void setF1046suite(String f1046suite) {
-		this.f1046suite = f1046suite;
-	}
-
+	
 	public String getF1046protectCategory() {
 		return f1046protectCategory;
 	}
@@ -111,20 +93,20 @@ public class Tb1046IedEntity {
 		this.f1046protectCrc = f1046protectCrc;
 	}
 
-	public String getF1046OperateData() {
-		return f1046OperateData;
+	public String getF1046OperateDate() {
+		return f1046OperateDate;
 	}
 
-	public void setF1046OperateData(String f1046OperateData) {
-		this.f1046OperateData = f1046OperateData;
+	public void setF1046OperateDate(String f1046OperateDate) {
+		this.f1046OperateDate = f1046OperateDate;
 	}
 
-	public String getF1046productData() {
-		return f1046productData;
+	public String getF1046productDate() {
+		return f1046productDate;
 	}
 
-	public void setF1046productData(String f1046productData) {
-		this.f1046productData = f1046productData;
+	public void setF1046productDate(String f1046productDate) {
+		this.f1046productDate = f1046productDate;
 	}
 
 	public String getF1046productNo() {

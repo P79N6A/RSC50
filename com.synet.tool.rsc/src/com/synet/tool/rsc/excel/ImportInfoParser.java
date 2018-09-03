@@ -183,7 +183,7 @@ public class ImportInfoParser {
 	        while (iter.hasNext()) {  
 	            InputStream stream = iter.next();
 	            String sheetName = iter.getSheetName();
-	            IEDBoardHandler handler = new IEDBoardHandler(headRowNum, excelColInfo);
+	            FibreListHandler handler = new FibreListHandler(headRowNum, excelColInfo);
             	setHandler(handler);
             	Xls2007Parser.processSheet(styles, strings, handler, stream);
             	map.put(sheetName, (List<IM102FibreListEntity>) handler.getResult());

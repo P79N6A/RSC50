@@ -23,9 +23,9 @@ public class ImportBoardWarnProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM105BoardWarnEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.insert(fileInfoEntity);
-			for (IM105BoardWarnEntity entity : list) {
+		improtInfoService.insert(fileInfoEntity);
+		for (IM105BoardWarnEntity entity : list) {
+			try {
 				Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
 				if (tempBoard != null) {
 					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getAlarmRefAddr());
@@ -41,12 +41,12 @@ public class ImportBoardWarnProcessor {
 						}
 					}
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}

@@ -15,7 +15,7 @@ public class PinEntityService extends BaseService {
 	}
 
 	public Tb1062PinEntity getPinEntity(String devName, String f1062RefAddr) {
-		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "devDesc", devName);
+		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 		if (ied != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("tb1046IedByF1046Code", ied);

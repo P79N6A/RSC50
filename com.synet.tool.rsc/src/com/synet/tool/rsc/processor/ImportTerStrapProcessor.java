@@ -29,9 +29,9 @@ public class ImportTerStrapProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM107TerStrapEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM107TerStrapEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM107TerStrapEntity entity : list) {
+			try {
 				String vpType = entity.getVpType();
 				if ("开入".equals(vpType)) {
 					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getVpRefAddr());
@@ -74,12 +74,12 @@ public class ImportTerStrapProcessor {
 						}
 					}
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}

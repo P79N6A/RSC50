@@ -23,9 +23,9 @@ public class ImportBrkCfmProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM108BrkCfmEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM108BrkCfmEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM108BrkCfmEntity entity : list) {
+			try {
 				Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getPinRefAddr());
 				if (pinEntity != null) {
 					Tb1063CircuitEntity circuitEntity = circuitEntityService.getCircuitEntity(pinEntity);
@@ -43,12 +43,12 @@ public class ImportBrkCfmProcessor {
 						circuitEntityService.save(circuitEntity);
 					}
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}

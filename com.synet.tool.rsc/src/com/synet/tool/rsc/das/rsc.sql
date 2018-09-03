@@ -187,8 +187,35 @@ create table TB1046_IED
    F1046_IsVirtual      INT,
    F1046_Type           INT,
    F1046_CRC            varchar(24),
+   F1046_AnetIp		    varchar(48),
+   F1046_BnetIp		    varchar(48),
+   F1046_Version        varchar(48),
+   F1046_ProtectCategory  varchar(48),
+   F1046_ProtectType    varchar(48),
+   F1046_ProtectModel   varchar(48),
+   F1046_ProtectCrc     varchar(48),
+   F1046_OperateDate     varchar(48),
+   F1046_ProductDate     varchar(48),
+   F1046_ProductData  	varchar(48),
+   F1046_ProductNo  	varchar(48),
+   F1046_DataGatType  	varchar(48),
+   F1046_OutType  		varchar(48),
+   F1046_BoardNum  		varchar(48),
    primary key (F1046_CODE)
 );
+
+   BAY           		varchar(96),
+   PROT_CLASSIFY        varchar(96),
+   PROT_MODEL           varchar(96),
+   PROT_TYPE           	varchar(96),
+   DATE_SERVICE         varchar(96),
+   DATE_PRODUCT         varchar(96),
+   PRODUCT_CODE         varchar(96),
+   DATA_COLLECT_TYPE    varchar(96),
+   OUT_TYPE           	varchar(96),
+   BOARD_NUM           	varchar(96),
+   MATCHED_IED_CODE     varchar(96),
+   MATCHED           	INT,
 
 /*==============================================================*/
 /* Table: TB1047_Board                                          */

@@ -23,7 +23,7 @@ public class BoardEntityService extends BaseService {
 	}
 	
 	public Tb1047BoardEntity existsEntity(String devName, String slot) {
-		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "devDesc", devName);
+		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 		if (ied != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("tb1046IedByF1046Code",ied);

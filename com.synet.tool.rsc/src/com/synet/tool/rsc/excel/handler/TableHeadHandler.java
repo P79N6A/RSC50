@@ -38,7 +38,10 @@ public class TableHeadHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow == headRowNum && !isEmpty(formattedValue)) {
+		if (currentRow < 4){
+			System.out.println(currentRow + "-" + currentCol + "-" + formattedValue);
+		}
+		if (currentRow <= headRowNum ) {
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -46,8 +49,10 @@ public class TableHeadHandler extends RscSheetHandler {
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
-		if (value != null) {
+		if (value != null && !"".equals(value)) {
 			entity.put(col, value.trim());
+		} else {
+			entity.put(col, "未知列名");
 		}
 	}
 

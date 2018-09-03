@@ -17,20 +17,20 @@ public class ImportStaInfoProcessor {
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM109StaInfoEntity> list){
 		if (list == null || list.size() <= 0)
 			return false;
-		try {
-			improtInfoService.save(fileInfoEntity);
-			for (IM109StaInfoEntity entity : list) {
+		improtInfoService.save(fileInfoEntity);
+		for (IM109StaInfoEntity entity : list) {
+			try {
 				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
 				if (mmsfcdaEntity != null) {
 					mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
 				}
-				entity.setFileInfoEntity(fileInfoEntity);
-				improtInfoService.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			entity.setFileInfoEntity(fileInfoEntity);
+			improtInfoService.save(entity);
 		}
 		return true;
 	}
