@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 
 public class CircuitEntityService extends BaseService {
@@ -40,6 +41,10 @@ public class CircuitEntityService extends BaseService {
 			result.add(tb1063CircuitEntity.getTb1061PoutByF1061CodePSend().getF1061Code());
 		}
 		return result;
+	}
+	
+	public Tb1063CircuitEntity getCircuitEntity(Tb1062PinEntity tb1062PinByF1062CodePRecv) {
+		return (Tb1063CircuitEntity) beanDao.getObject(Tb1063CircuitEntity.class, "tb1062PinByF1062CodePRecv", tb1062PinByF1062CodePRecv);
 	}
 
 }

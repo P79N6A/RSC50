@@ -35,5 +35,6 @@ Export-Package: com.shrcn.business.scl,
  com.shrcn.business.scl.ui,
  com.shrcn.business.scl.util,
  com.shrcn.business.xml.schema
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/bscl.jar
 Import-Package: org.apache.commons.lang.math

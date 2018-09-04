@@ -1,17 +1,27 @@
 package com.synet.tool.rsc.excel.handler;
 
+import java.util.Map;
+
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
-import com.synet.tool.rsc.entity.StaInfo;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.ExcelConstants;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
 
 public class StaInfoHandler extends RscSheetHandler {
-
-	private StaInfo entity = null;
 	
+	private IM109StaInfoEntity entity = null;
+	
+	public StaInfoHandler(int headRowNum, Map<Integer, String> excelColInfo) {
+		super(headRowNum, excelColInfo);
+	}
+
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new StaInfo();
+		this.entity = new IM109StaInfoEntity();
+		this.entity.setIm109Code(rscp.nextTbCode(DBConstants.PR_STAINFO));
+		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
 	@Override
@@ -38,22 +48,17 @@ public class StaInfoHandler extends RscSheetHandler {
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
-		switch(col) {
-			case 0: 
-				if (value != null && !"".equals(value)) {
-					entity.setIndex(Integer.valueOf(value.trim()));
-					break;
-				}
-				entity = null;
-				break;
-			case 1: 
-				entity.setDescription(value);
-				break;
-			case 2:
-				entity.setRefAddr(value);
-				break;
-			default:
-				break;
+		String fieldName = excelColInfo.get(col);
+		if (fieldName == null) return;
+		switch(fieldName) {
+		case ExcelConstants.IM109_DESCRIPTION: 
+			entity.setMmsDesc(value);
+			break;
+		case ExcelConstants.IM109_REF_ADDR: 
+			entity.setMmsRefAddr(value);
+			break;
+		default:
+			break;
 		}
 	}
 

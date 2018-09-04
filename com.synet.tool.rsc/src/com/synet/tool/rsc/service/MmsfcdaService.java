@@ -1,7 +1,9 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
@@ -57,5 +59,19 @@ public class MmsfcdaService extends BaseService {
 		}
 		return temp;
 	}
+	
+	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String f1058RefAddr) {
+		return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, "f1058RefAddr", f1058RefAddr);
+	}
 
+	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String devName, String f1058RefAddr) {
+		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		if (iedEntity != null) {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("tb1046IedByF1046Code", iedEntity);
+			params.put("f1058RefAddr", f1058RefAddr);
+			return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
+		}
+		return null;
+	}
 }

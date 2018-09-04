@@ -1,18 +1,25 @@
 package com.synet.tool.rsc.excel.handler;
 
+import java.util.List;
+
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
+import com.synet.tool.rsc.util.RscObjectUtils;
 
 public class SecFibreListHandler extends RscSheetHandler {
 
 	private Tb1090LineprotfiberEntity entity = null;
 	
+	public SecFibreListHandler(int headRowNum) {
+		super(headRowNum, null);
+	}
+
 	@Override
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
-		this.entity = new Tb1090LineprotfiberEntity();
+		this.entity = RscObjectUtils.createTb1090();
 	}
 	
 	@Override
@@ -36,42 +43,20 @@ public class SecFibreListHandler extends RscSheetHandler {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 1: 
-				if (value != null) {
-					Tb1090LineprotfiberEntity temp = 
-							(Tb1090LineprotfiberEntity) service.getById(Tb1090LineprotfiberEntity.class, value.trim());
-					if (temp == null) {
-						entity.setF1090Code(value);
-						break;
-					}
-				}
-				entity = null;
-				break;
-			case 2: 
-				if (value != null) {
-					String id = value.trim();
-					Tb1046IedEntity ied = (Tb1046IedEntity) service.getById(Tb1046IedEntity.class, id);
-					if (ied != null) {
-						entity.setTb1046IedByF1046Code(ied);
-						break;
-					}
-				}
-				entity = null;
-				break;
 			case 3: 
-				if (!entity.getTb1046IedByF1046Code().getF1046Name().equals(value.trim())) {
-					entity = null;
+				if (value != null){
+					List<Tb1046IedEntity> iedList = (List<Tb1046IedEntity>) service.getListByCriteria(Tb1046IedEntity.class, "f1046Name", value.trim());
+					if (iedList != null) {
+						entity.setTb1046IedByF1046Code(iedList.get(0));
+						break;
+					}
 				}
-				break;
-			case 4: 
-				if (!entity.getTb1046IedByF1046Code().getF1046Desc().equals(value.trim())) {
-					entity = null;
-				}
-				break;
+				entity = null;
 			case 5: 
 				if (value != null) {
 					entity.setF1090Desc(value);

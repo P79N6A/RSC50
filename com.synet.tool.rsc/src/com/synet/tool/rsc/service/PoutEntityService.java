@@ -32,4 +32,14 @@ public class PoutEntityService extends BaseService{
 		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, params);
 	}
 	
+	public Tb1061PoutEntity getPoutEntity(String devName, String f1061RefAddr) {
+		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		if (iedEntity != null) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("tb1046IedByF1046Code", iedEntity);
+			params.put("f1061RefAddr", f1061RefAddr);
+			return (Tb1061PoutEntity) beanDao.getObject(Tb1061PoutEntity.class, params);
+		}
+		return null;
+	}
 }

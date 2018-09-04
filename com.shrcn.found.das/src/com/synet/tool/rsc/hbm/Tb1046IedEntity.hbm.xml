@@ -40,6 +40,45 @@
         <property name="f1046Crc">
             <column name="F1046_CRC" sql-type="varchar" length="24"/>
         </property>
+        <property name="f1046aNetIp">
+            <column name="F1046_AnetIp" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046bNetIp">
+            <column name="F1046_BnetIp" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046version">
+            <column name="F1046_Version" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046protectCategory">
+            <column name="F1046_ProtectCategory" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046protectType">
+            <column name="F1046_ProtectType" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046protectModel">
+            <column name="F1046_ProtectModel" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046protectCrc">
+            <column name="F1046_ProtectCrc" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046OperateDate">
+            <column name="F1046_OperateDate" sql-type="varchar" length="48"/>
+        </property>
+         <property name="f1046productDate">
+            <column name="F1046_ProductDate" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046productNo">
+            <column name="F1046_ProductNo" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046dataGatType">
+            <column name="F1046_DataGatType" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046OutType">
+            <column name="F1046_OutType" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1046boardNum">
+            <column name="F1046_BoardNum" sql-type="varchar" length="48"/>
+        </property>
         <many-to-one name="tb1042BaysByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity" lazy="false" insert="false" update="false">
             <column name="F1042_CODE"/>
         </many-to-one>

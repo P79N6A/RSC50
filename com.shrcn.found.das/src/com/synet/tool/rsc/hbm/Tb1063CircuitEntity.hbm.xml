@@ -11,26 +11,25 @@
         <property name="f1063Type">
             <column name="F1063_Type" sql-type="int" not-null="true"/>
         </property>
-        <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+        <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE_IEDRecv" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1046IedByF1046CodeIedSend" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+        <many-to-one name="tb1046IedByF1046CodeIedSend" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE_IEDSend" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeConvChk1" class="com.synet.tool.rsc.model.Tb1061PoutEntity">
+        <many-to-one name="tb1061PoutByF1061CodeConvChk1" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
             <column name="F1061_CODE_ConvChk1"/>
         </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeConvChk2" class="com.synet.tool.rsc.model.Tb1061PoutEntity">
+        <many-to-one name="tb1061PoutByF1061CodeConvChk2" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
             <column name="F1061_CODE_ConvChk2"/>
         </many-to-one>
-        <!-- <one-to-one name="tb1062PinByF1062CodePRecv" constrained="true"/> -->
-        <many-to-one name="tb1062PinByF1062CodePRecv" class="com.synet.tool.rsc.model.Tb1062PinEntity">
+        <many-to-one name="tb1062PinByF1062CodePRecv" class="com.synet.tool.rsc.model.Tb1062PinEntity" lazy="false">
             <column name="F1062_CODE_PRecv" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodePSend" class="com.synet.tool.rsc.model.Tb1061PoutEntity">
-            <column name="F1061_CODE_PSend"/>
+        <many-to-one name="tb1061PoutByF1061CodePSend" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
+            <column name="F1061_CODE_PSend" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1065LogicallinkByF1065Code" class="com.synet.tool.rsc.model.Tb1065LogicallinkEntity">
+        <many-to-one name="tb1065LogicallinkByF1065Code" class="com.synet.tool.rsc.model.Tb1065LogicallinkEntity" lazy="false">
             <column name="F1065_CODE" not-null="true"/>
         </many-to-one>
     </class>

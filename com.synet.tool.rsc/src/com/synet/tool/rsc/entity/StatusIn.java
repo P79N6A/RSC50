@@ -7,13 +7,20 @@ package com.synet.tool.rsc.entity;
  */
 public class StatusIn {
 	
+	private String im104Code;
 	private String devName;		//装置Name
 	private String pinRefAddr;	//开入虚端子参引
 	private String pinDesc;		//端子描述
 	private String mmsSignal;	//MMS信号参引
 	private String signalDesc;	//信号描述
-	private boolean matched;	//是否匹配
+	private Integer matched;	//是否匹配
 	
+	public String getIm104Code() {
+		return im104Code;
+	}
+	public void setIm104Code(String im104Code) {
+		this.im104Code = im104Code;
+	}
 	public String getDevName() {
 		return devName;
 	}
@@ -44,10 +51,11 @@ public class StatusIn {
 	public void setSignalDesc(String signalDesc) {
 		this.signalDesc = signalDesc;
 	}
-	public boolean isMatched() {
+	public Integer getMatched() {
 		return matched;
 	}
-	public void setMatched(boolean matched) {
+	public void setMatched(Integer matched) {
 		this.matched = matched;
 	}
+	
 }

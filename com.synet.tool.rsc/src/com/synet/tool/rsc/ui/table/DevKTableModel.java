@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.common.dict.DictManager;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
@@ -131,6 +133,13 @@ public class DevKTableModel extends RKTableModel {
 				|| TableFactory.CABLE_TABLE.equals(tableName) 
 				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
+			reloadPrj();
+		}
+	}
+	
+	private void reloadPrj() {
+		if (TableFactory.REGION_LIST_TABLE.equals(tableName)) {
+			EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 		}
 	}
 	

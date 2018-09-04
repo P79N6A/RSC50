@@ -1,6 +1,8 @@
 package com.synet.tool.rsc.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
@@ -12,4 +14,14 @@ public class PinEntityService extends BaseService {
 		return (List<Tb1062PinEntity>) beanDao.getListByCriteria(Tb1062PinEntity.class, "tb1046IedByF1046Code", ied);
 	}
 
+	public Tb1062PinEntity getPinEntity(String devName, String f1062RefAddr) {
+		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		if (ied != null) {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("tb1046IedByF1046Code", ied);
+			params.put("f1062RefAddr", f1062RefAddr);
+			return (Tb1062PinEntity) beanDao.getObject(Tb1062PinEntity.class, params);
+		}
+		return null;
+	}
 }
