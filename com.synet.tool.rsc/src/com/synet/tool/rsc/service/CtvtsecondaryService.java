@@ -57,9 +57,17 @@ public class CtvtsecondaryService extends BaseService{
 		}
 		sec.setF1067Code(rscp.nextTbCode(DBConstants.PR_SEC));
 		sec.setTb1043EquipmentByF1043Code(equipment);
-		Tb1044TerminalEntity tml = equipment.getTb1044TerminalsByF1043Code().iterator().next();
-		sec.setTb1044TerminalByF1044Code(tml);
-		sec.setF1067Index(null);
+		Set<Tb1044TerminalEntity> tb1044Terminals = equipment.getTb1044TerminalsByF1043Code();
+		if (tb1044Terminals != null && tb1044Terminals.size()>0) {
+			Tb1044TerminalEntity tml = tb1044Terminals.iterator().next();
+			sec.setTb1044TerminalByF1044Code(tml);
+		}
+		Set<Tb1067CtvtsecondaryEntity> tb1067Secondarys = equipment.getTb1067SecondarysByF1043Code();
+		if (tb1067Secondarys != null && tb1067Secondarys.size()>0) {
+			sec.setF1067Index(tb1067Secondarys.size() + 1);
+		} else {
+			sec.setF1067Index(1);
+		}
 		sec.setF1067CircNo(null);
 		sec.setF1067Model(null);
 		sec.setF1067Desc(null);
