@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	装置配置模板只需保存装置配置信息，具体包括：
+	1、装置的板卡、端口基本信息
+	2、装置、板卡告警信号，端口光强配置
+	3、虚端子压板
+	注：
+	1、不同项目的逻辑链路配置不同，无法复用，因此保存成模板无意义。
+	2、第一版保护录波配置不做要求，因此暂不做模板，将来再补充。
+-->
+<Tb1046IedEntity f1046Manufacturor="" f1046Model="" f1046ConfigVersion="" warnRefAddr=""><!-- warnRefAddr为装置告警信号参引 -->
+	<Boards>
+		<Tb1047BoardEntity f1047Slot="" f1047Desc="" f1047Type="" warnRefAddr=""><!-- warnRefAddr为板卡告警信号参引 -->
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/><!-- fbRefAddr为端口光强信号参引 -->
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>				
+		</Tb1047BoardEntity>
+		<Tb1047BoardEntity f1047Slot="" f1047Desc="" f1047Type="" warnRefAddr="">
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>				
+		</Tb1047BoardEntity>
+		<Tb1047BoardEntity f1047Slot="" f1047Desc="" f1047Type="" warnRefAddr="">
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>
+				<Tb1048PortEntity f1048No="" f1048Desc="" f1048Direction="" f1048Plug=""  fbRefAddr=""/>				
+		</Tb1047BoardEntity>
+	</Boards>
+	<Straps><!-- 虚端子压板 -->
+		<Pouts>
+			<Tb1061PoutEntity f1061RefAddr="" strapRefAddr=""/>
+			<Tb1061PoutEntity f1061RefAddr="" strapRefAddr=""/>
+			<Tb1061PoutEntity f1061RefAddr="" strapRefAddr=""/>
+		</Pouts>
+		<Pins>
+			<Tb1062PinEntity f1062RefAddr="" strapRefAddr=""/>
+			<Tb1062PinEntity f1062RefAddr="" strapRefAddr=""/>
+			<Tb1062PinEntity f1062RefAddr="" strapRefAddr=""/>
+		</Pins>
+	</Straps>
+</Tb1046IedEntity> 
