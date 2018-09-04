@@ -108,6 +108,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1069RcdchannelaEntity> rcdchannelaEntities;
 	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
 	private CTabFolder tabFProtect;
+	private DictManager dic;
 	
 	
 
@@ -117,6 +118,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	@Override
 	public void init() {
+		dic = DictManager.getInstance();
 		mmsfcdaService = new MmsfcdaService();
 		portService = new BoardPortService();
 		sgfcdaEntityService = new SgfcdaEntityService();
@@ -358,6 +360,10 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(!DataUtils.listNotNull(circuitEntities)) {
 				//虚端子压板
 				circuitEntities = circuitEntityService.getByIed(iedEntity);
+//				for (Tb1063CircuitEntity circui : circuitEntities) {
+//					dic.addItemByType("REV_CONVCHK", circui.get);
+//					dic.addItemByType("SEND_CONVCHK", circui.get);
+//				}
 				//开出
 				tableVirtualTerminalOut.setInput(circuitEntities);
 				//开入
@@ -397,7 +403,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 	
 	private void initTableDict() {
-		DictManager dic = DictManager.getInstance();
 		dic.removeDict("EQU_ANALOG");
 		dic.removeDict("SV_ANALOG");
 		dic.removeDict("MMS_ANALOG");
@@ -406,34 +411,22 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		EquipmentEntityService qEntityService = new EquipmentEntityService();
 		//互感器字典
 		List<String> equNames = qEntityService.getEquipmentByType();
-		dic.addDict("EQU_ANALOG", "EQU_ANALOG", createDict(equNames));
+		dic.addDict("EQU_ANALOG", "EQU_ANALOG", DataUtils.createDictItems(equNames));
 		//SV虚端子字典
 		List<String> svPoutNames = circuitEntityService.getByIedAndTypes(iedEntity, true);
-		dic.addDict("SV_ANALOG", "SV_ANALOG", createDict(svPoutNames));
+		dic.addDict("SV_ANALOG", "SV_ANALOG", DataUtils.createDictItems(svPoutNames));
 		//MMS模拟量字典
 		AnalogdataService analogdataService = new AnalogdataService();
 		List<String> mmsAnalog = analogdataService.getAnologByIed(iedEntity);
-		dic.addDict("MMS_ANALOG", "MMS_ANALOG", createDict(mmsAnalog));
+		dic.addDict("MMS_ANALOG", "MMS_ANALOG", DataUtils.createDictItems(mmsAnalog));
 		//GOOSE虚端子字典
 		List<String> goosePoutDescs = circuitEntityService.getByIedAndTypes(iedEntity, false);
-		dic.addDict("GOOSE_CIRCUIT", "GOOSE_CIRCUIT", createDict(goosePoutDescs));
+		dic.addDict("GOOSE_CIRCUIT", "GOOSE_CIRCUIT", DataUtils.createDictItems(goosePoutDescs));
 		//MMS状态量字典 
 		StatedataService statedataService = new StatedataService();
 		List<String> mmsCircuit = statedataService.getStateDataByIed(iedEntity);
-		dic.addDict("MMS__CIRCUIT", "MMS__CIRCUIT", createDict(mmsCircuit));
+		dic.addDict("MMS__CIRCUIT", "MMS__CIRCUIT", DataUtils.createDictItems(mmsCircuit));
 		
-	}
-
-	private String[][] createDict(List<String> equDescs) {
-		int size = equDescs.size();
-		String [ ][ ] arr = new String [ size ][ ];  
-		for (int i = 0; i < size; i++) {
-			arr[i] = new String[2];
-			for (int j = 0; j < 2; j++) {
-				arr [i][j] = equDescs.get(i);
-			}
-		}
-		return arr;
 	}
 
 	/**

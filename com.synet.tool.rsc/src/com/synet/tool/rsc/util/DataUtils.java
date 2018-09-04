@@ -19,4 +19,16 @@ public class DataUtils {
 			return false;
 		}
 	}
+	
+	public static String[][] createDictItems(List<String> equDescs) {
+		int size = equDescs.size();
+		String [ ][ ] arr = new String [ size ][ ];  
+		for (int i = 0; i < size; i++) {
+			arr[i] = new String[2];
+			for (int j = 0; j < 2; j++) {
+				arr [i][j] = equDescs.get(i);
+			}
+		}
+		return arr;
+	}
 }

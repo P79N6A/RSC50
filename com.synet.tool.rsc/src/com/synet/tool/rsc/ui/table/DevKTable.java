@@ -16,6 +16,10 @@ import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.DefaultKTable;
 import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
 
 
@@ -79,5 +83,23 @@ public class DevKTable extends RKTable {
 		ExcelUtils.addValue("fields", fields);
 		ExcelUtils.addValue("data", exportData);
 		ExcelFileManager2007.saveExcelFile(getClass(), UICommonConstants.EXCEL_COMM_EXPORT_2007, fileName);
+	}
+
+	@Override
+	public void saveCellValue(Object data, String property, Object value) {
+		if(data instanceof Tb1063CircuitEntity) {
+			//根据下拉框选择的POUT描述，将value改为pout对象
+			if(property.contains("tb1061PoutByF1061CodeConvChk")) {
+				String poutDesc = (String) value;
+				Tb1061PoutEntity pout = (Tb1061PoutEntity) 
+						BeanDaoImpl.getInstance().getListByCriteria(
+								Tb1061PoutEntity.class, "f1061Desc", poutDesc);
+				value = pout;
+			}
+		}
+		if(data instanceof Tb1046IedEntity) {
+			System.out.println(property);
+		}
+		super.saveCellValue(data, property, value);
 	}
 }

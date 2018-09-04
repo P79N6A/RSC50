@@ -10,6 +10,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="类型" editor="none" name="f1069Type" width="50" default=""/>
   <field desc="相别" editor="none" name="f1069Phase" width="50" default=""/> 
   <field desc="互感器代码" editor="none" dict="EQU_ANALOG" name="f1043Code" width="110" default=""/> 
-  <field desc="SV虚端子代码" editor="none" dict="SV_ANALOG" name="f1061Code" width="130" default=""/>
-  <field desc="MMS点代码" editor="none" dict="MMS_ANALOG" name="f1058Code" width="110" default=""/> 
+  <field desc="SV虚端子代码" dict="SV_ANALOG" name="f1061Code" width="130" default=""/>
+  <field desc="MMS点代码" dict="MMS_ANALOG" name="f1058Code" width="110" default=""/> 
 </table>

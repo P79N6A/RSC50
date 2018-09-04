@@ -1,17 +1,28 @@
 package com.synet.tool.rsc.ui.table;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.shrcn.business.ui.NetPortUtil;
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
+import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
-import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.service.DefaultService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.DataUtils;
 
 import de.kupzog.ktable.KTableCellEditor;
 
@@ -19,6 +30,7 @@ import de.kupzog.ktable.KTableCellEditor;
 public class DevKTableModel extends RKTableModel {
 	
 	private DefaultService defaultService;
+	private Map<String, List<String>> dictMap;
 	
 	public DevKTableModel(DevKTable table, TableConfig config) {
 		super(table, config);
@@ -70,8 +82,31 @@ public class DevKTableModel extends RKTableModel {
 					return editor;
 				}
 			}
+			if(TableFactory.INTERVAL_MSG_TABLE.equals(tableName)) {
+				initTableDict(row);
+			}
 		}
 		return super.getCellEditor(col, row);
+	}
+
+	private void initTableDict(int row) {
+		if(dictMap == null) {
+			dictMap = new HashMap<>();
+		}
+		Tb1063CircuitEntity circuit = (Tb1063CircuitEntity) getItem(row);
+		Tb1046IedEntity iedSend = circuit.getTb1046IedByF1046CodeIedSend();
+		if(!dictMap.containsKey(iedSend.getF1046Name())) {
+			PoutEntityService service = new PoutEntityService();
+			List<Tb1061PoutEntity> poutEntitys = service.getPoutEntityByProperties(iedSend, null);
+			List<String> poutDescs = new ArrayList<>();
+			for (Tb1061PoutEntity entity : poutEntitys) {
+				poutDescs.add(entity.getF1061Desc());
+			}
+			dictMap.put(iedSend.getF1046Name(), poutDescs);
+			DictManager dict = DictManager.getInstance();
+			dict.removeDict("CONVCHK");
+			dict.addDict("CONVCHK", "CONVCHK", DataUtils.createDictItems(poutDescs));
+		}
 	}
 	
 	@Override
@@ -80,7 +115,7 @@ public class DevKTableModel extends RKTableModel {
 		Object obj = getItem(row);
 		saveData(obj);
 	}
-
+	
 	/**
 	 * 实时保存更改的数据
 	 * @param obj
@@ -98,5 +133,7 @@ public class DevKTableModel extends RKTableModel {
 			defaultService.saveTableData(obj);
 		}
 	}
+	
+	
 	
 }

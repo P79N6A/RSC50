@@ -34,9 +34,11 @@
 		
         <mapping resource="com/synet/tool/rsc/hbm/Tb1093VoltagekkEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1066ProtmmxuEntity.hbm.xml"/>
-        
+        <!-- 
         <mapping resource="com/synet/tool/rsc/hbm/Tb1056SvcbEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1055GcbEntity.hbm.xml"/>
+         -->
+        <mapping resource="com/synet/tool/rsc/hbm/BaseCbEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1061PoutEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1062PinEntity.hbm.xml"/>
         

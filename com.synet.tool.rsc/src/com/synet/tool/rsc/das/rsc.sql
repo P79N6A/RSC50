@@ -305,18 +305,18 @@ create table TB1054_RCB
 /*==============================================================*/
 create table TB1055_GCB
 (
-   F1055_CODE           varchar(48) not null,
-   F1046_CODE           varchar(48) not null,
-   F1055_CBNAME         varchar(48) not null,
-   F1055_CBID           varchar(48) not null,
-   F1055_MACAddr        varchar(24) not null,
-   F1055_VLANID         varchar(24) not null,
-   F1055_VLANPriority   varchar(24) not null,
-   F1055_APPID          varchar(24) not null,
-   F1055_DATASET        varchar(24) not null,
-   F1055_DSDesc         varchar(96),
-   F1071_CODE           varchar(48),
-   primary key (F1055_CODE)
+   CB_CODE          varchar(48) not null,
+   F1046_CODE       varchar(48) not null,
+   CBNAME         	varchar(48) not null,
+   CBID           	varchar(48) not null,
+   MACAddr        	varchar(24) not null,
+   VLANID         	varchar(24) not null,
+   VLANPriority   	varchar(24) not null,
+   APPID          	varchar(24) not null,
+   DATASET        	varchar(24) not null,
+   DSDesc         	varchar(96),
+   F1071_CODE       varchar(48),
+   primary key (CB_CODE)
 );
 
 /*==============================================================*/
@@ -324,18 +324,18 @@ create table TB1055_GCB
 /*==============================================================*/
 create table TB1056_SVCB
 (
-   F1056_CODE           varchar(48) not null,
-   F1046_CODE           varchar(48) not null,
-   F1056_CBName         varchar(48) not null,
-   F1056_CBID           varchar(48) not null,
-   F1056_MACAddr        varchar(24) not null,
-   F1056_VLANID         varchar(24) not null,
-   F1056_VLANPriority   varchar(24) not null,
-   F1056_APPID          varchar(24) not null,
-   F1056_Dataset        varchar(24) not null,
-   F1056_DSDesc         varchar(96),
+   CB_CODE          varchar(48) not null,
+   F1046_CODE       varchar(48) not null,
+   CBName         	varchar(48) not null,
+   CBID           	varchar(48) not null,
+   MACAddr        	varchar(24) not null,
+   VLANID         	varchar(24) not null,
+   VLANPriority   	varchar(24) not null,
+   APPID          	varchar(24) not null,
+   Dataset        	varchar(24) not null,
+   DSDesc         	varchar(96),
    F1071_CODE           varchar(48),
-   primary key (F1056_CODE)
+   primary key (CB_CODE)
 );
 
 /*==============================================================*/
@@ -476,7 +476,7 @@ create table TB1065_LogicalLink
    F1065_Type           INT not null,
    F1046_CODE_IEDSend   varchar(48) not null,
    F1046_CODE_IEDRecv   varchar(48),
-   F1065_APPID          varchar(24) not null,
+   BASECB_CODE          varchar(48),
    primary key (F1065_CODE)
 );
 

@@ -139,7 +139,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
 		List<String> lstComboSvItem = new ArrayList<>();
 		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
-			lstComboSvItem.add(tb1056SvcbEntity.getF1056CbName());
+			lstComboSvItem.add(tb1056SvcbEntity.getCbName());
 		}
 		comboSvItems = new String[lstComboSvItem.size()];
 		comboSvItems = lstComboSvItem.toArray(comboSvItems);
@@ -225,7 +225,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 
 	private Tb1056SvcbEntity getSvcbEntityByName(String selSvName) {
 		for (Tb1056SvcbEntity svcbEntity : svcbEntities) {
-			if(svcbEntity.getF1056CbName().equals(selSvName)) {
+			if(svcbEntity.getCbName().equals(selSvName)) {
 				return svcbEntity;
 			}
 		}

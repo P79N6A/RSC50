@@ -12,9 +12,11 @@
         <property name="f1065Type">
             <column name="F1065_Type" sql-type="int" not-null="true"/>
         </property>
-        <property name="f1065Appid">
-            <column name="F1065_APPID" sql-type="varchar" length="24" not-null="true"/>
-        </property>
+        
+        <many-to-one name="baseCbByCdCode" class="com.synet.tool.rsc.model.BaseCbEntity" lazy="false">
+            <column name="BASECB_CODE"/>
+        </many-to-one>
+        
         <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE_IEDRecv"/>
         </many-to-one>

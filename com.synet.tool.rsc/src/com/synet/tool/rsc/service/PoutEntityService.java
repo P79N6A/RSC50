@@ -29,8 +29,7 @@ public class PoutEntityService extends BaseService{
 		if(params.isEmpty()) {
 			return new ArrayList<>();
 		}
-		
 		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, params);
-
 	}
+	
 }

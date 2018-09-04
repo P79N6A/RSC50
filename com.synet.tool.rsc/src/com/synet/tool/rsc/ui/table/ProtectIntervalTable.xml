@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
   <field desc="装置Name" editor="none" name="f1046Name" datType="string" width="80" default=""/>
   <field desc="装置名称" editor="none" name="f1046Desc" datType="string" width="80" default=""/> 
-  <field desc="间隔" editor="none" name="tb1042BaysByF1042Code.f1042Name" datType="string" width="50" default=""/> 
+  <field desc="间隔" dict="ALL_INTERVAL" name="tb1042BaysByF1042Code.f1042Name" datType="string" width="150" default=""/> 
   <field desc="屏柜" editor="text" name="tb1050CubicleEntity.f1050Name" datType="string" width="50" default=""/> 
   <field desc="A网IP" editor="text" name="f1046aNetIp" datType="string" width="60" default=""/> 
   <field desc="B网IP" editor="text" name="f1046bNetIp" datType="string" width="60" default=""/> 

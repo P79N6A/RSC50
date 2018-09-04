@@ -32,20 +32,20 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 		for (Element gseNd : gseNds) {
 			Tb1055GcbEntity gcb = new Tb1055GcbEntity();
 			items.add(gcb);
-			gcb.setF1055Code(rscp.nextTbCode(DBConstants.PR_GCB));
+			gcb.setCbCode(rscp.nextTbCode(DBConstants.PR_GCB));
 			gcb.setTb1046IedByF1046Code(ied);
-			gcb.setF1055Cbname(gseNd.attributeValue("cbName"));
-			gcb.setF1055Cbid(gseNd.attributeValue("cbId"));
-			gcb.setF1055Dataset(gseNd.attributeValue("dsName"));
-			gcb.setF1055DsDesc(gseNd.attributeValue("dsDesc"));
-			gcb.setF1055MacAddr(gseNd.attributeValue("mac"));
-			gcb.setF1055Vlanid(gseNd.attributeValue("vlanID"));
-			gcb.setF1055VlanPriority(gseNd.attributeValue("priority"));
-			gcb.setF1055Appid(gseNd.attributeValue("appID"));
+			gcb.setCbName(gseNd.attributeValue("cbName"));
+			gcb.setCbId(gseNd.attributeValue("cbId"));
+			gcb.setDataset(gseNd.attributeValue("dsName"));
+			gcb.setDsDesc(gseNd.attributeValue("dsDesc"));
+			gcb.setMacAddr(gseNd.attributeValue("mac"));
+			gcb.setVlanid(gseNd.attributeValue("vlanID"));
+			gcb.setVlanPriority(gseNd.attributeValue("priority"));
+			gcb.setAppid(gseNd.attributeValue("appID"));
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();
-			gcb.setTb1061PoutsByF1055Code(pouts);
-			parsePOuts(gseNd, gcb.getF1055Code(), pouts);
+			gcb.setTb1061PoutsByCbCode(pouts);
+			parsePOuts(gseNd, gcb.getCbCode(), pouts);
 		}
 		saveAll();
 	}

@@ -17,6 +17,7 @@ import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -226,6 +227,7 @@ public class SCDImporter implements IImporter {
 		// 一次部分
 		SubstationParser sp = new SubstationParser();
 		sp.parse();
+		
 	}
 
 }

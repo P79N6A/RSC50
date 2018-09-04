@@ -32,20 +32,20 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 		for (Element cbNd : smvNds) {
 			Tb1056SvcbEntity smv = new Tb1056SvcbEntity();
 			items.add(smv);
-			smv.setF1056Code(rscp.nextTbCode(DBConstants.PR_GCB));
+			smv.setCbCode(rscp.nextTbCode(DBConstants.PR_GCB));
 			smv.setTb1046IedByF1046Code(ied);
-			smv.setF1056CbName(cbNd.attributeValue("cbName"));
-			smv.setF1056Cbid(cbNd.attributeValue("cbId"));
-			smv.setF1056Dataset(cbNd.attributeValue("dsName"));
-			smv.setF1056DsDesc(cbNd.attributeValue("dsDesc"));
-			smv.setF1056MacAddr(cbNd.attributeValue("mac"));
-			smv.setF1056Vlanid(cbNd.attributeValue("vlanID"));
-			smv.setF1056VlanPriority(cbNd.attributeValue("priority"));
-			smv.setF1056Appid(cbNd.attributeValue("appID"));
+			smv.setCbName(cbNd.attributeValue("cbName"));
+			smv.setCbId(cbNd.attributeValue("cbId"));
+			smv.setDataset(cbNd.attributeValue("dsName"));
+			smv.setDsDesc(cbNd.attributeValue("dsDesc"));
+			smv.setMacAddr(cbNd.attributeValue("mac"));
+			smv.setVlanid(cbNd.attributeValue("vlanID"));
+			smv.setVlanPriority(cbNd.attributeValue("priority"));
+			smv.setAppid(cbNd.attributeValue("appID"));
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();
-			smv.setTb1061PoutsByF1056Code(pouts);
-			parsePOuts(cbNd, smv.getF1056Code(), pouts);
+			smv.setTb1061PoutsByCbCode(pouts);
+			parsePOuts(cbNd, smv.getCbCode(), pouts);
 		}
 		saveAll();
 	}

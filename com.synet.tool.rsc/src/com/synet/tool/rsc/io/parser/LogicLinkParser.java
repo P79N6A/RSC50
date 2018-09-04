@@ -54,7 +54,7 @@ public class LogicLinkParser extends IedParserBase<Tb1065LogicallinkEntity> {
 			logiclink.setF1065Code(rscp.nextTbCode(DBConstants.PR_LOGICLINK));
 			logiclink.setF1065Type(DBConstants.LINK_GOOSE);
 			String appId = DOM4JNodeHelper.getNodeValue(gseIn, "./ConnectedAP/GSE/Address/P[@type='APPID']");
-			logiclink.setF1065Appid(appId);
+			logiclink.setCdCode(appId);
 			logiclink.setTb1046IedByF1046CodeIedRecv(ied);
 			String iedSendName = DOM4JNodeHelper.getAttributeValue(gseIn, "./ConnectedAP/@iedName");
 			Tb1046IedEntity iedSend = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedSendName);
