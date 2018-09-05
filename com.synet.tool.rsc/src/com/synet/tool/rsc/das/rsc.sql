@@ -204,19 +204,6 @@ create table TB1046_IED
    primary key (F1046_CODE)
 );
 
-   BAY           		varchar(96),
-   PROT_CLASSIFY        varchar(96),
-   PROT_MODEL           varchar(96),
-   PROT_TYPE           	varchar(96),
-   DATE_SERVICE         varchar(96),
-   DATE_PRODUCT         varchar(96),
-   PRODUCT_CODE         varchar(96),
-   DATA_COLLECT_TYPE    varchar(96),
-   OUT_TYPE           	varchar(96),
-   BOARD_NUM           	varchar(96),
-   MATCHED_IED_CODE     varchar(96),
-   MATCHED           	INT,
-
 /*==============================================================*/
 /* Table: TB1047_Board                                          */
 /*==============================================================*/

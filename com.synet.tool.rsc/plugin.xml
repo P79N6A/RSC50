@@ -87,9 +87,6 @@
 	      <action class="org.eclipse.ui.actions.ActionFactory" command="QUIT"/>
       </menu>
       <menu id="menu.imp" text="导入">
-           <action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSSDAction"
-	              text="SSD"/>
 	       <action
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSCDAction"
 	              text="SCD"/>
