@@ -5,13 +5,23 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
+import com.synet.tool.rsc.model.IM100FileInfoEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -20,6 +30,10 @@ import com.synet.tool.rsc.ui.TableFactory;
  * @version 1.0, 2013-4-3
  */
 public class ImpStaInfoEditor extends BaseConfigEditor {
+	
+	private ImprotInfoService improtInfoService;
+	private Map<String, IM100FileInfoEntity> map;
+	private org.eclipse.swt.widgets.List titleList;
 	
 	public ImpStaInfoEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -32,14 +46,52 @@ public class ImpStaInfoEditor extends BaseConfigEditor {
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
-		List titleList = SwtUtil.createList(container, gridData);
-		titleList.setItems(new String[]{"监控信息点表1"});
+		titleList = SwtUtil.createList(container, gridData);
 		table =TableFactory.getStaInfoTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+	
+	@Override
+	protected void addListeners() {
+		titleList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] selects = titleList.getSelection();
+				if (selects != null && selects.length > 0) {
+					IM100FileInfoEntity fileInfoEntity = map.get(selects[0]);
+					if (fileInfoEntity == null) {
+						DialogHelper.showAsynError("文名错误！");
+					} else {
+						List<IM109StaInfoEntity> list = improtInfoService.getStaInfoEntityList(fileInfoEntity);
+						if (list != null && list.size()> 0) {
+							table.setInput(list);
+						}
+					}
+					System.out.println(selects[0]);
+				}
+				super.widgetSelected(e);
+			}
+		});
 	}
 
 	@Override
 	public void initData() {
-		super.initData();
+		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE102);
+		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
+			List<String> items = new ArrayList<>();
+			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
+				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
+				items.add(fileInfoEntity.getFileName());
+			}
+			if (items.size() > 0) {
+				titleList.setItems(items.toArray(new String[0]));
+				titleList.setSelection(0);
+				
+				List<IM109StaInfoEntity> list = improtInfoService.getStaInfoEntityList(map.get(items.get(0)));
+				if (list != null && list.size()> 0) {
+					table.setInput(list);
+				}
+			}
+		}
 	}
 }
