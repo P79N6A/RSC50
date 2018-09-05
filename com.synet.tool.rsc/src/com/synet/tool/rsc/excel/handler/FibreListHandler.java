@@ -10,6 +10,8 @@ import com.synet.tool.rsc.model.IM102FibreListEntity;
 
 public class FibreListHandler extends RscSheetHandler {
 
+	private String CableCode = null;
+	
 	public FibreListHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
 	}
@@ -20,7 +22,7 @@ public class FibreListHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM102FibreListEntity();
-		this.entity.setIm102Code(rscp.nextTbCode(DBConstants.PR_FIBRELIST));
+//		this.entity.setIm102Code(rscp.nextTbCode(DBConstants.PR_FIBRELIST));
 	}
 	
 	@Override
@@ -30,7 +32,13 @@ public class FibreListHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getBoardCodeA() != null && entity.getPortCodeA() != null) {
+				entity.setIm102Code(rscp.nextTbCode(DBConstants.PR_FIBRELIST));
+				if (entity.getCableCode() == null) {
+					entity.setCableCode(CableCode);
+				}
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}
@@ -52,10 +60,11 @@ public class FibreListHandler extends RscSheetHandler {
 		switch(fieldName) {
 			case ExcelConstants.IM102_CABLE_CODE: //只处理光缆部分，不处理跳缆部分
 				if (value == null || "".equals(value)) {
-					entity = null;
+//					entity = null;
 					break;
 				}
 				entity.setCableCode(value);
+				CableCode = value;
 				break;
 			case ExcelConstants.IM102_CORE_CODE: 
 				entity.setCoreCode(value);
@@ -72,7 +81,7 @@ public class FibreListHandler extends RscSheetHandler {
 				entity.setDevDescA(value);
 				break;
 			case ExcelConstants.IM102_BOARD_PORT_CODEA:
-				if (value != null) {
+				if (value != null && !"".equals(value)) {
 					String[] values = null;
 					if (value.contains("/")) {
 						values = value.split("/");
@@ -87,7 +96,9 @@ public class FibreListHandler extends RscSheetHandler {
 						entity.setBoardCodeA(values[0]);
 						entity.setPortCodeA(values[1]);
 					}
+					break;
 				}
+				entity = null;
 				break;
 //			case ExcelConstants.IM102_BOARD_CODEA: 
 //				entity.setBoardCodeA(value);
