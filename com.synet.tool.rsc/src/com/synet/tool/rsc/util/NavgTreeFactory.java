@@ -93,7 +93,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ProjectEntry projectEntry = new ProjectEntry(staName, "", "project.gif");
 		data.add(projectEntry);
 		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", ET_PR_MDL, 1);
-		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", "", 2);
+		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", ET_PT_BAY, 2);
 		ConfigTreeEntry physicalEntry = createConfigEntry(projectEntry, "物理信息模型", "column.gif", ET_PY_MDL, 3);
 		ConfigTreeEntry securityEntry = createConfigEntry(projectEntry, "安措配置", "column.gif", "", 4);
 		ConfigTreeEntry icdEntry = createConfigEntry(projectEntry, "系统ICD", "column.gif", ET_ICD_MDL, 5);
@@ -150,12 +150,14 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 				if (iedEntities != null && iedEntities.size() > 0) {
 					if (!DBConstants.BAY_PUB.equals(bayName)) {
 						ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
+						bayEntry.setData(bayEntity);
 						for (Tb1046IedEntity iedEntity : iedEntities) {
 							ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
 							proEntry.setData(iedEntity);
 						}
 					} else {
 						createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);
+						
 					}
 				}
 			}

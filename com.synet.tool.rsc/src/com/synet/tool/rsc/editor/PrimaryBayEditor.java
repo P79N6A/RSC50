@@ -73,8 +73,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private StatedataService statedataService;
 	private List<Tb1016StatedataEntity> tableSluiceStatuData;
 	private Text textDesc;
-//	private Button btnDel;
-	
 	private IedEntityService iedService;
 	private Button btnAddTsf;
 	private Button btnDelTsf;
@@ -82,8 +80,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private CtvtsecondaryService ctvtsecondaryService;
 	private EquipmentEntityService equipmentEntityService;
 	private ProtmmxuService protmmxuService;
-	
-	
 	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
 	private List<Tb1043EquipmentEntity> statedataEntities;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
@@ -93,7 +89,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
 	}
-
 	
 	@Override
 	public void buildUI(Composite container) {
@@ -153,7 +148,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
 		comBtn.setLayout(SwtUtil.getGridLayout(1));
 		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
-//		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		
 		//开关刀闸状态-右侧
 		Composite comRight = SwtUtil.createComposite(compSwitch, gridData, 1);
@@ -201,7 +195,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			}
 			comboItems = new String[lstComboDevItem.size()];
 			comboItems = lstComboDevItem.toArray(comboItems);
-//			tableSluiceStatuData = getStateDataByIed(comboDvData.get(0));
 		}
 		super.init();
 	}
@@ -227,7 +220,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		}
 		return filterResult;
 	}
-
 
 	protected void addListeners() {
 		SelectionListener sleListener = new SelectionAdapter() {
@@ -263,7 +255,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					equipmentEntity.setF1016Code(statedataEntity.getF1016Code());
 					statedataEntity.setParentCode(equipmentEntity.getF1043Code());
 					statedataEntity.setF1011No(equipmentEntity.getF1043Type());
-//					BeanDaoImpl.getInstance().update(equipmentEntity);
 					BeanDaoImpl.getInstance().update(statedataEntity);
 					tableSwitchStatus.refresh();
 					tableSwitchStatus.getTable().layout();
@@ -307,26 +298,16 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					loadDataByTbItem(tabFolder.getSelectionIndex());
 				}
 			}
-
 		};
 		tabFolder.addSelectionListener(sleListener);
 		btnDelTsf.addSelectionListener(sleListener);
 		btnAddTsf.addSelectionListener(sleListener);
-//		btnDel.addSelectionListener(sleListener);
 		btnChanelConnect.addSelectionListener(sleListener);
 		btnSampleConnect.addSelectionListener(sleListener);
 		btnAdd.addSelectionListener(sleListener);
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
 	}
-	
-
-//	private void initTableSluiceData(int curComboSelIdx) {
-//		Tb1046IedEntity iedEntity = getIedEntityByName(comboDevice.getItem(curComboSelIdx));
-//		tableSluiceStatuData = getStateDataByIed(iedEntity);
-//		tableSluiceStatus.setInput(tableSluiceStatuData);
-//	}
-	
 
 	private void initTableSluiceStatus(int curComboSelIdx) {
 		if(DataUtils.listNotNull(comboDvData)) {
@@ -404,7 +385,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		tableSwitchStatus.setInput(statedataEntities);
 	}
 
-
 	private List<Tb1043EquipmentEntity> filterEquByTypes() {
 		List<Tb1043EquipmentEntity> temp = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : entities) {
@@ -416,10 +396,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		return temp;
 	}
 
-
-	
-	
-
 	private List<Tb1016StatedataEntity> searchByDesc(String desc) {
 		List<Tb1016StatedataEntity> res = new ArrayList<>();
 		for (Tb1016StatedataEntity statedataEntity : tableSluiceStatuData) {
@@ -429,15 +405,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		}
 		return res;
 	}
-	
-//	private Tb1046IedEntity getIedEntityByName(String iedName) {
-//		for (Tb1046IedEntity iedEntity : comboDvData) {
-//			if(iedEntity.getF1046Name().equals(iedName)) {
-//				return iedEntity;
-//			}
-//		}
-//		return null;
-//	}
 	
 	@Override
 	public void initData() {
@@ -454,7 +421,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			ctvtsecondaryEntities = 
 					ctvtsecondaryService.getCtvtsecondaryEntitiesByEquEntity(entities);
 		}
-//		initTableSluiceStatus();
 		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
 		super.initData();
 	}

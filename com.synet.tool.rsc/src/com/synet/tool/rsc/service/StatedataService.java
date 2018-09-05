@@ -42,5 +42,20 @@ public class StatedataService extends BaseService {
 		}
 		return result;
 	}
+	
+	/**
+	 * getByCode
+	 * @param code
+	 * @return
+	 */
+	public Tb1016StatedataEntity getStateDataByCode(String code) {
+		@SuppressWarnings("unchecked")
+		List<Tb1016StatedataEntity> listByCriteria = (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, "f1016Code", code);
+		if(DataUtils.listNotNull(listByCriteria)) {
+			return listByCriteria.get(0);
+		}
+		return null;
+
+	}
 
 }

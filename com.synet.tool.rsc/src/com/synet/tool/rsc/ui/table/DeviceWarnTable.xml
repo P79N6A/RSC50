@@ -8,6 +8,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="信号参引" editor="none" name="f1058RefAddr" width="100" default=""/> 
   <field desc="所属数据集" editor="none" name="tb1054RcbByF1054Code.f1054Dataset" width="120" default=""/> 
   <field desc="数据集中的序号" editor="none" name="f1058Index" width="120" default=""/> 
-  <field desc="告警类型" editor="none" name="f1058DataType" width="80" default=""/> 
+  <field desc="告警类型" editor="none" dict="WARN_TYPE" name="f1058DataType" width="80" default=""/> 
   <field desc="所属对象(装置/板卡/逻辑链路)" editor="none" name="tb1046IedByF1046Code.f1046Name" width="150" default=""/> 
 </table>

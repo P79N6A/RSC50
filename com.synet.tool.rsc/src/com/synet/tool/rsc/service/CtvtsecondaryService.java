@@ -37,13 +37,15 @@ public class CtvtsecondaryService extends BaseService{
 	 * @param ctvtsecondaryEntity
 	 */
 	public void delCtvtsecondary(Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
-		Tb1066ProtmmxuEntity portmmsuEntity = (Tb1066ProtmmxuEntity) beanDao.getObject(Tb1066ProtmmxuEntity.class, "tb1067CtvtsecondaryByF1067Code", ctvtsecondaryEntity);
-		beanDao.delete(portmmsuEntity);
 		Tb1043EquipmentEntity equipmentEntity = ctvtsecondaryEntity.getTb1043EquipmentByF1043Code();
 		Set<Tb1067CtvtsecondaryEntity> setCtvtsecondaryEntities = equipmentEntity.getTb1067SecondarysByF1043Code();
 		setCtvtsecondaryEntities.remove(ctvtsecondaryEntity);
 		beanDao.update(equipmentEntity);
 		beanDao.delete(ctvtsecondaryEntity);
+		System.out.println(ctvtsecondaryEntity.getF1067Code());
+		Object portmmsuEntity = beanDao.getObject(Tb1066ProtmmxuEntity.class, "f1067Code", ctvtsecondaryEntity.getF1067Code());
+		System.out.println(portmmsuEntity);
+		beanDao.delete(portmmsuEntity);
 	}
 	
 	/**
@@ -75,6 +77,8 @@ public class CtvtsecondaryService extends BaseService{
 		addProtMMXU(sec);
 		secs.add(sec);
 		equipment.setTb1067SecondarysByF1043Code(secs);
+//		System.out.println(sec.getF1067Code());
+//		System.out.println(beanDao.getObject(Tb1066ProtmmxuEntity.class, "f1067Code", sec.getF1067Code()));
 	}
 	
 	private void addProtMMXU(Tb1067CtvtsecondaryEntity ctvtsecondary) {
@@ -82,6 +86,9 @@ public class CtvtsecondaryService extends BaseService{
 		protmmxu.setF1066Code(rscp.nextTbCode(DBConstants.PR_MMXU));
 		protmmxu.setF1067Code(ctvtsecondary.getF1067Code());
 		protmmxu.setF1066Type(DBConstants.MMXU_3I);
+//		protmmxu.setTb1067CtvtsecondaryByF1067Code(ctvtsecondary);
 		beanDao.insert(protmmxu);
+//		System.out.println(ctvtsecondary.getF1067Code());
+//		System.out.println(beanDao.getObject(Tb1066ProtmmxuEntity.class, "f1067Code", ctvtsecondary.getF1067Code()));
 	}
 }

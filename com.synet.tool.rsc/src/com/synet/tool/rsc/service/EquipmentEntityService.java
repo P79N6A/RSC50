@@ -56,4 +56,23 @@ public class EquipmentEntityService extends BaseService{
 		return result;
 	}
 	
+	/**
+	 * 获取模拟量通道互感器 06 07
+	 * @return
+	 */
+	public List<Tb1043EquipmentEntity> getEquByTypeAndBay(Tb1042BayEntity bayEntity) {
+		List<Tb1043EquipmentEntity> equipmentEntitys = getEquipmentEntitysByBayEntity(bayEntity);
+		List<Integer> types = new ArrayList<>();
+		types.add(EnumEquipmentType.CTR.getCode());
+		types.add(EnumEquipmentType.VTR.getCode());
+		List<Tb1043EquipmentEntity> result = new ArrayList<>();
+		for (Tb1043EquipmentEntity tb1043EquipmentEntity : equipmentEntitys) {
+			System.out.println(tb1043EquipmentEntity.getF1043Type());
+			if(types.contains(tb1043EquipmentEntity.getF1043Type())) {
+				result.add(tb1043EquipmentEntity);
+			}
+		}
+		return result;
+	}
+	
 }

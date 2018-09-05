@@ -58,6 +58,9 @@ public class IedEntityService extends BaseService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1046IedEntity> getIedEntityByBay(Tb1042BayEntity bayEntity) {
+		if(bayEntity == null) {
+			return (List<Tb1046IedEntity>) beanDao.getAll(Tb1046IedEntity.class);
+		}
 		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, "tb1042BaysByF1042Code", bayEntity);
 	}
 	

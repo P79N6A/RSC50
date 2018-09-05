@@ -200,7 +200,7 @@ create table TB1046_IED
    F1046_ProductNo  	varchar(48),
    F1046_DataGatType  	varchar(48),
    F1046_OutType  		varchar(48),
-   F1046_BoardNum  		varchar(48),
+   F1046_BoardNum  		varchar(48) default '0', 
    primary key (F1046_CODE)
 );
 

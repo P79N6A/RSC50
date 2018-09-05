@@ -23,5 +23,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="出厂编号" editor="text" name="f1046productNo" datType="string" width="80" default=""/> 
   <field desc="数据采集方式" editor="text" name="f1046dataGatType" datType="string" width="100" default=""/> 
   <field desc="出口方式" editor="text" name="f1046OutType" datType="string" width="80" default=""/> 
-  <field desc="板卡数量" editor="text" name="f1046boardNum" datType="string" width="80" default=""/> 
+  <field desc="板卡数量" editor="text" name="f1046boardNum" datType="string" width="80" default="0"/> 
 </table>

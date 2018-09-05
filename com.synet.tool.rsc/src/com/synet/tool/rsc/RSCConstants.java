@@ -40,15 +40,23 @@ public interface RSCConstants {
      String ET_IMP_ST		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStatusInEditor";
      String ET_IMP_WRN		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBoardWarnEditor";
      String ET_IMP_PORT		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpPortLightEditor";
-     String ET_IMP_STRAP		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpTerStrapEditor";
+     String ET_IMP_STRAP	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpTerStrapEditor";
      String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
      String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
 	
+     
+     
+     String DEV_TYPE_ALL		= "全部装置";
+     String DEV_TYPE_PRO		= "保护装置";
+     String DEV_TYPE_TER		= "智能终端";
+     String DEV_TYPE_UNIT		= "合并单元";
+     String DEV_TYPE_UNIT_TER	= "合并智能终端";
+     String SEARCH				= "查询";
+     String DESCRIPTION			= "描述";
     
-    
-     String TSF_SCDRAY        = "互感器次级";
-     String PROTCT_SAMP       = "保护采样值";
-     String SWICH_STATES      = "开关刀闸状态";
+     String TSF_SCDRAY        	= "互感器次级";
+     String PROTCT_SAMP       	= "保护采样值";
+     String SWICH_STATES      	= "开关刀闸状态";
    
      String BOARD_PORT 			= "板卡端口";
      String PROTECT_MSG 		= "保护信息";
@@ -69,16 +77,16 @@ public interface RSCConstants {
      String TAB_PHYSCONN      	= "物理回路";
    
    //树节点名称
-     String TREE_PHYAICAMODEL = "物理信息模型";
+     String TREE_PHYAICAMODEL 	= "物理信息模型";
 
    // Excel表名称
-     String EXCEL_IED 		= "设备台账";
+     String EXCEL_IED 			= "设备台账";
      String EXCEL_FIBER 		= "光缆清册";
-     String EXCEL_IED_BOARD	= "装置板卡端口描述";
+     String EXCEL_IED_BOARD		= "装置板卡端口描述";
      String EXCEL_INPUT 		= "开入信号映射表";
      String EXCEL_BOARD_WARN	= "告警与板卡关联表";
      String EXCEL_PORT_POWER	= "光强与端口关联表";
-     String EXCEL_PIN_TRAP	= "压板与虚端子关联表";
+     String EXCEL_PIN_TRAP		= "压板与虚端子关联表";
      String EXCEL_BRK_CFM		= "跳合闸反校关联表";
      String EXCEL_STA_POINTS	= "监控信息点表";
    

@@ -5,6 +5,7 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -22,8 +23,10 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -77,7 +80,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableAnalogChn;
 	private DevKTable tableCriteriaChn;
 	private Button btnAdd;
-	private Button btnDel;
 	private DevKTable tableDeviceName;
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkName;
@@ -109,6 +111,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
 	private CTabFolder tabFProtect;
 	private DictManager dic;
+	private HashMap<Integer, DevKTable> tableMapper;
+	private CTabFolder tabFdCfg;
 	
 	
 
@@ -132,6 +136,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		gridData = new GridData(GridData.FILL_BOTH);
+		tableMapper = new HashMap<Integer, DevKTable>();
 		super.init();
 	}
 
@@ -254,6 +259,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 					initTbDataByTbName(tabFolder.getSelection().getText());
 				} else if(obj == tabFProtect) {
 					initProTbDataByTbName(tabFProtect.getSelection().getText());
+				} else if(obj == btnAdd) {
+					config();
 				}
 			}
 		};
@@ -262,13 +269,47 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		}
 		tabFolder.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
-		btnDel.addSelectionListener(selectionListener);
 		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 	}
 	
+	/**
+	 * 装置告警关联
+	 */
+	private void config() {
+		Object selection = tableMapper.get(tabFdCfg.getSelectionIndex()).getSelection();
+		if(selection == null) {
+			 return;
+		}
+		String code = null;
+		if(selection instanceof Tb1046IedEntity) {
+			code = ((Tb1046IedEntity) selection).getF1046Code();
+		} else if(selection instanceof Tb1047BoardEntity) {
+			code = ((Tb1047BoardEntity) selection).getF1047Code();
+		} else if(selection instanceof Tb1065LogicallinkEntity) {
+			code = ((Tb1065LogicallinkEntity) selection).getF1065Code();
+		} 
+		if(code == null) {
+			return;
+		}
+		Object objMms = tableDeviceWarning.getSelection();
+		if(objMms == null) {
+			return;
+		}
+		Tb1058MmsfcdaEntity mms = (Tb1058MmsfcdaEntity) objMms;
+		StatedataService statedataService = new StatedataService();
+		Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(mms.getDataCode());
+		stateData.setParentCode(code);
+		statedataService.update(stateData);
+		tableDeviceWarning.getTable().layout();
+		ConsoleManager.getInstance().append("关联成功！");
+	}
 
+	/**
+	 * 保护信息-根据tb标签名称加载数据
+	 * @param text
+	 */
 	private void initProTbDataByTbName(String text) {
 		switch (text) {
 		case RSCConstants.PROTECT_VALUE:
@@ -311,11 +352,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 
 		default:
 			break;
-
 		}
-		
 	}
 	
+	/**
+	 * 根据tb标签名称加载数据
+	 * @param tabName
+	 */
 	private void initTbDataByTbName(String tabName) {
 		switch (tabName) {
 		case RSCConstants.BOARD_PORT:
@@ -392,8 +435,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		default:
 			break;
 		}
-		
 	}
+		
 	@Override
 	public void initData() {
 		//板卡端口 
@@ -499,20 +542,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		GridData gdCentor = new GridData(41, SWT.DEFAULT);
 		Composite cmpCentor = SwtUtil.createComposite(cmpDeviceWarning, gdCentor, 1);
 		cmpCentor.setLayout(SwtUtil.getGridLayout(1));
-		
 		btnAdd = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
-		btnDel = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
-		
-		
 		GridData gdRight = new GridData(GridData.FILL_VERTICAL);
 		gdRight.widthHint = 320;
 		Composite cmpRight = SwtUtil.createComposite(cmpDeviceWarning, gdRight, 1);
 		cmpRight.setLayout(SwtUtil.getGridLayout(1));
 		
 		String[] tabNames = new String[]{"装置", "板卡", RSCConstants.LOGICAL_LINK};
-		CTabFolder tabFolder = SwtUtil.createTab(cmpRight, new GridData(GridData.FILL_BOTH), tabNames);
-		tabFolder.setSelection(0);
-		Control[] contros = tabFolder.getChildren();
+		tabFdCfg = SwtUtil.createTab(cmpRight, new GridData(GridData.FILL_BOTH), tabNames);
+		tabFdCfg.setSelection(0);
+		Control[] contros = tabFdCfg.getChildren();
 		tableDeviceName = TableFactory.getDeviceNameTable((Composite) contros[0]);
 		tableDeviceName.getTable().setLayoutData(gridData);
 		
@@ -522,6 +561,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tableLogLinkName = TableFactory.getLogicalLinkNameTable((Composite) contros[2]);
 		tableLogLinkName.getTable().setLayoutData(gridData);
 		
+		tableMapper.put(0, tableDeviceName);
+		tableMapper.put(1, tableBoardName);
+		tableMapper.put(2, tableLogLinkName);
 		return cmpDeviceWarning;
 	}
 	

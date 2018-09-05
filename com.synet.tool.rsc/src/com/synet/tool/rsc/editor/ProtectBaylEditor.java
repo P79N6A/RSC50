@@ -18,8 +18,11 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
@@ -37,6 +40,8 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 	private int comboPreSel = 0;
 	private IedEntityService iedEntityService;
 	private Text textDesc;
+	private Tb1042BayEntity bayEntity;
+	private List<Tb1046IedEntity> iedEntityAll;
 
 	public ProtectBaylEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -57,15 +62,14 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
 		textGridData.widthHint = 80;
-		String[] comboItems = new String[]{"保护装置", "智能终端", "合并单元", "合并智能终端"};
+		String[] comboItems = new String[]{RSCConstants.DEV_TYPE_ALL, RSCConstants.DEV_TYPE_PRO,
+				RSCConstants.DEV_TYPE_TER, RSCConstants.DEV_TYPE_UNIT, RSCConstants.DEV_TYPE_UNIT_TER};
 		comboDevType = SwtUtil.createCombo(comp, textGridData, true);
 		comboDevType.setItems(comboItems);
 		comboDevType.select(0);
-		
 		textDesc = SwtUtil.createText(comp, SwtUtil.bt_hd);
-		textDesc.setMessage("描述");
-		
-		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		textDesc.setMessage(RSCConstants.DESCRIPTION);
+		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		SwtUtil.createLabel(comp, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = 3;
@@ -107,13 +111,21 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
-		initTableData(0);
+		EditorConfigData editorConfigData = (EditorConfigData) getInput().getData();
+		bayEntity = (Tb1042BayEntity) editorConfigData.getData();
+		iedEntityAll = iedEntityService.getIedEntityByBay(bayEntity);
+		table.setInput(iedEntityAll);
 		super.initData();
 	}
 
 	private void initTableData(int comboIdx) {
-		int[] devTypes = EnumIedType.values()[comboIdx].getTypes();
-		List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedEntityByTypes(devTypes);
-		table.setInput(iedEntityByTypes);
+		if(comboIdx == 0) {
+			table.setInput(iedEntityAll);
+		} else {
+			int[] devTypes = EnumIedType.values()[comboIdx-1].getTypes();
+			List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedByTypesAndBay(devTypes, bayEntity);
+			table.setInput(iedEntityByTypes);
+		}
+		table.getTable().layout();
 	}
 }

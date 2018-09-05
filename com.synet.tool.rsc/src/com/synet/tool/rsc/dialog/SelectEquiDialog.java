@@ -1,6 +1,8 @@
 package com.synet.tool.rsc.dialog;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -14,7 +16,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.io.scd.EnumEquipmentType;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.service.EquipmentEntityService;
@@ -46,6 +48,7 @@ public class SelectEquiDialog  extends WrappedDialog{
 		super(parentShell);
 		this.bayEntity = bayEntity;
 		this.service = new EquipmentEntityService();
+		allBay = new ArrayList<>();
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class SelectEquiDialog  extends WrappedDialog{
 		comboBay.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				result = service.getEquipmentEntitysByBayEntity(allBay.get(comboBay.getSelectionIndex()));
+				result = service.getEquByTypeAndBay(allBay.get(comboBay.getSelectionIndex()));
 				int size = result.size();
 				itemsEqu = new String[size];
 				for (int i = 0; i < size; i++) {
@@ -87,25 +90,40 @@ public class SelectEquiDialog  extends WrappedDialog{
 	@SuppressWarnings("unchecked")
 	private void initData() {
 		int size;
+		List<Integer> types = new ArrayList<>();
+		types.add(EnumEquipmentType.CTR.getCode());
+		types.add(EnumEquipmentType.VTR.getCode());
 		if(bayEntity == null) {
-			allBay = (List<Tb1042BayEntity>) BeanDaoImpl.getInstance().getAll(Tb1042BayEntity.class);
-			if(!DataUtils.listNotNull(allBay)) {
+			List<Tb1042BayEntity> temp = (List<Tb1042BayEntity>) service.getAll(Tb1042BayEntity.class);
+			if(!DataUtils.listNotNull(temp)) {
 				return;
+			}
+			for (Tb1042BayEntity bay : temp) {
+				Set<Tb1043EquipmentEntity> setEqu = bay.getTb1043EquipmentsByF1042Code();
+				if(setEqu != null && setEqu.size() > 0) {
+					for (Tb1043EquipmentEntity tb1043EquipmentEntity : setEqu) {
+						if(types.contains(tb1043EquipmentEntity.getF1043Type())) {
+							allBay.add(bay);
+							break;
+						}
+					}
+					
+				}
 			}
 			size = allBay.size();
 			itemsBay = new String[size];
 			for (int i = 0; i < size; i++) {
 				itemsBay[i] = allBay.get(i).getF1042Name();
 			}
-			result = service.getEquipmentEntitysByBayEntity(allBay.get(0));
+			result = service.getEquByTypeAndBay(allBay.get(0));
 			size = result.size();
 			itemsEqu = new String[size];
 			for (int i = 0; i < size; i++) {
 				itemsEqu[i] = result.get(i).getF1043Name();
 			}
 		} else {
-			itemsBay = new String[]{bayEntity.getF1042Desc()};
-			result = service.getEquipmentEntitysByBayEntity(bayEntity);
+			itemsBay = new String[]{bayEntity.getF1042Name()};
+			result = service.getEquByTypeAndBay(bayEntity);
 			size = result.size();
 			itemsEqu = new String[size];
 			for (int i = 0; i < size; i++) {
