@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
-import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.util.DataUtils;
 
@@ -26,26 +25,7 @@ public class StatedataService extends BaseService {
 		return statedataEntities;
 	}
 	
-	/**
-	 * 根据互感器查找
-	 * @param equEntities
-	 * @return
-	 */
-	public List<Tb1016StatedataEntity> getStateDataByEquips(List<Tb1043EquipmentEntity> equEntities) {
-		if(!DataUtils.listNotNull(equEntities)) {
-			return new ArrayList<>();
-		}
-		List<String> equitCodes = new ArrayList<>();
-		for (Tb1043EquipmentEntity tb1043EquipmentEntity : equEntities) {
-			equitCodes.add(tb1043EquipmentEntity.getF1043Code());
-		}
-		@SuppressWarnings("unchecked")
-		List<Tb1016StatedataEntity> statedataEntities = 
-		(List<Tb1016StatedataEntity>) hqlDao.selectInObjects(
-				Tb1016StatedataEntity.class, "parentCode", equitCodes);
-		return statedataEntities;
 
-	}
 	
 	/**
 	 * 根据IED获取

@@ -3,6 +3,7 @@ package com.synet.tool.rsc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.synet.tool.rsc.io.scd.EnumEquipmentType;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
@@ -45,8 +46,8 @@ public class EquipmentEntityService extends BaseService{
 	@SuppressWarnings("unchecked")
 	public List<String> getEquipmentByType() {
 		List<Integer> types = new ArrayList<>();
-		types.add(6);
-		types.add(7);
+		types.add(EnumEquipmentType.CTR.getCode());
+		types.add(EnumEquipmentType.VTR.getCode());
 		List<Tb1043EquipmentEntity> temp = (List<Tb1043EquipmentEntity>) hqlDao.selectInObjects(Tb1043EquipmentEntity.class, "f1043Type", types);
 		List<String> result = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : temp) {
@@ -54,4 +55,5 @@ public class EquipmentEntityService extends BaseService{
 		}
 		return result;
 	}
+	
 }

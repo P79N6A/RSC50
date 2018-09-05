@@ -5,7 +5,7 @@ import java.util.List;
 public class DataUtils {
 	
 	public static boolean listNotNull(List<?> list) {
-		if(list != null &&list.size() > 0) {
+		if(list != null && list.size() > 0) {
 			return true;
 		} else {
 			return false;

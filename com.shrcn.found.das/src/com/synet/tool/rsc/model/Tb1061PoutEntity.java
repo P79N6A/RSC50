@@ -20,6 +20,12 @@ public class Tb1061PoutEntity {
     private Tb1016StatedataEntity stdata;
     private Tb1006AnalogdataEntity algdata;
     
+    public Tb1061PoutEntity() {
+	}
+    
+    public Tb1061PoutEntity(String f1061Desc) {
+		this.f1061Desc = f1061Desc;
+	}
     
     public String getF1061Code() {
         return f1061Code;

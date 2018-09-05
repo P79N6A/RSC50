@@ -13,6 +13,28 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 public class IedEntityService extends BaseService {
 	
 	/**
+	 * 根据类型和间隔获取IED
+	 * @param types
+	 * @param bayEntity
+	 * @return
+	 */
+	public List<Tb1046IedEntity> getIedByTypesAndBay(int[] types, Tb1042BayEntity bayEntity) {
+		//所有间隔下的合并单元
+		List<Tb1046IedEntity> iedEntityByTypes = getIedEntityByTypes(types);
+		if(bayEntity == null){
+			return iedEntityByTypes;
+		}
+		List<Tb1046IedEntity> result = new ArrayList<>();
+		for (Tb1046IedEntity tb1046IedEntity : iedEntityByTypes) {
+			//匹配对应的间隔
+			if(tb1046IedEntity.getTb1042BaysByF1042Code().getF1042Code().equals(bayEntity.getF1042Code())) {
+				result.add(tb1046IedEntity);
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * 根据设备类型查找设备
 	 * @param types
 	 * @return

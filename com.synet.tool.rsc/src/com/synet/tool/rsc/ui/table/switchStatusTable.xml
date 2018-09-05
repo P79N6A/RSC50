@@ -6,8 +6,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
   <field desc="对象Name" editor="none" name="f1043Name" datType="string" width="80" default=""/>
   <field desc="对象名称" editor="none" name="f1043Desc" datType="string" width="80" default=""/> 
-  <field desc="设备类型" editor="none" name="f1043Type" datType="int" width="80" default=""/> 
-  <field desc="智能终端Name" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.tb1046IedByF1046Code.f1046Name" datType="int" width="100" default=""/> 
-  <field desc="智能终端名称" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.tb1046IedByF1046Code.f1046Desc" datType="int" width="100" default=""/>
-  <field desc="虚端子通道参引" editor="none" name="tb1016StatedataEntity.tb1061PoutEntity.f1061RefAddr" datType="int" width="100" default=""/> 
+  <field desc="设备类型" editor="none" dict="EQUIT_TYPE" name="f1043Type" datType="int" width="80" default=""/> 
+  <field desc="智能终端Name" editor="none" name="tb1016StatedataEntity.tb1061PoutEntityByF1061Code.tb1046IedByF1046Code.f1046Name" datType="int" width="100" default=""/> 
+  <field desc="智能终端名称" editor="none" name="tb1016StatedataEntity.tb1061PoutEntityByF1061Code.tb1046IedByF1046Code.f1046Desc" datType="int" width="100" default=""/>
+  <field desc="虚端子通道参引" editor="none" name="tb1016StatedataEntity.tb1061PoutEntityByF1061Code.f1061RefAddr" datType="int" width="100" default=""/> 
 </table>

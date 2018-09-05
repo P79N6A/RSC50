@@ -19,14 +19,17 @@ import org.eclipse.swt.widgets.Shell;
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
-import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.EnumIedType;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.util.DataUtils;
 
 /**
  * 通道关联
@@ -40,30 +43,27 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private Button btnAdd;
 	private String curEntryName;
 	private String[] comboDevItems;
-	private String[] comboSvItems;
+//	private String[] comboSvItems;
 	private Tb1067CtvtsecondaryEntity curSel;
-	private Combo comboSvControl;
 	private Combo comboDevice;
 	private int preComboDevSelIdx = 0;
-	private int preComboSvSelIdx = 0;
+//	private int preComboSvSelIdx = 0;
 	private List<Tb1046IedEntity> iedEntities;
 	private SvcbEntityService svcbService;
-	private PoutEntityService poutService;
 	private List<Tb1056SvcbEntity> svcbEntities;
 	private Composite comRight;
 	private List<Tb1061PoutEntity> chanelTableData;
-	private Button btnDel;
+	private IedEntityService iedService;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
 	}
 	
 	public ChanelConnectDialog(Shell parentShell, String curEntryName, 
-			Tb1067CtvtsecondaryEntity ctvtsecondaryEntity, List<Tb1046IedEntity> iedEntities) {
+			Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
 		super(parentShell);
 		this.curEntryName = curEntryName;
 		this.curSel = ctvtsecondaryEntity;
-		this.iedEntities = iedEntities;
 		
 	}
 	
@@ -87,7 +87,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
 		comBtn.setLayout(SwtUtil.getGridLayout(1));
 		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
-		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
 		comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
@@ -98,9 +97,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 		comboDevice.setItems(comboDevItems);
 		comboDevice.select(0);
 		
-		comboSvControl = SwtUtil.createCombo(comRight, textGridData, true);
-		comboSvControl.setItems(comboSvItems);
-		comboSvControl.select(0);
 		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
 		gdSpan_2.horizontalSpan = 2;
 		tableState = TableFactory.getPoutTable(comRight);
@@ -111,6 +107,10 @@ public class ChanelConnectDialog extends WrappedDialog{
 	}
 	
 	private void initComboData() {
+		iedService = new IedEntityService();
+		int[] devTypes = EnumIedType.values()[2].getTypes();
+		Tb1042BayEntity bay = curSel.getTb1043EquipmentByF1043Code().getTb1042BayByF1042Code();
+		iedEntities = iedService.getIedByTypesAndBay(devTypes, bay);
 		if(iedEntities.size() < 1) {
 			comboDevItems = new String[]{"装置为空"};
 		} else {
@@ -121,45 +121,73 @@ public class ChanelConnectDialog extends WrappedDialog{
 			comboDevItems = new String[lstComboDevItem.size()];
 			comboDevItems = lstComboDevItem.toArray(comboDevItems);
 		}
-		
-		if(iedEntities.size() < 1 || comboDevItems.length < 1) {
-			comboSvItems = new String[]{""};
-			return;
-		} else {
-			Tb1046IedEntity iedEntity = iedEntities.get(0);
-			svcbService = new SvcbEntityService();
-			
-			initComboSvItems(iedEntity);
-		}
-		poutService = new PoutEntityService();
-		
 	}
 
-	private void initComboSvItems(Tb1046IedEntity iedEntity) {
-		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
-		List<String> lstComboSvItem = new ArrayList<>();
-		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
-			lstComboSvItem.add(tb1056SvcbEntity.getCbName());
-		}
-		comboSvItems = new String[lstComboSvItem.size()];
-		comboSvItems = lstComboSvItem.toArray(comboSvItems);
-	}
 
 	/**
 	 * 初始化表格数据
 	 */
 	private void initTableData() {
-		//测试用
-//		if(curSel == null) {
-//			return;
-//		}
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA1());
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeA2());
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeB1());
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeB2());
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeC1());
-		tableChanel.addRow(curSel.getTb1061PoutByF1061CodeC2());
+		
+		Tb1061PoutEntity a1 = curSel.getTb1061PoutByF1061CodeA1();
+		if(a1 == null) {
+			a1 = new Tb1061PoutEntity("A相通道1虚端子");
+		} else {
+			a1.setF1061Desc("A相通道1虚端子");
+		}
+			tableChanel.addRow(a1);
+		Tb1061PoutEntity a2 = curSel.getTb1061PoutByF1061CodeA2();
+		if(a2 == null) {
+			a2 = new Tb1061PoutEntity("A相通道2虚端子");
+		} else {
+			a2.setF1061Desc("A相通道2虚端子");
+		}
+			tableChanel.addRow(a2);
+		Tb1061PoutEntity b1 = curSel.getTb1061PoutByF1061CodeB1();
+		if(b1 == null) {
+			b1 = new Tb1061PoutEntity("B相通道1虚端子");
+		} else {
+			b1.setF1061Desc("B相通道1虚端子");
+		}
+			tableChanel.addRow(b1);
+		Tb1061PoutEntity b2 = curSel.getTb1061PoutByF1061CodeB2();
+		if(b2 == null) {
+			b2 = new Tb1061PoutEntity("B相通道2虚端子");
+		} else {
+			b2.setF1061Desc("B相通道2虚端子");
+		}
+			tableChanel.addRow(b2);
+		Tb1061PoutEntity c1 = curSel.getTb1061PoutByF1061CodeC1();
+		if(c1 == null) {
+			c1 = new Tb1061PoutEntity("C相通道1虚端子");
+		} else {
+			c1.setF1061Desc("C相通道1虚端子");
+		}
+		tableChanel.addRow(c1);
+		Tb1061PoutEntity c2 = curSel.getTb1061PoutByF1061CodeC2();
+		if(c2 == null) {
+			c2 = new Tb1061PoutEntity("C相通道2虚端子");
+		} else {
+			c2.setF1061Desc("C相通道2虚端子");
+		}
+			tableChanel.addRow(c2);
 		tableChanel.getTable().layout();
+		
+		if(DataUtils.listNotNull(iedEntities)) {
+			refreshTableState(iedEntities.get(0));
+		}
+		
+	}
+	
+
+	private void refreshTableState(Tb1046IedEntity iedEntity) {
+		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
+		List<Tb1061PoutEntity> allPouts = new ArrayList<>();
+		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
+			allPouts.addAll(tb1056SvcbEntity.getTb1061PoutsByCbCode());
+		}
+		tableState.setInput(allPouts);
+		tableState.getTable().layout();
 	}
 	
 	@Override
@@ -176,11 +204,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
 				if(obj == btnAdd) {
-					Object objSel = tableState.getSelection();
-					if(objSel != null && tableChanel.getItemCount() < 7) {
-						tableChanel.addRow(objSel);
-						tableState.removeSelected();
+					Tb1061PoutEntity rightSel = (Tb1061PoutEntity) tableState.getSelection();
+					if(rightSel == null) {
+						return;
 					}
+					Tb1061PoutEntity leftSel = (Tb1061PoutEntity) tableChanel.getSelection();
+					if(leftSel == null) {
+						return;
+					}
+					rightSel.setF1061Desc(leftSel.getF1061Desc());
+					leftSel = rightSel;
 					tableChanel.getTable().layout();
 				} else if(obj == comboDevice) {
 					int curComboDevSelIdx = comboDevice.getSelectionIndex();
@@ -190,46 +223,26 @@ public class ChanelConnectDialog extends WrappedDialog{
 					preComboDevSelIdx = curComboDevSelIdx;
 					String selDevName = comboDevItems[curComboDevSelIdx];
 					curSelIedEntity = getIedEntityByName(selDevName);
-					initComboSvItems(curSelIedEntity);
-					//TODO 局部刷新SV控制块下拉框数据
+					refreshTableState(curSelIedEntity);
 //					comRight.layout();
 					comboDevice.redraw();
-				} else if(obj == comboSvControl) {
-					int curComboSvSelIdx = comboSvControl.getSelectionIndex();
-					if(curComboSvSelIdx == preComboSvSelIdx) {
-						return;
-					}
-					preComboSvSelIdx = curComboSvSelIdx;
-					Tb1056SvcbEntity svcbEntity = getSvcbEntityByName(comboSvControl.getItem(curComboSvSelIdx));
-					List<Tb1061PoutEntity> poutEntities = poutService.getPoutEntityByProperties(curSelIedEntity, svcbEntity);
-					//TODO 刷新表格数据
-					tableState.setInput(poutEntities);
-					tableState.getTable().layout();
-				} else if(obj == btnDel) {
-					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) tableChanel.getSelection();
-					if(poutEntity == null) {
-						return;
-					}
-					tableState.addRow(poutEntity);
-					tableChanel.removeSelected();
-					tableChanel.refresh();
-					tableState.refresh();
-				}
+				} 
+//				else if(obj == btnDel) {
+//					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) tableChanel.getSelection();
+//					if(poutEntity == null) {
+//						return;
+//					}
+//					tableState.addRow(poutEntity);
+//					tableChanel.removeSelected();
+//					tableChanel.refresh();
+//					tableState.refresh();
+//				}
 			}
+
 		};
-		btnDel.addSelectionListener(selectionListener);
+//		btnDel.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
-		comboSvControl.addSelectionListener(selectionListener);
-	}
-
-	private Tb1056SvcbEntity getSvcbEntityByName(String selSvName) {
-		for (Tb1056SvcbEntity svcbEntity : svcbEntities) {
-			if(svcbEntity.getCbName().equals(selSvName)) {
-				return svcbEntity;
-			}
-		}
-		return null;
 	}
 	
 	private Tb1046IedEntity getIedEntityByName(String iedName) {
