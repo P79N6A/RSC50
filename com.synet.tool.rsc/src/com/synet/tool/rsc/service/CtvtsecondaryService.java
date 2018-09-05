@@ -51,10 +51,19 @@ public class CtvtsecondaryService extends BaseService{
 	 * @param equipment
 	 */
 	public void addCtvtsecondary(Tb1043EquipmentEntity equipment, Tb1067CtvtsecondaryEntity sec) {
-		Set<Tb1067CtvtsecondaryEntity> secs = new HashSet<>();
-		if(sec == null) {
-			sec = new Tb1067CtvtsecondaryEntity();
+		Set<Tb1067CtvtsecondaryEntity> secs = equipment.getTb1067SecondarysByF1043Code();
+		if(secs == null) {
+			secs = new HashSet<>();
+			equipment.setTb1067SecondarysByF1043Code(secs);
 		}
+		boolean isNull = (sec == null);
+		if(isNull) {
+			sec = new Tb1067CtvtsecondaryEntity();
+			sec.setF1067Index(1);
+		} else {
+			sec.setF1067Index(secs.size() + 1);
+		}
+		secs.add(sec);
 		sec.setF1067Code(rscp.nextTbCode(DBConstants.PR_SEC));
 		sec.setTb1043EquipmentByF1043Code(equipment);
 		Set<Tb1044TerminalEntity> tb1044Terminals = equipment.getTb1044TerminalsByF1043Code();
@@ -62,19 +71,14 @@ public class CtvtsecondaryService extends BaseService{
 			Tb1044TerminalEntity tml = tb1044Terminals.iterator().next();
 			sec.setTb1044TerminalByF1044Code(tml);
 		}
-		Set<Tb1067CtvtsecondaryEntity> tb1067Secondarys = equipment.getTb1067SecondarysByF1043Code();
-		if (tb1067Secondarys != null && tb1067Secondarys.size()>0) {
-			sec.setF1067Index(tb1067Secondarys.size() + 1);
-		} else {
-			sec.setF1067Index(1);
-		}
 		sec.setF1067CircNo(null);
 		sec.setF1067Model(null);
 		sec.setF1067Desc(null);
 		sec.setF1067Type(null);
+		if(!isNull) {
+			beanDao.insert(sec);
+		}
 		addProtMMXU(sec);
-		secs.add(sec);
-		equipment.setTb1067SecondarysByF1043Code(secs);
 	}
 	
 	private void addProtMMXU(Tb1067CtvtsecondaryEntity ctvtsecondary) {
