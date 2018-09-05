@@ -68,7 +68,6 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		initComboData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
@@ -96,8 +95,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		textGridData.heightHint = 25;
 		textGridData.widthHint = 80;
 		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
-		comboDevice.setItems(comboItems);
-		comboDevice.select(0);
 		
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
 		textDesc.setMessage("描述");
@@ -109,6 +106,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		tableSample.getTable().setLayoutData(gdSpan_3);
 		addListeners();
 		initTableData();
+		initComboData();
 		return composite;
 	}
 	
@@ -127,7 +125,8 @@ public class SampleConnectDialog extends WrappedDialog {
 			analogdataEntities = getAnalogByIed(defSel);
 			tableSample.setInput(analogdataEntities);
 		}
-
+		comboDevice.setItems(comboItems);
+		comboDevice.select(0);
 	}
 
 	private List<Tb1006AnalogdataEntity> getAnalogByIed(Tb1046IedEntity defSel) {
