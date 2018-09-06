@@ -40,8 +40,8 @@ public class TableFactory {
 	public static final String PROTECT_QUANT_TABLE 			= "ProtectMeaQuantityTable";
 	public static final String DEVICE_WARN_TABLE 			= "DeviceWarnTable";
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
-	public static final String VIRTER_IN_TABLE 				= "VirtualTerminalOutTable";
-	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalInTable";
+	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
+	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
 	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";
 	public static final String ANALOG_CHN_TABLE 			= "AnalogChnTable";
 	public static final String CRITER_CHN_TABLE 			= "CriteriaChnTable";
@@ -62,11 +62,17 @@ public class TableFactory {
 	
 	public static String SUBSTATION_TABLE			    	= "SubstationTable";
 	public static String PORT_TABLE							= "PortTable";
+	public static String MMS_FCDA_TABLE						= "MmsFcdaTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
 	public static DevKTable getDeviceNameTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_NAME_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getMmsFcdaTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(MMS_FCDA_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
@@ -91,12 +97,12 @@ public class TableFactory {
 	}
 	
 	public static DevKTable getVirtualTerminalOutTable(Composite container) {
-		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_IN_TABLE);
+		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_OUT_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
 	public static DevKTable getVirtualTerminalInTable(Composite container) {
-		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_OUT_TABLE);
+		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_IN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

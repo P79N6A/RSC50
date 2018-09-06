@@ -10,7 +10,7 @@ import com.synet.tool.rsc.util.DataUtils;
 public class AnalogdataService extends BaseService {
 	
 	/**
-	 * 根据code查找
+	 * 根据codes查找
 	 * @param codes
 	 * @return
 	 */
@@ -20,6 +20,15 @@ public class AnalogdataService extends BaseService {
 			return new ArrayList<>();
 		}
 		return (List<Tb1006AnalogdataEntity>) hqlDao.selectInObjects(Tb1006AnalogdataEntity.class, "f1006Code", codes);
+	}
+	
+	/**
+	 * 根据codes查找
+	 * @param codes
+	 * @return
+	 */
+	public Tb1006AnalogdataEntity getAnologByCodes(String code) {
+		return (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", code);
 	}
 	
 	/**

@@ -18,6 +18,7 @@ import com.synet.tool.rsc.dialog.CtvtChooseDialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
+import com.synet.tool.rsc.dialog.RefAddrSelectDialog;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
@@ -86,6 +87,12 @@ public class DevKTableModel extends RKTableModel {
 			}
 			if(TableFactory.INTERVAL_MSG_TABLE.equals(tableName)) {
 				initTableDict(row);
+			}
+			if(TableFactory.BOARD_PORT_TABLE.equals(tableName)) {
+				if(col == 6) {
+					KTableCellEditor editor = new KTableDialogEditor(RefAddrSelectDialog.class);
+					return editor;
+				}
 			}
 		}
 		return super.getCellEditor(col, row);

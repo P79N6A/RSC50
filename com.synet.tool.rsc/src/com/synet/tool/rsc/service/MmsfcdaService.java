@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
@@ -73,5 +74,18 @@ public class MmsfcdaService extends BaseService {
 			return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
 		}
 		return null;
+	}
+	
+	
+	public List<Tb1058MmsfcdaEntity> getByPort(String portCode) {
+		@SuppressWarnings("unchecked")
+		List<Tb1006AnalogdataEntity> listByAnalogdata = (List<Tb1006AnalogdataEntity>) beanDao.getListByCriteria(Tb1006AnalogdataEntity.class, "parentCode", portCode);
+		List<String> analogCodeList = new ArrayList<>();
+		for (Tb1006AnalogdataEntity analog : listByAnalogdata) {
+			analogCodeList.add(analog.getF1006Code());
+		}
+		@SuppressWarnings("unchecked")
+		List<Tb1058MmsfcdaEntity> result = (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, "dataCode", analogCodeList);
+		return result;
 	}
 }
