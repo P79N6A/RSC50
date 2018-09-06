@@ -5,7 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
+import com.synet.tool.rsc.model.IM101IEDListEntity;
+import com.synet.tool.rsc.model.IM102FibreListEntity;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM104StatusInEntity;
+import com.synet.tool.rsc.model.IM105BoardWarnEntity;
+import com.synet.tool.rsc.model.IM106PortLightEntity;
+import com.synet.tool.rsc.model.IM107TerStrapEntity;
+import com.synet.tool.rsc.model.IM108BrkCfmEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
 
 public class ImprotInfoService extends BaseService {
 	
@@ -28,5 +36,55 @@ public class ImprotInfoService extends BaseService {
 		if (list != null && list.size() > 0) 
 			return list.get(0);
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM100FileInfoEntity> getFileInfoEntityList(Integer fileType) {
+		return (List<IM100FileInfoEntity>) beanDao.getListByCriteria(IM100FileInfoEntity.class, "fileType", fileType);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM101IEDListEntity> getIEDListEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM101IEDListEntity>) beanDao.getListByCriteria(IM101IEDListEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM102FibreListEntity> getFibreListEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM102FibreListEntity>) beanDao.getListByCriteria(IM102FibreListEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM103IEDBoardEntity> getIEDBoardEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM103IEDBoardEntity>) beanDao.getListByCriteria(IM103IEDBoardEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM104StatusInEntity> getStatusInEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM104StatusInEntity>) beanDao.getListByCriteria(IM104StatusInEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM105BoardWarnEntity> getBoardWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM105BoardWarnEntity>) beanDao.getListByCriteria(IM105BoardWarnEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM106PortLightEntity> getPortLightEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM106PortLightEntity>) beanDao.getListByCriteria(IM106PortLightEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM107TerStrapEntity> getTerStrapEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM107TerStrapEntity>) beanDao.getListByCriteria(IM107TerStrapEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM108BrkCfmEntity> getBrkCfmEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM108BrkCfmEntity>) beanDao.getListByCriteria(IM108BrkCfmEntity.class, "fileInfoEntity", fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM109StaInfoEntity> getStaInfoEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM109StaInfoEntity>) beanDao.getListByCriteria(IM109StaInfoEntity.class, "fileInfoEntity", fileInfoEntity);
 	}
 }
