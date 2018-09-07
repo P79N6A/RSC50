@@ -12,16 +12,21 @@
         <property name="f1065Type">
             <column name="F1065_Type" sql-type="int" not-null="true"/>
         </property>
+        <property name="f1046CodeIedRecv">
+            <column name="F1046_CODE_IEDRecv" sql-type="varchar" not-null="true"/>
+        </property>
+        <property name="f1046CodeIedSend">
+            <column name="F1046_CODE_IEDSend" sql-type="varchar" not-null="true"/>
+        </property>
         
         <many-to-one name="baseCbByCdCode" class="com.synet.tool.rsc.model.BaseCbEntity" lazy="false">
-            <column name="BASECB_CODE"/>
+            <column name="CB_CODE"/>
         </many-to-one>
-        
-        <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
+        <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity" insert="false" update="false" lazy="false">
             <column name="F1046_CODE_IEDRecv"/>
         </many-to-one>
-        <many-to-one name="tb1046IedByF1046CodeIedSend" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
-            <column name="F1046_CODE_IEDSend" not-null="true"/>
+        <many-to-one name="tb1046IedByF1046CodeIedSend" class="com.synet.tool.rsc.model.Tb1046IedEntity" insert="false" update="false" lazy="false">
+            <column name="F1046_CODE_IEDSend"/>
         </many-to-one>
   		<set name="tb1063CircuitsByF1065Code" inverse="true" cascade="save-update"
         	table="tb1063_circuit" lazy="false">

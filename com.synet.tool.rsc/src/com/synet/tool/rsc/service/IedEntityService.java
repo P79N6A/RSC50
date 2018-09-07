@@ -68,13 +68,13 @@ public class IedEntityService extends BaseService {
 	 * 更新间隔编号
 	 * @param ied
 	 */
-	public void updateIEDBayCode(Tb1046IedEntity ied) {
-		String hql = "update " + ied.getClass().getName() +
+	public void updateIEDBayCode(String f1046Code, String f1042Code) {
+		String hql = "update " + Tb1046IedEntity.class.getName() +
 				" set f1042Code=:f1042Code" + 
 				" where f1046Code=:f1046Code";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("f1042Code", ied.getF1042Code());
-		params.put("f1046Code", ied.getF1046Code());
+		params.put("f1042Code", f1042Code);
+		params.put("f1046Code", f1046Code);
 		HqlDaoImpl.getInstance().updateByHql(hql, params);
 	}
 	

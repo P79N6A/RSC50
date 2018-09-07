@@ -490,7 +490,7 @@ create table TB1065_LogicalLink
    F1065_Type           INT not null,
    F1046_CODE_IEDSend   varchar(48) not null,
    F1046_CODE_IEDRecv   varchar(48),
-   BASECB_CODE          varchar(48),
+   CB_CODE          varchar(48),
    primary key (F1065_CODE)
 );
 

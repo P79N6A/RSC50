@@ -37,8 +37,6 @@ public class SCDImporterTest {
 	
 	@Before
 	public void before() {
-//		String scdPath = "./test/sub_shangwu.scd";
-//		XMLDBHelper.loadDocument("shangwu", scdPath);
 		String prj = "shangwu";
 		ProjectManager prjmgr = ProjectManager.getInstance();
 		if (!prjmgr.exists(prj)) {

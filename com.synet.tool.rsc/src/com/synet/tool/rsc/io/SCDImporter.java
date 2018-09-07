@@ -213,10 +213,6 @@ public class SCDImporter implements IImporter {
 			bay = (bay==null) ? getBayByName(DBConstants.BAY_PROT) : bay;
 			ied.setF1042Code(bay.getF1042Code());
 			beanDao.update(ied);
-//			ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", "CL1101");
-//			if (ied != null) {
-//				System.out.println(ied.getTb1042BaysByF1042Code()!=null);
-//			}
 		}
 		// 虚链路与虚回路
 		for (Element iedNd : iedNds) {

@@ -112,15 +112,15 @@ public interface DBConstants {
 	int DAT_PORT_POWER	 	= 105;	//光口光强
 
 	// 虚回路类型
-	int CIRCUIT_OPEN = 01;	//跳闸回路
-	int CIRCUIT_CLOSE = 02;	//重合闸回路
+	int CIRCUIT_OPEN = 01;			//跳闸回路
+	int CIRCUIT_CLOSE = 02;			//重合闸回路
 	int CIRCUIT_FIAL_START = 03;	//启动失灵回路
-	int CIRCUIT_LBRK = 04;	//联跳回路
-	int CIRCUIT_LOCK = 05;	//闭锁回路
-	int CIRCUIT_I = 06;	//电流采样回路
-	int CIRCUIT_U = 07;	//电压采样回路
-	int CIRCUIT_ST = 8;	//遥信开入
-	int CIRCUIT_OTHER = 9;	//其它
+	int CIRCUIT_LBRK = 04;			//联跳回路
+	int CIRCUIT_LOCK = 05;			//闭锁回路
+	int CIRCUIT_I = 06;				//电流采样回路
+	int CIRCUIT_U = 07;				//电压采样回路
+	int CIRCUIT_ST = 8;				//遥信开入
+	int CIRCUIT_OTHER = 9;			//其它
 
 	int Equipment_BRK = 01; //断路器
 	int Equipment_DIS = 02; //刀闸

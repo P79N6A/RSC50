@@ -183,20 +183,23 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			if (DBConstants.BAY_PROT.equals(bayName)) {
 				String bayCode = bay.getF1042Code();
 				ied.setF1042Code(bayCode);
-				iedServ.updateIEDBayCode(ied);
+				String f1046Code = ied.getF1046Code();
+				iedServ.updateIEDBayCode(f1046Code, bayCode);
 				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedRecv", ied);
+						Tb1065LogicallinkEntity.class, "f1046CodeIedRecv", f1046Code);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
-					ied = logiclink.getTb1046IedByF1046CodeIedSend();
-					ied.setF1042Code(bayCode);
-					iedServ.updateIEDBayCode(ied);
+//					ied = logiclink.getTb1046IedByF1046CodeIedSend();
+//					ied.setF1042Code(bayCode);
+//					iedServ.updateIEDBayCode(ied);
+					iedServ.updateIEDBayCode(logiclink.getF1046CodeIedSend(), bayCode);
 				}
 				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-						Tb1065LogicallinkEntity.class, "tb1046IedByF1046CodeIedSend", ied);
+						Tb1065LogicallinkEntity.class, "f1046CodeIedSend", f1046Code);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
-					ied = logiclink.getTb1046IedByF1046CodeIedRecv();
-					ied.setF1042Code(bayCode);
-					iedServ.updateIEDBayCode(ied);
+//					ied = logiclink.getTb1046IedByF1046CodeIedRecv();
+//					ied.setF1042Code(bayCode);
+//					iedServ.updateIEDBayCode(ied);
+					iedServ.updateIEDBayCode(logiclink.getF1046CodeIedRecv(), bayCode);
 				}
 			}
 		}

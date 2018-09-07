@@ -38,6 +38,7 @@ public abstract class ToolDBManagerImpl implements DBManager {
 		super();
 		setProDbName();
 		url = "jdbc:derby:./"+ prjDbName +"/%s;create=true;user=" + user + ";password=123456";
+//		url = "jdbc:derby:D:/develop/eclipse-rcp-indigo-SR2-win32/eclipse/RscData/ppp;create=true;user=" + user + ";password=123456";
 		shutUrl = "jdbc:derby:;shutdown=true;user=" + user + ";password=123456";
 	}
 	
