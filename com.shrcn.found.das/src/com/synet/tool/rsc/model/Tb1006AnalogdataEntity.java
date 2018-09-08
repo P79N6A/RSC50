@@ -33,6 +33,13 @@ public class Tb1006AnalogdataEntity {
     private Integer f1006Savetype;
     private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
     private Tb1061PoutEntity tb1061PoutByF1061Code;
+    
+    public Tb1006AnalogdataEntity() {
+	}
+    
+    public Tb1006AnalogdataEntity(String f1006Byname) {
+		this.f1006Byname = f1006Byname;
+	}
 
     public String getF1006Code() {
         return f1006Code;

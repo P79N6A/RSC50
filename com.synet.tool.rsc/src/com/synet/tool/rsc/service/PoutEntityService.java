@@ -8,6 +8,7 @@ import java.util.Map;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 
 public class PoutEntityService extends BaseService{
 
@@ -41,5 +42,15 @@ public class PoutEntityService extends BaseService{
 			return (Tb1061PoutEntity) beanDao.getObject(Tb1061PoutEntity.class, params);
 		}
 		return null;
+	}
+	
+	/**
+	 * 根据关联的保护压板查找开出虚端子
+	 * @param straps
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1061PoutEntity> getByStraps(List<Tb1064StrapEntity> straps) {
+		return (List<Tb1061PoutEntity>) hqlDao.selectInObjects(Tb1061PoutEntity.class, "tb1064StrapByF1064Code", straps);
 	}
 }

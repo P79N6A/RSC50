@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 
 public class PinEntityService extends BaseService {
 	
@@ -23,5 +24,15 @@ public class PinEntityService extends BaseService {
 			return (Tb1062PinEntity) beanDao.getObject(Tb1062PinEntity.class, params);
 		}
 		return null;
+	}
+	
+	/**
+	 * 根根据关联的保护压板查询
+	 * @param straps
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1062PinEntity> getByStraps(List<Tb1064StrapEntity> straps) {
+		return (List<Tb1062PinEntity>) hqlDao.selectInObjects(Tb1062PinEntity.class, "tb1064StrapByF1064Code", straps);
 	}
 }

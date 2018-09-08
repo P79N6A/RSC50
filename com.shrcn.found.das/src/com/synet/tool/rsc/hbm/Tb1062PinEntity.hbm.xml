@@ -23,7 +23,7 @@
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity">
+        <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity" lazy="false">
             <column name="F1064_CODE"/>
         </many-to-one>
     </class>

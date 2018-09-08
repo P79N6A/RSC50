@@ -51,8 +51,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	private List<Tb1046IedEntity> iedEntities;
 	private List<Tb1006AnalogdataEntity> analogdataEntities;
 	private Text textDesc;
-	private List<Tb1006AnalogdataEntity> tableData;
-	private Button btnDel;
+	private List<Tb1006AnalogdataEntity> portAnalogTableData;
 	
 	public SampleConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -87,7 +86,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		comBtn.setLayout(SwtUtil.getGridLayout(1));
 		
 		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
-		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
 		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(3));
@@ -116,7 +114,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		} else {
 			List<String> lstIedName = new ArrayList<>();
 			for (Tb1046IedEntity tb1046IedEntity : iedEntities) {
-				lstIedName.add(tb1046IedEntity.getF1046Desc());
+				lstIedName.add(tb1046IedEntity.getF1046Name());
 			}
 			comboItems = new String[lstIedName.size()];
 			comboItems = lstIedName.toArray(comboItems);
@@ -147,13 +145,31 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 	private void initTableData() {
-		//测试用
-//		if(curSel == null) {
-//			return;
-//		}
-		tableProtctSample.addRow(curSel.getF1006CodeA());
-		tableProtctSample.addRow(curSel.getF1006CodeB());
-		tableProtctSample.addRow(curSel.getF1006CodeC());
+		portAnalogTableData = new ArrayList<>();
+		Tb1006AnalogdataEntity f1006CodeA = curSel.getF1006CodeA();
+		if(f1006CodeA == null) {
+			f1006CodeA = new Tb1006AnalogdataEntity("采样值数据A相");
+		} else {
+			f1006CodeA.setF1006Byname("采样值数据A相");
+		}
+		portAnalogTableData.add(f1006CodeA);
+		Tb1006AnalogdataEntity f1006CodeB = curSel.getF1006CodeB();
+		
+		if(f1006CodeB == null) {
+			f1006CodeB = new Tb1006AnalogdataEntity("采样值数据B相");
+		} else {
+			f1006CodeB.setF1006Byname("采样值数据B相");
+		}
+		portAnalogTableData.add(f1006CodeB);
+		Tb1006AnalogdataEntity f1006CodeC = curSel.getF1006CodeC();
+		
+		if(f1006CodeC == null) {
+			f1006CodeC = new Tb1006AnalogdataEntity("采样值数据C相");
+		} else {
+			f1006CodeC.setF1006Byname("采样值数据C相");
+		}
+		portAnalogTableData.add(f1006CodeC);
+		tableProtctSample.setInput(portAnalogTableData);
 		tableProtctSample.getTable().layout();
 	}
 	
@@ -180,11 +196,7 @@ public class SampleConnectDialog extends WrappedDialog {
 					tableSample.setInput(analogdataEntities);
 					tableSample.getTable().layout();
 				} else if(obj == btnAdd) {
-					Object tableData = tableSample.getSelection();
-					if(tableData != null && tableProtctSample.getItemCount() < 4) {
-						tableProtctSample.addRow(tableData);
-					}
-					tableProtctSample.getTable().layout();
+					configData();
 				} else if(obj == btnSearch) {
 					String desc = textDesc.getText().trim();
 					List<Tb1006AnalogdataEntity> searchRes = new ArrayList<>();
@@ -195,23 +207,44 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					tableSample.setInput(searchRes);
 					tableSample.getTable().layout();
-				} else if(obj == btnDel) {
-					Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) tableProtctSample.getSelection();
-					if(analogdataEntity == null) {
-						return;
-					}
-					tableSample.addRow(analogdataEntity);
-					tableProtctSample.removeSelected();
-					tableSample.refresh();
-					tableProtctSample.refresh();
 				}
 			}
+
+			
 		};
-		btnDel.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
 		btnSearch.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
 		
+	}
+	
+	private void configData() {
+		Tb1006AnalogdataEntity analogLeft = (Tb1006AnalogdataEntity) tableProtctSample.getSelection();
+		if(analogLeft == null) {
+			return;
+		}
+		Tb1006AnalogdataEntity analogRight = (Tb1006AnalogdataEntity) tableSample.getSelection();
+		if(analogRight == null) {
+			return;
+		}
+		analogLeft.setF1006Desc(analogRight.getF1006Desc());
+		analogRight.setF1006Byname(analogLeft.getF1006Byname());
+//		analogLeft = analogRight;
+		int selectRowNum = tableProtctSample.getSelectRowNum();
+		switch (selectRowNum) {
+		case 1:
+			curSel.setF1006CodeA(analogRight);
+			break;
+		case 2:
+			curSel.setF1006CodeB(analogRight);
+			break;
+		case 3:
+			curSel.setF1006CodeC(analogRight);
+		default:
+			break;
+		}
+		tableProtctSample.setInput(portAnalogTableData);
+		tableProtctSample.getTable().layout();
 	}
 
 	private Tb1046IedEntity getSelIedByName(String select) {
@@ -234,30 +267,16 @@ public class SampleConnectDialog extends WrappedDialog {
 		return new Point(800, 550);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID) {
-			if(tableProtctSample.getItemCount() == 3) {
-				List<Tb1006AnalogdataEntity> input = (List<Tb1006AnalogdataEntity>) tableProtctSample.getInput();
-				setTableData(input);
-				curSel.setF1006CodeA(input.get(0));
-				curSel.setF1006CodeB(input.get(1));
-				curSel.setF1006CodeC(input.get(2));
-			} else {
-				 DialogHelper.showInformation("请关联3个模拟量对象");
+			if(curSel.getF1006CodeA() == null 
+				|| curSel.getF1006CodeB() == null
+					|| curSel.getF1006CodeC() == null) {
+				DialogHelper.showInformation("请关联3个模拟量对象");
 				 return;
 			}
 		}
 		super.buttonPressed(buttonId);
 	}
-
-	public List<Tb1006AnalogdataEntity> getTableData() {
-		return tableData;
-	}
-
-	private void setTableData(List<Tb1006AnalogdataEntity> tableData) {
-		this.tableData = tableData;
-	}
-
 }

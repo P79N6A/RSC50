@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -41,5 +42,16 @@ public class PortEntityService extends BaseService{
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取板卡对应端口
+	 * @param boardEntity
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1048PortEntity> getByBoard(Tb1047BoardEntity boardEntity) {
+		return (List<Tb1048PortEntity>) beanDao.getListByCriteria(
+				Tb1048PortEntity.class, "tb1047BoardByF1047Code", boardEntity);
 	}
 }

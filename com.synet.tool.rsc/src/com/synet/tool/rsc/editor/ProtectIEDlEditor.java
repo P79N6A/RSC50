@@ -261,6 +261,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 					initProTbDataByTbName(tabFProtect.getSelection().getText());
 				} else if(obj == btnAdd) {
 					config();
+				} else if(obj == btnTempSave) {
+					
 				}
 			}
 		};

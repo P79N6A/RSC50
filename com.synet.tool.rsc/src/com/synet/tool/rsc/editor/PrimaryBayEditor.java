@@ -234,9 +234,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					Tb1067CtvtsecondaryEntity ctvtsecondaryEntity = (Tb1067CtvtsecondaryEntity) obj;
 					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), 
 							curEntryName, ctvtsecondaryEntity);
-					if(chnDialog.open() == IDialogConstants.OK_ID) {
-						//TODO 设置虚端子
-					}
+					chnDialog.open();
 				} else if(object == btnSampleConnect) {
 					Object obj = tableProtectSample.getSelection();
 					if(obj == null) {
@@ -245,9 +243,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					Tb1066ProtmmxuEntity protmmxuEntity = (Tb1066ProtmmxuEntity) obj;
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
 							curEntryName, protmmxuEntity, iedEntities);
-					if(sampleDialog.open() == IDialogConstants.OK_ID) {
-					//TODO 设置模拟量	
-					}
+					sampleDialog.open();
 				} else if(object == btnAdd) {
 					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
 					Tb1043EquipmentEntity equipmentEntity = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
