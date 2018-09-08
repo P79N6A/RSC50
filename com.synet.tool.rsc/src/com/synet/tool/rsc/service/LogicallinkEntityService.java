@@ -21,7 +21,7 @@ public class LogicallinkEntityService extends BaseService {
 	@SuppressWarnings("unchecked")
 	public List<Tb1065LogicallinkEntity> getByRecvIed(Tb1046IedEntity iedEntity) {
 		return (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(Tb1065LogicallinkEntity.class, 
-				"tb1046IedByF1046CodeIedRecv", iedEntity);
+				"f1046CodeIedRecv", iedEntity.getF1046Code());
 	}
 	
 }

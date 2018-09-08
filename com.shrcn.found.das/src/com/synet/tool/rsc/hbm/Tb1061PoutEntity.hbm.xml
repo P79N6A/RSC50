@@ -32,10 +32,7 @@
         <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity" lazy="false">
             <column name="F1064_CODE"/>
         </many-to-one>
-        <many-to-one name="tb1055GcbByCbCode" class="com.synet.tool.rsc.model.Tb1055GcbEntity" insert="false" update="false">
-            <column name="CB_CODE" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="tb1056SvcbByCbCode" class="com.synet.tool.rsc.model.Tb1056SvcbEntity" insert="false" update="false">
+        <many-to-one name="cbEntity" class="com.synet.tool.rsc.model.BaseCbEntity" insert="false" update="false">
             <column name="CB_CODE" not-null="true"/>
         </many-to-one>
         <many-to-one name="stdata" class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false">

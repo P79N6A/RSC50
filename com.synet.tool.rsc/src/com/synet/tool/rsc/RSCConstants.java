@@ -6,6 +6,7 @@ public interface RSCConstants {
 	
 	String RSC_PRJ_NAME  	= "RscData";
 	String USR_DIR 	 	    = System.getProperty("user.dir") + separator;
+//	String USR_DIR 	 	    = "D:/develop/eclipse-rcp-indigo-SR2-win32/eclipse" + separator;
 	String RSC_HB_CFG   	= "com/synet/tool/rsc/das/hibernate.rsccfg.xml";
 	String RSC_SQL      	= "com/synet/tool/rsc/das/rsc.sql";
 

@@ -397,9 +397,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			}
 			if(!DataUtils.listNotNull(logicallinkEntities)) {
 				logicallinkEntities  = logicallinkEntityService.getByRecvIed(iedEntity);
-				tableLogLinkName.setInput(logicallinkEntities);
 			}
-			
+			tableLogLinkName.setInput(logicallinkEntities);
 			break;
 		case RSCConstants.CIRCUI_BOARD:
 			if(!DataUtils.listNotNull(circuitEntities)) {
@@ -419,8 +418,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(!DataUtils.listNotNull(logicallinkEntities)) {
 				//逻辑链路
 				logicallinkEntities = logicallinkEntityService.getByRecvIed(iedEntity);
-				tableLogicalLink.setInput(logicallinkEntities);
 			}
+			tableLogicalLink.setInput(logicallinkEntities);
 			break;
 		case RSCConstants.PROTECT_WAVE:
 			if(!DataUtils.listNotNull(rcdchannelaEntities)) {
@@ -545,8 +544,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpCentor = SwtUtil.createComposite(cmpDeviceWarning, gdCentor, 1);
 		cmpCentor.setLayout(SwtUtil.getGridLayout(1));
 		btnAdd = SwtUtil.createButton(cmpCentor, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		
 		GridData gdRight = new GridData(GridData.FILL_VERTICAL);
-		gdRight.widthHint = 320;
+		gdRight.widthHint = 520;
 		Composite cmpRight = SwtUtil.createComposite(cmpDeviceWarning, gdRight, 1);
 		cmpRight.setLayout(SwtUtil.getGridLayout(1));
 		

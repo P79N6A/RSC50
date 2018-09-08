@@ -14,8 +14,7 @@ public class Tb1061PoutEntity {
     private Integer f1061Type;
     private String dataCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
-    private Tb1055GcbEntity tb1055GcbByCbCode;
-    private Tb1056SvcbEntity tb1056SvcbByCbCode;
+    private BaseCbEntity cbEntity;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
     private Tb1016StatedataEntity stdata;
     private Tb1006AnalogdataEntity algdata;
@@ -137,23 +136,15 @@ public class Tb1061PoutEntity {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
     }
 
-    public Tb1055GcbEntity getTb1055GcbByCbCode() {
-        return tb1055GcbByCbCode;
-    }
+    public BaseCbEntity getCbEntity() {
+		return cbEntity;
+	}
 
-    public void setTb1055GcbByCbCode(Tb1055GcbEntity tb1055GcbByCbCode) {
-        this.tb1055GcbByCbCode = tb1055GcbByCbCode;
-    }
+	public void setCbEntity(BaseCbEntity cbEntity) {
+		this.cbEntity = cbEntity;
+	}
 
-    public Tb1056SvcbEntity getTb1056SvcbByCbCode() {
-        return tb1056SvcbByCbCode;
-    }
-
-    public void setTb1056SvcbByCbCode(Tb1056SvcbEntity tb1056SvcbByCbCode) {
-        this.tb1056SvcbByCbCode = tb1056SvcbByCbCode;
-    }
-
-    public Tb1064StrapEntity getTb1064StrapByF1064Code() {
+	public Tb1064StrapEntity getTb1064StrapByF1064Code() {
         return tb1064StrapByF1064Code;
     }
 
