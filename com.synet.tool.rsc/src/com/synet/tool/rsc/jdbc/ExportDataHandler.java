@@ -106,7 +106,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			
 			System.out.println("导出完成");
 			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			try {
 				connect.rollback();
@@ -511,6 +511,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		} else {
 			setSring(preState, index++, null);
 		}
+		setInt(preState, index++, entity.getF1051Type());
 	}
 	@Override
 	protected String getTb1052Sql() {
@@ -632,7 +633,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1057Sql() {
-		return "INSERT INTO TB1057_SGCB(F1057_CODE,F1046_CODE,F1057_CBNAME,F1057_CBNAME,F1057_DATASET,F1057_DSDESC)" +
+		return "INSERT INTO TB1057_SGCB(F1057_CODE,F1046_CODE,F1057_CBNAME,F1057_DATASET,F1057_DSDESC)" +
 				" VALUES (?,?,?,?,?)";
 	}
 	

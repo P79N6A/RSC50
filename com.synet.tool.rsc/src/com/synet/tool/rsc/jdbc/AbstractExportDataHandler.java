@@ -99,21 +99,20 @@ public abstract class AbstractExportDataHandler {
 	public abstract boolean exportData(ConnParam connParam);
 	
 	protected void exprotTableDate(int tbIndex) throws SQLException {
-		Class<?> clazz = getClazz(tbIndex);
-		if (clazz == null) return;
-		List<?> list = beanDao.getAll(clazz);
-		if (list != null && list.size() > 0) {
-			System.out.println("准备插入：" + tbIndex + ",数据条数：" + list.size());
-			connect.setAutoCommit(false);
-			for (Object obj : list) {
-				exportObjectData(tbIndex, obj);
+		try {//目前数据异常任然继续处理后面的数据
+			Class<?> clazz = getClazz(tbIndex);
+			if (clazz == null) return;
+			System.out.println("开始处理:" + tbIndex + "数据导出");
+			List<?> list = beanDao.getAll(clazz);
+			if (list != null && list.size() > 0) {
+				System.out.println("准备插入：" + tbIndex + ",数据条数：" + list.size());
+				connect.setAutoCommit(false);
+				for (Object obj : list) {
+					exportObjectData(tbIndex, obj);
+				}
+				connect.commit();
 			}
-			connect.commit();
-		}
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -125,6 +124,8 @@ public abstract class AbstractExportDataHandler {
 		}
 		PreparedStatement preState = connect.prepareStatement(sql);
 		setValue(preState, tbIndex, obj);
+		preState.execute();
+		preState.close();
 	}
 	
 	
@@ -226,7 +227,7 @@ public abstract class AbstractExportDataHandler {
 		case TB1022_INDEX:
 			return getTb1022Sql();
 		case TB1026_INDEX:
-			return getTb1041Sql();
+			return getTb1026Sql();
 		case TB1041_INDEX:
 			return getTb1041Sql();
 		case TB1042_INDEX:
