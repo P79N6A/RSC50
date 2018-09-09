@@ -9,7 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.GlobalData;
 import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.jdbc.ExportDataHandler;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -31,7 +33,7 @@ public class TestMain {
 	
 	@Before
 	public void before() {
-		String dbName = "shangwu";
+		String dbName = "aaaaa";
 		ProjectManager instance = ProjectManager.getInstance();
 //		instance.initDb(dbName);
 		instance.openDb(dbName);
@@ -176,6 +178,11 @@ public class TestMain {
 		beandao.insert(portEntity);
 		List<Tb1048PortEntity> list1 = (List<Tb1048PortEntity>) beandao.getAll(Tb1048PortEntity.class);
 		Assert.assertTrue(list1.size() > 0);
+	}
+	
+	@Test
+	public void testExprotData() {
+		new ExportDataHandler().exportData(GlobalData.getInstance().getConnParam());
 	}
 
 }

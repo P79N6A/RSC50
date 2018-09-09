@@ -4,7 +4,13 @@
  */
 package com.synet.tool.rsc.action;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
+
 import com.shrcn.found.ui.action.ConfigAction;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.synet.tool.rsc.dialog.OracleConnDialog;
+import com.synet.tool.rsc.jdbc.ConnParam;
+import com.synet.tool.rsc.jdbc.ExportDataHandler;
 
  /**
  * 
@@ -19,6 +25,14 @@ public class ExportRSAction extends ConfigAction {
 
 	@Override
 	public void run() {
+		OracleConnDialog dialog = new OracleConnDialog(getShell());
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			ConnParam connParam = dialog.getConnParam();
+			boolean b = new ExportDataHandler().exportData(connParam);
+			if (b) {
+				DialogHelper.showAsynInformation("工程配置导出完成！");
+			}
+		}
 	}
 
 }
