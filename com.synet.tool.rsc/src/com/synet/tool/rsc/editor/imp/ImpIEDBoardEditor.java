@@ -6,6 +6,7 @@
 package com.synet.tool.rsc.editor.imp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,13 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 	
 	public ImpIEDBoardEditor(Composite container, IEditorInput input) {
 		super(container, input);
+	}
+	
+	@Override
+	public void init() {
+		improtInfoService = new ImprotInfoService();
+		map = new HashMap<String, IM100FileInfoEntity>();
+		super.init();
 	}
 
 	@Override
