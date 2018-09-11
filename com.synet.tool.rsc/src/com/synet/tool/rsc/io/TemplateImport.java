@@ -1,129 +1,164 @@
 package com.synet.tool.rsc.io;
 
+import java.io.File;
 import java.util.List;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
+import org.dom4j.io.SAXReader;
 
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.model.Tb1064StrapEntity;
-import com.synet.tool.rsc.service.BoardEntityService;
-import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PinEntityService;
-import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
-import com.synet.tool.rsc.service.StrapEntityService;
+import com.synet.tool.rsc.service.StatedataService;
 
 public class TemplateImport implements IImporter{
+	
+	private MmsfcdaService mmsfcdaService;
+	private StatedataService statedataService;
+	private BeanDaoImpl beanDao;
+	private Tb1046IedEntity tb1046IedEntity;
+	private PoutEntityService poutEntityService;
+	private PinEntityService pinEntityService;
+	
+	public TemplateImport(Tb1046IedEntity tb1046IedEntity) {
+		this.tb1046IedEntity = tb1046IedEntity;
+		mmsfcdaService = new MmsfcdaService();
+		statedataService = new StatedataService();
+		poutEntityService = new PoutEntityService();
+		pinEntityService = new PinEntityService();
+		beanDao = BeanDaoImpl.getInstance();
+	}
 
-	@Override
 	@SuppressWarnings("unchecked")
+	@Override
 	public void execute() {
-		final String path = DialogHelper.selectFile(new Shell(), SWT.OPEN, Constants.XML_FILENAME);
-		System.out.println(path);
-		Document doc = DocumentHelper.createDocument();
-		IedEntityService iedEntityService = new IedEntityService();
-		//获取所有的IED
-		List<Tb1046IedEntity> allIedList = (List<Tb1046IedEntity>) iedEntityService.getAll(Tb1046IedEntity.class);
-		for (Tb1046IedEntity tb1046IedEntity : allIedList) {
-			Element elementIedEntity = doc.addElement("Tb1046IedEntity");
-			elementIedEntity.addAttribute("f1046Manufacturor", tb1046IedEntity.getF1046Manufacturor());
-			elementIedEntity.addAttribute("f1046Model", tb1046IedEntity.getF1046Model());
-			elementIedEntity.addAttribute("f1046ConfigVersion", tb1046IedEntity.getF1046ConfigVersion());
-			elementIedEntity.addAttribute("warnRefAddr", getDevWarnRefAddr(tb1046IedEntity));
-			BoardEntityService boardEntityService = new BoardEntityService();
-			//获取当前装置下所有板卡
-			List<Tb1047BoardEntity> boards = boardEntityService.getByIed(tb1046IedEntity);
-			Element elementBoards = elementIedEntity.addElement("Boards");
-			for (Tb1047BoardEntity tb1047BoardEntity : boards) {
-				Element elementBoardEntity = elementBoards.addElement("Tb1047BoardEntity");
-				elementBoardEntity.addAttribute("f1047Slot", tb1047BoardEntity.getF1047Slot());
-				elementBoardEntity.addAttribute("f1047Desc", tb1047BoardEntity.getF1047Desc());
-				elementBoardEntity.addAttribute("f1047Type", tb1047BoardEntity.getF1047Type());
-				elementBoardEntity.addAttribute("warnRefAddr", getBordWarnRefAddr(tb1047BoardEntity));
-				
-				PortEntityService portEntityService = new PortEntityService();
-				//获取当前板卡所有端口
-				List<Tb1048PortEntity> ports = portEntityService.getByBoard(tb1047BoardEntity);
-				for (Tb1048PortEntity tb1048PortEntity : ports) {
-					Element elementPortEntity = elementBoardEntity.addElement("Tb1048PortEntity");
-					elementPortEntity.addAttribute("f1048No", tb1048PortEntity.getF1048No());
-					elementPortEntity.addAttribute("f1048Desc", tb1048PortEntity.getF1048Desc());
-					elementPortEntity.addAttribute("f1048Direction", tb1048PortEntity.getF1048Direction()+"");
-					elementPortEntity.addAttribute("f1048Plug", tb1048PortEntity.getF1048Plug()+"");
-					elementPortEntity.addAttribute("fbRefAddr", getFbRefAddr(tb1048PortEntity));
-				}
-			}
-			StrapEntityService strapEntityService = new StrapEntityService();
-			//获取装置下所有虚端子压板
-			List<Tb1064StrapEntity> straps = strapEntityService.getByIed(tb1046IedEntity);
-			Element elementStraps = elementIedEntity.addElement("Straps");
-			Element elementPouts = elementStraps.addElement("Pouts");
-			Element elementPins = elementStraps.addElement("Pins");
-			
-			PoutEntityService poutEntityService = new PoutEntityService();
-			//获取当前压板所有开出虚端子
-			List<Tb1061PoutEntity> pouts = poutEntityService.getByStraps(straps);
-			for (Tb1061PoutEntity tb1061PoutEntity : pouts) {
-				Element elementPoutEntity = elementPouts.addElement("Tb1061PoutEntity");
-				elementPoutEntity.addAttribute("f1061RefAddr", tb1061PoutEntity.getF1061RefAddr());
-				elementPoutEntity.addAttribute("strapRefAddr", getStrapRefAddr());
-			}
-			
-			PinEntityService pinEntityService = new PinEntityService();
-			//获取当前压板所有开入虚端子
-			List<Tb1062PinEntity> pins = pinEntityService.getByStraps(straps);
-			for (Tb1062PinEntity tb1062PinEntity : pins) {
-				Element elementPinEntity = elementPins.addElement("Tb1062PinEntity");
-				elementPinEntity.addAttribute("f1062RefAddr", tb1062PinEntity.getF1062RefAddr());
-				elementPinEntity.addAttribute("strapRefAddr", getStrapRefAddr());
-			}
+		String f1046Manufacturor = tb1046IedEntity.getF1046Manufacturor();
+		String f1046Model = tb1046IedEntity.getF1046Model();
+		String f1046ConfigVersion = tb1046IedEntity.getF1046ConfigVersion();
+		if(f1046Manufacturor.isEmpty() || f1046Model.isEmpty() || f1046ConfigVersion.isEmpty()) {
+			DialogHelper.showAsynInformation("数据配置不完善，无法查找模版");
+			return;
+		}
+		String fileName = f1046Manufacturor + f1046Model + f1046ConfigVersion;
+		String path = Constants.tplDir + fileName + ".xml";
+		File file = new File(path);
+		if(!file.exists()) { //判断是否存在模版
+			DialogHelper.showAsynInformation("当前设备类型模版不存在！");
+			return;
 		}
 		
+		SAXReader reader = new SAXReader();
+		reader.setEncoding("UTF-8");
+		try {
+			Document document = reader.read(new File(path));
+			Element rootElement = document.getRootElement();
+			saveIed(rootElement);
+			Element elementBoards = rootElement.element("Boards");
+			List<Element> elementsBoardEntity = elementBoards.elements("Tb1047BoardEntity");
+			for (Element elementBoardEntity : elementsBoardEntity) {
+				saveBoard(elementBoardEntity);
+				List<Element> elementsPortEntity = elementBoardEntity.elements("Tb1048PortEntity");
+				for (Element elementPortEntity : elementsPortEntity) {
+					savePort(elementPortEntity);
+				}
+			}
+			Element elementStraps = rootElement.element("Straps");
+			Element elementPouts = elementStraps.element("Pouts");
+			List<Element> elementsPoutEntity = elementPouts.elements("Tb1061PoutEntity");
+			for (Element elementPoutEntity : elementsPoutEntity) {
+				savePout(elementPoutEntity);
+			}
+			Element elementPins = elementStraps.element("Pins");
+			List<Element> elementsPinEntity = elementPins.elements("Tb1062PinEntity");
+			for (Element elementPinEntity : elementsPinEntity) {
+				savePin(elementPinEntity);
+			}
+		} catch (DocumentException e) {
+			ConsoleManager.getInstance().append("文件读取失败");
+			e.printStackTrace();
+		}
 	}
 
-	private String getStrapRefAddr() {
-		// TODO Auto-generated method stub
-		return null;
+	private void savePin(Element elementPinEntity) {
+		String f1062RefAddr = elementPinEntity.attributeValue("f1062RefAddr");
+		String strapRefAddr = elementPinEntity.attributeValue("strapRefAddr");
+		Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(tb1046IedEntity.getF1046Name(), f1062RefAddr);
+		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(strapRefAddr);
+		saveCode(statedataEntity, pinEntity.getF1062Code());
 	}
 
-	/**
-	 * 获取端口光强信号参引
-	 * @param tb1048PortEntity
-	 * @return
-	 */
-	private String getFbRefAddr(Tb1048PortEntity tb1048PortEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	private void savePout(Element elementPoutEntity) {
+		String f1061RefAddr = elementPoutEntity.attributeValue("f1061RefAddr");
+		String strapRefAddr = elementPoutEntity.attributeValue("strapRefAddr");
+		Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), f1061RefAddr);
+		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(strapRefAddr);
+		saveCode(statedataEntity, poutEntity.getF1061Code());
 	}
 
-	/**
-	 * 获取板卡告警信号参引
-	 * @param tb1047BoardEntity
-	 * @return
-	 */
-	private String getBordWarnRefAddr(Tb1047BoardEntity tb1047BoardEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	private void savePort(Element elementPortEntity) {
+		String f1048No = elementPortEntity.attributeValue("f1048No");
+		String f1048Desc = elementPortEntity.attributeValue("f1048Desc");
+		String f1048Direction = elementPortEntity.attributeValue("f1048Direction");
+		String f1048Plug = elementPortEntity.attributeValue("f1048Plug");
+		String fbRefAddr = elementPortEntity.attributeValue("fbRefAddr");
+		String portCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_PORT);
+		Tb1048PortEntity portEntity = new Tb1048PortEntity(portCode, f1048No, f1048Desc,
+				Integer.parseInt(f1048Direction), Integer.parseInt(f1048Plug));
+		beanDao.save(portEntity);
+		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(fbRefAddr);
+		saveCode(statedataEntity, portEntity.getF1048Code());
 	}
 
-	/**
-	 * 获取装置告警信号参引
-	 * @param tb1046IedEntity
-	 * @return 信号参引
-	 */
-	private String getDevWarnRefAddr(Tb1046IedEntity tb1046IedEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	private void saveBoard(Element elementBoardEntity) {
+		String f1047Slot = elementBoardEntity.attributeValue("f1047Slot");
+		String f1047Desc = elementBoardEntity.attributeValue("f1047Desc");
+		String f1047Type = elementBoardEntity.attributeValue("f1047Type");
+		String warnRefAddr = elementBoardEntity.attributeValue("warnRefAddr");
+		String boardCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_BOARD);
+		Tb1047BoardEntity boardEntity = new Tb1047BoardEntity(boardCode, f1047Slot, f1047Desc, f1047Type);
+		beanDao.save(boardEntity);
+		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(warnRefAddr);
+		saveCode(statedataEntity, boardEntity.getF1047Code());
+	}
+
+	private void saveIed(Element rootElement) {
+		String warnRefAddr = rootElement.attributeValue("warnRefAddr");
+		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(warnRefAddr);
+		saveCode(statedataEntity, tb1046IedEntity.getF1046Code());
+	}
+	
+	private void saveCode(Tb1016StatedataEntity statedataEntity, String code) {
+		if(statedataEntity != null) {
+			statedataEntity.setParentCode(code);
+			beanDao.save(statedataEntity);
+		}
+	}
+
+	private Tb1016StatedataEntity getStateDataByRefAddr(String warnRefAddr) {
+		if(warnRefAddr == null) {
+			return null;
+		}
+		Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(warnRefAddr);
+		if(mmsfcdaEntity == null) {
+			return null;
+		}
+		Tb1016StatedataEntity statedataEntity = statedataService.getStateDataByCode(mmsfcdaEntity.getDataCode());
+		return statedataEntity;
 	}
 
 }

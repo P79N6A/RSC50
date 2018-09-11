@@ -15,8 +15,21 @@ public class Tb1048PortEntity {
     private Tb1047BoardEntity tb1047BoardByF1047Code;
     // 端口光强
     private Tb1006AnalogdataEntity tb1006AnalogdataByF1048Code;
+    
+    public Tb1048PortEntity() {
+	}
 
-    public String getF1048Code() {
+    public Tb1048PortEntity(String f1048Code,String f1048No, String f1048Desc,
+			 int f1048Direction, int f1048Plug) {
+		super();
+		this.f1048Code = f1048Code;
+		this.f1048No = f1048No;
+		this.f1048Desc = f1048Desc;
+		this.f1048Direction = f1048Direction;
+		this.f1048Plug = f1048Plug;
+	}
+
+	public String getF1048Code() {
         return f1048Code;
     }
 

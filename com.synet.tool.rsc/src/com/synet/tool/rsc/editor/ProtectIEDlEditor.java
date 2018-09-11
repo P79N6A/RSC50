@@ -5,9 +5,13 @@
  */
 package com.synet.tool.rsc.editor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,10 +26,14 @@ import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.io.TemplateExport;
+import com.synet.tool.rsc.io.TemplateImport;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -84,6 +92,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkName;
 	private Tb1046IedEntity iedEntity;
+	private List<Tb1046IedEntity> iedEntityList;
 	private CircuitEntityService circuitEntityService;
 	private CTabFolder tabFolder;
 	private MmsfcdaService mmsfcdaService;
@@ -123,6 +132,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	@Override
 	public void init() {
 		dic = DictManager.getInstance();
+		iedEntityList = new ArrayList<>();
 		mmsfcdaService = new MmsfcdaService();
 		portService = new BoardPortService();
 		sgfcdaEntityService = new SgfcdaEntityService();
@@ -135,6 +145,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		rcdChnLdService = new RcdchanneldEntityService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
+		iedEntityList.add(iedEntity);
 		gridData = new GridData(GridData.FILL_BOTH);
 		tableMapper = new HashMap<Integer, DevKTable>();
 		super.init();
@@ -262,7 +273,27 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				} else if(obj == btnAdd) {
 					config();
 				} else if(obj == btnTempSave) {
+					ProgressManager.execute(new IRunnableWithProgress() {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							new TemplateExport(iedEntity).execute();
+						}
+					});
+					DialogHelper.showAsynInformation("保存模版结束！");
+				} else if(obj == btnTempQuote) {
+					ProgressManager.execute(new IRunnableWithProgress() {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							new TemplateImport(iedEntity).execute();
+						}
+					});
+					DialogHelper.showAsynInformation("引入模版结束！");
 					
+					
+				} else if(obj == btnTempCamp) {
+					//TODO
 				}
 			}
 		};
@@ -389,7 +420,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				mmsfcdaEntities = 
 						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
 					tableDeviceWarning.setInput(mmsfcdaEntities);
-					tableDeviceName.addRow(iedEntity);
+					tableDeviceName.setInput(iedEntityList);
 			}
 			if(!DataUtils.listNotNull(boardEntities)) {
 					boardEntities = boardEntityService.getByIed(iedEntity);

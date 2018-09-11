@@ -37,7 +37,21 @@ public class Tb1046IedEntity {
     private String f1046OutType;//出口方式
     private String f1046boardNum;//板卡数量
     
-    public String getF1042Code() {
+    public Tb1046IedEntity() {
+	}
+    
+    
+    public Tb1046IedEntity(String f1046Manufacturor, String f1046Model,
+			String f1046ConfigVersion) {
+		super();
+		this.f1046Manufacturor = f1046Manufacturor;
+		this.f1046Model = f1046Model;
+		this.f1046ConfigVersion = f1046ConfigVersion;
+	}
+
+
+
+	public String getF1042Code() {
 		return f1042Code;
 	}
 

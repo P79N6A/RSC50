@@ -12,8 +12,20 @@ public class Tb1047BoardEntity {
     private String f1047Desc;
     private String f1047Type;
     private Tb1046IedEntity tb1046IedByF1046Code;
+    
+    public Tb1047BoardEntity() {
+	}
 
-    public String getF1047Code() {
+    public Tb1047BoardEntity(String f1047Code, String f1047Slot, String f1047Desc,
+			String f1047Type) {
+		super();
+		this.f1047Code = f1047Code;
+		this.f1047Slot = f1047Slot;
+		this.f1047Desc = f1047Desc;
+		this.f1047Type = f1047Type;
+	}
+
+	public String getF1047Code() {
         return f1047Code;
     }
 
