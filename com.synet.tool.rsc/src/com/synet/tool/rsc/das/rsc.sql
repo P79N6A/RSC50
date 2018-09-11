@@ -196,7 +196,6 @@ create table TB1046_IED
    F1046_ProtectCrc     varchar(48),
    F1046_OperateDate     varchar(48),
    F1046_ProductDate     varchar(48),
-   F1046_ProductData  	varchar(48),
    F1046_ProductNo  	varchar(48),
    F1046_DataGatType  	varchar(48),
    F1046_OutType  		varchar(48),
