@@ -33,6 +33,7 @@ public class ImportFibreListProcessor {
 	private CableEntityService cableEntityService = new CableEntityService();
 	private CoreEntityService coreEntityService = new CoreEntityService();
 	private PhyconnEntityService phyconnEntityService = new PhyconnEntityService();
+	private List<IM102FibreListEntity> fibreListEntitieList = new ArrayList<>();
 	//存放解析出来的光缆（去重）
 	private List<Tb1051CableEntity> cableEntitieList = new ArrayList<>();
 	private List<Tb1052CoreEntity> coreEntitieList = new ArrayList<>();
@@ -47,14 +48,19 @@ public class ImportFibreListProcessor {
 		improtInfoService.save(fileInfoEntity);
 		List<Tb1041SubstationEntity> substationList = substationService.getAllSubstation();
 		//map 的key值为屏柜的中文名称
+		//处理对侧装置和屏柜名称
+		analysisContralateralDev(map);
+		if (fibreListEntitieList == null || fibreListEntitieList.size() <= 0) {
+			return false;
+		}
+		save(fileInfoEntity, fibreListEntitieList);
 		for (String cubicleDesc : map.keySet()) {
-			List<IM102FibreListEntity> fibreListEntities = map.get(cubicleDesc);
+			Tb1050CubicleEntity cubicleEntity = cubicleService.getCubicleEntityByDesc(cubicleDesc);
 			try {
-				Tb1050CubicleEntity cubicleEntity = cubicleService.getCubicleEntityByDesc(cubicleDesc);
-				if (substationList != null && substationList.size() > 0 
-						&& cubicleEntity != null) {
-					if (fibreListEntities != null && fibreListEntities.size() > 0) {
-						analysisCable(substationList.get(0), cubicleEntity, fibreListEntities);
+				if (substationList != null && substationList.size() > 0 &&
+						cubicleEntity != null) {
+					if (fibreListEntitieList != null && fibreListEntitieList.size() > 0) {
+						analysisCable(substationList.get(0),cubicleEntity, fibreListEntitieList);
 						analysisPhyconn(substationList.get(0));
 					}
 				}
@@ -65,9 +71,41 @@ public class ImportFibreListProcessor {
 			cableEntityService.saveBatch(cableEntitieList);
 			coreEntityService.saveBatch(coreEntitieList);
 			phyconnEntityService.saveBatch(physconnEntitieList);
-			save(fileInfoEntity, fibreListEntities);
-		}
+			
+		}	
 		return true;
+	}
+	
+	
+	private void analysisContralateralDev( Map<String, List<IM102FibreListEntity>> map) {
+		for (String cubicleDesc : map.keySet()) {
+			List<IM102FibreListEntity> fibreListEntities = map.get(cubicleDesc);
+			System.out.println("屏柜光纤数：" + cubicleDesc + "-" + fibreListEntities.size());
+			for (IM102FibreListEntity entity : fibreListEntities) {
+				IM102FibreListEntity oldEntity = checkFibreListEntity(entity);
+				if (oldEntity == null) {
+					entity.setCubicleDescA(cubicleDesc);
+					fibreListEntitieList.add(entity);
+				} else {
+					oldEntity.setBoardCodeB(entity.getBoardCodeA());
+					oldEntity.setPortCodeB(entity.getPortCodeA());
+					oldEntity.setDevDescB(entity.getDevDescA());
+					entity.setCubicleDescB(cubicleDesc);
+				}
+			}
+		}
+	}
+	
+	private IM102FibreListEntity checkFibreListEntity(IM102FibreListEntity fibreListEntity) {
+		if (fibreListEntitieList != null) {
+			for (IM102FibreListEntity entity : fibreListEntitieList) {
+				if (entity.getCableCode().equals(fibreListEntity.getCableCode()) 
+						&& entity.getCoreCode().equals(fibreListEntity.getCoreCode())) {
+					return entity;
+				}
+			}
+		}
+		return null;
 	}
 	
 	//处理物理连接
@@ -91,8 +129,9 @@ public class ImportFibreListProcessor {
 	}
 
 	//处理光缆数据
-	private void analysisCable(Tb1041SubstationEntity substationEntity, Tb1050CubicleEntity cubicleEntity, List<IM102FibreListEntity> list) {
+	private void analysisCable(Tb1041SubstationEntity substationEntity,Tb1050CubicleEntity cubicleEntity, List<IM102FibreListEntity> list) {
 		for (IM102FibreListEntity entity : list) {
+			if (cubicleEntity == null) continue;
 			if (entity.getCableCode() == null || "".equals(entity.getCableCode())) continue;
 			Tb1051CableEntity cableEntity = new Tb1051CableEntity();
 			cableEntity.setF1051Name(entity.getCableCode());

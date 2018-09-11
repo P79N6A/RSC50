@@ -190,7 +190,7 @@ public class ImportInfoParser {
 	            stream.close();  
 	        }
 	        if (map != null && map.size() > 0) {
-	        	result.setFileInfoEntity(getIM100FileInfoEntity(xlspath, ExcelConstants.IM109_STA_INFO));
+	        	result.setFileInfoEntity(getIM100FileInfoEntity(xlspath, ExcelConstants.IM102_FIBRE_LIST));
 	        	result.setResult(map);
 	        }
 	        xlsxPackage.close();
@@ -263,22 +263,31 @@ public class ImportInfoParser {
 		switch (fileType) {
 		case ExcelConstants.IM101_IED_LIST:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE101);
+			break;
 		case ExcelConstants.IM102_FIBRE_LIST:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE102);
+			break;
 		case ExcelConstants.IM103_IED_BOARD:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE103);
+			break;
 		case ExcelConstants.IM104_STATUS_IN:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE104);
+			break;
 		case ExcelConstants.IM105_BOARD_WARN:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE105);
+			break;
 		case ExcelConstants.IM106_PORT_LIGHT:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE106);
+			break;
 		case ExcelConstants.IM107_TER_STRAP:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE107);
+			break;
 		case ExcelConstants.IM108_BRK_CFM:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE108);
+			break;
 		case ExcelConstants.IM109_STA_INFO:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE109);
+			break;
 		default:
 			break;
 		}
