@@ -9,10 +9,13 @@ public class TableHeadHandler extends RscSheetHandler {
 
 	private int headRowNum;
 	private Map<Integer, String> entity = null;
+	private Map<Integer, String> tempMap;
+	private int maxCol = 0;//表头行最大列
 	
 	public TableHeadHandler(int headRowNum) {
 		super();
 		this.headRowNum = headRowNum;
+		this.tempMap = new HashMap<>();
 	}
 
 	@Override
@@ -29,6 +32,14 @@ public class TableHeadHandler extends RscSheetHandler {
 				errorMsg.add(error);
 			} else {
 				result.add(entity);
+				//处理为读到的合并行的数据（往前读取）
+				for (int i = 0; i <= (maxCol + 1); i++) {
+					if (!entity.containsKey(i)) {
+						if (tempMap.containsKey(i)) {
+							entity.put(i, tempMap.get(i));
+						}
+					}
+				}
 			}
 		}
 		super.endRow(rowNum);
@@ -38,10 +49,8 @@ public class TableHeadHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow < 4){
-			System.out.println(currentRow + "-" + currentCol + "-" + formattedValue);
-		}
 		if (currentRow <= headRowNum ) {
+			System.out.println(currentRow + ":" +currentCol + "-" + formattedValue);
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -49,10 +58,20 @@ public class TableHeadHandler extends RscSheetHandler {
 	private void saveValue(int col, String value) {
 		if (entity == null)
 			return;
-		if (value != null && !"".equals(value)) {
-			entity.put(col, value.trim());
-		} else {
-			entity.put(col, "未知列名");
+		maxCol = col;
+		if (currentRow < headRowNum){
+			tempMap.put(col, value);
+		} else if (currentRow == headRowNum) {
+			if (value != null && !"".equals(value)) {
+				entity.put(col, value.trim());
+			} else {
+				value = tempMap.get(col);
+				if (value != null) {
+					entity.put(col,value);
+				} else {
+					entity.put(col,"");
+				}
+			}
 		}
 	}
 

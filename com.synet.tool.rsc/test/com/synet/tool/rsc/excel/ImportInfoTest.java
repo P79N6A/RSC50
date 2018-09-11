@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Result;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.ExcelConstants;
@@ -64,5 +62,12 @@ public class ImportInfoTest {
 		}
 		System.out.println(result.getResult());
 		System.out.println(parser.getHandler().getErrorMsg());
+	}
+	
+	@Test
+	public void testTableHead() {
+		TableHeadParser parser = new TableHeadParser();
+		Map<Integer, String> temp = parser.getTableHeadInfo("C:\\Users\\36576\\Desktop\\光缆清册2.xlsx", 2);
+		System.out.println(temp);
 	}
 }
