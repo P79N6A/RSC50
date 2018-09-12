@@ -11,6 +11,7 @@ public class SubstationService extends BaseService {
 		return (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Tb1041SubstationEntity getCurrSubstation() {
 		List<Tb1041SubstationEntity> staList = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 		if (staList != null && staList.size() > 0) {

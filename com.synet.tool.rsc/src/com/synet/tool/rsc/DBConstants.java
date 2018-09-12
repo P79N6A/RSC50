@@ -57,6 +57,7 @@ public interface DBConstants {
 	String PR_BRKCFM		= "BrkCfm";
 	String PR_TERSTRAP		= "TerStrap";
 	String PR_PORTLIGHT		= "PortLight";
+	String PR_LPRELATION    = "LPRelation";
 
 	String BAY_PROT			= "保护间隔";
 	String BAY_PUB 			= "公共间隔";

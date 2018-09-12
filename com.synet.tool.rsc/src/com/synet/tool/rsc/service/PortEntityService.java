@@ -54,4 +54,15 @@ public class PortEntityService extends BaseService{
 		return (List<Tb1048PortEntity>) beanDao.getListByCriteria(
 				Tb1048PortEntity.class, "tb1047BoardByF1047Code", boardEntity);
 	}
+	
+	/**
+	 * 获取板卡对应端口
+	 * @param boardEntity
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1048PortEntity> getByBoardList(List<Tb1047BoardEntity> boardEntitys) {
+		return (List<Tb1048PortEntity>) hqlDao.selectInObjects(Tb1048PortEntity.class,
+				"tb1047BoardByF1047Code", boardEntitys);
+	}
 }
