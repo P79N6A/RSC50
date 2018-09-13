@@ -298,15 +298,31 @@ public class HqlDaoImpl implements HqlDaoService {
 	
 	@Override
 	public List<?> queryBySql(String sql, Class<?> clazz, Map<String, Object> params) {
+		return queryBySql(sql, clazz, params, -1, -1);
+	}
+	
+	@Override
+	public List<?> queryBySql(String sql, Class<?> clazz, Map<String, Object> params,
+			int currentPage, int pageSize) {
 		Session session = service.get();
 		SQLQuery query = (SQLQuery) session.createSQLQuery(sql);
-		for (String colName : params.keySet()) {
-			query.setParameter(colName, params.get(colName));
+		if (params != null) {
+			for (String colName : params.keySet()) {
+				query.setParameter(colName, params.get(colName));
+			}
 		}
 		if (clazz != null)
 			query.addEntity(clazz);
+		if (pageSize > 0) {
+			if (currentPage < 1)
+				currentPage = 1;
+			query.setFirstResult((currentPage - 1) * pageSize);
+			query.setMaxResults(pageSize);
+		}
 		return query.list();
 	}
+	
+	
 	
 	/**
 	 * 

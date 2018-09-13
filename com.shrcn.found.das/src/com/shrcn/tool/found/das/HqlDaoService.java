@@ -167,6 +167,8 @@ public interface HqlDaoService {
 	 */
 	public List<?> queryBySql(String sql, Class<?> clazz, Map<String, Object> params);
 	
+	public List<?> queryBySql(String sql, Class<?> clazz, Map<String, Object> params,
+			int currentPage, int pageSize);
 	
 	
 	public int executeSql(String sql);
@@ -200,4 +202,5 @@ public interface HqlDaoService {
 	public int getRecNum(String tbName);
 	
 	public void createTable(String tbName, Map<String,String> paramMap);
+
 }
