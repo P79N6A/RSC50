@@ -7,21 +7,19 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="装置Name" editor="none" name="f1046Name" datType="string" width="80" default=""/>
   <field desc="装置名称" editor="none" name="f1046Desc" datType="string" width="80" default=""/> 
   <field desc="间隔" dict="ALL_INTERVAL" name="tb1042BaysByF1042Code.f1042Name" datType="string" width="150" default=""/> 
-  <field desc="屏柜" editor="text" name="tb1050CubicleEntity.f1050Name" datType="string" width="50" default=""/> 
-  <field desc="A网IP" editor="text" name="f1046aNetIp" datType="string" width="60" default=""/> 
-  <field desc="B网IP" editor="text" name="f1046bNetIp" datType="string" width="60" default=""/> 
-  <field desc="厂商" editor="text" name="f1046firm" datType="string" width="50" default=""/> 
-  <field desc="型号" editor="text" name="f1046type" datType="string" width="50" default=""/> 
-  <field desc="版本" editor="text" name="f1046version" datType="string" width="50" default=""/> 
-  <field desc="套" editor="text" name="f1046suite" datType="string" width="80" default=""/> 
-  <field desc="保护分类" editor="text" name="f1046protectCategory" datType="string" width="80" default=""/> 
-  <field desc="保护型号" editor="text" name="f1046protectType" datType="string" width="80" default=""/> 
-  <field desc="保护类型" editor="text" name="f1046protectModel" datType="string" width="80" default=""/> 
-  <field desc="保护CRC码" editor="text" name="f1046protectCrc" datType="string" width="90" default=""/> 
-  <field desc="投运日期" editor="text" name="f1046OperateData" datType="string" width="80" default=""/> 
-  <field desc="出厂日期" editor="text" name="f1046productData" datType="string" width="80" default=""/> 
-  <field desc="出厂编号" editor="text" name="f1046productNo" datType="string" width="80" default=""/> 
-  <field desc="数据采集方式" editor="text" name="f1046dataGatType" datType="string" width="100" default=""/> 
-  <field desc="出口方式" editor="text" name="f1046OutType" datType="string" width="80" default=""/> 
-  <field desc="板卡数量" editor="text" name="f1046boardNum" datType="string" width="80" default="0"/> 
+  <field desc="屏柜" editor="none" name="tb1050CubicleEntity.f1050Name" datType="string" width="50" default=""/> 
+  <field desc="A网IP" editor="none" name="f1046aNetIp" datType="string" width="60" default=""/> 
+  <field desc="B网IP" editor="none" name="f1046bNetIp" datType="string" width="60" default=""/> 
+  <field desc="厂商" editor="none" name="f1046Manufacturor" datType="string" width="50" default=""/> 
+  <field desc="型号" editor="none" name="f1046Model" datType="string" width="50" default=""/> 
+  <field desc="版本" editor="none" name="f1046ConfigVersion" datType="string" width="50" default=""/> 
+  <field desc="套" editor="none" name="f1046AorB" dict="IED_NO" datType="string" width="80" default=""/> 
+  <field desc="保护分类" editor="none" name="f1046Type" dict="IED_TYPE" datType="string" width="80" default=""/> 
+  <field desc="保护CRC码" editor="none" name="f1046Crc" datType="string" width="90" default=""/> 
+  <field desc="投运日期" editor="none" name="f1046OperateData" datType="string" width="80" default=""/> 
+  <field desc="出厂日期" editor="none" name="f1046productData" datType="string" width="80" default=""/> 
+  <field desc="出厂编号" editor="none" name="f1046productNo" datType="string" width="80" default=""/> 
+  <field desc="数据采集方式" editor="none" name="f1046dataGatType" datType="string" width="100" default=""/> 
+  <field desc="出口方式" editor="none" name="f1046OutType" datType="string" width="80" default=""/> 
+  <field desc="板卡数量" editor="none" name="f1046boardNum" datType="string" width="80" default="0"/> 
 </table>
