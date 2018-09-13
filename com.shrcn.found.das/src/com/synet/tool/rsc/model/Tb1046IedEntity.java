@@ -35,7 +35,7 @@ public class Tb1046IedEntity {
     private String f1046productNo;//出厂编号
     private String f1046dataGatType;//数据采集方式
     private String f1046OutType;//出口方式
-    private String f1046boardNum;//板卡数量
+    private Integer f1046boardNum;//板卡数量
     
     public Tb1046IedEntity() {
 	}
@@ -147,11 +147,11 @@ public class Tb1046IedEntity {
 		this.f1046OutType = f1046OutType;
 	}
 
-	public String getF1046boardNum() {
+	public Integer getF1046boardNum() {
 		return f1046boardNum;
 	}
 
-	public void setF1046boardNum(String f1046boardNum) {
+	public void setF1046boardNum(Integer f1046boardNum) {
 		this.f1046boardNum = f1046boardNum;
 	}
 

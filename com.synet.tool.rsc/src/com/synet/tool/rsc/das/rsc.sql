@@ -199,7 +199,7 @@ create table TB1046_IED
    F1046_ProductNo  	varchar(48),
    F1046_DataGatType  	varchar(48),
    F1046_OutType  		varchar(48),
-   F1046_BoardNum  		varchar(48) default '0', 
+   F1046_BoardNum  		INT, 
    primary key (F1046_CODE)
 );
 
@@ -428,7 +428,6 @@ create table TB1061_POUT
    F1061_RefAddr        varchar(48) not null,
    F1061_Index          INT not null,
    F1061_Desc           varchar(96),
-   F1061_Type           INT,
    F1064_CODE           varchar(48),
    DATA_CODE            varchar(48) not null,
    primary key (F1061_CODE)
@@ -442,7 +441,6 @@ create table TB1062_PIN
    F1062_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
    F1062_RefAddr        varchar(48) not null,
-   F1062_Type           INT not null,
    F1062_Desc           varchar(96),
    F1062_IsUsed         INT not null,
    F1064_CODE           varchar(48),
@@ -459,7 +457,6 @@ create table TB1063_Circuit
    F1061_CODE_PSend     varchar(48),
    F1046_CODE_IEDRecv   varchar(48) not null,
    F1062_CODE_PRecv     varchar(48) not null,
-   F1063_Type           INT not null,
    F1065_CODE           varchar(48) not null,
    F1061_CODE_ConvChk1  varchar(48),
    F1061_CODE_ConvChk2  varchar(48),

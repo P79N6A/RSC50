@@ -20,9 +20,6 @@
         <property name="f1061Desc">
             <column name="F1061_Desc" sql-type="varchar" length="96"/>
         </property>
-        <property name="f1061Type">
-            <column name="F1061_Type" sql-type="int"/>
-        </property>
         <property name="dataCode">
             <column name="DATA_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>

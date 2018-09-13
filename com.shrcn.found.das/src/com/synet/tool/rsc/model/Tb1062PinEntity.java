@@ -8,7 +8,6 @@ package com.synet.tool.rsc.model;
 public class Tb1062PinEntity {
     private String f1062Code;
     private String f1062RefAddr;
-    private int f1062Type;
     private String f1062Desc;
     private int f1062IsUsed;
     private Tb1046IedEntity tb1046IedByF1046Code;
@@ -29,14 +28,6 @@ public class Tb1062PinEntity {
     public void setF1062RefAddr(String f1062RefAddr) {
         this.f1062RefAddr = f1062RefAddr;
     }
-
-	public int getF1062Type() {
-		return f1062Type;
-	}
-
-	public void setF1062Type(int f1062Type) {
-		this.f1062Type = f1062Type;
-	}
 
 	public String getF1062Desc() {
         return f1062Desc;
@@ -62,7 +53,6 @@ public class Tb1062PinEntity {
         Tb1062PinEntity that = (Tb1062PinEntity) o;
 
         if (f1062IsUsed != that.f1062IsUsed) return false;
-        if (f1062Type != that.f1062Type) return false;
         if (f1062Code != null ? !f1062Code.equals(that.f1062Code) : that.f1062Code != null) return false;
         if (f1062Desc != null ? !f1062Desc.equals(that.f1062Desc) : that.f1062Desc != null) return false;
         if (f1062RefAddr != null ? !f1062RefAddr.equals(that.f1062RefAddr) : that.f1062RefAddr != null) return false;
@@ -76,7 +66,6 @@ public class Tb1062PinEntity {
         result = 31 * result + (f1062RefAddr != null ? f1062RefAddr.hashCode() : 0);
         result = 31 * result + (f1062Desc != null ? f1062Desc.hashCode() : 0);
         result = 31 * result + f1062IsUsed;
-        result = 31 * result + f1062Type;
         return result;
     }
 

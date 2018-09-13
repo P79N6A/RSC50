@@ -77,7 +77,7 @@
             <column name="F1046_OutType" sql-type="varchar" length="48"/>
         </property>
         <property name="f1046boardNum">
-            <column name="F1046_BoardNum" sql-type="varchar" length="48"/>
+            <column name="F1046_BoardNum"  sql-type="int"/>
         </property>
         <many-to-one name="tb1042BaysByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity" lazy="false" insert="false" update="false">
             <column name="F1042_CODE"/>

@@ -8,9 +8,6 @@
         <id name="f1063Code">
             <column name="F1063_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
-        <property name="f1063Type">
-            <column name="F1063_Type" sql-type="int" not-null="true"/>
-        </property>
         <many-to-one name="tb1046IedByF1046CodeIedRecv" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE_IEDRecv" not-null="true"/>
         </many-to-one>

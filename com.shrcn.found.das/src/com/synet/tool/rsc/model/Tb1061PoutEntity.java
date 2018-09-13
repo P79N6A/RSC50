@@ -11,7 +11,6 @@ public class Tb1061PoutEntity {
     private String f1061RefAddr;
     private int f1061Index;
     private String f1061Desc;
-    private Integer f1061Type;
     private String dataCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private BaseCbEntity cbEntity;
@@ -66,14 +65,6 @@ public class Tb1061PoutEntity {
         this.f1061Desc = f1061Desc;
     }
 
-    public Integer getF1061Type() {
-        return f1061Type;
-    }
-
-    public void setF1061Type(Integer f1061Type) {
-        this.f1061Type = f1061Type;
-    }
-
     public String getDataCode() {
         return dataCode;
     }
@@ -111,7 +102,6 @@ public class Tb1061PoutEntity {
         if (f1061Code != null ? !f1061Code.equals(that.f1061Code) : that.f1061Code != null) return false;
         if (f1061Desc != null ? !f1061Desc.equals(that.f1061Desc) : that.f1061Desc != null) return false;
         if (f1061RefAddr != null ? !f1061RefAddr.equals(that.f1061RefAddr) : that.f1061RefAddr != null) return false;
-        if (f1061Type != null ? !f1061Type.equals(that.f1061Type) : that.f1061Type != null) return false;
 
         return true;
     }
@@ -123,7 +113,6 @@ public class Tb1061PoutEntity {
         result = 31 * result + (f1061RefAddr != null ? f1061RefAddr.hashCode() : 0);
         result = 31 * result + f1061Index;
         result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
-        result = 31 * result + (f1061Type != null ? f1061Type.hashCode() : 0);
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);
         return result;
     }

@@ -5,7 +5,6 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1063CircuitEntity {
     private String f1063Code;
-    private int f1063Type;
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
     private Tb1046IedEntity tb1046IedByF1046CodeIedSend;
     
@@ -25,14 +24,6 @@ public class Tb1063CircuitEntity {
         this.f1063Code = f1063Code;
     }
 
-    public int getF1063Type() {
-		return f1063Type;
-	}
-
-	public void setF1063Type(int f1063Type) {
-		this.f1063Type = f1063Type;
-	}
-
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,7 +31,6 @@ public class Tb1063CircuitEntity {
 
         Tb1063CircuitEntity that = (Tb1063CircuitEntity) o;
 
-        if (f1063Type != that.f1063Type) return false;
         if (f1063Code != null ? !f1063Code.equals(that.f1063Code) : that.f1063Code != null) return false;
 
         return true;
@@ -49,7 +39,6 @@ public class Tb1063CircuitEntity {
     @Override
     public int hashCode() {
         int result = f1063Code != null ? f1063Code.hashCode() : 0;
-        result = 31 * result + f1063Type;
         return result;
     }
 
