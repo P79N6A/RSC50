@@ -17,6 +17,7 @@ public interface RSCConstants {
 	String DICT_PATH 		= "com/synet/tool/rsc/dict.properties";
 	
     String CFGURL 			= "com/synet/tool/rsc/util/rscnavg.xml";
+    String RULEURL 			= "com/synet/tool/rsc/util/rules.xml";
 
     String ET_PR_MDL		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryModelEditor";
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";
@@ -66,7 +67,7 @@ public interface RSCConstants {
      String CIRCUI_BOARD 		= "虚端子压板";
      String LOGICAL_LINK 		= "逻辑链路";
      String PROTECT_WAVE 		= "保护录波";
-     //"保护定值", "保护参数", "保护压板", "保护动作", "保护测量量"
+
      String PROTECT_VALUE 		= "保护定值";
      String PROTECT_PARAM 		= "保护参数";
      String PROTECT_BOARD 		= "保护压板";
