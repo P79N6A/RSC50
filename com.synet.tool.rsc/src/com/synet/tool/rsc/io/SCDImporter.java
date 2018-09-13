@@ -17,7 +17,6 @@ import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -27,6 +26,7 @@ import com.synet.tool.rsc.io.parser.DsParameterParser;
 import com.synet.tool.rsc.io.parser.DsSettingParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
 import com.synet.tool.rsc.io.parser.IIedParser;
+import com.synet.tool.rsc.io.parser.IedParserBase;
 import com.synet.tool.rsc.io.parser.LogicLinkParser;
 import com.synet.tool.rsc.io.parser.RcbParser;
 import com.synet.tool.rsc.io.parser.SmvParser;
@@ -56,6 +56,7 @@ import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.service.SubstationService;
+import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
  /**
@@ -136,8 +137,13 @@ public class SCDImporter implements IImporter {
 		// 变电站
 		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
 		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
-		station.setF1041Name(staEl.attributeValue("name"));
-		station.setF1041Desc(staEl.attributeValue("desc"));
+		if (staEl == null) {
+			station.setF1041Name(Constants.CURRENT_PRJ_NAME);
+			station.setF1041Desc(Constants.CURRENT_PRJ_NAME);
+		} else {
+			station.setF1041Name(staEl.attributeValue("name"));
+			station.setF1041Desc(staEl.attributeValue("desc"));
+		}
 		beanDao.insert(station);
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
@@ -163,9 +169,14 @@ public class SCDImporter implements IImporter {
 			int aOrb = iedName.endsWith("B") ? 2 : 1;
 			ied.setF1046AorB(aOrb);
 			ied.setF1046IsVirtual(0);
+			ied.setF1046boardNum(0);
 			beanDao.insert(ied);
+			// 通信状态点
+			Tb1016StatedataEntity stIedComm = IedParserBase.createStatedata(iedName, iedCode, F1011_NO.IED_COMM.getId());
+			beanDao.insert(stIedComm);
 			
 			Tb1026StringdataEntity strData = new Tb1026StringdataEntity();
+			strData.setF1011No(F1011_NO.VT_CRC.getId());
 			strData.setF1026Code(rscp.nextTbCode(DBConstants.PR_String));
 			strData.setF1026Desc(vtcrc);
 			strData.setParentCode(iedCode);
@@ -221,9 +232,10 @@ public class SCDImporter implements IImporter {
 			new LogicLinkParser(ied).parse();
 		}
 		// 一次部分
-		SubstationParser sp = new SubstationParser();
-		sp.parse();
-		
+		if (staEl != null) {
+			SubstationParser sp = new SubstationParser();
+			sp.parse();
+		}
 	}
 
 }
