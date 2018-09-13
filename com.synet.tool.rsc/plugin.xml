@@ -125,11 +125,11 @@
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportRuleAction"
 	              text="模型辨识规则"/>
        </menu>
-      <menu id="menu.help" text="帮助">
+      <!--menu id="menu.help" text="帮助">
        		<action
               class="com.synet.tool.rsc/com.synet.tool.rsc.action.AboutAction"
               text="关于"
               icon="help.gif"/>
-      </menu>
+      </menu-->
    </extension>
 </plugin>
