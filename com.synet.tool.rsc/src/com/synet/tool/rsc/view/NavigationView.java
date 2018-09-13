@@ -15,6 +15,7 @@ import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.Context;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.common.valid.NewNameValidator;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.file.util.ZipUtil;
@@ -189,6 +190,9 @@ public class NavigationView extends ANavigationView {
 	@Override
 	protected void exportProject() {
 		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.SAVE, "*.data");
+		if (StringUtil.isEmpty(path)) {
+			return;
+		}
 		ProgressManager.execute(new IRunnableWithProgress() {
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
@@ -210,6 +214,9 @@ public class NavigationView extends ANavigationView {
 	@Override
 	protected void importProject() {
 		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.OPEN, "*.data");
+		if (StringUtil.isEmpty(path)) {
+			return;
+		}
 		final String prjName = FileManipulate.getName(path);
 		ProgressManager.execute(new IRunnableWithProgress() {
 			@Override
