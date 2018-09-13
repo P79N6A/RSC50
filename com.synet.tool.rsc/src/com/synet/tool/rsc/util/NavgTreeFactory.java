@@ -92,7 +92,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		}
 		ProjectEntry projectEntry = new ProjectEntry(staName, "", "project.gif");
 		data.add(projectEntry);
-		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", ET_PR_MDL, 1);
+		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", null, 1);
 		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", ET_PT_BAY, 2);
 		ConfigTreeEntry physicalEntry = createConfigEntry(projectEntry, "物理信息模型", "column.gif", ET_PY_MDL, 3);
 		ConfigTreeEntry securityEntry = createConfigEntry(projectEntry, "安措配置", "column.gif", "", 4);
@@ -122,7 +122,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 */
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.listNotNull(bayEntityList)){
-			ITreeEntry structEntry = createConfigEntry(primaryEntry, "结构", "history_list.gif", null, 1);
+			ITreeEntry structEntry = createConfigEntry(primaryEntry, "结构", "history_list.gif", ET_PR_MDL, 1);
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
 				Set<Tb1043EquipmentEntity> equipments = tb1042BayEntity.getTb1043EquipmentsByF1042Code();
