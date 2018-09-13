@@ -38,7 +38,12 @@ public class ImportIEDListProcessor {
 					iedEntity.setF1046productNo(entity.getProductCode());
 					iedEntity.setF1046dataGatType(entity.getDataCollectType());
 					iedEntity.setF1046OutType(entity.getOutType());
-					iedEntity.setF1046boardNum(entity.getBoardNum());
+					int num = 0;
+					try {
+						num = Integer.parseInt(entity.getBoardNum());
+					} catch(Exception e) {
+					}
+					iedEntity.setF1046boardNum(num);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
