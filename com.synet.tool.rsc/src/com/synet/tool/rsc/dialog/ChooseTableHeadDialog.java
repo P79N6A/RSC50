@@ -73,7 +73,7 @@ public class ChooseTableHeadDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(260, 160);
+		return new Point(320, 180);
 	}
 	
 	@Override

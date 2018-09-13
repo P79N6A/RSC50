@@ -106,7 +106,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(380, 340);
+		return new Point(420, 580);
 	}
 	
 	@Override
