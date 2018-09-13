@@ -5,7 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -95,39 +100,63 @@ public abstract class AbstractExportDataHandler {
 	protected ExportConnManager exportConnManager;
 	protected Connection connect;
 	protected BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+	protected HqlDaoImpl hqlDao = HqlDaoImpl.getInstance();
+	protected ConsoleManager console = ConsoleManager.getInstance();
 	
-	public abstract boolean exportData(ConnParam connParam);
+	public abstract boolean exportData(ConnParam connParam, IProgressMonitor monitor);
 	
-	protected void exprotTableDate(int tbIndex) throws SQLException {
+	private String getTableName(Class<?> clazz) {
+		return SessionRsc.getInstance().getConfiguration().getClassMapping(clazz.getName()).getTable().getName();
+	}
+	
+	protected void clearTableDate(int tbIndex, IProgressMonitor monitor) throws SQLException {
+		Class<?> clazz = getClazz(tbIndex);
+		if (clazz == null)
+			return;
+		String tableName = getTableName(clazz);
+		monitor.setTaskName("正在清理" + tableName + "数据");
+		String sql = "delete from " + tableName;
+		PreparedStatement preState = connect.prepareStatement(sql);
+		preState.executeUpdate();
+	}
+	
+	protected void exprotTableDate(int tbIndex, IProgressMonitor monitor) throws SQLException {
 		try {//目前数据异常任然继续处理后面的数据
+			Long startTime = System.currentTimeMillis();
 			Class<?> clazz = getClazz(tbIndex);
-			if (clazz == null) return;
-			System.out.println("开始处理:" + tbIndex + "数据导出");
-			List<?> list = beanDao.getAll(clazz);
-			if (list != null && list.size() > 0) {
-				System.out.println("准备插入：" + tbIndex + ",数据条数：" + list.size());
+			if (clazz == null)
+				return;
+			String tableName = getTableName(clazz);
+			monitor.setTaskName("正在导入" + tableName + "数据");
+			console.append("开始处理:" + tbIndex + "数据导出");
+			int total = hqlDao.getCount(clazz);
+			int psize = 1000;
+			int ptotal = total / psize;
+			ptotal = (total % psize == 0) ? ptotal : (ptotal + 1);
+			console.append("准备插入：" + tbIndex + ",数据条数：" + total);
+			if (total > 0) {
 				connect.setAutoCommit(false);
-				for (Object obj : list) {
-					exportObjectData(tbIndex, obj);
+				String sql = getSql(tbIndex);
+				if (sql == null) {
+					throw new NullPointerException("sql is not null[]");
 				}
+				PreparedStatement preState = connect.prepareStatement(sql);
+				for (int p = 0; p < ptotal; p++) {
+					List<?> list = beanDao.getListByCriteriaAndPage(clazz, null, p+1, psize);
+					for (Object obj : list) {
+						setValue(preState, tbIndex, obj);
+						preState.addBatch();
+					}
+				}
+				preState.executeBatch();
 				connect.commit();
 			}
+			Long endTime = System.currentTimeMillis();
+			console.append(tableName + "导入用时：" + (endTime - startTime));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	protected void exportObjectData(int tbIndex, Object obj) throws SQLException {
-		String sql = getSql(tbIndex);
-		if (sql == null) {
-			throw new NullPointerException("sql is not null[]");
-		}
-		PreparedStatement preState = connect.prepareStatement(sql);
-		setValue(preState, tbIndex, obj);
-		preState.execute();
-		preState.close();
-	}
-	
 	
 	protected Class<?> getClazz(int tbIndex) {
 		switch (tbIndex) {

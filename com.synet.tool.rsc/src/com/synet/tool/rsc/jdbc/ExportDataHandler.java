@@ -3,6 +3,8 @@ package com.synet.tool.rsc.jdbc;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -47,71 +49,85 @@ import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
 
 public class ExportDataHandler extends AbstractExportDataHandler {
 	
+	private static final int[] tb_indice = new int[] {
+		// Substation
+		TB1041_INDEX,
+		TB1042_INDEX,
+		
+		// IED
+		TB1046_INDEX,
+		TB1070_INDEX,//TB1070_MMSServer
+		TB1054_INDEX,
+		TB1055_INDEX,
+		TB1056_INDEX,
+		TB1057_INDEX,
+		// data
+		TB1006_INDEX,
+		TB1016_INDEX,
+		TB1026_INDEX,
+		// fcda
+		TB1058_INDEX,
+		TB1059_INDEX,
+		TB1060_INDEX,
+		TB1064_INDEX, // strap
+		TB1061_INDEX, // pout
+		TB1065_INDEX, // logiclink
+		TB1063_INDEX, // circuit
+		TB1062_INDEX, // pin
+		
+		// equipment
+		TB1043_INDEX,
+		TB1044_INDEX,
+		TB1045_INDEX,
+		TB1067_INDEX,
+		TB1066_INDEX,//TB1066_ProtMMXU
+		TB1068_INDEX,//TB1068_ProtCtrl
+		TB1069_INDEX,//TB1069_RCDChannelA
+		TB1072_INDEX,//TB1072_RCDChannelD
+		
+		// 区域、屏柜、光缆、光芯
+		TB1049_INDEX,
+		TB1050_INDEX,
+		TB1051_INDEX,
+		TB1052_INDEX,
+		TB1053_INDEX,//TB1053_PhysConn
+		TB1073_INDEX,//TB1073_LLinkPhyRelation
+
+		TB1090_INDEX,
+		TB1091_INDEX,
+		TB1092_INDEX,
+		TB1093_INDEX,
+
+//		TB1022_INDEX,
+		TB1071_INDEX //TB1071_DAU
+	};
+	
 	@Override
-	public boolean exportData(ConnParam connParam) {
+	public boolean exportData(ConnParam connParam, IProgressMonitor monitor) {
 		exportConnManager = new ExportConnManager();
 		exportConnManager.setConnParam(connParam);
 		connect = exportConnManager.getConnection();
-		if (connect == null) return false;
+		if (connect == null)
+			return false;
 		try {
-			exprotTableDate(TB1022_INDEX);
-			exprotTableDate(TB1045_INDEX);
-			exprotTableDate(TB1071_INDEX);
-			
-			exprotTableDate(TB1041_INDEX);
-			exprotTableDate(TB1049_INDEX);
-			exprotTableDate(TB1050_INDEX);
-			exprotTableDate(TB1051_INDEX);
-			exprotTableDate(TB1052_INDEX);
-			exprotTableDate(TB1042_INDEX);
-			
-			exprotTableDate(TB1043_INDEX);
-			exprotTableDate(TB1044_INDEX);
-			
-			exprotTableDate(TB1046_INDEX);
-			
-			exprotTableDate(TB1006_INDEX);
-			exprotTableDate(TB1016_INDEX);
-			exprotTableDate(TB1026_INDEX);
-			exprotTableDate(TB1060_INDEX);
-			exprotTableDate(TB1069_INDEX);
-			exprotTableDate(TB1070_INDEX);
-			exprotTableDate(TB1072_INDEX);
-			exprotTableDate(TB1090_INDEX);
-			exprotTableDate(TB1091_INDEX);
-			exprotTableDate(TB1092_INDEX);
-			
-			exprotTableDate(TB1054_INDEX);
-			exprotTableDate(TB1055_INDEX);
-			exprotTableDate(TB1056_INDEX);
-			exprotTableDate(TB1057_INDEX);
-			exprotTableDate(TB1058_INDEX);
-			exprotTableDate(TB1059_INDEX);
-			
-			exprotTableDate(TB1047_INDEX);
-			exprotTableDate(TB1048_INDEX);
-			exprotTableDate(TB1053_INDEX);
-			exprotTableDate(TB1065_INDEX);
-			
-			exprotTableDate(TB1064_INDEX);
-			exprotTableDate(TB1061_INDEX);
-			exprotTableDate(TB1062_INDEX);
-			exprotTableDate(TB1063_INDEX);
-			exprotTableDate(TB1073_INDEX);
-			
-			exprotTableDate(TB1067_INDEX);
-			exprotTableDate(TB1093_INDEX);
-			exprotTableDate(TB1066_INDEX);
-			exprotTableDate(TB1068_INDEX);
-			
-			System.out.println("导出完成");
-			
+			monitor.beginTask("开始导出", tb_indice.length*2);
+			long start = System.currentTimeMillis();
+			for (int idx = tb_indice.length-1; idx > -1; idx--) {
+				clearTableDate(tb_indice[idx], monitor);
+				monitor.worked(1);
+			}
+			for (int idx = 0; idx < tb_indice.length; idx++) {
+				exprotTableDate(tb_indice[idx], monitor);
+				monitor.worked(1);
+			}
+			long time = (System.currentTimeMillis() - start) / 1000;
+			monitor.setTaskName("导出耗时：" + time + "秒");
+			monitor.done();
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
 				connect.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			return false;
@@ -351,11 +367,13 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1046Sql() {
+//		return "INSERT INTO TB1046_IED(F1046_CODE,F1042_CODE,F1050_CODE,F1046_NAME,F1046_DESC,F1046_MANUFACTUROR," +
+//				"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE,F1046_CRC,F1046_ANETIP," +
+//				"F1046_BNETIP,F1046_VERSION,F1046_PROTECTCATEGORY,F1046_PROTECTTYPE,F1046_PROTECTMODEL," +
+//				"F1046_PROTECTCRC,F1046_OPERATEDATE,F1046_PRODUCTDATE,F1046_PRODUCTNO,F1046_DATAGATTYPE," +
+//				"F1046_OUTTYPE,F1046_BOARDNUM) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		return "INSERT INTO TB1046_IED(F1046_CODE,F1042_CODE,F1050_CODE,F1046_NAME,F1046_DESC,F1046_MANUFACTUROR," +
-				"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE,F1046_CRC,F1046_ANETIP," +
-				"F1046_BNETIP,F1046_VERSION,F1046_PROTECTCATEGORY,F1046_PROTECTTYPE,F1046_PROTECTMODEL," +
-				"F1046_PROTECTCRC,F1046_OPERATEDATE,F1046_PRODUCTDATE,F1046_PRODUCTNO,F1046_DATAGATTYPE," +
-				"F1046_OUTTYPE,F1046_BOARDNUM) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE,F1046_CRC) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -382,19 +400,19 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1046IsVirtual());
 		setInt(preState, index++, entity.getF1046Type());
 		setSring(preState, index++, entity.getF1046Crc());
-		setSring(preState, index++, entity.getF1046aNetIp());
-		setSring(preState, index++, entity.getF1046bNetIp());
-		setSring(preState, index++, entity.getF1046version());
-		setSring(preState, index++, entity.getF1046protectCategory());
-		setSring(preState, index++, entity.getF1046protectType());
-		setSring(preState, index++, entity.getF1046protectModel());
-		setSring(preState, index++, entity.getF1046protectCrc());
-		setSring(preState, index++, entity.getF1046OperateDate());
-		setSring(preState, index++, entity.getF1046productDate());
-		setSring(preState, index++, entity.getF1046productNo());
-		setSring(preState, index++, entity.getF1046dataGatType());
-		setSring(preState, index++, entity.getF1046OutType());
-		setSring(preState, index++, entity.getF1046boardNum());
+//		setSring(preState, index++, entity.getF1046aNetIp());
+//		setSring(preState, index++, entity.getF1046bNetIp());
+//		setSring(preState, index++, entity.getF1046version());
+//		setSring(preState, index++, entity.getF1046protectCategory());
+//		setSring(preState, index++, entity.getF1046protectType());
+//		setSring(preState, index++, entity.getF1046protectModel());
+//		setSring(preState, index++, entity.getF1046protectCrc());
+//		setSring(preState, index++, entity.getF1046OperateDate());
+//		setSring(preState, index++, entity.getF1046productDate());
+//		setSring(preState, index++, entity.getF1046productNo());
+//		setSring(preState, index++, entity.getF1046dataGatType());
+//		setSring(preState, index++, entity.getF1046OutType());
+//		setInt(preState, index++, entity.getF1046boardNum());
 	}
 	
 	@Override
@@ -739,7 +757,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1061Sql() {
 		return "INSERT INTO TB1061_POUT(F1061_CODE,F1046_CODE,CB_CODE,F1061_REFADDR,F1061_INDEX,F1061_DESC," +
-				"F1061_TYPE,F1064_CODE,DATA_CODE) VALUES (?,?,?,?,?,?,?,?,?)";
+				"F1064_CODE,DATA_CODE) VALUES (?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -756,7 +774,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1061RefAddr());
 		setInt(preState, index++, entity.getF1061Index());
 		setSring(preState, index++, entity.getF1061Desc());
-		setInt(preState, index++, entity.getF1061Type());
 		if (entity.getTb1064StrapByF1064Code() != null) {
 			setSring(preState, index++, entity.getTb1064StrapByF1064Code().getF1064Code());
 		} else {
@@ -767,8 +784,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1062Sql() {
-		return "INSERT INTO TB1062_PIN(F1062_CODE,F1046_CODE,F1062_REFADDR,F1062_TYPE,F1062_DESC,F1062_ISUSED," +
-				"F1064_CODE) VALUES (?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1062_PIN(F1062_CODE,F1046_CODE,F1062_REFADDR,F1062_DESC,F1062_ISUSED," +
+				"F1064_CODE) VALUES (?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -782,7 +799,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			setSring(preState, index++, null);
 		}
 		setSring(preState, index++, entity.getF1062RefAddr());
-		setInt(preState, index++, entity.getF1062Type());
 		setSring(preState, index++, entity.getF1062Desc());
 		setInt(preState, index++, entity.getF1062IsUsed());
 		if (entity.getTb1064StrapByF1064Code() != null) {
@@ -795,8 +811,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1063Sql() {
 		return "INSERT INTO TB1063_CIRCUIT(F1063_CODE,F1046_CODE_IEDSEND,F1061_CODE_PSEND,F1046_CODE_IEDRECV," +
-				"F1062_CODE_PRECV,F1063_TYPE,F1065_CODE,F1061_CODE_CONVCHK1,F1061_CODE_CONVCHK2)" +
-				" VALUES (?,?,?,?,?,?,?,?,?)";
+				"F1062_CODE_PRECV,F1065_CODE,F1061_CODE_CONVCHK1,F1061_CODE_CONVCHK2)" +
+				" VALUES (?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -824,7 +840,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		} else {
 			setSring(preState, index++, null);
 		}
-		setInt(preState, index++, entity.getF1063Type());
 		if (entity.getTb1065LogicallinkByF1065Code() != null) {
 			setSring(preState, index++, entity.getTb1065LogicallinkByF1065Code().getF1065Code());
 		} else {

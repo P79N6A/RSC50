@@ -62,18 +62,18 @@ public class OracleConnDialog extends WrappedDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("连接配置");
+		newShell.setText("导出配置");
 	}
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, "下一步", true);
+		createButton(parent, IDialogConstants.OK_ID, "确定", true);
 		createButton(parent, IDialogConstants.CANCEL_ID, "取消", true);
 	}
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(300, 230);
+		return new Point(320, 270);
 	}
 	
 	@Override
