@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class TestMain {
 	
 	@Before
 	public void before() {
-		String dbName = "aaaaa";
+		String dbName = "p97";
 		ProjectManager instance = ProjectManager.getInstance();
 //		instance.initDb(dbName);
 		instance.openDb(dbName);
@@ -182,7 +183,43 @@ public class TestMain {
 	
 	@Test
 	public void testExprotData() {
-		new ExportDataHandler().exportData(GlobalData.getInstance().getConnParam());
+		IProgressMonitor monitor = new IProgressMonitor() {
+
+			@Override
+			public void beginTask(String name, int totalWork) {
+				System.out.println(name);
+			}
+
+			@Override
+			public void done() {
+			}
+
+			@Override
+			public void internalWorked(double work) {
+			}
+
+			@Override
+			public boolean isCanceled() {
+				return false;
+			}
+
+			@Override
+			public void setCanceled(boolean value) {
+			}
+
+			@Override
+			public void setTaskName(String name) {
+				System.out.println(name);
+			}
+
+			@Override
+			public void subTask(String name) {
+			}
+
+			@Override
+			public void worked(int work) {
+			}};
+		new ExportDataHandler().exportData(GlobalData.getInstance().getConnParam(), monitor);
 	}
 
 }
