@@ -42,10 +42,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.synet.tool.rsc.application"
-            name="RSC-50">
+            name="RSC50">
          <property
                name="appName"
-               value="RSC-50">
+               value="RSC50">
          </property>
          <property
                name="preferenceCustomization"
