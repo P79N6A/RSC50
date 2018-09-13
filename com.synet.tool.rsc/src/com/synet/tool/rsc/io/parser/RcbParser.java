@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
@@ -19,6 +20,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.service.StrapEntityService;
+import com.synet.tool.rsc.util.F1011_NO;
 
  /**
  * 
@@ -69,16 +71,19 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						mmsFcda.setF1058Desc(fcdaDesc);
 						mmsFcda.setF1058RefAddr(SclUtil.getFcdaRef(fcdaEl));
 						String fc = fcdaEl.attributeValue("fc");
+						String lnName = fcdaEl.attributeValue("lnClass");
+						String doName = fcdaEl.attributeValue("doName");
+						F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
 						if ("ST".equals(fc)) {
 							mmsFcda.setF1058DataType(DBConstants.DATA_ST);
-							Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, DBConstants.DAT_BRK);
-							mmsFcda.setDataCode(statedata.getF1016Code()); // TODO 需根据描述进一步分析
+							Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
+							mmsFcda.setDataCode(statedata.getF1016Code());
 							if (isStrap(datSet)) { // 添加压板
 								strapService.addStrap(statedata, fcdaDesc);
 							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
-							mmsFcda.setDataCode(addAlgdata(fcdaEl, fcdaDesc, DBConstants.DAT_PROT_MX)); // TODO 需根据描述进一步分析
+							mmsFcda.setDataCode(addAlgdata(fcdaEl, fcdaDesc, type.getId()));
 						}
 						i++;
 					}
@@ -89,7 +94,13 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 	}
 
 	private boolean isStrap(String datSet) {
-		return "dsEna".equals(datSet);
+		String[] names = DictManager.getInstance().getDictNames("DS_STRAP");
+		for (String name : names) {
+			if (name.equals(datSet)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

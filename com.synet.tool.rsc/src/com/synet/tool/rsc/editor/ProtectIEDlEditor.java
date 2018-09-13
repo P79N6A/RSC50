@@ -369,16 +369,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.PROTECT_ACTION:
 			if(!DataUtils.listNotNull(mmsfcdasProtcAction)) {
 				//保护信息-保护动作
+				String[] names = DictManager.getInstance().getDictNames("DS_DIN");
 				mmsfcdasProtcAction = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsDin", 1);
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
 				tableProtectAction.setInput(mmsfcdasProtcAction);
 			}
 			break;
 		case RSCConstants.PROTECT_MEAQU:
 			if(!DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
 				//保护信息-保护测量量
+				String[] names = DictManager.getInstance().getDictNames("DS_AIN");
 				mmsfcdasProtcMeaQua = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsAin", 2);
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
 				tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
 			}
 			break;
@@ -409,16 +411,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case RSCConstants.RUN_STATE:
 			if(!DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
+				String[] names = DictManager.getInstance().getDictNames("DS_STATE");
 				mmsfcdaEntitiesRun = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsCommState");
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
 					tableRunState.setInput(mmsfcdaEntitiesRun);	
 			}
 			
 			break;
 		case RSCConstants.DEV_WARNING:
 			if(!DataUtils.listNotNull(mmsfcdaEntities)) {
+				String[] names = DictManager.getInstance().getDictNames("DS_WARN");
 				mmsfcdaEntities = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), "dsWarning");
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
 					tableDeviceWarning.setInput(mmsfcdaEntities);
 					tableDeviceName.setInput(iedEntityList);
 			}

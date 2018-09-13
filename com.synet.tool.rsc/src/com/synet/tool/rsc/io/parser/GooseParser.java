@@ -11,9 +11,11 @@ import org.dom4j.Element;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.util.F1011_NO;
 
  /**
  * 
@@ -32,7 +34,8 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 		for (Element gseNd : gseNds) {
 			Tb1055GcbEntity gcb = new Tb1055GcbEntity();
 			items.add(gcb);
-			gcb.setCbCode(rscp.nextTbCode(DBConstants.PR_GCB));
+			String cbCode = rscp.nextTbCode(DBConstants.PR_GCB);
+			gcb.setCbCode(cbCode);
 			gcb.setTb1046IedByF1046Code(ied);
 			gcb.setCbName(gseNd.attributeValue("cbName"));
 			gcb.setCbId(gseNd.attributeValue("cbId"));
@@ -42,6 +45,9 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 			gcb.setVlanid(gseNd.attributeValue("vlanID"));
 			gcb.setVlanPriority(gseNd.attributeValue("priority"));
 			gcb.setAppid(gseNd.attributeValue("appID"));
+			// 状态点
+			Tb1016StatedataEntity st = IedParserBase.createStatedata(iedName, cbCode, F1011_NO.IED_WRN_GOOSE.getId());
+			beanDao.insert(st);
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();
 			gcb.setTb1061PoutsByCbCode(pouts);

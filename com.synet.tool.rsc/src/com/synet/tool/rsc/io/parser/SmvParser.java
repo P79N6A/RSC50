@@ -11,9 +11,11 @@ import org.dom4j.Element;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.util.F1011_NO;
 
  /**
  * 
@@ -32,7 +34,8 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 		for (Element cbNd : smvNds) {
 			Tb1056SvcbEntity smv = new Tb1056SvcbEntity();
 			items.add(smv);
-			smv.setCbCode(rscp.nextTbCode(DBConstants.PR_GCB));
+			String cbCode = rscp.nextTbCode(DBConstants.PR_GCB);
+			smv.setCbCode(cbCode);
 			smv.setTb1046IedByF1046Code(ied);
 			smv.setCbName(cbNd.attributeValue("cbName"));
 			smv.setCbId(cbNd.attributeValue("cbId"));
@@ -42,6 +45,9 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 			smv.setVlanid(cbNd.attributeValue("vlanID"));
 			smv.setVlanPriority(cbNd.attributeValue("priority"));
 			smv.setAppid(cbNd.attributeValue("appID"));
+			// 状态点
+			Tb1016StatedataEntity st = IedParserBase.createStatedata(iedName, cbCode, F1011_NO.IED_WRN_SV.getId());
+			beanDao.insert(st);
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();
 			smv.setTb1061PoutsByCbCode(pouts);

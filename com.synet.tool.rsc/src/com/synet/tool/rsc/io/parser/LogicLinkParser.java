@@ -115,14 +115,14 @@ public class LogicLinkParser extends IedParserBase<Tb1065LogicallinkEntity> {
 	
 	private Tb1063CircuitEntity createCircuit(Tb1065LogicallinkEntity logiclink, Tb1046IedEntity iedSend, Element fcdaEl) {
 		String doName = fcdaEl.attributeValue("doName");
-		int circuitType = (DBConstants.LINK_SMV==logiclink.getF1065Type()) ? 
-				getDoType(doName) : DBConstants.CIRCUIT_ST;
+//		int circuitType = (DBConstants.LINK_SMV==logiclink.getF1065Type()) ? 
+//				getDoType(doName) : DBConstants.CIRCUIT_ST;
 		Element intAddrEl = fcdaEl.element("intAddr");
 		String name = intAddrEl.attributeValue("name");
 		String desc = intAddrEl.attributeValue("desc");
 		Tb1063CircuitEntity circuit = new Tb1063CircuitEntity();
 		circuit.setF1063Code(rscp.nextTbCode(DBConstants.PR_CIRCUIT));
-		circuit.setF1063Type(circuitType);
+//		circuit.setF1063Type(circuitType);
 		circuit.setTb1065LogicallinkByF1065Code(logiclink);
 		circuit.setTb1046IedByF1046CodeIedRecv(ied);
 		circuit.setTb1046IedByF1046CodeIedSend(iedSend);
@@ -138,7 +138,7 @@ public class LogicLinkParser extends IedParserBase<Tb1065LogicallinkEntity> {
 		circuit.setTb1062PinByF1062CodePRecv(pin);
 		pin.setF1062Code(rscp.nextTbCode(DBConstants.PR_PIN));
 		pin.setTb1046IedByF1046Code(ied);
-		pin.setF1062Type(circuitType);
+//		pin.setF1062Type(circuitType);
 		String pinRefAddr = name;
 		int p = pinRefAddr.indexOf(":");
 		if (p > 0) {
@@ -151,8 +151,8 @@ public class LogicLinkParser extends IedParserBase<Tb1065LogicallinkEntity> {
 		return circuit;
 	}
 
-	private int getDoType(String doName) {
-		return doName.contains("Amp") ? DBConstants.CIRCUIT_I : 
-			(doName.contains("Vol") ? DBConstants.CIRCUIT_U : DBConstants.CIRCUIT_OTHER);
-	}
+//	private int getDoType(String doName) {
+//		return doName.contains("Amp") ? DBConstants.CIRCUIT_I : 
+//			(doName.contains("Vol") ? DBConstants.CIRCUIT_U : DBConstants.CIRCUIT_OTHER);
+//	}
 }
