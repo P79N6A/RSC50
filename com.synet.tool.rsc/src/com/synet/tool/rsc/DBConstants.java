@@ -85,44 +85,6 @@ public interface DBConstants {
 	int IED_MT 		= 40; 	//通用合并智能终端
 	int IED_MONI 	= 50; 	//测控装置
 
-	// 状态量功能类型
-	int DAT_BRK	 	= 01; 	//开关状态
-	int DAT_DIS	 	= 05; 	//刀闸状态
-	int DAT_COM	 	= 15;	//通讯状态
-	int DAT_CK_STRAP	 	= 31;	//检修压板
-	int DAT_GOUT_STRAP	 	= 32;	//GOOSE输出压板
-	int DAT_GIN_STRAP	 	= 33;	//GOOSE输入压板
-	int DAT_SVIN_STRAP	 	= 34;	//SV输入压板
-	int DAT_TM_STRAP	 	= 35;	//智能终端出口硬压板
-	int DAT_IED_LIGHT	 	= 51;	//装置运行状态灯
-	int DAT_IED_W_HW	 	= 52;	//装置告警-硬件异常
-	int DAT_IED_W_SW	 	= 53;	//装置告警-软件异常
-	int DAT_IED_W_T	 	= 54;	//装置告警-CT/PT断线
-	int DAT_IED_I	 	= 55;	//装置告警-差流越限
-	int DAT_IED_IN	 	= 56;	//装置告警-开入异常
-	int DAT_TIME	 	= 57;	//对时异常
-	int DAT_W_SV	 	= 58;	//SV告警（危急）
-	int DAT_E_SV	 	= 59;	//SV异常（严重）
-	int DAT_W_GO	 	= 60;	//GOOSE告警（危急）
-	int DAT_E_GO	 	= 61;	//GOOSE异常（严重）
-	int DAT_IED_W	 	= 100;	//装置一般告警
-	int DAT_PROT_MX	 	= 101;	//保护测量值
-	int DAT_MS_VALUE	= 102;	//模拟量采样值
-	int DAT_TEMP	 	= 103;	//装置监测温度
-	int DAT_WK_VOL	 	= 104;	//装置工作电压
-	int DAT_PORT_POWER	 	= 105;	//光口光强
-
-	// 虚回路类型
-	int CIRCUIT_OPEN = 01;			//跳闸回路
-	int CIRCUIT_CLOSE = 02;			//重合闸回路
-	int CIRCUIT_FIAL_START = 03;	//启动失灵回路
-	int CIRCUIT_LBRK = 04;			//联跳回路
-	int CIRCUIT_LOCK = 05;			//闭锁回路
-	int CIRCUIT_I = 06;				//电流采样回路
-	int CIRCUIT_U = 07;				//电压采样回路
-	int CIRCUIT_ST = 8;				//遥信开入
-	int CIRCUIT_OTHER = 9;			//其它
-
 	int Equipment_BRK = 01; //断路器
 	int Equipment_DIS = 02; //刀闸
 	int Equipment_BUS = 03; //母线
