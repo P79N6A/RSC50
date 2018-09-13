@@ -39,6 +39,20 @@ public class MmsfcdaService extends BaseService {
 	}
 	
 	/**
+	 * 根据所属多个数据集名称获取
+	 * @param iedName
+	 * @param dataSets
+	 * @return
+	 */
+	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(String iedName, String[] dataSets) {
+		List<Tb1058MmsfcdaEntity> fcdas = new ArrayList<>();
+		for (String dataSet : dataSets) {
+			fcdas.addAll(getMmsdcdaByDataSet(iedName, dataSet));
+		}
+		return fcdas;
+	}
+	
+	/**
 	 * 根据所属数据集名称和数据类型获取
 	 * @return
 	 */
