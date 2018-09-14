@@ -14,6 +14,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
 /**
@@ -26,13 +27,9 @@ public class BaseConfigEditor extends BaseEditor {
 	protected static final String DEV_TYPE_TITLE = "装置类型";
 	protected static final String DEV_NAME_TITLE = "装置名称";
 	
-//	protected DeviceConfig device;
-//
-//	protected ProjectFileManager prjFileMgr;
-//	protected ProjectManager prjMgr;
-	
 	protected DevKTable table;
 	protected BeanDaoImpl beandao;
+	protected HqlDaoImpl hqldao;
 	
 	public BaseConfigEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -46,16 +43,9 @@ public class BaseConfigEditor extends BaseEditor {
 	
 	@Override
 	public void init() {
-//		if (prjFileMgr == null)
-//			prjFileMgr = ProjectFileManager.getInstance();
-//		if (prjMgr == null)
-//			prjMgr = ProjectManager.getInstance();
-//		if (!(this instanceof ImportSCDEditor) &&
-//				device == null && getName() != null) {
-//			device = prjMgr.getDevice(getName());
-//		}
 		super.init();
 		beandao = BeanDaoImpl.getInstance();
+		hqldao = HqlDaoImpl.getInstance();
 	}
 
 	@Override
@@ -64,15 +54,6 @@ public class BaseConfigEditor extends BaseEditor {
 
 	@Override
 	public boolean doSave() {
-//		if (isDirty() && device != null) {
-//			if (DialogHelper.showConfirm("需要保存当前配置吗？")) {
-//				prjMgr.addDevice(device);
-//				prjFileMgr.saveDevice(getName());
-//				successInfo();
-//			} else {
-//				prjMgr.removeDeviceCache(getName());
-//			}
-//		}
 		return true;
 	}
 	
@@ -86,7 +67,4 @@ public class BaseConfigEditor extends BaseEditor {
 		return ((ConfigEditorInput)getInput()).getIedName();
 	}
 
-//	protected String getScdName() {
-//		return prjFileMgr.getScdname();
-//	}
 }

@@ -118,5 +118,49 @@ public class IM103IEDBoardEntity {
 				+ ", matched=" + matched + ", fileInfoEntity=" + fileInfoEntity
 				+ "]";
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((boardIndex == null) ? 0 : boardIndex.hashCode());
+		result = prime * result
+				+ ((boardModel == null) ? 0 : boardModel.hashCode());
+		result = prime * result
+				+ ((boardType == null) ? 0 : boardType.hashCode());
+		result = prime * result + ((portNum == null) ? 0 : portNum.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		IM103IEDBoardEntity other = (IM103IEDBoardEntity) obj;
+		if (boardIndex == null) {
+			if (other.boardIndex != null)
+				return false;
+		} else if (!boardIndex.equals(other.boardIndex))
+			return false;
+		if (boardModel == null) {
+			if (other.boardModel != null)
+				return false;
+		} else if (!boardModel.equals(other.boardModel))
+			return false;
+		if (boardType == null) {
+			if (other.boardType != null)
+				return false;
+		} else if (!boardType.equals(other.boardType))
+			return false;
+		if (portNum == null) {
+			if (other.portNum != null)
+				return false;
+		} else if (!portNum.equals(other.portNum))
+			return false;
+		return true;
+	}
 
 }

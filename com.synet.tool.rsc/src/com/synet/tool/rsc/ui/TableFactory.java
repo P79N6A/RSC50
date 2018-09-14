@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.TableBuilder;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.ui.table.IEDBoardTable;
 
 
 public class TableFactory {
@@ -51,6 +52,7 @@ public class TableFactory {
 	public static final String LOGLINK_NAME_TABLE 			= "LogicalLinkNameTable";
 	
 	public static String IED_LIST_TABLE                     = "IEDListTable";
+	public static String IED_COMP_LIST_TABLE                = "IEDCompListTable";
 	public static String BOARD_WARN_TABLE                   = "BoardWarnTableTable";
 	public static String FIBRE_LIST_TABLE                   = "FibreListTable";
 	public static String IED_BOARD_TABLE                    = "IEDBoardTable";
@@ -261,6 +263,11 @@ public class TableFactory {
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
+	public static DevKTable getIEDCompListTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(IED_COMP_LIST_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
 	public static DevKTable getBoardWarnTableTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(BOARD_WARN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
@@ -273,7 +280,7 @@ public class TableFactory {
 	
 	public static DevKTable getIEDBoardTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(IED_BOARD_TABLE);
-		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+		return (DevKTable) TableBuilder.createKTable(IEDBoardTable.class, container, tableCfg);
 	}
 	
 	public static DevKTable getStatusInTable(Composite container) {

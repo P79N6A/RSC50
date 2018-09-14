@@ -259,7 +259,7 @@ public class ImportInfoParser {
 		IM100FileInfoEntity fileInfoEntity = new IM100FileInfoEntity();
 		fileInfoEntity.setIm100Code(rscp.nextTbCode(DBConstants.PR_FILEINFO));
 		fileInfoEntity.setFilePath(xlspath);
-		fileInfoEntity.setFileName(xlspath.substring(xlspath.lastIndexOf("\\") + 2));
+		fileInfoEntity.setFileName(xlspath.substring(xlspath.lastIndexOf("\\") + 1));
 		switch (fileType) {
 		case ExcelConstants.IM101_IED_LIST:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE101);

@@ -130,7 +130,8 @@ public class DevKTableModel extends RKTableModel {
 	 * @param obj
 	 */
 	private void saveData(Object obj) {
-		if (obj == null) return;
+		if (obj == null)
+			return;
 		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
 				|| TableFactory.IOTERM_TABLE.equals(tableName)
 				|| TableFactory.POWERKK_TABLE.equals(tableName)
@@ -149,7 +150,5 @@ public class DevKTableModel extends RKTableModel {
 			EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 		}
 	}
-	
-	
 	
 }

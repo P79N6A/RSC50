@@ -37,6 +37,9 @@ public class Tb1046IedEntity {
     private String f1046OutType;//出口方式
     private Integer f1046boardNum;//板卡数量
     
+    private int conflict; // 是否冲突：1-是，2-否
+    private boolean overwrite; // 是否覆盖
+    
     public Tb1046IedEntity() {
 	}
     
@@ -153,6 +156,25 @@ public class Tb1046IedEntity {
 
 	public void setF1046boardNum(Integer f1046boardNum) {
 		this.f1046boardNum = f1046boardNum;
+	}
+
+	public int getConflict() {
+		return conflict;
+	}
+
+
+	public void setConflict(int conflict) {
+		this.conflict = conflict;
+	}
+
+
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+
+
+	public void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
 	}
 
 

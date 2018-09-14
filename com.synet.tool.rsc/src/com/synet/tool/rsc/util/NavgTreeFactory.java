@@ -19,7 +19,6 @@ import static com.synet.tool.rsc.RSCConstants.ET_PR_BAY;
 import static com.synet.tool.rsc.RSCConstants.ET_PR_MDL;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_BAY;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_IED;
-import static com.synet.tool.rsc.RSCConstants.ET_PT_PBAY;
 import static com.synet.tool.rsc.RSCConstants.ET_PY_AREA;
 import static com.synet.tool.rsc.RSCConstants.ET_PY_MDL;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_FIB;
@@ -61,7 +60,6 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private IedEntityService iedService = new IedEntityService();
 	
 	private NavgTreeFactory() {
-//		treeBuilder = TreeViewerBuilder.create(XMLFileManager.loadXMLFile(getClass(), Constants.CFGURL));
 		treeBuilder = TreeViewerBuilder.create(null);
 	}
 	
@@ -142,22 +140,18 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
 		if(DataUtils.listNotNull(bayEntityList)){
-			Tb1042BayEntity pbayEntity = null;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);
 				String bayName = bayEntity.getF1042Name();
 				List<Tb1046IedEntity> iedEntities = iedService.getIedEntityByBay(bayEntity);
 				if (iedEntities != null && iedEntities.size() > 0) {
+					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
+					bayEntry.setData(bayEntity);
 					if (!DBConstants.BAY_PUB.equals(bayName)) {
-						ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
-						bayEntry.setData(bayEntity);
 						for (Tb1046IedEntity iedEntity : iedEntities) {
 							ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
 							proEntry.setData(iedEntity);
 						}
-					} else {
-						createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_PBAY, bayEntityList.size()+1);
-						
 					}
 				}
 			}

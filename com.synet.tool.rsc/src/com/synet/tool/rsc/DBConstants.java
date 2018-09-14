@@ -143,5 +143,8 @@ public interface DBConstants {
 	int CORE_TYPE_XX = 1;//芯线
 	int CORE_TYPE_TX = 2;//跳纤
 	int CORE_TYPE_SJX = 3;//双绞线
+	
+	int YES = 1; 	// 是
+	int NO = 2; 	// 否
 }
 

@@ -97,9 +97,6 @@ public class DevKTable extends RKTable {
 				value = pout;
 			}
 		}
-		if(data instanceof Tb1046IedEntity) {
-			System.out.println(property);
-		}
 		super.saveCellValue(data, property, value);
 	}
 }
