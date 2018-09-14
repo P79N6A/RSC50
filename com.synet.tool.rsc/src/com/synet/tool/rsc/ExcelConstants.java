@@ -99,19 +99,19 @@ public interface ExcelConstants {
 			IM102_DISTRIB_FRAME_CODEB
 	};
 	
-	String IM103_DEV_NAME = "装置Name(保护型号)";
-	String IM103_DEV_DESC = "装置名称";
+	String IM103_DEV_TYPE = "保护型号";
+//	String IM103_DEV_DESC = "装置名称";
 	String IM103_MANUFACTUROR = "制造厂家";
-//	String IM103_DEV_MODEL = "保护型号";
-	String IM103_CONFIG_VERSION= "软件版本";
+	String IM103_DEV_MODEL = "保护型号";
+	String IM103_CONFIG_VERSION= "ICD文件版本";
 	String IM103_BOARD_CODE = "板卡编号";
 	String IM103_BOARD_INDEX = "板卡序号";
 	String IM103_BOARD_MODEL = "板卡型号";
 	String IM103_BOARD_TYPE = "板卡类别/用途";
 	String IM103_PORT_NUM = "端口数";
 	String[] IM103_IED_BOARD_FIELDS = {
-			IM103_DEV_NAME,
-			IM103_DEV_DESC,
+			IM103_DEV_TYPE,
+//			IM103_DEV_DESC,
 			IM103_MANUFACTUROR,
 			IM103_CONFIG_VERSION,
 			IM103_BOARD_INDEX,

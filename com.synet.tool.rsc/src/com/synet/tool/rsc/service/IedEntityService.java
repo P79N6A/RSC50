@@ -9,6 +9,7 @@ import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1047BoardEntity;
 
 public class IedEntityService extends BaseService {
 	
@@ -78,15 +79,21 @@ public class IedEntityService extends BaseService {
 		HqlDaoImpl.getInstance().updateByHql(hql, params);
 	}
 	
-	public Tb1046IedEntity getIedByIM103IEDBoard(IM103IEDBoardEntity entity) {
+	public List<Tb1046IedEntity> getIedByIM103IEDBoard(IM103IEDBoardEntity entity) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("f1046Manufacturor", entity.getManufacturor());
 		params.put("f1046Model", entity.getDevName());
 		params.put("f1046ConfigVersion", entity.getConfigVersion());
-		return (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, params);
+		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, params);
 	}
 
 	public Tb1046IedEntity getIedEntityByDevName(String devName) {
 		return (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+	}
+	
+	public void updateBoardNum(Tb1046IedEntity ied) {
+		int num = hqlDao.getCount(Tb1047BoardEntity.class, "tb1046IedByF1046Code", ied);
+		ied.setF1046boardNum(num);
+		beanDao.update(ied);
 	}
 }

@@ -98,7 +98,6 @@ public class ChooseTableHeadDialog extends WrappedDialog {
 		try {
 			excelColName = new TableHeadParser().getTableHeadInfo(excelFilPath, tableHeadRow);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 	

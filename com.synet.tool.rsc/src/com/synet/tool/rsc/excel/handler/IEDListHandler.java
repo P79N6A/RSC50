@@ -14,7 +14,6 @@ public class IEDListHandler extends RscSheetHandler {
 	
 	public IEDListHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

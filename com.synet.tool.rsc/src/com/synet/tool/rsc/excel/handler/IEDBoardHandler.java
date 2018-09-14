@@ -4,12 +4,16 @@ import java.util.Map;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 
 public class IEDBoardHandler extends RscSheetHandler {
 	
+	private String devName;
+	private String manufacturor;
+	private String configVersion;
 	private IM103IEDBoardEntity entity = null;
 	
 	public IEDBoardHandler(int headRowNum, Map<Integer, String> excelColInfo) {
@@ -31,6 +35,9 @@ public class IEDBoardHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
+			entity.setDevName(devName);
+			entity.setManufacturor(manufacturor);
+			entity.setConfigVersion(configVersion);
 			result.add(entity);
 		}
 		super.endRow(rowNum);
@@ -40,7 +47,7 @@ public class IEDBoardHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow > headRowNum && !isEmpty(formattedValue)) {
+		if (currentRow > headRowNum) {
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -52,17 +59,20 @@ public class IEDBoardHandler extends RscSheetHandler {
 		if (fieldName == null)
 			return;
 		switch(fieldName) {
-			case ExcelConstants.IM103_DEV_NAME: 
-				entity.setDevName(value);
+			case ExcelConstants.IM103_DEV_TYPE:
+				if (!StringUtil.isEmpty(value)) {
+					devName = value;
+				}
 				break;
-			case ExcelConstants.IM103_DEV_DESC: 
-				entity.setDevDesc(value);
+			case ExcelConstants.IM103_MANUFACTUROR:
+				if (!StringUtil.isEmpty(value)) {
+					manufacturor = value;
+				}
 				break;
-			case ExcelConstants.IM103_MANUFACTUROR: 
-				entity.setManufacturor(value);
-				break;
-			case ExcelConstants.IM103_CONFIG_VERSION: 
-				entity.setConfigVersion(value);
+			case ExcelConstants.IM103_CONFIG_VERSION:
+				if (!StringUtil.isEmpty(value)) {
+					configVersion = value;
+				}
 				break;
 			case ExcelConstants.IM103_BOARD_CODE:
 				entity.setBoardCode(value);

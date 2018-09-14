@@ -1,6 +1,8 @@
 package com.synet.tool.rsc.processor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -25,54 +27,75 @@ public class ImportIEDBoardProcessor {
 		if (list == null || list.size() <= 0)
 			return false;
 		improtInfoService.save(fileInfoEntity);
-		for (IM103IEDBoardEntity entity : list) {
-			try {
+		try {
+			Map<String, List<Tb1046IedEntity>> iedMap = new HashMap<String, List<Tb1046IedEntity>>();
+			for (IM103IEDBoardEntity entity : list) {
 				IM103IEDBoardEntity tempIEDBoard = improtInfoService.existsEntity(entity);
 				if (tempIEDBoard != null){
 					continue;
-				} 
-				Tb1046IedEntity ied = iedEntityService.getIedByIM103IEDBoard(entity);
-				if (ied != null) {
-					String portNumStr = entity.getPortNum();
+				}
+				String portNumStr = entity.getPortNum();
+				int portNum = 0;
+				if (portNumStr != null) {
+					try {
+						portNum = Integer.valueOf(portNumStr);
+					} catch(Exception e) {
+					}
+				}
+				String key = entity.getManufacturor() + entity.getDevName() + entity.getConfigVersion();
+				List<Tb1046IedEntity> ieds = iedMap.get(key);
+				if (ieds == null) {
+					ieds = iedEntityService.getIedByIM103IEDBoard(entity);
+					iedMap.put(key, ieds);
+				}
+				for (Tb1046IedEntity ied : ieds) {
 					Tb1047BoardEntity boardEntity = RscObjectUtils.createBoardEntity();
 					boardEntity.setTb1046IedByF1046Code(ied);
 					boardEntity.setF1047Slot(entity.getBoardIndex());
 					boardEntity.setF1047Desc(entity.getBoardModel());
 					boardEntity.setF1047Type(entity.getBoardType());
 					Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(boardEntity);
-					if (tempBoard ==  null){
-						boardEntityService.insert(boardEntity);
-						entity.setMatched(DBConstants.MATCHED_OK);
-						System.out.println("添加板卡成功");
+					boolean exists = (tempBoard !=  null);
+					if (!exists){
+						if (portNum > 0) {
+							entity.setMatched(DBConstants.MATCHED_OK);
+							boardEntityService.insert(boardEntity);
+						} else {
+							continue;
+						}
 					} else {
 						boardEntity = tempBoard;
 					}
-					if (portNumStr != null) {
-						int portNum = Integer.valueOf(portNumStr);
-						if (portNum > 0) {
-							char A = 'A';
-							for (int i = 0; i < portNum; i++) {
-								char c = (char) (A + i);
-								Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
-								portEntity.setTb1047BoardByF1047Code(boardEntity);
-								portEntity.setF1048No("" + c);
-								portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
-								portEntity.setF1048Plug(DBConstants.PLUG_FC);
-								if (portEntityService.existsEntity(portEntity) == null) {
-									portEntityService.insert(portEntity);
-									System.out.println("添加端口成功");
-									entity.setMatched(DBConstants.MATCHED_OK);
-								}
-							}
+					if (exists) {
+						boardEntityService.clearBoardPorts(boardEntity);
+					}
+					if (portNum > 0) {
+						char A = 'A';
+						for (int i = 0; i < portNum; i++) {
+							char c = (char) (A + i);
+							Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
+							portEntity.setTb1047BoardByF1047Code(boardEntity);
+							portEntity.setF1048No("" + c);
+							portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
+							portEntity.setF1048Plug(DBConstants.PLUG_FC);
+							portEntityService.insert(portEntity);
 						}
+					} else if(exists) {
+						boardEntityService.delete(boardEntity);
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
+				entity.setFileInfoEntity(fileInfoEntity);
+				improtInfoService.insert(entity);
 			}
-			entity.setFileInfoEntity(fileInfoEntity);
-			improtInfoService.insert(entity);
+			// 更新板卡数量
+			for (List<Tb1046IedEntity> ieds : iedMap.values()) {
+				for (Tb1046IedEntity ied : ieds) {
+					iedEntityService.updateBoardNum(ied);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

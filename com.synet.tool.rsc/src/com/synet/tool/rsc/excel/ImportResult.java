@@ -5,7 +5,7 @@ import com.synet.tool.rsc.model.IM100FileInfoEntity;
 public class ImportResult {
 
 	private IM100FileInfoEntity fileInfoEntity;
-	private Object result;
+	private Object result; // list
 	
 	public ImportResult() {
 		super();

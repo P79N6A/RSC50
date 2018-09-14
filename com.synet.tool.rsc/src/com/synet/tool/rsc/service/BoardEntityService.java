@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
 
 public class BoardEntityService extends BaseService {
 
@@ -17,7 +18,7 @@ public class BoardEntityService extends BaseService {
 	public Tb1047BoardEntity existsEntity(Tb1047BoardEntity entity) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("tb1046IedByF1046Code", entity.getTb1046IedByF1046Code());
-		params.put("f047Slot", entity.getF1047Slot());
+		params.put("f1047Slot", entity.getF1047Slot());
 		return (Tb1047BoardEntity) beanDao.getObject(Tb1047BoardEntity.class, params);
 		
 	}
@@ -33,4 +34,7 @@ public class BoardEntityService extends BaseService {
 		return null;
 	}
 	
+	public void clearBoardPorts(Tb1047BoardEntity entity) {
+		beanDao.deleteAll(Tb1048PortEntity.class, "tb1047BoardByF1047Code", entity);
+	}
 }

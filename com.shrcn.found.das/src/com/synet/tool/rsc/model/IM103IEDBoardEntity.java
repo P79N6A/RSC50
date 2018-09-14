@@ -107,5 +107,16 @@ public class IM103IEDBoardEntity {
 	public void setFileInfoEntity(IM100FileInfoEntity fileInfoEntity) {
 		this.fileInfoEntity = fileInfoEntity;
 	}
+	@Override
+	public String toString() {
+		return "IM103IEDBoardEntity [im103Code=" + im103Code + ", devName="
+				+ devName + ", devDesc=" + devDesc + ", manufacturor="
+				+ manufacturor + ", configVersion=" + configVersion
+				+ ", boardIndex=" + boardIndex + ", boardModel=" + boardModel
+				+ ", boardType=" + boardType + ", boardCode=" + boardCode
+				+ ", portNum=" + portNum + ", portCode=" + portCode
+				+ ", matched=" + matched + ", fileInfoEntity=" + fileInfoEntity
+				+ "]";
+	}
 
 }

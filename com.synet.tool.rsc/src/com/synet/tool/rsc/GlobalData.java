@@ -19,8 +19,10 @@ public class GlobalData {
 	     connParam.setIp("localhost");
 		 connParam.setPort("1521");
 		 connParam.setDbName("ORCL");
-		 connParam.setUser("RSC");
-		 connParam.setPassword("rsc123456");
+//		 connParam.setUser("RSC");
+//		 connParam.setPassword("rsc123456");
+		 connParam.setUser("system");
+		 connParam.setPassword("system");
 	}
 
 	public ConnParam getConnParam() {
