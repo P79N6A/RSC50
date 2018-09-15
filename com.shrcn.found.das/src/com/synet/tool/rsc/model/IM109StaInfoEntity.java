@@ -13,6 +13,10 @@ public class IM109StaInfoEntity {
 	private String mmsRefAddr;	//MMS信号参引
 	private Integer matched;    //是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
+	
+	private int conflict; // 是否冲突：1-是，2-否
+	private boolean overwrite; // 是否覆盖
+	
 	public String getIm109Code() {
 		return im109Code;
 	}
@@ -48,6 +52,18 @@ public class IM109StaInfoEntity {
 	}
 	public void setFileInfoEntity(IM100FileInfoEntity fileInfoEntity) {
 		this.fileInfoEntity = fileInfoEntity;
+	}
+	public int getConflict() {
+		return conflict;
+	}
+	public void setConflict(int conflict) {
+		this.conflict = conflict;
+	}
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+	public void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
 	}
 	
 }

@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -22,7 +24,17 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM107TerStrapEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
+import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PinEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.StatedataService;
+import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -35,6 +47,13 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 	private ImprotInfoService improtInfoService;
 	private Map<String, IM100FileInfoEntity> map;
 	private org.eclipse.swt.widgets.List titleList;
+	private Button btImport;
+	
+	private PinEntityService pinEntityService;
+	private PoutEntityService poutEntityService;
+	private MmsfcdaService mmsfcdaService;
+	private StatedataService statedataService;
+	private StrapEntityService strapEntityService;
 	
 	public ImpTerStrapEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -44,6 +63,11 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 	public void init() {
 		improtInfoService = new ImprotInfoService();
 		map = new HashMap<String, IM100FileInfoEntity>();
+		pinEntityService = new PinEntityService();
+		poutEntityService = new PoutEntityService();
+		mmsfcdaService = new MmsfcdaService();
+		statedataService = new StatedataService();
+		strapEntityService = new StrapEntityService();
 		super.init();
 	}
 
@@ -54,7 +78,11 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 	
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
+		gridData.verticalSpan = 2;
 		titleList = SwtUtil.createList(container, gridData);
+		GridData btData = new GridData();
+		btData.horizontalAlignment = SWT.RIGHT;
+		btImport = SwtUtil.createPushButton(container, "导入压板与虚端子", btData);
 		table =TableFactory.getTerStrapTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -79,6 +107,70 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 				super.widgetSelected(e);
 			}
 		});
+		
+		btImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doImport();
+				DialogHelper.showAsynInformation("导入成功！");
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void doImport() {
+		List<IM107TerStrapEntity> list = (List<IM107TerStrapEntity>) table.getInput();
+		if (list == null || list.size() <= 0)
+			return;
+		for (IM107TerStrapEntity entity : list) {
+			try {
+				String vpType = entity.getVpType();
+				if ("开入".equals(vpType)) {
+					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getVpRefAddr());
+					if (pinEntity != null) {
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						if (mmsfcdaEntity != null) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+									mmsfcdaEntity.getDataCode());
+							if (statedataEntity != null) {
+								if (statedataEntity.getParentCode() != null) {
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+											statedataEntity.getParentCode());
+									if (strapEntity != null) {
+										pinEntity.setTb1064StrapByF1064Code(strapEntity);
+										pinEntityService.save(pinEntity);
+										entity.setMatched(DBConstants.MATCHED_OK);
+									}
+								}
+							}
+						}
+					}
+				} else if ("开出".equals(vpType)){
+					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(entity.getDevName(), entity.getVpRefAddr());
+					if (poutEntity != null) {
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						if (mmsfcdaEntity != null) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+									mmsfcdaEntity.getDataCode());
+							if (statedataEntity != null) {
+								if (statedataEntity.getParentCode() != null) {
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+											statedataEntity.getParentCode());
+									if (strapEntity != null) {
+										poutEntity.setTb1064StrapByF1064Code(strapEntity);
+										poutEntityService.save(poutEntity);
+										entity.setMatched(DBConstants.MATCHED_OK);
+									}
+								}
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			improtInfoService.update(entity);
+		}
 	}
 
 	@Override
@@ -96,9 +188,71 @@ public class ImpTerStrapEditor extends BaseConfigEditor {
 				
 				List<IM107TerStrapEntity> list = improtInfoService.getTerStrapEntityList(map.get(items.get(0)));
 				if (list != null && list.size()> 0) {
+					checkData(list);
 					table.setInput(list);
 				}
 			}
 		}
 	}
+
+	private void checkData(List<IM107TerStrapEntity> list) {
+		for (IM107TerStrapEntity entity : list) {
+			if (entity.getMatched() == DBConstants.MATCHED_OK) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			try {
+				String vpType = entity.getVpType();
+				if ("开入".equals(vpType)) {
+					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getVpRefAddr());
+					if (pinEntity != null) {
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						if (mmsfcdaEntity != null) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+									mmsfcdaEntity.getDataCode());
+							if (statedataEntity != null) {
+								if (statedataEntity.getParentCode() != null) {
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+											statedataEntity.getParentCode());
+									if (strapEntity != null && pinEntity.getTb1064StrapByF1064Code() == null) {
+										entity.setConflict(DBConstants.NO);
+										entity.setOverwrite(true);
+										continue;
+									}
+								}
+							}
+						}
+					}
+					entity.setConflict(DBConstants.YES);
+					entity.setOverwrite(false);
+				} else if ("开出".equals(vpType)){
+					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(entity.getDevName(), entity.getVpRefAddr());
+					if (poutEntity != null) {
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						if (mmsfcdaEntity != null) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+									mmsfcdaEntity.getDataCode());
+							if (statedataEntity != null) {
+								if (statedataEntity.getParentCode() != null) {
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+											statedataEntity.getParentCode());
+									if (strapEntity != null && poutEntity.getTb1064StrapByF1064Code() == null) {
+										entity.setConflict(DBConstants.NO);
+										entity.setOverwrite(true);
+										continue;
+									}
+								}
+							}
+						}
+					}
+					entity.setConflict(DBConstants.YES);
+					entity.setOverwrite(false);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

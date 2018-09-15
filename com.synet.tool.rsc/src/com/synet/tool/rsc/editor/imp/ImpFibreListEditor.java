@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -22,7 +24,14 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1050CubicleEntity;
+import com.synet.tool.rsc.processor.ImportFibreListProcessor;
+import com.synet.tool.rsc.service.CubicleEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
+import com.synet.tool.rsc.service.PortEntityService;
+import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -35,6 +44,11 @@ public class ImpFibreListEditor extends BaseConfigEditor {
 	private ImprotInfoService improtInfoService;
 	private Map<String, IM100FileInfoEntity> map;
 	private org.eclipse.swt.widgets.List titleList;
+	private Button btImport;
+	
+	private SubstationService substationService;
+	private CubicleEntityService cubicleService;
+	private PortEntityService portEntityService;
 	
 	public ImpFibreListEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -44,6 +58,9 @@ public class ImpFibreListEditor extends BaseConfigEditor {
 	public void init() {
 		improtInfoService = new ImprotInfoService();
 		map = new HashMap<String, IM100FileInfoEntity>();
+		substationService = new SubstationService();
+		cubicleService = new CubicleEntityService();
+		portEntityService = new PortEntityService();
 		super.init();
 	}
 
@@ -54,7 +71,11 @@ public class ImpFibreListEditor extends BaseConfigEditor {
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
+		gridData.verticalSpan = 2;
 		titleList = SwtUtil.createList(container, gridData);
+		GridData btData = new GridData();
+		btData.horizontalAlignment = SWT.RIGHT;
+		btImport = SwtUtil.createPushButton(container, "导入光缆", btData);
 		table =TableFactory.getFibreListTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -79,6 +100,30 @@ public class ImpFibreListEditor extends BaseConfigEditor {
 				super.widgetSelected(e);
 			}
 		});
+		
+		btImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doImport();
+				DialogHelper.showAsynInformation("导入成功！");
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void doImport() {
+		List<IM102FibreListEntity> temp = new ArrayList<>();
+		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
+		for (IM102FibreListEntity entity : list) {
+			if (entity.isOverwrite()) {
+				temp.add(entity);
+			}
+		}
+		if (temp.size() > 0) {
+			new ImportFibreListProcessor().importData(temp);
+			beandao.updateBatch(temp);
+		}
 	}
 
 	@Override
@@ -96,9 +141,49 @@ public class ImpFibreListEditor extends BaseConfigEditor {
 				
 				List<IM102FibreListEntity> list = improtInfoService.getFibreListEntityList(map.get(items.get(0)));
 				if (list != null && list.size()> 0) {
+					checkData(list);
 					table.setInput(list);
 				}
 			}
+		}
+	}
+
+	//光缆清册为导入添加数据，只要检查是否添加过和必要参数是否存在即可,数据重复时，导入数据为更新操作
+	private void checkData(List<IM102FibreListEntity> list) {
+		List<Tb1041SubstationEntity> substationList = substationService.getAllSubstation();
+		boolean notStation = (substationList == null || substationList.size() <= 0);
+		for (IM102FibreListEntity entity : list) {
+			if (entity.getMatched() == DBConstants.MATCHED_OK) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			if (notStation) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			Tb1050CubicleEntity cubicleEntityA = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescA());
+			Tb1050CubicleEntity cubicleEntityB = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescB());
+			if (cubicleEntityA == null || cubicleEntityB == null) {//屏柜都不能为空
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			if (entity.getCoreCode() == null) {//纤芯编号不存在，不处理
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			Tb1048PortEntity portEntityA = portEntityService.getPortEntity(entity.getDevNameA(), entity.getBoardCodeA(), entity.getPortCodeA());
+			Tb1048PortEntity portEntityB = portEntityService.getPortEntity(entity.getDevNameB(), entity.getBoardCodeB(), entity.getPortCodeB());
+			if (portEntityA == null || portEntityB == null) {//端口都不能为空
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue; 
+			}
+			entity.setConflict(DBConstants.NO);
+			entity.setOverwrite(true);
 		}
 	}
 }

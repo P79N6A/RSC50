@@ -11,6 +11,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="虚端子参引" editor="none" name="vpRefAddr" width="100" default=""/> 
   <field desc="虚端子描述" editor="none" name="vpDesc" width="100" default=""/> 
   <field desc="虚端子类型（开入、开出）" editor="none" name="vpType" width="100" default=""/> 
-  <field desc="是否匹配" editor="none" name="matched" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
+  <field desc="匹配结果" dict="MATCHED" name="matched" width="100" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" width="100" default=""/> 
+  <field desc="覆盖" editor="none" name="overwrite" width="100" default=""/>  
 </table>

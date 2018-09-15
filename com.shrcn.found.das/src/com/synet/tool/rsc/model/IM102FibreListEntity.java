@@ -29,6 +29,9 @@ public class IM102FibreListEntity {
 	private Integer matched;
 	private IM100FileInfoEntity fileInfoEntity;
 	
+	private int conflict; // 是否冲突：1-是，2-否
+	private boolean overwrite; // 是否覆盖
+	
 	public String getIm102Code() {
 		return im102Code;
 	}
@@ -166,6 +169,18 @@ public class IM102FibreListEntity {
 	}
 	public void setFileInfoEntity(IM100FileInfoEntity fileInfoEntity) {
 		this.fileInfoEntity = fileInfoEntity;
+	}
+	public int getConflict() {
+		return conflict;
+	}
+	public void setConflict(int conflict) {
+		this.conflict = conflict;
+	}
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+	public void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
 	}
 	
 }

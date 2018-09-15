@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -22,7 +24,13 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM106PortLightEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
+import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PortEntityService;
+import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -35,6 +43,11 @@ public class ImpPortLightEditor extends BaseConfigEditor {
 	private ImprotInfoService improtInfoService;
 	private Map<String, IM100FileInfoEntity> map;
 	private org.eclipse.swt.widgets.List titleList;
+	private Button btImport;
+	
+	private PortEntityService portEntityService;
+	private MmsfcdaService mmsfcdaService;
+	private StatedataService statedataService;
 	
 	public ImpPortLightEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -44,6 +57,9 @@ public class ImpPortLightEditor extends BaseConfigEditor {
 	public void init() {
 		improtInfoService = new ImprotInfoService();
 		map = new HashMap<String, IM100FileInfoEntity>();
+		portEntityService = new PortEntityService();
+		mmsfcdaService = new MmsfcdaService();
+		statedataService = new StatedataService();
 		super.init();
 	}
 
@@ -54,7 +70,11 @@ public class ImpPortLightEditor extends BaseConfigEditor {
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
+		gridData.verticalSpan = 3;
 		titleList = SwtUtil.createList(container, gridData);
+		GridData btData = new GridData();
+		btData.horizontalAlignment = SWT.RIGHT;
+		btImport = SwtUtil.createPushButton(container, "导入光强与端口", btData);
 		table =TableFactory.getPortLightTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -79,6 +99,41 @@ public class ImpPortLightEditor extends BaseConfigEditor {
 				super.widgetSelected(e);
 			}
 		});
+		
+		btImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doImport();
+				DialogHelper.showAsynInformation("导入成功！");
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void doImport() {
+		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
+		if (list == null || list.size() <= 0)
+			return;
+		for (IM106PortLightEntity entity : list) {
+			try {
+				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
+						entity.getBoardCode(), entity.getPortCode());
+				if (portEntity != null) {
+					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
+					if (mmsfcdaEntity != null) {
+						Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+								mmsfcdaEntity.getDataCode());
+						if (statedataEntity != null) {
+							statedataEntity.setParentCode(portEntity.getF1048Code());
+							entity.setMatched(DBConstants.MATCHED_OK);
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			improtInfoService.update(entity);
+		}
 	}
 
 	@Override
@@ -96,9 +151,41 @@ public class ImpPortLightEditor extends BaseConfigEditor {
 				
 				List<IM106PortLightEntity> list = improtInfoService.getPortLightEntityList(map.get(items.get(0)));
 				if (list != null && list.size()> 0) {
+					checkData(list);
 					table.setInput(list);
 				}
 			}
 		}
 	}
+
+	private void checkData(List<IM106PortLightEntity> list) {
+		for (IM106PortLightEntity entity : list) {
+			if (entity.getMatched() == DBConstants.MATCHED_OK) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			try {
+				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
+						entity.getBoardCode(), entity.getPortCode());
+				if (portEntity != null) {
+					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
+					if (mmsfcdaEntity != null) {
+						Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+								mmsfcdaEntity.getDataCode());
+						if (statedataEntity != null && statedataEntity.getParentCode() == null) {
+							entity.setConflict(DBConstants.NO);
+							entity.setOverwrite(true);
+							continue;
+						} 
+					}
+				}
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

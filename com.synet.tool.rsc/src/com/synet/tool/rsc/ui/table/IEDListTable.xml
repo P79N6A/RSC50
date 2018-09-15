@@ -22,5 +22,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="出口方式" editor="none" name="outType" width="100" default=""/> 
   <field desc="板卡数量" editor="none" name="boardNum" width="100" default=""/> 
   <field desc="匹配装置代码" editor="none" name="matchedIedCode" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
+  <field desc="匹配结果" dict="MATCHED" name="matched" width="100" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" width="100" default=""/> 
+  <field desc="覆盖" editor="none" name="overwrite" width="100" default=""/> 
 </table>

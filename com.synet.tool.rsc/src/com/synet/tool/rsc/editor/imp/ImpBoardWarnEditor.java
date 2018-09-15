@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -22,7 +24,13 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM105BoardWarnEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
+import com.synet.tool.rsc.model.Tb1047BoardEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
+import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -35,6 +43,11 @@ public class ImpBoardWarnEditor extends BaseConfigEditor {
 	private ImprotInfoService improtInfoService;
 	private Map<String, IM100FileInfoEntity> map;
 	private org.eclipse.swt.widgets.List titleList;
+	private Button btImport;
+	
+	private BoardEntityService boardEntityService;
+	private MmsfcdaService mmsfcdaService;
+	private StatedataService statedataService;
 	
 	public ImpBoardWarnEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -44,6 +57,9 @@ public class ImpBoardWarnEditor extends BaseConfigEditor {
 	public void init() {
 		improtInfoService = new ImprotInfoService();
 		map = new HashMap<String, IM100FileInfoEntity>();
+		boardEntityService = new BoardEntityService();
+		mmsfcdaService = new MmsfcdaService();
+		statedataService = new StatedataService();
 		super.init();
 	}
 
@@ -53,7 +69,11 @@ public class ImpBoardWarnEditor extends BaseConfigEditor {
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
+		gridData.verticalSpan = 2;
 		titleList = SwtUtil.createList(container, gridData);
+		GridData btData = new GridData();
+		btData.horizontalAlignment = SWT.RIGHT;
+		btImport = SwtUtil.createPushButton(container, "导入告警", btData);
 		table =TableFactory.getBoardWarnTableTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -78,6 +98,44 @@ public class ImpBoardWarnEditor extends BaseConfigEditor {
 				super.widgetSelected(e);
 			}
 		});
+		
+		btImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doImport();
+				DialogHelper.showAsynInformation("导入成功！");
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void doImport() {
+		List<IM105BoardWarnEntity> list = (List<IM105BoardWarnEntity>) table.getInput();
+		for (IM105BoardWarnEntity entity : list) {
+			if (!entity.isOverwrite()) {
+				continue;
+			}
+			try {
+				Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
+				if (tempBoard != null) {
+					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getAlarmRefAddr());
+					if (tempMmsfcdaEntity != null) {
+						String dataCode = tempMmsfcdaEntity.getDataCode();
+						if (dataCode != null) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class, dataCode);
+							if (statedataEntity != null) {
+								statedataEntity.setParentCode(tempBoard.getF1047Code());
+								statedataService.save(statedataEntity);
+								entity.setMatched(DBConstants.MATCHED_OK);
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			improtInfoService.update(entity);
+		}
 	}
 
 	@Override
@@ -95,8 +153,41 @@ public class ImpBoardWarnEditor extends BaseConfigEditor {
 				
 				List<IM105BoardWarnEntity> list = improtInfoService.getBoardWarnEntityList(map.get(items.get(0)));
 				if (list != null && list.size()> 0) {
+					//冲突检查
+					checkData(list);
 					table.setInput(list);
 				}
+			}
+		}
+	}
+
+	private void checkData(List<IM105BoardWarnEntity> list) {
+		for (IM105BoardWarnEntity entity : list) {
+			if (entity.getMatched() == DBConstants.MATCHED_OK) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
+			if (tempBoard != null) {
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			} else {
+				Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getAlarmRefAddr());
+				if (tempMmsfcdaEntity != null) {
+					String dataCode = tempMmsfcdaEntity.getDataCode();
+					if (dataCode != null) {
+						Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class, dataCode);
+						if (statedataEntity != null && statedataEntity.getParentCode() == null) {
+							entity.setConflict(DBConstants.NO);
+							entity.setOverwrite(true);
+							continue;
+						} 
+					}
+				}
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
 			}
 		}
 	}
