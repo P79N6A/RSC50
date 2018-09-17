@@ -24,7 +24,6 @@ public class IedChooseDialog extends KTableEditorDialog {
 
 	public IedChooseDialog(Shell parentShell, Object item) {
 		super(parentShell, item);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

@@ -12,5 +12,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="装置版本号" editor="none" name="f1046ConfigVersion" width="100" default=""/> 
   <field desc="板卡数量" editor="none" name="f1046boardNum" width="100" default=""/> 
   <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="100" default=""/> 
-  <field desc="替换" editor="checkbox" name="overwrite" width="100" default=""/> 
+  <field desc="更新" editor="checkbox" name="overwrite" width="100" default=""/> 
 </table>

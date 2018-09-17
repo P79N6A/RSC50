@@ -8,6 +8,7 @@ import java.util.Map;
 import net.sf.excelutils2007.ExcelUtils;
 
 import org.eclipse.swt.widgets.Composite;
+
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.UICommonConstants;
@@ -17,10 +18,11 @@ import com.shrcn.found.ui.table.DefaultKTable;
 import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
+
+import de.kupzog.ktable.KTableCellSelectionListener;
 
 
 public class DevKTable extends RKTable {
@@ -33,6 +35,29 @@ public class DevKTable extends RKTable {
 	protected void initUI() {
 		tablemodel = new DevKTableModel(this, config);
 		table = new DefaultKTable(parent, tablemodel);	
+	}
+	
+	@Override
+	protected void initOthers() {
+		super.initOthers();
+		table.addCellSelectionListener(new KTableCellSelectionListener() {
+			@Override
+			public void fixedCellSelected(int row, int col, int mask) {
+				IField field = getField(row);
+				if ("overwrite".equals(field.getName())) {
+					if (getInput() != null) {
+						for (Object o : getInput()) {
+							boolean overwrite = (boolean) ObjectUtil.getProperty(o, "overwrite");
+							ObjectUtil.setProperty(o, "overwrite", !overwrite);
+						}
+						refresh();
+					}
+				}
+			}
+			@Override
+			public void cellSelected(int row, int col, int mask) {
+			}
+		});
 	}
 	
 	/**

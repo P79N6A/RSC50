@@ -82,5 +82,8 @@
         <many-to-one name="tb1042BaysByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity" lazy="false" insert="false" update="false">
             <column name="F1042_CODE"/>
         </many-to-one>
+        <many-to-one name="tb1050CubicleEntity" class="com.synet.tool.rsc.model.Tb1050CubicleEntity" lazy="false" insert="false" update="false">
+            <column name="F1050_Code"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

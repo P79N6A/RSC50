@@ -30,7 +30,6 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
-import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.RscObjectUtils;
@@ -51,7 +50,6 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 	private ImprotInfoService improtInfoService;
 	private IedEntityService iedEntityService;
 	private BoardEntityService boardEntityService;
-	private PortEntityService portEntityService;
 	private Map<String, IM100FileInfoEntity> map;
 	private List<IM103IEDBoardEntity> boards; // 用户选择装置型号板卡
 	
@@ -64,7 +62,6 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 		improtInfoService = new ImprotInfoService();
 		iedEntityService = new IedEntityService();
 		boardEntityService = new BoardEntityService();
-		portEntityService = new PortEntityService();
 		map = new HashMap<String, IM100FileInfoEntity>();
 		super.init();
 	}
@@ -94,17 +91,8 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 			public void widgetSelected(SelectionEvent e) {
 				String[] selects = titleList.getSelection();
 				if (selects != null && selects.length > 0) {
-					IM100FileInfoEntity fileInfoEntity = map.get(selects[0]);
-					if (fileInfoEntity == null) {
-						DialogHelper.showAsynError("文名错误！");
-					} else {
-						List<IM103IEDBoardEntity> list = improtInfoService.getIEDBoardEntityList(fileInfoEntity);
-						if (list != null && list.size()> 0) {
-							table.setInput(list);
-						}
-					}
+					loadIEDBoards(selects[0]);
 				}
-				super.widgetSelected(e);
 			}
 		});
 		table.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
@@ -234,12 +222,19 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 				
 				titleList.setItems(items.toArray(new String[0]));
 				titleList.setSelection(sel);
-				
-				String filename = items.get(sel);
-				List<IM103IEDBoardEntity> list = improtInfoService.getIEDBoardEntityList(map.get(filename));
-				if (list != null && list.size()> 0) {
-					table.setInput(list);
-				}
+				loadIEDBoards(items.get(sel));
+			}
+		}
+	}
+	
+	private void loadIEDBoards(String filename) {
+		IM100FileInfoEntity fileInfoEntity = map.get(filename);
+		if (fileInfoEntity == null) {
+			DialogHelper.showAsynError("文名错误！");
+		} else {
+			List<IM103IEDBoardEntity> list = improtInfoService.getIEDBoardEntityList(fileInfoEntity);
+			if (list != null && list.size()> 0) {
+				table.setInput(list);
 			}
 		}
 	}

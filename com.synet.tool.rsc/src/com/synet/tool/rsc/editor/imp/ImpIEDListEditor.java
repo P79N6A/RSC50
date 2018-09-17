@@ -6,7 +6,9 @@
 package com.synet.tool.rsc.editor.imp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +29,7 @@ import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
@@ -39,14 +42,16 @@ import com.synet.tool.rsc.ui.TableFactory;
  */
 public class ImpIEDListEditor extends BaseConfigEditor {
 	
-	private Combo cmbDevType;
-	private Text txtDevName;//装置中文名称
-	private Button btnSearch;
-	private ImprotInfoService improtInfoService;
+	private org.eclipse.swt.widgets.List titleList;
 	private Button btImport;
 	
+	private ImprotInfoService improtInfoService;
 	private IedEntityService iedEntityService;
 	private BayEntityService bayEntityService;
+	private Map<String, IM100FileInfoEntity> map;
+	private Combo cmbDevType;
+	private Text txtDevName;
+	private Button btnSearch;
 	
 	public ImpIEDListEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -55,8 +60,9 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 	@Override
 	public void init() {
 		improtInfoService = new ImprotInfoService();
-		 iedEntityService = new IedEntityService();
-		 bayEntityService = new BayEntityService();
+		iedEntityService = new IedEntityService();
+		bayEntityService = new BayEntityService();
+		map = new HashMap<String, IM100FileInfoEntity>();
 		super.init();
 	}
 
@@ -74,22 +80,29 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 		txtDevName.setMessage("装置中文名称");
 		SwtUtil.createLabel(container, "", noneGridData);
 		btnSearch = SwtUtil.createButton(container, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
+
 		
+		GridData gridData = new GridData(GridData.FILL_VERTICAL);
+		gridData.widthHint = 150;
+		titleList = SwtUtil.createList(container, gridData);
+		
+		Composite cmpRight = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入设备台账", btData);
-		
+		btImport = SwtUtil.createPushButton(cmpRight, "导入设备台账", btData);
 		GridData tableGridData = new GridData(GridData.FILL_BOTH);
-		tableGridData.horizontalSpan = 6;
-		table =TableFactory.getIEDListTable(container);
+		table = TableFactory.getIEDListTable(cmpRight);
 		table.getTable().setLayoutData(tableGridData);
 	}
 	
 	protected void addListeners() {
-		btnSearch.addSelectionListener(new SelectionAdapter() {
+		titleList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				search();
+				String[] selects = titleList.getSelection();
+				if (selects != null && selects.length > 0) {
+					loadIEDList(selects[0]);
+				}
 			}
 		});
 		
@@ -108,53 +121,68 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 		if (list == null || list.size() <= 0)
 			return;
 		for (IM101IEDListEntity entity : list) {
-			try {
-				Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(entity.getDevName());
-				if (iedEntity != null) {
-					Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
-					if (bayEntity != null) {
-						iedEntity.setTb1042BaysByF1042Code(bayEntity);
-					}
-					iedEntity.setF1046Manufacturor(entity.getManufacturor());
-					iedEntity.setF1046version(entity.getDevVersion());
-					iedEntity.setF1046protectCategory(entity.getProtClassify());
-					iedEntity.setF1046protectType(entity.getProtType());
-					iedEntity.setF1046protectModel(entity.getProtModel());
-					iedEntity.setF1046OperateDate(entity.getDateService());
-					iedEntity.setF1046productDate(entity.getDateProduct());
-					iedEntity.setF1046productNo(entity.getProductCode());
-					iedEntity.setF1046dataGatType(entity.getDataCollectType());
-					iedEntity.setF1046OutType(entity.getOutType());
-					int num = 0;
-					try {
-						num = Integer.parseInt(entity.getBoardNum());
-					} catch(Exception e) {
-					}
-					iedEntity.setF1046boardNum(num);
-					//更新
-					iedEntityService.update(iedEntity);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (!entity.isOverwrite()) {
+				continue;
 			}
-			improtInfoService.update(entity);
+			Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(entity.getDevName());
+			if (iedEntity != null) {
+				Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
+				if (bayEntity != null) {
+					iedEntity.setF1042Code(bayEntity.getF1042Code());
+				}
+				Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
+				if (cubicle != null) {
+					iedEntity.setF1050Code(cubicle.getF1050Code());
+				}
+//					iedEntity.setF1046Manufacturor(entity.getManufacturor());
+//					iedEntity.setF1046version(entity.getDevVersion());
+//					iedEntity.setF1046protectCategory(entity.getProtClassify());
+//					iedEntity.setF1046protectType(entity.getProtType());
+//					iedEntity.setF1046protectModel(entity.getProtModel());
+				iedEntity.setF1046OperateDate(entity.getDateService());
+				iedEntity.setF1046productDate(entity.getDateProduct());
+				iedEntity.setF1046productNo(entity.getProductCode());
+				iedEntity.setF1046dataGatType(entity.getDataCollectType());
+				iedEntity.setF1046OutType(entity.getOutType());
+				//更新
+				iedEntityService.update(iedEntity);
+			}
 		}
 	}
 
 	@Override
 	public void initData() {
-		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE102);
-		List<IM101IEDListEntity> inputs = new ArrayList<>();
+		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE101);
 		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
-			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) { 
-				List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
-				if (list != null && list.size()> 0) {
-					inputs.addAll(list);
-				}
+			List<String> items = new ArrayList<>();
+			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
+				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
+				items.add(fileInfoEntity.getFileName());
 			}
-			if (inputs != null && inputs.size() > 0) {
-				checkData(inputs);
-				table.setInput(inputs);
+			if (items.size() > 0) {
+				IEditorInput editinput = getInput();
+				int sel = 0;
+				Object data = editinput.getData();
+				if (data != null && data instanceof String) {
+					String filename = (String) data;
+					sel = items.indexOf(filename);
+				}
+				titleList.setItems(items.toArray(new String[0]));
+				titleList.setSelection(sel);
+				loadIEDList(items.get(sel));
+			}
+		}
+	}
+	
+	private void loadIEDList(String filename) {
+		IM100FileInfoEntity fileInfoEntity = map.get(filename);
+		if (fileInfoEntity == null) {
+			DialogHelper.showAsynError("文名错误！");
+		} else {
+			List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
+			if (list != null && list.size()> 0) {
+				checkData(list);
+				table.setInput(list);
 			}
 		}
 	}
@@ -169,24 +197,28 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 			try {
 				Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(entity.getDevName());
 				if (iedEntity != null) {
-					if(iedEntity.getTb1042BaysByF1042Code() != null 
-							|| iedEntity.getF1046Manufacturor() != null 
-							|| iedEntity.getF1046version() != null
-							|| iedEntity.getF1046protectCategory() != null
-							|| iedEntity.getF1046protectType() != null
-							|| iedEntity.getF1046protectModel() != null
+					Tb1042BayEntity bay = iedEntity.getTb1042BaysByF1042Code();
+					Tb1050CubicleEntity cubicle = iedEntity.getTb1050CubicleEntity();
+					if((bay != null && !bay.getF1042Name().equals(entity.getBay()))
+							|| (cubicle != null && !cubicle.getF1050Name().equals(entity.getCubicle()))
+//							|| iedEntity.getF1046Manufacturor() != null 
+//							|| iedEntity.getF1046version() != null
+//							|| iedEntity.getF1046protectCategory() != null
+//							|| iedEntity.getF1046protectType() != null
+//							|| iedEntity.getF1046protectModel() != null
 							|| iedEntity.getF1046OperateDate() != null
 							|| iedEntity.getF1046productDate() != null
 							|| iedEntity.getF1046productNo() != null
 							|| iedEntity.getF1046dataGatType() != null
 							|| iedEntity.getF1046OutType() != null
-							|| iedEntity.getF1046boardNum () != null) {
+//							|| iedEntity.getF1046boardNum () != null
+							) {
 						entity.setConflict(DBConstants.YES);
 						entity.setOverwrite(false);
-						continue;
+					} else {
+						entity.setConflict(DBConstants.NO);
+						entity.setOverwrite(true);
 					}
-					entity.setConflict(DBConstants.NO);
-					entity.setOverwrite(true);
 				} else {
 					entity.setConflict(DBConstants.YES);
 					entity.setOverwrite(false);
@@ -197,44 +229,4 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 		}
 	}
 
-	//手动过滤
-	private void search() {
-		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE102);
-		List<IM101IEDListEntity> inputs = new ArrayList<>();
-		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
-			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) { 
-				List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
-				if (list != null && list.size()> 0) {
-					inputs.addAll(list);
-				}
-			}
-			if (inputs != null && inputs.size() > 0) {
-				List<IM101IEDListEntity> temp = new ArrayList<>();
-				String devType = cmbDevType.getText().trim();
-				String devName = txtDevName.getText().trim();
-				for (IM101IEDListEntity entity : inputs) {
-					if (DEV_TYPE_TITLE.equals(devType)) {
-						if ("".equals(devName)) {
-							return;
-						} else {
-							if (devName.equals(entity.getDevDesc())) {
-								temp.add(entity);
-							}
-						}
-					} else {
-						if (devType.equals(entity.getDevType())) {
-							if ("".equals(devName)) {
-								return;
-							} else {
-								if (devName.equals(entity.getDevDesc())) {
-									temp.add(entity);
-								}
-							}
-						}
-					}
-				}
-				table.setInput(temp);
-			}
-		}
-	}
 }
