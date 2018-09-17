@@ -64,27 +64,27 @@ public class IEDListHandler extends RscSheetHandler {
 			case ExcelConstants.IM101_CUBICLE: 
 				entity.setCubicle(value);
 				break;
-			case ExcelConstants.IM101_MANUFACTUROR: 
-				entity.setManufacturor(value);
-				break;
-			case ExcelConstants.IM101_DEV_TYPE: 
-				entity.setDevType(value);
-				break;
-			case ExcelConstants.IM101_DEV_VERSION: 
-				entity.setDevVersion(value);
-				break;
-			case ExcelConstants.IM101_A_OR_B: 
-				entity.setAorB(value);;
-				break;
-			case ExcelConstants.IM101_PROT_CLASSIFY: 
-				entity.setProtClassify(value);
-				break;
-			case ExcelConstants.IM101_PROT_MODEL: 
-				entity.setProtModel(value);
-				break;
-			case ExcelConstants.IM101_PROT_TYPE: 
-				entity.setProtType(value);
-				break;
+//			case ExcelConstants.IM101_MANUFACTUROR: 
+//				entity.setManufacturor(value);
+//				break;
+//			case ExcelConstants.IM101_DEV_TYPE: 
+//				entity.setDevType(value);
+//				break;
+//			case ExcelConstants.IM101_DEV_VERSION: 
+//				entity.setDevVersion(value);
+//				break;
+//			case ExcelConstants.IM101_A_OR_B: 
+//				entity.setAorB(value);;
+//				break;
+//			case ExcelConstants.IM101_PROT_CLASSIFY: 
+//				entity.setProtClassify(value);
+//				break;
+//			case ExcelConstants.IM101_PROT_MODEL: 
+//				entity.setProtModel(value);
+//				break;
+//			case ExcelConstants.IM101_PROT_TYPE: 
+//				entity.setProtType(value);
+//				break;
 			case ExcelConstants.IM101_DATE_SERVICE: 
 				entity.setDateService(value);
 				break;
@@ -100,9 +100,9 @@ public class IEDListHandler extends RscSheetHandler {
 			case ExcelConstants.IM101_OUT_TYPE: 
 				entity.setOutType(value);
 				break;
-			case ExcelConstants.IM101_BOARD_NUM: 
-				entity.setBoardNum(value);
-				break;
+//			case ExcelConstants.IM101_BOARD_NUM: 
+//				entity.setBoardNum(value);
+//				break;
 			default:
 				break;
 		}
