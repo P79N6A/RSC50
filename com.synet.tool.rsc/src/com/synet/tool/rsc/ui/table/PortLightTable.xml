@@ -7,7 +7,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="装置名称" editor="none" name="devDesc" width="100" default=""/>
   <field desc="装置Name" editor="none" name="devName" width="100" default=""/>
   <field desc="光强信息参引" editor="none" name="opticalRefAddr" width="100" default=""/>
-  <field desc="光强信息描述" editor="none" name="opticalDedc" width="100" default=""/> 
+  <field desc="光强信息描述" editor="none" name="opticalDesc" width="100" default=""/> 
   <field desc="板卡编号" editor="none" name="boardCode" width="100" default=""/> 
   <field desc="端口编号" editor="none" name="portCode" width="100" default=""/> 
   <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="100" default=""/> 

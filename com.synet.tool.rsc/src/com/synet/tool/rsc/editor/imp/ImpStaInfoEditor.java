@@ -97,6 +97,7 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 			if (mmsfcdaEntity != null) {
 				mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
 			}
+			mmsfcdaService.update(mmsfcdaEntity);
 			improtInfoService.update(entity);
 		}
 	}

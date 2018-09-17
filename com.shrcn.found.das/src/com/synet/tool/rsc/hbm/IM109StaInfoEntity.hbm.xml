@@ -10,6 +10,9 @@
         <property name="devDesc">
             <column name="DEV_DESC" sql-type="varchar" length="96" />
         </property>
+        <property name="devName">
+            <column name="DEV_NAME" sql-type="varchar" length="96" />
+        </property>
         <property name="mmsRefAddr">
             <column name="MMS_REF_ADDR" sql-type="varchar" length="96"/>
         </property>

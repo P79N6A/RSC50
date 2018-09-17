@@ -55,6 +55,9 @@ public class TerStrapHandler extends RscSheetHandler {
 			case ExcelConstants.IM107_DEV_NAME: 
 				entity.setDevName(value);
 				break;
+			case ExcelConstants.IM107_DEV_DESC: 
+				entity.setDevDesc(value);
+				break;
 			case ExcelConstants.IM107_STRAP_REF_ADDR: 
 				entity.setStrapRefAddr(value);
 				break;
