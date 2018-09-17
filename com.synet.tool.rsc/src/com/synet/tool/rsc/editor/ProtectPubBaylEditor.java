@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
@@ -58,7 +59,7 @@ public class ProtectPubBaylEditor extends BaseConfigEditor {
 		combo.select(0);
 		Text text = SwtUtil.createText(comp, SwtUtil.bt_hd);
 		text.setMessage("装置名称");
-		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		SwtUtil.createLabel(comp, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = cols;

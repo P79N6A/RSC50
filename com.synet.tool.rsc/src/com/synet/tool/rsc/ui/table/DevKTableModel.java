@@ -12,9 +12,11 @@ import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
+import com.synet.tool.rsc.dialog.BaySelectDialog;
 import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
+import com.synet.tool.rsc.dialog.CubicleSelectDialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
@@ -96,6 +98,17 @@ public class DevKTableModel extends RKTableModel {
 			}
 		}
 		return super.getCellEditor(col, row);
+	}
+	
+	@Override
+	protected KTableCellEditor getCustomEditor(String editor) {
+		
+		if("BaySelectEditor".equals(editor)) {
+			return new KTableDialogEditor(BaySelectDialog.class);
+		} else if("CubicleSelectEditor".equals(editor)) {
+			return new KTableDialogEditor(CubicleSelectDialog.class);
+		}
+		return super.getCustomEditor(editor);
 	}
 
 	private void initTableDict(int row) {

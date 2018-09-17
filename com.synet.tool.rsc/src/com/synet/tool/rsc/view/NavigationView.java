@@ -1,7 +1,6 @@
 package com.synet.tool.rsc.view;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -11,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.common.Constants;
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.Context;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
@@ -32,12 +30,9 @@ import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ANavigationView;
 import com.shrcn.found.ui.view.ConsoleManager;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.dialog.HistoryProjectDialog;
-import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.ui.EcfgTreeViewer;
-import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.NavgTreeFactory;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
@@ -72,8 +67,8 @@ public class NavigationView extends ANavigationView {
 	@Override
 	public void execute(Context context) {
 		super.execute(context);
-		String event = context.getEventName();
-		Object data = context.getData();
+//		String event = context.getEventName();
+//		Object data = context.getData();
 //		if (RscEventConstants.PROJECT_NEW.equals(event)) {
 //			String priName = (String) data;
 //			prjmgr.initDb(priName);
@@ -108,7 +103,7 @@ public class NavigationView extends ANavigationView {
 					monitor.worked(1);
 					prjmgr.initDb(prjName);
 					prjmgr.openDb(prjName);
-					initIntervalDict();
+//					initIntervalDict();
 					monitor.worked(1);
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
@@ -141,7 +136,7 @@ public class NavigationView extends ANavigationView {
 					monitor.beginTask("正在打开...", 3);
 					monitor.worked(1);
 					prjmgr.openDb(prjName);
-					initIntervalDict();
+//					initIntervalDict();
 					monitor.worked(1);
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
@@ -166,17 +161,17 @@ public class NavigationView extends ANavigationView {
 	/**
 	 * 初始化间隔字典
 	 */
-	private void initIntervalDict() {
-		BeanDaoImpl instance = BeanDaoImpl.getInstance();
-		@SuppressWarnings("unchecked")
-		List<Tb1042BayEntity> allBay = (List<Tb1042BayEntity>) instance.getAll(Tb1042BayEntity.class);
-		if(!DataUtils.listNotNull(allBay)) {
-			return;
-		}
-		for (Tb1042BayEntity tb1042BayEntity : allBay) {
-			DictManager.getInstance().addItemByType("ALL_INTERVAL", tb1042BayEntity.getF1042Name());
-		}
-	}
+//	private void initIntervalDict() {
+//		BeanDaoImpl instance = BeanDaoImpl.getInstance();
+//		@SuppressWarnings("unchecked")
+//		List<Tb1042BayEntity> allBay = (List<Tb1042BayEntity>) instance.getAll(Tb1042BayEntity.class);
+//		if(!DataUtils.listNotNull(allBay)) {
+//			return;
+//		}
+//		for (Tb1042BayEntity tb1042BayEntity : allBay) {
+//			DictManager.getInstance().addItemByType("ALL_INTERVAL", tb1042BayEntity.getF1042Name());
+//		}
+//	}
 
 	@Override
 	protected void closeProject() {
@@ -229,7 +224,7 @@ public class NavigationView extends ANavigationView {
 				prjFileMgr.addProject(prjName, null);
 				prjFileMgr.setClosed(false);
 				prjmgr.openDb(prjName);
-				initIntervalDict();
+//				initIntervalDict();
 				monitor.worked(1);
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override

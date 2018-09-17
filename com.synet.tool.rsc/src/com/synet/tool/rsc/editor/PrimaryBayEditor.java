@@ -160,7 +160,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		comboDevice.select(0);
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
 		textDesc.setMessage("描述");
-		btnSearch = SwtUtil.createButton(comRight, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		btnSearch = SwtUtil.createButton(comRight, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		SwtUtil.createLabel(comRight, "			", new GridData(SWT.DEFAULT,10));
 		
 		tableSluiceStatus = TableFactory.getSluiceStatusTable(comRight);
@@ -393,6 +393,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	}
 
 	private List<Tb1016StatedataEntity> searchByDesc(String desc) {
+		if(desc.isEmpty()) {
+			return tableSluiceStatuData;
+		}
 		List<Tb1016StatedataEntity> res = new ArrayList<>();
 		for (Tb1016StatedataEntity statedataEntity : tableSluiceStatuData) {
 			if (statedataEntity.getF1016Desc().contains(desc)) {

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
@@ -97,7 +98,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
 		textDesc.setMessage("描述");
 		
-		btnSearch = SwtUtil.createButton(comRight, new GridData(50, 25), SWT.BUTTON1, "查询");
+		btnSearch = SwtUtil.createButton(comRight, new GridData(50, 25), SWT.BUTTON1, RSCConstants.SEARCH);
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = 3;
 		tableSample = TableFactory.getAnalogTable(comRight);
@@ -200,9 +201,13 @@ public class SampleConnectDialog extends WrappedDialog {
 				} else if(obj == btnSearch) {
 					String desc = textDesc.getText().trim();
 					List<Tb1006AnalogdataEntity> searchRes = new ArrayList<>();
-					for (Tb1006AnalogdataEntity analogdataEntity : analogdataEntities) {
-						if(analogdataEntity.getF1006Desc().contains(desc)) {
-							searchRes.add(analogdataEntity);
+					if(desc.isEmpty()) {
+						searchRes = analogdataEntities;
+					} else {
+						for (Tb1006AnalogdataEntity analogdataEntity : analogdataEntities) {
+							if(analogdataEntity.getF1006Desc().contains(desc)) {
+								searchRes.add(analogdataEntity);
+							}
 						}
 					}
 					tableSample.setInput(searchRes);

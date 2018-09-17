@@ -21,6 +21,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
@@ -72,7 +73,7 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 		txtDevName = SwtUtil.createText(container, SwtUtil.bt_hd);
 		txtDevName.setMessage("装置中文名称");
 		SwtUtil.createLabel(container, "", noneGridData);
-		btnSearch = SwtUtil.createButton(container, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		btnSearch = SwtUtil.createButton(container, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;

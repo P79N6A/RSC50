@@ -85,11 +85,13 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 				if(source == btnSearch) {
 					String desc = textDesc.getText().trim();
 					List<Tb1046IedEntity> searchRes = new ArrayList<>();
-					@SuppressWarnings("unchecked")
-					List<Tb1046IedEntity> iedEntityByTypes = (List<Tb1046IedEntity>) table.getInput();
-					for (Tb1046IedEntity tb1046IedEntity : iedEntityByTypes) {
-						if(tb1046IedEntity.getF1046Desc().contains(desc)) {
-							searchRes.add(tb1046IedEntity);
+					if(desc.isEmpty()) {
+						searchRes = iedEntityAll;
+					} else {
+						for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
+							if(tb1046IedEntity.getF1046Desc().contains(desc)) {
+								searchRes.add(tb1046IedEntity);
+							}
 						}
 					}
 					table.setInput(searchRes);

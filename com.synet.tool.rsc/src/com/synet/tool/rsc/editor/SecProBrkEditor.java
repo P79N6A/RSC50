@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
 import com.synet.tool.rsc.service.SecProBrkService;
@@ -58,7 +59,7 @@ public class SecProBrkEditor extends BaseConfigEditor {
 		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 8);
 		cmbDevType = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
 		cmbDevName = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
-		btnSearch = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
+		btnSearch = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		SwtUtil.createLabel(topComp, "", SwtUtil.bt_hd); 
 		btnImport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导入");
 		btnExport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导出");
