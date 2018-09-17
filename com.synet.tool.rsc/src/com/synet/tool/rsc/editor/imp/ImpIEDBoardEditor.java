@@ -8,20 +8,17 @@ package com.synet.tool.rsc.editor.imp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -41,16 +38,12 @@ import de.kupzog.ktable.KTableCellSelectionListener;
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2013-4-3
  */
-public class ImpIEDBoardEditor extends BaseConfigEditor {
+public class ImpIEDBoardEditor extends ExcelImportEditor {
 	
-	private org.eclipse.swt.widgets.List titleList;
-	private Button btImport;
 	private DevKTable tableComp;
 
-	private ImprotInfoService improtInfoService;
 	private IedEntityService iedEntityService;
 	private BoardEntityService boardEntityService;
-	private Map<String, IM100FileInfoEntity> map;
 	private List<IM103IEDBoardEntity> boards; // 用户选择装置型号板卡
 	
 	public ImpIEDBoardEditor(Composite container, IEditorInput input) {
@@ -86,12 +79,13 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 	}
 	
 	protected void addListeners() {
+		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM103IEDBoardEntity.class));
 		titleList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] selects = titleList.getSelection();
 				if (selects != null && selects.length > 0) {
-					loadIEDBoards(selects[0]);
+					loadFileItems(selects[0]);
 				}
 			}
 		});
@@ -133,7 +127,7 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 			int boardNum = 0;
 			for (IM103IEDBoardEntity entity : boards) {
 				IM103IEDBoardEntity tempIEDBoard = improtInfoService.existsEntity(entity);
-				if (tempIEDBoard != null){
+				if (tempIEDBoard == null){
 					continue;
 				}
 				String portNumStr = entity.getPortNum();
@@ -195,7 +189,7 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 		List<IM103IEDBoardEntity> boards = new ArrayList<>();
 		List<IM103IEDBoardEntity> inputs = (List<IM103IEDBoardEntity>) table.getInput();
 		for (IM103IEDBoardEntity input : inputs) {
-			if (input.equals(board)) {
+			if (input.getDevName().equals(board.getDevName())) {
 				boards.add(input);
 			}
 		}
@@ -204,6 +198,8 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 	
 	@Override
 	public void initData() {
+		table.setInput(new ArrayList<>());
+		tableComp.setInput(new ArrayList<>());
 		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE103);
 		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
 			List<String> items = new ArrayList<>();
@@ -222,18 +218,18 @@ public class ImpIEDBoardEditor extends BaseConfigEditor {
 				
 				titleList.setItems(items.toArray(new String[0]));
 				titleList.setSelection(sel);
-				loadIEDBoards(items.get(sel));
+				loadFileItems(items.get(sel));
 			}
 		}
 	}
 	
-	private void loadIEDBoards(String filename) {
+	private void loadFileItems(String filename) {
 		IM100FileInfoEntity fileInfoEntity = map.get(filename);
 		if (fileInfoEntity == null) {
 			DialogHelper.showAsynError("文名错误！");
 		} else {
 			List<IM103IEDBoardEntity> list = improtInfoService.getIEDBoardEntityList(fileInfoEntity);
-			if (list != null && list.size()> 0) {
+			if (list != null) {
 				table.setInput(list);
 			}
 		}

@@ -100,7 +100,6 @@ public interface ExcelConstants {
 	};
 	
 	String IM103_DEV_TYPE = "保护型号";
-//	String IM103_DEV_DESC = "装置名称";
 	String IM103_MANUFACTUROR = "制造厂家";
 	String IM103_DEV_MODEL = "保护型号";
 	String IM103_CONFIG_VERSION= "ICD文件版本";
@@ -111,7 +110,6 @@ public interface ExcelConstants {
 	String IM103_PORT_NUM = "端口数";
 	String[] IM103_IED_BOARD_FIELDS = {
 			IM103_DEV_TYPE,
-//			IM103_DEV_DESC,
 			IM103_MANUFACTUROR,
 			IM103_CONFIG_VERSION,
 			IM103_BOARD_INDEX,
@@ -122,12 +120,14 @@ public interface ExcelConstants {
 	};
 	
 	String IM104_DEV_NAME = "装置Name";
+	String IM104_DEV_DESC = "装置名称";
 	String IM104_PIN_REF_ADDR = "开入虚端子参引";
 	String IM104_PIN_DESC = "端子描述";
 	String IM104_MMS_SIGNAL = "MMS信号参引";
 	String IM104_SIGNAL_DESC = "信号描述";
 	String[] IM104_STATUS_IN_FIELDS = {
 			IM104_DEV_NAME,
+			IM104_DEV_DESC,
 			IM104_PIN_REF_ADDR,
 			IM104_PIN_DESC,
 			IM104_MMS_SIGNAL,
@@ -135,23 +135,27 @@ public interface ExcelConstants {
 	};
 	
 	String IM105_DEV_NAME = "装置Name";
+	String IM105_DEV_DESC = "装置名称";
 	String IM105_ALARM_REF_ADDR = "告警信息参引";
 	String IM105_ALARM_DESC = "告警信息描述";
 	String IM105_BOARD_CODE = "板卡编号";
 	String[] IM105_BOARD_WARN_FIELDS = {
 			IM105_DEV_NAME,
+			IM105_DEV_DESC,
 			IM105_ALARM_REF_ADDR,
 			IM105_ALARM_DESC,
 			IM105_BOARD_CODE
 	};
 	
 	String IM106_DEV_NAME = "装置Name";
+	String IM106_DEV_DESC = "装置名称";
 	String IM106_OPTICAL_REF_ADDR = "光强信息参引";
 	String IM106_OPTICAL_DESC = "光强信息描述";
 	String IM106_BOARD_CODE = "板卡编号";
 	String IM106_PORT_CODE = "端口编号";
 	String[] IM106_PORT_LIGHT_FIELDS = {
 			IM106_DEV_NAME,
+			IM106_DEV_DESC,
 			IM106_OPTICAL_REF_ADDR,
 			IM106_OPTICAL_DESC,
 			IM106_BOARD_CODE,
@@ -159,6 +163,7 @@ public interface ExcelConstants {
 	};
 	
 	String IM107_DEV_NAME = "装置Name";
+	String IM107_DEV_DESC = "装置名称";
 	String IM107_STRAP_REF_ADDR = "压板参引";
 	String IM107_STRAP_DESC = "压板描述";
 	String IM107_STRAP_TYPE = "压板类型";
@@ -167,6 +172,7 @@ public interface ExcelConstants {
 	String IM107_VP_TYPE = "虚端子类型(开入、开出)";
 	String[] IM107_TER_STRAP_FIELDS = {
 			IM107_DEV_NAME,
+			IM107_DEV_DESC,
 			IM107_STRAP_REF_ADDR,
 			IM107_STRAP_DESC,
 			IM107_STRAP_TYPE,
@@ -176,6 +182,7 @@ public interface ExcelConstants {
 	};
 	
 	String IM108_DEV_NAME = "装置Name";
+	String IM108_DEV_DESC = "装置名称";
 	String IM108_PIN_REF_ADDR = "开入虚端子参引";
 	String IM108_PIN_DESC = "开入虚端子描述";
 	String IM108_CMDACKVP_REF_ADDR = "命令确认虚端子参引";
@@ -184,6 +191,7 @@ public interface ExcelConstants {
 	String IM108_CMDOUTVP_DESC = "命令出口虚端子描述";
 	String[] IM108_BRK_CFM_FIELDS = {
 			IM108_DEV_NAME,
+			IM108_DEV_DESC,
 			IM108_PIN_REF_ADDR,
 			IM108_PIN_DESC,
 			IM108_CMDACKVP_REF_ADDR,
@@ -191,12 +199,16 @@ public interface ExcelConstants {
 			IM108_CMDOUTVP_REF_ADDR,
 			IM108_CMDOUTVP_DESC
 	};
-	
-	String IM109_DESCRIPTION = "描述";
-	String IM109_REF_ADDR = "参引";
+
+	String IM109_DEV_NAME = "装置Name";
+	String IM109_DEV_DESC  = "装置名称";
+	String IM109_REF_ADDR = "MMS参引";
+	String IM109_DESCRIPTION = "MMS描述";
 	String[] IM109_STA_INFO_FIELDS = {
+			IM109_DEV_NAME,
+			IM109_DEV_DESC,
+			IM109_REF_ADDR,
 			IM109_DESCRIPTION,
-			IM109_REF_ADDR
 	};
 	
 	String PORT_TYPE_RX = "TX";//表示发送

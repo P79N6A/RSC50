@@ -45,46 +45,50 @@ public class ImprotInfoService extends BaseService {
 	
 	@SuppressWarnings("unchecked")
 	public List<IM101IEDListEntity> getIEDListEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM101IEDListEntity>) beanDao.getListByCriteria(IM101IEDListEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM101IEDListEntity>) getFileItems(IM101IEDListEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM102FibreListEntity> getFibreListEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM102FibreListEntity>) beanDao.getListByCriteria(IM102FibreListEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM102FibreListEntity>) getFileItems(IM102FibreListEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM103IEDBoardEntity> getIEDBoardEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM103IEDBoardEntity>) beanDao.getListByCriteria(IM103IEDBoardEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM103IEDBoardEntity>) getFileItems(IM103IEDBoardEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM104StatusInEntity> getStatusInEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM104StatusInEntity>) beanDao.getListByCriteria(IM104StatusInEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM104StatusInEntity>) getFileItems(IM104StatusInEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM105BoardWarnEntity> getBoardWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM105BoardWarnEntity>) beanDao.getListByCriteria(IM105BoardWarnEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM105BoardWarnEntity>) getFileItems(IM105BoardWarnEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM106PortLightEntity> getPortLightEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM106PortLightEntity>) beanDao.getListByCriteria(IM106PortLightEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM106PortLightEntity>) getFileItems(IM106PortLightEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM107TerStrapEntity> getTerStrapEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM107TerStrapEntity>) beanDao.getListByCriteria(IM107TerStrapEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM107TerStrapEntity>) getFileItems(IM107TerStrapEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM108BrkCfmEntity> getBrkCfmEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM108BrkCfmEntity>) beanDao.getListByCriteria(IM108BrkCfmEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM108BrkCfmEntity>) getFileItems(IM108BrkCfmEntity.class,  fileInfoEntity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<IM109StaInfoEntity> getStaInfoEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM109StaInfoEntity>) beanDao.getListByCriteria(IM109StaInfoEntity.class, "fileInfoEntity", fileInfoEntity);
+		return (List<IM109StaInfoEntity>) getFileItems(IM109StaInfoEntity.class, fileInfoEntity);
+	}
+
+	private List<?> getFileItems(Class<?> itemClass, IM100FileInfoEntity fileInfoEntity) {
+		return beanDao.getListByCriteria(itemClass, "fileInfoEntity", fileInfoEntity);
 	}
 }

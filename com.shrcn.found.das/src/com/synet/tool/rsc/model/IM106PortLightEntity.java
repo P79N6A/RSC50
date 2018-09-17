@@ -9,6 +9,7 @@ public class IM106PortLightEntity {
 	
 	private String im106Code;
 	private String devName;			//装置Name
+	private String devDesc;			//装置名称
 	private String opticalRefAddr;	//光强信息参引
 	private String opticalDesc;		//光强信息描述
 	private String boardCode;		//板卡编号
@@ -30,6 +31,12 @@ public class IM106PortLightEntity {
 	}
 	public void setDevName(String devName) {
 		this.devName = devName;
+	}
+	public String getDevDesc() {
+		return devDesc;
+	}
+	public void setDevDesc(String devDesc) {
+		this.devDesc = devDesc;
 	}
 	public String getOpticalRefAddr() {
 		return opticalRefAddr;

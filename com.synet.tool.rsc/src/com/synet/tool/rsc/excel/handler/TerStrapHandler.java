@@ -14,7 +14,6 @@ public class TerStrapHandler extends RscSheetHandler {
 	
 	public TerStrapHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

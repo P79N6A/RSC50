@@ -21,14 +21,15 @@ public class ContentView extends AContentView {
 
 	@Override
 	public void execute(Context context) {
-		String event = context.getEventName();
-		if (EventConstants.OPEN_CONFIG.equals(event)) {
-			ConfigEditorInput input = (ConfigEditorInput) context.getData();
-			openEditor(input);
-		} else if (EventConstants.CLEAR_CONFIG.equals(event)) {
-			if(cfgEditor != null) {
-				closeEditor(true);
-			}
-		} 
+		super.execute(context);
+//		String event = context.getEventName();
+//		if (EventConstants.OPEN_CONFIG.equals(event)) {
+//			ConfigEditorInput input = (ConfigEditorInput) context.getData();
+//			openEditor(input);
+//		} else if (EventConstants.CLEAR_CONFIG.equals(event)) {
+//			if(cfgEditor != null) {
+//				closeEditor(true);
+//			}
+//		} 
 	}
 }

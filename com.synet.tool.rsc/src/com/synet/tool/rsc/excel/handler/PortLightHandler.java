@@ -14,7 +14,6 @@ public class PortLightHandler extends RscSheetHandler {
 	
 	public PortLightHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -55,6 +54,9 @@ public class PortLightHandler extends RscSheetHandler {
 		switch(fieldName) {
 			case ExcelConstants.IM106_DEV_NAME: 
 				entity.setDevName(value);
+				break;
+			case ExcelConstants.IM106_DEV_DESC: 
+				entity.setDevDesc(value);
 				break;
 			case ExcelConstants.IM106_OPTICAL_REF_ADDR: 
 				entity.setOpticalRefAddr(value);

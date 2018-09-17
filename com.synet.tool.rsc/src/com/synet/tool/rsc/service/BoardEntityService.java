@@ -28,7 +28,7 @@ public class BoardEntityService extends BaseService {
 		if (ied != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("tb1046IedByF1046Code",ied);
-			params.put("f047Slot", slot);
+			params.put("f1047Slot", slot);
 			return (Tb1047BoardEntity) beanDao.getObject(Tb1047BoardEntity.class, params);
 		}
 		return null;

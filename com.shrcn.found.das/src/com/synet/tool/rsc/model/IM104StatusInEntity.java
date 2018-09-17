@@ -9,6 +9,7 @@ public class IM104StatusInEntity {
 	
 	private String im104Code;
 	private String devName;		//装置Name
+	private String devDesc;		//装置名称
 	private String pinRefAddr;	//开入虚端子参引
 	private String pinDesc;		//端子描述
 	private String mmsRefAddr;//MMS信号参引
@@ -30,6 +31,12 @@ public class IM104StatusInEntity {
 	}
 	public void setDevName(String devName) {
 		this.devName = devName;
+	}
+	public String getDevDesc() {
+		return devDesc;
+	}
+	public void setDevDesc(String devDesc) {
+		this.devDesc = devDesc;
 	}
 	public String getPinRefAddr() {
 		return pinRefAddr;

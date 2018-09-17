@@ -9,8 +9,9 @@ public class IM109StaInfoEntity {
 	
 	private String im109Code;
 	private String devName;		//装置Name
-	private String mmsDesc; 	//信号描述
+	private String devDesc;		//装置名称
 	private String mmsRefAddr;	//MMS信号参引
+	private String mmsDesc; 	//信号描述
 	private Integer matched;    //是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
 	
@@ -28,6 +29,12 @@ public class IM109StaInfoEntity {
 	}
 	public void setDevName(String devName) {
 		this.devName = devName;
+	}
+	public String getDevDesc() {
+		return devDesc;
+	}
+	public void setDevDesc(String devDesc) {
+		this.devDesc = devDesc;
 	}
 	public String getMmsDesc() {
 		return mmsDesc;

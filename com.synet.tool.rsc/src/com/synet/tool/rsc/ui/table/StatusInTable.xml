@@ -4,12 +4,12 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.IM104StatusInEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="装置名称" editor="none" name="devDesc" width="100" default=""/>
   <field desc="装置Name" editor="none" name="devName" width="100" default=""/>
   <field desc="开入虚端子参引" editor="none" name="pinRefAddr" width="100" default=""/>
   <field desc="端子描述" editor="none" name="pinDesc" width="100" default=""/> 
   <field desc="MMS信号参引" editor="none" name="mmsSignal" width="100" default=""/> 
   <field desc="信号描述" editor="none" name="signalDesc" width="100" default=""/> 
-  <field desc="匹配结果" dict="MATCHED" name="matched" width="100" default=""/> 
-  <field desc="冲突" editor="none" name="conflict" width="100" default=""/> 
-  <field desc="覆盖" editor="none" name="overwrite" width="100" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="100" default=""/> 
+  <field desc="更新" editor="checkbox" name="overwrite" width="100" default=""/> 
 </table>

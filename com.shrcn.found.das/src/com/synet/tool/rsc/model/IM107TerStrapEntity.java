@@ -9,6 +9,7 @@ public class IM107TerStrapEntity {
 	
 	private String im107Code;
 	private String devName;			//装置Name
+	private String devDesc;			//装置名称
 	private String strapRefAddr;	//压板参引
 	private String strapDesc;		//压板描述
 	private String strapType;		//压板类型
@@ -32,6 +33,12 @@ public class IM107TerStrapEntity {
 	}
 	public void setDevName(String devName) {
 		this.devName = devName;
+	}
+	public String getDevDesc() {
+		return devDesc;
+	}
+	public void setDevDesc(String devDesc) {
+		this.devDesc = devDesc;
 	}
 	public String getStrapRefAddr() {
 		return strapRefAddr;

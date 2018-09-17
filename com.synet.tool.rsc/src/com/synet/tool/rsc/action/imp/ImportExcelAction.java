@@ -122,6 +122,7 @@ public class ImportExcelAction extends BaseImportAction {
 		data.setData(filename);
 		ConfigEditorInput input = new ConfigEditorInput(title, "bay.gif", excelMap.get(title), data);
 		EventManager.getDefault().notify(EventConstants.OPEN_CONFIG, input);
+		EventManager.getDefault().notify(EventConstants.REFRESH_EIDTOR, input);
 	}
 
 }

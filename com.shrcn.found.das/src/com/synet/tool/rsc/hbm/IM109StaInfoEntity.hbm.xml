@@ -7,11 +7,14 @@
   		<id name="im109Code">
             <column name="IM109_CODE" sql-type="varchar" length="48" not-null="true"/>
         </id>
-        <property name="mmsDesc">
-            <column name="MMS_DESC" sql-type="varchar" length="48" />
+        <property name="devDesc">
+            <column name="DEV_DESC" sql-type="varchar" length="96" />
         </property>
         <property name="mmsRefAddr">
             <column name="MMS_REF_ADDR" sql-type="varchar" length="96"/>
+        </property>
+        <property name="mmsDesc">
+            <column name="MMS_DESC" sql-type="varchar" length="96" />
         </property>
         <property name="matched">
             <column name="MATCHED" sql-type="int"/>

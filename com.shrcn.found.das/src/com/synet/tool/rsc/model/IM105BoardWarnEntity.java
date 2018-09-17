@@ -9,6 +9,7 @@ public class IM105BoardWarnEntity {
 	
 	private String im105Code;
 	private String devName;			//装置Name
+	private String devDesc;			//装置名称
 	private String alarmRefAddr;	//告警信息参引
 	private String alarmDesc;		//告警信息描述
 	private String boardCode;		//板卡编号
@@ -29,6 +30,12 @@ public class IM105BoardWarnEntity {
 	}
 	public void setDevName(String devName) {
 		this.devName = devName;
+	}
+	public String getDevDesc() {
+		return devDesc;
+	}
+	public void setDevDesc(String devDesc) {
+		this.devDesc = devDesc;
 	}
 	public String getAlarmRefAddr() {
 		return alarmRefAddr;

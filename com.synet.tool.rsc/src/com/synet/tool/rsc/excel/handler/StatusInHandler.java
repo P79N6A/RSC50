@@ -14,7 +14,6 @@ public class StatusInHandler extends RscSheetHandler {
 	
 	public StatusInHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -55,6 +54,9 @@ public class StatusInHandler extends RscSheetHandler {
 		switch(fieldName) {
 			case ExcelConstants.IM104_DEV_NAME: 
 				entity.setDevName(value);
+				break;
+			case ExcelConstants.IM104_DEV_DESC: 
+				entity.setDevDesc(value);
 				break;
 			case ExcelConstants.IM104_PIN_REF_ADDR: 
 				entity.setPinRefAddr(value);

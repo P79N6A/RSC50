@@ -8,23 +8,17 @@ package com.synet.tool.rsc.editor.imp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.RSCConstants;
-import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -40,18 +34,10 @@ import com.synet.tool.rsc.ui.TableFactory;
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2013-4-3
  */
-public class ImpIEDListEditor extends BaseConfigEditor {
+public class ImpIEDListEditor extends ExcelImportEditor {
 	
-	private org.eclipse.swt.widgets.List titleList;
-	private Button btImport;
-	
-	private ImprotInfoService improtInfoService;
 	private IedEntityService iedEntityService;
 	private BayEntityService bayEntityService;
-	private Map<String, IM100FileInfoEntity> map;
-	private Combo cmbDevType;
-	private Text txtDevName;
-	private Button btnSearch;
 	
 	public ImpIEDListEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -68,19 +54,7 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 
 	@Override
 	public void buildUI(Composite container) {
-		super.buildUI(container);
-		container.setLayout(SwtUtil.getGridLayout(6));
-		GridData noneGridData = new GridData();
-		noneGridData.widthHint = 20;
-		cmbDevType = SwtUtil.createCombo(container, SwtUtil.bt_hd, true);
-		cmbDevType.setItems(new String[]{DEV_TYPE_TITLE});
-		cmbDevType.select(0);
-		SwtUtil.createLabel(container, "", noneGridData);
-		txtDevName = SwtUtil.createText(container, SwtUtil.bt_hd);
-		txtDevName.setMessage("装置中文名称");
-		SwtUtil.createLabel(container, "", noneGridData);
-		btnSearch = SwtUtil.createButton(container, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
-
+		container.setLayout(SwtUtil.getGridLayout(2));
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
@@ -96,12 +70,13 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 	}
 	
 	protected void addListeners() {
+		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM101IEDListEntity.class));
 		titleList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] selects = titleList.getSelection();
 				if (selects != null && selects.length > 0) {
-					loadIEDList(selects[0]);
+					loadFileItems(selects[0]);
 				}
 			}
 		});
@@ -152,6 +127,7 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
+		table.setInput(new ArrayList<>());
 		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE101);
 		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
 			List<String> items = new ArrayList<>();
@@ -169,18 +145,18 @@ public class ImpIEDListEditor extends BaseConfigEditor {
 				}
 				titleList.setItems(items.toArray(new String[0]));
 				titleList.setSelection(sel);
-				loadIEDList(items.get(sel));
+				loadFileItems(items.get(sel));
 			}
 		}
 	}
 	
-	private void loadIEDList(String filename) {
+	private void loadFileItems(String filename) {
 		IM100FileInfoEntity fileInfoEntity = map.get(filename);
 		if (fileInfoEntity == null) {
 			DialogHelper.showAsynError("文名错误！");
 		} else {
 			List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
-			if (list != null && list.size()> 0) {
+			if (list != null) {
 				checkData(list);
 				table.setInput(list);
 			}

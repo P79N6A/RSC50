@@ -26,7 +26,7 @@ public class StaInfoHandler extends RscSheetHandler {
 	
 	@Override
 	public void endRow(int rowNum) {
-		if (rowNum <= 0) return;
+		if (rowNum <= headRowNum) return;
 		if (entity == null) {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
@@ -51,6 +51,12 @@ public class StaInfoHandler extends RscSheetHandler {
 		String fieldName = excelColInfo.get(col);
 		if (fieldName == null) return;
 		switch(fieldName) {
+		case ExcelConstants.IM109_DEV_NAME: 
+			entity.setDevName(value);
+			break;
+		case ExcelConstants.IM109_DEV_DESC: 
+			entity.setDevDesc(value);
+			break;
 		case ExcelConstants.IM109_DESCRIPTION: 
 			entity.setMmsDesc(value);
 			break;

@@ -14,7 +14,6 @@ public class BoardWarnHandler extends RscSheetHandler {
 	
 	public BoardWarnHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -55,6 +54,9 @@ public class BoardWarnHandler extends RscSheetHandler {
 		switch(fieldName) {
 			case ExcelConstants.IM105_DEV_NAME: 
 				entity.setDevName(value);
+				break;
+			case ExcelConstants.IM105_DEV_DESC: 
+				entity.setDevDesc(value);
 				break;
 			case ExcelConstants.IM105_BOARD_CODE: 
 				entity.setBoardCode(value);

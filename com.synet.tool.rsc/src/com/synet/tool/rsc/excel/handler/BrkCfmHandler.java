@@ -56,6 +56,9 @@ public class BrkCfmHandler extends RscSheetHandler {
 			case ExcelConstants.IM108_DEV_NAME:
 				entity.setDevName(value);
 				break;
+			case ExcelConstants.IM108_DEV_DESC:
+				entity.setDevDesc(value);
+				break;
 			case ExcelConstants.IM108_PIN_REF_ADDR:
 				entity.setPinRefAddr(value);
 				break;

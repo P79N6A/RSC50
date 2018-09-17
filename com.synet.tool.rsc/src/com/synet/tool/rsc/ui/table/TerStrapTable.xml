@@ -4,6 +4,7 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.IM107TerStrapEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="装置名称" editor="none" name="devDesc" width="100" default=""/>
   <field desc="装置Name" editor="none" name="devName" width="100" default=""/>
   <field desc="压板参引" editor="none" name="strapRefAddr" width="100" default=""/>
   <field desc="压板描述" editor="none" name="strapDesc" width="100" default=""/> 
@@ -11,7 +12,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="虚端子参引" editor="none" name="vpRefAddr" width="100" default=""/> 
   <field desc="虚端子描述" editor="none" name="vpDesc" width="100" default=""/> 
   <field desc="虚端子类型（开入、开出）" editor="none" name="vpType" width="100" default=""/> 
-  <field desc="匹配结果" dict="MATCHED" name="matched" width="100" default=""/> 
-  <field desc="冲突" editor="none" name="conflict" width="100" default=""/> 
-  <field desc="覆盖" editor="none" name="overwrite" width="100" default=""/>  
+  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="100" default=""/> 
+  <field desc="更新" editor="checkbox" name="overwrite" width="100" default=""/> 
 </table>
