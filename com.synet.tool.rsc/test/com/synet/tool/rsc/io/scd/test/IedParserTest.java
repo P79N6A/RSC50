@@ -115,7 +115,7 @@ public class IedParserTest {
 //		assertTrue(iedNds.size() > 1);
 
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("PT1101A");
+		ied.setF1046Name("IL1101");
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
 		GooseParser iedSubParser = new GooseParser(ied);
