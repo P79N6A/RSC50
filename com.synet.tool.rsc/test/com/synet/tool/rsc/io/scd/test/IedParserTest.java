@@ -16,9 +16,11 @@ import org.junit.Test;
 import com.shrcn.business.scl.check.InstResolver;
 import com.shrcn.business.scl.check.Problem;
 import com.shrcn.business.scl.model.SCL;
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.parser.DsParameterParser;
@@ -63,6 +65,8 @@ public class IedParserTest {
 	
 	@Before
 	public void before() {
+		DictManager.getInstance().init(getClass(), RSCConstants.DICT_PATH);
+		
 		String scdPath = "./test/sub_shangwu.scd";
 		XMLDBHelper.loadDocument("shangwu", scdPath);
 		String prj = "shangwu";
@@ -202,8 +206,8 @@ public class IedParserTest {
 		iedSubParser.parse();
 		List<Tb1060SpfcdaEntity> items = iedSubParser.getItems();
 		assertTrue(items.size() > 0);
-		List<Tb1060SpfcdaEntity> cbs = (List<Tb1060SpfcdaEntity>) beanDao.getAll(Tb1060SpfcdaEntity.class);
-		assertTrue(items.size() == cbs.size());
+		List<Tb1060SpfcdaEntity> sps = (List<Tb1060SpfcdaEntity>) beanDao.getListByCriteria(Tb1060SpfcdaEntity.class, "tb1046IedByF1046Code", ied);
+		assertTrue(items.size() == sps.size());
 	}
 	
 	@Test
