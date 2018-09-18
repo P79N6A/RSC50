@@ -20,7 +20,6 @@ public class TerStrapHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM107TerStrapEntity();
-		this.entity.setIm107Code(rscp.nextTbCode(DBConstants.PR_TERSTRAP));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -31,7 +30,10 @@ public class TerStrapHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getStrapRefAddr() != null) {
+				entity.setIm107Code(rscp.nextTbCode(DBConstants.PR_TERSTRAP));
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

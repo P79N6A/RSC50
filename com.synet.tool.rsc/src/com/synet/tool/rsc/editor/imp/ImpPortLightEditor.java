@@ -21,9 +21,11 @@ import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM106PortLightEntity;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PortEntityService;
@@ -39,7 +41,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 	
 	private PortEntityService portEntityService;
 	private MmsfcdaService mmsfcdaService;
-	private StatedataService statedataService;
+	private AnalogdataService analogdataService;
 	
 	public ImpPortLightEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -51,7 +53,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		map = new HashMap<String, IM100FileInfoEntity>();
 		portEntityService = new PortEntityService();
 		mmsfcdaService = new MmsfcdaService();
-		statedataService = new StatedataService();
+		analogdataService = new AnalogdataService();
 		super.init();
 	}
 
@@ -104,10 +106,11 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				if (portEntity != null) {
 					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
 					if (mmsfcdaEntity != null) {
-						Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+						Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) analogdataService.getById(Tb1006AnalogdataEntity.class,
 								mmsfcdaEntity.getDataCode());
-						if (statedataEntity != null) {
-							statedataEntity.setParentCode(portEntity.getF1048Code());
+						if (analogdataEntity != null) {
+							analogdataEntity.setParentCode(portEntity.getF1048Code());
+							analogdataService.update(analogdataEntity);
 							entity.setMatched(DBConstants.MATCHED_OK);
 						}
 					}
@@ -158,9 +161,9 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				if (portEntity != null) {
 					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
 					if (mmsfcdaEntity != null) {
-						Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+						Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) analogdataService.getById(Tb1006AnalogdataEntity.class,
 								mmsfcdaEntity.getDataCode());
-						if (statedataEntity != null && statedataEntity.getParentCode() == null) {
+						if (analogdataEntity != null && analogdataEntity.getParentCode() == null) {
 							entity.setConflict(DBConstants.NO);
 							entity.setOverwrite(true);
 							continue;

@@ -21,7 +21,6 @@ public class IEDListHandler extends RscSheetHandler {
 		super.startRow(rowNum);
 		this.entity = new IM101IEDListEntity();
 		this.entity.setIm101Code(rscp.nextTbCode(DBConstants.PR_IEDLIST));
-		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
 	@Override
@@ -31,7 +30,10 @@ public class IEDListHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevDesc() != null) {
+				entity.setMatched(DBConstants.MATCHED_NO);
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

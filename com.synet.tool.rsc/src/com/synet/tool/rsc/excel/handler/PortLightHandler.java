@@ -3,7 +3,6 @@ package com.synet.tool.rsc.excel.handler;
 import java.util.Map;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
-
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM106PortLightEntity;
@@ -20,7 +19,6 @@ public class PortLightHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM106PortLightEntity();
-		this.entity.setIm106Code(rscp.nextTbCode(DBConstants.PR_PORTLIGHT));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -31,7 +29,11 @@ public class PortLightHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getBoardCode() != null 
+					&& entity.getPortCode() != null && entity.getOpticalRefAddr() != null) {
+				entity.setIm106Code(rscp.nextTbCode(DBConstants.PR_PORTLIGHT));
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

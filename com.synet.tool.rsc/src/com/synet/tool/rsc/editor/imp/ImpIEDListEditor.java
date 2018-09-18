@@ -103,11 +103,11 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			if (iedEntity != null) {
 				Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 				if (bayEntity != null) {
-					iedEntity.setF1042Code(bayEntity.getF1042Code());
+					iedEntity.setTb1042BaysByF1042Code(bayEntity);
 				}
 				Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
 				if (cubicle != null) {
-					iedEntity.setF1050Code(cubicle.getF1050Code());
+					iedEntity.setTb1050CubicleEntity(cubicle);
 				}
 //					iedEntity.setF1046Manufacturor(entity.getManufacturor());
 //					iedEntity.setF1046version(entity.getDevVersion());

@@ -101,7 +101,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 			try {
 				Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
 				if (tempBoard != null) {
-					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getAlarmRefAddr());
+					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(),entity.getAlarmRefAddr());
 					if (tempMmsfcdaEntity != null) {
 						String dataCode = tempMmsfcdaEntity.getDataCode();
 						if (dataCode != null) {

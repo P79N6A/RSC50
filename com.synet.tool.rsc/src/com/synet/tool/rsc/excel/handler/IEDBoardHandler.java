@@ -25,7 +25,6 @@ public class IEDBoardHandler extends RscSheetHandler {
 		super.startRow(rowNum);
 		this.entity = new IM103IEDBoardEntity();
 		this.entity.setIm103Code(rscp.nextTbCode(DBConstants.PR_IEDBOARD));
-		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
 	@Override
@@ -35,10 +34,13 @@ public class IEDBoardHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			entity.setDevName(devName);
-			entity.setManufacturor(manufacturor);
-			entity.setConfigVersion(configVersion);
-			result.add(entity);
+			if (entity.getBoardIndex() != null && entity.getBoardCode() != null) { 
+				entity.setMatched(DBConstants.MATCHED_NO);
+				entity.setDevName(devName);
+				entity.setManufacturor(manufacturor);
+				entity.setConfigVersion(configVersion);
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}
