@@ -338,6 +338,10 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Tb1058MmsfcdaEntity mms = (Tb1058MmsfcdaEntity) objMms;
 		StatedataService statedataService = new StatedataService();
 		Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(mms.getDataCode());
+		if(stateData == null) {
+			ConsoleManager.getInstance().append("关联失败！没有找到状态量数据对象");
+			return;
+		}
 		stateData.setParentCode(code);
 		statedataService.update(stateData);
 		tableDeviceWarning.getTable().layout();

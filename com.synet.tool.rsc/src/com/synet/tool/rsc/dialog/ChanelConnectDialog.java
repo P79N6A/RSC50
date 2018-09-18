@@ -43,11 +43,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private Button btnAdd;
 	private String curEntryName;
 	private String[] comboDevItems;
-//	private String[] comboSvItems;
 	private Tb1067CtvtsecondaryEntity curSel;
 	private Combo comboDevice;
 	private int preComboDevSelIdx = 0;
-//	private int preComboSvSelIdx = 0;
 	private List<Tb1046IedEntity> iedEntities;
 	private SvcbEntityService svcbService;
 	private List<Tb1056SvcbEntity> svcbEntities;
@@ -108,6 +106,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	private void initComboData() {
 		iedService = new IedEntityService();
+		svcbService = new SvcbEntityService();
 		int[] devTypes = EnumIedType.values()[2].getTypes();
 		Tb1042BayEntity bay = curSel.getTb1043EquipmentByF1043Code().getTb1042BayByF1042Code();
 		iedEntities = iedService.getIedByTypesAndBay(devTypes, bay);
