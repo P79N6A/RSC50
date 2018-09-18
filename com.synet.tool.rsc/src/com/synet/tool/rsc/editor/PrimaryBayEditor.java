@@ -426,14 +426,13 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 
 	private List<Tb1016StatedataEntity> getStateDataByIed(
 			Tb1046IedEntity iedEntity) {
-		List<Tb1016StatedataEntity> statedataEntities = null;
+		List<Tb1016StatedataEntity> statedataEntities = new ArrayList<>();
 		List<Tb1061PoutEntity> poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
 		if(DataUtils.listNotNull(poutEntities)) {
 			List<String> stateDataCodes = new ArrayList<>();
 			for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
 				stateDataCodes.add(tb1061PoutEntity.getDataCode());
 			}
-			
 			statedataEntities = statedataService.getStatedataByDataCodes(stateDataCodes);
 		}
 		return statedataEntities;
