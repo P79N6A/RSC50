@@ -246,7 +246,13 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					sampleDialog.open();
 				} else if(object == btnAdd) {
 					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
+					if(statedataEntity == null) {
+						return;
+					}
 					Tb1043EquipmentEntity equipmentEntity = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
+					if(equipmentEntity == null) {
+						return;
+					}
 					equipmentEntity.setTb1016StatedataEntity(statedataEntity);	
 					equipmentEntity.setF1016Code(statedataEntity.getF1016Code());
 					statedataEntity.setParentCode(equipmentEntity.getF1043Code());
