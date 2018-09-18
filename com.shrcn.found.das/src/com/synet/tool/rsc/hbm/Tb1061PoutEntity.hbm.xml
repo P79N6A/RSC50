@@ -29,15 +29,15 @@
         <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity" lazy="false">
             <column name="F1064_CODE"/>
         </many-to-one>
-        <many-to-one name="cbEntity" class="com.synet.tool.rsc.model.BaseCbEntity" insert="false" update="false">
+        <many-to-one name="cbEntity" class="com.synet.tool.rsc.model.BaseCbEntity" lazy="false" insert="false" update="false">
             <column name="CB_CODE" not-null="true"/>
         </many-to-one>
-        <many-to-one name="stdata" class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false">
+        <!-- <many-to-one name="stdata" class="com.synet.tool.rsc.model.Tb1016StatedataEntity" lazy="false" insert="false" update="false">
             <column name="DATA_CODE"/>
         </many-to-one>
-        <many-to-one name="algdata" class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" insert="false" update="false">
+        <many-to-one name="algdata" class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" lazy="false" insert="false" update="false">
             <column name="DATA_CODE"/>
-        </many-to-one>
+        </many-to-one> -->
         <!-- <one-to-one name="stdata" constrained="true"/>
         <one-to-one name="algdata" constrained="true"/> -->
     </class>

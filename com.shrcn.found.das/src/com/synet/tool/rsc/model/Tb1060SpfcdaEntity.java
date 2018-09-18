@@ -6,7 +6,6 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1060SpfcdaEntity {
     private String f1060Code;
-    private String f1046Code;
     private String f1060RefAddr;
     private int f1060Index;
     private int f1060DataType;
@@ -23,14 +22,6 @@ public class Tb1060SpfcdaEntity {
 
     public void setF1060Code(String f1060Code) {
         this.f1060Code = f1060Code;
-    }
-
-    public String getF1046Code() {
-        return f1046Code;
-    }
-
-    public void setF1046Code(String f1046Code) {
-        this.f1046Code = f1046Code;
     }
 
     public String getF1060RefAddr() {
@@ -106,7 +97,6 @@ public class Tb1060SpfcdaEntity {
 
         if (f1060DataType != that.f1060DataType) return false;
         if (f1060Index != that.f1060Index) return false;
-        if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1060Code != null ? !f1060Code.equals(that.f1060Code) : that.f1060Code != null) return false;
         if (f1060Desc != null ? !f1060Desc.equals(that.f1060Desc) : that.f1060Desc != null) return false;
         if (f1060RefAddr != null ? !f1060RefAddr.equals(that.f1060RefAddr) : that.f1060RefAddr != null) return false;
@@ -124,7 +114,6 @@ public class Tb1060SpfcdaEntity {
     @Override
     public int hashCode() {
         int result = f1060Code != null ? f1060Code.hashCode() : 0;
-        result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1060RefAddr != null ? f1060RefAddr.hashCode() : 0);
         result = 31 * result + f1060Index;
         result = 31 * result + f1060DataType;
