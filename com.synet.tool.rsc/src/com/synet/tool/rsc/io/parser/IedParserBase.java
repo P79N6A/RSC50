@@ -93,12 +93,11 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String doName = fcdaEl.attributeValue("doName");
 			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
 			if ("ST".equals(fc)) {
-//				pout.setF1061Type(DBConstants.DATA_ST);
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
 			} else {
-//				pout.setF1061Type(DBConstants.DATA_MX);
-				pout.setDataCode(addAlgdata(fcdaEl, fcdaDesc, type.getId()));
+				String algcode = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+				pout.setDataCode(algcode);
 			}
 		}
 	}
@@ -111,7 +110,9 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		return createStatedata(fcdaDesc, ied.getF1046Code(), f1011No);
+		Tb1016StatedataEntity statedata = createStatedata(fcdaDesc, ied.getF1046Code(), f1011No);
+		sts.add(statedata);
+		return statedata;
 	}
 	
 	/**

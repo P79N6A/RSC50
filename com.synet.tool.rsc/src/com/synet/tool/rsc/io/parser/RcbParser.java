@@ -83,7 +83,8 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
-							mmsFcda.setDataCode(addAlgdata(fcdaEl, fcdaDesc, type.getId()));
+							String algcode = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+							mmsFcda.setDataCode(algcode);
 						}
 						i++;
 					}

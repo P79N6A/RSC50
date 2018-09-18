@@ -31,27 +31,27 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 	@Override
 	public void parse() {
 		List<Element> gseNds = IedInfoDao.getGooseConfigPub(iedName);
-		for (Element gseNd : gseNds) {
+		for (Element cbNd : gseNds) {
 			Tb1055GcbEntity gcb = new Tb1055GcbEntity();
 			items.add(gcb);
 			String cbCode = rscp.nextTbCode(DBConstants.PR_GCB);
 			gcb.setCbCode(cbCode);
 			gcb.setTb1046IedByF1046Code(ied);
-			gcb.setCbName(gseNd.attributeValue("cbName"));
-			gcb.setCbId(gseNd.attributeValue("cbId"));
-			gcb.setDataset(gseNd.attributeValue("dsName"));
-			gcb.setDsDesc(gseNd.attributeValue("dsDesc"));
-			gcb.setMacAddr(gseNd.attributeValue("mac"));
-			gcb.setVlanid(gseNd.attributeValue("vlanID"));
-			gcb.setVlanPriority(gseNd.attributeValue("priority"));
-			gcb.setAppid(gseNd.attributeValue("appID"));
+			gcb.setCbName(cbNd.attributeValue("cbName"));
+			gcb.setCbId(cbNd.attributeValue("cbId"));
+			gcb.setDataset(cbNd.attributeValue("dsName"));
+			gcb.setDsDesc(cbNd.attributeValue("dsDesc"));
+			gcb.setMacAddr(cbNd.attributeValue("mac"));
+			gcb.setVlanid(cbNd.attributeValue("vlanID"));
+			gcb.setVlanPriority(cbNd.attributeValue("priority"));
+			gcb.setAppid(cbNd.attributeValue("appID"));
 			// 状态点
-			Tb1016StatedataEntity st = IedParserBase.createStatedata(iedName, cbCode, F1011_NO.IED_WRN_GOOSE.getId());
-			beanDao.insert(st);
+			Tb1016StatedataEntity st = createStatedata(cbNd.attributeValue("cbRef")+"状态", cbCode, F1011_NO.IED_WRN_GOOSE.getId());
+			sts.add(st);
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();
 			gcb.setTb1061PoutsByCbCode(pouts);
-			parsePOuts(gseNd, gcb.getCbCode(), pouts);
+			parsePOuts(cbNd, gcb.getCbCode(), pouts);
 		}
 		saveAll();
 	}
