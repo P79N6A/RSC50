@@ -21,6 +21,7 @@ import com.synet.tool.rsc.excel.handler.BrkCfmHandler;
 import com.synet.tool.rsc.excel.handler.FibreListHandler;
 import com.synet.tool.rsc.excel.handler.IEDBoardHandler;
 import com.synet.tool.rsc.excel.handler.IEDListHandler;
+import com.synet.tool.rsc.excel.handler.NewFibreListHandler;
 import com.synet.tool.rsc.excel.handler.PortLightHandler;
 import com.synet.tool.rsc.excel.handler.RscSheetHandler;
 import com.synet.tool.rsc.excel.handler.SecFibreListHandler;
@@ -235,7 +236,8 @@ public class ImportInfoParser {
 		case ExcelConstants.IM101_IED_LIST:
 			return new IEDListHandler(headRowNum, excelColInfo);
 		case ExcelConstants.IM102_FIBRE_LIST:
-			return new FibreListHandler(headRowNum, excelColInfo);
+//			return new FibreListHandler(headRowNum, excelColInfo);
+			return new NewFibreListHandler(headRowNum, excelColInfo);
 		case ExcelConstants.IM103_IED_BOARD:
 			return new IEDBoardHandler(headRowNum, excelColInfo);
 		case ExcelConstants.IM104_STATUS_IN:

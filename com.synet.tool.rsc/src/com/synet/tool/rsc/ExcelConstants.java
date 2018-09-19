@@ -57,22 +57,22 @@ public interface ExcelConstants {
 	String IM102_DEV_CODEA = "端口A装置代码";
 	String IM102_DEV_NAMEA = "端口A装置Name";
 	String IM102_DEV_DESCA = "端口A装置名称";
-	String IM102_BOARD_PORT_CODEA = "装置插件/端口号(端口A)";
-//	String IM102_BOARD_CODEA = "端口A板卡编号";
-//	String IM102_PORT_CODEA = "端口A端口编号";
+	String IM102_BOARD_PORT_CODEA = "装置插件/端口号(端口A)";//现在不用
+	String IM102_BOARD_CODEA = "端口A板卡编号";
+	String IM102_PORT_CODEA = "端口A端口编号";
 	String IM102_CUBICLE_CODEA = "端口A屏柜代码";
 	String IM102_CUBICLE_DESCA = "端口A屏柜名称";
-//	String IM102_CORE_CODEA = "端口A芯线编号";
+	String IM102_CORE_CODEA = "端口A芯线编号";
 	String IM102_DISTRIB_FRAME_CODEA = "端口A光配架端口编号";
 	String IM102_DEV_CODEB = "端口B装置代码";
 	String IM102_DEV_NAMEB = "端口B装置Name";
 	String IM102_DEV_DESCB = "端口B装置名称";
-	String IM102_BOARD_PORT_CODEB = "装置插件/端口号(端口B)";
-//	String IM102_BOARD_CODEB = "端口B板卡编号";
-//	String IM102_PORT_CODEB = "端口B端口编号";
+	String IM102_BOARD_PORT_CODEB = "装置插件/端口号(端口B)";//现在不用
+	String IM102_BOARD_CODEB = "端口B板卡编号";
+	String IM102_PORT_CODEB = "端口B端口编号";
 	String IM102_CUBICLE_CODEB = "端口B屏柜代码";
 	String IM102_CUBICLE_DESCB = "端口B屏柜名称";
-//	String IM102_CORE_CODEB = "端口B芯线编号";
+	String IM102_CORE_CODEB = "端口B芯线编号";
 	String IM102_DISTRIB_FRAME_CODEB = "端口B光配架端口编号";
 	String[] IM102_FIBRE_LIST_FIELDS = {
 			IM102_CABLE_CODE,
@@ -80,22 +80,22 @@ public interface ExcelConstants {
 			IM102_DEV_CODEA,
 			IM102_DEV_NAMEA,
 			IM102_DEV_DESCA,
-			IM102_BOARD_PORT_CODEA,
-//			IM102_BOARD_CODEA,
-//			IM102_PORT_CODEA,
+//			IM102_BOARD_PORT_CODEA,
+			IM102_BOARD_CODEA,
+			IM102_PORT_CODEA,
 			IM102_CUBICLE_CODEA,
 			IM102_CUBICLE_DESCA,
-//			IM102_CORE_CODEA,
+			IM102_CORE_CODEA,
 			IM102_DISTRIB_FRAME_CODEA,
 			IM102_DEV_CODEB,
 			IM102_DEV_NAMEB,
 			IM102_DEV_DESCB,
-			IM102_BOARD_PORT_CODEB,
-//			IM102_BOARD_CODEB,
-//			IM102_PORT_CODEB,
+//			IM102_BOARD_PORT_CODEB,
+			IM102_BOARD_CODEB,
+			IM102_PORT_CODEB,
 			IM102_CUBICLE_CODEB,
 			IM102_CUBICLE_DESCB,
-//			IM102_CORE_CODEB,
+			IM102_CORE_CODEB,
 			IM102_DISTRIB_FRAME_CODEB
 	};
 	

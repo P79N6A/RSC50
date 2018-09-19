@@ -22,6 +22,7 @@ import com.synet.tool.rsc.processor.ImportPortLightProcessor;
 import com.synet.tool.rsc.processor.ImportStaInfoProcessor;
 import com.synet.tool.rsc.processor.ImportStatusInProcessor;
 import com.synet.tool.rsc.processor.ImportTerStrapProcessor;
+import com.synet.tool.rsc.processor.NewImportFibreListProcessor;
 
 public class ExcelImporter {
 	
@@ -35,9 +36,12 @@ public class ExcelImporter {
 			return new ImportIEDListProcessor().processor(result.getFileInfoEntity(),
 					(List<IM101IEDListEntity>) result.getResult());
 		case ExcelConstants.IM102_FIBRE_LIST:
-			result = parser.getFibreList(filePath, excelHeadRow, excelColInfo);
-			return new ImportFibreListProcessor().processor(result.getFileInfoEntity(), 
-					(Map<String, List<IM102FibreListEntity>>) result.getResult());
+//			result = parser.getFibreList(filePath, excelHeadRow, excelColInfo);
+//			return new ImportFibreListProcessor().processor(result.getFileInfoEntity(), 
+//					(Map<String, List<IM102FibreListEntity>>) result.getResult());
+			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM102_FIBRE_LIST);
+			return new NewImportFibreListProcessor().processor(result.getFileInfoEntity(), 
+					(List<IM102FibreListEntity>) result.getResult());
 		case ExcelConstants.IM103_IED_BOARD:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM103_IED_BOARD);
 			return new ImportIEDBoardProcessor().processor(result.getFileInfoEntity(), 
