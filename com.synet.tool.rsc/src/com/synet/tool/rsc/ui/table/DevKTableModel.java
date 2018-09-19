@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.Display;
+
 import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventConstants;
@@ -159,7 +161,13 @@ public class DevKTableModel extends RKTableModel {
 		if (TableFactory.REGION_LIST_TABLE.equals(tableName)) {
 			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
 			if (regionEntity.getF1049Name() != null) {
-				reloadPrj();
+				Display.getCurrent().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						reloadPrj();
+					}
+				});
 			}
 		}
 	}
