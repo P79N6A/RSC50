@@ -6,6 +6,7 @@ create table TB1006_AnalogData
 (
    F1006_CODE           varchar(48) not null,
    F1006_DESC           varchar(96),
+   F1006_ADDREF         varchar(96),
    F1006_SAFELEVEL      INT,
    Parent_CODE          varchar(48) not null,
    F1011_NO             INT not null,
@@ -40,6 +41,7 @@ create table TB1016_StateData
 (
    F1016_CODE           varchar(48) not null,
    F1016_DESC           varchar(96),
+   F1016_ADDREF         varchar(96),
    F1016_SAFELEVEL      INT,
    Parent_CODE          varchar(48) not null,
    F1011_NO             INT not null,

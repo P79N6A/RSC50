@@ -131,7 +131,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		compSwitch.setLayout(SwtUtil.getGridLayout(2));
 		//开关刀闸状态-左侧
 		GridData leftdata = new GridData(GridData.FILL_VERTICAL);
-		leftdata.widthHint = 640;
+		leftdata.widthHint = 720;
 		Composite comLeft = SwtUtil.createComposite(compSwitch, leftdata, 1);
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
 		GridData gdlb_2 = new GridData(200,25);

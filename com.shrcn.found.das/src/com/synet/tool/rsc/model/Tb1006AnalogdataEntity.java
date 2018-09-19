@@ -7,6 +7,7 @@ package com.synet.tool.rsc.model;
 public class Tb1006AnalogdataEntity {
     private String f1006Code;
     private String f1006Desc;
+    private String f1006AddRef;
     private Integer f1006Safelevel;
     private String parentCode;
     private int f1011No;
@@ -57,7 +58,15 @@ public class Tb1006AnalogdataEntity {
         this.f1006Desc = f1006Desc;
     }
 
-    public Integer getF1006Safelevel() {
+    public String getF1006AddRef() {
+		return f1006AddRef;
+	}
+
+	public void setF1006AddRef(String f1006AddRef) {
+		this.f1006AddRef = f1006AddRef;
+	}
+
+	public Integer getF1006Safelevel() {
         return f1006Safelevel;
     }
 
