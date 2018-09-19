@@ -1,7 +1,9 @@
 package com.synet.tool.rsc.io;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -9,11 +11,13 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -71,10 +75,10 @@ public class TemplateImport implements IImporter{
 			Element elementBoards = rootElement.element("Boards");
 			List<Element> elementsBoardEntity = elementBoards.elements("Tb1047BoardEntity");
 			for (Element elementBoardEntity : elementsBoardEntity) {
-				saveBoard(elementBoardEntity);
+				Tb1047BoardEntity boardEntity = saveBoard(elementBoardEntity);
 				List<Element> elementsPortEntity = elementBoardEntity.elements("Tb1048PortEntity");
 				for (Element elementPortEntity : elementsPortEntity) {
-					savePort(elementPortEntity);
+					savePort(boardEntity, elementPortEntity);
 				}
 			}
 			Element elementStraps = rootElement.element("Straps");
@@ -98,67 +102,107 @@ public class TemplateImport implements IImporter{
 		String f1062RefAddr = elementPinEntity.attributeValue("f1062RefAddr");
 		String strapRefAddr = elementPinEntity.attributeValue("strapRefAddr");
 		Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(tb1046IedEntity.getF1046Name(), f1062RefAddr);
-		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(strapRefAddr);
-		saveCode(statedataEntity, pinEntity.getF1062Code());
+		updateStateDataByRefAddr(strapRefAddr, pinEntity.getF1062Code());
 	}
 
 	private void savePout(Element elementPoutEntity) {
 		String f1061RefAddr = elementPoutEntity.attributeValue("f1061RefAddr");
 		String strapRefAddr = elementPoutEntity.attributeValue("strapRefAddr");
 		Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), f1061RefAddr);
-		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(strapRefAddr);
-		saveCode(statedataEntity, poutEntity.getF1061Code());
+		updateStateDataByRefAddr(strapRefAddr, poutEntity.getF1061Code());
 	}
 
-	private void savePort(Element elementPortEntity) {
+	private void savePort(Tb1047BoardEntity boardEntity, Element elementPortEntity) {
 		String f1048No = elementPortEntity.attributeValue("f1048No");
 		String f1048Desc = elementPortEntity.attributeValue("f1048Desc");
 		String f1048Direction = elementPortEntity.attributeValue("f1048Direction");
 		String f1048Plug = elementPortEntity.attributeValue("f1048Plug");
 		String fbRefAddr = elementPortEntity.attributeValue("fbRefAddr");
-		String portCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_PORT);
-		Tb1048PortEntity portEntity = new Tb1048PortEntity(portCode, f1048No, f1048Desc,
-				Integer.parseInt(f1048Direction), Integer.parseInt(f1048Plug));
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1048No", f1048No);
+		params.put("tb1047BoardByF1047Code", boardEntity);
+		Tb1048PortEntity portEntity = (Tb1048PortEntity) beanDao.getObject(Tb1048PortEntity.class, params);
+		if (portEntity == null) {
+			String portCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_PORT);
+			portEntity = new Tb1048PortEntity(portCode, f1048No, f1048Desc,
+					Integer.parseInt(f1048Direction), Integer.parseInt(f1048Plug));
+		}
+		portEntity.setTb1047BoardByF1047Code(boardEntity);
 		beanDao.save(portEntity);
-		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(fbRefAddr);
-		saveCode(statedataEntity, portEntity.getF1048Code());
+		updateAlgDataByRefAddr(fbRefAddr, portEntity.getF1048Code());
 	}
 
-	private void saveBoard(Element elementBoardEntity) {
+	private Tb1047BoardEntity saveBoard(Element elementBoardEntity) {
 		String f1047Slot = elementBoardEntity.attributeValue("f1047Slot");
 		String f1047Desc = elementBoardEntity.attributeValue("f1047Desc");
 		String f1047Type = elementBoardEntity.attributeValue("f1047Type");
 		String warnRefAddr = elementBoardEntity.attributeValue("warnRefAddr");
-		String boardCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_BOARD);
-		Tb1047BoardEntity boardEntity = new Tb1047BoardEntity(boardCode, f1047Slot, f1047Desc, f1047Type);
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1047Slot", f1047Slot);
+		params.put("f1047Desc", f1047Desc);
+		params.put("f1047Type", f1047Type);
+		params.put("tb1046IedByF1046Code", tb1046IedEntity);
+		Tb1047BoardEntity boardEntity = (Tb1047BoardEntity) beanDao.getObject(Tb1047BoardEntity.class, params);
+		if (boardEntity == null) {
+			String boardCode = RSCProperties.getInstance().nextTbCode(DBConstants.PR_BOARD);
+			boardEntity = new Tb1047BoardEntity(boardCode, f1047Slot, f1047Desc, f1047Type);
+		}
+		boardEntity.setTb1046IedByF1046Code(tb1046IedEntity);
 		beanDao.save(boardEntity);
-		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(warnRefAddr);
-		saveCode(statedataEntity, boardEntity.getF1047Code());
+		updateStateDataByRefAddr(warnRefAddr, boardEntity.getF1047Code());
+		return boardEntity;
 	}
 
 	private void saveIed(Element rootElement) {
 		String warnRefAddr = rootElement.attributeValue("warnRefAddr");
-		Tb1016StatedataEntity statedataEntity = getStateDataByRefAddr(warnRefAddr);
-		saveCode(statedataEntity, tb1046IedEntity.getF1046Code());
+		updateStateDataByRefAddr(warnRefAddr, tb1046IedEntity.getF1046Code());
 	}
 	
-	private void saveCode(Tb1016StatedataEntity statedataEntity, String code) {
-		if(statedataEntity != null) {
-			statedataEntity.setParentCode(code);
-			beanDao.save(statedataEntity);
+	private void updateStateDataByRefAddr(String warnRefAddr, String code) {
+		if(StringUtil.isEmpty(warnRefAddr)) {
+			return;
 		}
-	}
-
-	private Tb1016StatedataEntity getStateDataByRefAddr(String warnRefAddr) {
-		if(warnRefAddr == null) {
-			return null;
-		}
-		Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(warnRefAddr);
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1058RefAddr", warnRefAddr);
+		params.put("tb1046IedByF1046Code", tb1046IedEntity);
+		Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
 		if(mmsfcdaEntity == null) {
-			return null;
+			return;
 		}
 		Tb1016StatedataEntity statedataEntity = statedataService.getStateDataByCode(mmsfcdaEntity.getDataCode());
-		return statedataEntity;
+		if(statedataEntity == null) {
+			return;
+		}
+		if(statedataEntity != null) {
+			statedataEntity.setParentCode(code);
+			mmsfcdaEntity.setParentCode(code);
+			beanDao.update(statedataEntity);
+			beanDao.update(mmsfcdaEntity);
+		}
+	}
+	
+	private void updateAlgDataByRefAddr(String warnRefAddr, String code) {
+		if(StringUtil.isEmpty(warnRefAddr)) {
+			return;
+		}
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1058RefAddr", warnRefAddr);
+		params.put("tb1046IedByF1046Code", tb1046IedEntity);
+		Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
+		if(mmsfcdaEntity == null) {
+			return;
+		}
+		Tb1006AnalogdataEntity algdataEntity = (Tb1006AnalogdataEntity)beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", mmsfcdaEntity.getDataCode());
+		if(algdataEntity == null) {
+			return;
+		}
+		if(algdataEntity != null) {
+			algdataEntity.setParentCode(code);
+			mmsfcdaEntity.setParentCode(code);
+			beanDao.update(algdataEntity);
+			beanDao.update(mmsfcdaEntity);
+		}
 	}
 
 }

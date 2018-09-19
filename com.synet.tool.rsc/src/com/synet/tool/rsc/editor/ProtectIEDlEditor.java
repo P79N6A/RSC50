@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.shrcn.found.common.dict.DictManager;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -72,7 +74,7 @@ import com.synet.tool.rsc.util.DataUtils;
  */
 public class ProtectIEDlEditor extends BaseConfigEditor {
 	
-	private Button btnTempCamp;
+//	private Button btnTempCamp;
 	private Button btnTempQuote;
 	private Button btnTempSave;
 	private GridData gridData;
@@ -165,7 +167,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
 		} else {
 			SwtUtil.createLabel(comp, "", new GridData(780, SWT.DEFAULT));
-			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
+//			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
 			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
 			createCompByEntryName(comp);
@@ -311,14 +313,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,
 								InterruptedException {
 							new TemplateImport(iedEntity).execute();
+							EventManager.getDefault().notify(EventConstants.REFRESH_EIDTOR, null);
 						}
 					});
 					DialogHelper.showAsynInformation("引入模版结束！");
 					
 					
-				} else if(obj == btnTempCamp) {
-					//TODO
-				}
+				} 
+//				else if(obj == btnTempCamp) {
+//					//TODO
+//				}
 			}
 		};
 		if(tabFProtect != null) {
@@ -326,7 +330,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		}
 		tabFolder.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
-		btnTempCamp.addSelectionListener(selectionListener);
+//		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 	}
