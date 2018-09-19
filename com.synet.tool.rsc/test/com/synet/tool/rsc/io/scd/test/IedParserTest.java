@@ -163,22 +163,22 @@ public class IedParserTest {
 		assertTrue(items.size() > 0);
 		List<Tb1054RcbEntity> cbs = (List<Tb1054RcbEntity>) beanDao.getAll(Tb1054RcbEntity.class);
 		assertTrue(items.size() == cbs.size());
-		String sql = "select a.*, c.Parent_Code " +
-				" from tb1058_mmsfcda a," +
-				" tb1054_rcb b," +
-				" tb1016_statedata c" +
-				" where a.F1054_CODE=b.F1054_CODE" +
-				" and a.DATA_CODE=c.F1016_CODE" +
-				" and b.F1046_CODE=:iedCode" +
-				" and b.F1054_Dataset=:datSet";
-		Map<String, Object> params = new HashMap<>();
-		params.put("iedCode", ied.getF1046Code());
-		params.put("datSet", "dsWarning");
-		List<?> result = HqlDaoImpl.getInstance().queryBySql(sql, Tb1058MmsfcdaEntity.class, params);
-		assertTrue(result.size() > 0);
-//		List<Tb1058MmsfcdaEntity> fcdas = (List<Tb1058MmsfcdaEntity>) beanDao.getAll(Tb1058MmsfcdaEntity.class);
-//		assertTrue(fcdas.size() > 0);
-//		checkDatas();
+//		String sql = "select a.*, c.Parent_Code " +
+//				" from tb1058_mmsfcda a," +
+//				" tb1054_rcb b," +
+//				" tb1016_statedata c" +
+//				" where a.F1054_CODE=b.F1054_CODE" +
+//				" and a.DATA_CODE=c.F1016_CODE" +
+//				" and b.F1046_CODE=:iedCode" +
+//				" and b.F1054_Dataset=:datSet";
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("iedCode", ied.getF1046Code());
+//		params.put("datSet", "dsWarning");
+//		List<?> result = HqlDaoImpl.getInstance().queryBySql(sql, Tb1058MmsfcdaEntity.class, params);
+//		assertTrue(result.size() > 0);
+		List<Tb1058MmsfcdaEntity> fcdas = (List<Tb1058MmsfcdaEntity>) beanDao.getAll(Tb1058MmsfcdaEntity.class);
+		assertTrue(fcdas.size() > 0);
+		checkDatas();
 	}
 	
 	private void checkDatas() {
@@ -247,6 +247,7 @@ public class IedParserTest {
 	@Test
 	public void testSubstationParser() {
 		SubstationParser sp = new SubstationParser();
+		sp.init();
 		sp.parse();
 		List<Tb1041SubstationEntity> sts = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 		assertTrue(sts.size() > 0);

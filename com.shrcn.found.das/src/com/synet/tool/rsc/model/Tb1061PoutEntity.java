@@ -9,10 +9,11 @@ package com.synet.tool.rsc.model;
 public class Tb1061PoutEntity {
     private String f1061Code;
     private String cbCode;
-    private String f1061RefAddr;
     private int f1061Index;
     private int f1011No;
+    private String f1061Byname;
     private String f1061Desc;
+    private String f1061RefAddr;
     private String dataCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private BaseCbEntity cbEntity;
@@ -23,8 +24,8 @@ public class Tb1061PoutEntity {
     public Tb1061PoutEntity() {
 	}
     
-    public Tb1061PoutEntity(String f1061Desc) {
-		this.f1061Desc = f1061Desc;
+	public Tb1061PoutEntity(String f1061Byname) {
+		this.f1061Byname = f1061Byname;
 	}
     
     public String getF1061Code() {
@@ -65,6 +66,14 @@ public class Tb1061PoutEntity {
 
 	public void setF1011No(int f1011No) {
 		this.f1011No = f1011No;
+	}
+
+	public String getF1061Byname() {
+		return f1061Byname;
+	}
+
+	public void setF1061Byname(String f1061Byname) {
+		this.f1061Byname = f1061Byname;
 	}
 
 	public String getF1061Desc() {

@@ -84,7 +84,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
 			pout.setTb1046IedByF1046Code(ied);
 			pout.setCbCode(cbCode);
-			pout.setF1061RefAddr(fcdaEl.attributeValue("ref"));
+			String ref = fcdaEl.attributeValue("ref");
+			pout.setF1061RefAddr(ref);
 			pout.setF1061Index(Integer.parseInt(fcdaEl.attributeValue("idx")));
 			String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 			pout.setF1061Desc(fcdaDesc);
@@ -97,7 +98,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
 			} else {
-				Tb1006AnalogdataEntity algdata = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+				Tb1006AnalogdataEntity algdata = addAlgdata(ref, fcdaDesc, type.getId());
 				String algcode = algdata.getF1006Code();
 				pout.setDataCode(algcode);
 			}
@@ -148,12 +149,12 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @param f1011No
 	 * @return
 	 */
-	protected Tb1006AnalogdataEntity addAlgdata(Element fcdaEl, String fcdaDesc, int f1011No) {
+	protected Tb1006AnalogdataEntity addAlgdata(String ref, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
 		Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
 		algdata.setF1006Code(dataCode);
 		algdata.setF1006Desc(fcdaDesc);
-		algdata.setF1006AddRef(fcdaEl.attributeValue("ref"));
+		algdata.setF1006AddRef(ref);
 		algdata.setF1006Safelevel(0);
 		algdata.setParentCode(ied.getF1046Code());
 		algdata.setF1011No(f1011No);

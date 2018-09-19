@@ -70,7 +70,8 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						mmsFcda.setTb1054RcbByF1054Code(rcb);
 						mmsFcda.setF1058Index(i);
 						mmsFcda.setF1058Desc(fcdaDesc);
-						mmsFcda.setF1058RefAddr(SclUtil.getFcdaRef(fcdaEl));
+						String ref = SclUtil.getFcdaRef(fcdaEl);
+						mmsFcda.setF1058RefAddr(ref);
 						String fc = fcdaEl.attributeValue("fc");
 						String lnName = fcdaEl.attributeValue("lnClass");
 						String doName = fcdaEl.attributeValue("doName");
@@ -85,7 +86,7 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
-							Tb1006AnalogdataEntity algdata = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+							Tb1006AnalogdataEntity algdata = addAlgdata(ref, fcdaDesc, type.getId());
 							mmsFcda.setDataCode(algdata.getF1006Code());
 							mmsFcda.setParentCode(algdata.getParentCode());
 						}

@@ -362,8 +362,10 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			return;
 		}
 		stateData.setParentCode(code);
+		mms.setParentCode(code);
+		beandao.update(mms);
 		statedataService.update(stateData);
-		tableDeviceWarning.getTable().layout();
+		tableDeviceWarning.refresh();
 		ConsoleManager.getInstance().append("关联成功！");
 	}
 
