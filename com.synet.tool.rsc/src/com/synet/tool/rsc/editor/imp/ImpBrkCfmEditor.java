@@ -112,7 +112,7 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 						}
 						Tb1061PoutEntity poutEntity2 = poutEntityService.getPoutEntity(entity.getDevName(), entity.getCmdOutVpRefAddr());
 						if (poutEntity2 != null) {
-							circuitEntity.setTb1061PoutByF1061CodeConvChk2(poutEntity1);
+							circuitEntity.setTb1061PoutByF1061CodeConvChk2(poutEntity2);
 							entity.setMatched(DBConstants.MATCHED_OK);
 						}
 						circuitEntityService.save(circuitEntity);

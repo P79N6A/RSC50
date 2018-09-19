@@ -22,7 +22,6 @@ public class BrkCfmHandler extends RscSheetHandler {
 		super.startRow(rowNum);
 		this.entity = new IM108BrkCfmEntity();
 		this.entity.setIm108Code(rscp.nextTbCode(DBConstants.PR_BRKCFM));
-		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
 	@Override
@@ -32,7 +31,11 @@ public class BrkCfmHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getCmdAckVpRefAddr() != null 
+					&& entity.getCmdOutVpRefAddr() != null) {
+				entity.setMatched(DBConstants.MATCHED_NO);
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

@@ -21,7 +21,6 @@ public class BoardWarnHandler extends RscSheetHandler {
 		super.startRow(rowNum);
 		this.entity = new IM105BoardWarnEntity();
 		this.entity.setIm105Code(rscp.nextTbCode(DBConstants.PR_BOARDWARN));
-		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
 	@Override
@@ -31,7 +30,10 @@ public class BoardWarnHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getAlarmRefAddr() != null) {
+				entity.setMatched(DBConstants.MATCHED_NO);
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

@@ -20,7 +20,6 @@ public class StaInfoHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM109StaInfoEntity();
-		this.entity.setIm109Code(rscp.nextTbCode(DBConstants.PR_STAINFO));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -31,7 +30,10 @@ public class StaInfoHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getMmsRefAddr() != null) {
+				entity.setIm109Code(rscp.nextTbCode(DBConstants.PR_STAINFO));
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

@@ -41,6 +41,7 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
@@ -53,6 +54,7 @@ import com.synet.tool.rsc.service.CircuitEntityService;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.RcdchannelaEntityService;
 import com.synet.tool.rsc.service.RcdchanneldEntityService;
 import com.synet.tool.rsc.service.SgfcdaEntityService;
@@ -93,6 +95,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableLogLinkName;
 	private Tb1046IedEntity iedEntity;
 	private List<Tb1046IedEntity> iedEntityList;
+	private PoutEntityService poutEntityService;
 	private CircuitEntityService circuitEntityService;
 	private CTabFolder tabFolder;
 	private MmsfcdaService mmsfcdaService;
@@ -116,6 +119,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1047BoardEntity> boardEntities;
 	private List<Tb1065LogicallinkEntity> logicallinkEntities;
 	private List<Tb1063CircuitEntity> circuitEntities;
+	private List<Tb1061PoutEntity> poutEntities;
 	private List<Tb1069RcdchannelaEntity> rcdchannelaEntities;
 	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
 	private CTabFolder tabFProtect;
@@ -138,6 +142,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		sgfcdaEntityService = new SgfcdaEntityService();
 		spfcdaEntityService = new SpfcdaEntityService();
 		strapEntityService = new StrapEntityService();
+		poutEntityService = new PoutEntityService();
 		circuitEntityService = new CircuitEntityService();
 		boardEntityService = new BoardEntityService();
 		logicallinkEntityService = new LogicallinkEntityService();
@@ -441,14 +446,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case RSCConstants.CIRCUI_BOARD:
 			if(!DataUtils.listNotNull(circuitEntities)) {
+				//开出虚端子
+				poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
 				//虚端子压板
 				circuitEntities = circuitEntityService.getByIed(iedEntity);
-//				for (Tb1063CircuitEntity circui : circuitEntities) {
-//					dic.addItemByType("REV_CONVCHK", circui.get);
-//					dic.addItemByType("SEND_CONVCHK", circui.get);
-//				}
 				//开出
-				tableVirtualTerminalOut.setInput(circuitEntities);
+				tableVirtualTerminalOut.setInput(poutEntities);
 				//开入
 				tableVirtualTerminalIn.setInput(circuitEntities);
 			}

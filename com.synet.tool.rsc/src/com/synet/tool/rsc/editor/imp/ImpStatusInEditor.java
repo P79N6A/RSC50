@@ -98,11 +98,13 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				if (pinEntity != null) {
 					pinEntity.setF1062Desc(entity.getPinDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
+					pinEntityService.update(pinEntity);
 				}
 				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
 				if (mmsfcdaEntity != null) {
 					mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
+					mmsfcdaService.update(mmsfcdaEntity);
 				}
 			} catch (Exception e) {
 					e.printStackTrace();

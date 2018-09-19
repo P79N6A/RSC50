@@ -20,7 +20,6 @@ public class StatusInHandler extends RscSheetHandler {
 	public void startRow(int rowNum) {
 		super.startRow(rowNum);
 		this.entity = new IM104StatusInEntity();
-		this.entity.setIm104Code(rscp.nextTbCode(DBConstants.PR_STATUSIN));
 		this.entity.setMatched(DBConstants.MATCHED_NO);
 	}
 	
@@ -31,7 +30,10 @@ public class StatusInHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			result.add(entity);
+			if (entity.getDevName() != null && entity.getMmsRefAddr() != null && entity.getPinRefAddr() != null) {
+				entity.setIm104Code(rscp.nextTbCode(DBConstants.PR_STATUSIN));
+				result.add(entity);
+			}
 		}
 		super.endRow(rowNum);
 	}

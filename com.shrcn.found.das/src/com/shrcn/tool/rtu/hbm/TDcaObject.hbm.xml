@@ -40,23 +40,23 @@
         	not-null="false" lazy="false">
         </many-to-one>
         
-        <set name="psMx" inverse="true" cascade="save-update" table="T_DCA_MX" lazy="true">
+        <set name="psMx" inverse="true" cascade="save-update" table="T_DCA_MX" lazy="false">
         	<key column="OBJID"></key>
         	<one-to-many class="com.shrcn.tool.rtu.model.TDcaMx" />
         </set>
-        <set name="psSt" inverse="true" cascade="save-update" table="T_DCA_ST" lazy="true">
+        <set name="psSt" inverse="true" cascade="save-update" table="T_DCA_ST" lazy="false">
         	<key column="OBJID"></key>
         	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSt" />
         </set>
-        <set name="psCo" inverse="true" cascade="save-update" table="T_DCA_CO" lazy="true">
+        <set name="psCo" inverse="true" cascade="save-update" table="T_DCA_CO" lazy="false">
         	<key column="OBJID"></key>
         	<one-to-many class="com.shrcn.tool.rtu.model.TDcaCo" />
         </set>
-        <set name="psSp" inverse="true" cascade="save-update" table="T_DCA_SP" lazy="true">
+        <set name="psSp" inverse="true" cascade="save-update" table="T_DCA_SP" lazy="false">
         	<key column="OBJID"></key>
         	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSp" />
         </set>
-        <set name="psSg" inverse="true" cascade="save-update" table="T_DCA_SG" lazy="true">
+        <set name="psSg" inverse="true" cascade="save-update" table="T_DCA_SG" lazy="false">
         	<key column="OBJID"></key>
         	<one-to-many class="com.shrcn.tool.rtu.model.TDcaSg" />
         </set>

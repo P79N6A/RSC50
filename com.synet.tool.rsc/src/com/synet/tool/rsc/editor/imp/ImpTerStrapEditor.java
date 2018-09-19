@@ -117,7 +117,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									mmsfcdaEntity.getDataCode());
 							if (statedataEntity != null) {
 								if (statedataEntity.getParentCode() != null) {
-									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
 											statedataEntity.getParentCode());
 									if (strapEntity != null) {
 										pinEntity.setTb1064StrapByF1064Code(strapEntity);
@@ -137,7 +137,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									mmsfcdaEntity.getDataCode());
 							if (statedataEntity != null) {
 								if (statedataEntity.getParentCode() != null) {
-									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
 											statedataEntity.getParentCode());
 									if (strapEntity != null) {
 										poutEntity.setTb1064StrapByF1064Code(strapEntity);
@@ -200,7 +200,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									mmsfcdaEntity.getDataCode());
 							if (statedataEntity != null) {
 								if (statedataEntity.getParentCode() != null) {
-									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
 											statedataEntity.getParentCode());
 									if (strapEntity != null && pinEntity.getTb1064StrapByF1064Code() == null) {
 										entity.setConflict(DBConstants.NO);
@@ -222,7 +222,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									mmsfcdaEntity.getDataCode());
 							if (statedataEntity != null) {
 								if (statedataEntity.getParentCode() != null) {
-									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1062PinEntity.class, 
+									Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
 											statedataEntity.getParentCode());
 									if (strapEntity != null && poutEntity.getTb1064StrapByF1064Code() == null) {
 										entity.setConflict(DBConstants.NO);
