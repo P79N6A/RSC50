@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Shell;
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -52,6 +51,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private Composite comRight;
 	private List<Tb1061PoutEntity> chanelTableData;
 	private IedEntityService iedService;
+	private ArrayList<Object> tableChnData;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -90,7 +90,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		comRight.setLayout(SwtUtil.getGridLayout(2));
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
-		textGridData.widthHint = 80;
+		textGridData.widthHint = 150;
 		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
 		comboDevice.setItems(comboDevItems);
 		comboDevice.select(0);
@@ -107,15 +107,14 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private void initComboData() {
 		iedService = new IedEntityService();
 		svcbService = new SvcbEntityService();
-		int[] devTypes = EnumIedType.values()[2].getTypes();
-		Tb1042BayEntity bay = curSel.getTb1043EquipmentByF1043Code().getTb1042BayByF1042Code();
-		iedEntities = iedService.getIedByTypesAndBay(devTypes, bay);
+		int[] devTypes = EnumIedType.UNIT_DEVICE.getTypes();
+		iedEntities = iedService.getIedByTypesAndBay(devTypes, null);
 		if(iedEntities.size() < 1) {
 			comboDevItems = new String[]{"装置为空"};
 		} else {
 			List<String> lstComboDevItem = new ArrayList<>();
 			for (Tb1046IedEntity tb1046IedEntity : iedEntities) {
-				lstComboDevItem.add(tb1046IedEntity.getF1046Desc());
+				lstComboDevItem.add(tb1046IedEntity.getF1046Name());
 			}
 			comboDevItems = new String[lstComboDevItem.size()];
 			comboDevItems = lstComboDevItem.toArray(comboDevItems);
@@ -127,49 +126,50 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 * 初始化表格数据
 	 */
 	private void initTableData() {
-		
+		tableChnData = new ArrayList<>();
 		Tb1061PoutEntity a1 = curSel.getTb1061PoutByF1061CodeA1();
 		if(a1 == null) {
 			a1 = new Tb1061PoutEntity("A相通道1虚端子");
 		} else {
-			a1.setF1061Desc("A相通道1虚端子");
+			a1.setF1061Byname("A相通道1虚端子");
 		}
-			tableChanel.addRow(a1);
+		tableChnData.add(a1);
 		Tb1061PoutEntity a2 = curSel.getTb1061PoutByF1061CodeA2();
 		if(a2 == null) {
 			a2 = new Tb1061PoutEntity("A相通道2虚端子");
 		} else {
-			a2.setF1061Desc("A相通道2虚端子");
+			a2.setF1061Byname("A相通道2虚端子");
 		}
-			tableChanel.addRow(a2);
+		tableChnData.add(a2);
 		Tb1061PoutEntity b1 = curSel.getTb1061PoutByF1061CodeB1();
 		if(b1 == null) {
 			b1 = new Tb1061PoutEntity("B相通道1虚端子");
 		} else {
-			b1.setF1061Desc("B相通道1虚端子");
+			b1.setF1061Byname("B相通道1虚端子");
 		}
-			tableChanel.addRow(b1);
+		tableChnData.add(b1);
 		Tb1061PoutEntity b2 = curSel.getTb1061PoutByF1061CodeB2();
 		if(b2 == null) {
 			b2 = new Tb1061PoutEntity("B相通道2虚端子");
 		} else {
-			b2.setF1061Desc("B相通道2虚端子");
+			b2.setF1061Byname("B相通道2虚端子");
 		}
-			tableChanel.addRow(b2);
+		tableChnData.add(b2);
 		Tb1061PoutEntity c1 = curSel.getTb1061PoutByF1061CodeC1();
 		if(c1 == null) {
 			c1 = new Tb1061PoutEntity("C相通道1虚端子");
 		} else {
-			c1.setF1061Desc("C相通道1虚端子");
+			c1.setF1061Byname("C相通道1虚端子");
 		}
-		tableChanel.addRow(c1);
+		tableChnData.add(c1);
 		Tb1061PoutEntity c2 = curSel.getTb1061PoutByF1061CodeC2();
 		if(c2 == null) {
 			c2 = new Tb1061PoutEntity("C相通道2虚端子");
 		} else {
-			c2.setF1061Desc("C相通道2虚端子");
+			c2.setF1061Byname("C相通道2虚端子");
 		}
-			tableChanel.addRow(c2);
+		tableChnData.add(c2);
+		tableChanel.setInput(tableChnData);
 		tableChanel.getTable().layout();
 		
 		if(DataUtils.listNotNull(iedEntities)) {
@@ -198,7 +198,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private void addListeners() {
 		SelectionListener selectionListener = new SelectionAdapter() {
 			private Tb1046IedEntity curSelIedEntity;
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
@@ -211,9 +210,18 @@ public class ChanelConnectDialog extends WrappedDialog{
 					if(leftSel == null) {
 						return;
 					}
-					rightSel.setF1061Desc(leftSel.getF1061Desc());
-					leftSel = rightSel;
-					tableChanel.getTable().layout();
+					rightSel.setF1061Byname(leftSel.getF1061Byname());
+					int indexSel = tableChnData.indexOf(leftSel);
+					tableChnData.set(indexSel, rightSel);
+					tableChanel.setInput(tableChnData);
+					// 自动选中下一行
+					if (indexSel + 1 < tableChnData.size()) {
+						tableChanel.setSelection(indexSel + 2);
+					}
+					int selectRowNum = tableState.getSelectRowNum();
+					if (selectRowNum < tableState.getItemCount() + 1) {
+						tableState.setSelection(selectRowNum + 1);
+					}
 				} else if(obj == comboDevice) {
 					int curComboDevSelIdx = comboDevice.getSelectionIndex();
 					if(curComboDevSelIdx == preComboDevSelIdx) {
@@ -223,7 +231,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 					String selDevName = comboDevItems[curComboDevSelIdx];
 					curSelIedEntity = getIedEntityByName(selDevName);
 					refreshTableState(curSelIedEntity);
-//					comRight.layout();
 					comboDevice.redraw();
 				} 
 //				else if(obj == btnDel) {
@@ -246,7 +253,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	private Tb1046IedEntity getIedEntityByName(String iedName) {
 		for (Tb1046IedEntity iedEntity : iedEntities) {
-			if(iedEntity.getF1046Desc().equals(iedName)) {
+			if(iedEntity.getF1046Name().equals(iedName)) {
 				return iedEntity;
 			}
 		}
@@ -261,7 +268,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(800, 550);
+		return new Point(1000, 650);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -274,7 +281,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 				curSel.setTb1061PoutByF1061CodeA1(input.get(0));
 				curSel.setTb1061PoutByF1061CodeA2(input.get(1));
 				curSel.setTb1061PoutByF1061CodeB1(input.get(2));
-				curSel.setTb1061PoutByF1061CodeA2(input.get(3));
+				curSel.setTb1061PoutByF1061CodeB2(input.get(3));
 				curSel.setTb1061PoutByF1061CodeC1(input.get(4));
 				curSel.setTb1061PoutByF1061CodeC2(input.get(5));
 			} else {

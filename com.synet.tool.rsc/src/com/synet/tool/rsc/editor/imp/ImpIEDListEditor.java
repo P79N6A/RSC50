@@ -19,11 +19,13 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
+import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
@@ -89,6 +91,19 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			}
 		});
 	}
+	
+	private void updateIEDIPs(Tb1046IedEntity iedEntity, IM101IEDListEntity entity) {
+		String netIPA = entity.getNetAIP();
+		String netIPB = entity.getNetBIP();
+		iedEntity.setF1046aNetIp(netIPA);
+		iedEntity.setF1046bNetIp(netIPB);
+		Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
+		mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
+		mmsServer.setTb1046IedByF1046Code(iedEntity);
+		mmsServer.setF1070IpA(netIPA);
+		mmsServer.setF1070IpB(netIPB);
+		beandao.insert(mmsServer);
+	}
 
 	@SuppressWarnings("unchecked")
 	protected void doImport() {
@@ -109,11 +124,12 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				if (cubicle != null) {
 					iedEntity.setTb1050CubicleEntity(cubicle);
 				}
-//					iedEntity.setF1046Manufacturor(entity.getManufacturor());
-//					iedEntity.setF1046version(entity.getDevVersion());
-//					iedEntity.setF1046protectCategory(entity.getProtClassify());
-//					iedEntity.setF1046protectType(entity.getProtType());
-//					iedEntity.setF1046protectModel(entity.getProtModel());
+				updateIEDIPs(iedEntity, entity);
+//				iedEntity.setF1046Manufacturor(entity.getManufacturor());
+//				iedEntity.setF1046version(entity.getDevVersion());
+//				iedEntity.setF1046protectCategory(entity.getProtClassify());
+//				iedEntity.setF1046protectType(entity.getProtType());
+//				iedEntity.setF1046protectModel(entity.getProtModel());
 				iedEntity.setF1046OperateDate(entity.getDateService());
 				iedEntity.setF1046productDate(entity.getDateProduct());
 				iedEntity.setF1046productNo(entity.getProductCode());

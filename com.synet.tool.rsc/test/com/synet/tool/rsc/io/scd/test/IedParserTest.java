@@ -7,7 +7,9 @@ package com.synet.tool.rsc.io.scd.test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Element;
 import org.junit.Before;
@@ -19,6 +21,7 @@ import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.RSCProperties;
@@ -151,7 +154,7 @@ public class IedParserTest {
 	@Test
 	public void testRcbParser() {
 		Tb1046IedEntity ied = new Tb1046IedEntity();
-		ied.setF1046Name("CT102B");
+		ied.setF1046Name("CL1101");
 		ied.setF1046Code(rscp.nextTbCode(DBConstants.PR_IED));
 		beanDao.insert(ied);
 		RcbParser iedSubParser = new RcbParser(ied);
@@ -160,8 +163,21 @@ public class IedParserTest {
 		assertTrue(items.size() > 0);
 		List<Tb1054RcbEntity> cbs = (List<Tb1054RcbEntity>) beanDao.getAll(Tb1054RcbEntity.class);
 		assertTrue(items.size() == cbs.size());
-		List<Tb1058MmsfcdaEntity> pouts = (List<Tb1058MmsfcdaEntity>) beanDao.getAll(Tb1058MmsfcdaEntity.class);
-		assertTrue(pouts.size() > 0);
+//		String sql = "select a.*, c.Parent_Code " +
+//				" from tb1058_mmsfcda a," +
+//				" tb1054_rcb b," +
+//				" tb1016_statedata c" +
+//				" where a.F1054_CODE=b.F1054_CODE" +
+//				" and a.DATA_CODE=c.F1016_CODE" +
+//				" and b.F1046_CODE=:iedCode" +
+//				" and b.F1054_Dataset=:datSet";
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("iedCode", ied.getF1046Code());
+//		params.put("datSet", "dsWarning");
+//		List<?> result = HqlDaoImpl.getInstance().queryBySql(sql, Tb1058MmsfcdaEntity.class, params);
+//		assertTrue(result.size() > 0);
+		List<Tb1058MmsfcdaEntity> fcdas = (List<Tb1058MmsfcdaEntity>) beanDao.getAll(Tb1058MmsfcdaEntity.class);
+		assertTrue(fcdas.size() > 0);
 		checkDatas();
 	}
 	
@@ -231,6 +247,7 @@ public class IedParserTest {
 	@Test
 	public void testSubstationParser() {
 		SubstationParser sp = new SubstationParser();
+		sp.init();
 		sp.parse();
 		List<Tb1041SubstationEntity> sts = (List<Tb1041SubstationEntity>) beanDao.getAll(Tb1041SubstationEntity.class);
 		assertTrue(sts.size() > 0);

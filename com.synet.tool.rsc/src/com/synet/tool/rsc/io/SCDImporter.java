@@ -133,18 +133,8 @@ public class SCDImporter implements IImporter {
 	public void execute() {
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
-		Element staEl = XMLDBHelper.selectSingleNode("/SCL/Substation");
-		// 变电站
-		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
-		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
-		if (staEl == null) {
-			station.setF1041Name(Constants.CURRENT_PRJ_NAME);
-			station.setF1041Desc(Constants.CURRENT_PRJ_NAME);
-		} else {
-			station.setF1041Name(staEl.attributeValue("name"));
-			station.setF1041Desc(staEl.attributeValue("desc"));
-		}
-		beanDao.insert(station);
+		SubstationParser sp = new SubstationParser();
+		sp.init();
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 		if (iedNds == null || iedNds.size() < 1) {
@@ -205,10 +195,12 @@ public class SCDImporter implements IImporter {
 				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
 				mmsServer.setTb1046IedByF1046Code(ied);
 				String[] ips = IedInfoDao.getIPs(iedName);
-				if (ips.length > 0) {
+				if (ips != null && ips.length > 0) {
 					mmsServer.setF1070IpA(ips[0]);
+					ied.setF1046aNetIp(ips[0]);
 					if (ips.length > 1) {
 						mmsServer.setF1070IpB(ips[1]);
+						ied.setF1046bNetIp(ips[1]);
 					}
 				} else {
 					mmsServer.setF1070IpA("");
@@ -232,10 +224,7 @@ public class SCDImporter implements IImporter {
 			new LogicLinkParser(ied).parse();
 		}
 		// 一次部分
-		if (staEl != null) {
-			SubstationParser sp = new SubstationParser();
-			sp.parse();
-		}
+		sp.parse();
 	}
 
 }

@@ -84,7 +84,8 @@ public abstract class IedParserBase<T> implements IIedParser {
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
 			pout.setTb1046IedByF1046Code(ied);
 			pout.setCbCode(cbCode);
-			pout.setF1061RefAddr(fcdaEl.attributeValue("ref"));
+			String ref = fcdaEl.attributeValue("ref");
+			pout.setF1061RefAddr(ref);
 			pout.setF1061Index(Integer.parseInt(fcdaEl.attributeValue("idx")));
 			String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 			pout.setF1061Desc(fcdaDesc);
@@ -92,11 +93,13 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
 			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
+			pout.setF1011No(type.getId());
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
 			} else {
-				String algcode = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+				Tb1006AnalogdataEntity algdata = addAlgdata(ref, fcdaDesc, type.getId());
+				String algcode = algdata.getF1006Code();
 				pout.setDataCode(algcode);
 			}
 		}
@@ -110,9 +113,14 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = createStatedata(fcdaDesc, ied.getF1046Code(), f1011No);
+		Tb1016StatedataEntity statedata = createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
+				ied.getF1046Code(), f1011No);
 		sts.add(statedata);
 		return statedata;
+	}
+	
+	public static Tb1016StatedataEntity createStatedata(String desc, String parentCode, int f1011No) {
+		return createStatedata(desc, "", parentCode, f1011No);
 	}
 	
 	/**
@@ -122,11 +130,12 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @param f1011No
 	 * @return
 	 */
-	public static Tb1016StatedataEntity createStatedata(String desc, String parentCode, int f1011No) {
+	private static Tb1016StatedataEntity createStatedata(String desc, String ref, String parentCode, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
 		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
 		stdata.setF1016Code(dataCode);
 		stdata.setF1016Desc(desc);
+		stdata.setF1016AddRef(ref);
 		stdata.setF1016Safelevel(0);
 		stdata.setParentCode(parentCode);
 		stdata.setF1011No(f1011No);
@@ -140,16 +149,17 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @param f1011No
 	 * @return
 	 */
-	protected String addAlgdata(Element fcdaEl, String fcdaDesc, int f1011No) {
+	protected Tb1006AnalogdataEntity addAlgdata(String ref, String fcdaDesc, int f1011No) {
 		String dataCode = rscp.nextTbCode(DBConstants.PR_Analog);
 		Tb1006AnalogdataEntity algdata = new Tb1006AnalogdataEntity();
 		algdata.setF1006Code(dataCode);
 		algdata.setF1006Desc(fcdaDesc);
+		algdata.setF1006AddRef(ref);
 		algdata.setF1006Safelevel(0);
 		algdata.setParentCode(ied.getF1046Code());
 		algdata.setF1011No(f1011No);
 		agls.add(algdata);
-		return dataCode;
+		return algdata;
 	}
 	
 	/**

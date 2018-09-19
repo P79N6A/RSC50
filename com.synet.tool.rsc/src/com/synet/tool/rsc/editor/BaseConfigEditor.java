@@ -15,6 +15,7 @@ import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.ui.table.DevKTable;
 
 /**
@@ -30,6 +31,7 @@ public class BaseConfigEditor extends BaseEditor {
 	protected DevKTable table;
 	protected BeanDaoImpl beandao;
 	protected HqlDaoImpl hqldao;
+	protected RSCProperties rscp;
 	
 	public BaseConfigEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -46,6 +48,7 @@ public class BaseConfigEditor extends BaseEditor {
 		super.init();
 		beandao = BeanDaoImpl.getInstance();
 		hqldao = HqlDaoImpl.getInstance();
+		rscp = RSCProperties.getInstance();
 	}
 
 	@Override

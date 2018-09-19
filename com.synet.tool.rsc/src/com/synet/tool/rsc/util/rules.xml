@@ -8,7 +8,7 @@
 		<Rule id="06" name="链路中断信息" datSet="dsCommState/dsGOOSE" lnName="GGIO" doName="Alm" doDesc="断链"/>
 		<Rule id="08" name="保护动作信号" datSet="dsTripInfo" lnName="P" doName="Op" doDesc=""/>
 		<Rule id="09" name="保护跳闸出口信号" datSet="dsGOOSE" lnName="PTRC" doName="Tr" doDesc=""/>
-		<Rule id="10" name="跳合闸反校信号" datSet="dsGOOSE" lnName="" doName="" doDesc=""/>
+		<!--Rule id="10" name="跳合闸反校信号" datSet="dsGOOSE" lnName="" doName="" doDesc=""/-->
 		<Rule id="11" name="保护合闸出口信号" datSet="dsGOOSE" lnName="RREC" doName="Tr" doDesc=""/>
 		<Rule id="12" name="启动失灵信号" datSet="" lnName="RBRF" doName="" doDesc=""/>
 		<Rule id="13" name="保护联跳信号" datSet="" lnName="RBRF" doName="" doDesc=""/>
@@ -18,11 +18,11 @@
 		<Rule id="33" name="跳合闸出口硬压板" datSet="dsRelayEna" lnName="" doName="" doDesc="出口@压板"/>
 		<Rule id="34" name="GOOSE输出软压板" datSet="dsRelayEna" lnName="PTRC/RREC" doName="Strp" doDesc="压板"/>
 		<Rule id="35" name="GOOSE输入软压板" datSet="dsRelayEna" lnName="" doName="SPCSO" doDesc="接收@压板"/>
-		<Rule id="36" name="SV输出软压板" datSet="dsRelayEna" lnName="" doName="" doDesc=""/>
+		<!--Rule id="36" name="SV输出软压板" datSet="dsRelayEna" lnName="" doName="" doDesc=""/-->
 		<Rule id="37" name="SV接收软压板" datSet="dsRelayEna" lnName="" doName="SPCSO" doDesc="接收@SV"/>
 		
-		<Rule id="50" name="压板类型备用（预留）" datSet="dsRelayEna" lnName="" doName="" doDesc=""/>
-		<Rule id="51" name="装置运行状态灯" datSet="dsDeviceState" lnName="" doName="" doDesc=""/>
+		<!--Rule id="50" name="压板类型备用（预留）" datSet="dsRelayEna" lnName="" doName="" doDesc=""/>
+		<Rule id="51" name="装置运行状态灯" datSet="dsDeviceState" lnName="" doName="" doDesc=""/-->
 		<Rule id="52" name="装置告警-硬件异常" datSet="dsAlarm/dsWarning/dsGOOSE" lnName="" doName="Alm" doDesc=""/>
 		<Rule id="53" name="装置告警-软件异常" datSet="dsAlarm/dsWarning/dsGOOSE" lnName="" doName="Alm" doDesc=""/>
 		<Rule id="54" name="装置告警-CT/PT断线" datSet="dsAlarm/dsWarning" lnName="" doName="Alm" doDesc="CT@断线/PT@断线"/>

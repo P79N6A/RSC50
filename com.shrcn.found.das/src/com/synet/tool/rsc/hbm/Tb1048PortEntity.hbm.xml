@@ -24,7 +24,7 @@
             <column name="F1047_CODE" not-null="true"/>
         </many-to-one>
         <many-to-one name="tb1006AnalogdataByF1048Code" property-ref="parentCode"
-        	class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" insert="false" update="false">
+        	class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" insert="false" update="false" lazy="false">
             <column name="F1048_CODE"/>
         </many-to-one>
     </class>

@@ -16,7 +16,7 @@ import org.dom4j.io.XMLWriter;
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
-import com.sun.org.apache.regexp.internal.recompile;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -68,21 +68,8 @@ public class TemplateExport{
 		}
 		String path = Constants.tplDir + fileName + ".xml";
 		File file = new File(path);
-		if(file.exists()) { //判断是否存在模版
-			
-			return;
-		} else {
-			try {
-				boolean createNewFile = file.createNewFile();
-				if(!createNewFile) {
-					DialogHelper.showAsynInformation("创建文件失败：" + path);
-					return;
-				}
-			} catch (IOException e) {
-				DialogHelper.showAsynInformation("创建文件失败");
-				e.printStackTrace();
-				return;
-			}
+		if(file.exists()) {
+			ConsoleManager.getInstance().append("模板 " + fileName + " 将被覆盖！");
 		}
 		
 		Document doc = DocumentHelper.createDocument();
@@ -164,7 +151,7 @@ public class TemplateExport{
 		elementPortEntity.addAttribute("f1048Desc", tb1048PortEntity.getF1048Desc());
 		elementPortEntity.addAttribute("f1048Direction", tb1048PortEntity.getF1048Direction()+"");
 		elementPortEntity.addAttribute("f1048Plug", tb1048PortEntity.getF1048Plug()+"");
-		elementPortEntity.addAttribute("fbRefAddr", getRefAddr(tb1048PortEntity.getF1048Code()));
+		elementPortEntity.addAttribute("fbRefAddr", getAlgRefAddr(tb1048PortEntity.getF1048Code()));
 	}
 
 	private void boardAddAttr(Tb1047BoardEntity tb1047BoardEntity,
@@ -182,12 +169,26 @@ public class TemplateExport{
 		elementIedEntity.addAttribute("f1046ConfigVersion", tb1046IedEntity.getF1046ConfigVersion());
 		elementIedEntity.addAttribute("warnRefAddr", getRefAddr(tb1046IedEntity.getF1046Code()));
 	}
+	
+	@SuppressWarnings("unchecked")
+	private String getAlgRefAddr(String code) {
+		List<Tb1006AnalogdataEntity> algdataEntityList = (List<Tb1006AnalogdataEntity>) 
+				statedataService.getListByCriteria(Tb1006AnalogdataEntity.class, "parentCode", code);
+		if(DataUtils.listNotNull(algdataEntityList)) {
+			List<Tb1058MmsfcdaEntity> mmsfcdaEntityList = (List<Tb1058MmsfcdaEntity>) 
+					mmsfcdaService.getListByCriteria(Tb1058MmsfcdaEntity.class, "dataCode", 
+							algdataEntityList.get(0).getF1006Code());
+			if(DataUtils.listNotNull(mmsfcdaEntityList)) {
+				return mmsfcdaEntityList.get(0).getF1058RefAddr();
+			}
+		}
+		return "";
+	}
 
 	@SuppressWarnings("unchecked")
 	private String getRefAddr(String code) {
 		List<Tb1016StatedataEntity> statedataEntityList = (List<Tb1016StatedataEntity>) 
-				statedataService.getListByCriteria(Tb1016StatedataEntity.class, 
-						"parentCode", code);
+				statedataService.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", code);
 		if(DataUtils.listNotNull(statedataEntityList)) {
 			List<Tb1058MmsfcdaEntity> mmsfcdaEntityList = (List<Tb1058MmsfcdaEntity>) 
 					mmsfcdaService.getListByCriteria(Tb1058MmsfcdaEntity.class, 

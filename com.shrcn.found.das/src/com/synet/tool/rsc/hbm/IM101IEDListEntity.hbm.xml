@@ -40,6 +40,12 @@
         <property name="protType">
             <column name="PROT_TYPE" sql-type="varchar" length="96"/>
         </property>
+        <property name="netAIP">
+            <column name="NETA_IP" sql-type="varchar" length="96"/>
+        </property>
+        <property name="netBIP">
+            <column name="NETB_IP" sql-type="varchar" length="96"/>
+        </property>
         <property name="dateService">
             <column name="DATE_SERVICE" sql-type="varchar" length="96"/>
         </property>

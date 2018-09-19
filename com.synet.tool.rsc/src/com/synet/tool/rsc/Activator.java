@@ -7,6 +7,7 @@ import org.osgi.framework.BundleContext;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.TaskManager;
+import com.synet.tool.rsc.util.F1011_NO;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -34,8 +35,12 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		
 		EventManager.getDefault().loadEventHandlers(getClass(), RSCConstants.EVENT_PATH);
-		DictManager.getInstance().init(getClass(), RSCConstants.DICT_PATH);
 		
+		DictManager dictmgr = DictManager.getInstance();
+		dictmgr.init(getClass(), RSCConstants.DICT_PATH);
+		String dicttype = F1011_NO.class.getSimpleName();
+		dictmgr.addDict(dicttype, dicttype, F1011_NO.getDictItems());
+
 		new TaskManager().start();
 	}
 

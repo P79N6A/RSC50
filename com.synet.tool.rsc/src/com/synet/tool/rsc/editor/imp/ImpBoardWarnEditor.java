@@ -108,7 +108,9 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class, dataCode);
 							if (statedataEntity != null) {
 								statedataEntity.setParentCode(tempBoard.getF1047Code());
-								statedataService.save(statedataEntity);
+								tempMmsfcdaEntity.setParentCode(tempBoard.getF1047Code());
+								statedataService.update(statedataEntity);
+								mmsfcdaService.update(tempMmsfcdaEntity);
 								entity.setMatched(DBConstants.MATCHED_OK);
 							}
 						}

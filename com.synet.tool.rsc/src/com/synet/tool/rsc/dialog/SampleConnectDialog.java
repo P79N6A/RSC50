@@ -91,8 +91,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(3));
 		GridData textGridData = new GridData();
-		textGridData.heightHint = 25;
-		textGridData.widthHint = 80;
+		textGridData.widthHint = 150;
 		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
 		
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
@@ -155,7 +154,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		}
 		portAnalogTableData.add(f1006CodeA);
 		Tb1006AnalogdataEntity f1006CodeB = curSel.getF1006CodeB();
-		
 		if(f1006CodeB == null) {
 			f1006CodeB = new Tb1006AnalogdataEntity("采样值数据B相");
 		} else {
@@ -163,7 +161,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		}
 		portAnalogTableData.add(f1006CodeB);
 		Tb1006AnalogdataEntity f1006CodeC = curSel.getF1006CodeC();
-		
 		if(f1006CodeC == null) {
 			f1006CodeC = new Tb1006AnalogdataEntity("采样值数据C相");
 		} else {
@@ -178,7 +175,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("互感器通道关联");
+		newShell.setText("保护采样值关联");
 	}
 	
 	private void addListeners() {
@@ -234,7 +231,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		}
 		analogLeft.setF1006Desc(analogRight.getF1006Desc());
 		analogRight.setF1006Byname(analogLeft.getF1006Byname());
-//		analogLeft = analogRight;
 		int selectRowNum = tableProtctSample.getSelectRowNum();
 		switch (selectRowNum) {
 		case 1:
@@ -248,13 +244,15 @@ public class SampleConnectDialog extends WrappedDialog {
 		default:
 			break;
 		}
+		Tb1046IedEntity curSelIed = getSelIedByName(comboDevice.getItem(preComboDevSel));
+		curSel.setTb1046IedByF1046CodeProt(curSelIed);
 		tableProtctSample.setInput(portAnalogTableData);
 		tableProtctSample.getTable().layout();
 	}
 
 	private Tb1046IedEntity getSelIedByName(String select) {
 		for (Tb1046IedEntity ied : iedEntities) {
-			if(ied.getF1046Desc().equals(select)) {
+			if(ied.getF1046Name().equals(select)) {
 				return ied;
 			}
 		}
@@ -269,7 +267,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(800, 550);
+		return new Point(1000, 650);
 	}
 	
 	@Override
