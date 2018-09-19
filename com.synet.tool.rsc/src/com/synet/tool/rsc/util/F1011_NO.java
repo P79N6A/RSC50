@@ -217,4 +217,14 @@ public enum F1011_NO {
 		}
 		return (type == null) ? F1011_NO.ST_R19 : type;
 	}
+	
+	public static String[][] getDictItems() {
+		int size = F1011_NO.values().length;
+		String[][] items = new String[size][2];
+		for (int i=0; i<size; i++) {
+			F1011_NO typ = F1011_NO.values()[i];
+			items[i] = new String[] {typ.getId()+"", typ.getName()};
+		}
+		return items;
+	}
 }

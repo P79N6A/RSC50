@@ -20,6 +20,8 @@ public class IM101IEDListEntity {
 	private String protClassify;		//保护分类（国产、进口）
 	private String protModel;			//保护型号
 	private String protType;			//保护类型
+	private String netAIP;				//A网IP
+	private String netBIP;				//B网IP
 	private String dateService;			//投运日期
 	private String dateProduct;			//出厂日期
 	private String productCode;			//出厂编号
@@ -110,6 +112,18 @@ public class IM101IEDListEntity {
 	}
 	public void setProtType(String protType) {
 		this.protType = protType;
+	}
+	public String getNetAIP() {
+		return netAIP;
+	}
+	public void setNetAIP(String netAIP) {
+		this.netAIP = netAIP;
+	}
+	public String getNetBIP() {
+		return netBIP;
+	}
+	public void setNetBIP(String netBIP) {
+		this.netBIP = netBIP;
 	}
 	public String getDateService() {
 		return dateService;

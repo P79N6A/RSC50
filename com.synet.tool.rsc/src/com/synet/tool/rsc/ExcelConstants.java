@@ -24,6 +24,8 @@ public interface ExcelConstants {
 	String IM101_PROT_CLASSIFY  = "保护分类(国产、进口)";
 	String IM101_PROT_MODEL  = "保护型号";
 	String IM101_PROT_TYPE  = "保护类型";
+	String IM101_NETA_IP  = "A网IP";
+	String IM101_NETB_IP  = "B网IP";
 	String IM101_DATE_SERVICE  = "投运日期";
 	String IM101_DATE_PRODUCT  = "出厂日期";
 	String IM101_PRODUCT_CODE  = "出厂编号";
@@ -36,6 +38,8 @@ public interface ExcelConstants {
 			IM101_DEV_DESC,
 			IM101_BAY,
 			IM101_CUBICLE,
+			IM101_NETA_IP,
+			IM101_NETB_IP,
 //			IM101_MANUFACTUROR,
 //			IM101_DEV_TYPE,
 //			IM101_DEV_VERSION,

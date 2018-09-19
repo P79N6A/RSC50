@@ -15,6 +15,7 @@ import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.io.scd.SclUtil;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
@@ -78,13 +79,15 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 							mmsFcda.setF1058DataType(DBConstants.DATA_ST);
 							Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 							mmsFcda.setDataCode(statedata.getF1016Code());
+							mmsFcda.setParentCode(statedata.getParentCode());
 							if (isStrap(datSet)) { // 添加压板
 								strapService.addStrap(statedata, fcdaDesc);
 							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);
-							String algcode = addAlgdata(fcdaEl, fcdaDesc, type.getId());
-							mmsFcda.setDataCode(algcode);
+							Tb1006AnalogdataEntity algdata = addAlgdata(fcdaEl, fcdaDesc, type.getId());
+							mmsFcda.setDataCode(algdata.getF1006Code());
+							mmsFcda.setParentCode(algdata.getParentCode());
 						}
 						i++;
 					}

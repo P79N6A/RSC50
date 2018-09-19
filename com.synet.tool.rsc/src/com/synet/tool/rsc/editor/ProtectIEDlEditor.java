@@ -161,11 +161,27 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		super.buildUI(container);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
 		comp.setLayout(SwtUtil.getGridLayout(4));
-		SwtUtil.createLabel(comp, "", new GridData(780, SWT.DEFAULT));
-		btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
-		btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
-		btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
-		createCompByEntryName(comp);
+		if (!needConfig()) {
+			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
+		} else {
+			SwtUtil.createLabel(comp, "", new GridData(780, SWT.DEFAULT));
+			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
+			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
+			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
+			createCompByEntryName(comp);
+		}
+	}
+	
+	private boolean needConfig() {
+		int type = iedEntity.getF1046Type();
+		switch (type) {
+		case DBConstants.IED_PROT:
+		case DBConstants.IED_MU:
+		case DBConstants.IED_MT:
+		case DBConstants.IED_TERM:
+			return true;
+		}
+		return false;
 	}
 	
 	private void createCompByEntryName(Composite comp) {
@@ -267,6 +283,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 
 	protected void addListeners() {
+		if (!needConfig()) {
+			return;
+		}
 		SelectionListener selectionListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -430,8 +449,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.DEV_WARNING:
 			if(!DataUtils.listNotNull(mmsfcdaEntities)) {
 				String[] names = DictManager.getInstance().getDictNames("DS_WARN");
-				mmsfcdaEntities = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
+				mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
 					tableDeviceWarning.setInput(mmsfcdaEntities);
 					tableDeviceName.setInput(iedEntityList);
 			}
@@ -482,6 +500,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		
 	@Override
 	public void initData() {
+		if (!needConfig()) {
+			return;
+		}
 		//板卡端口 
 		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(iedEntity);
 		tableBoardPort.setInput(portEntities);

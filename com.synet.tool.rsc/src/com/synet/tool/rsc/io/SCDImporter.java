@@ -205,10 +205,12 @@ public class SCDImporter implements IImporter {
 				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
 				mmsServer.setTb1046IedByF1046Code(ied);
 				String[] ips = IedInfoDao.getIPs(iedName);
-				if (ips.length > 0) {
+				if (ips != null && ips.length > 0) {
 					mmsServer.setF1070IpA(ips[0]);
+					ied.setF1046aNetIp(ips[0]);
 					if (ips.length > 1) {
 						mmsServer.setF1070IpB(ips[1]);
+						ied.setF1046bNetIp(ips[1]);
 					}
 				} else {
 					mmsServer.setF1070IpA("");

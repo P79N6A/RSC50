@@ -377,6 +377,7 @@ create table TB1058_MMSFCDA
    F1058_Desc           varchar(96),
    F1058_DataType       INT not null,
    DATA_CODE            varchar(48) not null,
+   Parent_CODE            varchar(48) not null,
    primary key (F1058_CODE)
 );
 
@@ -427,6 +428,7 @@ create table TB1061_POUT
    CB_CODE              varchar(48) not null,
    F1061_RefAddr        varchar(48) not null,
    F1061_Index          INT not null,
+   F1011_NO          	INT not null,
    F1061_Desc           varchar(96),
    F1064_CODE           varchar(48),
    DATA_CODE            varchar(48) not null,
@@ -684,6 +686,8 @@ create table IM101_Ied_List
    PROT_CLASSIFY        varchar(96),
    PROT_MODEL           varchar(96),
    PROT_TYPE           	varchar(96),
+   NETA_IP           	varchar(96),
+   NETB_IP           	varchar(96),
    DATE_SERVICE         varchar(96),
    DATE_PRODUCT         varchar(96),
    PRODUCT_CODE         varchar(96),
