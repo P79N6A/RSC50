@@ -7,6 +7,7 @@ package com.synet.tool.rsc.model;
 public class Tb1016StatedataEntity {
     private String f1016Code;
     private String f1016Desc;
+    private String f1016AddRef;
     private Integer f1016Safelevel;
     private String parentCode;
     private int f1011No;
@@ -47,7 +48,15 @@ public class Tb1016StatedataEntity {
         this.f1016Desc = f1016Desc;
     }
 
-    public Integer getF1016Safelevel() {
+    public String getF1016AddRef() {
+		return f1016AddRef;
+	}
+
+	public void setF1016AddRef(String f1016AddRef) {
+		this.f1016AddRef = f1016AddRef;
+	}
+
+	public Integer getF1016Safelevel() {
         return f1016Safelevel;
     }
 

@@ -10,6 +10,9 @@
         <property name="f1006Desc">
             <column name="F1006_DESC" sql-type="varchar" length="96"/>
         </property>
+        <property name="f1006AddRef">
+            <column name="F1006_ADDREF" sql-type="varchar" length="96"/>
+        </property>
         <property name="f1006Safelevel">
             <column name="F1006_SAFELEVEL" sql-type="int"/>
         </property>

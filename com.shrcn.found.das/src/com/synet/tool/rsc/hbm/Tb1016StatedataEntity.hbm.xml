@@ -11,6 +11,9 @@
         <property name="f1016Desc">
             <column name="F1016_DESC" sql-type="varchar" length="96"/>
         </property>
+        <property name="f1016AddRef">
+            <column name="F1016_ADDREF" sql-type="varchar" length="96"/>
+        </property>
         <property name="f1016Safelevel">
             <column name="F1016_SAFELEVEL" sql-type="int"/>
         </property>

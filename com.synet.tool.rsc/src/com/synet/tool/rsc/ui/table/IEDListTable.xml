@@ -8,6 +8,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="装置名称" editor="none" name="devDesc" width="100" default=""/>
   <field desc="所属间隔" editor="none" name="bay" width="100" default=""/> 
   <field desc="所属屏柜" editor="none" name="cubicle" width="100" default=""/> 
+  <field desc="A网IP" editor="none" name="netAIP" width="100" default=""/> 
+  <field desc="B网IP" editor="none" name="netBIP" width="100" default=""/> 
   <!-- <field desc="生产厂家" editor="none" name="manufacturor" width="100" default=""/> 
   <field desc="装置型号" editor="none" name="devType" width="100" default=""/> 
   <field desc="装置版本号" editor="none" name="devVersion" width="100" default=""/> 

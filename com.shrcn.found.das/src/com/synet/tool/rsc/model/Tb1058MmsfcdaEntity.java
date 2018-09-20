@@ -11,6 +11,7 @@ public class Tb1058MmsfcdaEntity {
     private String f1058Desc;
     private int f1058DataType;
     private String dataCode;
+    private String parentCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1054RcbEntity tb1054RcbByF1054Code;
 
@@ -62,7 +63,15 @@ public class Tb1058MmsfcdaEntity {
         this.dataCode = dataCode;
     }
 
-    @Override
+    public String getParentCode() {
+		return parentCode;
+	}
+
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

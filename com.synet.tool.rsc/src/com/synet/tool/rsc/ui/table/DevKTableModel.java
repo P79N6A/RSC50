@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.Display;
+
 import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventConstants;
@@ -25,6 +27,7 @@ import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
 import com.synet.tool.rsc.dialog.RefAddrSelectDialog;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.service.DefaultService;
@@ -163,7 +166,18 @@ public class DevKTableModel extends RKTableModel {
 				|| TableFactory.CABLE_TABLE.equals(tableName) 
 				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
-			reloadPrj();
+		}
+		if (TableFactory.REGION_LIST_TABLE.equals(tableName)) {
+			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
+			if (regionEntity.getF1049Name() != null) {
+				Display.getCurrent().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						reloadPrj();
+					}
+				});
+			}
 		}
 	}
 	

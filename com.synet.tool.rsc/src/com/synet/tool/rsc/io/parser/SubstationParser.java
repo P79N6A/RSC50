@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.dom4j.Element;
 
+import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
@@ -49,6 +50,9 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	@Override
 	public void parse() {
 		Element staEl = XMLDBHelper.selectSingleNode("/SCL/Substation");
+		if (staEl == null) {
+			return;
+		}
 		Tb1041SubstationEntity station = staServ.getCurrSubstation();
 		// 连接点
 		List<Element> connEls = DOM4JNodeHelper.selectNodes(staEl, "./VoltageLevel/Bay/ConnectivityNode");
@@ -203,5 +207,20 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				}
 			}
 		}
+	}
+
+	public void init() {
+		Element staEl = XMLDBHelper.selectSingleNode("/SCL/Substation");
+		// 变电站
+		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
+		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
+		if (staEl == null) {
+			station.setF1041Name(Constants.CURRENT_PRJ_NAME);
+			station.setF1041Desc(Constants.CURRENT_PRJ_NAME);
+		} else {
+			station.setF1041Name(staEl.attributeValue("name"));
+			station.setF1041Desc(staEl.attributeValue("desc"));
+		}
+		beanDao.insert(station);		
 	}
 }

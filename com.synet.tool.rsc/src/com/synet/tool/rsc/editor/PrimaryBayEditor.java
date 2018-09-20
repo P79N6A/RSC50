@@ -131,7 +131,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		compSwitch.setLayout(SwtUtil.getGridLayout(2));
 		//开关刀闸状态-左侧
 		GridData leftdata = new GridData(GridData.FILL_VERTICAL);
-		leftdata.widthHint = 640;
+		leftdata.widthHint = 720;
 		Composite comLeft = SwtUtil.createComposite(compSwitch, leftdata, 1);
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
 		GridData gdlb_2 = new GridData(200,25);
@@ -235,6 +235,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), 
 							curEntryName, ctvtsecondaryEntity);
 					chnDialog.open();
+					beandao.update(ctvtsecondaryEntity);
+					tableCtvtsecondary.refresh();
 				} else if(object == btnSampleConnect) {
 					Object obj = tableProtectSample.getSelection();
 					if(obj == null) {
@@ -244,6 +246,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
 							curEntryName, protmmxuEntity, iedEntities);
 					sampleDialog.open();
+					beandao.update(protmmxuEntity);
+					tableProtectSample.refresh();
 				} else if(object == btnAdd) {
 					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
 					if(statedataEntity == null) {
@@ -289,7 +293,6 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					ctvtsecondaryService.addCtvtsecondary(select, defaultRow);
 					tableCtvtsecondary.addRow(defaultRow);
 					tableCtvtsecondary.refresh();
-					
 				} else if(object == btnDelTsf) {
 					ctvtsecondaryService.delCtvtsecondary((Tb1067CtvtsecondaryEntity) 
 							tableCtvtsecondary.getSelection());

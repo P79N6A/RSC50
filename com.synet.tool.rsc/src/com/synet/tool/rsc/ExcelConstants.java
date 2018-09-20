@@ -24,6 +24,8 @@ public interface ExcelConstants {
 	String IM101_PROT_CLASSIFY  = "保护分类(国产、进口)";
 	String IM101_PROT_MODEL  = "保护型号";
 	String IM101_PROT_TYPE  = "保护类型";
+	String IM101_NETA_IP  = "A网IP";
+	String IM101_NETB_IP  = "B网IP";
 	String IM101_DATE_SERVICE  = "投运日期";
 	String IM101_DATE_PRODUCT  = "出厂日期";
 	String IM101_PRODUCT_CODE  = "出厂编号";
@@ -36,6 +38,8 @@ public interface ExcelConstants {
 			IM101_DEV_DESC,
 			IM101_BAY,
 			IM101_CUBICLE,
+			IM101_NETA_IP,
+			IM101_NETB_IP,
 //			IM101_MANUFACTUROR,
 //			IM101_DEV_TYPE,
 //			IM101_DEV_VERSION,
@@ -57,22 +61,22 @@ public interface ExcelConstants {
 	String IM102_DEV_CODEA = "端口A装置代码";
 	String IM102_DEV_NAMEA = "端口A装置Name";
 	String IM102_DEV_DESCA = "端口A装置名称";
-	String IM102_BOARD_PORT_CODEA = "装置插件/端口号(端口A)";
-//	String IM102_BOARD_CODEA = "端口A板卡编号";
-//	String IM102_PORT_CODEA = "端口A端口编号";
+	String IM102_BOARD_PORT_CODEA = "装置插件/端口号(端口A)";//现在不用
+	String IM102_BOARD_CODEA = "端口A板卡编号";
+	String IM102_PORT_CODEA = "端口A端口编号";
 	String IM102_CUBICLE_CODEA = "端口A屏柜代码";
 	String IM102_CUBICLE_DESCA = "端口A屏柜名称";
-//	String IM102_CORE_CODEA = "端口A芯线编号";
+	String IM102_CORE_CODEA = "端口A芯线编号";
 	String IM102_DISTRIB_FRAME_CODEA = "端口A光配架端口编号";
 	String IM102_DEV_CODEB = "端口B装置代码";
 	String IM102_DEV_NAMEB = "端口B装置Name";
 	String IM102_DEV_DESCB = "端口B装置名称";
-	String IM102_BOARD_PORT_CODEB = "装置插件/端口号(端口B)";
-//	String IM102_BOARD_CODEB = "端口B板卡编号";
-//	String IM102_PORT_CODEB = "端口B端口编号";
+	String IM102_BOARD_PORT_CODEB = "装置插件/端口号(端口B)";//现在不用
+	String IM102_BOARD_CODEB = "端口B板卡编号";
+	String IM102_PORT_CODEB = "端口B端口编号";
 	String IM102_CUBICLE_CODEB = "端口B屏柜代码";
 	String IM102_CUBICLE_DESCB = "端口B屏柜名称";
-//	String IM102_CORE_CODEB = "端口B芯线编号";
+	String IM102_CORE_CODEB = "端口B芯线编号";
 	String IM102_DISTRIB_FRAME_CODEB = "端口B光配架端口编号";
 	String[] IM102_FIBRE_LIST_FIELDS = {
 			IM102_CABLE_CODE,
@@ -80,22 +84,22 @@ public interface ExcelConstants {
 			IM102_DEV_CODEA,
 			IM102_DEV_NAMEA,
 			IM102_DEV_DESCA,
-			IM102_BOARD_PORT_CODEA,
-//			IM102_BOARD_CODEA,
-//			IM102_PORT_CODEA,
+//			IM102_BOARD_PORT_CODEA,
+			IM102_BOARD_CODEA,
+			IM102_PORT_CODEA,
 			IM102_CUBICLE_CODEA,
 			IM102_CUBICLE_DESCA,
-//			IM102_CORE_CODEA,
+			IM102_CORE_CODEA,
 			IM102_DISTRIB_FRAME_CODEA,
 			IM102_DEV_CODEB,
 			IM102_DEV_NAMEB,
 			IM102_DEV_DESCB,
-			IM102_BOARD_PORT_CODEB,
-//			IM102_BOARD_CODEB,
-//			IM102_PORT_CODEB,
+//			IM102_BOARD_PORT_CODEB,
+			IM102_BOARD_CODEB,
+			IM102_PORT_CODEB,
 			IM102_CUBICLE_CODEB,
 			IM102_CUBICLE_DESCB,
-//			IM102_CORE_CODEB,
+			IM102_CORE_CODEB,
 			IM102_DISTRIB_FRAME_CODEB
 	};
 	

@@ -5,8 +5,8 @@ tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
   <field desc="代码" editor="none" name="f1048Code" width="100" default=""/>
-  <field desc="装置名称" editor="none" name="tb1047BoardByF1047Code.tb1046IedByF1046Code.f1046Name" width="100" default=""/> 
-  <field desc="板卡" editor="none" name="tb1047BoardByF1047Code.f1047Desc" width="60" default=""/> 
+  <field desc="板卡类型" editor="none" name="tb1047BoardByF1047Code.f1047Desc" width="60" default=""/> 
+  <field desc="板卡序号" editor="none" name="tb1047BoardByF1047Code.f1047Slot" width="60" default=""/> 
   <field desc="端口序号" editor="none" name="f1048No" width="100" default=""/>
   <field desc="描述" editor="none" name="f1048Desc" width="60" default=""/> 
   <field desc="方向" dict="PORT_DIRECTION" editor="none" name="f1048Direction" width="60" default=""/> 

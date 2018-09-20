@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.model;
 
 
+
 /**
  * 输出虚端子
  * Created by chunc on 2018/8/7.
@@ -8,9 +9,11 @@ package com.synet.tool.rsc.model;
 public class Tb1061PoutEntity {
     private String f1061Code;
     private String cbCode;
-    private String f1061RefAddr;
     private int f1061Index;
+    private int f1011No;
+    private String f1061Byname;
     private String f1061Desc;
+    private String f1061RefAddr;
     private String dataCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private BaseCbEntity cbEntity;
@@ -21,8 +24,8 @@ public class Tb1061PoutEntity {
     public Tb1061PoutEntity() {
 	}
     
-    public Tb1061PoutEntity(String f1061Desc) {
-		this.f1061Desc = f1061Desc;
+	public Tb1061PoutEntity(String f1061Byname) {
+		this.f1061Byname = f1061Byname;
 	}
     
     public String getF1061Code() {
@@ -57,7 +60,23 @@ public class Tb1061PoutEntity {
         this.f1061Index = f1061Index;
     }
 
-    public String getF1061Desc() {
+    public int getF1011No() {
+		return f1011No;
+	}
+
+	public void setF1011No(int f1011No) {
+		this.f1011No = f1011No;
+	}
+
+	public String getF1061Byname() {
+		return f1061Byname;
+	}
+
+	public void setF1061Byname(String f1061Byname) {
+		this.f1061Byname = f1061Byname;
+	}
+
+	public String getF1061Desc() {
         return f1061Desc;
     }
 
@@ -97,6 +116,7 @@ public class Tb1061PoutEntity {
         Tb1061PoutEntity that = (Tb1061PoutEntity) o;
 
         if (f1061Index != that.f1061Index) return false;
+        if (f1011No != that.f1011No) return false;
         if (cbCode != null ? !cbCode.equals(that.cbCode) : that.cbCode != null) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
         if (f1061Code != null ? !f1061Code.equals(that.f1061Code) : that.f1061Code != null) return false;
@@ -112,6 +132,7 @@ public class Tb1061PoutEntity {
         result = 31 * result + (cbCode != null ? cbCode.hashCode() : 0);
         result = 31 * result + (f1061RefAddr != null ? f1061RefAddr.hashCode() : 0);
         result = 31 * result + f1061Index;
+        result = 31 * result + f1011No;
         result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);
         return result;
@@ -140,5 +161,4 @@ public class Tb1061PoutEntity {
     public void setTb1064StrapByF1064Code(Tb1064StrapEntity tb1064StrapByF1064Code) {
         this.tb1064StrapByF1064Code = tb1064StrapByF1064Code;
     }
-
 }
