@@ -34,7 +34,7 @@ public class IEDBoardHandler extends RscSheetHandler {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
-			if (entity.getBoardIndex() != null && entity.getBoardCode() != null) { 
+			if (entity.getBoardIndex() != null) { 
 				entity.setMatched(DBConstants.MATCHED_NO);
 				entity.setDevName(devName);
 				entity.setManufacturor(manufacturor);
