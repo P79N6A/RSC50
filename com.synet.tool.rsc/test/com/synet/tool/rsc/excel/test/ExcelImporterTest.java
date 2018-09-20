@@ -21,7 +21,7 @@ import com.synet.tool.rsc.service.PhyscialAreaService;
 
 public class ExcelImporterTest {
 	
-	private static final String dir = "./test/excel/";
+	private static final String dir = "./test/excel/caihong/";
 	private BeanDaoImpl beandao;
 	private PhyscialAreaService service;
 	
@@ -37,7 +37,8 @@ public class ExcelImporterTest {
 	
 	@Test
 	public void testImportExcelIEDBoard() {
-		String path = dir + "装置板卡端口.xlsx";
+//		String path = dir + "装置板卡端口.xlsx";
+		String path = dir + "装置板卡与端口整理09201523(1).xlsx";
 		int excelHeadRow = 0;
 		Map<Integer, String> excelColInfo = new TableHeadParser().getTableHeadInfo(path, excelHeadRow);
 		assertTrue(ExcelImporter.importExcelData(ExcelConstants.IM103_IED_BOARD, path, excelHeadRow, excelColInfo));
