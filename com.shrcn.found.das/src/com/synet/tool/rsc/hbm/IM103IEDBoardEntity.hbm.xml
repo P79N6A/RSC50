@@ -32,7 +32,7 @@
             <column name="BOARD_TYPE" sql-type="varchar" length="96"/>
         </property>
         <property name="portNum">
-            <column name="PORT_NUM" sql-type="varchar" length="96"/>
+            <column name="PORT_NUM" sql-type="varchar" length="512"/>
         </property>
         <property name="matched">
             <column name="MATCHED" sql-type="int"/>

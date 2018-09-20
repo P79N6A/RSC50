@@ -747,7 +747,7 @@ create table IM103_Ied_Board
    BOARD_INDEX			varchar(96),
    BOARD_MODEL			varchar(96),	
    BOARD_TYPE			varchar(96),	
-   PORT_NUM       		varchar(96),
+   PORT_NUM       		varchar(512),
    MATCHED           	INT,
    primary key (IM103_CODE)
 );
