@@ -111,7 +111,7 @@ public interface ExcelConstants {
 	String IM103_BOARD_INDEX = "板卡序号";
 	String IM103_BOARD_MODEL = "板卡型号";
 	String IM103_BOARD_TYPE = "板卡类别/用途";
-	String IM103_PORT_NUM = "端口数";
+	String IM103_PORT_NUM = "端口";
 	String[] IM103_IED_BOARD_FIELDS = {
 			IM103_DEV_TYPE,
 			IM103_MANUFACTUROR,

@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Display;
 import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
@@ -119,6 +120,19 @@ public class DevKTableModel extends RKTableModel {
 		super.doSetContentAt(col, row, value);
 		Object obj = getItem(row);
 		saveData(obj);
+		IField f = fields[col];
+		if (TableFactory.REGION_LIST_TABLE.equals(tableName)
+				&& "区域名称".equals(f.getTitle())) {
+			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
+			if (regionEntity.getF1049Name() != null) {
+				Display.getCurrent().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						reloadPrj();
+					}
+				});
+			}
+		}
 	}
 	
 	/**
@@ -137,18 +151,6 @@ public class DevKTableModel extends RKTableModel {
 				|| TableFactory.CABLE_TABLE.equals(tableName) 
 				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
-		}
-		if (TableFactory.REGION_LIST_TABLE.equals(tableName)) {
-			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
-			if (regionEntity.getF1049Name() != null) {
-				Display.getCurrent().asyncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						reloadPrj();
-					}
-				});
-			}
 		}
 	}
 	

@@ -7,8 +7,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.table.KTableEditorDialog;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.tool.found.das.BeanDaoService;
@@ -36,7 +39,7 @@ public class BaySelectDialog extends KTableEditorDialog {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
-		SwtUtil.createLabel(composite, "屏柜选择：", SwtUtil.bt_gd);
+		SwtUtil.createLabel(composite, "间隔选择：", SwtUtil.bt_gd);
 		combo = SwtUtil.createCombo(composite,  SwtUtil.bt_hd);
 		combo.setItems(items);
 		combo.setText(oldData);
@@ -67,10 +70,19 @@ public class BaySelectDialog extends KTableEditorDialog {
 		if (buttonId == OK) {
 			int selectionIndex = combo.getSelectionIndex();
 			if(selectionIndex > -1) {
+				String oldBayCode = ied.getF1042Code();
 				Tb1042BayEntity selected = allBay.get(selectionIndex);
-				ied.setF1042Code(selected.getF1042Code());
-				ied.setTb1042BaysByF1042Code(selected);
-				instance.update(ied);
+				if (selected != null && !selected.getF1042Code().equals(oldBayCode)) {
+					ied.setF1042Code(selected.getF1042Code());
+					ied.setTb1042BaysByF1042Code(selected);
+					instance.update(ied);
+					Display.getCurrent().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
+						}
+					});
+				}
 			}
 		}
 		super.buttonPressed(buttonId);
@@ -84,7 +96,7 @@ public class BaySelectDialog extends KTableEditorDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(280, 150);
+		return new Point(320, 150);
 	}
 	
 }

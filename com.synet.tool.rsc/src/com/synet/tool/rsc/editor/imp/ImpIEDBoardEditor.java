@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
@@ -131,37 +132,50 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 					continue;
 				}
 				String portNumStr = entity.getPortNum();
-				int portNum = 0;
-				if (portNumStr != null) {
-					try {
-						portNum = Integer.valueOf(portNumStr);
-					} catch(Exception e) {
-					}
-				}
+//				int portNum = 0;
+//				if (portNumStr != null) {
+//					try {
+//						portNum = Integer.valueOf(portNumStr);
+//					} catch(Exception e) {
+//					}
+//				}
 				Tb1047BoardEntity boardEntity = RscObjectUtils.createBoardEntity();
 				boardEntity.setTb1046IedByF1046Code(ied);
 				boardEntity.setF1047Slot(entity.getBoardIndex());
 				boardEntity.setF1047Desc(entity.getBoardModel());
 				boardEntity.setF1047Type(entity.getBoardType());
-				if (portNum < 1) { // 只导入端口数>0的板卡
-					continue;
-				}
+//				if (portNum < 1) { // 只导入端口数>0的板卡
+//					continue;
+//				}
 				boardEntityService.insert(boardEntity);
 				boardNum++;
-				if (portNum > 0) {
-					List<Tb1048PortEntity> ports = new ArrayList<>();
-					char A = 'A';
-					for (int i = 0; i < portNum; i++) {
-						char c = (char) (A + i);
+				if (!StringUtil.isEmpty(portNumStr)) {
+					List<Tb1048PortEntity> portList = new ArrayList<>();
+					String[] ports = portNumStr.split(",");
+					for (String port : ports) {
 						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
 						portEntity.setTb1047BoardByF1047Code(boardEntity);
-						portEntity.setF1048No("" + c);
+						portEntity.setF1048No(port);
 						portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
 						portEntity.setF1048Plug(DBConstants.PLUG_FC);
-						ports.add(portEntity);
+						portList.add(portEntity);
 					}
-					beandao.insertBatch(ports);
+					beandao.insertBatch(portList);
 				}
+//				if (portNum > 0) {
+//					List<Tb1048PortEntity> ports = new ArrayList<>();
+//					char A = 'A';
+//					for (int i = 0; i < portNum; i++) {
+//						char c = (char) (A + i);
+//						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
+//						portEntity.setTb1047BoardByF1047Code(boardEntity);
+//						portEntity.setF1048No("" + c);
+//						portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
+//						portEntity.setF1048Plug(DBConstants.PLUG_FC);
+//						ports.add(portEntity);
+//					}
+//					beandao.insertBatch(ports);
+//				}
 			}
 			// 更新板卡数量
 			ied.setF1046boardNum(boardNum);
