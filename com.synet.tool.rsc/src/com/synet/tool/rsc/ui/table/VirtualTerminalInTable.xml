@@ -10,6 +10,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="压板(对保护)" editor="PinBoardEditor" name="tb1062PinByF1062CodePRecv.tb1064StrapByF1064Code.f1064Desc" width="120" default=""/>
   <field desc="发送装置" editor="none" name="tb1046IedByF1046CodeIedSend.f1046Name" width="100" default=""/> 
   <field desc="发送虚端子参引" editor="none" name="tb1061PoutByF1061CodePSend.f1061RefAddr" width="150" default=""/> 
-  <field desc="命令确认信号(参引，对智能终端)" dict="CONVCHK" name="tb1061PoutByF1061CodeConvChk1.f1061Desc" width="250" default=""/>
-  <field desc="命令出口信号(参引，对智能终端)" dict="CONVCHK" name="tb1061PoutByF1061CodeConvChk2.f1061Desc" width="250" default=""/> 
+  <field desc="命令确认信号(参引，对智能终端)" editor="ConvChk1Editor" name="tb1061PoutByF1061CodeConvChk1.f1061Desc" width="250" default=""/>
+  <field desc="命令出口信号(参引，对智能终端)" editor="ConvChk2Editor" name="tb1061PoutByF1061CodeConvChk2.f1061Desc" width="250" default=""/> 
 </table>

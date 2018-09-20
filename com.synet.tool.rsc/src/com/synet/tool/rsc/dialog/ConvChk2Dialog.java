@@ -13,31 +13,31 @@ import com.shrcn.found.ui.table.KTableEditorDialog;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
-import com.synet.tool.rsc.model.Tb1064StrapEntity;
-import com.synet.tool.rsc.service.StrapEntityService;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.service.PoutEntityService;
 
-public class PoutBaordEdtDialog extends KTableEditorDialog{
+public class ConvChk2Dialog extends KTableEditorDialog {
 
-	private Tb1061PoutEntity poutEntity;
 	private Combo combo;
 	private String[] items;
 	private String oldData;
-	private StrapEntityService strapEntityService;
-	private List<Tb1064StrapEntity> staEntities;
+	private List<Tb1061PoutEntity> poutEntitys;
+	private Tb1063CircuitEntity circuit;
+	private PoutEntityService service;
 
-	public PoutBaordEdtDialog(Shell parentShell, Object item) {
+	public ConvChk2Dialog(Shell parentShell, Object item) {
 		super(parentShell, item);
-		poutEntity = (Tb1061PoutEntity) item;
+		circuit = (Tb1063CircuitEntity) item;
 		
 	}
-
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		initData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
-		SwtUtil.createLabel(composite, "板卡选择：", SwtUtil.bt_gd);
+		SwtUtil.createLabel(composite, "出口信号：", SwtUtil.bt_gd);
 		combo = SwtUtil.createCombo(composite,  SwtUtil.bt_hd);
 		combo.setItems(items);
 		combo.setText(oldData);
@@ -45,19 +45,19 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 	}
 	
 	private void initData() {
-		Tb1046IedEntity iedEntity = poutEntity.getTb1046IedByF1046Code();
-		strapEntityService = new StrapEntityService();
-		staEntities = strapEntityService.getByIed(iedEntity);
-		int size = staEntities.size();
+		Tb1046IedEntity iedSend = circuit.getTb1046IedByF1046CodeIedSend();
+		service = new PoutEntityService();
+		poutEntitys = service.getPoutEntityByProperties(iedSend, null);
+		int size = poutEntitys.size();
 		items = new String[size];
 		for (int i = 0; i < size; i++) {
-			items[i] = staEntities.get(i).getF1064Desc();
+			items[i] = poutEntitys.get(i).getF1061Desc();
 		}
-		Tb1064StrapEntity strapEntity = poutEntity.getTb1064StrapByF1064Code();
-		if(strapEntity == null) {
+		Tb1061PoutEntity poutEntity = circuit.getTb1061PoutByF1061CodeConvChk2();
+		if(poutEntity == null) {
 			oldData = "*初始值为空*";
 		} else {
-			oldData = strapEntity.getF1064Desc();
+			oldData = poutEntity.getF1061Desc();
 		}
 	}
 	
@@ -67,9 +67,9 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 		if (buttonId == OK) {
 			int selectionIndex = combo.getSelectionIndex();
 			if(selectionIndex > -1) {
-				Tb1064StrapEntity strapEntity = staEntities.get(selectionIndex);
-				poutEntity.setTb1064StrapByF1064Code(strapEntity);
-				strapEntityService.update(poutEntity);
+				Tb1061PoutEntity poutEntity = poutEntitys.get(selectionIndex);
+				circuit.setTb1061PoutByF1061CodeConvChk2(poutEntity);
+				service.update(circuit);
 			}
 		}
 		super.buttonPressed(buttonId);
@@ -78,7 +78,7 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("开出虚端子板卡配置"); 
+		newShell.setText("命令出口信号"); 
 	}
 	
 	@Override

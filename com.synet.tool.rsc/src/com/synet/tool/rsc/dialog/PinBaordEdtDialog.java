@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.dialog;
 
+import java.util.List;
+
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
@@ -7,22 +9,27 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.table.KTableEditorDialog;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
-import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
+import com.synet.tool.rsc.service.StrapEntityService;
 
 public class PinBaordEdtDialog extends KTableEditorDialog {
 
-	private Tb1063CircuitEntity circuitEntity;
 	private Combo combo;
 	private String[] items;
 	private String oldData;
+	private List<Tb1064StrapEntity> staEntities;
+	private Tb1062PinEntity pinEntity;
+	private StrapEntityService strapEntityService;
 
 	public PinBaordEdtDialog(Shell parentShell, Object item) {
 		super(parentShell, item);
-		circuitEntity = (Tb1063CircuitEntity) item;
+		pinEntity = (Tb1062PinEntity) ((Tb1063CircuitEntity) item)
+				.getTb1062PinByF1062CodePRecv();
 	}
 	
 	@Override
@@ -40,46 +47,32 @@ public class PinBaordEdtDialog extends KTableEditorDialog {
 	
 
 	private void initData() {
-		MmsfcdaService mmsfcdaService = new MmsfcdaService();
-		String[] names = DictManager.getInstance().getDictNames("DS_AIN");
-//		String devName = portEntity.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
-//		mmsList = mmsfcdaService.getMmsdcdaByDataSet(devName, names);
-//		
-//		int size = mmsList.size();
-//		items = new String[size];
-//		for (int i = 0; i < size; i++) {
-//			items[i] = mmsList.get(i).getF1058RefAddr();
-//		}
-//		Tb1006AnalogdataEntity analogData = portEntity.getTb1006AnalogdataByF1048Code();
-//		if(analogData == null) {
-//			oldData = "*初始值为空*";
-//			
-//		} else {
-//			Tb1058MmsfcdaEntity mmsFcda = analogData.getTb1058FcdaByF1058Code();
-//			if(mmsFcda == null) {
-//				oldData = "*初始值为空*";
-//			} else {
-//				oldData = mmsFcda.getF1058RefAddr();
-//			}
-//		}
+		Tb1046IedEntity iedEntity = pinEntity.getTb1046IedByF1046Code();
+		strapEntityService = new StrapEntityService();
+		staEntities = strapEntityService.getByIed(iedEntity);
+		int size = staEntities.size();
+		items = new String[size];
+		for (int i = 0; i < size; i++) {
+			items[i] = staEntities.get(i).getF1064Desc();
+		}
+		Tb1064StrapEntity strapEntity = pinEntity.getTb1064StrapByF1064Code();
+		if(strapEntity == null) {
+			oldData = "*初始值为空*";
+		} else {
+			oldData = strapEntity.getF1064Desc();
+		}
 	}
 	
 	
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == OK) {
-//			int selectionIndex = combo.getSelectionIndex();
-//			if(selectionIndex > -1) {
-//				Tb1058MmsfcdaEntity tb1058MmsfcdaEntity = mmsList.get(selectionIndex);
-//				String dataCode = tb1058MmsfcdaEntity.getDataCode();
-//				Tb1006AnalogdataEntity analogData = (Tb1006AnalogdataEntity)
-//						beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", dataCode);
-//				portEntity.setTb1006AnalogdataByF1048Code(analogData);
-//				analogData.setParentCode(portEntity.getF1048Code());
-//				
-//				beanDao.update(portEntity);
-//				beanDao.update(analogData);
-//			}
+			int selectionIndex = combo.getSelectionIndex();
+			if(selectionIndex > -1) {
+				Tb1064StrapEntity strapEntity = staEntities.get(selectionIndex);
+				pinEntity.setTb1064StrapByF1064Code(strapEntity);
+				strapEntityService.update(pinEntity);
+			}
 		}
 		super.buttonPressed(buttonId);
 	}

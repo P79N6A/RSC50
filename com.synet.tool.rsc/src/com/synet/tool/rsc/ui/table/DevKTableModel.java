@@ -1,14 +1,8 @@
 package com.synet.tool.rsc.ui.table;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.business.ui.NetPortUtil;
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.model.TableConfig;
@@ -17,6 +11,8 @@ import com.shrcn.found.ui.table.RKTableModel;
 import com.synet.tool.rsc.dialog.BaySelectDialog;
 import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
+import com.synet.tool.rsc.dialog.ConvChk1Dialog;
+import com.synet.tool.rsc.dialog.ConvChk2Dialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
 import com.synet.tool.rsc.dialog.CubicleSelectDialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
@@ -26,14 +22,9 @@ import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
 import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
 import com.synet.tool.rsc.dialog.RefAddrSelectDialog;
-import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
-import com.synet.tool.rsc.model.Tb1061PoutEntity;
-import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.service.DefaultService;
-import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
-import com.synet.tool.rsc.util.DataUtils;
 
 import de.kupzog.ktable.KTableCellEditor;
 
@@ -41,7 +32,6 @@ import de.kupzog.ktable.KTableCellEditor;
 public class DevKTableModel extends RKTableModel {
 	
 	private DefaultService defaultService;
-	private Map<String, List<String>> dictMap;
 	
 	public DevKTableModel(DevKTable table, TableConfig config) {
 		super(table, config);
@@ -93,9 +83,6 @@ public class DevKTableModel extends RKTableModel {
 					return editor;
 				}
 			}
-			if(TableFactory.INTERVAL_MSG_TABLE.equals(tableName)) {
-				initTableDict(row);
-			}
 			if(TableFactory.BOARD_PORT_TABLE.equals(tableName)) {
 				if(col == 6) {
 					KTableCellEditor editor = new KTableDialogEditor(RefAddrSelectDialog.class);
@@ -119,30 +106,14 @@ public class DevKTableModel extends RKTableModel {
 			return new KTableDialogEditor(PinBaordEdtDialog.class);
 		} else if("PoutBoardEditor".equals(editor)) {
 			return new KTableDialogEditor(PoutBaordEdtDialog.class);
+		} else if("ConvChk1Editor".equals(editor)) {
+			return new KTableDialogEditor(ConvChk1Dialog.class);
+		} else if("ConvChk2Editor".equals(editor)) {
+			return new KTableDialogEditor(ConvChk2Dialog.class);
 		}
 		return super.getCustomEditor(editor);
 	}
 
-	private void initTableDict(int row) {
-		if(dictMap == null) {
-			dictMap = new HashMap<>();
-		}
-		Tb1063CircuitEntity circuit = (Tb1063CircuitEntity) getItem(row);
-		Tb1046IedEntity iedSend = circuit.getTb1046IedByF1046CodeIedSend();
-		if(!dictMap.containsKey(iedSend.getF1046Name())) {
-			PoutEntityService service = new PoutEntityService();
-			List<Tb1061PoutEntity> poutEntitys = service.getPoutEntityByProperties(iedSend, null);
-			List<String> poutDescs = new ArrayList<>();
-			for (Tb1061PoutEntity entity : poutEntitys) {
-				poutDescs.add(entity.getF1061Desc());
-			}
-			dictMap.put(iedSend.getF1046Name(), poutDescs);
-			DictManager dict = DictManager.getInstance();
-			dict.removeDict("CONVCHK");
-			dict.addDict("CONVCHK", "CONVCHK", DataUtils.createDictItems(poutDescs));
-		}
-	}
-	
 	@Override
 	public void doSetContentAt(int col, int row, Object value) {
 		super.doSetContentAt(col, row, value);

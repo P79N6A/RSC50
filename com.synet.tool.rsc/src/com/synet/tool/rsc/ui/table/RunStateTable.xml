@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
   <field desc="信号名称" editor="none" name="f1058Desc" width="100" default=""/>
   <field desc="信号参引" editor="none" name="f1058RefAddr" width="100" default=""/> 
-  <field desc="信号类型(温度/电压/光强)" editor="none" name="f1058DataType" width="200" default=""/> 
+  <field desc="信号类型" dict="WARN_TYPE" editor="none" name="f1058DataType" width="200" default=""/> 
   <field desc="所属数据集" editor="none" name="tb1054RcbByF1054Code.f1054Dataset" width="120" default=""/> 
   <field desc="数据集中的序号" editor="none" name="f1058Index" width="150" default=""/> 
 </table>

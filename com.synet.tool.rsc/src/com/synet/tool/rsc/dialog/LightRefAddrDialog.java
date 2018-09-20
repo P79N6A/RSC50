@@ -31,7 +31,7 @@ public class LightRefAddrDialog extends KTableEditorDialog {
 		super(parentShell, item);
 		portEntity = (Tb1048PortEntity) item;
 	}
-
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		initData();
