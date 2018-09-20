@@ -25,6 +25,7 @@ import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.processor.ImportFibreListProcessor;
+import com.synet.tool.rsc.processor.NewImportFibreListProcessor;
 import com.synet.tool.rsc.service.CubicleEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PortEntityService;
@@ -104,7 +105,8 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 			}
 		}
 		if (temp.size() > 0) {
-			new ImportFibreListProcessor().importData(temp);
+//			new ImportFibreListProcessor().importData(temp);
+			new NewImportFibreListProcessor().importData(temp);
 			beandao.updateBatch(temp);
 		}
 	}

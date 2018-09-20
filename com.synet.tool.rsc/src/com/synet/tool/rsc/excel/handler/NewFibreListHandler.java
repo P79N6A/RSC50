@@ -10,8 +10,6 @@ import com.synet.tool.rsc.model.IM102FibreListEntity;
 
 public class NewFibreListHandler extends RscSheetHandler {
 
-	private String CableCode = null;
-	
 	public NewFibreListHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super(headRowNum, excelColInfo);
 	}
@@ -58,11 +56,10 @@ public class NewFibreListHandler extends RscSheetHandler {
 		switch(fieldName) {
 			case ExcelConstants.IM102_CABLE_CODE: //只处理光缆部分，不处理跳缆部分
 				if (value == null || "".equals(value)) {
-//					entity = null;
+					entity = null;
 					break;
 				}
 				entity.setCableCode(value);
-				CableCode = value;
 				break;
 			case ExcelConstants.IM102_CORE_CODE: 
 				entity.setCoreCode(value);
@@ -100,7 +97,7 @@ public class NewFibreListHandler extends RscSheetHandler {
 				entity.setDevCodeB(value);
 				break;
 			case ExcelConstants.IM102_DEV_NAMEB: 
-				entity.setDevNameA(value);
+				entity.setDevNameB(value);
 				break;
 			case ExcelConstants.IM102_DEV_DESCB: 
 				entity.setDevDescB(value);

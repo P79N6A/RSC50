@@ -50,11 +50,11 @@ import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
 public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	private static final int[] tb_indice = new int[] {
-		// Substation
+//		// Substation
 		TB1041_INDEX,
 		TB1042_INDEX,
-		
-		// IED
+//		
+//		// IED
 		TB1046_INDEX,
 		TB1070_INDEX,//TB1070_MMSServer
 		TB1054_INDEX,
@@ -63,7 +63,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1057_INDEX,
 		// data
 		TB1006_INDEX,
-		TB1016_INDEX,
+//		TB1016_INDEX,
 		TB1026_INDEX,
 		// fcda
 		TB1058_INDEX,
@@ -99,7 +99,9 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1093_INDEX,
 
 //		TB1022_INDEX,
-		TB1071_INDEX //TB1071_DAU
+		TB1071_INDEX, //TB1071_DAU
+		TB1047_INDEX,
+		TB1048_INDEX
 	};
 	
 	@Override

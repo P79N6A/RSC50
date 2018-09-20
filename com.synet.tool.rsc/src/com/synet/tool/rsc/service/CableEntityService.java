@@ -15,7 +15,9 @@ public class CableEntityService extends BaseService{
 	public Tb1051CableEntity existEntity(Tb1051CableEntity cableEntity) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("f1051Name", cableEntity.getF1051Name());
-		params.put("f1051CoreNum", cableEntity.getF1051CoreNum());
+		params.put("tb1050CubicleByF1050CodeA", cableEntity.getTb1050CubicleByF1050CodeA());
+		params.put("tb1050CubicleByF1050CodeB", cableEntity.getTb1050CubicleByF1050CodeB());
+//		params.put("f1051CoreNum", cableEntity.getF1051CoreNum());
 		return (Tb1051CableEntity) beanDao.getObject(Tb1051CableEntity.class, params);
 	}
 }

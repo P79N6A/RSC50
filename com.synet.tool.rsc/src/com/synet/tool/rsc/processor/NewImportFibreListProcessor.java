@@ -79,7 +79,7 @@ public class NewImportFibreListProcessor {
 		//处理物理回路
 		analysisPhyconn(substationList.get(0));
 		//处理光缆、芯线、物理回路重复数据
-		doRepeatingData();
+//		doRepeatingData();
 		//处理逻辑链路与物理回路之间的关联关系(现只处理新增的芯线)
 		analysisLogicalAndPhyonn();
 		//保存光缆、芯线、物理回路
@@ -163,8 +163,10 @@ public class NewImportFibreListProcessor {
 	//处理物理回路
 	private void analysisPhyconn(Tb1041SubstationEntity substationEntity) {
 		for (Tb1052CoreEntity coreEntity : coreEntitieList) {
+			//避免重复处理更新数据
+//			if (coreEntity.getF1052Code() != null)
+//				continue;
 			Tb1053PhysconnEntity physconnEntity = new Tb1053PhysconnEntity();
-			physconnEntity.setF1053Code(rscp.nextTbCode(DBConstants.PR_PHYSCONN));
 			physconnEntity.setF1041Code(substationEntity.getF1041Code());
 			String portCodeA = coreEntity.getF1048CodeA();
 			String portCodeB = coreEntity.getF1048CodeB();
@@ -174,7 +176,14 @@ public class NewImportFibreListProcessor {
 			}
 			if (portCodeB != null) {
 				Tb1048PortEntity portEntityB = (Tb1048PortEntity) portEntityService.getById(Tb1048PortEntity.class, portCodeB);
-				physconnEntity.setTb1048PortByF1048CodeA(portEntityB);
+				physconnEntity.setTb1048PortByF1048CodeB(portEntityB);
+			}
+			Tb1053PhysconnEntity oldPhysconnEntity = phyconnEntityService.existEntity(physconnEntity);
+			//重复则更新
+			if (oldPhysconnEntity != null) {
+				physconnEntity.setF1053Code(oldPhysconnEntity.getF1053Code());
+			} else {
+				physconnEntity.setF1053Code(rscp.nextTbCode(DBConstants.PR_PHYSCONN));
 			}
 			physconnEntitieList.add(physconnEntity);
 		}
@@ -192,9 +201,16 @@ public class NewImportFibreListProcessor {
 			cableEntity.setF1051Type(DBConstants.CABLE_TYPE_WL);//现默认为“尾缆”
 			Tb1051CableEntity oldCableEntity = checkCableEntity(cableEntity);
 			if (oldCableEntity == null) {//该光缆还未处理
+				cableEntity.setTb1041SubstationByF1041Code(substationEntity);
 				cableEntity.setTb1050CubicleByF1050CodeA(cubicleEntityA);
 				cableEntity.setTb1050CubicleByF1050CodeB(cubicleEntityB);
-				cableEntity.setF1051Code(rscp.nextTbCode(DBConstants.PR_CABLE));
+				Tb1051CableEntity oldEntity = cableEntityService.existEntity(cableEntity);
+				//重复，则更新
+				if (oldEntity != null) {
+					cableEntity.setF1051Code(oldEntity.getF1051Code());
+				} else {
+					cableEntity.setF1051Code(rscp.nextTbCode(DBConstants.PR_CABLE));
+				}
 				cableEntitieList.add(cableEntity);
 			}
 //			if (oldCableEntity == null) {
@@ -210,6 +226,7 @@ public class NewImportFibreListProcessor {
 //				analysisCore(cubicleEntity, oldCableEntity, list);
 //			}
 		}
+		//处理F1051Code，数据库也存在，则使用原来的code（更新）
 	}
 	
 	//处理光芯数据
@@ -235,7 +252,7 @@ public class NewImportFibreListProcessor {
 					portEntityA.setF1048Direction(DBConstants.DIRECTION_RT);
 				}
 			}
-			String portCodeB = entity.getBoardCodeA();
+			String portCodeB = entity.getBoardCodeB();
 			if (portCodeB != null) {
 				if (portCodeB.contains(ExcelConstants.PORT_TYPE_TX)) {
 					portEntityB.setF1048Direction(DBConstants.DIRECTION_TX);
@@ -247,7 +264,20 @@ public class NewImportFibreListProcessor {
 			}
 			coreEntity.setF1048CodeA(portEntityA.getF1048Code());
 			coreEntity.setF1048CodeB(portEntityB.getF1048Code());
-			coreEntity.setF1052Code(rscp.nextTbCode(DBConstants.PR_CORE));
+			Tb1051CableEntity cableEntity = new Tb1051CableEntity();
+			cableEntity.setF1051Name(entity.getCableCode());
+			cableEntity.setF1051Type(DBConstants.CABLE_TYPE_WL);//现默认为“尾缆”
+			Tb1051CableEntity oldCableEntity = checkCableEntity(cableEntity);
+			if (oldCableEntity == null) continue;
+			coreEntity.setParentCode(oldCableEntity.getF1051Code());
+//			coreEntity.setTb1051CableByParentCode(oldCableEntity);
+			Tb1052CoreEntity oldCoreEntity = coreEntityService.existEntity(coreEntity);
+			//去重，存在则更新
+			if (oldCoreEntity != null) {
+				coreEntity.setF1052Code(oldCoreEntity.getF1052Code());
+			} else {
+				coreEntity.setF1052Code(rscp.nextTbCode(DBConstants.PR_CORE));
+			}
 			coreEntitieList.add(coreEntity);
 			
 //			if (entity.getCableCode().equals(cableEntity.getF1051Name())) {
@@ -320,7 +350,7 @@ public class NewImportFibreListProcessor {
 
 	private Tb1051CableEntity checkCableEntity(Tb1051CableEntity cableEntity) {
 		for (Tb1051CableEntity entity : cableEntitieList) {
-			if (entity.getF1051Name().equals(entity.getF1051Name()) 
+			if (entity.getF1051Name().equals(cableEntity.getF1051Name()) 
 					&& entity.getF1051Type() == cableEntity.getF1051Type()) {
 				return entity;
 			}
@@ -387,9 +417,14 @@ public class NewImportFibreListProcessor {
 			Tb1048PortEntity recvPort = (Tb1048PortEntity) portEntityService.getById(Tb1048PortEntity.class, portCodeA);
 			//生成物理回路
 			Tb1053PhysconnEntity physconnEntity = new Tb1053PhysconnEntity();
-			physconnEntity.setF1053Code(rscp.nextTbCode(DBConstants.PR_PHYSCONN));
 			physconnEntity.setTb1048PortByF1048CodeA(sendPort);
 			physconnEntity.setTb1048PortByF1048CodeB(recvPort);
+			Tb1053PhysconnEntity oldPhysconnEntity = phyconnEntityService.existEntity(physconnEntity);
+			if (oldPhysconnEntity != null) {
+				physconnEntity.setF1053Code(oldPhysconnEntity.getF1053Code());
+			} else {
+				physconnEntity.setF1053Code(rscp.nextTbCode(DBConstants.PR_PHYSCONN));
+			}
 			phyconnEntityService.save(physconnEntity);
 			//生成逻辑链路与物理回路的关联关系
 			Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();

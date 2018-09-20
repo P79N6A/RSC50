@@ -53,6 +53,7 @@ public class FibreListHandler extends RscSheetHandler {
 	}
 	
 	private void saveValue(int col, String value) {
+		System.out.print(col + "" + value + "   ");
 		if (entity == null)
 			return;
 		String fieldName = excelColInfo.get(col);
@@ -122,7 +123,7 @@ public class FibreListHandler extends RscSheetHandler {
 				entity.setDevCodeB(value);
 				break;
 			case ExcelConstants.IM102_DEV_NAMEB: 
-				entity.setDevNameA(value);
+				entity.setDevNameB(value);
 				break;
 			case ExcelConstants.IM102_DEV_DESCB: 
 				entity.setDevDescB(value);

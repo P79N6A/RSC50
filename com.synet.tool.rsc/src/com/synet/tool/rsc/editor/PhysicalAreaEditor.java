@@ -145,10 +145,17 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 	
 
 	private void delPhysconn() {
-		if (physConnTable.getSelection() != null) {
-			areaService.delete(physConnTable.getSelection());
+		List<Object> list = physConnTable.getSelections();
+		if (list != null) {
+			for (Object obj : list) {
+				areaService.delete(obj);
+			}
 			physConnTable.removeSelected();
 		}
+//		if (physConnTable.getSelection() != null) {
+//			areaService.delete(physConnTable.getSelection());
+//			physConnTable.removeSelected();
+//		}
 	}
 
 	private void addPhysconn() {
@@ -156,10 +163,17 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 	}
 
 	private void delCable() {
-		if (cableTable.getSelection() != null) {
-			areaService.delete(cableTable.getSelection());
+		List<Object> list = cableTable.getSelections();
+		if (list != null) {
+			for (Object obj : list) {
+				areaService.delete(obj);
+			}
 			cableTable.removeSelected();
 		}
+//		if (cableTable.getSelection() != null) {
+//			areaService.delete(cableTable.getSelection());
+//			cableTable.removeSelected();
+//		}
 	}
 
 	private void addCable() {
@@ -167,8 +181,11 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 	}
 
 	private void delCubicle() {
-		if (cubicleTable.getSelection() != null) {
-			areaService.delete(cubicleTable.getSelection());
+		List<Object> list = cubicleTable.getSelections();
+		if (list != null) {
+			for (Object obj : list) {
+				areaService.delete(obj);
+			}
 			cubicleTable.removeSelected();
 		}
 	}
