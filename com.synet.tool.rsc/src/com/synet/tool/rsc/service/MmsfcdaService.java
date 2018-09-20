@@ -102,4 +102,9 @@ public class MmsfcdaService extends BaseService {
 		List<Tb1058MmsfcdaEntity> result = (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, "dataCode", analogCodeList);
 		return result;
 	}
+	
+	public List<Tb1058MmsfcdaEntity> getByDataCodes(List<String> dataCodes) {
+		return null;
+		
+	}
 }

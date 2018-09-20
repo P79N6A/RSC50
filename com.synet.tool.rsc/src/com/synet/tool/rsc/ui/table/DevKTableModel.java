@@ -18,8 +18,11 @@ import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
 import com.synet.tool.rsc.dialog.CubicleSelectDialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
+import com.synet.tool.rsc.dialog.LightRefAddrDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
+import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
+import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
 import com.synet.tool.rsc.dialog.RefAddrSelectDialog;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -107,6 +110,12 @@ public class DevKTableModel extends RKTableModel {
 			return new KTableDialogEditor(BaySelectDialog.class);
 		} else if("CubicleSelectEditor".equals(editor)) {
 			return new KTableDialogEditor(CubicleSelectDialog.class);
+		} else if("lightRefAddrEditor".equals(editor)) {
+			return new KTableDialogEditor(LightRefAddrDialog.class);
+		} else if("PinBoardEditor".equals(editor)) {
+			return new KTableDialogEditor(PinBaordEdtDialog.class);
+		} else if("PoutBoardEditor".equals(editor)) {
+			return new KTableDialogEditor(PoutBaordEdtDialog.class);
 		}
 		return super.getCustomEditor(editor);
 	}

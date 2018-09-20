@@ -345,6 +345,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		stateData.setParentCode(code);
 		statedataService.update(stateData);
 		tableDeviceWarning.getTable().layout();
+		tableDeviceWarning.refresh();
 		ConsoleManager.getInstance().append("关联成功！");
 	}
 
@@ -488,6 +489,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		super.initData();
 	}
 	
+	@SuppressWarnings("unused")
 	private void initTableDict() {
 		dic.removeDict("EQU_ANALOG");
 		dic.removeDict("SV_ANALOG");
