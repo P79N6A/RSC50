@@ -15,11 +15,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -94,6 +94,9 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 	
 	private void updateIEDIPs(Tb1046IedEntity iedEntity, IM101IEDListEntity entity) {
 		String netIPA = entity.getNetAIP();
+		if (StringUtil.isEmpty(netIPA)) {
+			return;
+		}
 		String netIPB = entity.getNetBIP();
 		iedEntity.setF1046aNetIp(netIPA);
 		iedEntity.setF1046bNetIp(netIPB);
@@ -118,11 +121,11 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			if (iedEntity != null) {
 				Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 				if (bayEntity != null) {
-					iedEntity.setTb1042BaysByF1042Code(bayEntity);
+					iedEntity.setF1042Code(bayEntity.getF1042Code());
 				}
 				Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
 				if (cubicle != null) {
-					iedEntity.setTb1050CubicleEntity(cubicle);
+					iedEntity.setF1050Code(cubicle.getF1050Code());
 				}
 				updateIEDIPs(iedEntity, entity);
 //				iedEntity.setF1046Manufacturor(entity.getManufacturor());

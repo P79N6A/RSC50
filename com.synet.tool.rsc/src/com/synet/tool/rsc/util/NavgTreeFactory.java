@@ -170,7 +170,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		if (list != null && !list.isEmpty()) {
 			int index = 1;
 			for(Tb1049RegionEntity entity : list) {
-				ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, entity.getF1049Desc(), "bay.gif", ET_PY_AREA, index++);
+				ConfigTreeEntry areaEntry = createConfigEntry(physicalEntry, entity.getF1049Name(), "bay.gif", ET_PY_AREA, index++);
 				areaEntry.setData(entity);
 			}
 		}
