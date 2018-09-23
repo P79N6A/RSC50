@@ -78,17 +78,11 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			}
 			List<Element> bayEls = volEl.elements("Bay");
 			for (Element bayEl : bayEls) {
-				Tb1042BayEntity bay = new Tb1042BayEntity();
-				bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
-				String bayName = bayEl.attributeValue("name");
-				bay.setF1042Name(bayName);
-				bay.setF1042Desc(bayEl.attributeValue("desc"));
-				bay.setF1042Voltage(ivol);
 				List<Element> eqpEls = bayEl.elements();
 				Set<Tb1043EquipmentEntity> equipments = new HashSet<>();
-				bay.setTb1041SubstationByF1041Code(station);
-				bay.setTb1043EquipmentsByF1042Code(equipments);
-				beanDao.insert(bay);	// 避免IED更新bay信息后查询出错
+				String bayName = bayEl.attributeValue("name");
+				String bayDesc = bayEl.attributeValue("desc");
+				Tb1042BayEntity bay = addBay(station, ivol, bayName, bayDesc, equipments);
 				for (Element eqpEl : eqpEls) {
 					String stype = eqpEl.attributeValue("type");
 					EnumEquipmentType type = null;
@@ -147,6 +141,20 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				beanDao.update(bay);
 			}
 		}
+		addBay(station, 0, DBConstants.BAY_PUB, DBConstants.BAY_PUB, null); // 补充公共间隔用于存放交换机、采集器、配线架
+	}
+
+	private Tb1042BayEntity addBay(Tb1041SubstationEntity station, int ivol,
+			String bayName, String bayDesc, Set<Tb1043EquipmentEntity> equipments) {
+		Tb1042BayEntity bay = new Tb1042BayEntity();
+		bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
+		bay.setF1042Name(bayName);
+		bay.setF1042Desc(bayDesc);
+		bay.setF1042Voltage(ivol);
+		bay.setTb1041SubstationByF1041Code(station);
+		bay.setTb1043EquipmentsByF1042Code(equipments);
+		beanDao.insert(bay);	// 避免IED更新bay信息后查询出错
+		return bay;
 	}
 	
 	/**
@@ -184,7 +192,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		if (!StringUtil.isEmpty(iedName) && !"None".equalsIgnoreCase(iedName) && !"null".equalsIgnoreCase(iedName)) {
 			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 			String bayName = ied.getTb1042BaysByF1042Code().getF1042Name();
-			if (DBConstants.BAY_PROT.equals(bayName)) {
+			if (DBConstants.BAY_OTHER.equals(bayName)) {
 				String bayCode = bay.getF1042Code();
 				ied.setF1042Code(bayCode);
 				String f1046Code = ied.getF1046Code();

@@ -189,7 +189,7 @@ public class SCDImporter implements IImporter {
 						DBConstants.IED_PROT : DBConstants.IED_MONI;
 				ied.setF1046Type(type);
 				if (type == DBConstants.IED_MONI) {
-					bay = getBayByName(DBConstants.BAY_PUB);
+					bay = getBayByName(DBConstants.BAY_MOT);
 				}
 				Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
 				mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
@@ -213,7 +213,7 @@ public class SCDImporter implements IImporter {
 					ied.setF1046Type(DBConstants.IED_TERM);
 				}
 			}
-			bay = (bay==null) ? getBayByName(DBConstants.BAY_PROT) : bay;
+			bay = (bay==null) ? getBayByName(DBConstants.BAY_OTHER) : bay;
 			ied.setF1042Code(bay.getF1042Code());
 			beanDao.update(ied);
 		}

@@ -16,7 +16,6 @@ import static com.synet.tool.rsc.RSCConstants.ET_IMP_STA;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
 import static com.synet.tool.rsc.RSCConstants.ET_PR_BAY;
-import static com.synet.tool.rsc.RSCConstants.ET_PR_MDL;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_BAY;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_IED;
 import static com.synet.tool.rsc.RSCConstants.ET_PY_AREA;
@@ -91,7 +90,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ProjectEntry projectEntry = new ProjectEntry(staName, "", "project.gif");
 		data.add(projectEntry);
 		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", null, 1);
-		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", ET_PT_BAY, 2);
+		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", null, 2);
 		ConfigTreeEntry physicalEntry = createConfigEntry(projectEntry, "物理信息模型", "column.gif", ET_PY_MDL, 3);
 		ConfigTreeEntry securityEntry = createConfigEntry(projectEntry, "安措配置", "column.gif", "", 4);
 		ConfigTreeEntry icdEntry = createConfigEntry(projectEntry, "系统ICD", "column.gif", ET_ICD_MDL, 5);
@@ -120,15 +119,14 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 */
 	private void loadPrimary(ITreeEntry primaryEntry, List<Tb1042BayEntity> bayEntityList) {
 		if(DataUtils.listNotNull(bayEntityList)){
-			ITreeEntry structEntry = createConfigEntry(primaryEntry, "结构", "history_list.gif", ET_PR_MDL, 1);
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity tb1042BayEntity = bayEntityList.get(i);
 				Set<Tb1043EquipmentEntity> equipments = tb1042BayEntity.getTb1043EquipmentsByF1042Code();
 				if (equipments!= null && equipments.size()>0) {
-					createConfigEntry(structEntry, tb1042BayEntity.getF1042Name(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
+					createConfigEntry(primaryEntry, tb1042BayEntity.getF1042Name(), "bay.gif", ET_PR_BAY, i+1).setData(tb1042BayEntity);
 				}
 			}
-			createConfigEntry(primaryEntry, "功能", "function.gif", ET_PR_BAY, 2).setData(null);
+			createConfigEntry(primaryEntry, DBConstants.BAY_ALL, "bay.gif", ET_PR_BAY, bayEntityList.size()+1).setData(null);
 		}
 	}
 	
@@ -140,21 +138,39 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	private void loadProtect(ITreeEntry protectEntry, List<Tb1042BayEntity> bayEntityList) {
 		/** 动态加载-begin  */
 		if(DataUtils.listNotNull(bayEntityList)){
+			ConfigTreeEntry bayOther = null;
+			ConfigTreeEntry bayMot = null;
+			ConfigTreeEntry bayPub = null;
+			int bayIndex = 0;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);
-				String bayName = bayEntity.getF1042Name();
 				List<Tb1046IedEntity> iedEntities = iedService.getIedEntityByBay(bayEntity);
 				if (iedEntities != null && iedEntities.size() > 0) {
-					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayEntity.getF1042Name(), "bay.gif", ET_PT_BAY, i+1);
+					bayIndex = i + 1;
+					String bayName = bayEntity.getF1042Name();
+					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayName, "bay.gif", ET_PT_BAY, bayIndex);
 					bayEntry.setData(bayEntity);
-					if (!DBConstants.BAY_PUB.equals(bayName)) {
-						for (Tb1046IedEntity iedEntity : iedEntities) {
-							ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, 1);
-							proEntry.setData(iedEntity);
-						}
+					int iedIndex = 0;
+					for (Tb1046IedEntity iedEntity : iedEntities) {
+						ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, ++iedIndex);
+						proEntry.setData(iedEntity);
+					}
+					if (DBConstants.BAY_OTHER.equals(bayName)) {
+						bayOther = bayEntry;
+					} else if (DBConstants.BAY_MOT.equals(bayName)) {
+						bayMot = bayEntry;
+					} else if (DBConstants.BAY_PUB.equals(bayName)) {
+						bayPub = bayEntry;
 					}
 				}
 			}
+			if (bayOther != null)
+				bayOther.setIndex(++bayIndex);
+			if (bayMot != null)
+				bayMot.setIndex(++bayIndex);
+			if (bayPub != null)
+				bayPub.setIndex(++bayIndex);
+			createConfigEntry(protectEntry, DBConstants.BAY_ALL, "bay.gif", ET_PT_BAY, ++bayIndex);
 		}
 		/** 动态加载-end  */
 	}
@@ -210,12 +226,6 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry strapTermEntry = createConfigEntry(importEntry, "压板与虚端子关联表", "bay.gif", ET_IMP_STRAP, 7);
 		ConfigTreeEntry brkCfmEntry = createConfigEntry(importEntry, "跳合闸反校关联表", "bay.gif", ET_IMP_BRK, 8);
 		ConfigTreeEntry staInfoEntry = createConfigEntry(importEntry, "监控信息点表", "bay.gif", ET_IMP_STA, 9);
-	}
-	
-	private BayIEDEntry createParentEntry(ITreeEntry parent, String name, String icon, int index) {
-		BayIEDEntry bayIEDEntry = new BayIEDEntry(parent, name, "", icon);
-		bayIEDEntry.setIndex(index);
-		return bayIEDEntry;
 	}
 	
 	private ConfigTreeEntry createConfigEntry(ITreeEntry parent, String name, String icon, String editorId, int index) {

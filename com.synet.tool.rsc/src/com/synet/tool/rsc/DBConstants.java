@@ -59,8 +59,10 @@ public interface DBConstants {
 	String PR_PORTLIGHT		= "PortLight";
 	String PR_LPRELATION    = "LPRelation";
 
-	String BAY_PROT			= "保护间隔";
-	String BAY_PUB 			= "公共间隔";
+	String BAY_OTHER		= "其它间隔";	// 未知间隔
+	String BAY_MOT 			= "测控装置";
+	String BAY_PUB 			= "公共间隔"; // 交换机、采集器、配线架
+	String BAY_ALL 			= "全部";
 	
 	// A、B套
 	int SUITE_A = 1;
