@@ -441,13 +441,16 @@ public class NewImportFibreListProcessor {
 		for (String key : map.keySet()) { 
 			List<Tb1052CoreEntity> coreEntities = map.get(key);
 			for (Tb1052CoreEntity coreEntity : coreEntities) {
-				if (coreEntity.getF1048CodeA() == null) continue;
+				if (coreEntity.getF1048CodeA() == null)
+					continue;
 				Tb1048PortEntity tempPort = (Tb1048PortEntity) portEntityService
 						.getById(Tb1048PortEntity.class, coreEntity.getF1048CodeA());
 				Tb1047BoardEntity tempBoard = tempPort.getTb1047BoardByF1047Code();
-				if (tempBoard == null) continue;
+				if (tempBoard == null) 
+					continue;
 				Tb1046IedEntity tempIed = tempBoard.getTb1046IedByF1046Code();
-				if (tempIed == null) continue;
+				if (tempIed == null) 
+					continue;
 				if (logicalSendIedCode.equals(tempIed.getF1046Code())) {
 					temp.put(key, coreEntity.getF1048CodeA());
 				}

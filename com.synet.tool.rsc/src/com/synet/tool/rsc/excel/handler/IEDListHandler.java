@@ -94,22 +94,10 @@ public class IEDListHandler extends RscSheetHandler {
 //				entity.setProtType(value);
 //				break;
 			case ExcelConstants.IM101_DATE_SERVICE: 
-				if (value != null && value.contains("/")) {
-					String[] dataStrs = value.split("/");
-					if (dataStrs.length == 3) {
-						value = "20" + dataStrs[2] + "/" + dataStrs[0] + "/" + dataStrs[2];
-						entity.setDateService(value);
-					}
-				}
+				entity.setDateService(value);
 				break;
 			case ExcelConstants.IM101_DATE_PRODUCT: 
-				if (value != null && value.contains("/")) {
-					String[] dataStrs = value.split("/");
-					if (dataStrs.length == 3) {
-						value = "20" + dataStrs[2] + "/" + dataStrs[0] + "/" + dataStrs[2];
-						entity.setDateProduct(value);
-					}
-				}
+				entity.setDateProduct(value);
 				break;
 			case ExcelConstants.IM101_PRODUCT_CODE: 
 				entity.setProductCode(value);

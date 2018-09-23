@@ -7,9 +7,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="互感器名称" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.f1043Name" datType="int" width="100" default=""/> 
   <field desc="次级序号" editor="none" name="tb1067CtvtsecondaryByF1067Code.f1067Index" datType="int" width="100" default=""/> 
   <field desc="分组类型" editor="none" dict="PORTMMXU_TYPE" name="f1066Type" datType="int" width="100" default=""/> 
-  <field desc="保护装置Name" editor="none" name="tb1046IedByF1046CodeProt.f1046Name" datType="string" width="100" default=""/>
-  <field desc="保护装置名称" editor="none" name="tb1046IedByF1046CodeProt.f1046Desc" datType="string" width="100" default=""/>
+  <field desc="保护装置Name" editor="none" name="tb1046IedByF1046CodeProt.f1046Name" datType="string" width="150" default=""/>
+  <field desc="保护装置名称" editor="none" name="tb1046IedByF1046CodeProt.f1046Desc" datType="string" width="200" default=""/>
   <field desc="采样值数据A相" editor="none" name="f1006CodeA.f1006Desc" datType="string" width="150" default=""/> 
   <field desc="采样值数据B相" editor="none" name="f1006CodeB.f1006Desc" datType="string" width="150" default=""/> 
   <field desc="采样值数据C相" editor="none" name="f1006CodeC.f1006Desc" datType="string" width="150" default=""/> 
+  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

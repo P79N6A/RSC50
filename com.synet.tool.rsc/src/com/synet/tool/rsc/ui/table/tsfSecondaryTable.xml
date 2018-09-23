@@ -11,12 +11,13 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="次级型号" editor="none" name="f1067Model" datType="string" width="70" default=""/> 
   <field desc="描述" editor="none" name="f1061Desc" datType="string" width="50" default=""/> 
   <field desc="虚端子分组类型" editor="none" name="f1067Type" datType="string" width="110" default=""/>
-  <field desc="A相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeA1.f1061Desc" datType="string" width="110" default=""/> 
-  <field desc="A相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeA2.f1061Desc" datType="string" width="110" default=""/> 
-  <field desc="B相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeB1.f1061Desc" datType="string" width="110" default=""/> 
-  <field desc="B相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeB2.f1061Desc" datType="string" width="110" default=""/> 
-  <field desc="C相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeC1.f1061Desc" datType="string" width="110" default=""/>
-  <field desc="C相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeC2.f1061Desc" datType="string" width="110" default=""/> 
+  <field desc="A相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeA1.f1061Desc" datType="string" width="150" default=""/> 
+  <field desc="A相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeA2.f1061Desc" datType="string" width="150" default=""/> 
+  <field desc="B相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeB1.f1061Desc" datType="string" width="150" default=""/> 
+  <field desc="B相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeB2.f1061Desc" datType="string" width="150" default=""/> 
+  <field desc="C相通道1虚端子" editor="none" name="tb1061PoutByF1061CodeC1.f1061Desc" datType="string" width="150" default=""/>
+  <field desc="C相通道2虚端子" editor="none" name="tb1061PoutByF1061CodeC2.f1061Desc" datType="string" width="150" default=""/> 
   <field desc="端子编号" editor="none" name="f1061TermNo" datType="string" width="70" default=""/> 
   <field desc="回路编号" editor="none" name="f1061CircNo" datType="string" width="70" default=""/> 
+  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

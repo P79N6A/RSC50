@@ -3,7 +3,7 @@
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1042BayEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
   <field desc="间隔Name" editor="none" name="f1042Name" datType="string" width="200" default=""/>
   <field desc="间隔名称" editor="none" name="f1042Desc" datType="string" width="200" default=""/> 
   <field desc="电压等级" editor="none" name="f1042Voltage" datType="int" width="100" default=""/> 

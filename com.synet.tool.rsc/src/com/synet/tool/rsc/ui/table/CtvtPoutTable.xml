@@ -3,8 +3,9 @@
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1061PoutEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
-  <field desc="通道" editor="none" name="f1061Byname" datType="string" width="150" default=""/>
-  <field desc="虚端子名称" editor="none" name="f1061Desc" datType="string" width="150" default=""/>
+  <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="通道" editor="none" name="f1061Byname" datType="string" width="200" default=""/>
+  <field desc="虚端子名称" editor="none" name="f1061Desc" datType="string" width="300" default=""/>
+  <field desc="" editor="none" name="other" width="10" default=""/> 
   <!-- <field desc="虚端子参引" editor="none" name="f1061RefAddr" datType="string" width="100" default=""/> --> 
 </table>

@@ -734,6 +734,7 @@ create table IM102_Fibre_List
 
 /*==============================================================*/
 /* Table: IM103_Ied_Board                                      */
+/* alter table IM103_Ied_Board alter column PORT_NUM set data type VARCHAR(512); */
 /*==============================================================*/
 create table IM103_Ied_Board
 (

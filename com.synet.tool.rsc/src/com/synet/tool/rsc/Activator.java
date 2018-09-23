@@ -37,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 		EventManager.getDefault().loadEventHandlers(getClass(), RSCConstants.EVENT_PATH);
 		
 		DictManager dictmgr = DictManager.getInstance();
-		dictmgr.init(getClass(), RSCConstants.DICT_PATH);
+		dictmgr.init(getClass(), RSCConstants.DICT_PATH, true);
 		String dicttype = F1011_NO.class.getSimpleName();
 		dictmgr.addDict(dicttype, dicttype, F1011_NO.getDictItems());
 

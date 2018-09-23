@@ -3,10 +3,10 @@
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
-  <field desc="互感器次级代码" editor="none" name="f1067Code" width="100" default=""/>
-  <field desc="次级型号" editor="none" name="f1067Model" width="100" default=""/> 
-  <field desc="SV虚端子分组类型" editor="none" name="f1067Type" width="100" default=""/>  
-  <field desc="次级用途描述" editor="none" name="f1067Desc" width="100" default=""/> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="80" default=""/>  
+  <field desc="互感器次级代码" editor="none" name="f1067Code" width="200" default=""/>
+  <field desc="次级型号" editor="none" name="f1067Model" width="200" default=""/> 
+  <field desc="SV虚端子分组类型" editor="none" name="f1067Type" width="200" default=""/>  
+  <field desc="次级用途描述" editor="none" name="f1067Desc" width="200" default=""/> 
   <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>
