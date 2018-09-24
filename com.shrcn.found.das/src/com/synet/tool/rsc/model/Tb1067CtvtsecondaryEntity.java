@@ -7,20 +7,13 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1067CtvtsecondaryEntity {
     private String f1067Code;
+    private String f1067Name;
     private Integer f1067Index;
-    private String f1067Model;
     private String f1067Type;
+    private String f1067TermNo;
     private String f1067CircNo;
     private String f1067Desc;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeA1;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeA2;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeB1;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeB2;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeC1;
-    private Tb1061PoutEntity tb1061PoutByF1061CodeC2;
     private Tb1043EquipmentEntity tb1043EquipmentByF1043Code;
-    private Tb1044TerminalEntity tb1044TerminalByF1044Code;
-    private Tb1066ProtmmxuEntity tb1066ProtMmxuByF1067Code;
 
     public String getF1067Code() {
         return f1067Code;
@@ -36,14 +29,6 @@ public class Tb1067CtvtsecondaryEntity {
 
     public void setF1067Index(Integer f1067Index) {
         this.f1067Index = f1067Index;
-    }
-
-    public String getF1067Model() {
-        return f1067Model;
-    }
-
-    public void setF1067Model(String f1067Model) {
-        this.f1067Model = f1067Model;
     }
 
     public String getF1067Type() {
@@ -70,6 +55,22 @@ public class Tb1067CtvtsecondaryEntity {
 		this.f1067Desc = f1067Desc;
 	}
 
+	public String getF1067Name() {
+		return f1067Name;
+	}
+
+	public void setF1067Name(String f1067Name) {
+		this.f1067Name = f1067Name;
+	}
+
+	public String getF1067TermNo() {
+		return f1067TermNo;
+	}
+
+	public void setF1067TermNo(String f1067TermNo) {
+		this.f1067TermNo = f1067TermNo;
+	}
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,7 +82,7 @@ public class Tb1067CtvtsecondaryEntity {
         if (f1067Desc != null ? !f1067Desc.equals(that.f1067Desc) : that.f1067Desc != null) return false;
         if (f1067Code != null ? !f1067Code.equals(that.f1067Code) : that.f1067Code != null) return false;
         if (f1067Index != null ? !f1067Index.equals(that.f1067Index) : that.f1067Index != null) return false;
-        if (f1067Model != null ? !f1067Model.equals(that.f1067Model) : that.f1067Model != null) return false;
+        if (f1067Name != null ? !f1067Name.equals(that.f1067Name) : that.f1067Name != null) return false;
         if (f1067Type != null ? !f1067Type.equals(that.f1067Type) : that.f1067Type != null) return false;
 
         return true;
@@ -91,59 +92,11 @@ public class Tb1067CtvtsecondaryEntity {
     public int hashCode() {
         int result = f1067Code != null ? f1067Code.hashCode() : 0;
         result = 31 * result + (f1067Index != null ? f1067Index.hashCode() : 0);
-        result = 31 * result + (f1067Model != null ? f1067Model.hashCode() : 0);
+        result = 31 * result + (f1067Name != null ? f1067Name.hashCode() : 0);
         result = 31 * result + (f1067Type != null ? f1067Type.hashCode() : 0);
         result = 31 * result + (f1067CircNo != null ? f1067CircNo.hashCode() : 0);
         result = 31 * result + (f1067Desc != null ? f1067Desc.hashCode() : 0);
         return result;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeA1() {
-        return tb1061PoutByF1061CodeA1;
-    }
-
-    public void setTb1061PoutByF1061CodeA1(Tb1061PoutEntity tb1061PoutByF1061CodeA1) {
-        this.tb1061PoutByF1061CodeA1 = tb1061PoutByF1061CodeA1;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeA2() {
-        return tb1061PoutByF1061CodeA2;
-    }
-
-    public void setTb1061PoutByF1061CodeA2(Tb1061PoutEntity tb1061PoutByF1061CodeA2) {
-        this.tb1061PoutByF1061CodeA2 = tb1061PoutByF1061CodeA2;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeB1() {
-        return tb1061PoutByF1061CodeB1;
-    }
-
-    public void setTb1061PoutByF1061CodeB1(Tb1061PoutEntity tb1061PoutByF1061CodeB1) {
-        this.tb1061PoutByF1061CodeB1 = tb1061PoutByF1061CodeB1;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeB2() {
-        return tb1061PoutByF1061CodeB2;
-    }
-
-    public void setTb1061PoutByF1061CodeB2(Tb1061PoutEntity tb1061PoutByF1061CodeB2) {
-        this.tb1061PoutByF1061CodeB2 = tb1061PoutByF1061CodeB2;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeC1() {
-        return tb1061PoutByF1061CodeC1;
-    }
-
-    public void setTb1061PoutByF1061CodeC1(Tb1061PoutEntity tb1061PoutByF1061CodeC1) {
-        this.tb1061PoutByF1061CodeC1 = tb1061PoutByF1061CodeC1;
-    }
-
-    public Tb1061PoutEntity getTb1061PoutByF1061CodeC2() {
-        return tb1061PoutByF1061CodeC2;
-    }
-
-    public void setTb1061PoutByF1061CodeC2(Tb1061PoutEntity tb1061PoutByF1061CodeC2) {
-        this.tb1061PoutByF1061CodeC2 = tb1061PoutByF1061CodeC2;
     }
 
     public Tb1043EquipmentEntity getTb1043EquipmentByF1043Code() {
@@ -154,21 +107,4 @@ public class Tb1067CtvtsecondaryEntity {
         this.tb1043EquipmentByF1043Code = tb1043EquipmentByF1043Code;
     }
 
-	public Tb1044TerminalEntity getTb1044TerminalByF1044Code() {
-		return tb1044TerminalByF1044Code;
-	}
-
-	public void setTb1044TerminalByF1044Code(
-			Tb1044TerminalEntity tb1044TerminalByF1044Code) {
-		this.tb1044TerminalByF1044Code = tb1044TerminalByF1044Code;
-	}
-
-	public Tb1066ProtmmxuEntity getTb1066ProtMmxuByF1067Code() {
-		return tb1066ProtMmxuByF1067Code;
-	}
-
-	public void setTb1066ProtMmxuByF1067Code(
-			Tb1066ProtmmxuEntity tb1066ProtMmxuByF1067Code) {
-		this.tb1066ProtMmxuByF1067Code = tb1066ProtMmxuByF1067Code;
-	}
 }

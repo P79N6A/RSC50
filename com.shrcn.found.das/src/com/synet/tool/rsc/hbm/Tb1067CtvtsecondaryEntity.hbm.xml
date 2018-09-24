@@ -11,11 +11,14 @@
         <property name="f1067Index">
             <column name="F1067_Index" sql-type="int"/>
         </property>
-        <property name="f1067Model">
-            <column name="F1067_Model" sql-type="varchar" length="24"/>
+        <property name="f1067Name">
+            <column name="F1067_Name" sql-type="varchar" length="96"/>
         </property>
         <property name="f1067Type">
             <column name="F1067_Type" sql-type="varchar" length="48"/>
+        </property>
+        <property name="f1067TermNo">
+            <column name="F1067_TermNo" sql-type="varchar" length="96"/>
         </property>
         <property name="f1067CircNo">
             <column name="F1067_CircNo" sql-type="varchar" length="96"/>
@@ -23,33 +26,8 @@
         <property name="f1067Desc">
             <column name="F1067_Desc" sql-type="varchar" length="96"/>
         </property>
-        <many-to-one name="tb1061PoutByF1061CodeA1" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_A1"/>
-        </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeA2" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_A2"/>
-        </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeB1" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_B1"/>
-        </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeB2" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_B2"/>
-        </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeC1" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_C1"/>
-        </many-to-one>
-        <many-to-one name="tb1061PoutByF1061CodeC2" class="com.synet.tool.rsc.model.Tb1061PoutEntity" lazy="false">
-            <column name="F1061_CODE_C2"/>
-        </many-to-one>
         <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" lazy="false">
             <column name="F1043_CODE" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="tb1044TerminalByF1044Code" class="com.synet.tool.rsc.model.Tb1044TerminalEntity" lazy="false">
-            <column name="F1067_TermNo" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="tb1066ProtMmxuByF1067Code" property-ref="tb1067CtvtsecondaryByF1067Code"
-        	class="com.synet.tool.rsc.model.Tb1066ProtmmxuEntity" insert="false" update="false" lazy="false">
-            <column name="F1067_Code" not-null="true"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

@@ -501,11 +501,7 @@ create table TB1066_ProtMMXU
 (
    F1066_CODE           varchar(48) not null,
    F1067_CODE           varchar(48),
-   F1066_Type           INT not null,
-   F1046_Code_Prot      varchar(48),
-   F1006_CODE_A         varchar(48),
-   F1006_CODE_B         varchar(48),
-   F1006_CODE_C         varchar(48),
+   F1006_CODE         	varchar(48),
    primary key (F1066_CODE)
 );
 
@@ -516,19 +512,24 @@ create table TB1067_CTVTSecondary
 (
    F1067_Code           varchar(48) not null,
    F1043_CODE           varchar(48) not null,
+   F1067_Name         	varchar(96),
    F1067_Index          INT,
-   F1067_Model          varchar(24),
    F1067_Type           varchar(48),
-   F1061_CODE_A1        varchar(48),
-   F1061_CODE_A2        varchar(48),
-   F1061_CODE_B1        varchar(48),
-   F1061_CODE_B2        varchar(48),
-   F1061_CODE_C1        varchar(48),
-   F1061_CODE_C2        varchar(48),
    F1067_TermNo         varchar(96) not null,
    F1067_CircNo         varchar(96),
    F1067_Desc           varchar(96),
    primary key (F1067_Code)
+);
+
+/*==============================================================*/
+/* Table: TB1074_SVCTVTRelation                                  */
+/*==============================================================*/
+create table TB1074_SVCTVTRelation
+(
+   F1074_CODE           varchar(48) not null,
+   F1067_CODE           varchar(48) not null,
+   F1061_CODE           varchar(48) not null,
+   primary key (F1074_CODE)
 );
 
 /*==============================================================*/

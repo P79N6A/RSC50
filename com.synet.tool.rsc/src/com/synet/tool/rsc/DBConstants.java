@@ -46,6 +46,7 @@ public interface DBConstants {
 	String PR_PHYSCONN      = "Physconn";
 	String PR_BOARD			= "Board";
 	String PR_PORT			= "Port";
+	String PR_SVCVR			= "SVCVR";
 	//导入信息表主键
 	String PR_IEDBOARD		= "IEDBoard";
 	String PR_FILEINFO	    = "fileInfo";

@@ -115,7 +115,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 						if (EnumEquipmentType.PTR == type) {	// 变压器
 							List<Element> twEls = eqpEl.elements("TransformerWinding");
 							for (Element twEl : twEls) {
-								addTerminals(equipment, eqpEl); // 连接端子
+								addTerminals(equipment, twEl); // 连接端子
 							}
 						} else {								// 其它设备
 							addTerminals(equipment, eqpEl); // 连接端子

@@ -68,28 +68,24 @@ public class CtvtsecondaryService extends BaseService{
 		secs.add(sec);
 		sec.setF1067Code(rscp.nextTbCode(DBConstants.PR_SEC));
 		sec.setTb1043EquipmentByF1043Code(equipment);
-		Set<Tb1044TerminalEntity> tb1044Terminals = equipment.getTb1044TerminalsByF1043Code();
-		if (tb1044Terminals != null && tb1044Terminals.size()>0) {
-			Tb1044TerminalEntity tml = tb1044Terminals.iterator().next();
-			sec.setTb1044TerminalByF1044Code(tml);
-		}
-		sec.setF1067CircNo(null);
-		sec.setF1067Model(null);
-		sec.setF1067Desc(null);
+		sec.setF1067Name(null);
 		sec.setF1067Type(null);
+		sec.setF1067TermNo(null);
+		sec.setF1067CircNo(null);
+		sec.setF1067Desc(null);
 		if(!isNull) {
 			beanDao.insert(sec);
 		}
-		addProtMMXU(sec);
+//		addProtMMXU(sec);
 		secs.add(sec);
 		equipment.setTb1067SecondarysByF1043Code(secs);
 	}
 	
-	private void addProtMMXU(Tb1067CtvtsecondaryEntity ctvtsecondary) {
-		Tb1066ProtmmxuEntity protmmxu = new Tb1066ProtmmxuEntity();
-		protmmxu.setF1066Code(rscp.nextTbCode(DBConstants.PR_MMXU));
-		protmmxu.setF1067Code(ctvtsecondary.getF1067Code());
-		protmmxu.setF1066Type(DBConstants.MMXU_3I);
-		beanDao.insert(protmmxu);
-	}
+//	private void addProtMMXU(Tb1067CtvtsecondaryEntity ctvtsecondary) {
+//		Tb1066ProtmmxuEntity protmmxu = new Tb1066ProtmmxuEntity();
+//		protmmxu.setF1066Code(rscp.nextTbCode(DBConstants.PR_MMXU));
+//		protmmxu.setF1067Code(ctvtsecondary.getF1067Code());
+//		protmmxu.setF1066Type(DBConstants.MMXU_3I);
+//		beanDao.insert(protmmxu);
+//	}
 }

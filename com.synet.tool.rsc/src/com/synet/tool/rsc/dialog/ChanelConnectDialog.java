@@ -127,48 +127,48 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 */
 	private void initTableData() {
 		tableChnData = new ArrayList<>();
-		Tb1061PoutEntity a1 = curSel.getTb1061PoutByF1061CodeA1();
-		if(a1 == null) {
-			a1 = new Tb1061PoutEntity("A相通道1虚端子");
-		} else {
-			a1.setF1061Byname("A相通道1虚端子");
-		}
-		tableChnData.add(a1);
-		Tb1061PoutEntity a2 = curSel.getTb1061PoutByF1061CodeA2();
-		if(a2 == null) {
-			a2 = new Tb1061PoutEntity("A相通道2虚端子");
-		} else {
-			a2.setF1061Byname("A相通道2虚端子");
-		}
-		tableChnData.add(a2);
-		Tb1061PoutEntity b1 = curSel.getTb1061PoutByF1061CodeB1();
-		if(b1 == null) {
-			b1 = new Tb1061PoutEntity("B相通道1虚端子");
-		} else {
-			b1.setF1061Byname("B相通道1虚端子");
-		}
-		tableChnData.add(b1);
-		Tb1061PoutEntity b2 = curSel.getTb1061PoutByF1061CodeB2();
-		if(b2 == null) {
-			b2 = new Tb1061PoutEntity("B相通道2虚端子");
-		} else {
-			b2.setF1061Byname("B相通道2虚端子");
-		}
-		tableChnData.add(b2);
-		Tb1061PoutEntity c1 = curSel.getTb1061PoutByF1061CodeC1();
-		if(c1 == null) {
-			c1 = new Tb1061PoutEntity("C相通道1虚端子");
-		} else {
-			c1.setF1061Byname("C相通道1虚端子");
-		}
-		tableChnData.add(c1);
-		Tb1061PoutEntity c2 = curSel.getTb1061PoutByF1061CodeC2();
-		if(c2 == null) {
-			c2 = new Tb1061PoutEntity("C相通道2虚端子");
-		} else {
-			c2.setF1061Byname("C相通道2虚端子");
-		}
-		tableChnData.add(c2);
+//		Tb1061PoutEntity a1 = curSel.getTb1061PoutByF1061CodeA1();
+//		if(a1 == null) {
+//			a1 = new Tb1061PoutEntity("A相通道1虚端子");
+//		} else {
+//			a1.setF1061Byname("A相通道1虚端子");
+//		}
+//		tableChnData.add(a1);
+//		Tb1061PoutEntity a2 = curSel.getTb1061PoutByF1061CodeA2();
+//		if(a2 == null) {
+//			a2 = new Tb1061PoutEntity("A相通道2虚端子");
+//		} else {
+//			a2.setF1061Byname("A相通道2虚端子");
+//		}
+//		tableChnData.add(a2);
+//		Tb1061PoutEntity b1 = curSel.getTb1061PoutByF1061CodeB1();
+//		if(b1 == null) {
+//			b1 = new Tb1061PoutEntity("B相通道1虚端子");
+//		} else {
+//			b1.setF1061Byname("B相通道1虚端子");
+//		}
+//		tableChnData.add(b1);
+//		Tb1061PoutEntity b2 = curSel.getTb1061PoutByF1061CodeB2();
+//		if(b2 == null) {
+//			b2 = new Tb1061PoutEntity("B相通道2虚端子");
+//		} else {
+//			b2.setF1061Byname("B相通道2虚端子");
+//		}
+//		tableChnData.add(b2);
+//		Tb1061PoutEntity c1 = curSel.getTb1061PoutByF1061CodeC1();
+//		if(c1 == null) {
+//			c1 = new Tb1061PoutEntity("C相通道1虚端子");
+//		} else {
+//			c1.setF1061Byname("C相通道1虚端子");
+//		}
+//		tableChnData.add(c1);
+//		Tb1061PoutEntity c2 = curSel.getTb1061PoutByF1061CodeC2();
+//		if(c2 == null) {
+//			c2 = new Tb1061PoutEntity("C相通道2虚端子");
+//		} else {
+//			c2.setF1061Byname("C相通道2虚端子");
+//		}
+//		tableChnData.add(c2);
 		tableChanel.setInput(tableChnData);
 		tableChanel.getTable().layout();
 		
@@ -278,12 +278,12 @@ public class ChanelConnectDialog extends WrappedDialog{
 			if(tableChanel.getItemCount() == 6) {
 				List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
 				setChanelTableData(input);
-				curSel.setTb1061PoutByF1061CodeA1(input.get(0));
-				curSel.setTb1061PoutByF1061CodeA2(input.get(1));
-				curSel.setTb1061PoutByF1061CodeB1(input.get(2));
-				curSel.setTb1061PoutByF1061CodeB2(input.get(3));
-				curSel.setTb1061PoutByF1061CodeC1(input.get(4));
-				curSel.setTb1061PoutByF1061CodeC2(input.get(5));
+//				curSel.setTb1061PoutByF1061CodeA1(input.get(0));
+//				curSel.setTb1061PoutByF1061CodeA2(input.get(1));
+//				curSel.setTb1061PoutByF1061CodeB1(input.get(2));
+//				curSel.setTb1061PoutByF1061CodeB2(input.get(3));
+//				curSel.setTb1061PoutByF1061CodeC1(input.get(4));
+//				curSel.setTb1061PoutByF1061CodeC2(input.get(5));
 			} else {
 				DialogHelper.showInformation("请关联6个虚端子对象");
 				return;

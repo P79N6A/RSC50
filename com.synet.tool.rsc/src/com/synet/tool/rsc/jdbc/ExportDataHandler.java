@@ -912,8 +912,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1066Sql() {
-		return "INSERT INTO TB1066_PROTMMXU(F1066_CODE,F1067_CODE,F1066_TYPE,F1046_CODE_PROT,F1006_CODE_A," +
-				"F1006_CODE_B,F1006_CODE_C) VALUES (?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1066_PROTMMXU(F1066_CODE,F1067_CODE,F1006_CODE) VALUES (?,?,?)";
 	}
 	
 	@Override
@@ -926,24 +925,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		} else {
 			setSring(preState, index++, null);
 		}
-		setInt(preState, index++, entity.getF1066Type());
-		if (entity.getTb1046IedByF1046CodeProt() != null) {
-			setSring(preState, index++, entity.getTb1046IedByF1046CodeProt().getF1046Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getF1006CodeA() != null) {
-			setSring(preState, index++, entity.getF1006CodeA().getF1006Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getF1006CodeB() != null) {
-			setSring(preState, index++, entity.getF1006CodeB().getF1006Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getF1006CodeC() != null) {
-			setSring(preState, index++, entity.getF1006CodeC().getF1006Code());
+		if (entity.getF1006Code() != null) {
+			setSring(preState, index++, entity.getF1006Code().getF1006Code());
 		} else {
 			setSring(preState, index++, null);
 		}
@@ -951,9 +934,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1067Sql() {
-		return "INSERT INTO TB1067_CTVTSECONDARY(F1067_CODE,F1043_CODE,F1067_INDEX,F1067_MODEL,F1067_TYPE," +
-				"F1061_CODE_A1,F1061_CODE_A2,F1061_CODE_B1,F1061_CODE_B2,F1061_CODE_C1,F1061_CODE_C2," +
-				"F1067_CIRCNO,F1067_DESC) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1067_CTVTSECONDARY(F1067_CODE,F1043_CODE,F1067_INDEX,F1067_NAME,F1067_TYPE," +
+				"F1061_TERMNO,F1067_CIRCNO,F1067_DESC) VALUES (?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -967,38 +949,9 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			setSring(preState, index++, null);
 		}
 		setInt(preState, index++, entity.getF1067Index());
-		setSring(preState, index++, entity.getF1067Model());
+		setSring(preState, index++, entity.getF1067Name());
 		setSring(preState, index++, entity.getF1067Type());
-		if (entity.getTb1061PoutByF1061CodeA1() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeA1().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getTb1061PoutByF1061CodeA2() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeA2().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getTb1061PoutByF1061CodeB1() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeB1().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getTb1061PoutByF1061CodeB2() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeB2().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getTb1061PoutByF1061CodeC1() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeC1().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
-		if (entity.getTb1061PoutByF1061CodeC2() != null) {
-			setSring(preState, index++, entity.getTb1061PoutByF1061CodeC2().getF1061Code());
-		} else {
-			setSring(preState, index++, null);
-		}
+		setSring(preState, index++, entity.getF1067TermNo());
 		setSring(preState, index++, entity.getF1067CircNo());
 		setSring(preState, index++, entity.getF1067Desc());
 	}
