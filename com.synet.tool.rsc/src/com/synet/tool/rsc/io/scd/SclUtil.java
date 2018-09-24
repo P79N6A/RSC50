@@ -48,7 +48,7 @@ public class SclUtil {
 		if (!StringUtil.isEmpty(fc))
 			sb.append(fc);
 		sb.append("$" + doName);
-		if (daName != null)
+		if (daName != null && !"MX".equals(fc))
 			sb.append("$" + daName);
 		return sb.toString();
 	}
