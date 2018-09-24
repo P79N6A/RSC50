@@ -14,6 +14,7 @@ public enum EnumIedType {
 	RTU_DEVICE(new int[]{50});
 	
 	int[] types;
+	
 	private  EnumIedType(int[] types) {
 		this.types = types;
 	}
@@ -22,4 +23,12 @@ public enum EnumIedType {
 		return types;
 	}
 	
+	public boolean include(int typ) {
+		for (int temp : types) {
+			if (temp == typ) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

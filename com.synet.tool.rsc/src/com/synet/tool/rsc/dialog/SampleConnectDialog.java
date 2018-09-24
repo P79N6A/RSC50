@@ -26,6 +26,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
+import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -54,17 +55,19 @@ public class SampleConnectDialog extends WrappedDialog {
 	private Text textDesc;
 	private List<Tb1006AnalogdataEntity> portAnalogTableData;
 	
-	public SampleConnectDialog(Shell parentShell) {
-		super(parentShell);
-	}
-
 	public SampleConnectDialog(Shell defaultShell, String curEntryName, 
-			Tb1066ProtmmxuEntity protmmxuEntity, List<Tb1046IedEntity> iedEntities) {
+			Tb1066ProtmmxuEntity protmmxuEntity, List<Tb1046IedEntity> bayIeds) {
 		super(defaultShell);
 		this.curEntryName = curEntryName;
 		this.curSel = protmmxuEntity;
-		this.iedEntities = iedEntities;
+		this.iedEntities = new ArrayList<>();
+		for (Tb1046IedEntity bayIed : bayIeds) {
+			if (EnumIedType.PROTECT_DEVICE.include(bayIed.getF1046Type())) {
+				iedEntities.add(bayIed);
+			}
+		}
 	}
+	
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
