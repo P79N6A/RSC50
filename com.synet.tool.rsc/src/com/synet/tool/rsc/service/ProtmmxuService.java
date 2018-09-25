@@ -1,13 +1,30 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.util.DataUtils;
 
 public class ProtmmxuService extends BaseService {
+	
+	/**
+	 * 查询关系是否存在，存在返回true,不存在返回false
+	 * @param tb1067CtvtsecondaryByF1067Code
+	 * @param f1006Code
+	 * @return
+	 */
+	public boolean relationExistCheck(Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code,
+			Tb1006AnalogdataEntity f1006Code) {
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("tb1067CtvtsecondaryByF1067Code", tb1067CtvtsecondaryByF1067Code);
+		params.put("f1006Code", f1006Code);
+		Object object = beanDao.getObject(Tb1066ProtmmxuEntity.class, params);
+		return object == null ? false : true;
+	}
 	
 	/**
 	 * 根据互感器查找保护采样

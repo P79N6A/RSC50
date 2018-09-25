@@ -49,10 +49,19 @@ public interface RSCConstants {
      
      
      String DEV_TYPE_ALL		= "全部装置";
+     
      String DEV_TYPE_PRO		= "保护装置";
-     String DEV_TYPE_TER		= "智能终端";
      String DEV_TYPE_UNIT		= "合并单元";
+     String DEV_TYPE_TER		= "智能终端";
+     //测控装置
+     String DEV_TYPE_MOT		= "测控装置";
+     //交换机，采集单元，光配架
+//     String DEV_TYPE_1			= "交换机";
+//     String DEV_TYPE_2			= "采集单元";
+//     String DEV_TYPE_3			= "光配架";
+     
      String DEV_TYPE_UNIT_TER	= "合并智能终端";
+     
      String SEARCH				= "查询";
      String DESCRIPTION			= "描述";
     

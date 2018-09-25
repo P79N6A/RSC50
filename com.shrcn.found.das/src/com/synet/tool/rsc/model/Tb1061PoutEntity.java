@@ -21,6 +21,9 @@ public class Tb1061PoutEntity {
     private Tb1016StatedataEntity stdata;
     private Tb1006AnalogdataEntity algdata;
     
+    //表格操作使用字段
+    private boolean selected;
+    
     public Tb1061PoutEntity() {
 	}
     
@@ -161,4 +164,12 @@ public class Tb1061PoutEntity {
     public void setTb1064StrapByF1064Code(Tb1064StrapEntity tb1064StrapByF1064Code) {
         this.tb1064StrapByF1064Code = tb1064StrapByF1064Code;
     }
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
 }

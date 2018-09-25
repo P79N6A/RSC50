@@ -1,13 +1,23 @@
 package com.synet.tool.rsc.model;
 
 /**
- * 保护采样
+ * 次级-模拟量 关系模型
  * Created by chunc on 2018/8/7.
  */
 public class Tb1066ProtmmxuEntity {
     private String f1066Code;
     private Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code;
     private Tb1006AnalogdataEntity f1006Code;
+    
+    public Tb1066ProtmmxuEntity() {
+		// TODO Auto-generated constructor stub
+	}
+    
+    public Tb1066ProtmmxuEntity(Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code,
+    		Tb1006AnalogdataEntity f1006Code) {
+		this.tb1067CtvtsecondaryByF1067Code = tb1067CtvtsecondaryByF1067Code;
+		this.f1006Code = f1006Code;
+	}
 
     public String getF1066Code() {
         return f1066Code;

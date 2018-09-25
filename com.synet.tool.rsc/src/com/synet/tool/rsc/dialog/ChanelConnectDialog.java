@@ -17,14 +17,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
+import com.synet.tool.rsc.model.Tb1074SVCTVTRelationEntity;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.SVCTVTRelationEntityService;
 import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -51,7 +52,8 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private Composite comRight;
 	private List<Tb1061PoutEntity> chanelTableData;
 	private IedEntityService iedService;
-	private ArrayList<Object> tableChnData;
+	private Button btnDel;
+	private List<Tb1061PoutEntity> selectedPoutList;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -68,7 +70,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		initComboData();
+		initData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
@@ -85,6 +87,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
 		comBtn.setLayout(SwtUtil.getGridLayout(1));
 		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
 		comRight = SwtUtil.createComposite(composite, gridData, 1);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
@@ -104,7 +107,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 		return composite;
 	}
 	
-	private void initComboData() {
+	private void initData() {
+		selectedPoutList = new ArrayList<>();
+		
 		iedService = new IedEntityService();
 		svcbService = new SvcbEntityService();
 		int[] devTypes = EnumIedType.UNIT_DEVICE.getTypes();
@@ -126,56 +131,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 * 初始化表格数据
 	 */
 	private void initTableData() {
-		tableChnData = new ArrayList<>();
-//		Tb1061PoutEntity a1 = curSel.getTb1061PoutByF1061CodeA1();
-//		if(a1 == null) {
-//			a1 = new Tb1061PoutEntity("A相通道1虚端子");
-//		} else {
-//			a1.setF1061Byname("A相通道1虚端子");
-//		}
-//		tableChnData.add(a1);
-//		Tb1061PoutEntity a2 = curSel.getTb1061PoutByF1061CodeA2();
-//		if(a2 == null) {
-//			a2 = new Tb1061PoutEntity("A相通道2虚端子");
-//		} else {
-//			a2.setF1061Byname("A相通道2虚端子");
-//		}
-//		tableChnData.add(a2);
-//		Tb1061PoutEntity b1 = curSel.getTb1061PoutByF1061CodeB1();
-//		if(b1 == null) {
-//			b1 = new Tb1061PoutEntity("B相通道1虚端子");
-//		} else {
-//			b1.setF1061Byname("B相通道1虚端子");
-//		}
-//		tableChnData.add(b1);
-//		Tb1061PoutEntity b2 = curSel.getTb1061PoutByF1061CodeB2();
-//		if(b2 == null) {
-//			b2 = new Tb1061PoutEntity("B相通道2虚端子");
-//		} else {
-//			b2.setF1061Byname("B相通道2虚端子");
-//		}
-//		tableChnData.add(b2);
-//		Tb1061PoutEntity c1 = curSel.getTb1061PoutByF1061CodeC1();
-//		if(c1 == null) {
-//			c1 = new Tb1061PoutEntity("C相通道1虚端子");
-//		} else {
-//			c1.setF1061Byname("C相通道1虚端子");
-//		}
-//		tableChnData.add(c1);
-//		Tb1061PoutEntity c2 = curSel.getTb1061PoutByF1061CodeC2();
-//		if(c2 == null) {
-//			c2 = new Tb1061PoutEntity("C相通道2虚端子");
-//		} else {
-//			c2.setF1061Byname("C相通道2虚端子");
-//		}
-//		tableChnData.add(c2);
-		tableChanel.setInput(tableChnData);
-		tableChanel.getTable().layout();
-		
 		if(DataUtils.listNotNull(iedEntities)) {
 			refreshTableState(iedEntities.get(0));
 		}
-		
 	}
 	
 
@@ -196,32 +154,30 @@ public class ChanelConnectDialog extends WrappedDialog{
 	}
 	
 	private void addListeners() {
+		
 		SelectionListener selectionListener = new SelectionAdapter() {
 			private Tb1046IedEntity curSelIedEntity;
+			@SuppressWarnings("unchecked")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
-				if(obj == btnAdd) {
-					Tb1061PoutEntity rightSel = (Tb1061PoutEntity) tableState.getSelection();
-					if(rightSel == null) {
-						return;
+				if(obj == btnAdd) {//效率较低
+					List<Tb1061PoutEntity> rigthTableData = (List<Tb1061PoutEntity>) tableState.getInput();
+					for (Tb1061PoutEntity tb1061PoutEntity : rigthTableData) {
+						if(tb1061PoutEntity.isSelected()) {
+							selectedPoutList.add(tb1061PoutEntity);
+						}
 					}
-					Tb1061PoutEntity leftSel = (Tb1061PoutEntity) tableChanel.getSelection();
-					if(leftSel == null) {
-						return;
+					List<Tb1061PoutEntity> leftTableData = (List<Tb1061PoutEntity>) tableChanel.getInput();
+					for (Tb1061PoutEntity tb1061PoutEntity : selectedPoutList) {
+						if(!leftTableData.contains(tb1061PoutEntity)) {
+							tableChanel.addRow(tb1061PoutEntity);
+						}
 					}
-					rightSel.setF1061Byname(leftSel.getF1061Byname());
-					int indexSel = tableChnData.indexOf(leftSel);
-					tableChnData.set(indexSel, rightSel);
-					tableChanel.setInput(tableChnData);
-					// 自动选中下一行
-					if (indexSel + 1 < tableChnData.size()) {
-						tableChanel.setSelection(indexSel + 2);
-					}
-					int selectRowNum = tableState.getSelectRowNum();
-					if (selectRowNum < tableState.getItemCount() + 1) {
-						tableState.setSelection(selectRowNum + 1);
-					}
+					tableChanel.refresh();
+				} else if(obj == btnDel) {
+					tableChanel.removeSelected();
+					tableChanel.refresh();
 				} else if(obj == comboDevice) {
 					int curComboDevSelIdx = comboDevice.getSelectionIndex();
 					if(curComboDevSelIdx == preComboDevSelIdx) {
@@ -232,21 +188,11 @@ public class ChanelConnectDialog extends WrappedDialog{
 					curSelIedEntity = getIedEntityByName(selDevName);
 					refreshTableState(curSelIedEntity);
 					comboDevice.redraw();
-				} 
-//				else if(obj == btnDel) {
-//					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) tableChanel.getSelection();
-//					if(poutEntity == null) {
-//						return;
-//					}
-//					tableState.addRow(poutEntity);
-//					tableChanel.removeSelected();
-//					tableChanel.refresh();
-//					tableState.refresh();
-//				}
+				}
 			}
 
 		};
-//		btnDel.addSelectionListener(selectionListener);
+		btnDel.addSelectionListener(selectionListener);
 		btnAdd.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
 	}
@@ -275,18 +221,15 @@ public class ChanelConnectDialog extends WrappedDialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID){
-			if(tableChanel.getItemCount() == 6) {
-				List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
-				setChanelTableData(input);
-//				curSel.setTb1061PoutByF1061CodeA1(input.get(0));
-//				curSel.setTb1061PoutByF1061CodeA2(input.get(1));
-//				curSel.setTb1061PoutByF1061CodeB1(input.get(2));
-//				curSel.setTb1061PoutByF1061CodeB2(input.get(3));
-//				curSel.setTb1061PoutByF1061CodeC1(input.get(4));
-//				curSel.setTb1061PoutByF1061CodeC2(input.get(5));
-			} else {
-				DialogHelper.showInformation("请关联6个虚端子对象");
-				return;
+			SVCTVTRelationEntityService service = new SVCTVTRelationEntityService();
+			List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
+			setChanelTableData(input);
+			for (Tb1061PoutEntity tb1061PoutEntity : input) {
+				boolean exist = service.relationExistCheck(curSel, tb1061PoutEntity);
+				if(!exist) {
+					Tb1074SVCTVTRelationEntity relationEntity = new Tb1074SVCTVTRelationEntity(curSel, tb1061PoutEntity);
+					service.insert(relationEntity);
+				}
 			}
 		}
 		super.buttonPressed(buttonId);

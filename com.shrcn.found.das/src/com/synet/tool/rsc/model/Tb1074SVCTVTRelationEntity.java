@@ -1,13 +1,22 @@
 package com.synet.tool.rsc.model;
 
 /**
- * 保护采样
+ * 互感器次级-输出虚端子 关系类
  * Created by chunc on 2018/8/7.
  */
 public class Tb1074SVCTVTRelationEntity {
     private String f1074Code;
     private Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code;
     private Tb1061PoutEntity f1061Code;
+    
+    public Tb1074SVCTVTRelationEntity() {
+		// TODO Auto-generated constructor stub
+	}
+    
+    public Tb1074SVCTVTRelationEntity(Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code, Tb1061PoutEntity f1061Code) {
+		this.tb1067CtvtsecondaryByF1067Code = tb1067CtvtsecondaryByF1067Code;
+		this.f1061Code = f1061Code;
+	}
 
 	@Override
     public boolean equals(Object o) {

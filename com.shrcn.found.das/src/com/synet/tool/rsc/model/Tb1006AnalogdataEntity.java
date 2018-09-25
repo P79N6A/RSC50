@@ -35,6 +35,9 @@ public class Tb1006AnalogdataEntity {
     private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
     private Tb1061PoutEntity tb1061PoutByF1061Code;
     
+    //表格操作使用
+    private boolean selected;
+    
     public Tb1006AnalogdataEntity() {
 	}
     
@@ -342,6 +345,14 @@ public class Tb1006AnalogdataEntity {
 
 	public void setTb1061PoutByF1061Code(Tb1061PoutEntity tb1061PoutByF1061Code) {
 		this.tb1061PoutByF1061Code = tb1061PoutByF1061Code;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }

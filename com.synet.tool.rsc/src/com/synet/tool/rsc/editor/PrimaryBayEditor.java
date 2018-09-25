@@ -35,14 +35,12 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
-import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
-import com.synet.tool.rsc.service.ProtmmxuService;
 import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -56,7 +54,7 @@ import com.synet.tool.rsc.util.DataUtils;
 public class PrimaryBayEditor extends BaseConfigEditor {
 	
 	private Button btnChanelConnect;
-	private Button btnSampleConnect;
+	private Button btnSampleAdd;
 	private String curEntryName;
 	private Button btnAdd;
 	private String[] comboItems;
@@ -79,12 +77,13 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private CTabFolder tabFolder;
 	private CtvtsecondaryService ctvtsecondaryService;
 	private EquipmentEntityService equipmentEntityService;
-	private ProtmmxuService protmmxuService;
-	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
+//	private ProtmmxuService protmmxuService;
+//	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
 	private List<Tb1043EquipmentEntity> statedataEntities;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1043EquipmentEntity> entities;
 	private List<Tb1046IedEntity> comboDvData;
+	private Button btnSampleDel;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -119,11 +118,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		tableCtvtsecondary.getTable().setLayoutData(gdSpan_4);
 		//保护采样值
 		Composite compProtect = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
-		compProtect.setLayout(SwtUtil.getGridLayout(2));
+		compProtect.setLayout(SwtUtil.getGridLayout(3));
 		String protLbName = curEntryName + "保护采样值配置";
 		SwtUtil.createLabel(compProtect, protLbName, gdlb);
-		btnSampleConnect = SwtUtil.createButton(compProtect, SwtUtil.bt_gd, SWT.BUTTON1, "采样关联");
-		SwtUtil.createLabel(compProtect, "			", new GridData(SWT.DEFAULT,10));
+		btnSampleAdd = SwtUtil.createButton(compProtect, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
+		btnSampleDel = SwtUtil.createButton(compProtect, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
+//		SwtUtil.createLabel(compProtect, "			", new GridData(SWT.DEFAULT,10));
 		tableProtectSample = TableFactory.getProtectSampleTalbe(compProtect);
 		tableProtectSample.getTable().setLayoutData(gdSpan_3);
 		//开关刀闸状态
@@ -171,7 +171,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	public void init() {
 		ctvtsecondaryService = new CtvtsecondaryService();
         equipmentEntityService = new EquipmentEntityService();
-		protmmxuService = new ProtmmxuService();
+//		protmmxuService = new ProtmmxuService();
 		statedataService = new StatedataService();
 		poutEntityService = new PoutEntityService();
 		
@@ -237,16 +237,14 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					chnDialog.open();
 					beandao.update(ctvtsecondaryEntity);
 					tableCtvtsecondary.refresh();
-				} else if(object == btnSampleConnect) {
-					Object obj = tableProtectSample.getSelection();
-					if(obj == null) {
-						return;
-					}
-					Tb1066ProtmmxuEntity protmmxuEntity = (Tb1066ProtmmxuEntity) obj;
+				} else if(object == btnSampleAdd) {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
-							curEntryName, protmmxuEntity, iedEntities);
+							ctvtsecondaryEntities, curEntryName, iedEntities);
 					sampleDialog.open();
-					beandao.update(protmmxuEntity);
+					tableProtectSample.refresh();
+				} else if(object == btnSampleDel) {
+					poutEntityService.delete(tableProtectSample.getSelection());
+					tableProtectSample.removeSelected();
 					tableProtectSample.refresh();
 				} else if(object == btnAdd) {
 					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
@@ -308,7 +306,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		btnDelTsf.addSelectionListener(sleListener);
 		btnAddTsf.addSelectionListener(sleListener);
 		btnChanelConnect.addSelectionListener(sleListener);
-		btnSampleConnect.addSelectionListener(sleListener);
+		btnSampleAdd.addSelectionListener(sleListener);
 		btnAdd.addSelectionListener(sleListener);
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
@@ -339,9 +337,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				break;
 			case 1:
 				//查找互感器集合下关联的所有保护采样
-				if(!DataUtils.listNotNull(protmmxuEntities)) {
-					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-				}
+//				if(!DataUtils.listNotNull(protmmxuEntities)) {
+//					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+//				}
 				break;
 			case 2:
 				//初始化开关刀闸状态左表
@@ -369,9 +367,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				break;
 			case 1:
 				//查找互感器集合下关联的所有保护采样
-				if(!DataUtils.listNotNull(protmmxuEntities)) {
-					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-				}
+//				if(!DataUtils.listNotNull(protmmxuEntities)) {
+//					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+//				}
 				break;
 			case 2:
 				//初始化开关刀闸状态左表
@@ -386,7 +384,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			}
 		}
 		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
-		tableProtectSample.setInput(protmmxuEntities);
+//		tableProtectSample.setInput(protmmxuEntities);
 		tableSwitchStatus.setInput(statedataEntities);
 	}
 
