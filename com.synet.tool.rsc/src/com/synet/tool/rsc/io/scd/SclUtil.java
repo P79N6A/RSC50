@@ -55,8 +55,9 @@ public class SclUtil {
 
 	public static String getDoRef(Element fcdaEl, String daName) {
 		String ref = fcdaEl.attributeValue("ref");
-		return StringUtil.isEmpty(daName) ? ref : ref.substring(0,
-				ref.lastIndexOf(daName) - 1);
+		boolean empty = StringUtil.isEmpty(daName);
+		int index = ref.lastIndexOf(daName);
+		return (empty || index < 1) ? ref : ref.substring(0, index - 1);
 	}
 	
 	/**
