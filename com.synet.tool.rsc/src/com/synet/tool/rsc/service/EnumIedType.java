@@ -11,7 +11,13 @@ public enum EnumIedType {
 	//合并智能终端
 	TER_UNI_DEVICE(new int[]{40,41,42,43,44,45,46,47,48,49}),
 	//测控装置
-	RTU_DEVICE(new int[]{50});
+	RTU_DEVICE(new int[]{50}),
+	//交换机
+	SWC_DEVICE(new int[]{60}),
+	//光纤配线架
+	GAT_DEVICE(new int[]{61}),
+	//采集器
+	ODF_DEVICE(new int[]{62});
 	
 	int[] types;
 	

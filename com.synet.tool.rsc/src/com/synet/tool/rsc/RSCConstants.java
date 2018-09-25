@@ -23,6 +23,7 @@ public interface RSCConstants {
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";
     
      String ET_PT_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectBaylEditor";
+     String ET_PT_BAY_PUB	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectBayPubEditor";
      String ET_PT_IED		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectIEDlEditor";
      String ET_PT_PBAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectPubBaylEditor";
 
@@ -56,9 +57,9 @@ public interface RSCConstants {
      //测控装置
      String DEV_TYPE_MOT		= "测控装置";
      //交换机，采集单元，光配架
-//     String DEV_TYPE_1			= "交换机";
-//     String DEV_TYPE_2			= "采集单元";
-//     String DEV_TYPE_3			= "光配架";
+     String DEV_TYPE_SWC		= "交换机";
+     String DEV_TYPE_GAT		= "采集单元";
+     String DEV_TYPE_ODF		= "光配架";
      
      String DEV_TYPE_UNIT_TER	= "合并智能终端";
      

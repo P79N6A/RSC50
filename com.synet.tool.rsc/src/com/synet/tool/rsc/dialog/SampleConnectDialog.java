@@ -19,7 +19,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
@@ -55,12 +57,13 @@ public class SampleConnectDialog extends WrappedDialog {
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1006AnalogdataEntity> selectedAnalog;
 	private ProtmmxuService protmmxuService;
+	private List<Tb1066ProtmmxuEntity> protmmxuEntityList;
 	
 	public SampleConnectDialog(Shell defaultShell, List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities, String curEntryName, 
 			 List<Tb1046IedEntity> bayIeds) {
 		super(defaultShell);
 		this.curEntryName = curEntryName;
-		
+		iedEntities = new ArrayList<>();
 		this.ctvtsecondaryEntities = ctvtsecondaryEntities;
 		for (Tb1046IedEntity bayIed : bayIeds) {
 			if (EnumIedType.PROTECT_DEVICE.include(bayIed.getF1046Type())) {
@@ -127,7 +130,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		
 		tableProtctSample.setInput(ctvtsecondaryEntities);
 		selectedAnalog = new ArrayList<>();
-		iedEntities = new ArrayList<>();
+		
 		protmmxuService = new ProtmmxuService();
 	}
 
@@ -219,10 +222,12 @@ public class SampleConnectDialog extends WrappedDialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID) {
+			RSCProperties rscp = RSCProperties.getInstance();
 			Object selection = tableProtctSample.getSelection();
 			if(selection == null) {
 				return;
 			}
+			protmmxuEntityList = new ArrayList<>();
 			Tb1067CtvtsecondaryEntity selectedCtvt = (Tb1067CtvtsecondaryEntity) selection;
 			@SuppressWarnings("unchecked")
 			List<Tb1006AnalogdataEntity> input = (List<Tb1006AnalogdataEntity>) tableSample.getInput();
@@ -236,10 +241,17 @@ public class SampleConnectDialog extends WrappedDialog {
 			for (Tb1006AnalogdataEntity tb1006AnalogdataEntity : selectedAnalog) {
 				boolean exist = protmmxuService.relationExistCheck(selectedCtvt, tb1006AnalogdataEntity);
 				if(!exist) {
-					protmmxuService.insert(new Tb1066ProtmmxuEntity(selectedCtvt, tb1006AnalogdataEntity));
+					Tb1066ProtmmxuEntity entity = new Tb1066ProtmmxuEntity(selectedCtvt, tb1006AnalogdataEntity);
+					entity.setF1066Code(rscp.nextTbCode(DBConstants.PR_MMXU));
+					protmmxuEntityList.add(entity);
+					protmmxuService.insert(entity);
 				}
 			}
 		}
 		super.buttonPressed(buttonId);
+	}
+	
+	public List<Tb1066ProtmmxuEntity> getProtmmxuEntityList() {
+		return protmmxuEntityList;
 	}
 }

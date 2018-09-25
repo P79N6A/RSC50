@@ -17,6 +17,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
 import static com.synet.tool.rsc.RSCConstants.ET_PR_BAY;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_BAY;
+import static com.synet.tool.rsc.RSCConstants.ET_PT_BAY_PUB;
 import static com.synet.tool.rsc.RSCConstants.ET_PT_IED;
 import static com.synet.tool.rsc.RSCConstants.ET_PY_AREA;
 import static com.synet.tool.rsc.RSCConstants.ET_PY_MDL;
@@ -140,7 +141,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		if(DataUtils.listNotNull(bayEntityList)){
 			ConfigTreeEntry bayOther = null;
 			ConfigTreeEntry bayMot = null;
-			ConfigTreeEntry bayPub = null;
+//			ConfigTreeEntry bayPub = null;
 			int bayIndex = 0;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);
@@ -159,17 +160,19 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 						bayOther = bayEntry;
 					} else if (DBConstants.BAY_MOT.equals(bayName)) {
 						bayMot = bayEntry;
-					} else if (DBConstants.BAY_PUB.equals(bayName)) {
-						bayPub = bayEntry;
-					}
+					} 
+//					else if (DBConstants.BAY_PUB.equals(bayName)) {
+//						bayPub = bayEntry;
+//					}
 				}
 			}
 			if (bayOther != null)
 				bayOther.setIndex(++bayIndex);
 			if (bayMot != null)
 				bayMot.setIndex(++bayIndex);
-			if (bayPub != null)
-				bayPub.setIndex(++bayIndex);
+//			if (bayPub != null)
+//				bayPub.setIndex(++bayIndex);
+			createConfigEntry(protectEntry, DBConstants.BAY_PUB, "bay.gif", ET_PT_BAY_PUB, ++bayIndex);
 			createConfigEntry(protectEntry, DBConstants.BAY_ALL, "bay.gif", ET_PT_BAY, ++bayIndex);
 		}
 		/** 动态加载-end  */

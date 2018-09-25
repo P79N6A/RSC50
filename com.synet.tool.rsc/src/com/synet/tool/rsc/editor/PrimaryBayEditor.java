@@ -241,6 +241,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
 							ctvtsecondaryEntities, curEntryName, iedEntities);
 					sampleDialog.open();
+					tableProtectSample.addRows(sampleDialog.getProtmmxuEntityList(), 0);
 					tableProtectSample.refresh();
 				} else if(object == btnSampleDel) {
 					poutEntityService.delete(tableProtectSample.getSelection());

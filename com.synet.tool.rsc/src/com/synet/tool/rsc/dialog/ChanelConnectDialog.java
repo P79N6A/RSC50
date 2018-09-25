@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -221,6 +223,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID){
+			RSCProperties rscp = RSCProperties.getInstance();
 			SVCTVTRelationEntityService service = new SVCTVTRelationEntityService();
 			List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
 			setChanelTableData(input);
@@ -228,6 +231,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 				boolean exist = service.relationExistCheck(curSel, tb1061PoutEntity);
 				if(!exist) {
 					Tb1074SVCTVTRelationEntity relationEntity = new Tb1074SVCTVTRelationEntity(curSel, tb1061PoutEntity);
+					relationEntity.setF1074Code(rscp.nextTbCode(DBConstants.PR_SVCTVT));
 					service.insert(relationEntity);
 				}
 			}

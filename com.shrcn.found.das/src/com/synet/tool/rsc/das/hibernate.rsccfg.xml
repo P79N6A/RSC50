@@ -72,6 +72,7 @@
         <mapping resource="com/synet/tool/rsc/hbm/Tb1071DauEntity.hbm.xml"/>
         
         <mapping resource="com/synet/tool/rsc/hbm/Tb1072RcdchanneldEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/Tb1074SVCTVTRelationEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1090LineprotfiberEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1091IotermEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1092PowerkkEntity.hbm.xml"/>
