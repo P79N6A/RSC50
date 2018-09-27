@@ -16,7 +16,8 @@ public class IM102FibreListEntity {
 	private String cubicleCodeA;		//端口A屏柜代码
 	private String cubicleDescA;		//端口A屏柜名称
 	private String coreCodeA;         	//端口A芯线编号
-	private String distribFrameCodeA;   //端口A光配架端口编号
+	private String distribFrameCodeA;   //端口A光配单元编号
+	private String distribFramePortNoA;	//端口A光配单元端子号
 	private String devCodeB;
 	private String devNameB;
 	private String devDescB;
@@ -26,6 +27,7 @@ public class IM102FibreListEntity {
 	private String cubicleDescB;
 	private String coreCodeB;
 	private String distribFrameCodeB;
+	private String distribFramePortNoB;
 	private Integer matched;
 	private IM100FileInfoEntity fileInfoEntity;
 	
@@ -104,6 +106,12 @@ public class IM102FibreListEntity {
 	public void setDistribFrameCodeA(String distribFrameCodeA) {
 		this.distribFrameCodeA = distribFrameCodeA;
 	}
+	public String getDistribFramePortNoA() {
+		return distribFramePortNoA;
+	}
+	public void setDistribFramePortNoA(String distribFramePortNoA) {
+		this.distribFramePortNoA = distribFramePortNoA;
+	}
 	public String getDevCodeB() {
 		return devCodeB;
 	}
@@ -157,6 +165,12 @@ public class IM102FibreListEntity {
 	}
 	public void setDistribFrameCodeB(String distribFrameCodeB) {
 		this.distribFrameCodeB = distribFrameCodeB;
+	}
+	public String getDistribFramePortNoB() {
+		return distribFramePortNoB;
+	}
+	public void setDistribFramePortNoB(String distribFramePortNoB) {
+		this.distribFramePortNoB = distribFramePortNoB;
 	}
 	public Integer getMatched() {
 		return matched;

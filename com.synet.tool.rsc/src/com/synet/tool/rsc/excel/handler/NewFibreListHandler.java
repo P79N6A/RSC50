@@ -90,8 +90,11 @@ public class NewFibreListHandler extends RscSheetHandler {
 			case ExcelConstants.IM102_CORE_CODEA: 
 				entity.setCoreCodeA(value);
 				break;
-			case ExcelConstants.IM102_DISTRIB_FRAME_CODEA: 
+			case ExcelConstants.IM102_DISTRIBFRAME_CODEA: 
 				entity.setDistribFrameCodeA(value);
+				break;
+			case ExcelConstants.IM102_DISTRIBFRAME_PORT_NOA:
+				entity.setDistribFramePortNoB(value);
 				break;
 			case ExcelConstants.IM102_DEV_CODEB: 
 				entity.setDevCodeB(value);
@@ -117,8 +120,11 @@ public class NewFibreListHandler extends RscSheetHandler {
 			case ExcelConstants.IM102_CORE_CODEB: 
 				entity.setCoreCodeB(value);
 				break;
-			case ExcelConstants.IM102_DISTRIB_FRAME_CODEB: 
+			case ExcelConstants.IM102_DISTRIBFRAME_CODEB: 
 				entity.setDistribFrameCodeB(value);
+				break;
+			case ExcelConstants.IM102_DISTRIBFRAME_PORT_NOB:
+				entity.setDistribFramePortNoB(value);
 				break;
 			default:
 				break;

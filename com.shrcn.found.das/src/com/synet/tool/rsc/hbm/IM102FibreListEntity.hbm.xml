@@ -38,7 +38,10 @@
             <column name="CORE_CODEA" sql-type="varchar" length="96"/>
         </property>
         <property name="distribFrameCodeA">
-            <column name="DISTRIB_FRAME_CODEA" sql-type="varchar" length="96"/>
+            <column name="DISTRIBFRAME_CODEA" sql-type="varchar" length="96"/>
+        </property>
+        <property name="distribFramePortNoA">
+            <column name="DISTRIBFRAME_PORT_NOA" sql-type="varchar" length="96"/>
         </property>
         <property name="devCodeB">
             <column name="DEV_CODEB" sql-type="varchar" length="96"/>
@@ -65,7 +68,10 @@
             <column name="CORE_CODEB" sql-type="varchar" length="96"/>
         </property>
         <property name="distribFrameCodeB">
-            <column name="DISTRIB_FRAME_CODEB" sql-type="varchar" length="96"/>
+            <column name="DISTRIBFRAME_CODEB" sql-type="varchar" length="96"/>
+        </property>
+        <property name="distribFramePortNoB">
+            <column name="DISTRIBFRAME_PORT_NOB" sql-type="varchar" length="96"/>
         </property>
         <property name="matched">
             <column name="MATCHED" sql-type="int"/>

@@ -731,7 +731,8 @@ create table IM102_Fibre_List
    CUBICLE_CODEA        varchar(96),
    CUBICLE_DESCA        varchar(96),
    CORE_CODEA           varchar(96),
-   DISTRIB_FRAME_CODEA  varchar(96),
+   DISTRIBFRAME_CODEA   varchar(96),
+   DISTRIBFRAME_PORT_NOA varchar(96),
    DEV_CODEB           	varchar(96),
    DEV_NAMEB          	varchar(96),
    DEV_DESCB           	varchar(96),
@@ -741,6 +742,7 @@ create table IM102_Fibre_List
    CUBICLE_DESCB        varchar(96),
    CORE_CODEB           varchar(96),
    DISTRIB_FRAME_CODEB  varchar(96),
+   DISTRIBFRAME_PORT_NOB varchar(96),
    MATCHED           	INT,
    primary key (IM102_CODE)
 );
