@@ -26,8 +26,8 @@ public class PortEntityService extends BaseService{
 	 * @param f1048No
 	 * @return
 	 */
-	public Tb1048PortEntity getPortEntity(String devName, String slot,String f1048No) {
-		//TODO devName是英文名，还是中文名待确认?
+	public Tb1048PortEntity getPortEntity(String devName, String slot,String portNo) {
+		if (devName == null || slot == null || portNo == null) return null;
 		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 		if (ied != null) {
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -37,7 +37,7 @@ public class PortEntityService extends BaseService{
 			if (boardEntity != null) {
 				params.clear();
 				params.put("tb1047BoardByF1047Code",boardEntity);
-				params.put("f1048No", f1048No);
+				params.put("f1048No", portNo);
 				return (Tb1048PortEntity) beanDao.getObject(Tb1048PortEntity.class, params);
 			}
 		}

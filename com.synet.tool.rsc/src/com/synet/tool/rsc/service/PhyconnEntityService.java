@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 
 public class PhyconnEntityService extends BaseService {
@@ -18,4 +19,11 @@ public class PhyconnEntityService extends BaseService {
 		params.put("tb1048PortByF1048CodeB", physconnEntity.getTb1048PortByF1048CodeB());
 		return (Tb1053PhysconnEntity) beanDao.getObject(Tb1053PhysconnEntity.class, params);
 	}
+	
+	public Tb1053PhysconnEntity getByTb1048PortByF1048CodeB(Tb1048PortEntity tb1048PortByF1048CodeB) {
+		if (tb1048PortByF1048CodeB == null) return null;
+		return (Tb1053PhysconnEntity) beanDao.getObject(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeB", tb1048PortByF1048CodeB);
+	}
+	
+	
 }
