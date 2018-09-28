@@ -23,10 +23,6 @@
         <many-to-one name="tb1042BayByF1042Code" class="com.synet.tool.rsc.model.Tb1042BayEntity" lazy="false">
             <column name="F1042_CODE" not-null="true"/>
         </many-to-one>
-        <many-to-one name="tb1016StatedataEntity" property-ref="parentCode"
-        	class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false" lazy="false">
-            <column name="F1043_CODE" not-null="true"/>
-        </many-to-one>
         <set name="tb1044TerminalsByF1043Code" inverse="true" cascade="save-update" table="tb1044_terminal" lazy="false">
         	<key column="F1043_CODE"></key>
         	<one-to-many class="com.synet.tool.rsc.model.Tb1044TerminalEntity" />

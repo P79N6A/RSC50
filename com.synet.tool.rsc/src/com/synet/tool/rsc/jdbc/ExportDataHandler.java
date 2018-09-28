@@ -308,7 +308,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1043Sql() {
 		return "INSERT INTO TB1043_EQUIPMENT(F1043_CODE,F1042_CODE,F1043_NAME,F1043_DESC,F1043_ISVIRTUAL," +
-				"F1043_TYPE,F1016_CODE) VALUES (?,?,?,?,?,?,?)";
+				"F1043_TYPE) VALUES (?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -321,11 +321,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1043Desc());
 		setInt(preState, index++, entity.getF1043IsVirtual());
 		setInt(preState, index++, entity.getF1043Type());
-		if (entity.getTb1016StatedataEntity() != null) {
-			setSring(preState, index++, entity.getTb1016StatedataEntity().getF1016Code());
-		} else {
-			setSring(preState, index++, null);
-		}
 	}
 	
 	@Override

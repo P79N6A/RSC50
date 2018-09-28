@@ -47,6 +47,9 @@ import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.F1011_NO;
+
+import de.kupzog.ktable.KTableCellSelectionListener;
 
 /**
  * 一次拓扑模型树菜单编辑器。
@@ -58,7 +61,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private Button btnChanelConnect;
 	private Button btnSampleAdd;
 	private String curEntryName;
-	private Button btnAdd;
+	private Button btnAddSwitch;
+	private Button btnDelSwitch;
 	private String[] comboItems;
 	private Button btnSearch;
 	private DevKTable tableCtvtsecondary;
@@ -149,7 +153,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		GridData gridBtnCom = new GridData(41, SWT.DEFAULT);
 		Composite comBtn = SwtUtil.createComposite(comLeft, gridBtnCom, 1);
 		comBtn.setLayout(SwtUtil.getGridLayout(1));
-		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
+		btnAddSwitch = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
+		btnDelSwitch = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
 		
 		//开关刀闸状态-右侧
 		Composite comRight = SwtUtil.createComposite(compSwitch, gridData, 1);
@@ -224,6 +229,35 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	}
 
 	protected void addListeners() {
+		tableSwitchStatus.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
+			@Override
+			public void fixedCellSelected(int col, int row, int statemask) {
+			}
+			
+			@Override
+			public void cellSelected(int col, int row, int statemask) {
+				if (row < 1) {
+					return;
+				}
+				Tb1043EquipmentEntity switchEq = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
+				List<Tb1016StatedataEntity> stateDatas = statedataService.getStateDataByParentCode(switchEq.getF1043Code());
+				if (stateDatas != null && stateDatas.size()>0) {
+					List<Tb1016StatedataEntity> eqpSts = new ArrayList<>();
+					int sel = comboDvData.indexOf(stateDatas.get(0).getTb1046IedByF1046Code());
+					comboDevice.select(sel);
+					initTableSluiceStatus(sel);
+					for (Tb1016StatedataEntity staData : tableSluiceStatuData) {
+						if (stateDatas.contains(staData)) {
+							staData.setParentCode(switchEq.getF1043Code());
+							eqpSts.add(staData);
+						}
+					}
+					tableSluiceStatus.refresh();
+					tableSluiceStatus.setSelections(eqpSts);
+				}
+			}
+		});
+		
 		SelectionListener sleListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -250,22 +284,36 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					beandao.deleteBatch(tableProtectSample.getSelections());
 					tableProtectSample.removeSelected();
 					tableProtectSample.refresh();
-				} else if(object == btnAdd) {
-					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) tableSluiceStatus.getSelection();
-					if(statedataEntity == null) {
-						return;
-					}
+				} else if(object == btnAddSwitch) {
 					Tb1043EquipmentEntity equipmentEntity = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
-					if(equipmentEntity == null) {
-						return;
+					List<Object> selections = tableSluiceStatus.getSelections();
+					if (equipmentEntity != null && selections != null && selections.size() > 0) {
+						for (Object o : selections) {
+							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) o;
+							statedataEntity.setParentCode(equipmentEntity.getF1043Code());
+							int f1011 = (equipmentEntity.getF1043Type()==1) ? F1011_NO.ST_BRK.getId() : F1011_NO.ST_DIS.getId();
+							statedataEntity.setF1011No(f1011);
+						}
 					}
-					equipmentEntity.setTb1016StatedataEntity(statedataEntity);	
-					equipmentEntity.setF1016Code(statedataEntity.getF1016Code());
-					statedataEntity.setParentCode(equipmentEntity.getF1043Code());
-					statedataEntity.setF1011No(equipmentEntity.getF1043Type());
-					BeanDaoImpl.getInstance().update(statedataEntity);
-					tableSwitchStatus.refresh();
-					tableSwitchStatus.getTable().layout();
+					BeanDaoImpl.getInstance().updateBatch(selections);
+					tableSluiceStatus.refresh();
+					tableSluiceStatus.setSelections(selections);
+				}  else if(object == btnDelSwitch) {
+					Tb1043EquipmentEntity equipmentEntity = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
+					List<Object> selections = tableSluiceStatus.getSelections();
+					if (equipmentEntity != null && selections != null && selections.size() > 0) {
+						int selectionIndex = comboDevice.getSelectionIndex();
+						if (selectionIndex > -1) {
+							Tb1046IedEntity iedEntity = comboDvData.get(selectionIndex);
+							for (Object o : selections) {
+								Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) o;
+								statedataEntity.setParentCode(iedEntity.getF1046Code());
+								statedataEntity.setF1011No(F1011_NO.IED_WRN_R60.getId());
+							}
+						}
+					}
+					BeanDaoImpl.getInstance().updateBatch(selections);
+					tableSluiceStatus.refresh();
 				} else if(object == btnSearch) {
 					if(tableSluiceStatuData == null) {
 						return;
@@ -312,7 +360,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		btnChanelConnect.addSelectionListener(sleListener);
 		btnSampleAdd.addSelectionListener(sleListener);
 		btnSampleDel.addSelectionListener(sleListener);
-		btnAdd.addSelectionListener(sleListener);
+		btnAddSwitch.addSelectionListener(sleListener);
+		btnDelSwitch.addSelectionListener(sleListener);
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
 	}

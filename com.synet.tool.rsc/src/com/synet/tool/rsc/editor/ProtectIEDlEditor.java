@@ -406,7 +406,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				//保护信息-保护动作
 				String[] names = DictManager.getInstance().getDictNames("DS_DIN");
 				mmsfcdasProtcAction = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
 				tableProtectAction.setInput(mmsfcdasProtcAction);
 			}
 			break;
@@ -415,7 +415,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				//保护信息-保护测量量
 				String[] names = DictManager.getInstance().getDictNames("DS_AIN");
 				mmsfcdasProtcMeaQua = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
 				tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
 			}
 			break;
@@ -448,7 +448,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(!DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
 				String[] names = DictManager.getInstance().getDictNames("DS_STATE");
 				mmsfcdaEntitiesRun = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
+						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
 					tableRunState.setInput(mmsfcdaEntitiesRun);	
 			}
 			
@@ -456,7 +456,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.DEV_WARNING:
 			if(!DataUtils.listNotNull(mmsfcdaEntities)) {
 				String[] names = DictManager.getInstance().getDictNames("DS_WARN");
-				mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity.getF1046Name(), names);
+				mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
 					tableDeviceWarning.setInput(mmsfcdaEntities);
 					tableDeviceName.setInput(iedEntityList);
 			}

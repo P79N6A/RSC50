@@ -23,57 +23,53 @@ public class MmsfcdaService extends BaseService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(String iedName, String dataSet) {
-		if(!DataUtils.strNotNull(iedName) || !DataUtils.strNotNull(dataSet)) {
+	private List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(Tb1046IedEntity iedEntity, String dataSet) {
+		if((iedEntity == null) || !DataUtils.strNotNull(dataSet)) {
 			return new ArrayList<>();
 		}
-		List<Tb1054RcbEntity> rcbEntities = (List<Tb1054RcbEntity>) beanDao.getListByCriteria(Tb1054RcbEntity.class, "f1054Dataset", dataSet);
-		List<Tb1058MmsfcdaEntity> result = (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, "tb1054RcbByF1054Code", rcbEntities);
-		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
-		for (Tb1058MmsfcdaEntity tb1058MmsfcdaEntity : result) {
-			if(iedName.equals(tb1058MmsfcdaEntity.getTb1046IedByF1046Code().getF1046Name())) {
-				temp.add(tb1058MmsfcdaEntity);
-			}
-		}
-		return temp;
+		Map<String, Object> params = new HashMap<>();
+		params.put("tb1046IedByF1046Code", iedEntity);
+		params.put("f1054Dataset", dataSet);
+		List<Tb1054RcbEntity> rcbEntities = (List<Tb1054RcbEntity>) beanDao.getListByCriteria(Tb1054RcbEntity.class, params);
+		return (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, "tb1054RcbByF1054Code", rcbEntities);
 	}
 	
 	/**
 	 * 根据所属多个数据集名称获取
-	 * @param iedName
+	 * @param iedEntity
 	 * @param dataSets
 	 * @return
 	 */
-	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(String iedName, String[] dataSets) {
+	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(Tb1046IedEntity iedEntity, String[] dataSets) {
 		List<Tb1058MmsfcdaEntity> fcdas = new ArrayList<>();
 		for (String dataSet : dataSets) {
-			fcdas.addAll(getMmsdcdaByDataSet(iedName, dataSet));
+			fcdas.addAll(getMmsdcdaByDataSet(iedEntity, dataSet));
 		}
 		return fcdas;
 	}
 	
-	/**
-	 * 根据所属数据集名称和数据类型获取
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(String iedName, String dataSet, int dataType) {
-		if(!DataUtils.strNotNull(iedName) || !DataUtils.strNotNull(dataSet)) {
-			return new ArrayList<>();
-		}
-		List<Tb1054RcbEntity> rcbEntities = (List<Tb1054RcbEntity>) beanDao.getListByCriteria(Tb1054RcbEntity.class, "f1054Dataset", dataSet);
-		List<Tb1058MmsfcdaEntity> result = (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, 
-				"tb1054RcbByF1054Code", rcbEntities);
-		
-		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
-		for (Tb1058MmsfcdaEntity tb1058MmsfcdaEntity : result) {
-			if(iedName.equals(tb1058MmsfcdaEntity.getTb1046IedByF1046Code().getF1046Name())
-					&& tb1058MmsfcdaEntity.getF1058DataType() == dataType) {
-				temp.add(tb1058MmsfcdaEntity);
-			}
-		}
-		return temp;
-	}
+//	/**
+//	 * 根据所属数据集名称和数据类型获取
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public List<Tb1058MmsfcdaEntity> getMmsdcdaByDataSet(String iedName, String dataSet, int dataType) {
+//		if(!DataUtils.strNotNull(iedName) || !DataUtils.strNotNull(dataSet)) {
+//			return new ArrayList<>();
+//		}
+//		List<Tb1054RcbEntity> rcbEntities = (List<Tb1054RcbEntity>) beanDao.getListByCriteria(Tb1054RcbEntity.class, "f1054Dataset", dataSet);
+//		List<Tb1058MmsfcdaEntity> result = (List<Tb1058MmsfcdaEntity>) hqlDao.selectInObjects(Tb1058MmsfcdaEntity.class, 
+//				"tb1054RcbByF1054Code", rcbEntities);
+//		
+//		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
+//		for (Tb1058MmsfcdaEntity tb1058MmsfcdaEntity : result) {
+//			if(iedName.equals(tb1058MmsfcdaEntity.getTb1046IedByF1046Code().getF1046Name())
+//					&& tb1058MmsfcdaEntity.getF1058DataType() == dataType) {
+//				temp.add(tb1058MmsfcdaEntity);
+//			}
+//		}
+//		return temp;
+//	}
 	
 	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String f1058RefAddr) {
 		return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, "f1058RefAddr", f1058RefAddr);

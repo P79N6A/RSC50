@@ -48,8 +48,8 @@ public class LightRefAddrDialog extends KTableEditorDialog {
 	private void initData() {
 		MmsfcdaService mmsfcdaService = new MmsfcdaService();
 		String[] names = DictManager.getInstance().getDictNames("DS_AIN");
-		String devName = portEntity.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
-		mmsList = mmsfcdaService.getMmsdcdaByDataSet(devName, names);
+		mmsList = mmsfcdaService.getMmsdcdaByDataSet(portEntity.getTb1047BoardByF1047Code()
+				.getTb1046IedByF1046Code(), names);
 		
 		int size = mmsList.size();
 		items = new String[size];

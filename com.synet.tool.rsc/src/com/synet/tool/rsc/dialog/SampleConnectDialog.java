@@ -168,6 +168,9 @@ public class SampleConnectDialog extends WrappedDialog {
 			
 			@Override
 			public void cellSelected(int col, int row, int statemask) {
+				if (row < 1) {
+					return;
+				}
 				List<Object> secds = tableProtctSample.getSelections();
 				List<Tb1067CtvtsecondaryEntity> selections = new ArrayList<>();
 				for (Object o : secds) {
