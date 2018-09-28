@@ -743,7 +743,7 @@ create table IM102_Fibre_List
    CUBICLE_CODEB        varchar(96),
    CUBICLE_DESCB        varchar(96),
    CORE_CODEB           varchar(96),
-   DISTRIB_FRAME_CODEB  varchar(96),
+   DISTRIBFRAME_CODEB  varchar(96),
    DISTRIBFRAME_PORT_NOB varchar(96),
    MATCHED           	INT,
    primary key (IM102_CODE)

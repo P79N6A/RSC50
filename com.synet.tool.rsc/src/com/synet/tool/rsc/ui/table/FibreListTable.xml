@@ -16,7 +16,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口A屏柜代码" editor="text" name="cubicleCodeA" width="100" default=""/> 
   <field desc="端口A屏柜名称" editor="text" name="cubicleDescA" width="100" default=""/> 
   <field desc="端口A芯线编号" editor="text" name="coreCodeA" width="100" default=""/> 
-  <field desc="端口A光配架端口编号" editor="text" name="distribFrameCodeA" width="100" default=""/> 
+  <field desc="装置A柜光配单元编号" editor="text" name="distribFrameCodeA" width="100" default=""/> 
+  <field desc="装置A柜光配单元端子号" editor="text" name="distribFramePortNoA" width="100" default=""/> 
    <field desc="端口B装置代码" editor="text" name="devCodeB" width="100" default=""/> 
   <field desc="端口B装置Name" editor="text" name="devNameB" width="150" default=""/> 
   <field desc="端口B装置名称" editor="text" name="devDescB" width="150" default=""/> 
@@ -25,5 +26,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口B屏柜代码" editor="text" name="cubicleCodeB" width="100" default=""/> 
   <field desc="端口B屏柜名称" editor="text" name="cubicleDescB" width="100" default=""/> 
   <field desc="端口B芯线编号" editor="text" name="coreCodeB" width="100" default=""/> 
-  <field desc="端口B光配架端口编号" editor="text" name="distribFrameCodeB" width="100" default=""/> 
+  <field desc="装置B柜光配单元编号" editor="text" name="distribFrameCodeB" width="100" default=""/> 
+  <field desc="装置B柜光配单元端子号" editor="text" name="distribFramePortNoB" width="100" default=""/> 
 </table>

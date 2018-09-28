@@ -94,7 +94,7 @@ public class NewFibreListHandler extends RscSheetHandler {
 				entity.setDistribFrameCodeA(value);
 				break;
 			case ExcelConstants.IM102_DISTRIBFRAME_PORT_NOA:
-				entity.setDistribFramePortNoB(value);
+				entity.setDistribFramePortNoA(value);
 				break;
 			case ExcelConstants.IM102_DEV_CODEB: 
 				entity.setDevCodeB(value);
