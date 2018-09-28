@@ -13,5 +13,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="A屏柜描述" editor="none" name="tb1050CubicleByF1050CodeA.f1050Desc" width="180" default=""/> 
   <field desc="B屏柜代码" editor="text" name="tb1050CubicleByF1050CodeB.f1050Code" width="100" default=""/> 
   <field desc="B屏柜描述" editor="none" name="tb1050CubicleByF1050CodeB.f1050Desc" width="180" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

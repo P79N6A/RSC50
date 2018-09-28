@@ -47,6 +47,7 @@ public class GooseParser extends IedParserBase<Tb1055GcbEntity> {
 			gcb.setAppid(cbNd.attributeValue("appID"));
 			// 状态点
 			Tb1016StatedataEntity st = createStatedata(cbNd.attributeValue("cbRef")+"状态", cbCode, F1011_NO.IED_WRN_GOOSE.getId());
+			st.setTb1046IedByF1046Code(ied);
 			sts.add(st);
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();

@@ -9,5 +9,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="inst" editor="none" name="f1049Desc" width="150" default=""/> 
   <field desc="lnType" editor="none" name="f1049Desc" width="200" default=""/> 
   <field desc="数据集" editor="none" name="f1049Desc" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="130" default=""/> 
 </table>

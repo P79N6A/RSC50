@@ -163,6 +163,7 @@ public class SCDImporter implements IImporter {
 			beanDao.insert(ied);
 			// 通信状态点
 			Tb1016StatedataEntity stIedComm = IedParserBase.createStatedata(iedName, iedCode, F1011_NO.IED_COMM.getId());
+			stIedComm.setTb1046IedByF1046Code(ied);
 			beanDao.insert(stIedComm);
 			
 			Tb1026StringdataEntity strData = new Tb1026StringdataEntity();

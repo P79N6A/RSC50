@@ -11,6 +11,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="发送装置" editor="none" name="tb1046IedByF1046CodeIedSend.f1046Name" width="100" default=""/> 
   <field desc="发送虚端子参引" editor="none" name="tb1061PoutByF1061CodePSend.f1061RefAddr" width="150" default=""/> 
   <field desc="命令确认信号(参引，对智能终端)" editor="ConvChk1Editor" name="tb1061PoutByF1061CodeConvChk1.f1061Desc" width="250" default=""/>
-  <field desc="命令出口信号(参引，对智能终端)" editor="ConvChk2Editor" name="tb1061PoutByF1061CodeConvChk2.f1061Desc" width="250" default=""/>
-  <field desc="" editor="none" name="other" width="10" default=""/>  
+  <field desc="命令出口信号(参引，对智能终端)" editor="ConvChk2Editor" name="tb1061PoutByF1061CodeConvChk2.f1061Desc" width="250" default=""/> 
 </table>

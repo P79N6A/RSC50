@@ -32,8 +32,9 @@ public class Tb1006AnalogdataEntity {
     private int f1006Deadtime;
     private int f1006Alarmlevel;
     private Integer f1006Savetype;
-    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
-    private Tb1061PoutEntity tb1061PoutByF1061Code;
+    private Tb1046IedEntity tb1046IedByF1046Code;
+//    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
+//    private Tb1061PoutEntity tb1061PoutByF1061Code;
     
     //表格操作使用
     private boolean selected;
@@ -61,7 +62,7 @@ public class Tb1006AnalogdataEntity {
         this.f1006Desc = f1006Desc;
     }
 
-    public String getF1006AddRef() {
+	public String getF1006AddRef() {
 		return f1006AddRef;
 	}
 
@@ -261,7 +262,15 @@ public class Tb1006AnalogdataEntity {
         this.f1006Savetype = f1006Savetype;
     }
 
-    @Override
+    public Tb1046IedEntity getTb1046IedByF1046Code() {
+		return tb1046IedByF1046Code;
+	}
+
+	public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
+		this.tb1046IedByF1046Code = tb1046IedByF1046Code;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -296,6 +305,7 @@ public class Tb1006AnalogdataEntity {
         if (f1006Savetype != null ? !f1006Savetype.equals(that.f1006Savetype) : that.f1006Savetype != null)
             return false;
         if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
+        if (tb1046IedByF1046Code != null ? !tb1046IedByF1046Code.equals(that.tb1046IedByF1046Code) : that.tb1046IedByF1046Code != null) return false;
 
         return true;
     }
@@ -304,6 +314,7 @@ public class Tb1006AnalogdataEntity {
     public int hashCode() {
         int result = f1006Code != null ? f1006Code.hashCode() : 0;
         result = 31 * result + (f1006Desc != null ? f1006Desc.hashCode() : 0);
+        result = 31 * result + (f1006AddRef != null ? f1006AddRef.hashCode() : 0);
         result = 31 * result + (f1006Safelevel != null ? f1006Safelevel.hashCode() : 0);
         result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         result = 31 * result + f1011No;
@@ -328,24 +339,25 @@ public class Tb1006AnalogdataEntity {
         result = 31 * result + f1006Deadtime;
         result = 31 * result + f1006Alarmlevel;
         result = 31 * result + (f1006Savetype != null ? f1006Savetype.hashCode() : 0);
+        result = 31 * result + (tb1046IedByF1046Code != null ? tb1046IedByF1046Code.hashCode() : 0);
         return result;
     }
 
-	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
-		return tb1058FcdaByF1058Code;
-	}
-
-	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
-		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
-	}
-
-	public Tb1061PoutEntity getTb1061PoutByF1061Code() {
-		return tb1061PoutByF1061Code;
-	}
-
-	public void setTb1061PoutByF1061Code(Tb1061PoutEntity tb1061PoutByF1061Code) {
-		this.tb1061PoutByF1061Code = tb1061PoutByF1061Code;
-	}
+//	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
+//		return tb1058FcdaByF1058Code;
+//	}
+//
+//	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
+//		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
+//	}
+//
+//	public Tb1061PoutEntity getTb1061PoutByF1061Code() {
+//		return tb1061PoutByF1061Code;
+//	}
+//
+//	public void setTb1061PoutByF1061Code(Tb1061PoutEntity tb1061PoutByF1061Code) {
+//		this.tb1061PoutByF1061Code = tb1061PoutByF1061Code;
+//	}
 
 	public boolean isSelected() {
 		return selected;

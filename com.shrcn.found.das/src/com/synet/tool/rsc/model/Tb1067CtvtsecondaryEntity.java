@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
+
 
 /**
  * 互感器次级
@@ -14,6 +16,7 @@ public class Tb1067CtvtsecondaryEntity {
     private String f1067CircNo;
     private String f1067Desc;
     private Tb1043EquipmentEntity tb1043EquipmentByF1043Code;
+    private Set<Tb1074SVCTVTRelationEntity> svRelations;
 
     public String getF1067Code() {
         return f1067Code;
@@ -107,4 +110,15 @@ public class Tb1067CtvtsecondaryEntity {
         this.tb1043EquipmentByF1043Code = tb1043EquipmentByF1043Code;
     }
 
+	public Set<Tb1074SVCTVTRelationEntity> getSvRelations() {
+		return svRelations;
+	}
+
+	public void setSvRelations(Set<Tb1074SVCTVTRelationEntity> svRelations) {
+		this.svRelations = svRelations;
+	}
+
+	public int getSvNum() {
+		return (svRelations==null) ? 0 : svRelations.size();
+	}
 }

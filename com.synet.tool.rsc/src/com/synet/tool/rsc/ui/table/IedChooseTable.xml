@@ -7,5 +7,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="IED代码" editor="none" name="f1046Code" width="100" default=""/>
   <field desc="IED名称" editor="none" name="f1046Name" width="150" default=""/> 
   <field desc="IED描述" editor="none" name="f1046Desc" width="200" default=""/>  
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

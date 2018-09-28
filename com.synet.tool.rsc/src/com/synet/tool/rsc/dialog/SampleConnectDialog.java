@@ -72,7 +72,6 @@ public class SampleConnectDialog extends WrappedDialog {
 		}
 	}
 	
-	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -216,7 +215,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(1000, 650);
+		return new Point(1200, 650);
 	}
 	
 	@Override
@@ -228,6 +227,7 @@ public class SampleConnectDialog extends WrappedDialog {
 				return;
 			}
 			protmmxuEntityList = new ArrayList<>();
+			selectedAnalog.clear();
 			Tb1067CtvtsecondaryEntity selectedCtvt = (Tb1067CtvtsecondaryEntity) selection;
 			@SuppressWarnings("unchecked")
 			List<Tb1006AnalogdataEntity> input = (List<Tb1006AnalogdataEntity>) tableSample.getInput();

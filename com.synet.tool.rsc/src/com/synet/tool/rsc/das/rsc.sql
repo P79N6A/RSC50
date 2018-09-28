@@ -17,6 +17,7 @@ create table tb1074_svctvtrelation
 create table TB1006_AnalogData
 (
    F1006_CODE           varchar(48) not null,
+   F1046_CODE           varchar(48),
    F1006_DESC           varchar(96),
    F1006_ADDREF         varchar(96),
    F1006_SAFELEVEL      INT,
@@ -52,6 +53,7 @@ create table TB1006_AnalogData
 create table TB1016_StateData
 (
    F1016_CODE           varchar(48) not null,
+   F1046_CODE           varchar(48),
    F1016_DESC           varchar(96),
    F1016_ADDREF         varchar(96),
    F1016_SAFELEVEL      INT,

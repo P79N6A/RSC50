@@ -10,5 +10,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="保护装置名称" editor="none" name="" datType="string" width="200" default=""/>
   <field desc="采样值描述" editor="none" name="f1006Code.f1006Desc" datType="string" width="100" default=""/> 
   <field desc="采样值参引" editor="none" name="f1006Code.f1006AddRef" datType="string" width="200" default=""/>
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

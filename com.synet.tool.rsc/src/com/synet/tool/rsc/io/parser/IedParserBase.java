@@ -115,6 +115,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
 		Tb1016StatedataEntity statedata = createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
 				ied.getF1046Code(), f1011No);
+		statedata.setTb1046IedByF1046Code(ied);
 		sts.add(statedata);
 		return statedata;
 	}
@@ -158,6 +159,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 		algdata.setF1006Safelevel(0);
 		algdata.setParentCode(ied.getF1046Code());
 		algdata.setF1011No(f1011No);
+		algdata.setTb1046IedByF1046Code(ied);
 		agls.add(algdata);
 		return algdata;
 	}

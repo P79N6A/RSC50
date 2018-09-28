@@ -142,16 +142,16 @@ public class DevKTableModel extends RKTableModel {
 	private void saveData(Object obj) {
 		if (obj == null)
 			return;
-		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
-				|| TableFactory.IOTERM_TABLE.equals(tableName)
-				|| TableFactory.POWERKK_TABLE.equals(tableName)
-				|| TableFactory.VOLTAGEKK_TABLE.equals(tableName) 
-				|| TableFactory.REGION_LIST_TABLE.equals(tableName) 
-				|| TableFactory.CUBICLE_TABLE.equals(tableName) 
-				|| TableFactory.CABLE_TABLE.equals(tableName) 
-				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
+//		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
+//				|| TableFactory.IOTERM_TABLE.equals(tableName)
+//				|| TableFactory.POWERKK_TABLE.equals(tableName)
+//				|| TableFactory.VOLTAGEKK_TABLE.equals(tableName) 
+//				|| TableFactory.REGION_LIST_TABLE.equals(tableName) 
+//				|| TableFactory.CUBICLE_TABLE.equals(tableName) 
+//				|| TableFactory.CABLE_TABLE.equals(tableName) 
+//				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
 			defaultService.saveTableData(obj);
-		}
+//		}
 	}
 	
 	private void reloadPrj() {

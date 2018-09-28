@@ -10,5 +10,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="参引" editor="text" name="mmsRefAddr" width="200" default=""/>
   <field desc="冲突" editor="text" name="conflict" dict="YESNO" width="60" default=""/> 
   <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

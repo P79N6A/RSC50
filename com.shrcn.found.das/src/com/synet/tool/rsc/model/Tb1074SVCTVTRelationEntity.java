@@ -10,7 +10,6 @@ public class Tb1074SVCTVTRelationEntity {
     private Tb1061PoutEntity f1061Code;
     
     public Tb1074SVCTVTRelationEntity() {
-		// TODO Auto-generated constructor stub
 	}
     
     public Tb1074SVCTVTRelationEntity(Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code, Tb1061PoutEntity f1061Code) {

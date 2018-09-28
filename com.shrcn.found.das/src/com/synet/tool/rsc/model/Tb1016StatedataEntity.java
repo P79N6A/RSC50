@@ -28,8 +28,9 @@ public class Tb1016StatedataEntity {
     private String f1016Sgprocname;
     private Integer f1016Revflag;
     private Integer f1016Issta;
-    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
-    private Tb1061PoutEntity tb1061PoutEntityByF1061Code;
+    private Tb1046IedEntity tb1046IedByF1046Code;
+//    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
+//    private Tb1061PoutEntity tb1061PoutEntityByF1061Code;
     
 
     public String getF1016Code() {
@@ -216,7 +217,15 @@ public class Tb1016StatedataEntity {
         this.f1016Issta = f1016Issta;
     }
 
-    @Override
+    public Tb1046IedEntity getTb1046IedByF1046Code() {
+		return tb1046IedByF1046Code;
+	}
+
+	public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
+		this.tb1046IedByF1046Code = tb1046IedByF1046Code;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -229,6 +238,7 @@ public class Tb1016StatedataEntity {
         if (f1016Dpsflag != that.f1016Dpsflag) return false;
         if (f1016Ispdr != that.f1016Ispdr) return false;
         if (f1016Sglimitval != that.f1016Sglimitval) return false;
+        if (f1016AddRef != null ? !f1016AddRef.equals(that.f1016AddRef) : that.f1016AddRef != null) return false;
         if (f0008Name != null ? !f0008Name.equals(that.f0008Name) : that.f0008Name != null) return false;
         if (f0009Name != null ? !f0009Name.equals(that.f0009Name) : that.f0009Name != null) return false;
         if (f1016Byname != null ? !f1016Byname.equals(that.f1016Byname) : that.f1016Byname != null) return false;
@@ -250,6 +260,7 @@ public class Tb1016StatedataEntity {
             return false;
         if (f1016Soe != null ? !f1016Soe.equals(that.f1016Soe) : that.f1016Soe != null) return false;
         if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
+        if (tb1046IedByF1046Code != null ? !tb1046IedByF1046Code.equals(that.tb1046IedByF1046Code) : that.tb1046IedByF1046Code != null) return false;
 
         return true;
     }
@@ -258,6 +269,7 @@ public class Tb1016StatedataEntity {
     public int hashCode() {
         int result = f1016Code != null ? f1016Code.hashCode() : 0;
         result = 31 * result + (f1016Desc != null ? f1016Desc.hashCode() : 0);
+        result = 31 * result + (f1016AddRef != null ? f1016AddRef.hashCode() : 0);
         result = 31 * result + (f1016Safelevel != null ? f1016Safelevel.hashCode() : 0);
         result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         result = 31 * result + f1011No;
@@ -278,24 +290,25 @@ public class Tb1016StatedataEntity {
         result = 31 * result + (f1016Sgprocname != null ? f1016Sgprocname.hashCode() : 0);
         result = 31 * result + (f1016Revflag != null ? f1016Revflag.hashCode() : 0);
         result = 31 * result + (f1016Issta != null ? f1016Issta.hashCode() : 0);
+        result = 31 * result + (tb1046IedByF1046Code != null ? tb1046IedByF1046Code.hashCode() : 0);
         return result;
     }
 
-	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
-		return tb1058FcdaByF1058Code;
-	}
-
-	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
-		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
-	}
-
-	public Tb1061PoutEntity getTb1061PoutEntityByF1061Code() {
-		return tb1061PoutEntityByF1061Code;
-	}
-
-	public void setTb1061PoutEntityByF1061Code(
-			Tb1061PoutEntity tb1061PoutEntityByF1061Code) {
-		this.tb1061PoutEntityByF1061Code = tb1061PoutEntityByF1061Code;
-	}
+//	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
+//		return tb1058FcdaByF1058Code;
+//	}
+//
+//	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
+//		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
+//	}
+//
+//	public Tb1061PoutEntity getTb1061PoutEntityByF1061Code() {
+//		return tb1061PoutEntityByF1061Code;
+//	}
+//
+//	public void setTb1061PoutEntityByF1061Code(
+//			Tb1061PoutEntity tb1061PoutEntityByF1061Code) {
+//		this.tb1061PoutEntityByF1061Code = tb1061PoutEntityByF1061Code;
+//	}
 
 }

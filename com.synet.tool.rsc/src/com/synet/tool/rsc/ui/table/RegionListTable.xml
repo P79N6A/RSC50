@@ -8,5 +8,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="区域名称" editor="text" name="f1049Name" width="200" default=""/> 
   <field desc="区域描述" editor="text" name="f1049Desc" width="200" default=""/> 
   <field desc="区域类型" dict="AREA_TYPE" name="f1049Area" width="160" default=""/> 
-  <field desc="" editor="none" name="other" width="130" default=""/> 
 </table>

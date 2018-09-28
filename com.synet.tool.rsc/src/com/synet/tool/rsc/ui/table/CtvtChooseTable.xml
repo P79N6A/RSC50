@@ -8,5 +8,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="次级型号" editor="none" name="f1067Model" width="200" default=""/> 
   <field desc="SV虚端子分组类型" editor="none" name="f1067Type" width="200" default=""/>  
   <field desc="次级用途描述" editor="none" name="f1067Desc" width="200" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

@@ -69,16 +69,16 @@ public abstract class BaseService {
 	 * @return 失败：-1，成功：0，不合法：1
 	 */
 	public int saveTableData(Object obj) {
-		if (obj == null) return -1;
-		try {
-			if (CheckEntityUtils.check(obj)){
+//		if (obj == null) return -1;
+//		try {
+//			if (CheckEntityUtils.check(obj)){
 				save(obj);
-			} else {
-				return 0;
-			}
-		} catch (Exception e) {
-			return -1;
-		}
+//			} else {
+//				return 0;
+//			}
+//		} catch (Exception e) {
+//			return -1;
+//		}
 		return 1;
 	}
 }

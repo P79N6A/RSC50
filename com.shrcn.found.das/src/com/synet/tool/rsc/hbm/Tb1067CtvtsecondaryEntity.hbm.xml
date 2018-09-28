@@ -26,8 +26,13 @@
         <property name="f1067Desc">
             <column name="F1067_Desc" sql-type="varchar" length="96"/>
         </property>
-        <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" lazy="false">
+        <many-to-one name="tb1043EquipmentByF1043Code" insert="true" update="true"
+        	class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" lazy="false">
             <column name="F1043_CODE" not-null="true"/>
         </many-to-one>
+        <set name="svRelations" fetch="join" lazy="false">
+        	<key column="F1067_Code"></key>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1074SVCTVTRelationEntity" />
+        </set>
     </class>
 </hibernate-mapping>

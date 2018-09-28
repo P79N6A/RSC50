@@ -12,5 +12,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口描述" editor="none" name="f1048Desc" width="100" default=""/> 
   <field desc="端口方向" dict="DEV_PORT_DIRECTION" name="f1048Direction" width="100" default=""/> 
   <field desc="接口型式" dict="DEV_PORT_PLUG" name="f1048Plug" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

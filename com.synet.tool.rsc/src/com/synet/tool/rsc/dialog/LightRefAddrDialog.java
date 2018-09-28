@@ -61,11 +61,11 @@ public class LightRefAddrDialog extends KTableEditorDialog {
 			oldData = "*初始值为空*";
 			
 		} else {
-			Tb1058MmsfcdaEntity mmsFcda = analogData.getTb1058FcdaByF1058Code();
+			String mmsFcda = analogData.getF1006AddRef();
 			if(mmsFcda == null) {
 				oldData = "*初始值为空*";
 			} else {
-				oldData = mmsFcda.getF1058RefAddr();
+				oldData = analogData.getF1006AddRef();
 			}
 		}
 	}

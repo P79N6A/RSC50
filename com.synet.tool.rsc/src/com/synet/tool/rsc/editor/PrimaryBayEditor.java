@@ -234,15 +234,17 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					Tb1067CtvtsecondaryEntity ctvtsecondaryEntity = (Tb1067CtvtsecondaryEntity) obj;
 					ChanelConnectDialog chnDialog = new ChanelConnectDialog(SwtUtil.getDefaultShell(), 
 							curEntryName, ctvtsecondaryEntity);
-					chnDialog.open();
-					beandao.update(ctvtsecondaryEntity);
-					tableCtvtsecondary.refresh();
+					if (ChanelConnectDialog.OK == chnDialog.open()) {
+						tableCtvtsecondary.refresh();
+					}
 				} else if(object == btnSampleAdd) {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
 							ctvtsecondaryEntities, curEntryName, iedEntities);
 					sampleDialog.open();
-					tableProtectSample.addRows(sampleDialog.getProtmmxuEntityList(), 0);
-					tableProtectSample.refresh();
+					if (SampleConnectDialog.OK == sampleDialog.open()) {
+						tableProtectSample.addRows(sampleDialog.getProtmmxuEntityList(), 0);
+						tableProtectSample.refresh();
+					}
 				} else if(object == btnSampleDel) {
 					poutEntityService.delete(tableProtectSample.getSelection());
 					tableProtectSample.removeSelected();

@@ -47,6 +47,7 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 			smv.setAppid(cbNd.attributeValue("appID"));
 			// 状态点
 			Tb1016StatedataEntity st = IedParserBase.createStatedata(cbNd.attributeValue("cbRef")+"状态", cbCode, F1011_NO.IED_WRN_SV.getId());
+			st.setTb1046IedByF1046Code(ied);
 			beanDao.insert(st);
 			
 			List<Tb1061PoutEntity> pouts = new ArrayList<>();

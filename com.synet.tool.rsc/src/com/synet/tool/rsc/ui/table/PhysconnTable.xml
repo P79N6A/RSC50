@@ -13,5 +13,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口B装置描述" editor="none" name="tb1048PortByF1048CodeB.tb1047BoardByF1047Code.tb1046IedByF1046Code.f1046Desc" width="200" default=""/> 
   <field desc="端口B板卡编号" editor="none" name="tb1048PortByF1048CodeB.tb1047BoardByF1047Code.f1047Slot" width="100" default=""/> 
   <field desc="端口B端口编号" editor="text" name="tb1048PortByF1048CodeB.f1048No" width="100" default=""/> 
-  <field desc="" editor="none" name="other" width="10" default=""/> 
 </table>

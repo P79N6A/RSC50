@@ -18,8 +18,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -52,7 +50,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private SvcbEntityService svcbService;
 	private List<Tb1056SvcbEntity> svcbEntities;
 	private Composite comRight;
-	private List<Tb1061PoutEntity> chanelTableData;
 	private IedEntityService iedService;
 	private Button btnDel;
 	private List<Tb1061PoutEntity> selectedPoutList;
@@ -79,6 +76,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 		//左侧
 		Composite comLeft = SwtUtil.createComposite(composite, gridData, 1);
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
+		GridData chlData = new GridData(SWT.CENTER, SWT.FILL, false, true);
+		chlData.widthHint = 730;
+		comLeft.setLayoutData(chlData);
 		GridData gdlb_2 = new GridData(200,25);
 		gdlb_2.horizontalSpan = 2;
 		String switchLbName = curEntryName + "互感器次级：";
@@ -100,7 +100,8 @@ public class ChanelConnectDialog extends WrappedDialog{
 		comboDevice.setItems(comboDevItems);
 		comboDevice.select(0);
 		
-		GridData gdSpan_2 = new GridData(GridData.FILL_BOTH);
+		GridData gdSpan_2 = new GridData(SWT.CENTER, SWT.FILL, false, true);
+		gdSpan_2.widthHint = 450;
 		gdSpan_2.horizontalSpan = 2;
 		tableState = TableFactory.getPoutTable(comRight);
 		tableState.getTable().setLayoutData(gdSpan_2);
@@ -111,9 +112,13 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	private void initData() {
 		selectedPoutList = new ArrayList<>();
-		
 		iedService = new IedEntityService();
 		svcbService = new SvcbEntityService();
+		
+		for (Tb1074SVCTVTRelationEntity relation : curSel.getSvRelations()) {
+			selectedPoutList.add(relation.getF1061Code());
+		}
+		
 		int[] devTypes = EnumIedType.UNIT_DEVICE.getTypes();
 		iedEntities = iedService.getIedByTypesAndBay(devTypes, null);
 		if(iedEntities.size() < 1) {
@@ -133,6 +138,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 * 初始化表格数据
 	 */
 	private void initTableData() {
+		tableChanel.setInput(selectedPoutList);
 		if(DataUtils.listNotNull(iedEntities)) {
 			refreshTableState(iedEntities.get(0));
 		}
@@ -143,7 +149,14 @@ public class ChanelConnectDialog extends WrappedDialog{
 		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
 		List<Tb1061PoutEntity> allPouts = new ArrayList<>();
 		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
-			allPouts.addAll(tb1056SvcbEntity.getTb1061PoutsByCbCode());
+			List<Tb1061PoutEntity> pouts = tb1056SvcbEntity.getTb1061PoutsByCbCode();
+			for (Tb1061PoutEntity pout : pouts) {
+				List<Tb1061PoutEntity> leftTableData = (List<Tb1061PoutEntity>) tableChanel.getInput();
+				if(leftTableData.contains(pout)) {
+					pout.setSelected(true);
+				}
+				allPouts.add(pout);
+			}
 		}
 		tableState.setInput(allPouts);
 		tableState.getTable().layout();
@@ -164,6 +177,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
 				if(obj == btnAdd) {//效率较低
+					selectedPoutList.clear();
 					List<Tb1061PoutEntity> rigthTableData = (List<Tb1061PoutEntity>) tableState.getInput();
 					for (Tb1061PoutEntity tb1061PoutEntity : rigthTableData) {
 						if(tb1061PoutEntity.isSelected()) {
@@ -178,8 +192,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 					}
 					tableChanel.refresh();
 				} else if(obj == btnDel) {
+					List<Object> selections = tableChanel.getSelections();
+					List<Tb1061PoutEntity> rigthTableData = (List<Tb1061PoutEntity>) tableState.getInput();
+					for (Tb1061PoutEntity tb1061PoutEntity : rigthTableData) {
+						if(selections.contains(tb1061PoutEntity)) {
+							tb1061PoutEntity.setSelected(false);
+						}
+					}
 					tableChanel.removeSelected();
 					tableChanel.refresh();
+					tableState.refresh();
 				} else if(obj == comboDevice) {
 					int curComboDevSelIdx = comboDevice.getSelectionIndex();
 					if(curComboDevSelIdx == preComboDevSelIdx) {
@@ -216,34 +238,18 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(1000, 650);
+		return new Point(1200, 650);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID){
-			RSCProperties rscp = RSCProperties.getInstance();
 			SVCTVTRelationEntityService service = new SVCTVTRelationEntityService();
 			List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
-			setChanelTableData(input);
-			for (Tb1061PoutEntity tb1061PoutEntity : input) {
-				boolean exist = service.relationExistCheck(curSel, tb1061PoutEntity);
-				if(!exist) {
-					Tb1074SVCTVTRelationEntity relationEntity = new Tb1074SVCTVTRelationEntity(curSel, tb1061PoutEntity);
-					relationEntity.setF1074Code(rscp.nextTbCode(DBConstants.PR_SVCTVT));
-					service.insert(relationEntity);
-				}
-			}
+			service.savePinOuts(curSel, input);
 		}
 		super.buttonPressed(buttonId);
 	}
 
-	public List<Tb1061PoutEntity> getChanelTableData() {
-		return chanelTableData;
-	}
-
-	private void setChanelTableData(List<Tb1061PoutEntity> chanelTableData) {
-		this.chanelTableData = chanelTableData;
-	}
 }

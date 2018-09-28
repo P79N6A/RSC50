@@ -9,6 +9,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="信号类型" editor="none" dict="F1011_NO" name="f1011No" width="150" default=""/> 
   <field desc="所属数据集" editor="none" name="cbEntity.dataset" width="120" default=""/> 
   <field desc="数据集中的序号" editor="none" name="f1061Index" width="150" default=""/> 
-  <field desc="压板(对保护)" editor="PoutBoardEditor" name="tb1064StrapByF1064Code.f1064Desc" width="150" default=""/>
-  <field desc="" editor="none" name="other" width="10" default=""/>  
+  <field desc="压板(对保护)" editor="PoutBoardEditor" name="tb1064StrapByF1064Code.f1064Desc" width="150" default=""/> 
 </table>
