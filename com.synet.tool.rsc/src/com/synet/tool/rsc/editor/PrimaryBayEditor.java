@@ -35,12 +35,14 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.ProtmmxuService;
 import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -77,8 +79,8 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private CTabFolder tabFolder;
 	private CtvtsecondaryService ctvtsecondaryService;
 	private EquipmentEntityService equipmentEntityService;
-//	private ProtmmxuService protmmxuService;
-//	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
+	private ProtmmxuService protmmxuService;
+	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
 	private List<Tb1043EquipmentEntity> statedataEntities;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1043EquipmentEntity> entities;
@@ -171,7 +173,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	public void init() {
 		ctvtsecondaryService = new CtvtsecondaryService();
         equipmentEntityService = new EquipmentEntityService();
-//		protmmxuService = new ProtmmxuService();
+		protmmxuService = new ProtmmxuService();
 		statedataService = new StatedataService();
 		poutEntityService = new PoutEntityService();
 		
@@ -240,13 +242,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				} else if(object == btnSampleAdd) {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
 							ctvtsecondaryEntities, curEntryName, iedEntities);
-					sampleDialog.open();
 					if (SampleConnectDialog.OK == sampleDialog.open()) {
 						tableProtectSample.addRows(sampleDialog.getProtmmxuEntityList(), 0);
 						tableProtectSample.refresh();
 					}
 				} else if(object == btnSampleDel) {
-					poutEntityService.delete(tableProtectSample.getSelection());
+					beandao.deleteBatch(tableProtectSample.getSelections());
 					tableProtectSample.removeSelected();
 					tableProtectSample.refresh();
 				} else if(object == btnAdd) {
@@ -310,6 +311,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		btnAddTsf.addSelectionListener(sleListener);
 		btnChanelConnect.addSelectionListener(sleListener);
 		btnSampleAdd.addSelectionListener(sleListener);
+		btnSampleDel.addSelectionListener(sleListener);
 		btnAdd.addSelectionListener(sleListener);
 		btnSearch.addSelectionListener(sleListener);
 		comboDevice.addSelectionListener(sleListener);
@@ -340,9 +342,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				break;
 			case 1:
 				//查找互感器集合下关联的所有保护采样
-//				if(!DataUtils.listNotNull(protmmxuEntities)) {
-//					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-//				}
+				if(!DataUtils.listNotNull(protmmxuEntities)) {
+					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+				}
 				break;
 			case 2:
 				//初始化开关刀闸状态左表
@@ -370,9 +372,9 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 				break;
 			case 1:
 				//查找互感器集合下关联的所有保护采样
-//				if(!DataUtils.listNotNull(protmmxuEntities)) {
-//					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
-//				}
+				if(!DataUtils.listNotNull(protmmxuEntities)) {
+					protmmxuEntities = protmmxuService.getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+				}
 				break;
 			case 2:
 				//初始化开关刀闸状态左表
@@ -387,7 +389,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			}
 		}
 		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
-//		tableProtectSample.setInput(protmmxuEntities);
+		tableProtectSample.setInput(protmmxuEntities);
 		tableSwitchStatus.setInput(statedataEntities);
 	}
 

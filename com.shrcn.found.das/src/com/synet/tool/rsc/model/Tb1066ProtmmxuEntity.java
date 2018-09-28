@@ -10,7 +10,6 @@ public class Tb1066ProtmmxuEntity {
     private Tb1006AnalogdataEntity f1006Code;
     
     public Tb1066ProtmmxuEntity() {
-		// TODO Auto-generated constructor stub
 	}
     
     public Tb1066ProtmmxuEntity(Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code,

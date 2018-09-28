@@ -35,6 +35,8 @@ import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
 
+import de.kupzog.ktable.KTableCellSelectionListener;
+
 /**
  * 采样关联
  * @author Administrator
@@ -159,6 +161,34 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 	private void addListeners() {
+		tableProtctSample.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
+			@Override
+			public void fixedCellSelected(int col, int row, int statemask) {
+			}
+			
+			@Override
+			public void cellSelected(int col, int row, int statemask) {
+				List<Object> secds = tableProtctSample.getSelections();
+				List<Tb1067CtvtsecondaryEntity> selections = new ArrayList<>();
+				for (Object o : secds) {
+					Tb1067CtvtsecondaryEntity sec = (Tb1067CtvtsecondaryEntity) o;
+					selections.add(sec);
+				}
+				List<Tb1066ProtmmxuEntity> mmxus = protmmxuService.getProtmmxuByCtvtsecondary(selections);
+				List<Tb1006AnalogdataEntity> algs = new ArrayList<>();
+				for (Tb1066ProtmmxuEntity mmxu : mmxus) {
+					algs.add(mmxu.getF1006Code());
+				}
+				List<Tb1006AnalogdataEntity> searchRes = (List<Tb1006AnalogdataEntity>) tableSample.getInput();
+				for (Tb1006AnalogdataEntity searchRe : searchRes) {
+					if (algs.contains(searchRe)) {
+						searchRe.setSelected(true);
+					}
+				}
+				tableSample.refresh();
+			}
+		});
+		
 		SelectionListener selectionListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
