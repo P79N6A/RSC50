@@ -4,6 +4,8 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.IM108BrkCfmEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
   <field desc="装置名称" editor="text" name="devDesc" width="150" default=""/>
   <field desc="装置Name" editor="text" name="devName" width="200" default=""/>
   <field desc="开入虚端子参引" editor="text" name="pinRefAddr" width="150" default=""/>
@@ -12,6 +14,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="命令确认虚端子描述" editor="text" name="cmdAckVpDesc" width="150" default=""/> 
   <field desc="命令出口虚端子参引" editor="text" name="cmdOutVpRefAddr" width="150" default=""/> 
   <field desc="命令出口虚端子描述" editor="text" name="cmdOutVpDesc" width="150" default=""/> 
-  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
-  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
 </table>

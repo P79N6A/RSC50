@@ -57,51 +57,51 @@ public interface ExcelConstants {
 	};
 	
 	String IM102_CABLE_CODE = "光缆编号";
-	String IM102_CORE_CODE = "纤芯编号";
-	String IM102_DEV_CODEA = "端口A装置代码";
-	String IM102_DEV_NAMEA = "端口A装置Name";
-	String IM102_DEV_DESCA = "端口A装置名称";
+	String IM102_CORE_CODE = "光缆纤芯序号";
+	String IM102_DEV_CODEA = "端口A装置代码";//
+	String IM102_DEV_NAMEA = "装置A装置Name";
+	String IM102_DEV_DESCA = "装置A装置名称";
 	String IM102_BOARD_PORT_CODEA = "装置插件/端口号(端口A)";//现在不用
-	String IM102_BOARD_CODEA = "端口A板卡编号";
-	String IM102_PORT_CODEA = "端口A端口编号";
-	String IM102_CUBICLE_CODEA = "端口A屏柜代码";
-	String IM102_CUBICLE_DESCA = "端口A屏柜名称";
-	String IM102_CORE_CODEA = "端口A芯线编号";
-	String IM102_DISTRIBFRAME_CODEA = "端口A光配单元编号";
-	String IM102_DISTRIBFRAME_PORT_NOA = "端口A光配单元端子号";
-	String IM102_DEV_CODEB = "端口B装置代码";
-	String IM102_DEV_NAMEB = "端口B装置Name";
-	String IM102_DEV_DESCB = "端口B装置名称";
+	String IM102_BOARD_CODEA = "装置A端口所属板卡编号";
+	String IM102_PORT_CODEA = "装置A端口编号";
+	String IM102_CUBICLE_CODEA = "端口A屏柜代码";//
+	String IM102_CUBICLE_DESCA = "端口A屏柜名称";//
+	String IM102_CORE_CODEA = "装置A尾纤纤芯编号";
+	String IM102_DISTRIBFRAME_CODEA = "装置A柜光配单元编号";
+	String IM102_DISTRIBFRAME_PORT_NOA = "装置A柜光配单元端子号";
+	String IM102_DEV_CODEB = "端口B装置代码";//
+	String IM102_DEV_NAMEB = "装置B装置Name";
+	String IM102_DEV_DESCB = "装置B装置名称";
 	String IM102_BOARD_PORT_CODEB = "装置插件/端口号(端口B)";//现在不用
-	String IM102_BOARD_CODEB = "端口B板卡编号";
-	String IM102_PORT_CODEB = "端口B端口编号";
-	String IM102_CUBICLE_CODEB = "端口B屏柜代码";
-	String IM102_CUBICLE_DESCB = "端口B屏柜名称";
-	String IM102_CORE_CODEB = "端口B芯线编号";
-	String IM102_DISTRIBFRAME_CODEB = "端口B光配架端口编号";
-	String IM102_DISTRIBFRAME_PORT_NOB = "端口B光配单元端子号";
+	String IM102_BOARD_CODEB = "装置B端口所属板卡编号";
+	String IM102_PORT_CODEB = "装置B端口编号";
+	String IM102_CUBICLE_CODEB = "端口B屏柜代码";//
+	String IM102_CUBICLE_DESCB = "端口B屏柜名称";//
+	String IM102_CORE_CODEB = "装置B尾纤纤芯编号";
+	String IM102_DISTRIBFRAME_CODEB = "装置B柜光配单元编号";
+	String IM102_DISTRIBFRAME_PORT_NOB = "装置B柜光配单元端子号";
 	String[] IM102_FIBRE_LIST_FIELDS = {
 			IM102_CABLE_CODE,
 			IM102_CORE_CODE,
-			IM102_DEV_CODEA,
+//			IM102_DEV_CODEA,
 			IM102_DEV_NAMEA,
 			IM102_DEV_DESCA,
 //			IM102_BOARD_PORT_CODEA,
 			IM102_BOARD_CODEA,
 			IM102_PORT_CODEA,
-			IM102_CUBICLE_CODEA,
-			IM102_CUBICLE_DESCA,
+//			IM102_CUBICLE_CODEA,
+//			IM102_CUBICLE_DESCA,
 			IM102_CORE_CODEA,
 			IM102_DISTRIBFRAME_CODEA,
 			IM102_DISTRIBFRAME_PORT_NOA,
-			IM102_DEV_CODEB,
+//			IM102_DEV_CODEB,
 			IM102_DEV_NAMEB,
 			IM102_DEV_DESCB,
 //			IM102_BOARD_PORT_CODEB,
 			IM102_BOARD_CODEB,
 			IM102_PORT_CODEB,
-			IM102_CUBICLE_CODEB,
-			IM102_CUBICLE_DESCB,
+//			IM102_CUBICLE_CODEB,
+//			IM102_CUBICLE_DESCB,
 			IM102_CORE_CODEB,
 			IM102_DISTRIBFRAME_CODEB,
 			IM102_DISTRIBFRAME_PORT_NOB

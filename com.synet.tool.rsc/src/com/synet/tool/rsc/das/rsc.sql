@@ -528,7 +528,7 @@ create table TB1067_CTVTSecondary
    F1043_CODE           varchar(48) not null,
    F1067_Name         	varchar(96),
    F1067_Index          INT,
-   F1067_Type           varchar(48),
+   F1067_Type           INT,
    F1067_TermNo         varchar(96),
    F1067_CircNo         varchar(96),
    F1067_Desc           varchar(96),

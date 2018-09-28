@@ -10,15 +10,15 @@ import com.synet.tool.rsc.ui.table.IEDBoardTable;
 
 public class TableFactory {
 
-	public static final String REGION_LIST_TABLE  			= "RegionListTable";
-	public static final String INTERVAL_MSG_TABLE  			= "IntervalMessageTable";
+	public static final String INTERVAL_MSG_TABLE  			= "IntervalMessageTable"; // 间隔
 	public static final String TSF_SCD_TABLE  				= "TsfSecondaryTable"; // 次级
 	public static final String PROTECT_SAM_TABLE  			= "ProtectSampleTalbe"; // 采样值
 	public static final String SWITCH_STATUS_TABLE  		= "SwitchStatusTable"; // 开关状态-开关
 	public static final String SLUICE_STATUS_TABLE  		= "SluiceStatusTable"; // 开关状态-状态
-	public static final String CUBICLE_TABLE                = "CubicleTable";
-	public static final String CABLE_TABLE                  = "CableTable";
-	public static final String PHYSCONNE_TABLE              = "PhysconnTable";		
+	public static final String REGION_LIST_TABLE  			= "RegionListTable"; // 区域
+	public static final String CUBICLE_TABLE                = "CubicleTable"; 	// 屏柜
+	public static final String CABLE_TABLE                  = "CableTable";		// 光缆
+	public static final String PHYSCONNE_TABLE              = "PhysconnTable";	// 物理回路
 	public static final String LINEPORTFIBER_TABLE			= "LineProtFiberTable";
 	public static final String IOTERM_TABLE 				= "IOTermTable";
 	public static final String POWERKK_TABLE 				= "PowerKKTable";

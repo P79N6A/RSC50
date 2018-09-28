@@ -4,6 +4,8 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.IM102FibreListEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
+  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
   <field desc="光缆编号" editor="text" name="cableCode" width="100" default=""/>
   <field desc="纤芯编号" editor="text" name="coreCode" width="100" default=""/>
   <field desc="端口A装置代码" editor="text" name="devCodeA" width="150" default=""/> 
@@ -24,6 +26,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="端口B屏柜名称" editor="text" name="cubicleDescB" width="100" default=""/> 
   <field desc="端口B芯线编号" editor="text" name="coreCodeB" width="100" default=""/> 
   <field desc="端口B光配架端口编号" editor="text" name="distribFrameCodeB" width="100" default=""/> 
-  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
-  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
 </table>

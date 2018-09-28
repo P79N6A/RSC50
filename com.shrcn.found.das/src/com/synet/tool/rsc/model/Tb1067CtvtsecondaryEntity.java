@@ -11,7 +11,7 @@ public class Tb1067CtvtsecondaryEntity {
     private String f1067Code;
     private String f1067Name;
     private Integer f1067Index;
-    private String f1067Type;
+    private Integer f1067Type;
     private String f1067TermNo;
     private String f1067CircNo;
     private String f1067Desc;
@@ -34,11 +34,11 @@ public class Tb1067CtvtsecondaryEntity {
         this.f1067Index = f1067Index;
     }
 
-    public String getF1067Type() {
+    public Integer getF1067Type() {
         return f1067Type;
     }
 
-    public void setF1067Type(String f1067Type) {
+    public void setF1067Type(Integer f1067Type) {
         this.f1067Type = f1067Type;
     }
 

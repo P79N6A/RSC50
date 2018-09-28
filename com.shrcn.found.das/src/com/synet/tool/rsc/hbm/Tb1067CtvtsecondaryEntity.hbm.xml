@@ -15,7 +15,7 @@
             <column name="F1067_Name" sql-type="varchar" length="96"/>
         </property>
         <property name="f1067Type">
-            <column name="F1067_Type" sql-type="varchar" length="48"/>
+            <column name="F1067_Type" sql-type="int"/>
         </property>
         <property name="f1067TermNo">
             <column name="F1067_TermNo" sql-type="varchar" length="96"/>

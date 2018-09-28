@@ -945,7 +945,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		}
 		setInt(preState, index++, entity.getF1067Index());
 		setSring(preState, index++, entity.getF1067Name());
-		setSring(preState, index++, entity.getF1067Type());
+		setInt(preState, index++, entity.getF1067Type());
 		setSring(preState, index++, entity.getF1067TermNo());
 		setSring(preState, index++, entity.getF1067CircNo());
 		setSring(preState, index++, entity.getF1067Desc());

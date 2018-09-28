@@ -50,7 +50,7 @@ public class TableHeadHandler extends RscSheetHandler {
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
 		if (currentRow <= headRowNum ) {
-			System.out.println(currentRow + ":" +currentCol + "-" + formattedValue);
+//			System.out.println(currentRow + ":" +currentCol + "-" + formattedValue);
 			saveValue(currentCol, formattedValue);
 		}
 	}
