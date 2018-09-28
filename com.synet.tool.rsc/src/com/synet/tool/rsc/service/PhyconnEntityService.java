@@ -20,10 +20,15 @@ public class PhyconnEntityService extends BaseService {
 		return (Tb1053PhysconnEntity) beanDao.getObject(Tb1053PhysconnEntity.class, params);
 	}
 	
+	//根据接收端端口查找物理回路
 	public Tb1053PhysconnEntity getByTb1048PortByF1048CodeB(Tb1048PortEntity tb1048PortByF1048CodeB) {
 		if (tb1048PortByF1048CodeB == null) return null;
 		return (Tb1053PhysconnEntity) beanDao.getObject(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeB", tb1048PortByF1048CodeB);
 	}
 	
-	
+	//根据发送端端口查找物理回路
+	public Tb1053PhysconnEntity getByTb1048PortByF1048CodeA(Tb1048PortEntity tb1048PortByF1048CodeA) {
+		if (tb1048PortByF1048CodeA == null) return null;
+		return (Tb1053PhysconnEntity) beanDao.getObject(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeA", tb1048PortByF1048CodeA);
+	}
 }
