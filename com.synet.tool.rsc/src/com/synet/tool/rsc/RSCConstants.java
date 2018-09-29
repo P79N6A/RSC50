@@ -87,7 +87,7 @@ public interface RSCConstants {
      String PROTECT_MEAQU 		= "保护测量量";
    
      String TAB_CUBICLE       	= "屏柜";
-     String TAB_CABLE      		= "光纤";
+     String TAB_CABLE      		= "光缆";
      String TAB_PHYSCONN      	= "物理回路";
    
    //树节点名称

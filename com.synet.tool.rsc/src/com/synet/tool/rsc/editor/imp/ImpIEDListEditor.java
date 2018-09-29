@@ -140,6 +140,10 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				int f1046Type = Integer.parseInt(type);
 				iedEntity = new Tb1046IedEntity(f1046Code, devName, f1046Type);
 				iedEntity.setF1046Desc(desc);
+				iedEntity.setF1046ConfigVersion(entity.getDevVersion());
+				iedEntity.setF1046Manufacturor(entity.getManufacturor());
+				iedEntity.setF1046Model(entity.getDevType());
+				iedEntity.setF1046boardNum(0);
 			}
 			Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 			if (bayEntity != null) {
@@ -149,11 +153,6 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			if (cubicle != null) {
 				iedEntity.setF1050Code(cubicle.getF1050Code());
 			}
-//			iedEntity.setF1046Manufacturor(entity.getManufacturor());
-//			iedEntity.setF1046version(entity.getDevVersion());
-//			iedEntity.setF1046protectCategory(entity.getProtClassify());
-//			iedEntity.setF1046protectType(entity.getProtType());
-//			iedEntity.setF1046protectModel(entity.getProtModel());
 			iedEntity.setF1046OperateDate(entity.getDateService());
 			iedEntity.setF1046productDate(entity.getDateProduct());
 			iedEntity.setF1046productNo(entity.getProductCode());

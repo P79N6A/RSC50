@@ -72,15 +72,15 @@ public class IEDListHandler extends RscSheetHandler {
 			case ExcelConstants.IM101_NETB_IP: 
 				entity.setNetBIP(value);
 				break;
-//			case ExcelConstants.IM101_MANUFACTUROR: 
-//				entity.setManufacturor(value);
-//				break;
-//			case ExcelConstants.IM101_DEV_TYPE: 
-//				entity.setDevType(value);
-//				break;
-//			case ExcelConstants.IM101_DEV_VERSION: 
-//				entity.setDevVersion(value);
-//				break;
+			case ExcelConstants.IM101_MANUFACTUROR: 
+				entity.setManufacturor(value);
+				break;
+			case ExcelConstants.IM101_DEV_TYPE: 
+				entity.setDevType(value);
+				break;
+			case ExcelConstants.IM101_DEV_VERSION: 
+				entity.setDevVersion(value);
+				break;
 //			case ExcelConstants.IM101_A_OR_B: 
 //				entity.setAorB(value);;
 //				break;

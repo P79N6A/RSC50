@@ -20,6 +20,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -153,10 +154,19 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 					List<Tb1048PortEntity> portList = new ArrayList<>();
 					String[] ports = portNumStr.split(",");
 					for (String port : ports) {
+						if (StringUtil.isEmpty(port)) {
+							continue;
+						}
 						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
 						portEntity.setTb1047BoardByF1047Code(boardEntity);
 						portEntity.setF1048No(port);
-						portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
+						if (port.contains(ExcelConstants.PORT_TYPE_TX)) {
+							portEntity.setF1048Direction(DBConstants.DIRECTION_TX);
+						} else if (port.contains(ExcelConstants.PORT_TYPE_RX)) {
+							portEntity.setF1048Direction(DBConstants.DIRECTION_RX);
+						} else {
+							portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
+						}
 						portEntity.setF1048Plug(DBConstants.PLUG_FC);
 						portList.add(portEntity);
 					}
@@ -254,11 +264,12 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		boards = getIedBoards(iedBoard);
 		List<Tb1046IedEntity> ieds = iedEntityService.getIedByIM103IEDBoard(iedBoard);
 		for (Tb1046IedEntity ied : ieds) {
-			if (ied.getF1046boardNum() < 1) {
+			Integer f1046boardNum = ied.getF1046boardNum();
+			if (f1046boardNum==null || f1046boardNum < 1) {
 				ied.setConflict(DBConstants.NO);
 				ied.setOverwrite(false);
 			} else {
-				if (ied.getF1046boardNum() != boards.size()) {
+				if (f1046boardNum != boards.size()) {
 					ied.setConflict(DBConstants.YES);
 					ied.setOverwrite(true);
 				} else {

@@ -8,8 +8,8 @@ public class Tb1052CoreEntity {
     private String parentCode;
     private int f1052Type;
     private Integer f1052No;
-    private String f1048CodeA;
-    private String f1048CodeB;
+    private Tb1048PortEntity tb1048PortByF1048CodeA;
+    private Tb1048PortEntity tb1048PortByF1048CodeB;
     private Tb1051CableEntity tb1051CableByParentCode;
     private Tb1050CubicleEntity tb1050CubicleByParentCode;
 
@@ -45,22 +45,6 @@ public class Tb1052CoreEntity {
         this.f1052No = f1052No;
     }
 
-    public String getF1048CodeA() {
-        return f1048CodeA;
-    }
-
-    public void setF1048CodeA(String f1048CodeA) {
-        this.f1048CodeA = f1048CodeA;
-    }
-
-    public String getF1048CodeB() {
-        return f1048CodeB;
-    }
-
-    public void setF1048CodeB(String f1048CodeB) {
-        this.f1048CodeB = f1048CodeB;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,8 +53,8 @@ public class Tb1052CoreEntity {
         Tb1052CoreEntity that = (Tb1052CoreEntity) o;
 
         if (f1052Type != that.f1052Type) return false;
-        if (f1048CodeA != null ? !f1048CodeA.equals(that.f1048CodeA) : that.f1048CodeA != null) return false;
-        if (f1048CodeB != null ? !f1048CodeB.equals(that.f1048CodeB) : that.f1048CodeB != null) return false;
+        if (tb1048PortByF1048CodeA != null ? !tb1048PortByF1048CodeA.equals(that.tb1048PortByF1048CodeA) : that.tb1048PortByF1048CodeA != null) return false;
+        if (tb1048PortByF1048CodeB != null ? !tb1048PortByF1048CodeB.equals(that.tb1048PortByF1048CodeB) : that.tb1048PortByF1048CodeB != null) return false;
         if (f1052Code != null ? !f1052Code.equals(that.f1052Code) : that.f1052Code != null) return false;
         if (f1052No != null ? !f1052No.equals(that.f1052No) : that.f1052No != null) return false;
         if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
@@ -84,12 +68,28 @@ public class Tb1052CoreEntity {
         result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         result = 31 * result + f1052Type;
         result = 31 * result + (f1052No != null ? f1052No.hashCode() : 0);
-        result = 31 * result + (f1048CodeA != null ? f1048CodeA.hashCode() : 0);
-        result = 31 * result + (f1048CodeB != null ? f1048CodeB.hashCode() : 0);
+        result = 31 * result + (tb1048PortByF1048CodeA != null ? tb1048PortByF1048CodeA.hashCode() : 0);
+        result = 31 * result + (tb1048PortByF1048CodeB != null ? tb1048PortByF1048CodeB.hashCode() : 0);
         return result;
     }
 
-    public Tb1051CableEntity getTb1051CableByParentCode() {
+    public Tb1048PortEntity getTb1048PortByF1048CodeA() {
+		return tb1048PortByF1048CodeA;
+	}
+
+	public void setTb1048PortByF1048CodeA(Tb1048PortEntity tb1048PortByF1048CodeA) {
+		this.tb1048PortByF1048CodeA = tb1048PortByF1048CodeA;
+	}
+
+	public Tb1048PortEntity getTb1048PortByF1048CodeB() {
+		return tb1048PortByF1048CodeB;
+	}
+
+	public void setTb1048PortByF1048CodeB(Tb1048PortEntity tb1048PortByF1048CodeB) {
+		this.tb1048PortByF1048CodeB = tb1048PortByF1048CodeB;
+	}
+
+	public Tb1051CableEntity getTb1051CableByParentCode() {
         return tb1051CableByParentCode;
     }
 
@@ -104,4 +104,12 @@ public class Tb1052CoreEntity {
     public void setTb1050CubicleByParentCode(Tb1050CubicleEntity tb1050CubicleByParentCode) {
         this.tb1050CubicleByParentCode = tb1050CubicleByParentCode;
     }
+
+	public String getF1048CodeA() {
+		return tb1048PortByF1048CodeA==null ? "" : tb1048PortByF1048CodeA.getF1048Code();
+	}
+
+	public String getF1048CodeB() {
+		return tb1048PortByF1048CodeB==null ? "" : tb1048PortByF1048CodeB.getF1048Code();
+	}
 }

@@ -483,7 +483,7 @@ public class BeanDaoImpl implements BeanDaoService {
 			}
 			return criteria.list();
 		} finally {
-			service.flush();
+//			service.flush();
 		}
 	}
 	/**

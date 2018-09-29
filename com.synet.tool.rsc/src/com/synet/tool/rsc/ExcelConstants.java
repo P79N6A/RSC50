@@ -40,9 +40,9 @@ public interface ExcelConstants {
 			IM101_CUBICLE,
 			IM101_NETA_IP,
 			IM101_NETB_IP,
-//			IM101_MANUFACTUROR,
-//			IM101_DEV_TYPE,
-//			IM101_DEV_VERSION,
+			IM101_MANUFACTUROR,
+			IM101_DEV_TYPE,
+			IM101_DEV_VERSION,
 //			IM101_A_OR_B,
 //			IM101_PROT_CLASSIFY,
 //			IM101_PROT_MODEL,
@@ -219,7 +219,7 @@ public interface ExcelConstants {
 			IM109_DESCRIPTION,
 	};
 	
-	String PORT_TYPE_RX = "TX";//表示发送
-	String PORT_TYPE_TX = "RX";//表示接收
+	String PORT_TYPE_RX = "RX";//表示发送
+	String PORT_TYPE_TX = "TX";//表示接收
 	String PORT_TYPE_RT = "RT";//表示收发
 }

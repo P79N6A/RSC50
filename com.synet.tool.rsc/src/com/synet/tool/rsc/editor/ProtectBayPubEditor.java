@@ -1,5 +1,9 @@
 package com.synet.tool.rsc.editor;
 
+import static com.synet.tool.rsc.DBConstants.IED_CJQ;
+import static com.synet.tool.rsc.DBConstants.IED_GP;
+import static com.synet.tool.rsc.DBConstants.IED_JHJ;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +18,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
@@ -26,7 +29,6 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
-import static com.synet.tool.rsc.DBConstants.*;
 
 /**
  * 公共间隔
@@ -143,7 +145,9 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 					if(selections == null) {
 						return;
 					}
-					beandao.deleteBatch(selections);
+					for (Object o : selections) {
+						iedEntityService.deleteTb1046IedEntity((Tb1046IedEntity) o);
+					}
 					table.removeSelected();
 				}
 			}

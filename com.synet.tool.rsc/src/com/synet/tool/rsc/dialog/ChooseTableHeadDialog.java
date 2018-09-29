@@ -39,7 +39,7 @@ public class ChooseTableHeadDialog extends WrappedDialog {
 		SwtUtil.createLabel(composite, "  ", new GridData());
 		SwtUtil.createLabel(composite, "表头行数：", new GridData());
 		txtTableHead = SwtUtil.createText(composite, SwtUtil.bt_gd);
-		txtTableHead.setMessage("1");
+		txtTableHead.setText("1");
 		
 		GridData msgGridData = new GridData();
 		msgGridData.horizontalSpan = 2;

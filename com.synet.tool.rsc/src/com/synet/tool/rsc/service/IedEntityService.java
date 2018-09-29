@@ -5,11 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1051CableEntity;
+import com.synet.tool.rsc.model.Tb1052CoreEntity;
+import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
+import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 
 public class IedEntityService extends BaseService {
 	
@@ -33,6 +39,36 @@ public class IedEntityService extends BaseService {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 删除IED及其关联对象（仅适用于交换机、光配单元、采集器）
+	 * @param iedEntity
+	 */
+	public void deleteTb1046IedEntity(Tb1046IedEntity iedEntity) {
+		List<Tb1047BoardEntity> boards = (List<Tb1047BoardEntity>) beanDao.getListByCriteria(Tb1047BoardEntity.class, "tb1046IedByF1046Code", iedEntity);
+		for (Tb1047BoardEntity board : boards) {
+			List<Tb1048PortEntity> ports = (List<Tb1048PortEntity>) beanDao.getListByCriteria(Tb1048PortEntity.class, "tb1047BoardByF1047Code", board);
+			for (Tb1048PortEntity port : ports) {
+				beanDao.deleteAll(Tb1052CoreEntity.class, "tb1048PortByF1048CodeA", port);
+				beanDao.deleteAll(Tb1052CoreEntity.class, "tb1048PortByF1048CodeB", port);
+				List<Tb1053PhysconnEntity> physA = (List<Tb1053PhysconnEntity>) beanDao.getListByCriteria(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeA", port);
+				List<Tb1053PhysconnEntity> physB = (List<Tb1053PhysconnEntity>) beanDao.getListByCriteria(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeB", port);
+				if (physA == null) {
+					physA = new ArrayList<>();
+				}
+				if (physB != null) {
+					physA.addAll(physB);
+				}
+				for (Tb1053PhysconnEntity phy : physA) {
+					beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class, "tb1053PhysconnByF1053Code", phy);
+				}
+				beanDao.deleteBatch(physA);
+			}
+			beanDao.deleteBatch(ports);
+		}
+		beanDao.deleteBatch(boards);
+		beanDao.delete(iedEntity);
 	}
 	
 	/**
@@ -82,9 +118,11 @@ public class IedEntityService extends BaseService {
 	@SuppressWarnings("unchecked")
 	public List<Tb1046IedEntity> getIedByIM103IEDBoard(IM103IEDBoardEntity entity) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("f1046Manufacturor", entity.getManufacturor());
+		if (!StringUtil.isEmpty(entity.getManufacturor()))
+			params.put("f1046Manufacturor", entity.getManufacturor());
 		params.put("f1046Model", entity.getDevName());
-		params.put("f1046ConfigVersion", entity.getConfigVersion());
+		if (!StringUtil.isEmpty(entity.getConfigVersion()))
+			params.put("f1046ConfigVersion", entity.getConfigVersion());
 		return (List<Tb1046IedEntity>) beanDao.getListByCriteria(Tb1046IedEntity.class, params);
 	}
 

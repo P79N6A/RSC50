@@ -18,13 +18,18 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
-import com.synet.tool.rsc.processor.ImportFibreListProcessor2;
+import com.synet.tool.rsc.model.Tb1051CableEntity;
+import com.synet.tool.rsc.model.Tb1052CoreEntity;
+import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
+import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
+import com.synet.tool.rsc.processor.ImportFibreListProcessor3;
 import com.synet.tool.rsc.processor.LogcalAndPhyconnProcessor;
 import com.synet.tool.rsc.service.CubicleEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
@@ -105,13 +110,18 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 			}
 		}
 		if (temp.size() > 0) {
+			BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+			beanDao.deleteAll(Tb1051CableEntity.class);
+			beanDao.deleteAll(Tb1052CoreEntity.class);
+			beanDao.deleteAll(Tb1053PhysconnEntity.class);
+			beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
 //			new ImportFibreListProcessor().importData(temp);
 			//导入数据
-			new ImportFibreListProcessor2().importData(temp);
-			//处理逻辑链路与物理回路关联(处理全部)
-			new LogcalAndPhyconnProcessor().analysis();
-			//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
-			new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
+			new ImportFibreListProcessor3().importData(temp);
+//			//处理逻辑链路与物理回路关联(处理全部)
+//			new LogcalAndPhyconnProcessor().analysis();
+//			//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
+//			new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
 			beandao.updateBatch(temp);
 		}
 	}

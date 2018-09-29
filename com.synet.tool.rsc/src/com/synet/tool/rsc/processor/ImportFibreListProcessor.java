@@ -315,8 +315,8 @@ public class ImportFibreListProcessor {
 					portEntityB.setF1048Direction(DBConstants.DIRECTION_RT);
 				}
 			}
-			coreEntity.setF1048CodeA(portEntityA.getF1048Code());
-			coreEntity.setF1048CodeB(portEntityB.getF1048Code());
+			coreEntity.setTb1048PortByF1048CodeA(portEntityA);
+			coreEntity.setTb1048PortByF1048CodeB(portEntityB);
 			coreEntity.setF1052Code(rscp.nextTbCode(DBConstants.PR_CORE));
 			coreEntitieList.add(coreEntity);
 			

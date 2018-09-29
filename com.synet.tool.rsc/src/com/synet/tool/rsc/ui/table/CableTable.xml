@@ -4,13 +4,13 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1051CableEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
-  <field desc="线缆代码" editor="none" name="f1051Code" width="100" default=""/>
-  <field desc="线缆名称" editor="text" name="f1051Name" width="150" default=""/> 
-  <field desc="线缆描述" editor="text" name="f1051Desc" width="100" default=""/> 
+  <field desc="线缆代码" editor="none" name="f1051Code" width="200" default=""/>
+  <field desc="线缆名称" editor="text" name="f1051Name" width="250" default=""/> 
+  <field desc="线缆描述" editor="text" name="f1051Desc" width="250" default=""/> 
   <field desc="线缆长度" editor="text" name="f1051Length" width="100" default=""/> 
   <field desc="线缆芯数" editor="text" name="f1051CoreNum" width="100" default=""/> 
-  <field desc="A屏柜代码" editor="text" name="tb1050CubicleByF1050CodeA.f1050Code" width="100" default=""/> 
-  <field desc="A屏柜描述" editor="none" name="tb1050CubicleByF1050CodeA.f1050Desc" width="180" default=""/> 
-  <field desc="B屏柜代码" editor="text" name="tb1050CubicleByF1050CodeB.f1050Code" width="100" default=""/> 
-  <field desc="B屏柜描述" editor="none" name="tb1050CubicleByF1050CodeB.f1050Desc" width="180" default=""/> 
+  <field desc="A屏柜代码" editor="text" name="tb1050CubicleByF1050CodeA.f1050Code" width="200" default=""/> 
+  <field desc="A屏柜名称" editor="none" name="tb1050CubicleByF1050CodeA.f1050Name" width="200" default=""/> 
+  <field desc="B屏柜代码" editor="text" name="tb1050CubicleByF1050CodeB.f1050Code" width="200" default=""/> 
+  <field desc="B屏柜名称" editor="none" name="tb1050CubicleByF1050CodeB.f1050Name" width="200" default=""/> 
 </table>

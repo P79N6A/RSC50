@@ -153,7 +153,7 @@ public class HqlDaoImpl implements HqlDaoService {
 			}
 			return query.setCacheable(true).list();
 		} finally {
-			service.flush();
+//			service.flush();
 		}
 	}
 	
