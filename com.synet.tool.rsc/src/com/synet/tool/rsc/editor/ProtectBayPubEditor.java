@@ -14,8 +14,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
@@ -24,6 +26,7 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
+import static com.synet.tool.rsc.DBConstants.*;
 
 /**
  * 公共间隔
@@ -52,9 +55,9 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 		super.init();
 		iedEntityService = new IedEntityService();
 		typeMap = new HashMap<>();
-		typeMap.put(1, 60);
-		typeMap.put(2, 61);
-		typeMap.put(3, 62);
+		typeMap.put(1, IED_JHJ);
+		typeMap.put(2, IED_GP);
+		typeMap.put(3, IED_CJQ);
 	}
 	
 	@Override
@@ -123,18 +126,25 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 					}
 					String code = rscp.nextTbCode(DBConstants.PR_IED);
 					Tb1046IedEntity iedEntity = new Tb1046IedEntity(code, desc, type);
+					if (desc.indexOf(comboDevType.getText()) < 0) {
+						desc += comboDevType.getText();
+						iedEntity.setF1046Desc(desc);
+					}
+					iedEntity.setF1042Code(bayEntity.getF1042Code());
+					iedEntity.setTb1042BaysByF1042Code(bayEntity);
 					beandao.insert(iedEntity);
 					table.addRow(iedEntity);
 					table.getTable().layout();
-//					DialogHelper.showConfirm("")
 				} else if(source == btnDel) {
-					Tb1046IedEntity iedSelected = (Tb1046IedEntity) table.getSelection();
-					if(iedSelected == null) {
+					if (!DialogHelper.showConfirm("确定删除？", "是", "否")) {
 						return;
 					}
-					beandao.delete(iedSelected);
+					List<Object> selections = table.getSelections();
+					if(selections == null) {
+						return;
+					}
+					beandao.deleteBatch(selections);
 					table.removeSelected();
-					table.getTable().layout();
 				}
 			}
 		};
@@ -148,10 +158,18 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 	public void initData() {
 		EditorConfigData editorConfigData = (EditorConfigData) getInput().getData();
 		bayEntity = (Tb1042BayEntity) editorConfigData.getData();
-		int[] types = new int[]{60,61,62};
-		iedEntityAll = iedEntityService.getIedByTypesAndBay(types, bayEntity);
+		int[] types = new int[]{IED_JHJ, IED_GP, IED_CJQ};
+		iedEntityAll = iedEntityService.getIedByTypesAndBay(types, null);
+		IField[] fields = table.getFields();
+		for (IField field : fields) {
+			String title = field.getTitle();
+			if ("保护分类".equals(title)) {
+				field.setEditor("combo");
+			} else if (!"间隔".equals(title) && !"屏柜".equals(title)) {
+				field.setEditor("text");
+			}
+		}
 		table.setInput(iedEntityAll);
-		table.getTable().layout();
 		super.initData();
 	}
 

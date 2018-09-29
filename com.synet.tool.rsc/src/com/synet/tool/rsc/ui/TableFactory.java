@@ -29,7 +29,7 @@ public class TableFactory {
 	public static final String POUT_TABLE 					= "PoutTable";	// 发送虚端子
 	public static final String ANALOG_TABLE 				= "AnalogTable"; // 测量量
 	public static final String PROT_ANALOG_TABLE 			= "ProtAnalogTable"; // 保护测量量
-	public static final String PROT_INTERVAL_TABLE 			= "ProtectIntervalTable"; // 装置信息
+	public static final String PROT_INTERVAL_TABLE 			= "ProtectIntervalTable"; // 装置列表
 	public static final String IED_CHOOSE_TABLE             = "IedChooseTable";
 	public static final String CTVT_CHOOSE_TABLE            = "CtvtChooseTable";
 	public static final String GATHER_TABLE 				= "GatherTable";

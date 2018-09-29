@@ -27,7 +27,8 @@ public class PortEntityService extends BaseService{
 	 * @return
 	 */
 	public Tb1048PortEntity getPortEntity(String devName, String slot,String portNo) {
-		if (devName == null || slot == null || portNo == null) return null;
+		if (devName == null || slot == null || portNo == null) 
+			return null;
 		Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 		if (ied != null) {
 			Map<String, Object> params = new HashMap<String, Object>();

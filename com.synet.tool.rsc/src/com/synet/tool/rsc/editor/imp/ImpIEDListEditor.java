@@ -15,11 +15,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -94,18 +96,18 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 	
 	private void updateIEDIPs(Tb1046IedEntity iedEntity, IM101IEDListEntity entity) {
 		String netIPA = entity.getNetAIP();
-		if (StringUtil.isEmpty(netIPA)) {
-			return;
-		}
 		String netIPB = entity.getNetBIP();
 		iedEntity.setF1046aNetIp(netIPA);
 		iedEntity.setF1046bNetIp(netIPB);
-		Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
-		mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
-		mmsServer.setTb1046IedByF1046Code(iedEntity);
-		mmsServer.setF1070IpA(netIPA);
-		mmsServer.setF1070IpB(netIPB);
-		beandao.insert(mmsServer);
+		iedEntityService.save(iedEntity);
+		if (!StringUtil.isEmpty(netIPA)) {
+			Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
+			mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
+			mmsServer.setTb1046IedByF1046Code(iedEntity);
+			mmsServer.setF1070IpA(netIPA);
+			mmsServer.setF1070IpB(netIPB);
+			beandao.insert(mmsServer);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,34 +115,52 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		DictManager dictMgr = DictManager.getInstance();
 		for (IM101IEDListEntity entity : list) {
 			if (!entity.isOverwrite()) {
 				continue;
 			}
-			Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(entity.getDevName());
-			if (iedEntity != null) {
-				Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
-				if (bayEntity != null) {
-					iedEntity.setF1042Code(bayEntity.getF1042Code());
+			String devName = entity.getDevName();
+			Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(devName);
+			if (iedEntity == null) {
+				String f1046Code = rscp.nextTbCode(DBConstants.PR_IED);
+				String desc = entity.getDevDesc();
+				String type = null;
+				if (desc.contains(RSCConstants.DEV_TYPE_SWC)) {
+					type = RSCConstants.DEV_TYPE_SWC;
+				} else if (desc.contains(RSCConstants.DEV_TYPE_GAT)) {
+					type = RSCConstants.DEV_TYPE_GAT;
+				} else if (desc.contains(RSCConstants.DEV_TYPE_ODF)) {
+					type = RSCConstants.DEV_TYPE_ODF;
 				}
-				Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
-				if (cubicle != null) {
-					iedEntity.setF1050Code(cubicle.getF1050Code());
+				if (type == null) {
+					continue;
 				}
-				updateIEDIPs(iedEntity, entity);
-//				iedEntity.setF1046Manufacturor(entity.getManufacturor());
-//				iedEntity.setF1046version(entity.getDevVersion());
-//				iedEntity.setF1046protectCategory(entity.getProtClassify());
-//				iedEntity.setF1046protectType(entity.getProtType());
-//				iedEntity.setF1046protectModel(entity.getProtModel());
-				iedEntity.setF1046OperateDate(entity.getDateService());
-				iedEntity.setF1046productDate(entity.getDateProduct());
-				iedEntity.setF1046productNo(entity.getProductCode());
-				iedEntity.setF1046dataGatType(entity.getDataCollectType());
-				iedEntity.setF1046OutType(entity.getOutType());
-				//更新
-				iedEntityService.update(iedEntity);
+				type = dictMgr.getIdByName("IED_TYPE", type);
+				int f1046Type = Integer.parseInt(type);
+				iedEntity = new Tb1046IedEntity(f1046Code, devName, f1046Type);
+				iedEntity.setF1046Desc(desc);
 			}
+			Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
+			if (bayEntity != null) {
+				iedEntity.setF1042Code(bayEntity.getF1042Code());
+			}
+			Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
+			if (cubicle != null) {
+				iedEntity.setF1050Code(cubicle.getF1050Code());
+			}
+//			iedEntity.setF1046Manufacturor(entity.getManufacturor());
+//			iedEntity.setF1046version(entity.getDevVersion());
+//			iedEntity.setF1046protectCategory(entity.getProtClassify());
+//			iedEntity.setF1046protectType(entity.getProtType());
+//			iedEntity.setF1046protectModel(entity.getProtModel());
+			iedEntity.setF1046OperateDate(entity.getDateService());
+			iedEntity.setF1046productDate(entity.getDateProduct());
+			iedEntity.setF1046productNo(entity.getProductCode());
+			iedEntity.setF1046dataGatType(entity.getDataCollectType());
+			iedEntity.setF1046OutType(entity.getOutType());
+			//更新
+			updateIEDIPs(iedEntity, entity);
 		}
 	}
 

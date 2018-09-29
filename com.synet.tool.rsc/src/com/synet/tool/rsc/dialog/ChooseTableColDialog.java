@@ -53,7 +53,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 		SwtUtil.createLabel(composite, "导入字段", new GridData());
 		SwtUtil.createLabel(composite, "Excel列属性", new GridData());
 		GridData gridData = new GridData();
-		gridData.widthHint = 230;
+		gridData.widthHint = 250;
 		if (fieldList != null && fieldList.length > 0) {
 			for (String field : fieldList) {
 				labelList.add(SwtUtil.createLabel(composite, field, new GridData()));
@@ -106,7 +106,7 @@ public class ChooseTableColDialog extends WrappedDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 850);
+		return new Point(470, 850);
 	}
 	
 	@Override

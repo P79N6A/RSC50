@@ -119,10 +119,13 @@ public class DevKTableModel extends RKTableModel {
 	public void doSetContentAt(int col, int row, Object value) {
 		super.doSetContentAt(col, row, value);
 		Object obj = getItem(row);
-		saveData(obj);
 		IField f = fields[col];
+		String title = f.getTitle();
+		if (!"更新".equals(title)) {
+			saveData(obj);
+		}
 		if (TableFactory.REGION_LIST_TABLE.equals(tableName)
-				&& "区域名称".equals(f.getTitle())) {
+				&& "区域名称".equals(title)) {
 			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
 			if (regionEntity.getF1049Name() != null) {
 				Display.getCurrent().asyncExec(new Runnable() {

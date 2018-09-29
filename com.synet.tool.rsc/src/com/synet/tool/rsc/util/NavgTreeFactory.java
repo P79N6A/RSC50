@@ -141,15 +141,17 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		if(DataUtils.listNotNull(bayEntityList)){
 			ConfigTreeEntry bayOther = null;
 			ConfigTreeEntry bayMot = null;
-//			ConfigTreeEntry bayPub = null;
+			ConfigTreeEntry bayPub = null;
 			int bayIndex = 0;
 			for (int i = 0; i < bayEntityList.size(); i++) {
 				Tb1042BayEntity bayEntity = bayEntityList.get(i);
 				List<Tb1046IedEntity> iedEntities = iedService.getIedEntityByBay(bayEntity);
-				if (iedEntities != null && iedEntities.size() > 0) {
+				String bayName = bayEntity.getF1042Name();
+				boolean isPubBay = DBConstants.BAY_PUB.equals(bayName);
+				if (isPubBay || (iedEntities != null && iedEntities.size() > 0)) {
 					bayIndex = i + 1;
-					String bayName = bayEntity.getF1042Name();
-					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayName, "bay.gif", ET_PT_BAY, bayIndex);
+					String editorId = isPubBay ? ET_PT_BAY_PUB : ET_PT_BAY;
+					ConfigTreeEntry bayEntry = createConfigEntry(protectEntry, bayName, "bay.gif", editorId, bayIndex);
 					bayEntry.setData(bayEntity);
 					int iedIndex = 0;
 					for (Tb1046IedEntity iedEntity : iedEntities) {
@@ -160,19 +162,17 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 						bayOther = bayEntry;
 					} else if (DBConstants.BAY_MOT.equals(bayName)) {
 						bayMot = bayEntry;
-					} 
-//					else if (DBConstants.BAY_PUB.equals(bayName)) {
-//						bayPub = bayEntry;
-//					}
+					} else if (isPubBay) {
+						bayPub = bayEntry;
+					}
 				}
 			}
 			if (bayOther != null)
 				bayOther.setIndex(++bayIndex);
 			if (bayMot != null)
 				bayMot.setIndex(++bayIndex);
-//			if (bayPub != null)
-//				bayPub.setIndex(++bayIndex);
-			createConfigEntry(protectEntry, DBConstants.BAY_PUB, "bay.gif", ET_PT_BAY_PUB, ++bayIndex);
+			if (bayPub != null)
+				bayPub.setIndex(++bayIndex);
 			createConfigEntry(protectEntry, DBConstants.BAY_ALL, "bay.gif", ET_PT_BAY, ++bayIndex);
 		}
 		/** 动态加载-end  */

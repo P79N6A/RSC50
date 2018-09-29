@@ -89,8 +89,10 @@ public class IedEntityService extends BaseService {
 	}
 
 	public Tb1046IedEntity getIedEntityByDevName(String devName) {
-		if (devName == null) return null;
-		return (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		if (devName == null)
+			return null;
+		Object object = beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		return (Tb1046IedEntity) object;
 	}
 	
 	public void updateBoardNum(Tb1046IedEntity ied) {

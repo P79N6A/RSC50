@@ -2,6 +2,8 @@ package com.synet.tool.rsc;
 
 import static java.io.File.separator;
 
+import com.shrcn.found.common.dict.DictManager;
+
 public interface RSCConstants {
 	
 	String RSC_PRJ_NAME  	= "RscData";
@@ -47,21 +49,21 @@ public interface RSCConstants {
      String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
      String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
 	
-     
+     DictManager dictMgr = DictManager.getInstance();
      
      String DEV_TYPE_ALL		= "全部装置";
      
-     String DEV_TYPE_PRO		= "保护装置";
-     String DEV_TYPE_UNIT		= "合并单元";
-     String DEV_TYPE_TER		= "智能终端";
+     String DEV_TYPE_PRO		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_PROT); //"保护装置";
+     String DEV_TYPE_UNIT		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_MU); //"合并单元";
+     String DEV_TYPE_TER		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_TERM); //"智能终端";
      //测控装置
-     String DEV_TYPE_MOT		= "测控装置";
+     String DEV_TYPE_MOT		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_MONI); //"测控装置";
      //交换机，采集单元，光配架
-     String DEV_TYPE_SWC		= "交换机";
-     String DEV_TYPE_GAT		= "采集单元";
-     String DEV_TYPE_ODF		= "光配架";
+     String DEV_TYPE_SWC		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_JHJ); //"交换机";
+     String DEV_TYPE_GAT		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_CJQ); //"采集单元";
+     String DEV_TYPE_ODF		= dictMgr.getNameById("IED_TYPE", DBConstants.IED_GP); //"光配架";
      
-     String DEV_TYPE_UNIT_TER	= "合并智能终端";
+     String DEV_TYPE_UNIT_TER	= dictMgr.getNameById("IED_TYPE", DBConstants.IED_MT); //"合并智能终端";
      
      String SEARCH				= "查询";
      String DESCRIPTION			= "描述";

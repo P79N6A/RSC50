@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -116,6 +117,21 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		EditorConfigData editorConfigData = (EditorConfigData) getInput().getData();
 		bayEntity = (Tb1042BayEntity) editorConfigData.getData();
 		iedEntityAll = iedEntityService.getIedEntityByBay(bayEntity);
+		IField[] fields = table.getFields();
+		for (IField field : fields) {
+			String fname = field.getName();
+			String title = field.getTitle();
+			if ("f1046OperateDate".equals(fname)//投运日期
+					|| "f1046productDate".equals(fname)//出厂日期
+					|| "f1046productNo".equals(fname)//出厂编号
+					|| "f1046dataGatType".equals(fname)//数据采集方式
+					|| "f1046OutType".equals(fname)//出口方式
+					) {
+				field.setEditor("text");
+			} else if (!"间隔".equals(title) && !"屏柜".equals(title)) {
+				field.setEditor("none");
+			}
+		}
 		table.setInput(iedEntityAll);
 		super.initData();
 	}

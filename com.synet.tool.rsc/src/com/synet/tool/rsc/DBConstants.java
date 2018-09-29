@@ -88,6 +88,9 @@ public interface DBConstants {
 	int IED_MU 		= 30; 	//通用合并单元
 	int IED_MT 		= 40; 	//通用合并智能终端
 	int IED_MONI 	= 50; 	//测控装置
+	int IED_JHJ 	= 60; 	//交换机
+	int IED_GP 		= 61; 	//光配
+	int IED_CJQ		= 62; 	//采集器
 
 	int Equipment_BRK = 01; //断路器
 	int Equipment_DIS = 02; //刀闸
