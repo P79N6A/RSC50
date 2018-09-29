@@ -194,8 +194,8 @@ public class ImportFibreListProcessor2 {
 				portEntityB.setF1048Direction(DBConstants.DIRECTION_RT);
 			}
 		}
-		coreEntity.setF1048CodeA(portEntityA.getF1048Code());
-		coreEntity.setF1048CodeB(portEntityB.getF1048Code());
+		coreEntity.setTb1048PortByF1048CodeA(portEntityA);
+		coreEntity.setTb1048PortByF1048CodeB(portEntityB);
 		Tb1051CableEntity cableEntity = new Tb1051CableEntity();
 		cableEntity.setF1051Name(entity.getCableCode());
 		cableEntity.setF1051Type(DBConstants.CABLE_TYPE_WL);//现默认为“尾缆”
@@ -242,8 +242,8 @@ public class ImportFibreListProcessor2 {
 				portEntityB.setF1048Direction(DBConstants.DIRECTION_RT);
 			}
 		}
-		coreEntity.setF1048CodeA(portEntityA.getF1048Code());
-		coreEntity.setF1048CodeB(portEntityB.getF1048Code());
+		coreEntity.setTb1048PortByF1048CodeA(portEntityA);
+		coreEntity.setTb1048PortByF1048CodeB(portEntityB);
 		if (cubicleEntity == null) return null;
 		coreEntity.setParentCode(cubicleEntity.getF1050Code());
 //			coreEntity.setTb1051CableByParentCode(oldCableEntity);
