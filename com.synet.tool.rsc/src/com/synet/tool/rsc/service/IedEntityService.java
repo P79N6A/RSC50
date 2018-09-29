@@ -79,6 +79,7 @@ public class IedEntityService extends BaseService {
 		HqlDaoImpl.getInstance().updateByHql(hql, params);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Tb1046IedEntity> getIedByIM103IEDBoard(IM103IEDBoardEntity entity) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("f1046Manufacturor", entity.getManufacturor());
@@ -88,6 +89,7 @@ public class IedEntityService extends BaseService {
 	}
 
 	public Tb1046IedEntity getIedEntityByDevName(String devName) {
+		if (devName == null) return null;
 		return (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
 	}
 	

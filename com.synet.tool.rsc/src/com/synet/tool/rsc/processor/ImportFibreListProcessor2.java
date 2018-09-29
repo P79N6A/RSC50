@@ -9,6 +9,7 @@ import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
@@ -16,7 +17,7 @@ import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.service.CableEntityService;
 import com.synet.tool.rsc.service.CoreEntityService;
-import com.synet.tool.rsc.service.CubicleEntityService;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
@@ -27,11 +28,12 @@ public class ImportFibreListProcessor2 {
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ImprotInfoService improtInfoService = new ImprotInfoService();
 	private SubstationService substationService = new SubstationService();
-	private CubicleEntityService cubicleService = new CubicleEntityService();
+//	private CubicleEntityService cubicleService = new CubicleEntityService();
 	private PortEntityService portEntityService = new PortEntityService();
 	private CableEntityService cableEntityService = new CableEntityService();
 	private CoreEntityService coreEntityService = new CoreEntityService();
 	private PhyconnEntityService phyconnEntityService = new PhyconnEntityService();
+	private IedEntityService iedEntityService = new IedEntityService();
 	private List<IM102FibreListEntity> fibreListEntitieList = new ArrayList<>();
 	//存放解析出来的光缆（去重）
 	private List<Tb1051CableEntity> cableEntitieList = new ArrayList<>();
@@ -97,8 +99,11 @@ public class ImportFibreListProcessor2 {
 	//处理光缆数据
 	private void analysisCable(Tb1041SubstationEntity substationEntity) {
 		for (IM102FibreListEntity entity : fibreListEntitieList) {
-			Tb1050CubicleEntity cubicleEntityA = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescA());
-			Tb1050CubicleEntity cubicleEntityB = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescB());
+			Tb1046IedEntity iedEntityA = iedEntityService.getIedEntityByDevName(entity.getDevNameA());
+			Tb1046IedEntity iedEntityB = iedEntityService.getIedEntityByDevName(entity.getDevNameB());
+			if (iedEntityA == null || iedEntityB == null) continue;
+			Tb1050CubicleEntity cubicleEntityA = iedEntityA.getTb1050CubicleEntity();
+			Tb1050CubicleEntity cubicleEntityB = iedEntityB.getTb1050CubicleEntity();
 			if (cubicleEntityA == null || cubicleEntityB == null) continue;//屏柜都不能为空
 			if (entity.getCableCode() == null || "".equals(entity.getCableCode())) continue;
 			Tb1051CableEntity cableEntity = new Tb1051CableEntity();
@@ -130,7 +135,9 @@ public class ImportFibreListProcessor2 {
 			if (portEntityA == null || portEntityB == null) continue; //端口都不能为空
 			
 			//处理屏柜A跳线
-			Tb1050CubicleEntity cubicleEntityA = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescA());
+			Tb1046IedEntity iedEntityA = iedEntityService.getIedEntityByDevName(entity.getDevNameA());
+			if (iedEntityA == null ) continue;
+			Tb1050CubicleEntity cubicleEntityA = iedEntityA.getTb1050CubicleEntity();
 			if (cubicleEntityA != null) {
 				Tb1048PortEntity portEntityAA = portEntityService.getPortEntity(entity.getDistribFrameCodeA(), "X1", entity.getDistribFramePortNoA());
 				if (portEntityAA != null) {
@@ -140,7 +147,9 @@ public class ImportFibreListProcessor2 {
 			}
 			
 			//处理屏柜B跳线
-			Tb1050CubicleEntity cubicleEntityB = cubicleService.getCubicleEntityByDesc(entity.getCubicleDescB());
+			Tb1046IedEntity iedEntityB = iedEntityService.getIedEntityByDevName(entity.getDevNameB());
+			if (iedEntityB == null ) continue;
+			Tb1050CubicleEntity cubicleEntityB = iedEntityB.getTb1050CubicleEntity();
 			if (cubicleEntityB != null) {
 				Tb1048PortEntity portEntityBB = portEntityService.getPortEntity(entity.getDistribFrameCodeA(), "X1", entity.getDistribFramePortNoA());
 				if (portEntityBB != null) {
