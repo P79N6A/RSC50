@@ -43,9 +43,9 @@ public class Tb1046IedEntity {
     public Tb1046IedEntity() {
 	}
     
-    public Tb1046IedEntity(String f1046Code, String f1046Desc, Integer f1046Type) {
+    public Tb1046IedEntity(String f1046Code, String f1046Name, Integer f1046Type) {
     	this.f1046Code = f1046Code;
-    	this.f1046Desc = f1046Desc;
+    	this.f1046Name = f1046Name;
     	this.f1046Type = f1046Type;
 	}
     
