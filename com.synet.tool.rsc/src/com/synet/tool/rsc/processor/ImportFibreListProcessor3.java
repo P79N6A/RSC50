@@ -153,10 +153,12 @@ public class ImportFibreListProcessor3 {
 	 * @param cubicleEntityB
 	 */
 	private void addCableCores(IM102FibreListEntity entity, Tb1050CubicleEntity cubicleEntityA, Tb1050CubicleEntity cubicleEntityB) {
-		Tb1048PortEntity portEntityA = portEntityService.getPortEntity(entity.getDevNameA(), entity.getBoardCodeA(), entity.getPortCodeA());
-		Tb1048PortEntity portEntityB = portEntityService.getPortEntity(entity.getDevNameB(), entity.getBoardCodeB(), entity.getPortCodeB());
-		String portA = entity.getDevNameA() + "$" + entity.getBoardCodeA() + "$" + entity.getPortCodeA();
-		String portB = entity.getDevNameB() + "$" + entity.getBoardCodeB() + "$" + entity.getPortCodeB();
+		String devNameA = entity.getDevNameA();
+		String devNameB = entity.getDevNameB();
+		Tb1048PortEntity portEntityA = portEntityService.getPortEntity(devNameA, entity.getBoardCodeA(), entity.getPortCodeA());
+		Tb1048PortEntity portEntityB = portEntityService.getPortEntity(devNameB, entity.getBoardCodeB(), entity.getPortCodeB());
+		String portA = devNameA + "$" + entity.getBoardCodeA() + "$" + entity.getPortCodeA();
+		String portB = devNameB + "$" + entity.getBoardCodeB() + "$" + entity.getPortCodeB();
 		if (portEntityA == null || portEntityB == null) {
 			String msg = "无法创建任何芯线：";
 			if (portEntityA == null) {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.BaseCbEntity;
@@ -35,42 +36,46 @@ public class LogcalAndPhyconnProcessor {
 	private PortEntityService portEntityService = new PortEntityService();
 	private IedEntityService iedEntityService = new IedEntityService();
 
+	/**
+	 * 递归查找
+	 * @param sendIedName
+	 * @param recvIed
+	 * @param phyconnList
+	 * @return
+	 */
+	private boolean findSendPhysConns(String sendIedName, Tb1046IedEntity recvIed, List<Tb1053PhysconnEntity> phyconnList) {
+		// 接收装置物理回路map（key：物理回路，value：发送装置）
+		Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
+		if (phyconnMap == null) 
+			return false;
+		for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
+			Tb1046IedEntity sendIed = phyconnMap.get(physconnEntity);
+			if (sendIed.getF1046Name().equals(sendIedName)) { //与逻辑链路发送端装置一致
+				phyconnList.add(physconnEntity);
+				return true;
+			//判断是否是交换机
+			} else if (isSwcDevice(sendIed)) {				  //与逻辑链路发送端装置不一致
+				phyconnList.add(physconnEntity);
+				return findSendPhysConns(sendIedName, recvIed, phyconnList);
+			}
+		}
+		return false;
+	}
+	
 	public void analysis() {
-		//获取所有的逻辑链路
+		// 获取所有的逻辑链路
 		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getAll();
-		
+		// 查找逻辑链路物理回路
 		for (Tb1065LogicallinkEntity logicallinkEntity : logicallinkEntities) {
-			if (logicallinkEntity.getTb1046IedByF1046CodeIedSend() == null 
-					|| logicallinkEntity.getTb1046IedByF1046CodeIedRecv() == null) {
+			Tb1046IedEntity recvIed = logicallinkEntity.getTb1046IedByF1046CodeIedRecv();
+			Tb1046IedEntity sendIed = logicallinkEntity.getTb1046IedByF1046CodeIedSend();
+			if (sendIed == null || recvIed == null) {
 				continue;
 			}
-			Tb1046IedEntity recvIed = logicallinkEntity.getTb1046IedByF1046CodeIedRecv();
-			Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
-			if (phyconnMap == null) continue;
 			List<Tb1053PhysconnEntity> phyconnList = new ArrayList<>();
-			for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
-				Tb1046IedEntity sendIed = phyconnMap.get(physconnEntity);
-				if (sendIed.getF1046Name().equals(logicallinkEntity.getTb1046IedByF1046CodeIedSend().getF1046Name())) {
-					//与逻辑链路发送端装置一致
-					phyconnList.add(physconnEntity);
-				} else {
-					//与逻辑链路发送端装置不一致
-					//判断是否是交换机
-					if (sendIed.getF1046Desc() == null) continue;
-					if (isSwcDevice(sendIed)) {
-						//将交换作为接收装置查找物理链路
-						Map<Tb1053PhysconnEntity, Tb1046IedEntity> tempPhyconnMap = getPhysconnEntitiesByPortB(sendIed);
-						for (Tb1053PhysconnEntity tempPhysconnEntity : tempPhyconnMap.keySet()) {
-							Tb1046IedEntity tempSendIed = tempPhyconnMap.get(tempPhysconnEntity);
-							if (tempSendIed.getF1046Name().equals(logicallinkEntity.getTb1046IedByF1046CodeIedSend().getF1046Name())) {
-								//与逻辑链路发送端装置一致
-								phyconnList.add(physconnEntity);
-							}
-						}
-					} 
-				}
-			}
-			if (phyconnList.size() > 0) {//有与逻辑链路匹配的物理回路
+			String sendIedName = sendIed.getF1046Name();
+			boolean success = findSendPhysConns(sendIedName, recvIed, phyconnList);
+			if (success) {//有与逻辑链路匹配的物理回路
 				for (Tb1053PhysconnEntity physconnEntity : phyconnList) {
 					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();
 					llinkphyrelationEntity.setTb1065LogicallinkByF1065Code(logicallinkEntity);
@@ -117,21 +122,26 @@ public class LogcalAndPhyconnProcessor {
 					int direction = portEntity.getF1048Direction();
 					//接收端口只能为接收或收发
 					if (direction == DBConstants.DIRECTION_RX || direction == DBConstants.DIRECTION_RT) {
-						//根据接收端口查找发送端口，一个端口只能连一根线（带确认）
+						//根据接收端口查找发送端口，一个端口只能连一根线（已确认）
 						Tb1053PhysconnEntity physconnEntity = phyconnEntityService.getByTb1048PortByF1048CodeB(portEntity); 
-						if (physconnEntity == null) continue;
+						if (physconnEntity == null) 
+							continue;
 						Tb1048PortEntity sendPortEntity = physconnEntity.getTb1048PortByF1048CodeA();
-						if (sendPortEntity == null) continue;
+						if (sendPortEntity == null) 
+							continue;
 						//根据发送端口找到发动装置
-						if (sendPortEntity.getTb1047BoardByF1047Code() == null) continue;
+						if (sendPortEntity.getTb1047BoardByF1047Code() == null) 
+							continue;
 						Tb1046IedEntity sendIed = sendPortEntity.getTb1047BoardByF1047Code().getTb1046IedByF1046Code();
-						if (sendIed == null) continue;
+						if (sendIed == null) 
+							continue;
 						map.put(physconnEntity, sendIed);
 					}
 				}
 			}		
 		}
-		if (map.size() <= 0) return null;
+		if (map.size() <= 0) 
+			return null;
 		return map;
 	}
 	
@@ -171,26 +181,27 @@ public class LogcalAndPhyconnProcessor {
 	public void analysisGCBAndSVCB() {
 		//采集器
 		List<Tb1046IedEntity> odfDeviceList = iedEntityService.getIedEntityByTypes(EnumIedType.ODF_DEVICE.getTypes());
-		if (odfDeviceList == null || odfDeviceList.size() <= 0) return;//采集器为空，退出
+		if (odfDeviceList == null || odfDeviceList.size() <= 0) 
+			return;//采集器为空，退出
+		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 		for (Tb1046IedEntity odf : odfDeviceList) {
 			Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(odf);
-			if (phyconnMap == null) continue;
+			if (phyconnMap == null) 
+				continue;
 			for (Tb1046IedEntity ied : phyconnMap.values()) {
 				if (isSwcDevice(ied)) {//是交换机，则视为交换机汇集口
-					//搜索所有端口相关的物理回路
-					List<Tb1053PhysconnEntity> list = getPhysconnEntitiesByPortAll(ied);
-					if (list == null) continue;
-					for (Tb1053PhysconnEntity physconnEntity : list) {
-						//根据物理回路查找与之关联的逻辑链路
-						List<Tb1073LlinkphyrelationEntity> llEntities = lLinkPhyRelationService.getByTb1053PhysconnByF1053Code(physconnEntity);
-						if (llEntities == null || llEntities.size() <= 0) continue;
-						for (Tb1073LlinkphyrelationEntity llEntity : llEntities) {
-							Tb1065LogicallinkEntity logicallinkEntity = llEntity.getTb1065LogicallinkByF1065Code();
-							//把逻辑链路对应的GCB、SVCB的F1071_CODE为当前采集器的Code
-							BaseCbEntity baseCbByCdCode = logicallinkEntity.getBaseCbByCdCode();
-							if (baseCbByCdCode != null) {
-								baseCbByCdCode.setF1071Code(odf.getF1046Code());
+					//搜索端口B相关的物理回路
+					Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMapSwc = getPhysconnEntitiesByPortB(ied);
+					if (phyconnMapSwc == null) 
+						continue;
+					for (Tb1053PhysconnEntity physconnEntity : phyconnMapSwc.keySet()) {
+						Tb1046IedEntity sendIed = phyconnMapSwc.get(physconnEntity);
+						List<BaseCbEntity> cbs = (List<BaseCbEntity>) beanDao.getListByCriteria(BaseCbEntity.class, "tb1046IedByF1046Code", sendIed);
+						if (cbs != null && cbs.size()>0) {
+							for (BaseCbEntity cb : cbs) {
+								cb.setF1071Code(odf.getF1046Code());
 							}
+							beanDao.updateBatch(cbs);
 						}
 					}
 				}

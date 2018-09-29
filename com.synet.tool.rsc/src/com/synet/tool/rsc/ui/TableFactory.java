@@ -43,7 +43,7 @@ public class TableFactory {
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
 	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
 	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
-	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";
+	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";	// 逻辑链路
 	public static final String ANALOG_CHN_TABLE 			= "AnalogChnTable";
 	public static final String CRITER_CHN_TABLE 			= "CriteriaChnTable";
 	

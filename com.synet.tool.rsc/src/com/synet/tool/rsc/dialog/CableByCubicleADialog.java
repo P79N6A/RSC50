@@ -26,10 +26,11 @@ public class CableByCubicleADialog extends KTableEditorDialog {
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		table = TableFactory.getCubicleTable(parent);
+		Composite container = (Composite) super.createDialogArea(parent);
+		table = TableFactory.getCubicleTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		initData();
-		return super.createDialogArea(parent);
+		return container;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,7 +65,7 @@ public class CableByCubicleADialog extends KTableEditorDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(480, 410);
+		return new Point(880, 510);
 	}
 	
 }

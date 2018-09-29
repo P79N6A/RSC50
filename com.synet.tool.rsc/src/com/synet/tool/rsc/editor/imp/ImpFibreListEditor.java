@@ -118,11 +118,10 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 //			new ImportFibreListProcessor().importData(temp);
 			//导入数据
 			new ImportFibreListProcessor3().importData(temp);
-//			//处理逻辑链路与物理回路关联(处理全部)
-//			new LogcalAndPhyconnProcessor().analysis();
-//			//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
-//			new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
-			beandao.updateBatch(temp);
+			//处理逻辑链路与物理回路关联(处理全部)
+			new LogcalAndPhyconnProcessor().analysis();
+			//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
+			new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
 		}
 	}
 

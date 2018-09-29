@@ -4,7 +4,7 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1050CubicleEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
-  <field desc="屏柜代码" editor="none" name="f1050Code" width="300" default=""/>
-  <field desc="屏柜名称" editor="text" name="f1050Name" width="300" default=""/> 
-  <field desc="屏柜描述" editor="text" name="f1050Desc" width="300" default=""/> 
+  <field desc="屏柜代码" editor="none" name="f1050Code" width="200" default=""/>
+  <field desc="屏柜名称" editor="text" name="f1050Name" width="250" default=""/> 
+  <field desc="屏柜描述" editor="text" name="f1050Desc" width="200" default=""/> 
 </table>
