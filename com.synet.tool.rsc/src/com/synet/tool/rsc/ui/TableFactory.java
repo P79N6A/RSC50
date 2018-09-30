@@ -7,7 +7,6 @@ import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.table.TableBuilder;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.ui.table.IEDBoardTable;
-import com.synet.tool.rsc.ui.table.ProblemTable;
 
 
 public class TableFactory {
@@ -70,11 +69,6 @@ public class TableFactory {
 	public static final String PROBLEMS		  				= "problems";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
-	
-	public static RKTable getProblemTable(Composite container) {
-		TableConfig tableCfg = uicfg.getDefinedTable(PROBLEMS);
-		return TableBuilder.createKTable(ProblemTable.class, container, tableCfg);
-	}
 	
 	public static DevKTable getDeviceNameTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_NAME_TABLE);
