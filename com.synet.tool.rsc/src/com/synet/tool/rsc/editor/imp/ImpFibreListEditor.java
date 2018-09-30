@@ -13,11 +13,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -25,9 +27,6 @@ import com.synet.tool.rsc.model.IM102FibreListEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
-import com.synet.tool.rsc.model.Tb1051CableEntity;
-import com.synet.tool.rsc.model.Tb1052CoreEntity;
-import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.processor.ImportFibreListProcessor3;
 import com.synet.tool.rsc.processor.LogcalAndPhyconnProcessor;
@@ -47,6 +46,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 	private SubstationService substationService;
 	private CubicleEntityService cubicleService;
 	private PortEntityService portEntityService;
+	private Button btAnalysis;
 	
 	public ImpFibreListEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -69,13 +69,19 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		
 		GridData gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.widthHint = 150;
-		gridData.verticalSpan = 2;
 		titleList = SwtUtil.createList(container, gridData);
+		
+		int cols = 3;
+		Composite cmpRight = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), cols);
+		SwtUtil.createLabel(cmpRight, "", new GridData(GridData.FILL_HORIZONTAL));
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入光缆", btData);
-		table =TableFactory.getFibreListTable(container);
-		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		btImport = SwtUtil.createPushButton(cmpRight, "导入光缆", btData);
+		btAnalysis = SwtUtil.createPushButton(cmpRight, "分析回路", btData);
+		table = TableFactory.getFibreListTable(cmpRight);
+		GridData tbData = new GridData(GridData.FILL_BOTH);
+		tbData.horizontalSpan = cols;
+		table.getTable().setLayoutData(tbData);
 	}
 	
 	protected void addListeners() {
@@ -93,8 +99,21 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				String[] selects = titleList.getSelection();
+				if (selects != null && selects.length > 0) {
+					doImport();
+					ConsoleManager.getInstance().append(titleList.getSelection()[0] + "导入完毕！");
+				}
+			}
+		});
+		
+		btAnalysis.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] selects = titleList.getSelection();
+				if (selects != null && selects.length > 0) {
+					doAnalysis();
+				}
 			}
 		});
 	}
@@ -109,20 +128,19 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 				temp.add(entity);
 			}
 		}
+		//导入数据
 		if (temp.size() > 0) {
-			BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
-			beanDao.deleteAll(Tb1051CableEntity.class);
-			beanDao.deleteAll(Tb1052CoreEntity.class);
-			beanDao.deleteAll(Tb1053PhysconnEntity.class);
-			beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
-//			new ImportFibreListProcessor().importData(temp);
-			//导入数据
 			new ImportFibreListProcessor3().importData(temp);
-			//处理逻辑链路与物理回路关联(处理全部)
-			new LogcalAndPhyconnProcessor().analysis();
-			//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
-			new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
 		}
+	}
+	
+	private void doAnalysis() {
+		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+		beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
+		//处理逻辑链路与物理回路关联(处理全部)
+		new LogcalAndPhyconnProcessor().analysis();
+		//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
+		new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
 	}
 
 	@Override

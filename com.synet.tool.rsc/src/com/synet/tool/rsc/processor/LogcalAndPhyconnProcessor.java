@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.common.log.SCTLogger;
+import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.found.ui.view.LEVEL;
+import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
@@ -22,6 +26,7 @@ import com.synet.tool.rsc.service.LLinkPhyRelationService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
+import com.synet.tool.rsc.util.ProblemManager;
 
 /**
  * 逻辑链路与物理链路关联处理器
@@ -29,6 +34,7 @@ import com.synet.tool.rsc.service.PortEntityService;
 public class LogcalAndPhyconnProcessor {
 	
 	private RSCProperties rscp = RSCProperties.getInstance();
+	private ProblemManager pmgr = ProblemManager.getInstance();
 	private LogicallinkEntityService logicallinkEntityService = new LogicallinkEntityService();
 	private LLinkPhyRelationService lLinkPhyRelationService = new LLinkPhyRelationService();
 	private PhyconnEntityService phyconnEntityService = new PhyconnEntityService();
@@ -63,13 +69,28 @@ public class LogcalAndPhyconnProcessor {
 	}
 	
 	public void analysis() {
+		ConsoleManager console = ConsoleManager.getInstance();
 		// 获取所有的逻辑链路
 		List<Tb1065LogicallinkEntity> logicallinkEntities = logicallinkEntityService.getAll();
 		// 查找逻辑链路物理回路
 		for (Tb1065LogicallinkEntity logicallinkEntity : logicallinkEntities) {
 			Tb1046IedEntity recvIed = logicallinkEntity.getTb1046IedByF1046CodeIedRecv();
 			Tb1046IedEntity sendIed = logicallinkEntity.getTb1046IedByF1046CodeIedSend();
+			String appid = recvIed.getF1046Name() + " [" + logicallinkEntity.getBaseCbByCdCode().getCbId() + "] ";
 			if (sendIed == null || recvIed == null) {
+				String msg = "找不到逻辑链路" + appid + "的";
+				if (sendIed == null) {
+					msg += "发送装置";
+				}
+				if (recvIed == null) {
+					if (sendIed == null) {
+						msg += "和";
+					}
+					msg += "接收装置";
+				}
+				msg += "。";
+				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "分析回路", "装置检查", "", msg));
 				continue;
 			}
 			List<Tb1053PhysconnEntity> phyconnList = new ArrayList<>();
@@ -87,9 +108,10 @@ public class LogcalAndPhyconnProcessor {
 					llinkphyrelationEntity.setF1073Code(rscp.nextTbCode(DBConstants.PR_LPRELATION));
 					lLinkPhyRelationService.save(llinkphyrelationEntity);
 				}
+				console.append("逻辑链路" + appid + "与" + phyconnList.size() + "条物理回路有关。");
 			}
 		}
-		
+		console.append("物理回路与逻辑链路联关系分析完毕！");
 	}
 	
 	//判断是否是交换机
@@ -180,10 +202,14 @@ public class LogcalAndPhyconnProcessor {
 	//分析确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
 	public void analysisGCBAndSVCB() {
 		//采集器
+		ConsoleManager console = ConsoleManager.getInstance();
 		List<Tb1046IedEntity> odfDeviceList = iedEntityService.getIedEntityByTypes(EnumIedType.ODF_DEVICE.getTypes());
-		if (odfDeviceList == null || odfDeviceList.size() <= 0) 
+		if (odfDeviceList == null || odfDeviceList.size() <= 0) {
+			console.append("当前工程没有采集器，GOOSE/SMV与采集器关联关系分析完毕！");
 			return;//采集器为空，退出
+		}
 		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+		int cbNum = 0;
 		for (Tb1046IedEntity odf : odfDeviceList) {
 			Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(odf);
 			if (phyconnMap == null) 
@@ -202,10 +228,13 @@ public class LogcalAndPhyconnProcessor {
 								cb.setF1071Code(odf.getF1046Code());
 							}
 							beanDao.updateBatch(cbs);
+							cbNum += cbs.size();
 						}
 					}
 				}
 			}
 		}
+		console.append("一共更新 " + cbNum + " 个GOOSE/SMV的采集器编号。");
+		console.append("GOOSE/SMV与采集器关联关系分析完毕！");
 	}
 }

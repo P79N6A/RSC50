@@ -16,5 +16,11 @@
 		<event name="refresh editor" />
 		<handler source="com.synet.tool.rsc.view.ContentView" />
 	</category>
+	<category id="refresh ProblemView">
+		<!-- 刷新问题视图 -->
+		<event name="append problems" />
+		<event name="clear problems" />
+		<handler source="com.shrcn.found.ui.view.ProblemView" />
+	</category>
 	
 </extension>

@@ -1,8 +1,12 @@
 package com.synet.tool.rsc.processor;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.found.ui.view.LEVEL;
+import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.common.valid.DataTypeChecker;
@@ -25,13 +29,14 @@ import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.SubstationService;
+import com.synet.tool.rsc.util.ProblemManager;
 
 public class ImportFibreListProcessor3 {
 	
 	private RSCProperties rscp = RSCProperties.getInstance();
+	private ProblemManager pmgr = ProblemManager.getInstance();
 	private ImprotInfoService improtInfoService = new ImprotInfoService();
 	private SubstationService substationService = new SubstationService();
-//	private CubicleEntityService cubicleService = new CubicleEntityService();
 	private PortEntityService portEntityService = new PortEntityService();
 	private CableEntityService cableEntityService = new CableEntityService();
 	private CoreEntityService coreEntityService = new CoreEntityService();
@@ -77,6 +82,10 @@ public class ImportFibreListProcessor3 {
 		cableEntityService.saveBatch(cableEntitieList);
 		coreEntityService.saveBatch(coreEntitieList);
 		phyconnEntityService.saveBatch(physconnEntitieList);
+		ConsoleManager console = ConsoleManager.getInstance();
+		console.append("导入光缆数：" + cableEntitieList.size());
+		console.append("导入芯线数：" + coreEntitieList.size());
+		console.append("导入物理回路数：" + physconnEntitieList.size());
 	}
 	
 	//处理物理回路
@@ -110,6 +119,7 @@ public class ImportFibreListProcessor3 {
 					msg += "找不到装置B[" + entity.getDevNameB() + "]";
 				}
 				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "装置检查", "", msg));
 				continue;
 			}
 			Tb1050CubicleEntity cubicleEntityA = iedEntityA.getTb1050CubicleEntity();
@@ -119,7 +129,9 @@ public class ImportFibreListProcessor3 {
 			if (existsCable) {
 				addCable(cableCode, cubicleEntityA, cubicleEntityB);	// 1根光缆
 			} else {
-				SCTLogger.info(entity.getDevNameA() + " -> " + entity.getDevNameB() + "之间无光缆！");
+				String msg = entity.getDevNameA() + " -> " + entity.getDevNameB() + "之间无光缆！";
+				SCTLogger.info(msg);
+				pmgr.append(new Problem(0, LEVEL.WARNING, "导入光缆", "光缆检查", entity.getCableCode(), msg));
 			}
 			addCableCores(entity, cubicleEntityA, cubicleEntityB);		// 3根芯线：A、B端跳纤和1根光缆芯线
 		}
@@ -157,10 +169,10 @@ public class ImportFibreListProcessor3 {
 		String devNameB = entity.getDevNameB();
 		Tb1048PortEntity portEntityA = portEntityService.getPortEntity(devNameA, entity.getBoardCodeA(), entity.getPortCodeA());
 		Tb1048PortEntity portEntityB = portEntityService.getPortEntity(devNameB, entity.getBoardCodeB(), entity.getPortCodeB());
-		String portA = devNameA + "$" + entity.getBoardCodeA() + "$" + entity.getPortCodeA();
-		String portB = devNameB + "$" + entity.getBoardCodeB() + "$" + entity.getPortCodeB();
+		String portA = devNameA + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+		String portB = devNameB + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
 		if (portEntityA == null || portEntityB == null) {
-			String msg = "无法创建任何芯线：";
+			String msg = "无法创建芯线和物理回路：";
 			if (portEntityA == null) {
 				msg += "找不到端口A[" + portA + "] ";
 			}
@@ -168,6 +180,7 @@ public class ImportFibreListProcessor3 {
 				msg += "找不到端口B[" + portB + "]";
 			}
 			SCTLogger.error(msg);
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线和回路", entity.getCableCode(), msg));
 			return;
 		}
 		
@@ -178,9 +191,12 @@ public class ImportFibreListProcessor3 {
 			if (StringUtil.isEmpty(coreCodeA) || !DataTypeChecker.checkDigit(coreCodeA)) {
 				String msg = "芯线编号为空或非数字，无法创建端口A[" + portA + "]跳纤。";
 				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", entity.getCableCode(), msg));
 			} else {
 				Tb1052CoreEntity coreEntityA = createCore(coreCodeA, portEntityA, portEntityAA, cubicleEntityA);
-				coreEntitieList.add(coreEntityA);
+				if (coreEntityA != null) {
+					coreEntitieList.add(coreEntityA);
+				}
 			}
 		}
 		
@@ -191,20 +207,33 @@ public class ImportFibreListProcessor3 {
 			if (StringUtil.isEmpty(coreCodeB) || !DataTypeChecker.checkDigit(coreCodeB)) {
 				String msg = "芯线编号为空或非数字，无法创建端口B[" + portB + "]跳纤。";
 				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", entity.getCableCode(), msg));
 			} else {
 				Tb1052CoreEntity coreEntityB = createCore(coreCodeB, portEntityBB, portEntityB, cubicleEntityB);
-				coreEntitieList.add(coreEntityB);
+				if (coreEntityB != null) {
+					coreEntitieList.add(coreEntityB);
+				}
 			}
 		}
 		
 		//处理光缆芯线
 		String coreCode = entity.getCoreCode();
 		if (StringUtil.isEmpty(coreCode) || !DataTypeChecker.checkDigit(coreCode)) {
-			String msg = "芯线编号为空或非数字，无法创建端口" + portA + "和" + portB + "之间光缆芯线。";
+			String msg = "芯线编号为空或非数字，无法创建端口[" + portA + "]和[" + portB + "]之间光缆芯线。";
 			SCTLogger.error(msg);
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", devNameA + " -> " + devNameB, msg));
 		} else {
 			Tb1052CoreEntity coreEntity = createCore(entity, portEntityA, portEntityB);
-			coreEntitieList.add(coreEntity);
+			if (coreEntity == null) {
+				coreEntity = createCore(coreCode, portEntityA, portEntityB, cubicleEntityA); // 直连
+			}
+			if (coreEntity != null) {
+				coreEntitieList.add(coreEntity);
+			} else {
+				String msg = "端口[" + portA + "]和[" + portB + "]之间无芯线连接。";
+				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", devNameA + " -> " + devNameB, msg));
+			}
 		}
 		
 		//处理物理回路
@@ -246,7 +275,6 @@ public class ImportFibreListProcessor3 {
 		cableEntity.setF1051Type(DBConstants.CABLE_TYPE_GL);
 		Tb1051CableEntity oldCableEntity = checkCableEntity(cableEntity);
 		if (oldCableEntity == null) {
-			SCTLogger.error("找不到光缆：" + entity.getCableCode() + "，无法创建光缆芯线。");
 			return null;
 		} else {
 			int num = oldCableEntity.getF1051CoreNum();

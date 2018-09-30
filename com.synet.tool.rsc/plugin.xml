@@ -36,6 +36,11 @@
             class="com.shrcn.found.ui.view.ConsoleView"
             id="com.shrcn.found.ui.view.ConsoleView">
       </view>
+      <view
+            name="问题视图"
+            class="com.shrcn.found.ui.view.ProblemView"
+            id="com.shrcn.found.ui.view.ProblemView">
+      </view>
    </extension>
    <extension
          id="product"
