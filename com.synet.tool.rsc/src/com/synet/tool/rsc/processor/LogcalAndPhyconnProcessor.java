@@ -42,6 +42,8 @@ public class LogcalAndPhyconnProcessor {
 	private PortEntityService portEntityService = new PortEntityService();
 	private IedEntityService iedEntityService = new IedEntityService();
 
+	private Map<String, List<Tb1053PhysconnEntity>> phyconnCache = new HashMap<>();
+	
 	/**
 	 * 递归查找
 	 * @param sendIedName
@@ -50,6 +52,12 @@ public class LogcalAndPhyconnProcessor {
 	 * @return
 	 */
 	private boolean findSendPhysConns(String sendIedName, Tb1046IedEntity recvIed, List<Tb1053PhysconnEntity> phyconnList) {
+		String key = sendIedName + "->" + recvIed.getF1046Name();
+		List<Tb1053PhysconnEntity> temp = phyconnCache.get(key);
+		if (temp != null) {
+			phyconnList.addAll(temp);
+			return true;
+		}
 		// 接收装置物理回路map（key：物理回路，value：发送装置）
 		Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
 		if (phyconnMap == null) 
