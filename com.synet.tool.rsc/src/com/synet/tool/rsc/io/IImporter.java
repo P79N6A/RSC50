@@ -4,12 +4,14 @@
  */
 package com.synet.tool.rsc.io;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
  /**
  * 
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2018-8-14
  */
 public interface IImporter {
-	public void execute();
+	public void execute(IProgressMonitor monitor);
 }
 

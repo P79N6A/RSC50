@@ -17,7 +17,7 @@ import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.synet.tool.rsc.io.SCDImporter;
+import com.synet.tool.rsc.io.SCDImporterNew;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
@@ -41,7 +41,7 @@ public class ImportSCDAction extends BaseImportAction {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					new SCDImporter(path).execute(); 
+					new SCDImporterNew(path).execute(monitor); 
 					ProjectFileManager.getInstance().renameScd(Constants.CURRENT_PRJ_NAME, path);
 					@SuppressWarnings("unchecked")
 					List<Tb1065LogicallinkEntity> cbs = (List<Tb1065LogicallinkEntity>) BeanDaoImpl.getInstance().getAll(Tb1065LogicallinkEntity.class);

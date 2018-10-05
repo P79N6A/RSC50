@@ -19,6 +19,7 @@ public interface DBConstants {
 	String PR_IED 			= "IED";
 	String PR_MMSSvr 		= "MMSSvr";
 	String PR_GCB 			= "GCB";
+	String PR_SVCB 			= "SVCB";
 	String PR_POUT 			= "POUT";
 	String PR_RCB 			= "RCB";
 	String PR_SGCB 			= "SGCB";

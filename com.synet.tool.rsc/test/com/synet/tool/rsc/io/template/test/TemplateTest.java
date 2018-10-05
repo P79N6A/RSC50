@@ -34,7 +34,7 @@ public class TemplateTest {
 	@Test
 	public void testTemplateImport() {
 		TemplateImport templateImport = new TemplateImport(iedEntity);
-		templateImport.execute();
+		templateImport.execute(null);
 	}
 
 }

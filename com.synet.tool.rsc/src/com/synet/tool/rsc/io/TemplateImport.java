@@ -9,6 +9,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.util.StringUtil;
@@ -50,7 +51,7 @@ public class TemplateImport implements IImporter{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void execute() {
+	public void execute(IProgressMonitor monitor) {
 		String f1046Manufacturor = tb1046IedEntity.getF1046Manufacturor();
 		String f1046Model = tb1046IedEntity.getF1046Model();
 		String f1046ConfigVersion = tb1046IedEntity.getF1046ConfigVersion();

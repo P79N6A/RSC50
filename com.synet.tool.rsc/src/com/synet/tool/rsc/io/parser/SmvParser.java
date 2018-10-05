@@ -34,7 +34,7 @@ public class SmvParser extends IedParserBase<Tb1056SvcbEntity> {
 		for (Element cbNd : smvNds) {
 			Tb1056SvcbEntity smv = new Tb1056SvcbEntity();
 			items.add(smv);
-			String cbCode = rscp.nextTbCode(DBConstants.PR_GCB);
+			String cbCode = rscp.nextTbCode(DBConstants.PR_SVCB);
 			smv.setCbCode(cbCode);
 			smv.setTb1046IedByF1046Code(ied);
 			smv.setCbName(cbNd.attributeValue("cbName"));

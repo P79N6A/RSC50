@@ -55,6 +55,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		}
 		Tb1041SubstationEntity station = staServ.getCurrSubstation();
 		// 连接点
+		List<Tb1045ConnectivitynodeEntity> conns = new ArrayList<>();
 		List<Element> connEls = DOM4JNodeHelper.selectNodes(staEl, "./VoltageLevel/Bay/ConnectivityNode");
 		for (Element connEl : connEls) {
 			String cnode = connEl.attributeValue("name");
@@ -66,9 +67,11 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			conn.setF1045Code(rscp.nextTbCode(DBConstants.PR_CNode));
 			conn.setF1045Name(cnode);
 			conn.setF1045Desc(connEl.attributeValue("pathName"));
-			beanDao.insert(conn);
+			conns.add(conn);
 			connMap.put(cnode, conn);
 		}
+		beanDao.insertBatch(conns);
+		// 一次设备
 		List<Element> volEls = staEl.elements("VoltageLevel");
 		for (Element volEl : volEls) {
 			String vol = DOM4JNodeHelper.getNodeValue(volEl, "./Voltage");

@@ -113,34 +113,14 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
-				ied.getF1046Code(), f1011No);
-		statedata.setTb1046IedByF1046Code(ied);
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
+				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;
 	}
 	
 	public static Tb1016StatedataEntity createStatedata(String desc, String parentCode, int f1011No) {
-		return createStatedata(desc, "", parentCode, f1011No);
-	}
-	
-	/**
-	 * 创建状态量数据对象
-	 * @param desc
-	 * @param parentCode
-	 * @param f1011No
-	 * @return
-	 */
-	private static Tb1016StatedataEntity createStatedata(String desc, String ref, String parentCode, int f1011No) {
-		String dataCode = rscp.nextTbCode(DBConstants.PR_State);
-		Tb1016StatedataEntity stdata = new Tb1016StatedataEntity();
-		stdata.setF1016Code(dataCode);
-		stdata.setF1016Desc(desc);
-		stdata.setF1016AddRef(ref);
-		stdata.setF1016Safelevel(0);
-		stdata.setParentCode(parentCode);
-		stdata.setF1011No(f1011No);
-		return stdata;
+		return ParserUtil.createStatedata(desc, "", parentCode, null, f1011No);
 	}
 	
 	/**

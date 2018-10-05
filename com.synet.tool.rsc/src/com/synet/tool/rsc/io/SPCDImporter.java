@@ -4,6 +4,8 @@
  */
 package com.synet.tool.rsc.io;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
  /**
  * 
  * @author 陈春(mailto:chench80@126.com)
@@ -12,7 +14,7 @@ package com.synet.tool.rsc.io;
 public class SPCDImporter implements IImporter {
 
 	@Override
-	public void execute() {
+	public void execute(IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
 		
 	}
