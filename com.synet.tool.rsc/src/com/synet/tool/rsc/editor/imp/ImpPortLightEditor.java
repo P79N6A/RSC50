@@ -8,6 +8,7 @@ package com.synet.tool.rsc.editor.imp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -18,18 +19,17 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM106PortLightEntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
-import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PortEntityService;
-import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -99,27 +99,36 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
-		for (IM106PortLightEntity entity : list) {
-			try {
+		try {
+			HqlDaoImpl hqlDao = HqlDaoImpl.getInstance();
+			Map<String, Object> params = new HashMap<>();
+			for (IM106PortLightEntity entity : list) {
+				if (!entity.isOverwrite()) {
+					continue;
+				}
 				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
 						entity.getBoardCode(), entity.getPortCode());
 				if (portEntity != null) {
-					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
-					if (mmsfcdaEntity != null) {
-						Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) 
-								analogdataService.getById(Tb1006AnalogdataEntity.class,
-								mmsfcdaEntity.getDataCode());
-						if (analogdataEntity != null) {
-							analogdataEntity.setParentCode(portEntity.getF1048Code());
-							analogdataService.update(analogdataEntity);
-							entity.setMatched(DBConstants.MATCHED_OK);
+					params.clear();
+					params.put("f1046Name", entity.getDevName());
+					params.put("f1058RefAddr", entity.getOpticalRefAddr());
+					String hql = "from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:f1046Name and f1058RefAddr=:f1058RefAddr";
+					List<?> mmsList = hqlDao.getListByHql(hql, params);
+					if (mmsList!=null && mmsList.size()>0) {
+						Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) mmsList.get(0);
+						if (mmsfcdaEntity != null) {
+							Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) 
+									analogdataService.getById(Tb1006AnalogdataEntity.class, mmsfcdaEntity.getDataCode());
+							if (analogdataEntity != null) {
+								analogdataEntity.setParentCode(portEntity.getF1048Code());
+								analogdataService.update(analogdataEntity);
+							}
 						}
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-			improtInfoService.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
