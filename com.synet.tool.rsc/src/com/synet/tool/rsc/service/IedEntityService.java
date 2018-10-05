@@ -46,6 +46,15 @@ public class IedEntityService extends BaseService {
 	 * @param iedEntity
 	 */
 	public void deleteTb1046IedEntity(Tb1046IedEntity iedEntity) {
+		deleteBoards(iedEntity);
+		beanDao.delete(iedEntity);
+	}
+
+	/**
+	 * 删除IED关联对象
+	 * @param iedEntity
+	 */
+	public void deleteBoards(Tb1046IedEntity iedEntity) {
 		List<Tb1047BoardEntity> boards = (List<Tb1047BoardEntity>) beanDao.getListByCriteria(Tb1047BoardEntity.class, "tb1046IedByF1046Code", iedEntity);
 		for (Tb1047BoardEntity board : boards) {
 			List<Tb1048PortEntity> ports = (List<Tb1048PortEntity>) beanDao.getListByCriteria(Tb1048PortEntity.class, "tb1047BoardByF1047Code", board);
@@ -68,7 +77,6 @@ public class IedEntityService extends BaseService {
 			beanDao.deleteBatch(ports);
 		}
 		beanDao.deleteBatch(boards);
-		beanDao.delete(iedEntity);
 	}
 	
 	/**

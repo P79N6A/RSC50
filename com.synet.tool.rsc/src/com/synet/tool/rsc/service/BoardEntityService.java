@@ -34,7 +34,4 @@ public class BoardEntityService extends BaseService {
 		return null;
 	}
 	
-	public void clearBoardPorts(Tb1047BoardEntity entity) {
-		beanDao.deleteAll(Tb1048PortEntity.class, "tb1047BoardByF1047Code", entity);
-	}
 }

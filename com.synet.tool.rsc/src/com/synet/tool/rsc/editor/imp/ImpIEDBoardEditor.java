@@ -120,10 +120,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			// 清除原有板卡和端口
 			List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
 			if (iedBoards != null && iedBoards.size() > 0) {
-				for (Tb1047BoardEntity iedBoard : iedBoards) {
-					boardEntityService.clearBoardPorts(iedBoard);
-				}
-				beandao.deleteAll(Tb1047BoardEntity.class, "tb1046IedByF1046Code", ied);
+				iedEntityService.deleteBoards(ied);
 			}
 			// 创建板卡和端口
 			int boardNum = 0;
