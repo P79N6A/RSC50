@@ -11,5 +11,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="描述" editor="none" name="f1048Desc" width="100" default=""/> 
   <field desc="方向" dict="PORT_DIRECTION" editor="none" name="f1048Direction" width="60" default=""/> 
   <field desc="接口类型" dict="PORT_PLUG" editor="none" name="f1048Plug" width="100" default=""/>
-  <field desc="光强参引" editor="lightRefAddrEditor" name="tb1006AnalogdataByF1048Code.tb1058FcdaByF1058Code.f1058RefAddr" width="100" default=""/> 
+  <field desc="光强参引" editor="lightRefAddrEditor" name="tb1006AnalogdataByF1048Code.f1006AddRef" width="300" default=""/> 
+  <field desc="光强描述" editor="none" name="tb1006AnalogdataByF1048Code.f1006Desc" width="100" default=""/> 
 </table>
