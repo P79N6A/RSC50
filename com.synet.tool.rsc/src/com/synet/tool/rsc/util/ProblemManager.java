@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 
 import com.shrcn.business.scl.SCLConstants;
 import com.shrcn.found.ui.view.Problem;
@@ -14,6 +15,7 @@ import com.shrcn.found.ui.view.ViewManager;
 public class ProblemManager {
 	
 	private static ProblemManager logger = new ProblemManager();
+	private IViewPart problemView;
 	
 	private ProblemManager() {
 	}
@@ -24,7 +26,7 @@ public class ProblemManager {
 	
 	private void openView() {
 		if (SwtUtil.hasUI()) {
-			ViewManager.findView("com.shrcn.found.ui.view.ProblemView");
+			this.problemView = ViewManager.findView("com.shrcn.found.ui.view.ProblemView");
 		}
 	}
 	
@@ -32,7 +34,8 @@ public class ProblemManager {
 		Display.getDefault().syncExec(new Runnable() { // 此处使用同步可避免线程冲突
 			public void run() {
 				openView();
-				EventManager.getDefault().notify(SCLConstants.APPEND_PROBLEM, ps);
+				if (problemView != null)
+					EventManager.getDefault().notify(SCLConstants.APPEND_PROBLEM, ps);
 			}
 		});
 	}
@@ -50,7 +53,8 @@ public class ProblemManager {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				openView();
-				EventManager.getDefault().notify(SCLConstants.CLEAR_PROBLEM, null);
+				if (problemView != null)
+					EventManager.getDefault().notify(SCLConstants.CLEAR_PROBLEM, null);
 			}
 		});
 	}
