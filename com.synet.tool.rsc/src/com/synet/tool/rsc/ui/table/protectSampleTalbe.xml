@@ -3,7 +3,8 @@
 class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1066ProtmmxuEntity" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>
+  <field desc="间隔" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.tb1042BayByF1042Code.f1042Name" datType="string" width="150" default=""/>
   <field desc="互感器名称" editor="none" name="tb1067CtvtsecondaryByF1067Code.tb1043EquipmentByF1043Code.f1043Name" datType="int" width="150" default=""/> 
   <field desc="次级序号" editor="none" name="tb1067CtvtsecondaryByF1067Code.f1067Index" datType="int" width="100" default=""/> 
   <field desc="保护装置名称" editor="none" name="f1006Code.tb1046IedByF1046Code.f1046Desc" datType="string" width="250" default=""/>
