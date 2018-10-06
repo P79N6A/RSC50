@@ -7,4 +7,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="选择" editor="checkbox" name="selected" datType="boolean" width="50" default="false"/>
   <field desc="名称" editor="none" name="f1006Desc" datType="string" width="200" default=""/> 
   <field desc="描述" editor="none" name="f1006AddRef" datType="string" width="100" default=""/> 
+  <!-- <field desc="类型" editor="none" name="f1011No" dict="F1011_NO" width="100" default=""/>  -->
 </table>
