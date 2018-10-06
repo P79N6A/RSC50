@@ -24,7 +24,6 @@ import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
@@ -56,6 +55,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	private List<Tb1046IedEntity> iedEntities;
 	private List<Tb1006AnalogdataEntity> analogdataEntities;
 	private Text textDesc;
+	private Button btFilter;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1006AnalogdataEntity> selectedAnalog;
 	private ProtmmxuService protmmxuService;
@@ -92,17 +92,18 @@ public class SampleConnectDialog extends WrappedDialog {
 		
 		//右侧
 		Composite comRight = SwtUtil.createComposite(composite, gridData, 1);
-		comRight.setLayout(SwtUtil.getGridLayout(3));
+		comRight.setLayout(SwtUtil.getGridLayout(4));
 		GridData textGridData = new GridData();
 		textGridData.widthHint = 150;
 		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
 		
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
-		textDesc.setMessage("描述");
-		
+		textDesc.setMessage("描述");		
 		btnSearch = SwtUtil.createButton(comRight, new GridData(50, 25), SWT.BUTTON1, RSCConstants.SEARCH);
+		btFilter = SwtUtil.createCheckBox(comRight, "按类型过滤", null);
+		
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
-		gdSpan_3.horizontalSpan = 3;
+		gdSpan_3.horizontalSpan = 4;
 		tableSample = TableFactory.getAnalogTable(comRight);
 		tableSample.getTable().setLayoutData(gdSpan_3);
 		initData();
@@ -111,7 +112,8 @@ public class SampleConnectDialog extends WrappedDialog {
 	}
 	
 
-	private void initData() {
+	private void initData() {		
+		btFilter.setSelection(true);
 		if(!DataUtils.listNotNull(iedEntities)) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -123,33 +125,24 @@ public class SampleConnectDialog extends WrappedDialog {
 			comboItems = lstIedName.toArray(comboItems);
 			Tb1046IedEntity defSel = iedEntities.get(0);
 			mmsfcdaService = new MmsfcdaService();
-			analogdataEntities = getAnalogByIed(defSel);
-			tableSample.setInput(analogdataEntities);
+			loadAnalogByIed(defSel);
 		}
 		comboDevice.setItems(comboItems);
 		comboDevice.select(0);
-		
 		tableProtctSample.setInput(ctvtsecondaryEntities);
 		selectedAnalog = new ArrayList<>();
 		
 		protmmxuService = new ProtmmxuService();
 	}
 
-	private List<Tb1006AnalogdataEntity> getAnalogByIed(Tb1046IedEntity defSel) {
-		List<Tb1058MmsfcdaEntity> mmsfcdaEntities = mmsfcdaService.getMmsfcdaByIed(defSel);
-		if(!DataUtils.listNotNull(mmsfcdaEntities)) {
-			return new ArrayList<>();
-		}
-		List<String> lstAnalogDataCodes = new ArrayList<>();
-		for (Tb1058MmsfcdaEntity tb1058MmsfcdaEntity : mmsfcdaEntities) {
-			lstAnalogDataCodes.add(tb1058MmsfcdaEntity.getDataCode());
-		}
-		if(!DataUtils.listNotNull(lstAnalogDataCodes)) {
-			return new ArrayList<>();
-		}
+	private void loadAnalogByIed(Tb1046IedEntity defSel) {
 		analogdataService = new AnalogdataService();
-		List<Tb1006AnalogdataEntity> analogdataEntities = analogdataService.getAnologByCodes(lstAnalogDataCodes);
-		return analogdataEntities;
+		if (btFilter.getSelection()) {
+			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
+		} else {
+			analogdataEntities = analogdataService.getAnologByIed(defSel);
+		}
+		tableSample.setInput(analogdataEntities);
 	}
 	
 	
@@ -203,9 +196,7 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					preComboDevSel = curComboSel;
 					Tb1046IedEntity curSelIed = getSelIedByName(comboDevice.getItem(curComboSel));
-					analogdataEntities = getAnalogByIed(curSelIed);
-					tableSample.setInput(analogdataEntities);
-					tableSample.getTable().layout();
+					loadAnalogByIed(curSelIed);
 				} else if(obj == btnSearch) {
 					String desc = textDesc.getText().trim();
 					List<Tb1006AnalogdataEntity> searchRes = new ArrayList<>();
@@ -220,6 +211,10 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					tableSample.setInput(searchRes);
 					tableSample.getTable().layout();
+				} else if(obj == btFilter) {
+					int curComboSel = comboDevice.getSelectionIndex();
+					Tb1046IedEntity curSelIed = getSelIedByName(comboDevice.getItem(curComboSel));
+					loadAnalogByIed(curSelIed);
 				}
 			}
 
@@ -227,7 +222,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		};
 		btnSearch.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
-		
+		btFilter.addSelectionListener(selectionListener);
 	}
 	
 

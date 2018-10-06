@@ -571,7 +571,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		dic.addDict("SV_ANALOG", "SV_ANALOG", DataUtils.createDictItems(svPoutNames));
 		//MMS模拟量字典
 		AnalogdataService analogdataService = new AnalogdataService();
-		List<String> mmsAnalog = analogdataService.getAnologByIed(iedEntity);
+		List<String> mmsAnalog = analogdataService.getAnologNameByIed(iedEntity);
 		dic.addDict("MMS_ANALOG", "MMS_ANALOG", DataUtils.createDictItems(mmsAnalog));
 		//GOOSE虚端子字典
 		List<String> goosePoutDescs = circuitEntityService.getByIedAndTypes(iedEntity, false);
