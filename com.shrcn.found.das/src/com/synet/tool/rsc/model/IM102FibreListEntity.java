@@ -31,7 +31,7 @@ public class IM102FibreListEntity {
 	private Integer matched;
 	private IM100FileInfoEntity fileInfoEntity;
 	
-	private int conflict; // 是否冲突：1-是，2-否
+	private int conflict = 2; // 是否冲突：1-是，2-否
 	private boolean overwrite; // 是否覆盖
 	
 	public String getIm102Code() {

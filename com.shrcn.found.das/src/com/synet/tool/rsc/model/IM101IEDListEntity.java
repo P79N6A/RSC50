@@ -32,7 +32,7 @@ public class IM101IEDListEntity {
 	private Integer matched;			//是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
 	
-	private int conflict; // 是否冲突：1-是，2-否
+	private int conflict = 2; // 是否冲突：1-是，2-否
 	private boolean overwrite; // 是否覆盖
 	
 	public String getIm101Code() {
