@@ -8,6 +8,7 @@ import java.util.Map;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -34,7 +35,9 @@ public class IedEntityService extends BaseService {
 		List<Tb1046IedEntity> result = new ArrayList<>();
 		for (Tb1046IedEntity tb1046IedEntity : iedEntityByTypes) {
 			//匹配对应的间隔
-			if(tb1046IedEntity.getTb1042BaysByF1042Code().getF1042Code().equals(bayEntity.getF1042Code())) {
+			String f1042Code = tb1046IedEntity.getTb1042BaysByF1042Code().getF1042Code();
+//			System.out.println(f1042Code);
+			if(f1042Code.equals(bayEntity.getF1042Code())) {
 				result.add(tb1046IedEntity);
 			}
 		}
@@ -69,10 +72,19 @@ public class IedEntityService extends BaseService {
 				if (physB != null) {
 					physA.addAll(physB);
 				}
+				// 删除逻辑链路与物理回路关联关系
 				for (Tb1053PhysconnEntity phy : physA) {
 					beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class, "tb1053PhysconnByF1053Code", phy);
 				}
+				// 删除端口相关物理回路
 				beanDao.deleteBatch(physA);
+				// 更新端口光强
+				Map<String, Object> params = new HashMap<>();
+				params.put("iedCode", iedEntity.getF1046Code());
+				params.put("portCode", port.getF1048Code());
+				String hql = "update " + Tb1006AnalogdataEntity.class.getName() + " set parentCode=:iedCode " +
+						"where parentCode=:portCode";
+				hqlDao.updateByHql(hql, params);
 			}
 			beanDao.deleteBatch(ports);
 		}
