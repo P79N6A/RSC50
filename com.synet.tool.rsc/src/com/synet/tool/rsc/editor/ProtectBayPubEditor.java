@@ -27,6 +27,7 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 
@@ -70,18 +71,17 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 		comp.setLayout(SwtUtil.getGridLayout(5));
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
-		textGridData.widthHint = 80;
+		textGridData.widthHint = 120;
 		String[] comboItems = new String[]{RSCConstants.DEV_TYPE_ALL,
 				RSCConstants.DEV_TYPE_SWC, RSCConstants.DEV_TYPE_ODF, RSCConstants.DEV_TYPE_GAT};
 		comboDevType = SwtUtil.createCombo(comp, textGridData, true);
 		comboDevType.setItems(comboItems);
 		comboDevType.select(0);
-		textDesc = SwtUtil.createText(comp, SwtUtil.bt_hd);
-		textDesc.setMessage(RSCConstants.DESCRIPTION);
+		textDesc = SwtUtil.createText(comp, new GridData(300, SWT.DEFAULT));
+		textDesc.setMessage("名称、描述、厂商、型号");
 		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		btnAdd = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
 		btnDel = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
-		SwtUtil.createLabel(comp, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_5 = new GridData(GridData.FILL_BOTH);
 		gdSpan_5.horizontalSpan = 5;
 		table = TableFactory.getProtectIntervalTable(comp);
@@ -100,7 +100,10 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 						searchRes = iedEntityAll;
 					} else {
 						for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
-							if(tb1046IedEntity.getF1046Desc().contains(desc)) {
+							if(tb1046IedEntity.getF1046Desc().contains(desc)
+									|| tb1046IedEntity.getF1046Name().contains(desc)
+									|| tb1046IedEntity.getF1046Manufacturor().contains(desc)
+									|| tb1046IedEntity.getF1046Model().contains(desc)) {
 								searchRes.add(tb1046IedEntity);
 							}
 						}
@@ -109,11 +112,11 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 					table.refresh();
 				} else if(source == comboDevType) {
 					int comboCurSel = comboDevType.getSelectionIndex();
-					if(comboPreSel == comboCurSel) {
+					if(comboPreSel == comboCurSel || comboCurSel<0) {
 						return;
 					}
 					comboPreSel = comboCurSel;
-					initTableData(comboCurSel);
+					initTableData();
 				} else if(source == btnAdd) {
 					int selIdx = comboDevType.getSelectionIndex();
 					if(selIdx <= 0) {
@@ -177,14 +180,14 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 		super.initData();
 	}
 
-	private void initTableData(int comboIdx) {
-		if(comboIdx == 0) {
+	private void initTableData() {
+		EnumIedType typeDev = EnumIedType.getTypeByDesc(comboDevType.getText());
+		if (typeDev == null) {
 			table.setInput(iedEntityAll);
 		} else {
-			int[] devTypes = new int[]{typeMap.get(comboIdx)};
+			int[] devTypes = typeDev.getTypes();
 			List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedByTypesAndBay(devTypes, bayEntity);
 			table.setInput(iedEntityByTypes);
-			table.getTable().layout();
 		}
 	}
 }

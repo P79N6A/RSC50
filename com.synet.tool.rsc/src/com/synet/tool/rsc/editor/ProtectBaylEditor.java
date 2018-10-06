@@ -22,6 +22,7 @@ import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -62,16 +63,11 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		comp.setLayout(SwtUtil.getGridLayout(3));
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
-		textGridData.widthHint = 80;
-		String[] comboItems = new String[]{RSCConstants.DEV_TYPE_ALL, RSCConstants.DEV_TYPE_PRO,
-				RSCConstants.DEV_TYPE_TER, RSCConstants.DEV_TYPE_UNIT, RSCConstants.DEV_TYPE_UNIT_TER};
+		textGridData.widthHint = 120;
 		comboDevType = SwtUtil.createCombo(comp, textGridData, true);
-		comboDevType.setItems(comboItems);
-		comboDevType.select(0);
-		textDesc = SwtUtil.createText(comp, SwtUtil.bt_hd);
-		textDesc.setMessage(RSCConstants.DESCRIPTION);
+		textDesc = SwtUtil.createText(comp, new GridData(300, SWT.DEFAULT));
+		textDesc.setMessage("名称、描述、厂商、型号");
 		btnSearch = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
-		SwtUtil.createLabel(comp, "			", new GridData(SWT.DEFAULT,10));
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
 		gdSpan_3.horizontalSpan = 3;
 		table = TableFactory.getProtectIntervalTable(comp);
@@ -90,7 +86,10 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 						searchRes = iedEntityAll;
 					} else {
 						for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
-							if(tb1046IedEntity.getF1046Desc().contains(desc)) {
+							if(tb1046IedEntity.getF1046Desc().contains(desc)
+									|| tb1046IedEntity.getF1046Name().contains(desc)
+									|| tb1046IedEntity.getF1046Manufacturor().contains(desc)
+									|| tb1046IedEntity.getF1046Model().contains(desc)) {
 								searchRes.add(tb1046IedEntity);
 							}
 						}
@@ -99,11 +98,11 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 					table.refresh();
 				} else if(source == comboDevType) {
 					int comboCurSel = comboDevType.getSelectionIndex();
-					if(comboPreSel == comboCurSel) {
+					if(comboPreSel == comboCurSel || comboCurSel<0) {
 						return;
 					}
 					comboPreSel = comboCurSel;
-					initTableData(comboCurSel);
+					initTableData();
 				}
 			}
 		};
@@ -116,6 +115,24 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 	public void initData() {
 		EditorConfigData editorConfigData = (EditorConfigData) getInput().getData();
 		bayEntity = (Tb1042BayEntity) editorConfigData.getData();
+		
+		String bayName = (bayEntity==null) ? DBConstants.BAY_ALL : bayEntity.getF1042Name();
+		String[] comboItems = null;
+		if (DBConstants.BAY_MOT.equals(bayName)) {
+			comboItems = new String[]{RSCConstants.DEV_TYPE_MOT};
+		} else if (DBConstants.BAY_ALL.equals(bayName)) {
+			comboItems = new String[]{RSCConstants.DEV_TYPE_ALL, RSCConstants.DEV_TYPE_PRO,
+					RSCConstants.DEV_TYPE_TER, RSCConstants.DEV_TYPE_UNIT, RSCConstants.DEV_TYPE_UNIT_TER,
+					RSCConstants.DEV_TYPE_MOT, RSCConstants.DEV_TYPE_SWC, RSCConstants.DEV_TYPE_ODF, RSCConstants.DEV_TYPE_GAT};
+		} else {
+			comboItems = new String[]{RSCConstants.DEV_TYPE_ALL, RSCConstants.DEV_TYPE_PRO,
+					RSCConstants.DEV_TYPE_TER, RSCConstants.DEV_TYPE_UNIT, RSCConstants.DEV_TYPE_UNIT_TER};
+		}
+		if (comboItems != null) {
+			comboDevType.setItems(comboItems);
+			comboDevType.select(0);
+		}
+		
 		iedEntityAll = iedEntityService.getIedEntityByBay(bayEntity);
 		IField[] fields = table.getFields();
 		for (IField field : fields) {
@@ -136,14 +153,14 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 		super.initData();
 	}
 
-	private void initTableData(int comboIdx) {
-		if(comboIdx == 0) {
+	private void initTableData() {
+		EnumIedType typeDev = EnumIedType.getTypeByDesc(comboDevType.getText());
+		if (typeDev == null) {
 			table.setInput(iedEntityAll);
 		} else {
-			int[] devTypes = EnumIedType.values()[comboIdx-1].getTypes();
+			int[] devTypes = typeDev.getTypes();
 			List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedByTypesAndBay(devTypes, bayEntity);
 			table.setInput(iedEntityByTypes);
 		}
-		table.getTable().layout();
 	}
 }
