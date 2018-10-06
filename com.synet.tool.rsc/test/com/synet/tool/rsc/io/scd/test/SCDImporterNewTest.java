@@ -37,7 +37,7 @@ public class SCDImporterNewTest {
 	
 	@Before
 	public void before() {
-		String prj = "shangwu";
+		String prj = "bbb1";
 		ProjectManager prjmgr = ProjectManager.getInstance();
 		if (!prjmgr.exists(prj)) {
 			prjmgr.initDb(prj);
@@ -47,10 +47,10 @@ public class SCDImporterNewTest {
 	}
 	@Test
 	public void testExecute() {
-		String scdPath = "./test/sub_shangwu.scd";
+		String scdPath = "./test/bbb1.scd";
 		TimeCounter.begin();
 		new SCDImporterNew(scdPath).execute(null);
-		TimeCounter.end("导入SCD");
+		TimeCounter.end("New导入SCD");
 		assertLogiclinks();
 		assertEquipments();
 	}

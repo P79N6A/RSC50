@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.shrcn.found.common.util.TimeCounter;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.das.ProjectManager;
@@ -37,7 +38,7 @@ public class SCDImporterTest {
 	
 	@Before
 	public void before() {
-		String prj = "bbb";
+		String prj = "bbb1";
 		ProjectManager prjmgr = ProjectManager.getInstance();
 		if (!prjmgr.exists(prj)) {
 			prjmgr.initDb(prj);
@@ -47,9 +48,10 @@ public class SCDImporterTest {
 	}
 	@Test
 	public void testExecute() {
-		String scdPath = "./test/bbb.scd";
+		String scdPath = "./test/bbb1.scd";
+		TimeCounter.begin();
 		new SCDImporter(scdPath).execute(null);
-		
+		TimeCounter.end("导入SCD");
 		assertLogiclinks();
 		assertEquipments();
 	}

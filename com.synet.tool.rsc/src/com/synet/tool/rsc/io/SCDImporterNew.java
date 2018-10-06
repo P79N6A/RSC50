@@ -50,6 +50,7 @@ import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.service.SubstationService;
+import com.synet.tool.rsc.util.ProblemManager;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
  /**
@@ -125,9 +126,11 @@ public class SCDImporterNew implements IImporter {
 	@Override
 	public void execute(IProgressMonitor monitor) {
 		long begin = System.currentTimeMillis();
+		ConsoleManager console = ConsoleManager.getInstance();
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
-		SubstationParser sp = new SubstationParser();
+		Context context = new Context();
+		SubstationParser sp = new SubstationParser(context);
 		sp.init();
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
@@ -137,7 +140,6 @@ public class SCDImporterNew implements IImporter {
 		if (monitor != null) {
 			monitor.beginTask("开始导入SCD", iedNds.size() + 2);
 		}
-		Context context = new Context();
 		for (Element iedNd : iedNds) {
 			String iedName = iedNd.attributeValue("name");
 			iedNd = XMLDBHelper.selectSingleNode(SCL.getIEDXPath(iedName));
@@ -174,6 +176,7 @@ public class SCDImporterNew implements IImporter {
 			ied.setF1042Code(bay.getF1042Code());
 			beanDao.update(ied);
 		}
+		console.append("一共导入 " + iedNds.size() + " 台装置。");
 		// 虚链路与虚回路
 		if (monitor != null) {
 			monitor.setTaskName("正在处理逻辑链路和虚回路");
@@ -191,7 +194,8 @@ public class SCDImporterNew implements IImporter {
 			monitor.done();
 		}
 		long t = (System.currentTimeMillis() - begin) / 1000;
-		ConsoleManager.getInstance().append("SCD导入耗时：" + t + "秒。");
+		console.append("SCD导入耗时 " + t + " 秒。");
+		ProblemManager.getInstance().append(context.getProblems());
 	}
 
 }

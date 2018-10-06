@@ -17,8 +17,10 @@ import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.scd.EnumEquipmentType;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -42,9 +44,15 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
 	private SubstationService staServ = new SubstationService();
 	private IedEntityService iedServ = new IedEntityService();
+	private Context context;
 	
 	public SubstationParser() {
 		super(null);
+	}
+
+	public SubstationParser(Context context) {
+		super(null);
+		this.context = context;
 	}
 
 	@Override
@@ -53,6 +61,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		if (staEl == null) {
 			return;
 		}
+		int bayNum = 0, eqpNum = 0, conNum = 0;
 		Tb1041SubstationEntity station = staServ.getCurrSubstation();
 		// 连接点
 		List<Tb1045ConnectivitynodeEntity> conns = new ArrayList<>();
@@ -60,7 +69,8 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		for (Element connEl : connEls) {
 			String cnode = connEl.attributeValue("name");
 			if (connMap.containsKey(cnode)) {
-				SCTLogger.error("已存在：" + cnode);
+				SCTLogger.warn("已存在：" + cnode);
+				context.addWarning("一次模型", "连接点", cnode, "拓扑模型有误，存在同名的连接点。");
 				continue;
 			}
 			Tb1045ConnectivitynodeEntity conn = new Tb1045ConnectivitynodeEntity();
@@ -69,9 +79,11 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			conn.setF1045Desc(connEl.attributeValue("pathName"));
 			conns.add(conn);
 			connMap.put(cnode, conn);
+			conNum++;
 		}
 		beanDao.insertBatch(conns);
 		// 一次设备
+		List<Tb1043EquipmentEntity> eqpList = new ArrayList<>();
 		List<Element> volEls = staEl.elements("VoltageLevel");
 		for (Element volEl : volEls) {
 			String vol = DOM4JNodeHelper.getNodeValue(volEl, "./Voltage");
@@ -80,12 +92,12 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				ivol = Integer.parseInt(vol);
 			}
 			List<Element> bayEls = volEl.elements("Bay");
+			bayNum += bayEls.size();
 			for (Element bayEl : bayEls) {
 				List<Element> eqpEls = bayEl.elements();
-				Set<Tb1043EquipmentEntity> equipments = new HashSet<>();
 				String bayName = bayEl.attributeValue("name");
 				String bayDesc = bayEl.attributeValue("desc");
-				Tb1042BayEntity bay = addBay(station, ivol, bayName, bayDesc, equipments);
+				Tb1042BayEntity bay = addBay(station, ivol, bayName, bayDesc);
 				for (Element eqpEl : eqpEls) {
 					String stype = eqpEl.attributeValue("type");
 					EnumEquipmentType type = null;
@@ -103,9 +115,10 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 					}
 					if (type != null) {
 						Tb1043EquipmentEntity equipment = new Tb1043EquipmentEntity();
-						equipments.add(equipment);
+						eqpList.add(equipment);
 						equipment.setF1043Code(rscp.nextTbCode(DBConstants.PR_EQP));
 						equipment.setTb1042BayByF1042Code(bay);
+//						equipment.setF1042Code(bay.getF1042Code());
 						equipment.setF1043Name(eqpEl.attributeValue("name"));
 						equipment.setF1043Desc(eqpEl.attributeValue("desc"));
 						String virtual = eqpEl.attributeValue("virtual");
@@ -139,23 +152,26 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 						for (Element lnodeEl : lnodeEls) {
 							updateIEDBayInfo(lnodeEl, bay);
 						}
+						eqpNum++;
 					}
 				}
-				beanDao.update(bay);
 			}
 		}
-		addBay(station, 0, DBConstants.BAY_PUB, DBConstants.BAY_PUB, null); // 补充公共间隔用于存放交换机、采集器、配线架
+		beanDao.insertBatch(eqpList);
+		addBay(station, 0, DBConstants.BAY_PUB, DBConstants.BAY_PUB); // 补充公共间隔用于存放交换机、采集器、配线架
+		bayNum++;
+		ConsoleManager.getInstance().append("一共导入 " + bayNum +
+				" 个间隔， " + eqpNum + " 台设备， " + conNum + " 个连接点。");
 	}
 
 	private Tb1042BayEntity addBay(Tb1041SubstationEntity station, int ivol,
-			String bayName, String bayDesc, Set<Tb1043EquipmentEntity> equipments) {
+			String bayName, String bayDesc) {
 		Tb1042BayEntity bay = new Tb1042BayEntity();
 		bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
 		bay.setF1042Name(bayName);
 		bay.setF1042Desc(bayDesc);
 		bay.setF1042Voltage(ivol);
 		bay.setTb1041SubstationByF1041Code(station);
-		bay.setTb1043EquipmentsByF1042Code(equipments);
 		beanDao.insert(bay);	// 避免IED更新bay信息后查询出错
 		return bay;
 	}
@@ -182,7 +198,8 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			Tb1045ConnectivitynodeEntity node = connMap.get(cnode);
 			if (node == null) {
 				String eqp = equipment.getTb1042BayByF1042Code().getF1042Name() + "/" + equipment.getF1043Name();
-				SCTLogger.error("拓扑模型有误，找不到设备[ " + eqp + " ]连接点" + cnode);
+				SCTLogger.warn("拓扑模型有误，找不到设备[ " + eqp + " ]连接点" + cnode);
+				context.addWarning("一次模型", "一次设备", eqp, "拓扑模型有误，找不到设备连接点。");
 			}
 			tm.setTb1045ConnectivitynodeByF1045Code(node);
 			terminals.add(tm);
@@ -200,22 +217,22 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				ied.setF1042Code(bayCode);
 				String f1046Code = ied.getF1046Code();
 				iedServ.updateIEDBayCode(f1046Code, bayCode);
+				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
 				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
 						Tb1065LogicallinkEntity.class, "f1046CodeIedRecv", f1046Code);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
-//					ied = logiclink.getTb1046IedByF1046CodeIedSend();
-//					ied.setF1042Code(bayCode);
-//					iedServ.updateIEDBayCode(ied);
-					iedServ.updateIEDBayCode(logiclink.getF1046CodeIedSend(), bayCode);
+					Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend();
+					iedSend.setF1042Code(bayCode);
+					bayIeds.add(iedSend);
 				}
 				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
 						Tb1065LogicallinkEntity.class, "f1046CodeIedSend", f1046Code);
 				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
-//					ied = logiclink.getTb1046IedByF1046CodeIedRecv();
-//					ied.setF1042Code(bayCode);
-//					iedServ.updateIEDBayCode(ied);
-					iedServ.updateIEDBayCode(logiclink.getF1046CodeIedRecv(), bayCode);
+					Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv();
+					iedResv.setF1042Code(bayCode);
+					bayIeds.add(iedResv);
 				}
+				beanDao.updateBatch(bayIeds);
 			}
 		}
 	}

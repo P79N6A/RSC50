@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -90,6 +91,8 @@ public class LogicLinkParserNew {
 			}
 		}
 		beanDao.insertBatch(circuits);
+		ConsoleManager.getInstance().append("一共导入 " + linkCache.size() +
+				" 条逻辑链路，" + circuits.size() + "  条虚回路。");
 	}
 	
 	private Tb1063CircuitEntity createCircuit(Tb1065LogicallinkEntity logiclink, String pinRefAddr, String pinDesc, Tb1061PoutEntity pout) {
