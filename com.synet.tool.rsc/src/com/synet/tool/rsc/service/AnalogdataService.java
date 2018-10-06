@@ -1,11 +1,14 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.F1011_NO;
 
 public class AnalogdataService extends BaseService {
 	
@@ -19,7 +22,19 @@ public class AnalogdataService extends BaseService {
 		if(!DataUtils.listNotNull(codes)) {
 			return new ArrayList<>();
 		}
-		return (List<Tb1006AnalogdataEntity>) hqlDao.selectInObjects(Tb1006AnalogdataEntity.class, "f1006Code", codes);
+		StringBuilder sbObjs = new StringBuilder();
+		Map<String, Object> params = new HashMap<String, Object>();
+		int ldSize = codes.size();
+		for (int i = 1; i <=ldSize; i++) {
+			Object obj = codes.get(i-1);
+			String key = "ld" + i;
+			params.put(key, obj);
+			sbObjs.append(":" + key);
+			if (i < ldSize)
+				sbObjs.append(", ");
+		}
+		String hql = "from " + Tb1006AnalogdataEntity.class.getName() + " where f1006Code in (" + sbObjs + ") and f1011No=" + F1011_NO.PROT_MEAR.getId();
+		return (List<Tb1006AnalogdataEntity>) hqlDao.getListByHql(hql, params);
 	}
 	
 	/**
