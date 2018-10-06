@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -80,22 +84,7 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 			public void widgetSelected(SelectionEvent e) {
 				Object source = e.getSource();
 				if(source == btnSearch) {
-					String desc = textDesc.getText().trim();
-					List<Tb1046IedEntity> searchRes = new ArrayList<>();
-					if(desc.isEmpty()) {
-						searchRes = iedEntityAll;
-					} else {
-						for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
-							if(tb1046IedEntity.getF1046Desc().contains(desc)
-									|| tb1046IedEntity.getF1046Name().contains(desc)
-									|| tb1046IedEntity.getF1046Manufacturor().contains(desc)
-									|| tb1046IedEntity.getF1046Model().contains(desc)) {
-								searchRes.add(tb1046IedEntity);
-							}
-						}
-					}
-					table.setInput(searchRes);
-					table.refresh();
+					doSearch();
 				} else if(source == comboDevType) {
 					int comboCurSel = comboDevType.getSelectionIndex();
 					if(comboPreSel == comboCurSel || comboCurSel<0) {
@@ -106,9 +95,18 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 				}
 			}
 		};
-		
 		btnSearch.addSelectionListener(listener);
 		comboDevType.addSelectionListener(listener);
+		textDesc.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == 13) {
+					doSearch();
+				}
+			}});
 	}
 
 	@Override
@@ -162,5 +160,23 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 			List<Tb1046IedEntity> iedEntityByTypes = iedEntityService.getIedByTypesAndBay(devTypes, bayEntity);
 			table.setInput(iedEntityByTypes);
 		}
+	}
+
+	private void doSearch() {
+		String desc = textDesc.getText().trim();
+		List<Tb1046IedEntity> searchRes = new ArrayList<>();
+		if(desc.isEmpty()) {
+			searchRes = iedEntityAll;
+		} else {
+			for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
+				if(tb1046IedEntity.getF1046Desc().contains(desc)
+						|| tb1046IedEntity.getF1046Name().contains(desc)
+						|| tb1046IedEntity.getF1046Manufacturor().contains(desc)
+						|| tb1046IedEntity.getF1046Model().contains(desc)) {
+					searchRes.add(tb1046IedEntity);
+				}
+			}
+		}
+		table.setInput(searchRes);
 	}
 }
