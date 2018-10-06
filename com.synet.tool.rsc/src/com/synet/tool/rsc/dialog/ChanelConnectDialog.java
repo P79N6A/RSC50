@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -45,6 +46,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private String[] comboDevItems;
 	private Tb1067CtvtsecondaryEntity curSel;
 	private Combo comboDevice;
+	private Button chBay;
 	private int preComboDevSelIdx = 0;
 	private List<Tb1046IedEntity> iedEntities;
 	private SvcbEntityService svcbService;
@@ -69,7 +71,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		initData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
@@ -91,14 +92,13 @@ public class ChanelConnectDialog extends WrappedDialog{
 		btnAdd = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "<-");
 		btnDel = SwtUtil.createButton(comBtn, new GridData(40, SWT.DEFAULT), SWT.BUTTON1, "->");
 		//右侧
-		comRight = SwtUtil.createComposite(composite, gridData, 1);
+		comRight = SwtUtil.createComposite(composite, gridData, 2);
 		comRight.setLayout(SwtUtil.getGridLayout(2));
 		GridData textGridData = new GridData();
 		textGridData.heightHint = 25;
 		textGridData.widthHint = 150;
 		comboDevice = SwtUtil.createCombo(comRight, textGridData, true);
-		comboDevice.setItems(comboDevItems);
-		comboDevice.select(0);
+		chBay = SwtUtil.createCheckBox(comRight, "当前间隔", null);
 		
 		GridData gdSpan_2 = new GridData(SWT.CENTER, SWT.FILL, false, true);
 		gdSpan_2.widthHint = 450;
@@ -106,7 +106,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		tableState = TableFactory.getPoutTable(comRight);
 		tableState.getTable().setLayoutData(gdSpan_2);
 		addListeners();
-		initTableData();
+		initData();
 		return composite;
 	}
 	
@@ -118,9 +118,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 		for (Tb1074SVCTVTRelationEntity relation : curSel.getSvRelations()) {
 			selectedPoutList.add(relation.getF1061Code());
 		}
+		tableChanel.setInput(selectedPoutList);
 		
+		chBay.setSelection(true);
+		loadIeds(true);
+	}
+	
+	private void loadIeds(boolean useBay) {
 		int[] devTypes = EnumIedType.UNIT_DEVICE.getTypes();
-		iedEntities = iedService.getIedByTypesAndBay(devTypes, null);
+		Tb1042BayEntity bay = useBay ? curSel.getTb1043EquipmentByF1043Code().getTb1042BayByF1042Code() : null;
+		iedEntities = iedService.getIedByTypesAndBay(devTypes, bay);
 		if(iedEntities.size() < 1) {
 			comboDevItems = new String[]{"装置为空"};
 		} else {
@@ -131,6 +138,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 			comboDevItems = new String[lstComboDevItem.size()];
 			comboDevItems = lstComboDevItem.toArray(comboDevItems);
 		}
+		comboDevice.setItems(comboDevItems);
+		comboDevice.select(0);
+		initTableData();
 	}
 
 
@@ -138,9 +148,16 @@ public class ChanelConnectDialog extends WrappedDialog{
 	 * 初始化表格数据
 	 */
 	private void initTableData() {
-		tableChanel.setInput(selectedPoutList);
 		if(DataUtils.listNotNull(iedEntities)) {
-			refreshTableState(iedEntities.get(0));
+			List<Tb1061PoutEntity> leftTableData = (List<Tb1061PoutEntity>) tableChanel.getInput();
+			Tb1046IedEntity iedEntity = null;
+			if (leftTableData != null && leftTableData.size() > 0) {
+				iedEntity = leftTableData.get(0).getTb1046IedByF1046Code();
+			} else {
+				iedEntity = iedEntities.get(0);
+			}
+			comboDevice.setText(iedEntity.getF1046Name());
+			refreshTableState(iedEntity);
 		}
 	}
 	
@@ -159,7 +176,6 @@ public class ChanelConnectDialog extends WrappedDialog{
 			}
 		}
 		tableState.setInput(allPouts);
-		tableState.getTable().layout();
 	}
 	
 	@Override
@@ -169,7 +185,12 @@ public class ChanelConnectDialog extends WrappedDialog{
 	}
 	
 	private void addListeners() {
-		
+		chBay.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				loadIeds(chBay.getSelection());
+			}
+		});
 		SelectionListener selectionListener = new SelectionAdapter() {
 			private Tb1046IedEntity curSelIedEntity;
 			@SuppressWarnings("unchecked")
