@@ -23,14 +23,20 @@ import static com.synet.tool.rsc.RSCConstants.ET_IMP_STA;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
 import com.synet.tool.rsc.excel.ExcelImporter;
@@ -80,7 +86,7 @@ public class ImportExcelAction extends BaseImportAction {
 
 	@Override
 	public void run() {
-		String filePath = DialogHelper.getSaveFilePath(getTitle() + "文件", "", new String[]{"*.xlsx"});
+		final String filePath = DialogHelper.getSaveFilePath(getTitle() + "文件", "", new String[]{"*.xlsx"});
 		if (filePath == null || "".equals(filePath)){
 			return;
 		}
@@ -90,7 +96,7 @@ public class ImportExcelAction extends BaseImportAction {
 			ChooseTableColDialog colDialog = new ChooseTableColDialog(getShell());
 			//表头信息
 			Map<Integer, String> excelColName = headDialog.getExcelColName();
-			int excelHeadRow = headDialog.getTableHeadRow();
+			final int excelHeadRow = headDialog.getTableHeadRow();
 			if (excelColName == null) {
 				DialogHelper.showAsynError("文件异常");
 				return;
@@ -103,14 +109,29 @@ public class ImportExcelAction extends BaseImportAction {
 			}
 			colDialog.setFields(fields);
 			if (colDialog.open() == 0) {
-				Map<Integer, String> excelColInfo = colDialog.getMap();
-				boolean b = ExcelImporter.importExcelData(getTitle(), filePath, excelHeadRow, excelColInfo);
-				if (b) {
-					openImportEditor(filePath);
-//					DialogHelper.showAsynInformation("导入成功！");
-				} else {
-					DialogHelper.showAsynError("导入失败，请检查文件格式");
-				}
+				final Map<Integer, String> excelColInfo = colDialog.getMap();
+				ProgressManager.execute(new IRunnableWithProgress() {
+					
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						Display.getDefault().asyncExec(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								
+								boolean b = ExcelImporter.importExcelData(getTitle(), filePath, excelHeadRow, excelColInfo);
+								if (b) {
+									openImportEditor(filePath);
+//								DialogHelper.showAsynInformation("导入成功！");
+								} else {
+									DialogHelper.showAsynError("导入失败，请检查文件格式");
+								}
+							}
+						});
+					}
+				});
 			}
 		}
 	}
