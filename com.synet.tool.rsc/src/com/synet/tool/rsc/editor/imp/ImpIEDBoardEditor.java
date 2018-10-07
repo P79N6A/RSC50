@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.common.util.StringUtil;
@@ -43,6 +44,7 @@ import de.kupzog.ktable.KTableCellSelectionListener;
 public class ImpIEDBoardEditor extends ExcelImportEditor {
 	
 	private DevKTable tableComp;
+	protected Button btCheckAll;
 
 	private IedEntityService iedEntityService;
 	private BoardEntityService boardEntityService;
@@ -75,7 +77,9 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入板卡", btData);
+		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		btCheckAll = SwtUtil.createPushButton(btComp, "检查所有装置", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入板卡", new GridData());
 		tableComp = TableFactory.getIEDCompListTable(container);
 		tableComp.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -98,20 +102,52 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			@Override
 			public void cellSelected(int col, int row, int statemask) {
 				if (row > 0) {
-					refreshBompIEDTable();
+					List<IM103IEDBoardEntity> temp = new ArrayList<>();
+					if (table.getSelection() != null) {
+						temp.add((IM103IEDBoardEntity) table.getSelection());
+						refreshBompIEDTable(temp);
+					}
 				}
+			}
+		});
+		btCheckAll.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				checkAll();
 			}
 		});
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				importData();
 			}
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void checkAll() {
+		List<IM103IEDBoardEntity> temp = new ArrayList<>();
+		List<IM103IEDBoardEntity> inputs = (List<IM103IEDBoardEntity>) table.getInput();
+		String devType = null;
+		for (IM103IEDBoardEntity iedBoardEntity : inputs) {
+			if (devType == null) {
+				devType = iedBoardEntity.getDevName();
+				temp.add(iedBoardEntity);
+			} else {
+				if (!devType.equals(iedBoardEntity.getDevName())) {
+					devType = iedBoardEntity.getDevName();
+					temp.add(iedBoardEntity);
+				}
+			}
+		}
+		refreshBompIEDTable(temp);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
+		int boardCount = 0;
+		int portCount = 0;
 		List<Tb1046IedEntity> ieds = (List<Tb1046IedEntity>) tableComp.getInput();
 		for (Tb1046IedEntity ied : ieds) {
 			if (!ied.isOverwrite()) {
@@ -130,6 +166,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 					continue;
 				}
 				String portNumStr = entity.getPortNum();
+				System.out.println(portNumStr);
 //				int portNum = 0;
 //				if (portNumStr != null) {
 //					try {
@@ -154,6 +191,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 						if (StringUtil.isEmpty(port)) {
 							continue;
 						}
+						portCount++;
 						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
 						portEntity.setTb1047BoardByF1047Code(boardEntity);
 						portEntity.setF1048No(port);
@@ -168,6 +206,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 						portList.add(portEntity);
 					}
 					beandao.insertBatch(portList);
+//					portCount += portList.size();
 				}
 //				if (portNum > 0) {
 //					List<Tb1048PortEntity> ports = new ArrayList<>();
@@ -186,8 +225,11 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			}
 			// 更新板卡数量
 			ied.setF1046boardNum(boardNum);
+			boardCount += boardNum;
 			beandao.update(ied);
 		}
+		console.append("导入板卡数：" + boardCount);
+		console.append("导入端口数：" + portCount);
 	}
 
 	private boolean isMatch(Tb1047BoardEntity iedboard, IM103IEDBoardEntity board) {
@@ -206,6 +248,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		return portNum == bpnum;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<IM103IEDBoardEntity> getIedBoards(IM103IEDBoardEntity board) {
 		List<IM103IEDBoardEntity> boards = new ArrayList<>();
 		List<IM103IEDBoardEntity> inputs = (List<IM103IEDBoardEntity>) table.getInput();
@@ -254,42 +297,51 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				table.setInput(list);
 			}
 		}
+		tableComp.setInput(new ArrayList<Tb1046IedEntity>());
 	}
 
-	private void refreshBompIEDTable() {
-		IM103IEDBoardEntity iedBoard = (IM103IEDBoardEntity) table.getSelection();
-		boards = getIedBoards(iedBoard);
-		List<Tb1046IedEntity> ieds = iedEntityService.getIedByIM103IEDBoard(iedBoard);
-		for (Tb1046IedEntity ied : ieds) {
-			Integer f1046boardNum = ied.getF1046boardNum();
-			if (f1046boardNum==null || f1046boardNum < 1) {
-				ied.setConflict(DBConstants.NO);
-				ied.setOverwrite(false);
-			} else {
-				if (f1046boardNum != boards.size()) {
-					ied.setConflict(DBConstants.YES);
-					ied.setOverwrite(true);
+	private void refreshBompIEDTable(List<IM103IEDBoardEntity> iedBoardList) {
+//		IM103IEDBoardEntity iedBoard = (IM103IEDBoardEntity) table.getSelection();
+		if (iedBoardList == null || iedBoardList.size() <= 0) return;
+		List<Tb1046IedEntity> inputs = new ArrayList<>();
+		for (IM103IEDBoardEntity iedBoard : iedBoardList) {
+			boards = getIedBoards(iedBoard);
+			List<Tb1046IedEntity> ieds = iedEntityService.getIedByIM103IEDBoard(iedBoard);
+			if (ieds == null || ieds.size() <= 0) {
+				console.append("装置[" + iedBoard.getDevName() + "]不存在！");
+			}
+			for (Tb1046IedEntity ied : ieds) {
+				Integer f1046boardNum = ied.getF1046boardNum();
+				if (f1046boardNum==null || f1046boardNum < 1) {
+					ied.setConflict(DBConstants.NO);
+					ied.setOverwrite(false);
 				} else {
-					List<Tb1047BoardEntity> iedboards = boardEntityService.getByIed(ied);
-					boolean match = true;
-					for (Tb1047BoardEntity iedboard : iedboards) {
-						boolean find = false;
-						for (IM103IEDBoardEntity board : boards) {
-							if (isMatch(iedboard, board)) {
-								find = true;
+					if (f1046boardNum != boards.size()) {
+						ied.setConflict(DBConstants.YES);
+						ied.setOverwrite(true);
+					} else {
+						List<Tb1047BoardEntity> iedboards = boardEntityService.getByIed(ied);
+						boolean match = true;
+						for (Tb1047BoardEntity iedboard : iedboards) {
+							boolean find = false;
+							for (IM103IEDBoardEntity board : boards) {
+								if (isMatch(iedboard, board)) {
+									find = true;
+									break;
+								}
+							}
+							if (!find) {
+								match = false;
 								break;
 							}
 						}
-						if (!find) {
-							match = false;
-							break;
-						}
+						ied.setConflict(match ? DBConstants.NO : DBConstants.YES);
+						ied.setOverwrite(!match);
 					}
-					ied.setConflict(match ? DBConstants.NO : DBConstants.YES);
-					ied.setOverwrite(!match);
 				}
 			}
+			inputs.addAll(ieds);
 		}
-		tableComp.setInput(ieds);
+		tableComp.setInput(inputs);
 	}
 }
