@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -66,7 +65,11 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 		titleList = SwtUtil.createList(container, gridData);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入跳合闸反校", btData);
+		
+		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入跳合闸反校", new GridData());
+		
 		table =TableFactory.getBrkCfmTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -83,16 +86,24 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//冲突检查
+				checkConflict();
+			}
+		});
+		
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				importData();
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
 		List<IM108BrkCfmEntity> list = (List<IM108BrkCfmEntity>) table.getInput();
 		if(list == null || list.size() <= 0) return;
@@ -109,14 +120,26 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 						if (poutEntity1 != null) {
 							circuitEntity.setTb1061PoutByF1061CodeConvChk1(poutEntity1);
 							entity.setMatched(DBConstants.MATCHED_OK);
+						} else {
+							String msg = "命令确认虚端子不存在：" + entity.getDevName() + "->" + entity.getCmdAckVpRefAddr();
+							appendError("导入跳合闸反校", "虚端子检查", msg);
 						}
 						Tb1061PoutEntity poutEntity2 = poutEntityService.getPoutEntity(entity.getDevName(), entity.getCmdOutVpRefAddr());
 						if (poutEntity2 != null) {
 							circuitEntity.setTb1061PoutByF1061CodeConvChk2(poutEntity2);
 							entity.setMatched(DBConstants.MATCHED_OK);
+						} else {
+							String msg = "命令出口虚端子不存在：" + entity.getDevName() + "->" + entity.getCmdOutVpRefAddr();
+							appendError("导入跳合闸反校", "虚端子检查", msg);
 						}
 						circuitEntityService.save(circuitEntity);
+					} else {
+						String msg = "开入虚端子虚回路不存在：" + entity.getDevName() + "->" + entity.getPinRefAddr();
+						appendError("导入跳合闸反校", "虚回路检查", msg);
 					}
+				} else {
+					String msg = "开入虚端子不存在：" + entity.getDevName() + "->" + entity.getPinRefAddr();
+					appendError("导入跳合闸反校", "虚端子检查", msg);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -146,13 +169,14 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 	private void loadFileItems(String filename) {
 		List<IM108BrkCfmEntity> list = improtInfoService.getBrkCfmEntityList(map.get(filename));
 		if (list != null) {
-			//冲突检查
-			checkData(list);
 			table.setInput(list);
 		}
 	}
 
-	private void checkData(List<IM108BrkCfmEntity> list) {
+	@SuppressWarnings("unchecked")
+	protected void checkData() {
+		List<IM108BrkCfmEntity> list = (List<IM108BrkCfmEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
 		try {
 			for (IM108BrkCfmEntity entity : list) {
 				if (entity.getMatched() == DBConstants.MATCHED_OK) {

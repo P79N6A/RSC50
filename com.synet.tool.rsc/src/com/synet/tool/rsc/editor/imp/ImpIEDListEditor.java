@@ -67,7 +67,11 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		Composite cmpRight = SwtUtil.createComposite(container, new GridData(GridData.FILL_BOTH), 1);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(cmpRight, "导入设备台账", btData);
+		
+		Composite btComp = SwtUtil.createComposite(cmpRight, btData, 2);
+		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入设备台账", new GridData());
+		
 		GridData tableGridData = new GridData(GridData.FILL_BOTH);
 		table = TableFactory.getIEDListTable(cmpRight);
 		table.getTable().setLayoutData(tableGridData);
@@ -85,11 +89,18 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//冲突检查
+				checkConflict();
+			}
+		});
+		
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				importData();
 			}
 		});
 	}
@@ -111,6 +122,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
 		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
@@ -134,6 +146,8 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 					type = RSCConstants.DEV_TYPE_ODF;
 				}
 				if (type == null) {
+					String msg = entity.getDevName() + "[" + desc +"],装置类型无法识别";
+					appendError("导入设备台账", "装置检查", msg);
 					continue;
 				}
 				type = dictMgr.getIdByName("IED_TYPE", type);
@@ -148,10 +162,16 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 			if (bayEntity != null) {
 				iedEntity.setF1042Code(bayEntity.getF1042Code());
+			} else {
+				String msg = "间隔不存在：" + entity.getDevDesc() + "->" + entity.getBay();
+				appendWarning("导入设备台账", "间隔检查", msg);
 			}
 			Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
 			if (cubicle != null) {
 				iedEntity.setF1050Code(cubicle.getF1050Code());
+			} else {
+				String msg = "屏柜不存在：" + entity.getDevDesc() + "->" + entity.getCubicle();
+				appendWarning("导入设备台账", "屏柜检查", msg);
 			}
 			iedEntity.setF1046OperateDate(entity.getDateService());
 			iedEntity.setF1046productDate(entity.getDateProduct());
@@ -195,13 +215,15 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		} else {
 			List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
 			if (list != null) {
-				checkData(list);
 				table.setInput(list);
 			}
 		}
 	}
 	
-	private void checkData(List<IM101IEDListEntity> list) {
+	@SuppressWarnings("unchecked")
+	protected void checkData() {
+		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
 		for (IM101IEDListEntity entity : list) {
 			if (entity.getMatched() == DBConstants.MATCHED_OK) {
 				entity.setConflict(DBConstants.YES);
@@ -242,5 +264,5 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			}
 		}
 	}
-
+	
 }

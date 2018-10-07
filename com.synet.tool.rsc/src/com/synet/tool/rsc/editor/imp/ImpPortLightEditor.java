@@ -17,7 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -68,7 +67,10 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		titleList = SwtUtil.createList(container, gridData);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入光强与端口", btData);
+		
+		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入光强与端口", new GridData());
 		table =TableFactory.getPortLightTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -85,16 +87,24 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//冲突检查
+				checkConflict();
+			}
+		});
+		
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				importData();
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
 		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
@@ -108,6 +118,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				}
 				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
 						entity.getBoardCode(), entity.getPortCode());
+				String endMsg = entity.getDevName() + "->" + entity.getBoardCode() + "->" + entity.getPortCode();
 				if (portEntity != null) {
 					params.clear();
 					params.put("f1046Name", entity.getDevName());
@@ -122,9 +133,18 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 							if (analogdataEntity != null) {
 								analogdataEntity.setParentCode(portEntity.getF1048Code());
 								analogdataService.update(analogdataEntity);
+							} else {
+								String msg = "装置板卡端口FCDA数据点不存在：" + endMsg;
+								appendError("导入光强与端口", "FCDA数据点检查", msg);
 							}
 						}
+					} else {
+						String msg = "装置板卡端口Mmsfcda不存在：" + endMsg;
+						appendError("导入光强与端口", "FCDA检查", msg);
 					}
+				} else {
+					String msg = "装置板卡端口不存在：" + endMsg;
+					appendError("导入光强与端口", "端口检查", msg);
 				}
 			}
 		} catch (Exception e) {
@@ -153,12 +173,14 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 	private void loadFileItems(String filename) {
 		List<IM106PortLightEntity> list = improtInfoService.getPortLightEntityList(map.get(filename));
 		if (list != null && list.size()> 0) {
-			checkData(list);
 			table.setInput(list);
 		}
 	}
 
-	private void checkData(List<IM106PortLightEntity> list) {
+	@SuppressWarnings("unchecked")
+	protected void checkData() {
+		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
 		for (IM106PortLightEntity entity : list) {
 			if (entity.getMatched() == DBConstants.MATCHED_OK) {
 				entity.setConflict(DBConstants.YES);

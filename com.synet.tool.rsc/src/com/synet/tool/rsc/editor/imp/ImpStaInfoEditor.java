@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -58,7 +57,9 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 		titleList = SwtUtil.createList(container, gridData);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(container, "导入监控信息", btData);
+		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入监控信息", new GridData());
 		table =TableFactory.getStaInfoTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -76,16 +77,24 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//冲突检查
+				checkConflict();
+			}
+		});
+		
 		btImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doImport();
-				DialogHelper.showAsynInformation("导入成功！");
+				importData();
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
 		List<IM109StaInfoEntity> list = (List<IM109StaInfoEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
@@ -96,6 +105,9 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 			Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
 			if (mmsfcdaEntity != null) {
 				mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
+			} else {
+				String msg = "Mmsfcda不存在：" + entity.getDevName() + "->" + entity.getMmsRefAddr();
+				appendError("导入监控信息", "FCDA检查", msg);
 			}
 			mmsfcdaService.update(mmsfcdaEntity);
 			improtInfoService.update(entity);
@@ -130,12 +142,14 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 	private void loadFileItems(String filename) {
 		List<IM109StaInfoEntity> list = improtInfoService.getStaInfoEntityList(map.get(filename));
 		if (list != null) {
-			checkData(list);
 			table.setInput(list);
 		}
 	}
 
-	private void checkData(List<IM109StaInfoEntity> list) {
+	@SuppressWarnings("unchecked")
+	protected void checkData() {
+		List<IM109StaInfoEntity> list = (List<IM109StaInfoEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
 		for (IM109StaInfoEntity entity : list) {
 			if (entity.getMatched() == DBConstants.MATCHED_OK) {
 				entity.setConflict(DBConstants.YES);

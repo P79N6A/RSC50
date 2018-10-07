@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -76,8 +75,12 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		SwtUtil.createLabel(cmpRight, "", new GridData(GridData.FILL_HORIZONTAL));
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		btImport = SwtUtil.createPushButton(cmpRight, "导入光缆", btData);
-		btAnalysis = SwtUtil.createPushButton(cmpRight, "分析回路", btData);
+		
+		Composite btComp = SwtUtil.createComposite(cmpRight, btData, 3);
+		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
+		btImport = SwtUtil.createPushButton(btComp, "导入光缆", new GridData());
+		btAnalysis = SwtUtil.createPushButton(btComp, "分析回路", new GridData());
+		
 		table = TableFactory.getFibreListTable(cmpRight);
 		GridData tbData = new GridData(GridData.FILL_BOTH);
 		tbData.horizontalSpan = cols;
@@ -93,6 +96,14 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 				if (selects != null && selects.length > 0) {
 					loadFileItems(selects[0]);
 				}
+			}
+		});
+		
+		btCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//冲突检查
+				checkConflict();
 			}
 		});
 		
@@ -119,6 +130,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected void doImport() {
 		List<IM102FibreListEntity> temp = new ArrayList<>();
 		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
@@ -164,13 +176,15 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 	private void loadFileItems(String filename) {
 		List<IM102FibreListEntity> list = improtInfoService.getFibreListEntityList(map.get(filename));
 		if (list != null && list.size()> 0) {
-			checkData(list);
 			table.setInput(list);
 		}
 	}
 
 	//光缆清册为导入添加数据，只要检查是否添加过和必要参数是否存在即可,数据重复时，导入数据为更新操作
-	private void checkData(List<IM102FibreListEntity> list) {
+	@SuppressWarnings("unchecked")
+	protected void checkData() {
+		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
 		List<Tb1041SubstationEntity> substationList = substationService.getAllSubstation();
 		boolean notStation = (substationList == null || substationList.size() <= 0);
 		for (IM102FibreListEntity entity : list) {
@@ -191,7 +205,14 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 				entity.setOverwrite(false);
 				continue;
 			}
-			if (entity.getCoreCode() == null) {//纤芯编号不存在，不处理
+			
+			if (entity.getCableCode() == null || "".equals(entity.getCableCode())) {//光缆编号不存在，不处理
+				entity.setConflict(DBConstants.YES);
+				entity.setOverwrite(false);
+				continue;
+			}
+			
+			if (entity.getCoreCode() == null || "".equals(entity.getCoreCode())) {//纤芯编号不存在，不处理
 				entity.setConflict(DBConstants.YES);
 				entity.setOverwrite(false);
 				continue;
