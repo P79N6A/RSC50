@@ -393,6 +393,7 @@ public class IedParserNew {
 			sgFcda.setF1060Desc(fcdaDesc);
 			sgFcda.setF1060RefAddr(SclUtil.getFcdaRef(fcdaEl));
 			sgFcda.setF1060DataType(context.getBType(elLd, fcdaEl));
+			spFcdaList.add(sgFcda);
 			i++;
 		}
 		beanDao.insertBatch(spFcdaList);
