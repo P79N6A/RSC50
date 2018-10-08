@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
@@ -102,37 +103,41 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 		if (list == null || list.size() <= 0)
 			return;
 		for (IM104StatusInEntity entity : list) {
-			if (entity.getDevName() == null) continue;
-			if (entity.getPinRefAddr() != null) {
-				Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getPinRefAddr());
+			String devName = entity.getDevName();
+			if (devName == null)
+				continue;
+			String pinRefAddr = entity.getPinRefAddr();
+			String devDesc = entity.getDevDesc();
+			devDesc = devName + ":" + devDesc;
+			if (!StringUtil.isEmpty(pinRefAddr)) {
+				Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(devName, pinRefAddr);
 				if (pinEntity != null) {
 					pinEntity.setF1062Desc(entity.getPinDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
 					pinEntityService.update(pinEntity);
 				} else {
-					String msg = "开入虚端子不存在:" + entity.getDevDesc() + "-> " + entity.getPinRefAddr();
+					String msg = "开入虚端子不存在:" + devDesc + "-> " + pinRefAddr;
 					appendError("导入开入信号", "虚端子检查", msg);
 				}
 			} else {
-				String msg = "开入虚端子参引不能为空:装置[" + entity.getDevDesc()+ "]";
+				String msg = "开入虚端子参引不能为空:装置[" + devDesc+ "]";
 				appendError("导入开入信号", "虚端子检查", msg);
 			}
-			
-			if (entity.getMmsRefAddr() == null) {
-				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
+			String mmsRefAddr = entity.getMmsRefAddr();
+			if (!StringUtil.isEmpty(mmsRefAddr)) {
+				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(devName, mmsRefAddr);
 				if (mmsfcdaEntity != null) {
 					mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
 					entity.setMatched(DBConstants.MATCHED_OK);
 					mmsfcdaService.update(mmsfcdaEntity);
 				} else {
-					String msg = "MMS不存在:" + entity.getDevDesc() + "-> " + entity.getMmsRefAddr ();
+					String msg = "MMS不存在:" + devDesc + "-> " + mmsRefAddr;
 					appendError("导入开入信号", "FCDA检查", msg);
 				}
 			} else {
-				String msg = "MMS信号参引不能为空:装置[" + entity.getDevDesc() + "]";
+				String msg = "MMS信号参引不能为空:装置[" + devDesc + "]";
 				appendError("导入开入信号", "FCDA检查", msg);
 			}
-			improtInfoService.update(entity);
 		}
 	}
 

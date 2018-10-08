@@ -67,20 +67,20 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		List<Tb1045ConnectivitynodeEntity> conns = new ArrayList<>();
 		List<Element> connEls = DOM4JNodeHelper.selectNodes(staEl, "./VoltageLevel/Bay/ConnectivityNode");
 		for (Element connEl : connEls) {
-			String cnode = connEl.attributeValue("name");
-			if (connMap.containsKey(cnode)) {
-				SCTLogger.warn("已存在：" + cnode);
-				context.addWarning("一次模型", "连接点", cnode, "拓扑模型有误，存在同名的连接点。");
+			String pathName = connEl.attributeValue("pathName");
+			String nodeName = connEl.attributeValue("name");
+			if ("grounded".equals(nodeName.toLowerCase())) {
 				continue;
 			}
-			Tb1045ConnectivitynodeEntity conn = new Tb1045ConnectivitynodeEntity();
-			conn.setF1045Code(rscp.nextTbCode(DBConstants.PR_CNode));
-			conn.setF1045Name(cnode);
-			conn.setF1045Desc(connEl.attributeValue("pathName"));
-			conns.add(conn);
-			connMap.put(cnode, conn);
+			if (connMap.containsKey(nodeName)) {
+				SCTLogger.warn("已存在：" + nodeName);
+				context.addWarning("一次模型", "连接点", nodeName, "拓扑模型有误，存在同名的连接点。");
+				continue;
+			}
+			addConnNode(nodeName, pathName, conns);
 			conNum++;
 		}
+		addConnNode("grounded", "grounded", conns);
 		beanDao.insertBatch(conns);
 		// 一次设备
 		List<Tb1043EquipmentEntity> eqpList = new ArrayList<>();
@@ -118,7 +118,6 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 						eqpList.add(equipment);
 						equipment.setF1043Code(rscp.nextTbCode(DBConstants.PR_EQP));
 						equipment.setTb1042BayByF1042Code(bay);
-//						equipment.setF1042Code(bay.getF1042Code());
 						equipment.setF1043Name(eqpEl.attributeValue("name"));
 						equipment.setF1043Desc(eqpEl.attributeValue("desc"));
 						String virtual = eqpEl.attributeValue("virtual");
@@ -164,6 +163,16 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				" 个间隔， " + eqpNum + " 台设备， " + conNum + " 个连接点。");
 	}
 
+	private void addConnNode(String nodeName,
+			String pathName, List<Tb1045ConnectivitynodeEntity> conns) {
+		Tb1045ConnectivitynodeEntity conn = new Tb1045ConnectivitynodeEntity();
+		conn.setF1045Code(rscp.nextTbCode(DBConstants.PR_CNode));
+		conn.setF1045Name(nodeName);
+		conn.setF1045Desc(pathName);
+		conns.add(conn);
+		connMap.put(nodeName, conn);
+	}
+
 	private Tb1042BayEntity addBay(Tb1041SubstationEntity station, int ivol,
 			String bayName, String bayDesc) {
 		Tb1042BayEntity bay = new Tb1042BayEntity();
@@ -188,20 +197,26 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		if (tmEls == null || tmEls.size() < 1)
 			return;
 		for (Element tmEl : tmEls) {
+			String tmName = tmEl.attributeValue("name");
 			Tb1044TerminalEntity tm = new Tb1044TerminalEntity();
 			terminals.add(tm);
 			tm.setF1044Code(rscp.nextTbCode(DBConstants.PR_Term));
-			tm.setF1044Name(tmEl.attributeValue("name"));
+			tm.setF1044Name(tmName);
 			tm.setF1044Desc(tmEl.attributeValue("connectivityNode"));
 			tm.setTb1043EquipmentByF1043Code(equipment);
 			String cnode = tmEl.attributeValue("cNodeName");
-			Tb1045ConnectivitynodeEntity node = connMap.get(cnode);
-			if (node == null) {
-				String eqp = equipment.getTb1042BayByF1042Code().getF1042Name() + "/" + equipment.getF1043Name();
-				SCTLogger.warn("拓扑模型有误，找不到设备[ " + eqp + " ]连接点" + cnode);
-				context.addWarning("一次模型", "一次设备", eqp, "拓扑模型有误，找不到设备连接点。");
+			boolean isNull = StringUtil.isEmpty(cnode) || "null".equals(cnode.toLowerCase());
+			String eqp = equipment.getTb1042BayByF1042Code().getF1042Name() + "/" + equipment.getF1043Name();
+			if (isNull) {
+				context.addWarning("一次模型", "一次设备", eqp, "拓扑模型有误，端子[ " + tmName + " ]的连接点为空。");
+			} else {
+				Tb1045ConnectivitynodeEntity node = connMap.get(cnode);
+				if (node == null) {
+					context.addWarning("一次模型", "一次设备", eqp, "拓扑模型有误，找不到端子[ " + tmName + " ]的连接点 " + cnode + " 。");
+				} else {
+					tm.setTb1045ConnectivitynodeByF1045Code(node);
+				}
 			}
-			tm.setTb1045ConnectivitynodeByF1045Code(node);
 			terminals.add(tm);
 		}
 		equipment.setTb1044TerminalsByF1043Code(terminals);

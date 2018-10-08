@@ -81,7 +81,7 @@ public class ExcelImportEditor extends BaseConfigEditor {
 						clearMsgCount();
 						doImport();
 //						console.append(titleList.getSelection()[0] + "导入完毕！");
-						printMsg(titleList.getSelection()[0] + "导入完毕！");
+						printMsg(titleList.getSelection()[0] + "导入完毕");
 					}
 				});
 			}
@@ -119,11 +119,12 @@ public class ExcelImportEditor extends BaseConfigEditor {
 		if (msg == null) 
 			msg ="";
 		if (errorCount != 0) {
-			msg += ",错误：" + errorCount;
+			msg += "，错误：" + errorCount;
 		}
 		if (warningCount != 0) {
-			msg += ",警告：" + warningCount;
+			msg += "，警告：" + warningCount;
 		}
+		msg += "。";
 		console.append(msg);
 	}
 }
