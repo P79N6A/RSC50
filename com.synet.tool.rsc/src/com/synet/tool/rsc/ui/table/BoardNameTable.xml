@@ -4,7 +4,8 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1047BoardEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
-  <field desc="板卡编号" editor="none" name="f1047Code" width="200" default=""/>
-  <field desc="板卡序号" editor="none" name="f1047Slot" width="150" default=""/>
-  <field desc="板卡类型" editor="none" name="f1047Desc" width="150" default=""/>
+  <field desc="板卡编号" editor="none" name="f1047Code" width="150" default=""/>
+  <field desc="板卡序号" editor="none" name="f1047Slot" width="100" default=""/>
+  <field desc="板卡用途" editor="none" name="f1047Type" width="150" default=""/>
+  <field desc="板卡类型" editor="none" name="f1047Desc" width="100" default=""/>
 </table>
