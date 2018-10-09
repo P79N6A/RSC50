@@ -31,7 +31,7 @@ public class StrapEntityService extends BaseService {
 		String iedCode = statedata.getParentCode();
 		statedata.setParentCode(strapCode);
 		strap.setF1046Code(iedCode);
-		strap.setF1064Type(DBConstants.STRAP_FUN);
+		strap.setF1064Type(statedata.getF1011No());
 		strap.setF1064Desc(desc);
 		beanDao.insert(strap);
 	}
