@@ -3,10 +3,10 @@ package com.synet.tool.rsc.ui;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.model.TableConfig;
-import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.table.TableBuilder;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.ui.table.IEDBoardTable;
+import com.synet.tool.rsc.ui.table.RuleTable;
 
 
 public class TableFactory {
@@ -67,8 +67,14 @@ public class TableFactory {
 	public static String PORT_TABLE							= "PortTable";
 	public static String MMS_FCDA_TABLE						= "MmsFcdaTable";
 	public static final String PROBLEMS		  				= "problems";
+	public static final String MODEL_RULE_TABLE		  		= "ModelRuleTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
+	
+	public static RuleTable getModelRuleTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(MODEL_RULE_TABLE);
+		return (RuleTable) TableBuilder.createKTable(RuleTable.class, container, tableCfg);
+	}
 	
 	public static DevKTable getDeviceNameTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_NAME_TABLE);

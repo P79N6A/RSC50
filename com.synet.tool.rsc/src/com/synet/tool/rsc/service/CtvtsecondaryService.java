@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
-import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.util.DataUtils;
@@ -42,10 +41,10 @@ public class CtvtsecondaryService extends BaseService{
 		setCtvtsecondaryEntities.remove(ctvtsecondaryEntity);
 		beanDao.update(equipmentEntity);
 		beanDao.delete(ctvtsecondaryEntity);
-		System.out.println(ctvtsecondaryEntity.getF1067Code());
-		Object portmmsuEntity = beanDao.getObject(Tb1066ProtmmxuEntity.class, "f1067Code", ctvtsecondaryEntity.getF1067Code());
-		System.out.println(portmmsuEntity);
-		beanDao.delete(portmmsuEntity);
+		Object portmmsuEntity = beanDao.getObject(Tb1066ProtmmxuEntity.class, "tb1067CtvtsecondaryByF1067Code", ctvtsecondaryEntity);
+		if(portmmsuEntity != null) {
+			beanDao.delete(portmmsuEntity);
+		}
 	}
 	
 	/**

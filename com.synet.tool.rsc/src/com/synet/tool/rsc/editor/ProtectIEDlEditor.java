@@ -66,6 +66,7 @@ import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.F1011_NO;
 
 /**
  * 保护信息模型->装置树菜单编辑器。
@@ -129,6 +130,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DictManager dic;
 	private HashMap<Integer, DevKTable> tableMapper;
 	private CTabFolder tabFdCfg;
+	private Button btnApplyRule;
 	
 	
 
@@ -168,6 +170,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
 		} else {
 			SwtUtil.createLabel(comp, "", new GridData(780, SWT.DEFAULT));
+			btnApplyRule = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "应用规则");
 //			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
 			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
@@ -322,11 +325,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 					DialogHelper.showAsynInformation("引入模版结束！");
 					
 					
-				} 
+				} else if(obj == btnApplyRule) {
+					applyRule();
+				}
 //				else if(obj == btnTempCamp) {
 //					//TODO
 //				}
 			}
+			
 		};
 		if(tabFProtect != null) {
 			tabFProtect.addSelectionListener(selectionListener);
@@ -339,6 +345,45 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempSave.addSelectionListener(selectionListener);
 	}
 	
+	/**
+	 * 规则应用
+	 */
+	private void applyRule() {
+		@SuppressWarnings("unchecked")
+		List<Tb1064StrapEntity> input2 = (List<Tb1064StrapEntity>) tableProtectPlate.getInput();
+		if(!DataUtils.listNotNull(input2)) {
+			return;
+		}
+		for (Tb1064StrapEntity tb1064StrapEntity : input2) {
+			Tb1016StatedataEntity statedata = tb1064StrapEntity.getStatedata();
+			Tb1058MmsfcdaEntity mmsfcdaEntity = statedata.getTb1058FcdaByF1058Code();
+			String datSet = mmsfcdaEntity.getTb1054RcbByF1054Code().getF1054Dataset();
+			String lnName = getLnName(mmsfcdaEntity.getF1058RefAddr());
+			String doName = getDoName(mmsfcdaEntity.getF1058RefAddr());
+			String doDesc = mmsfcdaEntity.getF1058Desc();
+			F1011_NO f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc);
+			tb1064StrapEntity.setF1064Type(f1011no.getId());
+			statedata.setF1011No(f1011no.getId());
+			mmsfcdaService.save(statedata);
+			mmsfcdaService.save(tb1064StrapEntity);
+		}
+		tableProtectPlate.setInput(input2);
+		tableProtectPlate.refresh();
+	}
+	
+	private String getDoName(String f1058RefAddr) {
+		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf("$"), f1058RefAddr.lastIndexOf("$"));
+		String doName = temp.substring(f1058RefAddr.indexOf("$") + 1, temp.length());
+		return doName;
+	}
+
+	private String getLnName(String f1058RefAddr) {
+		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf("$"));
+		temp = temp.replaceAll("\\d+","");
+		String result = temp.substring(temp.length() - 4);
+		return result;
+	}
+
 	/**
 	 * 删除装置告警关联
 	 */

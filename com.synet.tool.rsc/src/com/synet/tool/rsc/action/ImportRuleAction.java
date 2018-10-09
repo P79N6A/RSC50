@@ -5,9 +5,11 @@
 package com.synet.tool.rsc.action;
 
 import com.shrcn.found.ui.action.ConfigAction;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.synet.tool.rsc.dialog.ModelRuleDialog;
 
  /**
- * 
+ * 模型辨识规则
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2018-8-7
  */
@@ -19,6 +21,8 @@ public class ImportRuleAction extends ConfigAction {
 
 	@Override
 	public void run() {
+		ModelRuleDialog dialog = new ModelRuleDialog(getShell());
+		dialog.open();
 	}
 
 }

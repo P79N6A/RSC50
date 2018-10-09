@@ -148,6 +148,10 @@ public enum F1011_NO {
 	public Rule getRule() {
 		return rule;
 	}
+	
+	public void setRule(Rule rule) {
+		this.rule = rule;
+	}
 
 	public static F1011_NO getType(String datSet, String lnName, String doName, String doDesc) {
 		F1011_NO[] types = F1011_NO.values();
@@ -227,4 +231,28 @@ public enum F1011_NO {
 		}
 		return items;
 	}
+	
+	public static String getNameById(int id) {
+		for (F1011_NO f1011 : F1011_NO.values()) {
+			if(f1011.getId() == id) {
+				return f1011.getName();
+			}
+		}
+		return "";
+	}
+	
+	/**
+	 * 根据id找到实例，设置Rule
+	 * @param id
+	 * @param rule
+	 */
+	public static void setRule(int id, Rule rule) {
+		for (F1011_NO f1011 : F1011_NO.values()) {
+			if(f1011.getId() == id) {
+				f1011.setRule(rule);
+			}
+		}
+	}
+	
+	
 }
