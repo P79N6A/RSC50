@@ -31,7 +31,6 @@ public class Tb1016StatedataEntity {
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
     private Tb1061PoutEntity tb1061PoutEntityByF1061Code;
-    
 
     public String getF1016Code() {
         return f1016Code;

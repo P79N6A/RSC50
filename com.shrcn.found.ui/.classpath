@@ -8,7 +8,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/poi-3.11-beta2-20140822.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-3.11-beta2-20140822.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-schemas-3.11-beta2-20140822.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/fui.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/fui.jar" sourcepath="D:/eclipse_rcp/RSC50/com.shrcn.found.ui"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.shrcn.found.common"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,6 +14,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -38,9 +39,23 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 	private DevKTable cubicleTable;
 	private DevKTable cableTable;
 	private DevKTable physConnTable;
+	//查询条件
+	private Text txtCubicleName;
+	private Text txtCubicleDesc;
+	private Text txtCableName;
+	private Text txtCableDesc;
+	private Text txtIedName;
+	private Text txtIedDesc;
+	
+	//查询
+	private Button btnSearchCubicle;
+	private Button btnSearchCable;
+	private Button btnSearchPhysconn;
+	//添加
 	private Button btnAddCubicle;
 	private Button btnAddCable;
 	private Button btnAddPhysconn;
+	//删除
 	private Button btnDelCubicle;
 	private Button btnDelCable;
 	private Button btnDelPhysconn;
@@ -64,27 +79,42 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 		super.buildUI(container);
 		tab = SwtUtil.createTabFolder(container, SWT.TOP | SWT.BORDER);
 		tab.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Composite cubicleComp = SwtUtil.createComposite(tab, new GridData(), 2);
+		Composite cubicleComp = SwtUtil.createComposite(tab, new GridData(), 5);
 		SwtUtil.addTabItem(tab, RSCConstants.TAB_CUBICLE, cubicleComp);
-		Composite cableComp = SwtUtil.createComposite(tab, new GridData(), 2);
+		Composite cableComp = SwtUtil.createComposite(tab, new GridData(), 5);
 		SwtUtil.addTabItem(tab, RSCConstants.TAB_CABLE, cableComp);
-		Composite physConnComp = SwtUtil.createComposite(tab, new GridData(), 2);
+		Composite physConnComp = SwtUtil.createComposite(tab, new GridData(), 5);
 		SwtUtil.addTabItem(tab, RSCConstants.TAB_PHYSCONN, physConnComp);
 		tab.setSelection(0);
 		
 		GridData tableGridData = new GridData(GridData.FILL_BOTH);
-		tableGridData.horizontalSpan = 2;
+		tableGridData.horizontalSpan = 5;
 		
+		txtCubicleName = SwtUtil.createText(cubicleComp, SwtUtil.bt_hd); 
+		txtCubicleName.setMessage("屏柜名称");
+		txtCubicleDesc = SwtUtil.createText(cubicleComp, SwtUtil.bt_hd); 
+		txtCubicleDesc.setMessage("屏柜描述");
+		btnSearchCubicle = SwtUtil.createButton(cubicleComp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
 		btnAddCubicle = SwtUtil.createButton(cubicleComp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
 		btnDelCubicle = SwtUtil.createButton(cubicleComp, SwtUtil.bt_gd, SWT.BUTTON1, "删除");		
 		cubicleTable = TableFactory.getCubicleTable(cubicleComp);
 		cubicleTable.getTable().setLayoutData(tableGridData);
 		
+		txtCableName = SwtUtil.createText(cableComp, SwtUtil.bt_hd); 
+		txtCableName.setMessage("线缆名称");
+		txtCableDesc = SwtUtil.createText(cableComp, SwtUtil.bt_hd); 
+		txtCableDesc.setMessage("线缆描述");
+		btnSearchCable = SwtUtil.createButton(cableComp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
 		btnAddCable = SwtUtil.createButton(cableComp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
 		btnDelCable = SwtUtil.createButton(cableComp, SwtUtil.bt_gd, SWT.BUTTON1, "删除");	
 		cableTable = TableFactory.getCableTable(cableComp);
 		cableTable.getTable().setLayoutData(tableGridData);
 		
+		txtIedName = SwtUtil.createText(physConnComp, SwtUtil.bt_hd); 
+		txtIedName.setMessage("装置名称");
+		txtIedDesc = SwtUtil.createText(physConnComp, SwtUtil.bt_hd); 
+		txtIedDesc.setMessage("装置描述");
+		btnSearchPhysconn = SwtUtil.createButton(physConnComp, SwtUtil.bt_gd, SWT.BUTTON1, "查询");
 		btnAddPhysconn = SwtUtil.createButton(physConnComp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
 		btnDelPhysconn = SwtUtil.createButton(physConnComp, SwtUtil.bt_gd, SWT.BUTTON1, "删除");	
 		physConnTable = TableFactory.getPhysconnTable(physConnComp);
@@ -110,6 +140,12 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 					addPhysconn();
 				} else if (obj == btnDelPhysconn) {
 					delPhysconn();
+				} else if (obj == btnSearchCubicle) {
+					searchCubicle();
+				} else if (obj == btnSearchCable) {
+					searchCable();
+				} else if (obj == btnSearchPhysconn) {
+					searchPhysconn();
 				}
 			}
 		};
@@ -120,6 +156,9 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 		btnDelCubicle.addSelectionListener(listener);
 		btnDelCable.addSelectionListener(listener);
 		btnDelPhysconn.addSelectionListener(listener);
+		btnSearchCubicle.addSelectionListener(listener);
+		btnSearchCable.addSelectionListener(listener);
+		btnSearchPhysconn.addSelectionListener(listener);
 	}
 
 	@Override
@@ -128,21 +167,20 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 				(List<Tb1050CubicleEntity>) areaService.getCubicleList(regionEntity);
 		if (cubicleList != null) {
 			cubicleTable.setInput(cubicleList);
+			
+			List<Tb1051CableEntity> cableList = 
+					(List<Tb1051CableEntity>) areaService.getCableList(cubicleList);
+			if (cableList != null){
+				cableTable.setInput(cableList);
+			}
+			
+			List<Tb1053PhysconnEntity> physconnList = 
+					(List<Tb1053PhysconnEntity>) areaService.getPhysconnList(cubicleList);
+			if (physconnList != null)
+				physConnTable.setInput(physconnList);
 		}
 		
-		List<Tb1051CableEntity> cableList = 
-				(List<Tb1051CableEntity>) areaService.getCableList(cubicleList);
-		if (cableList != null){
-			cableTable.setInput(cableList);
-		}
-		
-		List<Tb1053PhysconnEntity> physconnList = 
-				(List<Tb1053PhysconnEntity>) areaService.getPhysconnList(cubicleList,cableList);
-		
-		if (physconnList != null)
-			physConnTable.setInput(physconnList);
 	}
-	
 
 	private void delPhysconn() {
 		List<Object> list = physConnTable.getSelections();
@@ -194,5 +232,50 @@ public class PhysicalAreaEditor extends BaseConfigEditor {
 		Tb1050CubicleEntity cubicleEntity = RscObjectUtils.createCubicle();
 		cubicleEntity.setTb1049RegionByF1049Code(regionEntity);
 		cubicleTable.addRow(cubicleEntity);
+	}
+	
+
+	private void searchCubicle() {
+		String cubicleName = txtCubicleName.getText().trim(); 
+		String cubicleDesc = txtCubicleDesc.getText().trim();
+		cubicleName = "".equals(cubicleName) ? null : cubicleName;
+		cubicleDesc = "".equals(cubicleDesc) ? null : cubicleDesc;
+		List<Tb1050CubicleEntity> cubicleList = 
+				(List<Tb1050CubicleEntity>) areaService.getCubicleList(regionEntity, cubicleName, cubicleDesc);
+		if (cubicleList != null) {
+			cubicleTable.setInput(cubicleList);
+		}
+	}
+	
+	private void searchCable() {
+		String cableName = txtCableName.getText().trim();
+		String cableDesc = txtCableDesc.getText().trim();
+		cableName = "".equals(cableName) ? null : cableName;
+		cableDesc = "".equals(cableDesc) ? null : cableDesc;
+		List<Tb1050CubicleEntity> cubicleList = 
+				(List<Tb1050CubicleEntity>) areaService.getCubicleList(regionEntity);
+		if (cubicleList != null) {
+			List<Tb1051CableEntity> cableList = 
+					(List<Tb1051CableEntity>) areaService.getCableList(cubicleList, cableName, cableDesc);
+			if (cableList != null){
+				cableTable.setInput(cableList);
+			}
+		}
+	}
+
+	private void searchPhysconn() {
+		String iedName = txtIedName.getText().trim();
+		String iedDesc = txtIedDesc.getText().trim();
+		iedName = "".equals(iedName) ? null : iedName;
+		iedDesc = "".equals(iedDesc) ? null : iedDesc;
+		List<Tb1050CubicleEntity> cubicleList = 
+				(List<Tb1050CubicleEntity>) areaService.getCubicleList(regionEntity);
+		if (cubicleList != null) {
+			List<Tb1053PhysconnEntity> physconnList = 
+					(List<Tb1053PhysconnEntity>) areaService.getPhysconnList(cubicleList, iedName, iedDesc);
+			if (physconnList != null)
+				physConnTable.setInput(physconnList);
+		}
+	
 	}
 }

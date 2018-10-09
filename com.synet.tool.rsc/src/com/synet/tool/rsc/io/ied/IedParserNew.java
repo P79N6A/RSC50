@@ -393,6 +393,7 @@ public class IedParserNew {
 			sgFcda.setF1060Desc(fcdaDesc);
 			sgFcda.setF1060RefAddr(SclUtil.getFcdaRef(fcdaEl));
 			sgFcda.setF1060DataType(context.getBType(elLd, fcdaEl));
+			spFcdaList.add(sgFcda);
 			i++;
 		}
 		beanDao.insertBatch(spFcdaList);
@@ -406,7 +407,7 @@ public class IedParserNew {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SCL.getNodeRef(fcdaEl),
 				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;

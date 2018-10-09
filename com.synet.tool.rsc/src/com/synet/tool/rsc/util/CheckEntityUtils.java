@@ -41,7 +41,7 @@ public class CheckEntityUtils {
 		if (obj instanceof Tb1093VoltagekkEntity){
 			return CheckEntityUtils.checkVoltagekk((Tb1093VoltagekkEntity) obj);
 		}
-		return false;
+		return true;
 	}
 	
 	public static boolean checkRegion(Tb1049RegionEntity entity) {
