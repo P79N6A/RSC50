@@ -407,7 +407,7 @@ public class IedParserNew {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, fcdaEl.attributeValue("ref"),
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SCL.getNodeRef(fcdaEl),
 				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;
