@@ -115,13 +115,19 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 		if (list == null || list.size() <= 0)
 			return;
 		for (IM107TerStrapEntity entity : list) {
-			String endMsg = entity.getDevName() + "->" + entity.getVpRefAddr();
+			if (!entity.isOverwrite()) {
+				continue;
+			}
+			String devName = entity.getDevName();
+			String vpRefAddr = entity.getVpRefAddr();
+			String vpType = entity.getVpType();
+			String strapRefAddr = entity.getStrapRefAddr();
+			String endMsg = devName + "->" + vpRefAddr;
 			try {
-				String vpType = entity.getVpType();
 				if ("开入".equals(vpType)) {
-					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getVpRefAddr());
+					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(devName, vpRefAddr);
 					if (pinEntity != null) {
-						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(devName, strapRefAddr);
 						if (mmsfcdaEntity != null) {
 							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
 									mmsfcdaEntity.getDataCode());
@@ -145,9 +151,9 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 						appendError("导入压板与虚端子", "虚端子检查", msg);
 					}
 				} else if ("开出".equals(vpType)){
-					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(entity.getDevName(), entity.getVpRefAddr());
+					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(devName, vpRefAddr);
 					if (poutEntity != null) {
-						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getStrapRefAddr());
+						Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(devName, strapRefAddr);
 						if (mmsfcdaEntity != null) {
 							Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
 									mmsfcdaEntity.getDataCode());
@@ -158,7 +164,6 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									if (strapEntity != null) {
 										poutEntity.setTb1064StrapByF1064Code(strapEntity);
 										poutEntityService.save(poutEntity);
-										entity.setMatched(DBConstants.MATCHED_OK);
 									}
 								}
 							} else {
@@ -174,7 +179,6 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			improtInfoService.update(entity);
 		}
 	}
 

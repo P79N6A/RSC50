@@ -104,7 +104,7 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 			return;
 		for (IM104StatusInEntity entity : list) {
 			String devName = entity.getDevName();
-			if (devName == null)
+			if (devName == null || !entity.isOverwrite())
 				continue;
 			String pinRefAddr = entity.getPinRefAddr();
 			String devDesc = entity.getDevDesc();
