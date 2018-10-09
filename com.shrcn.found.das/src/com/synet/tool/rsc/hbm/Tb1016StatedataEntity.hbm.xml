@@ -77,12 +77,12 @@
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
-        <!-- <many-to-one name="tb1043Equipment" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" insert="false" update="false" lazy="false">
-            <column name="Parent_CODE" not-null="true"/>
-        </many-to-one>
         <many-to-one name="tb1058FcdaByF1058Code" class="com.synet.tool.rsc.model.Tb1058MmsfcdaEntity" 
         	property-ref="dataCode" insert="false" update="false" lazy="false">
             <column name="F1016_CODE" not-null="true"/>
+        </many-to-one>
+        <!-- <many-to-one name="tb1043Equipment" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" insert="false" update="false" lazy="false">
+            <column name="Parent_CODE" not-null="true"/>
         </many-to-one>
         <many-to-one name="tb1061PoutEntityByF1061Code" class="com.synet.tool.rsc.model.Tb1061PoutEntity" 
         	property-ref="dataCode" insert="false" update="false" lazy="false">
