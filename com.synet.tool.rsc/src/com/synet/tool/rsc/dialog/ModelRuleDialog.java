@@ -41,13 +41,13 @@ public class ModelRuleDialog extends WrappedDialog{
 		btnAdd = SwtUtil.createButton(composite, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
 		btnDel = SwtUtil.createButton(composite, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
 		
-		GridData griddata_2 = new GridData(770, 355);
+		GridData griddata_2 = new GridData(GridData.FILL_BOTH);
 		griddata_2.horizontalSpan = 2;
 		table = TableFactory.getModelRuleTable(composite);
 		table.getTable().setLayoutData(griddata_2);
 		initData();
 		addListeners();
-		return super.createDialogArea(parent);
+		return composite;
 	}
 	
 	private void initData() {
@@ -89,7 +89,7 @@ public class ModelRuleDialog extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(800, 500);
+		return new Point(1000, 650);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -98,7 +98,6 @@ public class ModelRuleDialog extends WrappedDialog{
 		if (buttonId == IDialogConstants.OK_ID) {
 			boolean confirm = DialogHelper.showConfirm("确定要保存改动？（若无改动请点击\"取消\"按钮）");
 			if(confirm) {//修改rule.xml文件
-				System.out.println("修改rule.xml文件");
 				ruleManager.modify((List<Rule>) table.getInput());
 			}
 		}

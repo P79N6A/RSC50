@@ -343,6 +343,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 //		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
+		btnApplyRule.addSelectionListener(selectionListener);
 	}
 	
 	/**
@@ -368,12 +369,15 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			mmsfcdaService.save(tb1064StrapEntity);
 		}
 		tableProtectPlate.setInput(input2);
-		tableProtectPlate.refresh();
 	}
 	
 	private String getDoName(String f1058RefAddr) {
-		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf("$"), f1058RefAddr.lastIndexOf("$"));
-		String doName = temp.substring(f1058RefAddr.indexOf("$") + 1, temp.length());
+		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf("$") + 1, f1058RefAddr.length());
+		String doName = temp.substring(temp.indexOf("$") + 1, temp.length());
+		int p = doName.indexOf('$');
+		if (p > 0) {
+			doName = doName.substring(0, p);
+		}
 		return doName;
 	}
 
