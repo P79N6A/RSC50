@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
   <field desc="信号名称" editor="none" name="tb1062PinByF1062CodePRecv.f1062Desc" width="100" default=""/>
   <field desc="信号参引" editor="none" name="tb1062PinByF1062CodePRecv.f1062RefAddr" width="100" default=""/> 
-  <field desc="信号类型" editor="none" dict="POUT_TYPE" name="tb1062PinByF1062CodePRecv.f1062Type" width="150" default=""/>
+<!--   <field desc="信号类型" editor="none" dict="POUT_TYPE" name="tb1062PinByF1062CodePRecv.f1062Type" width="150" default=""/> -->
   <field desc="压板(对保护)" editor="PinBoardEditor" name="tb1062PinByF1062CodePRecv.tb1064StrapByF1064Code.f1064Desc" width="120" default=""/>
   <field desc="发送装置" editor="none" name="tb1046IedByF1046CodeIedSend.f1046Name" width="100" default=""/> 
   <field desc="发送虚端子参引" editor="none" name="tb1061PoutByF1061CodePSend.f1061RefAddr" width="150" default=""/> 
