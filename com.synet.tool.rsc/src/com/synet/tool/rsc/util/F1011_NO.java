@@ -178,7 +178,7 @@ public enum F1011_NO {
 			if (!StringUtil.isEmpty(rule.getLnName()) && !rule.getLnName().contains(lnName)) {
 				continue;
 			}
-			if (!StringUtil.isEmpty(rule.getDoName()) && !rule.getDoName().equals(doName)) {
+			if (!StringUtil.isEmpty(rule.getDoName()) && !doName.contains(rule.getDoName())) {
 				continue;
 			}
 			if (!StringUtil.isEmpty(rule.getDoDesc())) {
