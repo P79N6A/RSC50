@@ -93,7 +93,6 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
 			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
-			pout.setF1011No(type.getId());
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
