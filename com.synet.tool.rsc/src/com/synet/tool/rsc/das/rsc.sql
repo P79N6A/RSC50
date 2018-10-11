@@ -1,17 +1,5 @@
 
 /*==============================================================*/
-/* Table: tb1074_svctvtrelation                           */
-/*==============================================================*/
-create table tb1074_svctvtrelation
-(
-   F1074_CODE           varchar(48) not null,
-   F1067_CODE           varchar(48) not null,
-   F1061_CODE           varchar(48) not null,
-   primary key (f1074Code)
-);
-
-
-/*==============================================================*/
 /* Table: TB1006_AnalogData                                     */
 /*==============================================================*/
 create table TB1006_AnalogData
@@ -444,7 +432,6 @@ create table TB1061_POUT
    CB_CODE              varchar(48) not null,
    F1061_RefAddr        varchar(48) not null,
    F1061_Index          INT not null,
-   F1011_NO          	INT not null,
    F1061_Desc           varchar(96),
    F1064_CODE           varchar(48),
    DATA_CODE            varchar(48) not null,
