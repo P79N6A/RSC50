@@ -1,3 +1,45 @@
+DROP TABLE TB1093_VOLTAGEKK;
+DROP TABLE TB1092_POWERKK;
+DROP TABLE TB1091_IOTERM;
+DROP TABLE TB1090_LINEPROTFIBER;
+DROP TABLE TB1073_LLINKPHYRELATION;
+DROP TABLE TB1072_RCDCHANNELD;
+DROP TABLE TB1071_DAU;
+DROP TABLE TB1070_MMSSERVER;
+DROP TABLE TB1069_RCDCHANNELA;
+DROP TABLE TB1068_PROTCTRL;
+DROP TABLE TB1067_CTVTSECONDARY;
+DROP TABLE TB1066_PROTMMXU;
+DROP TABLE TB1065_LOGICALLINK;
+DROP TABLE TB1064_STRAP;
+DROP TABLE TB1063_CIRCUIT;
+DROP TABLE TB1062_PIN;
+DROP TABLE TB1061_POUT;
+DROP TABLE TB1060_SPFCDA;
+DROP TABLE TB1059_SGFCDA;
+DROP TABLE TB1058_MMSFCDA;
+DROP TABLE TB1057_SGCB;
+DROP TABLE TB1056_SVCB;
+DROP TABLE TB1055_GCB;
+DROP TABLE TB1054_RCB;
+DROP TABLE TB1053_PHYSCONN;
+DROP TABLE TB1052_CORE;
+DROP TABLE TB1051_CABLE;
+DROP TABLE TB1050_CUBICLE;
+DROP TABLE TB1049_REGION;
+DROP TABLE TB1048_PORT;
+DROP TABLE TB1047_BOARD;
+DROP TABLE TB1046_IED;
+DROP TABLE TB1045_CONNECTIVITYNODE;
+DROP TABLE TB1044_TERMINAL;
+DROP TABLE TB1043_EQUIPMENT;
+DROP TABLE TB1042_BAY;
+DROP TABLE TB1041_SUBSTATION;
+DROP TABLE TB1026_STRINGDATA;
+DROP TABLE TB1022_FAULTCONFIG;
+DROP TABLE TB1016_STATEDATA;
+DROP TABLE TB1006_ANALOGDATA;
+DROP TABLE TB1074_SVCTVTRelation;
 
 /*==============================================================*/
 /* Table: TB1006_AnalogData                                     */
@@ -495,13 +537,9 @@ create table TB1065_LogicalLink
 /*==============================================================*/
 create table TB1066_ProtMMXU
 (
-   F1066_CODE           VARCHAR(48) not null,
-   F1067_CODE           VARCHAR(48),
-   F1066_Type           NUMBER(5),
-   F1046_Code_Prot      VARCHAR(48),
-   F1006_CODE_A         VARCHAR(48),
-   F1006_CODE_B         VARCHAR(48),
-   F1006_CODE_C         VARCHAR(48),
+   F1066_CODE           varchar(48) not null,
+   F1067_CODE           varchar(48),
+   F1006_CODE         	varchar(48),
    primary key (F1066_CODE)
 );
 
@@ -510,21 +548,26 @@ create table TB1066_ProtMMXU
 /*==============================================================*/
 create table TB1067_CTVTSecondary
 (
-   F1067_Code           VARCHAR(48) not null,
-   F1043_CODE           VARCHAR(48),
-   F1067_Index          NUMBER(5),
-   F1067_Model          VARCHAR(24),
-   F1067_Type           VARCHAR(48),
-   F1061_CODE_A1        VARCHAR(48),
-   F1061_CODE_A2        VARCHAR(48),
-   F1061_CODE_B1        VARCHAR(48),
-   F1061_CODE_B2        VARCHAR(48),
-   F1061_CODE_C1        VARCHAR(48),
-   F1061_CODE_C2        VARCHAR(48),
-   F1067_TermNo         VARCHAR(96),
-   F1067_CircNo         VARCHAR(96),
-   F1067_Desc           VARCHAR(96),
+   F1067_Code           varchar(48) not null,
+   F1043_CODE           varchar(48) not null,
+   F1067_Name         	varchar(96),
+   F1067_Index          INT,
+   F1067_Type           INT,
+   F1067_TermNo         varchar(96),
+   F1067_CircNo         varchar(96),
+   F1067_Desc           varchar(96),
    primary key (F1067_Code)
+);
+
+/*==============================================================*/
+/* Table: TB1074_SVCTVTRelation                                 */
+/*==============================================================*/
+create table TB1074_SVCTVTRelation
+(
+   F1074_CODE           VARCHAR(48) not null,
+   F1067_CODE           VARCHAR(48) not null,
+   F1061_CODE           VARCHAR(48) not null,
+   primary key (F1074_CODE)
 );
 
 /*==============================================================*/
