@@ -8,5 +8,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="数据集名称" editor="text" name="datSet" width="200" default=""/> 
   <field desc="LN类型" editor="text" name="lnName" width="100" default=""/> 
   <field desc="DO名称" editor="text" name="doName" width="100" default=""/> 
-  <field desc="DO藐视" editor="text" name="doDesc" width="100" default=""/> 
+  <field desc="DO描述" editor="text" name="doDesc" width="100" default=""/> 
 </table>
