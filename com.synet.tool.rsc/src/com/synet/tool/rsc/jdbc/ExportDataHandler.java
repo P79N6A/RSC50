@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -42,6 +43,7 @@ import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.model.Tb1071DauEntity;
 import com.synet.tool.rsc.model.Tb1072RcdchanneldEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
+import com.synet.tool.rsc.model.Tb1074SVCTVTRelationEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
@@ -92,6 +94,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1052_INDEX,
 		TB1053_INDEX,//TB1053_PhysConn
 		TB1073_INDEX,//TB1073_LLinkPhyRelation
+		TB1074_INDEX,//TB1074_SVCTVTRelation
 
 		TB1090_INDEX,
 		TB1091_INDEX,
@@ -99,7 +102,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1093_INDEX,
 
 //		TB1022_INDEX,
-		TB1071_INDEX, //TB1071_DAU
+//		TB1071_INDEX, //TB1071_DAU
 		TB1047_INDEX,
 		TB1048_INDEX
 	};
@@ -109,8 +112,10 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		exportConnManager = new ExportConnManager();
 		exportConnManager.setConnParam(connParam);
 		connect = exportConnManager.getConnection();
-		if (connect == null)
+		if (connect == null) {
+			ConsoleManager.getInstance().append("获取数据库连接失败，导出终止！");
 			return false;
+		}
 		try {
 			monitor.beginTask("开始导出", tb_indice.length*2);
 			long start = System.currentTimeMillis();
@@ -132,6 +137,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			ConsoleManager.getInstance().append("数据导出异常：" + e.getMessage());
 			return false;
 		} finally {
 			if (connect != null) {
@@ -929,8 +935,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1067Sql() {
-		return "INSERT INTO TB1067_CTVTSECONDARY(F1067_CODE,F1043_CODE,F1067_INDEX,F1067_NAME,F1067_TYPE," +
-				"F1061_TERMNO,F1067_CIRCNO,F1067_DESC) VALUES (?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1067_CTVTSECONDARY(F1067_CODE,F1043_CODE,F1067_NAME,F1067_INDEX,F1067_TYPE," +
+				"F1067_TermNo,F1067_CIRCNO,F1067_DESC) VALUES (?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -943,8 +949,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		} else {
 			setSring(preState, index++, null);
 		}
-		setInt(preState, index++, entity.getF1067Index());
 		setSring(preState, index++, entity.getF1067Name());
+		setInt(preState, index++, entity.getF1067Index());
 		setInt(preState, index++, entity.getF1067Type());
 		setSring(preState, index++, entity.getF1067TermNo());
 		setSring(preState, index++, entity.getF1067CircNo());
@@ -1163,5 +1169,20 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		}
 		setSring(preState, index++, entity.getF1093Desc());
 		setSring(preState, index++, entity.getF1093KkNo());
+	}
+
+	@Override
+	protected String getTb1074Sql() {
+		return "INSERT INTO TB1093_VOLTAGEKK(F1074_CODE,F1067_CODE,F1061_CODE) VALUES (?,?,?)";
+	}
+
+	@Override
+	protected void setValueByTb1074(PreparedStatement preState, Object obj)
+			throws SQLException {
+		Tb1074SVCTVTRelationEntity entity = (Tb1074SVCTVTRelationEntity) obj;
+		int index = 1;
+		setSring(preState, index++, entity.getF1074Code());
+		setSring(preState, index++, entity.getTb1067CtvtsecondaryByF1067Code().getF1067Code());
+		setSring(preState, index++, entity.getF1061Code().getF1061Code());
 	}
 }

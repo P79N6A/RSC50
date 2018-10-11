@@ -48,6 +48,7 @@ import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
 import com.synet.tool.rsc.model.Tb1071DauEntity;
 import com.synet.tool.rsc.model.Tb1072RcdchanneldEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
+import com.synet.tool.rsc.model.Tb1074SVCTVTRelationEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
@@ -96,6 +97,7 @@ public abstract class AbstractExportDataHandler {
 	protected static final int TB1091_INDEX = 1091;
 	protected static final int TB1092_INDEX = 1092;
 	protected static final int TB1093_INDEX = 1093;
+	protected static final int TB1074_INDEX = 1074;
 	
 	protected ExportConnManager exportConnManager;
 	protected Connection connect;
@@ -242,6 +244,8 @@ public abstract class AbstractExportDataHandler {
 			return Tb1092PowerkkEntity.class;
 		case TB1093_INDEX:
 			return Tb1093VoltagekkEntity.class;
+		case TB1074_INDEX:
+			return Tb1074SVCTVTRelationEntity.class;
 		default:
 			return null;
 		}
@@ -331,6 +335,8 @@ public abstract class AbstractExportDataHandler {
 			return getTb1092Sql();
 		case TB1093_INDEX:
 			return getTb1093Sql();
+		case TB1074_INDEX:
+			return getTb1074Sql();
 		default:
 			return null;
 		}
@@ -461,6 +467,9 @@ public abstract class AbstractExportDataHandler {
 		case TB1093_INDEX:
 			setValueByTb1093(preState, obj);
 			break;
+		case TB1074_INDEX:
+			setValueByTb1074(preState, obj);
+			break;
 		default:
 			break;
 		}
@@ -507,6 +516,7 @@ public abstract class AbstractExportDataHandler {
 	protected abstract void setValueByTb1091(PreparedStatement preState, Object obj) throws SQLException;
 	protected abstract void setValueByTb1092(PreparedStatement preState, Object obj) throws SQLException;
 	protected abstract void setValueByTb1093(PreparedStatement preState, Object obj) throws SQLException;
+	protected abstract void setValueByTb1074(PreparedStatement preState, Object obj) throws SQLException;
 
 	
 	protected abstract String getTb1006Sql();
@@ -550,6 +560,7 @@ public abstract class AbstractExportDataHandler {
 	protected abstract String getTb1091Sql();
 	protected abstract String getTb1092Sql();
 	protected abstract String getTb1093Sql();
+	protected abstract String getTb1074Sql();
 
 	protected void setInt(PreparedStatement preState, int index,Integer value) throws SQLException{
 		if (value != null) {
