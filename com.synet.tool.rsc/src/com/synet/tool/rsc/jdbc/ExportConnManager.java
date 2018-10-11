@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.view.ConsoleManager;
 
 /**
  *线上Oracle数据库连接管理
@@ -29,18 +31,13 @@ public class ExportConnManager {
 		if (connParam == null || !connParam.checkParam()) {
 			DialogHelper.showAsynError("导出数据的数据库连接参数错误！");
 		}
-         try {
-//        	Driver driver = new OracleDriver();
-//			DriverManager.deregisterDriver(driver);
+        try {
 			Class.forName(driver);
-//	        Connection connect = driver.connect(getUrl(), getProperties());
 			Connection connect = DriverManager.getConnection(getUrl(), connParam.getUser(), connParam.getPassword());
 	        return connect;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		} catch (SQLException | ClassNotFoundException e) {
+			SCTLogger.error("数据库连接异常：", e);
+			ConsoleManager.getInstance().append("数据库连接异常：" + e.getMessage());
 			return null;
 		}
 	}
@@ -63,7 +60,6 @@ public class ExportConnManager {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
