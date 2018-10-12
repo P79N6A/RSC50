@@ -104,21 +104,6 @@ create table TB1016_StateData
    F1016_ISSTA          NUMBER(5),
    primary key (F1016_CODE)
 );
-
-/*==============================================================*/
-/* Table: TB1022_FaultConfig                                    */
-/*==============================================================*/
-create table TB1022_FaultConfig
-(
-   F1022_CODE           VARCHAR(48) not null,
-   F1011_NO             NUMBER(5),
-   F1022_FAULTLEVEL     NUMBER(5),
-   F1022_T1             NUMBER(5),
-   F1022_T2             NUMBER(5),
-   F1022_K              NUMBER(5),
-   primary key (F1022_CODE)
-);
-
 /*==============================================================*/
 /* Table: TB1026_StringData                                     */
 /*==============================================================*/
@@ -139,6 +124,21 @@ create table TB1026_StringData
    F1026_ISSTA          NUMBER(5),
    primary key (F1026_CODE)
 );
+
+/*==============================================================*/
+/* Table: TB1022_FaultConfig                                    */
+/*==============================================================*/
+create table TB1022_FaultConfig
+(
+   F1022_CODE           VARCHAR(48) not null,
+   F1011_NO             NUMBER(5),
+   F1022_FAULTLEVEL     NUMBER(5),
+   F1022_T1             NUMBER(5),
+   F1022_T2             NUMBER(5),
+   F1022_K              NUMBER(5),
+   primary key (F1022_CODE)
+);
+
 
 /*==============================================================*/
 /* Table: TB1041_Substation                                     */
@@ -229,19 +229,7 @@ create table TB1046_IED
    F1046_IsVirtual      NUMBER(5),
    F1046_Type           NUMBER(5),
    F1046_CRC            VARCHAR(24),
-   F1046_AnetIp		    VARCHAR(48),
-   F1046_BnetIp		    VARCHAR(48),
-   F1046_Version        VARCHAR(48),
-   F1046_ProtectCategory  VARCHAR(48),
-   F1046_ProtectType    VARCHAR(48),
-   F1046_ProtectModel   VARCHAR(48),
-   F1046_ProtectCrc     VARCHAR(48),
-   F1046_OperateDate     VARCHAR(48),
-   F1046_ProductDate     VARCHAR(48),
-   F1046_ProductNo  	VARCHAR(48),
-   F1046_DataGatType  	VARCHAR(48),
-   F1046_OutType  		VARCHAR(48),
-   F1046_BoardNum  		NUMBER(5), 
+   F1200_CODE			VARCHAR(48),
    primary key (F1046_CODE)
 );
 
@@ -320,7 +308,7 @@ create table TB1051_Cable
 create table TB1052_Core
 (
    F1052_CODE           VARCHAR(48) not null,
-   Parent_CODE          VARCHAR(48),
+   F1052_PARENT_CODE    VARCHAR(48),
    F1052_Type           NUMBER(5),
    F1052_No             NUMBER(5),
    F1048_CODE_A         VARCHAR(48),
@@ -360,18 +348,18 @@ create table TB1054_RCB
 /*==============================================================*/
 create table TB1055_GCB
 (
-   CB_CODE          VARCHAR(48) not null,
+   F1055_CODE          VARCHAR(48) not null,
    F1046_CODE       VARCHAR(48),
-   CBNAME         	VARCHAR(48),
-   CBID           	VARCHAR(48),
-   MACAddr        	VARCHAR(24),
-   VLANID         	VARCHAR(24),
-   VLANPriority   	VARCHAR(24),
-   APPID          	VARCHAR(24),
-   DATASET        	VARCHAR(24),
-   DSDesc         	VARCHAR(96),
+   F1055_CBNAME         	VARCHAR(48),
+   F1055_CBID           	VARCHAR(48),
+   F1055_MACAddr        	VARCHAR(24),
+   F1055_VLANID         	VARCHAR(24),
+   F1055_VLANPriority   	VARCHAR(24),
+   F1055_APPID          	VARCHAR(24),
+   F1055_DATASET        	VARCHAR(24),
+   F1055_Desc         	VARCHAR(96),
    F1071_CODE       VARCHAR(48),
-   primary key (CB_CODE)
+   primary key (F1055_CODE)
 );
 
 /*==============================================================*/
@@ -379,18 +367,18 @@ create table TB1055_GCB
 /*==============================================================*/
 create table TB1056_SVCB
 (
-   CB_CODE          VARCHAR(48) not null,
+   F1056_CODE          VARCHAR(48) not null,
    F1046_CODE       VARCHAR(48),
-   CBName         	VARCHAR(48),
-   CBID           	VARCHAR(48),
-   MACAddr        	VARCHAR(24),
-   VLANID         	VARCHAR(24),
-   VLANPriority   	VARCHAR(24),
-   APPID          	VARCHAR(24),
-   Dataset        	VARCHAR(24),
-   DSDesc         	VARCHAR(96),
+   F1056_CBName         	VARCHAR(48),
+   F1056_CBID           	VARCHAR(48),
+   F1056_MACAddr        	VARCHAR(24),
+   F1056_VLANID         	VARCHAR(24),
+   F1056_VLANPriority   	VARCHAR(24),
+   F1056_APPID          	VARCHAR(24),
+   F1056_Dataset        	VARCHAR(24),
+   F1056_Desc         	VARCHAR(96),
    F1071_CODE           VARCHAR(48),
-   primary key (CB_CODE)
+   primary key (F1056_CODE)
 );
 
 /*==============================================================*/
@@ -483,6 +471,7 @@ create table TB1062_PIN
    F1062_CODE           VARCHAR(48) not null,
    F1046_CODE           VARCHAR(48),
    F1062_RefAddr        VARCHAR(48),
+   F1011_NO				NUMBER(3)	not null,
    F1062_Desc           VARCHAR(96),
    F1062_IsUsed         NUMBER(5),
    F1064_CODE           VARCHAR(48),
@@ -512,7 +501,7 @@ create table TB1064_Strap
 (
    F1064_CODE           VARCHAR(48) not null,
    F1046_CODE           VARCHAR(48),
-   F1064_TYPE           NUMBER(5),
+   F1011_NO           	NUMBER(5),
    F1064_NUM            VARCHAR(48),
    F1064_DESC           VARCHAR(96),
    F1042_CODE_RelatedBay VARCHAR(48),
@@ -528,7 +517,7 @@ create table TB1065_LogicalLink
    F1065_Type           NUMBER(5),
    F1046_CODE_IEDSend   VARCHAR(48),
    F1046_CODE_IEDRecv   VARCHAR(48),
-   CB_CODE          VARCHAR(48),
+   F1065_CBCODDE        VARCHAR(48),
    primary key (F1065_CODE)
 );
 
