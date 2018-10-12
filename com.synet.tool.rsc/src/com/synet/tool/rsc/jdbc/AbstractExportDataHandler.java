@@ -154,9 +154,10 @@ public abstract class AbstractExportDataHandler {
 				connect.commit();
 			}
 			Long endTime = System.currentTimeMillis();
-			console.append(tableName + "导入用时：" + (endTime - startTime));
+			console.append(tableName + "导出用时：" + (endTime - startTime));
 		} catch (Exception e) {
 			e.printStackTrace();
+			console.append(tbIndex + "数据导出异常：" + e.getMessage());
 		}
 	}
 	

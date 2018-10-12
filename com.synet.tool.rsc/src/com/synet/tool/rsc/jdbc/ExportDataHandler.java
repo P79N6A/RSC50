@@ -116,15 +116,18 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			ConsoleManager.getInstance().append("获取数据库连接失败，导出终止！");
 			return false;
 		}
+		int tbIndex = -1;
 		try {
 			monitor.beginTask("开始导出", tb_indice.length*2);
 			long start = System.currentTimeMillis();
 			for (int idx = tb_indice.length-1; idx > -1; idx--) {
-				clearTableDate(tb_indice[idx], monitor);
+				tbIndex = tb_indice[idx];
+				clearTableDate(tbIndex, monitor);
 				monitor.worked(1);
 			}
 			for (int idx = 0; idx < tb_indice.length; idx++) {
-				exprotTableDate(tb_indice[idx], monitor);
+				tbIndex = tb_indice[idx];
+				exprotTableDate(tbIndex, monitor);
 				monitor.worked(1);
 			}
 			long time = (System.currentTimeMillis() - start) / 1000;
@@ -132,12 +135,12 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			monitor.done();
 		} catch (Exception e) {
 			e.printStackTrace();
+			ConsoleManager.getInstance().append(tbIndex + "数据导出异常：" + e.getMessage());
 			try {
 				connect.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			ConsoleManager.getInstance().append("数据导出异常：" + e.getMessage());
 			return false;
 		} finally {
 			if (connect != null) {
@@ -271,8 +274,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1041Sql() {
-		return "INSERT INTO TB1041_SUBSTATION(F1041_CODE,F1041_NAME,F1041_DESC,F1041_DQNAME,F1041_DQDESC,F1041_COMPANY,F1042_VOLTAGEH,F1042_VOLTAGEM,F1042_VOLTAGEL) VALUES " +
-				"(?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1041_SUBSTATION(F1041_CODE,F1041_NAME,F1041_DESC,F1041_DQNAME,F1041_DQDESC) VALUES " +
+				"(?,?,?,?,?)";
 	}
 	
 	@Override
@@ -284,17 +287,13 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1041Desc());
 		setSring(preState, index++, entity.getF1041DqName());
 		setSring(preState, index++, entity.getF1041Dqdesc());
-		setSring(preState, index++, entity.getF1041Company());
-		setInt(preState, index++, entity.getF1042VoltageH());
-		setInt(preState, index++, entity.getF1042VoltageM());
-		setInt(preState, index++, entity.getF1042VoltageL());
 	}
 	
 	@Override
 	protected String getTb1042Sql() {
 		return "INSERT INTO TB1042_BAY(F1042_CODE,F1041_CODE,F1042_NAME,F1042_DESC,F1042_VOLTAGE," +
-				"F1042_CONNTYPE,F1042_DEVTYPE,F1042_IEDSOLUTION)" +
-				" VALUES (?,?,?,?,?,?,?,?)";
+				"F1042_ConnType)" +
+				" VALUES (?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -307,8 +306,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1042Desc());
 		setInt(preState, index++, entity.getF1042Voltage());
 		setInt(preState, index++, entity.getF1042ConnType());
-		setInt(preState, index++, entity.getF1042DevType());
-		setInt(preState, index++, entity.getF1042IedSolution());
 	}
 	
 	@Override
@@ -536,7 +533,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	}
 	@Override
 	protected String getTb1052Sql() {
-		return "INSERT INTO TB1052_CORE(F1052_CODE,PARENT_CODE,F1052_TYPE,F1052_NO,F1048_CODE_A,F1048_CODE_B)" +
+		return "INSERT INTO TB1052_CORE(F1052_CODE,F1052_PARENT_CODE,F1052_TYPE,F1052_NO,F1048_CODE_A,F1048_CODE_B)" +
 				" VALUES (?,?,?,?,?,?)";
 	}
 	
@@ -600,8 +597,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1055Sql() {
-		return "INSERT INTO TB1055_GCB(CB_CODE,F1046_CODE,CBNAME,CBID,MACADDR,VLANID,VLANPRIORITY,APPID," +
-				"DATASET,DSDESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1055_GCB(F1055_CODE,F1046_CODE,F1055_CBNAME,F1055_CBID,F1055_MACADDR,F1055_VLANID,F1055_VLANPRIORITY,F1055_APPID," +
+				"F1055_DATASET,F1055_DESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -627,8 +624,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1056Sql() {
-		return "INSERT INTO TB1056_SVCB(CB_CODE,F1046_CODE,CBNAME,CBID,MACADDR,VLANID,VLANPRIORITY,APPID,DATASET," +
-				"DSDESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1056_SVCB(F1056_CODE,F1046_CODE,F1056_CBNAME,F1056_CBID,F1056_MACADDR,F1056_VLANID,F1056_VLANPRIORITY,F1056_APPID,F1056_DATASET," +
+				"F1056_DESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -787,8 +784,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1062Sql() {
-		return "INSERT INTO TB1062_PIN(F1062_CODE,F1046_CODE,F1062_REFADDR,F1062_DESC,F1062_ISUSED," +
-				"F1064_CODE) VALUES (?,?,?,?,?,?)";
+		return "INSERT INTO TB1062_PIN(F1062_CODE,F1046_CODE,F1062_REFADDR,F1011_NO,F1062_DESC,F1062_ISUSED," +
+				"F1064_CODE) VALUES (?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -802,6 +799,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			setSring(preState, index++, null);
 		}
 		setSring(preState, index++, entity.getF1062RefAddr());
+		setInt(preState, index++, entity.getF1011No());
 		setSring(preState, index++, entity.getF1062Desc());
 		setInt(preState, index++, entity.getF1062IsUsed());
 		if (entity.getTb1064StrapByF1064Code() != null) {
@@ -862,7 +860,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1064Sql() {
-		return "INSERT INTO TB1064_STRAP(F1064_CODE,F1046_CODE,F1064_TYPE,F1064_NUM,F1064_DESC," +
+		return "INSERT INTO TB1064_STRAP(F1064_CODE,F1046_CODE,F1011_NO,F1064_NUM,F1064_DESC," +
 				"F1042_CODE_RELATEDBAY) VALUES (?,?,?,?,?,?)";
 	}
 	
@@ -885,7 +883,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1065Sql() {
 		return "INSERT INTO TB1065_LOGICALLINK(F1065_CODE,F1065_TYPE,F1046_CODE_IEDSEND,F1046_CODE_IEDRECV," +
-				"CB_CODE) VALUES (?,?,?,?,?)";
+				"F1065_CBCODDE) VALUES (?,?,?,?,?)";
 	}
 	
 	@Override
@@ -992,7 +990,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1069Sql() {
-		return "INSERT INTO TB1069_RCDCHANNELA(F1069_CODE,IED_CODE,F1069_INDEX,F1069_TYPE,F1069_PHASE," +
+		return "INSERT INTO TB1069_RCDCHANNELA(F1069_CODE,F1046_CODE,F1069_INDEX,F1069_TYPE,F1069_PHASE," +
 				"F1043_CODE,F1061_CODE,F1058_CODE) VALUES (?,?,?,?,?,?,?,?)";
 	}
 	
@@ -1049,7 +1047,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1072Sql() {
-		return "INSERT INTO TB1072_RCDCHANNELD(F1072_CODE,IED_CODE,F1072_INDEX,F1072_TYPE,F1061_CODE,F1058_CODE)" +
+		return "INSERT INTO TB1072_RCDCHANNELD(F1072_CODE,F1046_CODE,F1072_INDEX,F1072_TYPE,F1061_CODE,F1058_CODE)" +
 				" VALUES (?,?,?,?,?,?)";
 	}
 	
