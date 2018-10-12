@@ -41,6 +41,7 @@ public class SecPwrBrkService extends BaseService {
 	public List<Tb1092PowerkkEntity> importData(String filePath) {
 		List<Tb1092PowerkkEntity> result = new ArrayList<>();
 		result = new ImportInfoParser().getPowerkkList(filePath);
+		beanDao.insertBatch(result);
 		return result;
 		
 	}

@@ -42,6 +42,7 @@ public class SecLockBrkService extends BaseService {
 	public List<Tb1091IotermEntity> importData(String filePath) {
 		List<Tb1091IotermEntity> result = new ArrayList<>();
 		result = new ImportInfoParser().getIotermList(filePath);
+		beanDao.insertBatch(result);
 		return result;
 		
 	}

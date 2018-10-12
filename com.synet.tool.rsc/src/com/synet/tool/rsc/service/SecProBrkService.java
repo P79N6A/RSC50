@@ -91,6 +91,7 @@ public class SecProBrkService extends BaseService {
 	public List<Tb1093VoltagekkEntity> importData(String filePath) {
 		List<Tb1093VoltagekkEntity> result = new ArrayList<>();
 		result = new ImportInfoParser().getVoltagekkList(filePath);
+		beanDao.insertBatch(result);
 		return result;
 		
 	}

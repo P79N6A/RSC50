@@ -43,6 +43,7 @@ public class SecFibreService extends BaseService {
 	public List<Tb1090LineprotfiberEntity> importData(String filePath) {
 		List<Tb1090LineprotfiberEntity> result = new ArrayList<>();
 		result = new ImportInfoParser().getLineprotfiberList(filePath);
+		beanDao.insertBatch(result);
 		return result;
 		
 	}
