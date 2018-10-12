@@ -10,6 +10,7 @@ public class Tb1062PinEntity {
     private String f1062RefAddr;
     private String f1062Desc;
     private int f1062IsUsed;
+    private int f1011No;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
 
@@ -45,7 +46,15 @@ public class Tb1062PinEntity {
         this.f1062IsUsed = f1062IsUsed;
     }
 
-    @Override
+    public int getF1011No() {
+		return f1011No;
+	}
+
+	public void setF1011No(int f1011No) {
+		this.f1011No = f1011No;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -53,6 +62,7 @@ public class Tb1062PinEntity {
         Tb1062PinEntity that = (Tb1062PinEntity) o;
 
         if (f1062IsUsed != that.f1062IsUsed) return false;
+        if (f1011No != that.f1011No) return false;
         if (f1062Code != null ? !f1062Code.equals(that.f1062Code) : that.f1062Code != null) return false;
         if (f1062Desc != null ? !f1062Desc.equals(that.f1062Desc) : that.f1062Desc != null) return false;
         if (f1062RefAddr != null ? !f1062RefAddr.equals(that.f1062RefAddr) : that.f1062RefAddr != null) return false;
@@ -66,6 +76,7 @@ public class Tb1062PinEntity {
         result = 31 * result + (f1062RefAddr != null ? f1062RefAddr.hashCode() : 0);
         result = 31 * result + (f1062Desc != null ? f1062Desc.hashCode() : 0);
         result = 31 * result + f1062IsUsed;
+        result = 31 * result + f1011No;
         return result;
     }
 

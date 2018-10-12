@@ -11,6 +11,9 @@
         <property name="f1062RefAddr">
             <column name="F1062_RefAddr" sql-type="varchar" length="48" not-null="true"/>
         </property>
+        <property name="f1011No">
+            <column name="F1011_NO" sql-type="int" not-null="true"/>
+        </property>
         <property name="f1062Desc">
             <column name="F1062_Desc" sql-type="varchar" length="96"/>
         </property>

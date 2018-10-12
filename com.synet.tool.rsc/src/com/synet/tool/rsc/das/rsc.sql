@@ -446,6 +446,7 @@ create table TB1062_PIN
    F1062_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
    F1062_RefAddr        varchar(48) not null,
+   F1011_NO				INT not null,
    F1062_Desc           varchar(96),
    F1062_IsUsed         INT not null,
    F1064_CODE           varchar(48),
