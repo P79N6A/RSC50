@@ -10,7 +10,7 @@ import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 public class PhyconnEntityService extends BaseService {
 
 	public void saveBatch(List<Tb1053PhysconnEntity> list) {
-		beanDao.saveBatch(list);
+		beanDao.insertBatch(list);
 	}
 
 	public Tb1053PhysconnEntity existEntity(Tb1053PhysconnEntity physconnEntity) {

@@ -9,7 +9,7 @@ import com.synet.tool.rsc.model.Tb1051CableEntity;
 public class CableEntityService extends BaseService{
 
 	public void saveBatch(List<Tb1051CableEntity> list) {
-		beanDao.saveBatch(list);
+		beanDao.insertBatch(list);
 	}
 	
 	public Tb1051CableEntity existEntity(Tb1051CableEntity cableEntity) {
