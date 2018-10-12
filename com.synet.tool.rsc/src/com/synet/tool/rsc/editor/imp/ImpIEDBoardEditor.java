@@ -161,27 +161,18 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			// 创建板卡和端口
 			int boardNum = 0;
 			for (IM103IEDBoardEntity entity : boards) {
-				IM103IEDBoardEntity tempIEDBoard = improtInfoService.existsEntity(entity);
-				if (tempIEDBoard == null){
+				boolean match = ied.getF1046Manufacturor().equals(entity.getManufacturor())
+						&& ied.getF1046Model().equals(entity.getDevName())
+						&& ied.getF1046ConfigVersion().equals(entity.getConfigVersion());
+				if (!match) {
 					continue;
 				}
 				String portNumStr = entity.getPortNum();
-				System.out.println(portNumStr);
-//				int portNum = 0;
-//				if (portNumStr != null) {
-//					try {
-//						portNum = Integer.valueOf(portNumStr);
-//					} catch(Exception e) {
-//					}
-//				}
 				Tb1047BoardEntity boardEntity = RscObjectUtils.createBoardEntity();
 				boardEntity.setTb1046IedByF1046Code(ied);
 				boardEntity.setF1047Slot(entity.getBoardIndex());
 				boardEntity.setF1047Desc(entity.getBoardModel());
 				boardEntity.setF1047Type(entity.getBoardType());
-//				if (portNum < 1) { // 只导入端口数>0的板卡
-//					continue;
-//				}
 				boardEntityService.insert(boardEntity);
 				boardNum++;
 				if (!StringUtil.isEmpty(portNumStr)) {
@@ -191,7 +182,6 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 						if (StringUtil.isEmpty(port)) {
 							continue;
 						}
-						portCount++;
 						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
 						portEntity.setTb1047BoardByF1047Code(boardEntity);
 						portEntity.setF1048No(port);
@@ -206,30 +196,16 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 						portList.add(portEntity);
 					}
 					beandao.insertBatch(portList);
-//					portCount += portList.size();
+					portCount += portList.size();
 				}
-//				if (portNum > 0) {
-//					List<Tb1048PortEntity> ports = new ArrayList<>();
-//					char A = 'A';
-//					for (int i = 0; i < portNum; i++) {
-//						char c = (char) (A + i);
-//						Tb1048PortEntity portEntity = RscObjectUtils.createPortEntity();
-//						portEntity.setTb1047BoardByF1047Code(boardEntity);
-//						portEntity.setF1048No("" + c);
-//						portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
-//						portEntity.setF1048Plug(DBConstants.PLUG_FC);
-//						ports.add(portEntity);
-//					}
-//					beandao.insertBatch(ports);
-//				}
 			}
 			// 更新板卡数量
 			ied.setF1046boardNum(boardNum);
 			boardCount += boardNum;
 			beandao.update(ied);
 		}
-		console.append("导入板卡数：" + boardCount);
-		console.append("导入端口数：" + portCount);
+		console.append("为 " + ieds.size() +
+				" 台装置，导入板卡数：" + boardCount + "，导入端口数：" + portCount);
 	}
 
 	private boolean isMatch(Tb1047BoardEntity iedboard, IM103IEDBoardEntity board) {
@@ -302,10 +278,11 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 
 	private void refreshBompIEDTable(List<IM103IEDBoardEntity> iedBoardList) {
 //		IM103IEDBoardEntity iedBoard = (IM103IEDBoardEntity) table.getSelection();
-		if (iedBoardList == null || iedBoardList.size() <= 0) return;
+		if (iedBoardList == null || iedBoardList.size() <= 0) 
+			return;
 		List<Tb1046IedEntity> inputs = new ArrayList<>();
 		for (IM103IEDBoardEntity iedBoard : iedBoardList) {
-			boards = getIedBoards(iedBoard);
+			List<IM103IEDBoardEntity> boardList = getIedBoards(iedBoard);
 			List<Tb1046IedEntity> ieds = iedEntityService.getIedByIM103IEDBoard(iedBoard);
 			if (ieds == null || ieds.size() <= 0) {
 				console.append("装置[" + iedBoard.getDevName() + "]不存在！");
@@ -316,7 +293,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 					ied.setConflict(DBConstants.NO);
 					ied.setOverwrite(false);
 				} else {
-					if (f1046boardNum != boards.size()) {
+					if (f1046boardNum != boardList.size()) {
 						ied.setConflict(DBConstants.YES);
 						ied.setOverwrite(true);
 					} else {
@@ -324,7 +301,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 						boolean match = true;
 						for (Tb1047BoardEntity iedboard : iedboards) {
 							boolean find = false;
-							for (IM103IEDBoardEntity board : boards) {
+							for (IM103IEDBoardEntity board : boardList) {
 								if (isMatch(iedboard, board)) {
 									find = true;
 									break;
@@ -341,6 +318,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				}
 			}
 			inputs.addAll(ieds);
+			boards.addAll(boardList);
 		}
 		tableComp.setInput(inputs);
 	}
