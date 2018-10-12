@@ -191,10 +191,15 @@ public class ExcelImportEditor extends BaseConfigEditor {
 				for (int i=0; i<fLen; i++) {
 					IField f = vfields[i];
 					String fieldName = f.getName();
-					if ("index".equals(fieldName))
+					if ("index".equals(fieldName)) {
 						row[i] = "" + index;
-					else
-						row[i] = "" + ObjectUtil.getProperty(o, fieldName);
+					} else {
+						Object obj = ObjectUtil.getProperty(o, fieldName);
+						if (obj == null) {
+							obj = "";
+						}
+						row[i] = "" + obj;
+					}
 				}
 				exportData.add(row);
 				index++;
@@ -209,6 +214,7 @@ public class ExcelImportEditor extends BaseConfigEditor {
 		ExcelUtils.addValue("data", exportData);
 		ExcelFileManager2007.saveExcelFile(getClass(), UICommonConstants.EXCEL_COMM_EXPORT_2007, fileName);
 		long time = (System.currentTimeMillis() - start) / 1000;
+		console.append(fileName + "导出完成");
 		System.out.println("导出耗时：" + time + "秒");
 	}
 }

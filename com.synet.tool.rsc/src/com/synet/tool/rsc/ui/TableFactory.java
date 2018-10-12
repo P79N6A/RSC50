@@ -69,6 +69,8 @@ public class TableFactory {
 	public static final String PROBLEMS		  				= "problems";
 	public static final String MODEL_RULE_TABLE		  		= "ModelRuleTable";
 	
+	public static final String IED_TABLE		  		    = "IEDTable";
+	
 	private static UIConfig uicfg = UIConfig.getInstance();
 	
 	public static RuleTable getModelRuleTable(Composite container) {
@@ -323,6 +325,11 @@ public class TableFactory {
 	
 	public static DevKTable getPortTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(PORT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getIEDTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(IED_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 }

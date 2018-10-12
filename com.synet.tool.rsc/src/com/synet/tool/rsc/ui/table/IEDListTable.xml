@@ -10,11 +10,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="装置名称" editor="text" name="devDesc" width="200" default=""/>
   <field desc="所属间隔" editor="text" name="bay" width="150" default=""/> 
   <field desc="所属屏柜" editor="text" name="cubicle" width="100" default=""/> 
-  <field desc="A网IP" editor="text" name="netAIP" width="100" default=""/> 
-  <field desc="B网IP" editor="text" name="netBIP" width="100" default=""/> 
   <field desc="生产厂家" editor="text" name="manufacturor" width="100" default=""/> 
   <field desc="装置型号" editor="text" name="devType" width="100" default=""/> 
   <field desc="装置版本号" editor="text" name="devVersion" width="100" default=""/> 
+  <field desc="A网IP" editor="text" name="netAIP" width="100" default=""/> 
+  <field desc="B网IP" editor="text" name="netBIP" width="100" default=""/> 
   <!-- <field desc="A/B套" editor="text" name="AorB" width="100" default=""/> 
   <field desc="保护分类（国产、进口）" editor="text" name="protClassify" width="100" default=""/> 
   <field desc="保护型号" editor="text" name="protModel" width="100" default=""/> 
