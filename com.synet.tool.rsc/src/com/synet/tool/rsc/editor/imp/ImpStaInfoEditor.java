@@ -5,21 +5,29 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.MmsfcdaService;
@@ -57,7 +65,8 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 		titleList = SwtUtil.createList(container, gridData);
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		Composite btComp = SwtUtil.createComposite(container, btData, 3);
+		btExport = SwtUtil.createPushButton(btComp, "导出Excel", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入监控信息", new GridData());
 		table =TableFactory.getStaInfoTable(container);
@@ -77,6 +86,13 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btExport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				exportExcel();
+			}
+		});
+		
 		btCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -91,6 +107,49 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 				importData();
 			}
 		});
+	}
+
+	protected void exportExcel() {
+		final String filePath = DialogHelper.selectDirectory(getShell(), "");
+		if (filePath == null) return;
+		ProgressManager.execute(new IRunnableWithProgress() {
+			
+			@Override
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				IField[] vfields = getExportFields();
+				monitor.setTaskName("正在查询装置信息");
+				List<Tb1046IedEntity> ieds = iedEntityService.getIedList();
+				if (ieds != null && ieds.size() > 0) {
+					monitor.beginTask("开始导出", ieds.size());
+					long start = System.currentTimeMillis();
+					for (Tb1046IedEntity ied : ieds) {
+						monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
+						List<Object> list = new ArrayList<>();
+						List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
+						if (mmsList != null && mmsList.size() > 0) {
+							for (Tb1058MmsfcdaEntity mms : mmsList) {
+								IM109StaInfoEntity staInfoEntity = new IM109StaInfoEntity();
+								staInfoEntity.setDevName(ied.getF1046Name());
+								staInfoEntity.setDevDesc(ied.getF1046Desc());
+								staInfoEntity.setMmsRefAddr(mms.getF1058RefAddr());
+								staInfoEntity.setMmsDesc(mms.getF1058Desc());
+								list.add(staInfoEntity);
+							}
+						}
+						if (list.size() > 0) {
+							String fileName = filePath + "/" + ied.getF1046Name() + "监控信息点表.xlsx";
+							exportTemplateExcel(fileName, "监控信息点表", vfields, list);
+						}
+						monitor.worked(1);
+					}
+					long time = (System.currentTimeMillis() - start) / 1000;
+					monitor.setTaskName("导出耗时：" + time + "秒");
+					monitor.done();
+				}
+			}
+		});
+		
 	}
 
 	@SuppressWarnings("unchecked")

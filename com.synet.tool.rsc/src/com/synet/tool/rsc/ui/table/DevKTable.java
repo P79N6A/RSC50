@@ -124,4 +124,9 @@ public class DevKTable extends RKTable {
 		}
 		super.saveCellValue(data, property, value);
 	}
+	
+	@Override
+	public IField[] getExportFields() {
+		return super.getExportFields();
+	}
 }
