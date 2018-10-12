@@ -9,7 +9,7 @@ package com.synet.tool.rsc.model;
 public class IM103IEDBoardEntity {
 
 	private String im103Code;
-	private String devName; 	//装置Name
+	private String devName; 	//装置Name 保护型号
 	private String devDesc;		//装置名称
 	private String manufacturor;//制造厂家
 //	private String devModel;	//保护型号
