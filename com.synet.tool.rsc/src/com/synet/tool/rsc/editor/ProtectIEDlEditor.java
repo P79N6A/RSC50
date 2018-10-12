@@ -383,9 +383,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 
 	private String getLnName(String f1058RefAddr) {
 		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf("$"));
-		temp = temp.replaceAll("\\d+","");
-		String result = temp.substring(temp.length() - 4);
-		return result;
+		return DataUtils.getLnClass(temp);
 	}
 
 	/**

@@ -17,6 +17,8 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.F1011_NO;
 
 public class LogicLinkParserNew {
 	
@@ -112,7 +114,23 @@ public class LogicLinkParserNew {
 		pin.setF1062RefAddr(pinRefAddr);
 		pin.setF1062Desc(pinDesc);
 		pin.setF1062IsUsed(1);
+		setF1011No(pin);
 		beanDao.insert(pin);
 		return circuit;
 	}
+	
+	private void setF1011No(Tb1062PinEntity pin) {
+		String intAddr = pin.getF1062RefAddr();
+		int p = intAddr.indexOf('.');
+		if (p < 1) {
+			return;
+		}
+		String lnClass = DataUtils.getLnClass(intAddr.substring(0, p));
+		String temp = intAddr.substring(p + 1);
+		p = temp.indexOf('.');
+		String doName = (p > 0) ? temp.substring(0, p) : temp;
+		int f1011No = F1011_NO.getType("", lnClass, doName, pin.getF1062Desc()).getId();
+		pin.setF1011No(f1011No);
+	}
+
 }
