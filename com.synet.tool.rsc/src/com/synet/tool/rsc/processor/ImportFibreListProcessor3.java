@@ -10,6 +10,7 @@ import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.common.valid.DataTypeChecker;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.RSCProperties;
@@ -22,6 +23,7 @@ import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
 import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
+import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.service.CableEntityService;
 import com.synet.tool.rsc.service.CoreEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
@@ -70,6 +72,12 @@ public class ImportFibreListProcessor3 {
 		fibreListEntitieList.clear();
 		fibreListEntitieList.addAll(list);
 		
+		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+		beanDao.deleteAll(Tb1051CableEntity.class);
+		beanDao.deleteAll(Tb1052CoreEntity.class);
+		beanDao.deleteAll(Tb1053PhysconnEntity.class);
+		beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
+		
 		if (list == null || list.size() <= 0) 
 			return;
 		List<Tb1041SubstationEntity> substationList = substationService.getAllSubstation();
@@ -113,9 +121,12 @@ public class ImportFibreListProcessor3 {
 			if (iedEntityA == null || iedEntityB == null) {
 				String msg = "光缆 " + cableCode + " 连接有误：";
 				if (iedEntityA == null) {
-					msg += "找不到装置A[" + entity.getDevNameA() + "] ";
+					msg += "找不到装置A[" + entity.getDevNameA() + "]";
 				}
 				if (iedEntityB == null) {
+					if (iedEntityA == null) {
+						msg += "，";
+					}
 					msg += "找不到装置B[" + entity.getDevNameB() + "]";
 				}
 				SCTLogger.error(msg);
@@ -124,6 +135,21 @@ public class ImportFibreListProcessor3 {
 			}
 			Tb1050CubicleEntity cubicleEntityA = iedEntityA.getTb1050CubicleEntity();
 			Tb1050CubicleEntity cubicleEntityB = iedEntityB.getTb1050CubicleEntity();
+			if (cubicleEntityA == null || cubicleEntityB == null) {
+				String msg = "光缆 " + cableCode + " 连接有误：";
+				if (cubicleEntityA == null) {
+					msg += "找不到装置[" + iedEntityA.getF1046Name() + "]所在屏柜A";
+				}
+				if (cubicleEntityB == null) {
+					if (cubicleEntityA == null) {
+						msg += "，";
+					}
+					msg += "找不到装置[" + iedEntityB.getF1046Name() + "]所在屏柜B";
+				}
+				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "屏柜检查", "", msg));
+				continue;
+			}
 			boolean existsCable = !StringUtil.isEmpty(cableCode);
 			// 添加光缆和芯线
 			if (existsCable) {
