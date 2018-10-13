@@ -5,10 +5,15 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,11 +21,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.dialog.ExportIedDialog;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM105BoardWarnEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.service.BoardEntityService;
@@ -28,6 +37,7 @@ import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.DateUtils;
 
 /**
  * 导入信息->告警与板卡关联表 树菜单编辑器。
@@ -65,7 +75,8 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
 		
-		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		Composite btComp = SwtUtil.createComposite(container, btData, 3);
+		btExport = SwtUtil.createPushButton(btComp, "导出Excel", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入告警", new GridData());
 		
@@ -85,6 +96,13 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btExport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				exportExcel();
+			}
+		});
+		
 		btCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -99,6 +117,52 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				importData();
 			}
 		});
+	}
+
+	protected void exportExcel() {
+		ExportIedDialog dialog = new ExportIedDialog(getShell());
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			final String filePath = dialog.getFilePath();
+			final List<Tb1046IedEntity> ieds = dialog.getIeds();
+			if (filePath == null) return;
+			ProgressManager.execute(new IRunnableWithProgress() {
+				
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+				InterruptedException {
+					IField[] vfields = getExportFields();
+					if (ieds != null && ieds.size() > 0) {
+						monitor.beginTask("开始导出", ieds.size());
+						long start = System.currentTimeMillis();
+						for (Tb1046IedEntity ied : ieds) {
+							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
+							List<Object> list = new ArrayList<>();
+							List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
+							if (mmsList != null && mmsList.size() > 0) {
+								for (Tb1058MmsfcdaEntity mms : mmsList) {
+									IM105BoardWarnEntity entity = new IM105BoardWarnEntity();
+									entity.setDevName(ied.getF1046Name());
+									entity.setDevDesc(ied.getF1046Desc());
+									entity.setBoardCode(ied.getF1046boardNum() + "");
+									entity.setAlarmRefAddr(mms.getF1058RefAddr());
+									entity.setAlarmDesc(mms.getF1058Desc());
+									list.add(entity);
+								}
+							}
+							if (list.size() > 0) {
+								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
+								String fileName = filePath + "/" + ied.getF1046Name() + "告警与板卡关联表" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "告警与板卡关联表", vfields, list);
+							}
+							monitor.worked(1);
+						}
+						long time = (System.currentTimeMillis() - start) / 1000;
+						monitor.setTaskName("导出耗时：" + time + "秒");
+						monitor.done();
+					}
+				}
+			}, true);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
