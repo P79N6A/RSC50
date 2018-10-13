@@ -5,10 +5,15 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,10 +21,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.dialog.ExportIedDialog;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
+import com.synet.tool.rsc.model.IM106PortLightEntity;
 import com.synet.tool.rsc.model.IM108BrkCfmEntity;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1048PortEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
@@ -28,6 +41,7 @@ import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.DateUtils;
 
 /**
  * 导入信息->跳合闸反校关联表 树菜单编辑器。
@@ -66,7 +80,8 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
 		
-		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		Composite btComp = SwtUtil.createComposite(container, btData, 3);
+		btExport = SwtUtil.createPushButton(btComp, "导出Excel", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入跳合闸反校", new GridData());
 		
@@ -86,6 +101,13 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 			}
 		});
 		
+		btExport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				exportExcel();
+			}
+		});
+		
 		btCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -100,6 +122,64 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 				importData();
 			}
 		});
+	}
+	
+	protected void exportExcel() {
+		ExportIedDialog dialog = new ExportIedDialog(getShell());
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			final String filePath = dialog.getFilePath();
+			final List<Tb1046IedEntity> ieds = dialog.getIeds();
+			if (filePath == null) return;
+			ProgressManager.execute(new IRunnableWithProgress() {
+				
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+				InterruptedException {
+					IField[] vfields = getExportFields();
+					if (ieds != null && ieds.size() > 0) {
+						monitor.beginTask("开始导出", ieds.size());
+						long start = System.currentTimeMillis();
+						for (Tb1046IedEntity ied : ieds) {
+							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
+							List<Object> list = new ArrayList<>();
+							List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
+							if (pinList != null && pinList.size() <= 0) continue; 
+							for (Tb1062PinEntity pinEntity : pinList) {
+								IM108BrkCfmEntity entity = new IM108BrkCfmEntity();
+								entity.setDevName(ied.getF1046Name());
+								entity.setDevDesc(ied.getF1046Desc());
+								entity.setPinRefAddr(pinEntity.getF1062RefAddr());
+								entity.setPinDesc(pinEntity.getF1062Desc());
+								Tb1063CircuitEntity circuitEntity = circuitEntityService.getCircuitEntity(pinEntity);
+								if (circuitEntity != null) {
+									Tb1061PoutEntity poutEntity1 = circuitEntity.getTb1061PoutByF1061CodeConvChk1();
+									Tb1061PoutEntity poutEntity2 = circuitEntity.getTb1061PoutByF1061CodeConvChk2();
+									if (poutEntity1 != null) {
+										entity.setCmdAckVpRefAddr(poutEntity1.getF1061RefAddr());
+										entity.setCmdAckVpDesc(poutEntity1.getF1061Desc());
+									}
+									if (poutEntity2 != null) {
+										entity.setCmdOutVpRefAddr(poutEntity2.getF1061RefAddr());
+										entity.setCmdOutVpDesc(poutEntity2.getF1061Desc());
+									}
+								}
+								list.add(entity);
+							}
+							if (list.size() > 0) {
+								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
+								String fileName = filePath + "/" + ied.getF1046Name() + "跳合闸反校关联表" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "跳合闸反校关联表", vfields, list);
+							}
+							monitor.worked(1);
+						}
+						long time = (System.currentTimeMillis() - start) / 1000;
+						monitor.setTaskName("导出耗时：" + time + "秒");
+						monitor.done();
+						
+					}
+				}
+			}, true);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
