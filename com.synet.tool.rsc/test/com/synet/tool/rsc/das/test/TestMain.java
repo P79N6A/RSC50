@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.synet.tool.rsc.GlobalData;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.jdbc.ExportDataHandler;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -219,7 +219,7 @@ public class TestMain {
 			@Override
 			public void worked(int work) {
 			}};
-		new ExportDataHandler().exportData(GlobalData.getInstance().getConnParam(), monitor);
+		new ExportDataHandler().exportData(RSCProperties.getInstance().getConnParam(), monitor);
 	}
 
 }

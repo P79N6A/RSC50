@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Text;
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.synet.tool.rsc.GlobalData;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.jdbc.ConnParam;
 
 public class OracleConnDialog extends WrappedDialog {
@@ -23,6 +23,7 @@ public class OracleConnDialog extends WrappedDialog {
 	private Text txtUser;
 	private Text txtPassword;
 	private ConnParam connParam;
+	private RSCProperties rscp = RSCProperties.getInstance();
 
 	public OracleConnDialog(Shell parentShell) {
 		super(parentShell);
@@ -48,8 +49,7 @@ public class OracleConnDialog extends WrappedDialog {
 	
 	
 	private void initData() {
-		GlobalData instance = GlobalData.getInstance();
-		connParam = instance.getConnParam();
+		connParam = rscp.getConnParam();
 		if (connParam != null) {
 			txtIp.setText(connParam.getIp());
 			txtPort.setText(connParam.getPort());
@@ -110,7 +110,7 @@ public class OracleConnDialog extends WrappedDialog {
 			connParam.setDbName(dbName);
 			connParam.setUser(user);
 			connParam.setPassword(password);
-			
+			rscp.saveConnParam(connParam);
 		}
 		super.buttonPressed(buttonId);
 	}

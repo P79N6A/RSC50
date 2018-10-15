@@ -10,12 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.shrcn.found.file.util.AProperties;
+import com.synet.tool.rsc.jdbc.ConnParam;
 
 public class RSCProperties extends AProperties {
 
 	private String path = "com/synet/tool/rsc/rsc.properties";
 	private static volatile RSCProperties instance = new RSCProperties();
 	private Map<String, Integer> codeCache = new HashMap<>();
+	private static final String ORA_IP = "ora.ip";
+	private static final String ORA_PORT = "ora.port";
+	private static final String ORA_DB = "ora.db";
+	private static final String ORA_USR = "ora.usr";
+	private static final String ORA_PWD = "ora.pwd";
 
 	private RSCProperties() {
 		init(path);
@@ -73,5 +79,23 @@ public class RSCProperties extends AProperties {
 		DecimalFormat df = new DecimalFormat("0000000000");
         return df.format(icode);
 	}
+
+	public ConnParam getConnParam() {
+		ConnParam cp = new ConnParam();
+		cp.setIp(getProperty(ORA_IP));
+		cp.setPort(getProperty(ORA_PORT));
+		cp.setDbName(getProperty(ORA_DB));
+		cp.setUser(getProperty(ORA_USR));
+		cp.setPassword(getProperty(ORA_PWD));
+		return cp;
+	}
 	
+	public void saveConnParam(ConnParam cp) {
+		setProperty(ORA_IP, cp.getIp(), false);
+		setProperty(ORA_PORT, cp.getPort(), false);
+		setProperty(ORA_DB, cp.getDbName(), false);
+		setProperty(ORA_USR, cp.getUser(), false);
+		setProperty(ORA_PWD, cp.getPassword(), false);
+		saveData();
+	}
 }
