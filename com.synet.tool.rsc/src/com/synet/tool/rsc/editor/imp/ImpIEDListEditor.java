@@ -136,11 +136,13 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
 						monitor.setTaskName("正在导出");
-						long start = System.currentTimeMillis();
 						List<Object> list = new ArrayList<>();
 						for (Tb1046IedEntity ied : ieds) {
 							IM101IEDListEntity entity = new IM101IEDListEntity();
-							entity.setAorB(ied.getF1046AorB() == DBConstants.SUITE_A ? "A":"B" );
+							Integer f1046AorB = ied.getF1046AorB();
+							if (f1046AorB != null) {
+								entity.setAorB(f1046AorB == DBConstants.SUITE_A ? "A":"B" );
+							}
 							if (ied.getTb1042BaysByF1042Code() != null) {
 								entity.setBay(ied.getTb1042BaysByF1042Code().getF1042Name());
 							}
@@ -165,6 +167,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 							entity.setProtType(ied.getF1046protectType());
 							list.add(entity);
 						}
+						long start = System.currentTimeMillis();
 						if (list.size() > 0) {
 							String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 							String fileName = filePath + "/" + "设备台账" + dateStr + ".xlsx";

@@ -143,7 +143,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 									IM105BoardWarnEntity entity = new IM105BoardWarnEntity();
 									entity.setDevName(ied.getF1046Name());
 									entity.setDevDesc(ied.getF1046Desc());
-									entity.setBoardCode(ied.getF1046boardNum() + "");
+									entity.setBoardCode("");
 									entity.setAlarmRefAddr(mms.getF1058RefAddr());
 									entity.setAlarmDesc(mms.getF1058Desc());
 									list.add(entity);
