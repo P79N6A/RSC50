@@ -11,6 +11,11 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 
 public class PoutEntityService extends BaseService{
+	
+	@SuppressWarnings("unchecked")
+	public List<Tb1061PoutEntity> getByIed(Tb1046IedEntity ied) {
+		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, "tb1046IedByF1046Code", ied);
+	}
 
 	/**
 	 * 根据条件查找虚端子

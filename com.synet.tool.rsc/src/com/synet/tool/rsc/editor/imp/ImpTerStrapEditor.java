@@ -142,41 +142,23 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 					if (ieds != null && ieds.size() > 0) {
 						monitor.beginTask("开始导出", ieds.size());
 						long start = System.currentTimeMillis();
-						DictManager dictManager = DictManager.getInstance();
 						for (Tb1046IedEntity ied : ieds) {
 							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
-							List<Object> list = new ArrayList<>();
-							
-							List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
-							if (mmsList != null && mmsList.size() > 0) {
-								for (Tb1058MmsfcdaEntity mms : mmsList) {
-									if (mms.getParentCode() != null) {
-										Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
-												mms.getDataCode());
-										if (statedataEntity != null) {
-											if (statedataEntity.getParentCode() != null) {
-												Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
-														statedataEntity.getParentCode());
-												if (strapEntity != null) {
-													IM107TerStrapEntity entity = new IM107TerStrapEntity();
-													entity.setDevName(ied.getF1046Name());
-													entity.setDevDesc(ied.getF1046Desc());
-													entity.setStrapRefAddr(mms.getF1058RefAddr());
-													entity.setStrapDesc(mms.getF1058Desc());
-													entity.setStrapType(dictManager.getNameById("F1011_NO", strapEntity.getF1064Type()));
-													list.add(entity);
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							if (list.size() > 0) {
+							//导出压板部分
+							List<Object> strapList = getStrapData(ied);
+							if (strapList.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
-								String fileName = filePath + "/" + ied.getF1046Name() + "压板与虚端子关联表" + dateStr + ".xlsx";
-								exportTemplateExcel(fileName, "压板与虚端子关联表", vfields, list);
+								String fileName = filePath + "/" + ied.getF1046Name() + "压板与虚端子关联表(压板部分)" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "压板与虚端子关联表", vfields, strapList);
 							}
+							//导出虚端子部分
+							List<Object> vpList = getVpData(ied);
+							if (vpList.size() > 0) {
+								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
+								String fileName = filePath + "/" + ied.getF1046Name() + "压板与虚端子关联表(虚端子部分)" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "压板与虚端子关联表", vfields, vpList);
+							}
+							
 							monitor.worked(1);
 						}
 						long time = (System.currentTimeMillis() - start) / 1000;
@@ -187,6 +169,67 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 				}
 			}, true);
 		}
+	}
+	
+	private List<Object> getStrapData(Tb1046IedEntity ied) {
+		DictManager dictManager = DictManager.getInstance();
+		List<Object> list = new ArrayList<>();
+		List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
+		if (mmsList != null && mmsList.size() > 0) {
+			for (Tb1058MmsfcdaEntity mms : mmsList) {
+				if (mms.getParentCode() != null) {
+					Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) statedataService.getById(Tb1016StatedataEntity.class,
+							mms.getDataCode());
+					if (statedataEntity != null) {
+						if (statedataEntity.getParentCode() != null) {
+							Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) strapEntityService.getById(Tb1064StrapEntity.class, 
+									statedataEntity.getParentCode());
+							if (strapEntity != null) {
+								IM107TerStrapEntity entity = new IM107TerStrapEntity();
+								entity.setDevName(ied.getF1046Name());
+								entity.setDevDesc(ied.getF1046Desc());
+								entity.setStrapRefAddr(mms.getF1058RefAddr());
+								entity.setStrapDesc(mms.getF1058Desc());
+								entity.setStrapType(dictManager.getNameById("F1011_NO", strapEntity.getF1064Type()));
+								list.add(entity);
+							}
+						}
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
+	private List<Object> getVpData(Tb1046IedEntity ied) {
+		List<Object> list = new ArrayList<>();
+		//开入
+		List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
+		if (pinList != null && pinList.size() > 0) {
+			for (Tb1062PinEntity pinEntity : pinList) {
+				IM107TerStrapEntity entity = new IM107TerStrapEntity();
+				entity.setDevName(ied.getF1046Name());
+				entity.setDevDesc(ied.getF1046Desc());
+				entity.setVpRefAddr(pinEntity.getF1062RefAddr());
+				entity.setVpDesc(pinEntity.getF1062Desc());
+				entity.setVpType("开入");
+				list.add(entity);
+			}
+		}
+		//开出
+		List<Tb1061PoutEntity> poutList = poutEntityService.getByIed(ied);
+		if (poutList != null && poutList.size() > 0) {
+			for (Tb1061PoutEntity poutEntity : poutList) {
+				IM107TerStrapEntity entity = new IM107TerStrapEntity();
+				entity.setDevName(ied.getF1046Name());
+				entity.setDevDesc(ied.getF1046Desc());
+				entity.setVpRefAddr(poutEntity.getF1061RefAddr());
+				entity.setVpDesc(poutEntity.getF1061Desc());
+				entity.setVpType("开出");
+				list.add(entity);
+			}
+		}
+		return list;
 	}
 	
 	@SuppressWarnings("unchecked")
