@@ -131,24 +131,18 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
-							List<Object> list = new ArrayList<>();
-							
-							List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
-							if (pinList != null && pinList.size() > 0) {
-									for (Tb1062PinEntity pinEntity : pinList) {
-									IM104StatusInEntity entity = new IM104StatusInEntity();
-									entity.setDevName(ied.getF1046Name());
-									entity.setDevDesc(ied.getF1046Desc());
-									entity.setPinRefAddr(pinEntity.getF1062RefAddr());
-									entity.setPinDesc(pinEntity.getF1062Desc());
-									list.add(entity);
-								}
+							String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
+							//导出虚端子部分
+							List<Object> vpList = getVpData(ied);
+							if (vpList.size() > 0) {
+								String fileName = filePath + "/" + ied.getF1046Name() + "开入信号映射表(虚端子部分)" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "开入信号映射表", vfields, vpList);
 							}
-							
-							if (list.size() > 0) {
-								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
-								String fileName = filePath + "/" + ied.getF1046Name() + "开入信号映射表" + dateStr + ".xlsx";
-								exportTemplateExcel(fileName, "开入信号映射表", vfields, list);
+							//导出MMS部分
+							List<Object> mmsList = getMssData(ied);
+							if (mmsList.size() > 0) {
+								String fileName = filePath + "/" + ied.getF1046Name() + "开入信号映射表(MMS信号部分)" + dateStr + ".xlsx";
+								exportTemplateExcel(fileName, "开入信号映射表", vfields, mmsList);
 							}
 							monitor.worked(1);
 						}
@@ -160,6 +154,38 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				}
 			}, true);
 		}
+	}
+	
+	private List<Object> getVpData(Tb1046IedEntity ied) {
+		List<Object> list = new ArrayList<>();
+		List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
+		if (pinList != null && pinList.size() > 0) {
+			for (Tb1062PinEntity pinEntity : pinList) {
+				IM104StatusInEntity entity = new IM104StatusInEntity();
+				entity.setDevName(ied.getF1046Name());
+				entity.setDevDesc(ied.getF1046Desc());
+				entity.setPinRefAddr(pinEntity.getF1062RefAddr());
+				entity.setPinDesc(pinEntity.getF1062Desc());
+				list.add(entity);
+			}
+		}
+		return list;
+	}
+	
+	private List<Object> getMssData(Tb1046IedEntity ied) {
+		List<Object> list = new ArrayList<>();
+		List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
+		if (mmsList != null && mmsList.size() > 0) {
+			for (Tb1058MmsfcdaEntity mms : mmsList) {
+				IM104StatusInEntity entity = new IM104StatusInEntity();
+				entity.setDevName(ied.getF1046Name());
+				entity.setDevDesc(ied.getF1046Desc());
+				entity.setMmsRefAddr(mms.getF1058RefAddr());
+				entity.setMmsDesc(mms.getF1058Desc());
+				list.add(entity);
+			}
+		}
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")
