@@ -2,7 +2,9 @@ package com.synet.tool.rsc.processor;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.ui.view.LEVEL;
@@ -50,6 +52,9 @@ public class ImportFibreListProcessor3 {
 	private List<Tb1052CoreEntity> coreEntitieList = new ArrayList<>();//光缆芯线
 	private List<Tb1053PhysconnEntity> physconnEntitieList = new ArrayList<>();
 	
+	//保存处理过的端口，用于验证端口重复
+	Map<String, IM102FibreListEntity> map = new HashMap<String, IM102FibreListEntity>();
+	
 	private Tb1041SubstationEntity substation;
 	
 	public boolean processor(IM100FileInfoEntity fileInfoEntity, List<IM102FibreListEntity> list){
@@ -71,6 +76,7 @@ public class ImportFibreListProcessor3 {
 		physconnEntitieList.clear();
 		fibreListEntitieList.clear();
 		fibreListEntitieList.addAll(list);
+		map.clear();
 		
 		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 		beanDao.deleteAll(Tb1051CableEntity.class);
@@ -150,6 +156,7 @@ public class ImportFibreListProcessor3 {
 				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "屏柜检查", "", msg));
 				continue;
 			}
+		
 			boolean existsCable = !StringUtil.isEmpty(cableCode);
 			// 添加光缆和芯线
 			if (existsCable) {
@@ -208,6 +215,21 @@ public class ImportFibreListProcessor3 {
 			SCTLogger.error(msg);
 			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线和回路", entity.getCableCode(), msg));
 			return;
+		}
+		//检查端口是否重复，并记录非重复端口
+		if (map.containsKey(portA)) {
+			String msg = "端口A重复[" + portA + "]" ;
+			SCTLogger.error(msg);
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", "", msg));
+			return;
+		} else if (map.containsKey(portB)) {
+			String msg = "端口B重复[" + portB + "]" ;
+			SCTLogger.error(msg);
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", "", msg));
+			return;
+		} else {
+			map.put(portA, entity);
+			map.put(portB, entity);
 		}
 		
 		//处理屏柜A跳线
