@@ -140,6 +140,9 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 						monitor.beginTask("开始导出", ieds.size());
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
+							if (monitor.isCanceled()) {
+								break;
+							}
 							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
 							List<Object> list = new ArrayList<>();
 							List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);

@@ -138,6 +138,9 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 						monitor.setTaskName("正在导出");
 						List<Object> list = new ArrayList<>();
 						for (Tb1046IedEntity ied : ieds) {
+							if (monitor.isCanceled()) {
+								break;
+							}
 							IM101IEDListEntity entity = new IM101IEDListEntity();
 							Integer f1046AorB = ied.getF1046AorB();
 							if (f1046AorB != null) {
