@@ -154,5 +154,9 @@ public interface DBConstants {
 	
 	int YES = 1; 	// 是
 	int NO = 2; 	// 否
+
+	String sqlPath = "com/synet/tool/rsc/das/rsc-oracle.sql";
+//	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.sql";
+//	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.txt";
 }
 

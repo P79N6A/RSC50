@@ -7,6 +7,7 @@ public class ConnParam {
 	private String dbName;
 	private String user;
 	private String password;
+	private boolean init;
 	
 	public String getIp() {
 		return ip;
@@ -39,6 +40,12 @@ public class ConnParam {
 		this.password = password;
 	}
 
+	public boolean isInit() {
+		return init;
+	}
+	public void setInit(boolean init) {
+		this.init = init;
+	}
 	public boolean checkParam() {
 		return ip != null && port != null && dbName != null && user != null && password != null;
 	}

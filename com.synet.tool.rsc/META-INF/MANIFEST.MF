@@ -16,5 +16,6 @@ Require-Bundle: org.eclipse.ui,
  com.shrcn.found.dbxapi;bundle-version="1.0.0",
  com.shrcn.business.scl;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/ojdbc6-12.1.0.1-atlassian-hosted.jar,
- .
+Bundle-ClassPath: .,
+ lib/ojdbc6-12.1.0.1-atlassian-hosted.jar,
+ lib/mybatis-3.2.8.jar

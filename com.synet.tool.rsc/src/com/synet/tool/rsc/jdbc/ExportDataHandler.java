@@ -48,6 +48,7 @@ import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
 import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
+import com.synet.tool.rsc.util.SqlHelper;
 
 public class ExportDataHandler extends AbstractExportDataHandler {
 	
@@ -118,15 +119,22 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		}
 		int tbIndex = -1;
 		try {
-			monitor.beginTask("开始导出", tb_indice.length*2);
+			monitor.beginTask("开始导出", tb_indice.length * 2 + 1);
+			monitor.setTaskName("正在初始化数据库");
+			SqlHelper.initOracle(connParam);
 			long start = System.currentTimeMillis();
 			for (int idx = tb_indice.length-1; idx > -1; idx--) {
 				tbIndex = tb_indice[idx];
+				monitor.setTaskName("正在清理表" + tbIndex);
 				clearTableDate(tbIndex, monitor);
 				monitor.worked(1);
 			}
 			for (int idx = 0; idx < tb_indice.length; idx++) {
+				if (monitor.isCanceled()) {
+					break;
+				}
 				tbIndex = tb_indice[idx];
+				monitor.setTaskName("正在导出表" + tbIndex);
 				exprotTableDate(tbIndex, monitor);
 				monitor.worked(1);
 			}

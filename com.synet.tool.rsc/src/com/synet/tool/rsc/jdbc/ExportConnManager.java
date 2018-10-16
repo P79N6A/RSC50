@@ -1,14 +1,12 @@
 package com.synet.tool.rsc.jdbc;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.ui.util.DialogHelper;
-import com.shrcn.found.ui.view.ConsoleManager;
+import com.synet.tool.rsc.util.SqlHelper;
 
 /**
  *线上Oracle数据库连接管理
@@ -20,26 +18,13 @@ public class ExportConnManager {
 //	private String USER = "RSC";
 //	private String PASSWORD = "rsc123456";
 //	
-	private static String driver = "oracle.jdbc.driver.OracleDriver"; //驱动
 	private ConnParam connParam;
    
-	private String getUrl() {
-		return "jdbc:oracle:thin:@" + connParam.getIp() + ":" + connParam.getPort() + ":" + connParam.getDbName();
-	}
-	
 	private Connection createConnection() {
 		if (connParam == null || !connParam.checkParam()) {
 			DialogHelper.showAsynError("导出数据的数据库连接参数错误！");
 		}
-        try {
-			Class.forName(driver);
-			Connection connect = DriverManager.getConnection(getUrl(), connParam.getUser(), connParam.getPassword());
-	        return connect;
-		} catch (SQLException | ClassNotFoundException e) {
-			SCTLogger.error("数据库连接异常：", e);
-			ConsoleManager.getInstance().append("数据库连接异常：" + e.getMessage());
-			return null;
-		}
+		return SqlHelper.getConn(connParam);
 	}
 	
 	/**

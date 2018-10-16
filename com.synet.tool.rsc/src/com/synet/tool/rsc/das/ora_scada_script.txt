@@ -1,142 +1,142 @@
 --//////////////////////////////////////////////////////////////////
 --
---ĞŞ¸Ä¼ÇÂ¼
+--ä¿®æ”¹è®°å½•
 --
---ÈÕÆÚ          ×÷Õß         Ô­Òò
+--æ—¥æœŸ          ä½œè€…         åŸå› 
 --2018/06/14     songx         create tabled
 --			
 --//////////////////////////////////////////////////////////////////
 
---=================================================================²ÎÊı±í=================================================================
+--=================================================================å‚æ•°è¡¨=================================================================
 
---================´´½¨Éè±¸ÀàĞÍ±í£¨SCDÉè±¸ÀàĞÍ±í£©=====================
+--================åˆ›å»ºè®¾å¤‡ç±»å‹è¡¨ï¼ˆSCDè®¾å¤‡ç±»å‹è¡¨ï¼‰=====================
 drop table TB1001_DEVTYPE;
 create table TB1001_DEVTYPE
   (
-  F1001_TYPE       number(5)   not null,   --ÀàĞÍ    
-  F1001_CODE       char(48)    not null,   --´úÂë   
-  F1001_DESC       char(96)    null,       --ÃèÊö     
-  F1001_PARATBL    char(48)    null,       --²ÎÊı±í
-  F1001_PREFIX     char(48)    null        --Ç°×º
+  F1001_TYPE       number(5)   not null,   --ç±»å‹    
+  F1001_CODE       char(48)    not null,   --ä»£ç    
+  F1001_DESC       char(96)    null,       --æè¿°     
+  F1001_PARATBL    char(48)    null,       --å‚æ•°è¡¨
+  F1001_PREFIX     char(48)    null        --å‰ç¼€
   );
 alter table TB1001_DEVTYPE add constraint TB1001_DEVTYPEindex1
 primary key (F1001_CODE);
 
---===============´´½¨¼ÆËãÁ¿¹ØÏµ²ÎÊı±í£¨¼ÆËãÁ¿¹ØÏµ²ÎÊı±í£©================
+--===============åˆ›å»ºè®¡ç®—é‡å…³ç³»å‚æ•°è¡¨ï¼ˆè®¡ç®—é‡å…³ç³»å‚æ•°è¡¨ï¼‰================
 drop table TB1005_EXPRESSMAP;
 create table TB1005_EXPRESSMAP
   (  
-  F1005_CODE       char(48)     not null,   --Ä¿±ê´úÂë  
-  F1005_TYPE       number(3)    not null,   --0=Ò£²âÁ¿£¬1=Ò£ĞÅÁ¿£¬2=µç¶ÈÁ¿
-  F1005_EXPRESS    char(255)    not null ,  --¼ÆËã±í´ïÊ½
-  F1005_STARTMODE  number(3)    not null,   --Æô¶¯·½Ê½£¬0=Ñ­»·£¬1=¶¨Ê±£¬2=Ö¸¶¨ÈÕ£¬3=Ö¸¶¨ÔÂ£¬4=Ö¸¶¨Äê
-  F1005_PERIOD		 number(10)   null,       --Ñ­»·ÖÜÆÚ£¬Ãë
-  F1005_ATMINUTE   number(5)    null,       --¶¨Ê±·ÖÖÓ
-  F1005_ATHOUR     number(5)    null,       --¶¨Ê±Ğ¡Ê±
-  F1005_ATDAY      number(5)    null,       --Ö¸¶¨ÈÕÆÚ
-  F1005_ATMONTH    number(5)    null,       --Ö¸¶¨ÔÂ
-  F1005_ATYEAR     number(5)    null        --Ö¸¶¨Äê
+  F1005_CODE       char(48)     not null,   --ç›®æ ‡ä»£ç   
+  F1005_TYPE       number(3)    not null,   --0=é¥æµ‹é‡ï¼Œ1=é¥ä¿¡é‡ï¼Œ2=ç”µåº¦é‡
+  F1005_EXPRESS    char(255)    not null ,  --è®¡ç®—è¡¨è¾¾å¼
+  F1005_STARTMODE  number(3)    not null,   --å¯åŠ¨æ–¹å¼ï¼Œ0=å¾ªç¯ï¼Œ1=å®šæ—¶ï¼Œ2=æŒ‡å®šæ—¥ï¼Œ3=æŒ‡å®šæœˆï¼Œ4=æŒ‡å®šå¹´
+  F1005_PERIOD		 number(10)   null,       --å¾ªç¯å‘¨æœŸï¼Œç§’
+  F1005_ATMINUTE   number(5)    null,       --å®šæ—¶åˆ†é’Ÿ
+  F1005_ATHOUR     number(5)    null,       --å®šæ—¶å°æ—¶
+  F1005_ATDAY      number(5)    null,       --æŒ‡å®šæ—¥æœŸ
+  F1005_ATMONTH    number(5)    null,       --æŒ‡å®šæœˆ
+  F1005_ATYEAR     number(5)    null        --æŒ‡å®šå¹´
   );
 alter table TB1005_EXPRESSMAP add constraint TB1005_EXPRESSMAPindex1 primary key (F1005_CODE);
 
 
---==============´´½¨Á¿²âÀàĞÍ±í(SCD¶ÔÏóÀàĞÍ±í)=============================
+--==============åˆ›å»ºé‡æµ‹ç±»å‹è¡¨(SCDå¯¹è±¡ç±»å‹è¡¨)=============================
 drop table TB1011_MEASTYPE;
 create table TB1011_MEASTYPE
   (   
-  F1011_NO    number(5) not null,    --ÀàĞÍÖµ
-  F1011_CODE  char(48)  null,        --ÀàĞÍ´úÂë     
-  F1011_DESC  char(96)  not null,    --ÃèÊö   
-  F1011_TBL   char(48)  not null    --±íÃû
+  F1011_NO    number(5) not null,    --ç±»å‹å€¼
+  F1011_CODE  char(48)  null,        --ç±»å‹ä»£ç      
+  F1011_DESC  char(96)  not null,    --æè¿°   
+  F1011_TBL   char(48)  not null    --è¡¨å
   );
 alter table TB1011_MEASTYPE add constraint TB1011_MEASTYPEindex1 primary key  (F1011_NO);
 
 
---==============´´½¨Ä£ÄâÁ¿±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºæ¨¡æ‹Ÿé‡è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1006_ANALOGDATA;
 create table TB1006_ANALOGDATA
 (
-	F1006_CODE		char(48)	not null,	--´úÂë£¨Analog000001~Analog999999£©  -RSC-50
-	F1006_DESC		char(96)	null,		--ÃèÊö£¨È±Ê¡ÌîSCDÖĞµÄÃèÊö£©     -RSC-50
-	F1006_SAFELEVEL		number(10)	null,		--°²È«¼¶£¨È±Ê¡Ìî0£©    -RSC-50
-	PARENT_CODE		char(48)	not null,	--Éè±¸´úÂë                -RSC-50
-	F1011_NO		number(5)	not null,	--ÀàĞÍ       -RSC-50
-	F1006_BYNAME		char(24)	null,		--±ğÃû
-	F0008_NAME		char(48)	not null,	--ÊÂÏî´¦Àí·½Ê½
-	F0009_NAME		char(48)	not null,	--ÊÂÏî¾ä´úÂë
-	F1006_CALCFLAG		number(3)	not null,	--¼ÆËãÁ¿±êÖ¾
-	F1006_PICNAME		char(96)	null,		--ÍÆÍ¼Ãû
-	F1006_PDRMODE		number(3)	null,		--×·ÒäÄ£Ê½
-	F1006_K			float		not null,	--Ğ±ÂÊ
-	F1006_B			float		not null,	--½Ø¾à
-	F1006_ZERODBAND		float		not null,	--ÁãÆ¯
-	F1006_OVERFLOW		float		null,		--ÉÏÒçÖµ
-	F1006_LOWFLOW		float		null,		--ÏÂÒçÖµ
-	F1006_MAXINC		float		not null,	--×î´óÔöÁ¿
-	F1006_HIWARN		float		null,		--¾¯¸æÉÏÏŞ
-	F1006_LOWARN		float		null,		--¾¯¸æÏÂÏŞ
-	F1006_HIALARM		float		null,		--¾¯±¨ÉÏÏŞ
-	F1006_LOALARM		float		null,		--¾¯±¨ÏÂÏŞ
-	F1006_SAVEPERIOD	number(3)	not null,	--´æÅÌÖÜÆÚ
-	F1006_PLANTIME		number(3)	null,		--¼Æ»®¼ä¸ô
-	F1006_DEADTIME		number(5)	not null,	--ËÀÊıÊ±¼äÏŞ
-	F1006_ALARMLEVEL	number(3)	not null,	--´¦ÀíÔ½ÏŞ¼¶±ğ
-	F1006_SAVETYPE		number(3)	null,		--ÀúÊ·Êı¾İ²ÉÑùÀàĞÍ£¨Ë²Ê±Öµ/Æ½¾ùÖµ£©
-	F1006_MANSET		number(3)	null,       --ÖÃÈë±êÖ¾
-	F1006_SAMPLECPMAXINC 	number(3)	null        --Í¬ÆÚ±È½Ï×î´óÔöÁ¿
+	F1006_CODE		char(48)	not null,	--ä»£ç ï¼ˆAnalog000001~Analog999999ï¼‰  -RSC-50
+	F1006_DESC		char(96)	null,		--æè¿°ï¼ˆç¼ºçœå¡«SCDä¸­çš„æè¿°ï¼‰     -RSC-50
+	F1006_SAFELEVEL		number(10)	null,		--å®‰å…¨çº§ï¼ˆç¼ºçœå¡«0ï¼‰    -RSC-50
+	PARENT_CODE		char(48)	not null,	--è®¾å¤‡ä»£ç                 -RSC-50
+	F1011_NO		number(5)	not null,	--ç±»å‹       -RSC-50
+	F1006_BYNAME		char(24)	null,		--åˆ«å
+	F0008_NAME		char(48)	not null,	--äº‹é¡¹å¤„ç†æ–¹å¼
+	F0009_NAME		char(48)	not null,	--äº‹é¡¹å¥ä»£ç 
+	F1006_CALCFLAG		number(3)	not null,	--è®¡ç®—é‡æ ‡å¿—
+	F1006_PICNAME		char(96)	null,		--æ¨å›¾å
+	F1006_PDRMODE		number(3)	null,		--è¿½å¿†æ¨¡å¼
+	F1006_K			float		not null,	--æ–œç‡
+	F1006_B			float		not null,	--æˆªè·
+	F1006_ZERODBAND		float		not null,	--é›¶æ¼‚
+	F1006_OVERFLOW		float		null,		--ä¸Šæº¢å€¼
+	F1006_LOWFLOW		float		null,		--ä¸‹æº¢å€¼
+	F1006_MAXINC		float		not null,	--æœ€å¤§å¢é‡
+	F1006_HIWARN		float		null,		--è­¦å‘Šä¸Šé™
+	F1006_LOWARN		float		null,		--è­¦å‘Šä¸‹é™
+	F1006_HIALARM		float		null,		--è­¦æŠ¥ä¸Šé™
+	F1006_LOALARM		float		null,		--è­¦æŠ¥ä¸‹é™
+	F1006_SAVEPERIOD	number(3)	not null,	--å­˜ç›˜å‘¨æœŸ
+	F1006_PLANTIME		number(3)	null,		--è®¡åˆ’é—´éš”
+	F1006_DEADTIME		number(5)	not null,	--æ­»æ•°æ—¶é—´é™
+	F1006_ALARMLEVEL	number(3)	not null,	--å¤„ç†è¶Šé™çº§åˆ«
+	F1006_SAVETYPE		number(3)	null,		--å†å²æ•°æ®é‡‡æ ·ç±»å‹ï¼ˆç¬æ—¶å€¼/å¹³å‡å€¼ï¼‰
+	F1006_MANSET		number(3)	null,       --ç½®å…¥æ ‡å¿—
+	F1006_SAMPLECPMAXINC 	number(3)	null        --åŒæœŸæ¯”è¾ƒæœ€å¤§å¢é‡
 );
 alter table TB1006_ANALOGDATA
 add constraint   TB1006_ANALOGDATAindex1 primary key (F1006_CODE);
 --create table index TB1006_ANALOGDATAindex4 on TB1006_ANALOGDATA (F1006_DESC);
 
---==============´´½¨×´Ì¬Á¿±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºçŠ¶æ€é‡è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1016_STATEDATA;
 create table TB1016_STATEDATA
 (
-	F1016_CODE		char(48)	not null,	--´úÂë£¨State000001~State999999£©     -RSC-50
-	F1016_DESC		char(96)	null,		--ÃèÊö£¨È±Ê¡ÌîSCDÖĞµÄÃèÊö£©  -RSC-50
-	F1016_SAFELEVEL		number(10)	null,		--°²È«¼¶£¨È±Ê¡Ìî0£©  -RSC-50
-	PARENT_CODE		char(48)	not null,	--Éè±¸´úÂë£¨ÉÏÒ»¼¶Ë÷Òı£©       -RSC-50
-	F1011_NO		number(5)	not null,	--ÀàĞÍ£¨¹¦ÄÜÀàĞÍ£©  -RSC-50
-	F1016_BYNAME		char(24)	null,		--±ğÃû
-	F0008_NAME		char(48)	not null,	--ÊÂÏî´¦Àí·½Ê½
-	F0009_NAME		char(48)	not null,	--ÊÂÏî¾ä´úÂë
-	F1016_CALCFLAG		number(3)	not null,	--¼ÆËãÁ¿±êÖ¾£¨ÊìÊı¾İflag£©
-	F1016_PICNAME		char(96)	null,		--ÍÆÍ¼Ãû£¨ÍÆÍ¼ÖÁÉÏ·½£©
-	F1016_ISPDR		number(3)	null,		--ÊÇ·ñ×·Òä£¨ÀúÊ·¶ÏÃæ£©
-	F1016_PDRNO		number(5)	null,		--×·Òä×éºÅ
-	F1016_DPSFLAG		number(3)	null,		--Ë«Ò£ĞÅ±êÖ¾
-	F1016_MAINSTFLAG	number(3)	null,		--Ö÷Ò£ĞÅ±êÖ¾
-	F1016_DPSCALCFLAG	number(3)	null,		--Ë«Ò£ĞÅ¼ÆËã·½Ê½
-	F1016_SOE		char(48)	null,		--SOE¾ä
-	F1016_SGLIMITVAL	number(5)	null,		--ÊÂ¹ÊÏŞÖµ
-	F1016_ALARMPROCMODE	number(3)	null,		--ÅĞÊÂ¹Ê·½Ê½
-	F1016_PROCBAND		number(3)	null,		--ÅĞÊÂ¹ÊËÀÇø
-	F1016_SGPROCNAME	char(48)	null,		--ÊÂ¹Ê¹ı³ÌÃû
-	F1016_REVFLAG		number(3)	null,		--È¡·´±êÖ¾
-	F1016_ISSTA		number(3)	null		--ÊÇ·ñÍ³¼Æ
-	--F1016_MANSET		number(3)	null        --ÖÃÈë±êÖ¾
+	F1016_CODE		char(48)	not null,	--ä»£ç ï¼ˆState000001~State999999ï¼‰     -RSC-50
+	F1016_DESC		char(96)	null,		--æè¿°ï¼ˆç¼ºçœå¡«SCDä¸­çš„æè¿°ï¼‰  -RSC-50
+	F1016_SAFELEVEL		number(10)	null,		--å®‰å…¨çº§ï¼ˆç¼ºçœå¡«0ï¼‰  -RSC-50
+	PARENT_CODE		char(48)	not null,	--è®¾å¤‡ä»£ç ï¼ˆä¸Šä¸€çº§ç´¢å¼•ï¼‰       -RSC-50
+	F1011_NO		number(5)	not null,	--ç±»å‹ï¼ˆåŠŸèƒ½ç±»å‹ï¼‰  -RSC-50
+	F1016_BYNAME		char(24)	null,		--åˆ«å
+	F0008_NAME		char(48)	not null,	--äº‹é¡¹å¤„ç†æ–¹å¼
+	F0009_NAME		char(48)	not null,	--äº‹é¡¹å¥ä»£ç 
+	F1016_CALCFLAG		number(3)	not null,	--è®¡ç®—é‡æ ‡å¿—ï¼ˆç†Ÿæ•°æ®flagï¼‰
+	F1016_PICNAME		char(96)	null,		--æ¨å›¾åï¼ˆæ¨å›¾è‡³ä¸Šæ–¹ï¼‰
+	F1016_ISPDR		number(3)	null,		--æ˜¯å¦è¿½å¿†ï¼ˆå†å²æ–­é¢ï¼‰
+	F1016_PDRNO		number(5)	null,		--è¿½å¿†ç»„å·
+	F1016_DPSFLAG		number(3)	null,		--åŒé¥ä¿¡æ ‡å¿—
+	F1016_MAINSTFLAG	number(3)	null,		--ä¸»é¥ä¿¡æ ‡å¿—
+	F1016_DPSCALCFLAG	number(3)	null,		--åŒé¥ä¿¡è®¡ç®—æ–¹å¼
+	F1016_SOE		char(48)	null,		--SOEå¥
+	F1016_SGLIMITVAL	number(5)	null,		--äº‹æ•…é™å€¼
+	F1016_ALARMPROCMODE	number(3)	null,		--åˆ¤äº‹æ•…æ–¹å¼
+	F1016_PROCBAND		number(3)	null,		--åˆ¤äº‹æ•…æ­»åŒº
+	F1016_SGPROCNAME	char(48)	null,		--äº‹æ•…è¿‡ç¨‹å
+	F1016_REVFLAG		number(3)	null,		--å–åæ ‡å¿—
+	F1016_ISSTA		number(3)	null,		--æ˜¯å¦ç»Ÿè®¡
+	--F1016_MANSET		number(3)	null        --ç½®å…¥æ ‡å¿—
 );
 alter table TB1016_STATEDATA
 add constraint   TB1016_STATEDATAindex1 primary key (F1016_CODE);
 
---==============´´½¨×Ö·û´®±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå­—ç¬¦ä¸²è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1026_STRINGDATA;
 create table TB1026_STRINGDATA
 (
-	F1026_CODE			char(48)	not null,	--´úÂë£¨String000001~String999999£© -RSC-50
-	F1026_DESC			char(96)	null,		--ÃèÊö   -RSC-50
-	F1026_SAFELEVEL		number(10)	null,		--°²È«¼¶  -RSC-50
-	PARENT_CODE			char(48)	not null,	--Éè±¸´úÂë  -RSC-50
-	F1011_NO			number(5)	not null,	--ÀàĞÍ  -RSC-50
-	F1026_BYNAME		char(24)	null,		--±ğÃû
-	F0008_NAME			char(48)	not null,	--ÊÂÏî´¦Àí·½Ê½
-	F0009_NAME			char(48)	not null,	--ÊÂÏî¾ä´úÂë
-	F1026_CALCFLAG		number(3)	not null,	--¼ÆËãÁ¿±êÖ¾
-	F1026_PICNAME		char(96)	null,		--ÍÆÍ¼Ãû
-	F1026_ISPDR			number(3)	not null,	--ÊÇ·ñ×·Òä
-	F1026_PDRNO			number(5)	null,		--×·Òä×éºÅ
-	F1026_ISSTA			number(3)	null		--ÊÇ·ñÍ³¼Æ
+	F1026_CODE			char(48)	not null,	--ä»£ç ï¼ˆString000001~String999999ï¼‰ -RSC-50
+	F1026_DESC			char(96)	null,		--æè¿°   -RSC-50
+	F1026_SAFELEVEL		number(10)	null,		--å®‰å…¨çº§  -RSC-50
+	PARENT_CODE			char(48)	not null,	--è®¾å¤‡ä»£ç   -RSC-50
+	F1011_NO			number(5)	not null,	--ç±»å‹  -RSC-50
+	F1026_BYNAME		char(24)	null,		--åˆ«å
+	F0008_NAME			char(48)	not null,	--äº‹é¡¹å¤„ç†æ–¹å¼
+	F0009_NAME			char(48)	not null,	--äº‹é¡¹å¥ä»£ç 
+	F1026_CALCFLAG		number(3)	not null,	--è®¡ç®—é‡æ ‡å¿—
+	F1026_PICNAME		char(96)	null,		--æ¨å›¾å
+	F1026_ISPDR			number(3)	not null,	--æ˜¯å¦è¿½å¿†
+	F1026_PDRNO			number(5)	null,		--è¿½å¿†ç»„å·
+	F1026_ISSTA			number(3)	null		--æ˜¯å¦ç»Ÿè®¡
 );
 alter table TB1026_STRINGDATA
 add constraint   TB1026_STRINGDATAindex1 primary key (F1026_CODE);
@@ -148,9 +148,9 @@ add constraint   TB1026_STRINGDATAindex1 primary key (F1026_CODE);
 --drop view TB1023_OBJECTVIEW;
 --create table view TB1023_OBJECTVIEW
 --(
---	OBJ_CODE,	--¶ÔÏó´úÂë
---	OBJ_TYPE,	--¶ÔÏóÀàĞÍ
---	PARENT_CODE	--¶ÔÏóµÄ¸¸¶ÔÏó´úÂë
+--	OBJ_CODE,	--å¯¹è±¡ä»£ç 
+--	OBJ_TYPE,	--å¯¹è±¡ç±»å‹
+--	PARENT_CODE	--å¯¹è±¡çš„çˆ¶å¯¹è±¡ä»£ç 
 --);
 --as 
 --select 
@@ -170,89 +170,89 @@ add constraint   TB1026_STRINGDATAindex1 primary key (F1026_CODE);
 
 	
 	
---==============´´½¨¸æ¾¯ÀàĞÍ¶ÔÓ¦µÄÈ±ÏİµÈ¼¶ÅäÖÃ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå‘Šè­¦ç±»å‹å¯¹åº”çš„ç¼ºé™·ç­‰çº§é…ç½®è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1022_FAULTCONFIG;
 create table TB1022_FAULTCONFIG
 (
-	F1022_CODE			char(48)	not null,	--´úÂë£¨FaultConfig001~FaultConfig999£©
-	F1011_NO			number(5)	not null,	--¸æ¾¯ÀàĞÍ±àÂë
-	F1022_FAULTLEVEL	number(3)	not null,	--¶ÔÓ¦µÄÈ±ÏİµÈ¼¶
-	F1022_T1			Number(5)	null,		--È±ÏİµÈ¼¶4µÄ¸æ¾¯ĞÅºÅT1Ê±¼ä£¨µ¥Î»Ãë£©ÄÚ²»·µ»ØÊÓÎªÑÏÖØÈ±Ïİ
-	F1022_T2			Number(5)	null,		--È±ÏİµÈ¼¶4µÄ¸æ¾¯ĞÅºÅÊÇ·ñÆµ·±³öÏÖµÄ¼ì²âÊ±¼ä´°¿í¶ÈT2
-	F1022_K				Number(5)	null		--È±ÏİµÈ¼¶4µÄ¸æ¾¯ĞÅºÅÊÇ·ñÆµ·±³öÏÖµÄ¼ì²â´ÎÊıK
+	F1022_CODE			char(48)	not null,	--ä»£ç ï¼ˆFaultConfig001~FaultConfig999ï¼‰
+	F1011_NO			number(5)	not null,	--å‘Šè­¦ç±»å‹ç¼–ç 
+	F1022_FAULTLEVEL	number(3)	not null,	--å¯¹åº”çš„ç¼ºé™·ç­‰çº§
+	F1022_T1			Number(5)	null,		--ç¼ºé™·ç­‰çº§4çš„å‘Šè­¦ä¿¡å·T1æ—¶é—´ï¼ˆå•ä½ç§’ï¼‰å†…ä¸è¿”å›è§†ä¸ºä¸¥é‡ç¼ºé™·
+	F1022_T2			Number(5)	null,		--ç¼ºé™·ç­‰çº§4çš„å‘Šè­¦ä¿¡å·æ˜¯å¦é¢‘ç¹å‡ºç°çš„æ£€æµ‹æ—¶é—´çª—å®½åº¦T2
+	F1022_K				Number(5)	null		--ç¼ºé™·ç­‰çº§4çš„å‘Šè­¦ä¿¡å·æ˜¯å¦é¢‘ç¹å‡ºç°çš„æ£€æµ‹æ¬¡æ•°K
 );
 alter table TB1022_FAULTCONFIG add constraint   TB1022_FAULTCONFIGindex1 primary key (F1022_CODE);
 
 	
 
 
---==============´´½¨±äµçÕ¾±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå˜ç”µç«™è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1041_SUBSTATION;
 create table TB1041_SUBSTATION
 (
-	F1041_CODE			char(48)	not null,	--±äµçÕ¾´úÂë£¨Substation001~ Substation999£©  -RSC-50
-	F1041_NAME			char(48)	not null,	--±äµçÕ¾Ãû³Æ£¨Ó¢ÎÄ£©£¬´ÓSSDµ¼Èë£¬ÔÊĞíÊÖ¹¤ÅäÖÃ  -RSC-50
-	F1041_DESC			char(96)	null,		--±äµçÕ¾Ãû³Æ£¨ÖĞÎÄ£©£¬´ÓSSDµ¼Èë£¬ÔÊĞíÊÖ¹¤ÅäÖÃ  -RSC-50
-	F1041_DQNAME		char(48)	not null,	--±äµçÕ¾ËùÊôµØÇø´úÂë£¬´ÓSSDµ¼Èë£¬ÔÊĞíÊÖ¹¤ÅäÖÃ  -RSC-50
-	F1041_DQDESC		char(96)	null,		--±äµçÕ¾ËùÊôµØÇøÃû³Æ£¬´ÓSSDµ¼Èë£¬ÔÊĞíÊÖ¹¤ÅäÖÃ  -RSC-50
-                F1041_COMPANY                  char(96)	null,		--±äµçÕ¾ËùÊôµ¥Î»Ãû³Æ£¬ -RSC-50
-                F1041_VOLTAGEH                  Number(5)   not null,	--±äµçÕ¾µÄµçÑ¹µÈ¼¶£¬ -RSC-50
-                F1041_VOLTAGEM                  Number(5)   not null,	--±äµçÕ¾µÄµçÑ¹µÈ¼¶£¬ -RSC-50
-                F1041_VOLTAGEL                  Number(5)   not null	--±äµçÕ¾µÄµçÑ¹µÈ¼¶£¬ -RSC-50
+	F1041_CODE			char(48)	not null,	--å˜ç”µç«™ä»£ç ï¼ˆSubstation001~ Substation999ï¼‰  -RSC-50
+	F1041_NAME			char(48)	not null,	--å˜ç”µç«™åç§°ï¼ˆè‹±æ–‡ï¼‰ï¼Œä»SSDå¯¼å…¥ï¼Œå…è®¸æ‰‹å·¥é…ç½®  -RSC-50
+	F1041_DESC			char(96)	null,		--å˜ç”µç«™åç§°ï¼ˆä¸­æ–‡ï¼‰ï¼Œä»SSDå¯¼å…¥ï¼Œå…è®¸æ‰‹å·¥é…ç½®  -RSC-50
+	F1041_DQNAME		char(48)	not null,	--å˜ç”µç«™æ‰€å±åœ°åŒºä»£ç ï¼Œä»SSDå¯¼å…¥ï¼Œå…è®¸æ‰‹å·¥é…ç½®  -RSC-50
+	F1041_DQDESC		char(96)	null,		--å˜ç”µç«™æ‰€å±åœ°åŒºåç§°ï¼Œä»SSDå¯¼å…¥ï¼Œå…è®¸æ‰‹å·¥é…ç½®  -RSC-50
+                F1041_COMPANY                  char(96)	null,		--å˜ç”µç«™æ‰€å±å•ä½åç§°ï¼Œ -RSC-50
+                F1041_VOLTAGEH                  Number(5)   not null,	--å˜ç”µç«™çš„ç”µå‹ç­‰çº§ï¼Œ -RSC-50
+                F1041_VOLTAGEM                  Number(5)   not null,	--å˜ç”µç«™çš„ç”µå‹ç­‰çº§ï¼Œ -RSC-50
+                F1041_VOLTAGEL                  Number(5)   not null	--å˜ç”µç«™çš„ç”µå‹ç­‰çº§ï¼Œ -RSC-50
 );
 alter table TB1041_SUBSTATION
 add constraint   TB1041_SUBSTATIONindex1 primary key (F1041_CODE);
 
---==============´´½¨¼ä¸ô±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºé—´éš”è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1042_BAY;
 create table TB1042_BAY
 (
-	F1042_CODE			char(48)	not null,	--¼ä¸ô´úÂë£¨Bay001~Bay999£© -RSC-50
-	F1041_CODE			char(48)	not null,	--ËùÊô±äµçÕ¾´úÂë   -RSC-50
-	F1042_NAME			char(48)	not null,	--¼ä¸ôÃû³Æ    -RSC-50
-	F1042_DESC			char(96)	not null,	--¼ä¸ôÃû³Æ£¨ÖĞÎÄ£©   -RSC-50
-	F1042_VOLTAGE		number(5)	not null,	--¼ä¸ôµÄµçÑ¹µÈ¼¶£¬10¡¢35¡¢66¡¢110¡¢220¡¢330¡¢500¡¢750¡¢1000µÈ   -RSC-50
-	F1042_CONNTYPE			number(3)  not null	,  --¼ä¸ô½ÓÏßÀàĞÍ   -RSC-50
-                F1042_DEVTYPE                                      number(3) not null,  --¼ä¸ôÉè±¸ÀàĞÍ -RSC-50
-                F1042_IEDSOLUTION                             number(3) not null  --¼ä¸ôµÄIEDÅäÖÃ·½°¸ -RSC-50
+	F1042_CODE			char(48)	not null,	--é—´éš”ä»£ç ï¼ˆBay001~Bay999ï¼‰ -RSC-50
+	F1041_CODE			char(48)	not null,	--æ‰€å±å˜ç”µç«™ä»£ç    -RSC-50
+	F1042_NAME			char(48)	not null,	--é—´éš”åç§°    -RSC-50
+	F1042_DESC			char(96)	not null,	--é—´éš”åç§°ï¼ˆä¸­æ–‡ï¼‰   -RSC-50
+	F1042_VOLTAGE		number(5)	not null,	--é—´éš”çš„ç”µå‹ç­‰çº§ï¼Œ10ã€35ã€66ã€110ã€220ã€330ã€500ã€750ã€1000ç­‰   -RSC-50
+	F1042_CONNTYPE			number(3)  not null	,  --é—´éš”æ¥çº¿ç±»å‹   -RSC-50
+                F1042_DEVTYPE                                      number(3) not null,  --é—´éš”è®¾å¤‡ç±»å‹ -RSC-50
+                F1042_IEDSOLUTION                             number(3) not null  --é—´éš”çš„IEDé…ç½®æ–¹æ¡ˆ -RSC-50
 );
 alter table TB1042_BAY
 add constraint   TB1042_BAYindex1 primary key (F1042_CODE);
 
---==============´´½¨Ò»´ÎÉè±¸±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºä¸€æ¬¡è®¾å¤‡è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1043_EQUIPMENT;
 create table TB1043_EQUIPMENT
 (
-	F1043_CODE			char(48)	not null,	--Ò»´ÎÉè±¸´úÂë£¨Equipment0001~ Equipment9999£© -RSC-50
-	F1042_CODE			char(48)	not null,	--Ò»´ÎÉè±¸ËùÊô¼ä¸ô´úÂë -RSC-50
-	F1043_NAME			char(48)	not null,	--Ò»´ÎÉè±¸Ãû³Æ£¨Ó¢ÎÄ£© -RSC-50
-	F1043_DESC			char(96)	null,		--Ò»´ÎÉè±¸Ãû³Æ£¨ÖĞÎÄ£© -RSC-50
-	F1043_ISVIRTUAL		number(3)	not null,	--ÊÇ·ñĞéÄâÉè±¸£¨È±Ê¡Ìî0£© -RSC-50
-	F1043_TYPE			number(3)	not null	--Ò»´ÎÉè±¸ÀàĞÍ   -RSC-50
+	F1043_CODE			char(48)	not null,	--ä¸€æ¬¡è®¾å¤‡ä»£ç ï¼ˆEquipment0001~ Equipment9999ï¼‰ -RSC-50
+	F1042_CODE			char(48)	not null,	--ä¸€æ¬¡è®¾å¤‡æ‰€å±é—´éš”ä»£ç  -RSC-50
+	F1043_NAME			char(48)	not null,	--ä¸€æ¬¡è®¾å¤‡åç§°ï¼ˆè‹±æ–‡ï¼‰ -RSC-50
+	F1043_DESC			char(96)	null,		--ä¸€æ¬¡è®¾å¤‡åç§°ï¼ˆä¸­æ–‡ï¼‰ -RSC-50
+	F1043_ISVIRTUAL		number(3)	not null,	--æ˜¯å¦è™šæ‹Ÿè®¾å¤‡ï¼ˆç¼ºçœå¡«0ï¼‰ -RSC-50
+	F1043_TYPE			number(3)	not null	--ä¸€æ¬¡è®¾å¤‡ç±»å‹   -RSC-50
 );
 alter table TB1043_EQUIPMENT
 add constraint   TB1043_EQUIPMENTindex1 primary key (F1043_CODE);
 
---==============´´½¨Ò»´ÎÉè±¸¶Ëµã±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºä¸€æ¬¡è®¾å¤‡ç«¯ç‚¹è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1044_TERMINAL;
 create table TB1044_TERMINAL
 (
-	F1044_CODE			char(48)	not null,	--¶Ëµã´úÂë£¨Term0001~Term9999£©-RSC-50
-	F1043_CODE			char(48)	not null,	--ËùÊôµÄÒ»´ÎÉè±¸´úÂë -RSC-50
-	F1045_CODE			char(48)	not null,	--ËùÁ¬½ÓµÄÁ¬½Óµã´úÂë -RSC-50
-	F1044_NAME			char(48)	not null,	--¶ËµãÃû³Æ£¨Ó¢ÎÄ£©£¨À´×ÔSSD»òÊÖÅä£©-RSC-50
-	F1044_DESC			char(96)	null		--¶ËµãÃû³Æ£¨ÖĞÎÄ£©£¨À´×ÔSSD»òÊÖÅä£©-RSC-50 
+	F1044_CODE			char(48)	not null,	--ç«¯ç‚¹ä»£ç ï¼ˆTerm0001~Term9999ï¼‰-RSC-50
+	F1043_CODE			char(48)	not null,	--æ‰€å±çš„ä¸€æ¬¡è®¾å¤‡ä»£ç  -RSC-50
+	F1045_CODE			char(48)	not null,	--æ‰€è¿æ¥çš„è¿æ¥ç‚¹ä»£ç  -RSC-50
+	F1044_NAME			char(48)	not null,	--ç«¯ç‚¹åç§°ï¼ˆè‹±æ–‡ï¼‰ï¼ˆæ¥è‡ªSSDæˆ–æ‰‹é…ï¼‰-RSC-50
+	F1044_DESC			char(96)	null		--ç«¯ç‚¹åç§°ï¼ˆä¸­æ–‡ï¼‰ï¼ˆæ¥è‡ªSSDæˆ–æ‰‹é…ï¼‰-RSC-50 
 );
 alter table TB1044_TERMINAL
 add constraint   TB1044_TERMINALindex1 primary key (F1044_CODE);
 
---==============´´½¨Ò»´ÎÍØÆËÁ¬½Óµã±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºä¸€æ¬¡æ‹“æ‰‘è¿æ¥ç‚¹è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1045_CONNECTIVITYNODE;
 create table TB1045_CONNECTIVITYNODE
 (
-	F1045_CODE			char(48)	not null,	--Á¬½Óµã´úÂë£¨CNode0001~CNode9999£©-RSC-50
-	F1045_NAME			char(48)	not null,	--Á¬½ÓµãÃû³Æ£¨Ó¢ÎÄ£©£¨À´×ÔSSD»òÊÖÅä£©-RSC-50
-	F1045_DESC			char(96)	null		--Á¬½ÓµãÃû³Æ£¨ÖĞÎÄ£©£¨À´×ÔSSD»òÊÖÅä£©-RSC-50
+	F1045_CODE			char(48)	not null,	--è¿æ¥ç‚¹ä»£ç ï¼ˆCNode0001~CNode9999ï¼‰-RSC-50
+	F1045_NAME			char(48)	not null,	--è¿æ¥ç‚¹åç§°ï¼ˆè‹±æ–‡ï¼‰ï¼ˆæ¥è‡ªSSDæˆ–æ‰‹é…ï¼‰-RSC-50
+	F1045_DESC			char(96)	null		--è¿æ¥ç‚¹åç§°ï¼ˆä¸­æ–‡ï¼‰ï¼ˆæ¥è‡ªSSDæˆ–æ‰‹é…ï¼‰-RSC-50
 );
 alter table TB1045_CONNECTIVITYNODE
 add constraint   TB1045_CONNECTIVITYNODEindex1 primary key (F1045_CODE);
@@ -262,125 +262,125 @@ add constraint   TB1045_CONNECTIVITYNODEindex1 primary key (F1045_CODE);
 
 
 
---==============´´½¨×°ÖÃ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè£…ç½®è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1046_IED;
 create table TB1046_IED
 (
-	F1046_CODE			char(48)	not null,	--IEDµÄ´úÂë£¨IED0001~IED9999£©-RSC-50
-	F1042_CODE			char(48)	not null,	--×°ÖÃËùÊô¼ä¸ô -RSC-50
-	F1050_CODE			char(48)	null,		--IED°²×°µÄÆÁ¹ñ´úÂë -RSC-50
-	F1046_NAME			char(48)	not null,	--IEDµÄÃû³Æ£¨Ó¢ÎÄ£©£¬SCDÎÄ¼şÖĞIEDµÄnameÊôĞÔ -RSC-50
-	F1046_DESC			char(96)	null,		--IEDµÄÃû³Æ£¨ÖĞÎÄ£©£¬SCDÎÄ¼şÖĞIEDµÄdescÊôĞÔ -RSC-50
-	F1046_MANUFACTUROR	char(48)	null,		--IEDÉú²ú³§¼Ò£¬SCDÎÄ¼şÖĞIEDµÄmanufacturerÊôĞÔ -RSC-50
-	F1046_MODEL			char(48)	null,		--IEDĞÍºÅ£¬SCDÎÄ¼şÖĞIEDµÄtypeÊôĞÔ -RSC-50
-	F1046_CONFIGVERSION	char(48)	null,		--IEDÅäÖÃ°æ±¾£¬SCDÎÄ¼şÖĞIEDµÄconfigVersionÊôĞÔ -RSC-50
-	F1046_AORB			number(3)	null,		--IEDÊÇA»òBÌ× -RSC-50
-	F1046_ISVIRTUAL		number(3)	not null,	--IEDÊÇ·ñĞéÄâÉè±¸ -RSC-50
-	F1046_TYPE			number(3)	null,		--IEDÀàĞÍ -RSC-50
-                F1046_CRC                                             char(24)	null		--´ÓSCDÎÄ¼şÖĞÌáÈ¡µÄ×°ÖÃCRCÂë -RSC-50
-	F1200_CODE			char(48)	null		--²É¼¯×é 
+	F1046_CODE			char(48)	not null,	--IEDçš„ä»£ç ï¼ˆIED0001~IED9999ï¼‰-RSC-50
+	F1042_CODE			char(48)	not null,	--è£…ç½®æ‰€å±é—´éš” -RSC-50
+	F1050_CODE			char(48)	null,		--IEDå®‰è£…çš„å±æŸœä»£ç  -RSC-50
+	F1046_NAME			char(48)	not null,	--IEDçš„åç§°ï¼ˆè‹±æ–‡ï¼‰ï¼ŒSCDæ–‡ä»¶ä¸­IEDçš„nameå±æ€§ -RSC-50
+	F1046_DESC			char(96)	null,		--IEDçš„åç§°ï¼ˆä¸­æ–‡ï¼‰ï¼ŒSCDæ–‡ä»¶ä¸­IEDçš„descå±æ€§ -RSC-50
+	F1046_MANUFACTUROR	char(48)	null,		--IEDç”Ÿäº§å‚å®¶ï¼ŒSCDæ–‡ä»¶ä¸­IEDçš„manufacturerå±æ€§ -RSC-50
+	F1046_MODEL			char(48)	null,		--IEDå‹å·ï¼ŒSCDæ–‡ä»¶ä¸­IEDçš„typeå±æ€§ -RSC-50
+	F1046_CONFIGVERSION	char(48)	null,		--IEDé…ç½®ç‰ˆæœ¬ï¼ŒSCDæ–‡ä»¶ä¸­IEDçš„configVersionå±æ€§ -RSC-50
+	F1046_AORB			number(3)	null,		--IEDæ˜¯Aæˆ–Bå¥— -RSC-50
+	F1046_ISVIRTUAL		number(3)	not null,	--IEDæ˜¯å¦è™šæ‹Ÿè®¾å¤‡ -RSC-50
+	F1046_TYPE			number(3)	null,		--IEDç±»å‹ -RSC-50
+    F1046_CRC           char(24)	null,		--ä»SCDæ–‡ä»¶ä¸­æå–çš„è£…ç½®CRCç  -RSC-50
+	F1200_CODE			char(48)	null		--é‡‡é›†ç»„ 
 );
 alter table TB1046_IED
 add constraint   TB1046_IEDindex1 primary key (F1046_CODE);
 
---==============´´½¨×°ÖÃ±í£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºè£…ç½®è¡¨ï¼ˆè§†å›¾ï¼‰====================
 
 
 
---==============´´½¨×°ÖÃ°å¿¨±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè£…ç½®æ¿å¡è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1047_BOARD;
 create table TB1047_BOARD
 (
-	F1047_CODE			char(48)	not null,	--°å¿¨´úÂë£¨Board0001~Board9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIED -RSC-50
-	F1047_SLOT			char(24)	not null, 	--°å¿¨±àºÅ -RSC-50
-	F1047_DESC			char(96)	null,		--°å¿¨ÃèÊö -RSC-50
-	F1047_TYPE			char(48)	not null	--°å¿¨ĞÍºÅ -RSC-50
+	F1047_CODE			char(48)	not null,	--æ¿å¡ä»£ç ï¼ˆBoard0001~Board9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IED -RSC-50
+	F1047_SLOT			char(24)	not null, 	--æ¿å¡ç¼–å· -RSC-50
+	F1047_DESC			char(96)	null,		--æ¿å¡æè¿° -RSC-50
+	F1047_TYPE			char(48)	not null	--æ¿å¡å‹å· -RSC-50
 );
 alter table TB1047_BOARD
 add constraint   TB1047_BOARDindex1 primary key (F1047_CODE);
 
---==============´´½¨×°ÖÃ¶Ë¿Ú±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè£…ç½®ç«¯å£è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1048_PORT;
 create table TB1048_PORT
 (
-	F1048_CODE			char(48)	not null,	--¶Ë¿Ú´úÂë£¨Port0001~Port9999£© -RSC-50
-	F1047_CODE			char(48)	not null,	--ËùÊô°å¿¨ -RSC-50
-	F1048_NO			char(24)	not null, 	--¶Ë¿ÚĞòºÅ -RSC-50
-	F1048_DESC			char(96)	null,		--¶Ë¿ÚÃèÊö -RSC-50
-	F1048_DIRECTION		number(3)	not null,	--¶Ë¿Ú·½Ïò -RSC-50
-	F1048_PLUG			number(3)	not null	--½Ó¿ÚĞÍÊ½ -RSC-50
+	F1048_CODE			char(48)	not null,	--ç«¯å£ä»£ç ï¼ˆPort0001~Port9999ï¼‰ -RSC-50
+	F1047_CODE			char(48)	not null,	--æ‰€å±æ¿å¡ -RSC-50
+	F1048_NO			char(24)	not null, 	--ç«¯å£åºå· -RSC-50
+	F1048_DESC			char(96)	null,		--ç«¯å£æè¿° -RSC-50
+	F1048_DIRECTION		number(3)	not null,	--ç«¯å£æ–¹å‘ -RSC-50
+	F1048_PLUG			number(3)	not null	--æ¥å£å‹å¼ -RSC-50
 );
 alter table TB1048_PORT
 add constraint   TB1048_PORTindex1 primary key (F1048_CODE);
 
 
---==============´´½¨ÇøÓò±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºåŒºåŸŸè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1049_REGION;
 create table TB1049_REGION
 (
-	F1049_CODE			char(48)	not null,	--ÇøÓò´úÂë£¨Region001~Region999£© -RSC-50
-	F1041_CODE			char(48)	not null,	--±äµçÕ¾´úÂë -RSC-50
-	F1049_NAME			char(48)	not null, 	--ÇøÓòÃû³Æ -RSC-50
-	F1049_DESC			char(96)	null,		--ÇøÓòÃèÊö -RSC-50
-	F1049_AREA			number(3)	null		--»§ÄÚ/»§Íâ£¬ÆäÖµÎª£º -RSC-50
+	F1049_CODE			char(48)	not null,	--åŒºåŸŸä»£ç ï¼ˆRegion001~Region999ï¼‰ -RSC-50
+	F1041_CODE			char(48)	not null,	--å˜ç”µç«™ä»£ç  -RSC-50
+	F1049_NAME			char(48)	not null, 	--åŒºåŸŸåç§° -RSC-50
+	F1049_DESC			char(96)	null,		--åŒºåŸŸæè¿° -RSC-50
+	F1049_AREA			number(3)	null		--æˆ·å†…/æˆ·å¤–ï¼Œå…¶å€¼ä¸ºï¼š -RSC-50
 );
 alter table TB1049_REGION
 add constraint   TB1049_REGIONindex1 primary key (F1049_CODE);
 
---==============´´½¨ÆÁ¹ñ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå±æŸœè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1050_CUBICLE;
 create table TB1050_CUBICLE
 (
-	F1050_CODE			char(48)	not null,	--ÆÁ¹ñ´úÂë£¨Cubicle0001~Cubicle9999£© -RSC-50
-	F1049_CODE			char(48)	not null,	--ËùÊôÇøÓò´úÂë -RSC-50
-	F1050_NAME			char(48)	not null, 	--ÆÁ¹ñÃû³Æ -RSC-50
-	F1050_DESC			char(96)	null		--ÆÁ¹ñÃèÊö -RSC-50
+	F1050_CODE			char(48)	not null,	--å±æŸœä»£ç ï¼ˆCubicle0001~Cubicle9999ï¼‰ -RSC-50
+	F1049_CODE			char(48)	not null,	--æ‰€å±åŒºåŸŸä»£ç  -RSC-50
+	F1050_NAME			char(48)	not null, 	--å±æŸœåç§° -RSC-50
+	F1050_DESC			char(96)	null		--å±æŸœæè¿° -RSC-50
 );
 alter table TB1050_CUBICLE
 add constraint   TB1050_CUBICLEindex1 primary key (F1050_CODE);
 
---==============´´½¨ÏßÀÂ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºçº¿ç¼†è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1051_CABLE;
 create table TB1051_CABLE
 (
-	F1051_CODE			char(48)	not null,	--ÏßÀÂ´úÂë£¨Cable0001~Cable9999£© -RSC-50
-	F1041_CODE			char(48)	not null,	--±äµçÕ¾´úÂë -RSC-50
-	F1051_NAME			char(48)	not null, 	--ÏßÀÂÃû³Æ -RSC-50
-	F1051_DESC			char(96)	null,		--ÏßÀÂÃèÊö -RSC-50
-	F1051_LENGTH		number(5)	null,		--ÏßÀÂ³¤¶È£¬µ¥Î»ÊÇÃ× -RSC-50
-	F1051_CORENUM		number(3)	null,		--ÏßÀÂĞ¾Êı -RSC-50
-	F1050_CODE_A		char(48)	not null, 	--A¶ËÆÁ¹ñ´úÂë -RSC-50
-	F1050_CODE_B		char(48)	not null, 	--B¶ËÆÁ¹ñ´úÂë -RSC-50
-	F1051_TYPE			number(3)	not null 	--ÏßÀÂÀàĞÍ -RSC-50
+	F1051_CODE			char(48)	not null,	--çº¿ç¼†ä»£ç ï¼ˆCable0001~Cable9999ï¼‰ -RSC-50
+	F1041_CODE			char(48)	not null,	--å˜ç”µç«™ä»£ç  -RSC-50
+	F1051_NAME			char(48)	not null, 	--çº¿ç¼†åç§° -RSC-50
+	F1051_DESC			char(96)	null,		--çº¿ç¼†æè¿° -RSC-50
+	F1051_LENGTH		number(5)	null,		--çº¿ç¼†é•¿åº¦ï¼Œå•ä½æ˜¯ç±³ -RSC-50
+	F1051_CORENUM		number(3)	null,		--çº¿ç¼†èŠ¯æ•° -RSC-50
+	F1050_CODE_A		char(48)	not null, 	--Aç«¯å±æŸœä»£ç  -RSC-50
+	F1050_CODE_B		char(48)	not null, 	--Bç«¯å±æŸœä»£ç  -RSC-50
+	F1051_TYPE			number(3)	not null 	--çº¿ç¼†ç±»å‹ -RSC-50
 );
 alter table TB1051_CABLE
 add constraint   TB1051_CABLEindex1 primary key (F1051_CODE);
 
---==============´´½¨Ğ¾Ïß±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºèŠ¯çº¿è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1052_CORE;
 create table TB1052_CORE
 (
-	F1052_CODE			char(48)	not null,	--Ğ¾Ïß´úÂë£¨CORE0001~CORE9999£© -RSC-50
-	F1052_PARENT_CODE			char(48)	not null,	--Ğ¾ÏßµÄ¸¸¶ÔÏó¿ÉÒÔÊÇÆÁ¹ñ»ò¹âÀÂ -RSC-50
-	F1052_TYPE			number(3)	not null, 	--Ğ¾ÏßÀàĞÍ -RSC-50
-	F1052_NO			number(3)	null,  --Ğ¾ÏßĞòºÅ£¬µ±ÀàĞÍÊÇĞ¾ÏßÊ±ÓĞĞ§£¬±íÊ¾Ğ¾ÏßÔÚÏßÀÂÖĞµÄ±àºÅ -RSC-50
-	F1048_CODE_A		char(48)	null,		--A¶ËÁ¬½ÓµÄ¶Ë¿Ú´úÂë -RSC-50
-	F1048_CODE_B		char(48)	null		--B¶ËÁ¬½ÓµÄ¶Ë¿Ú´úÂë -RSC-50
+	F1052_CODE			char(48)	not null,	--èŠ¯çº¿ä»£ç ï¼ˆCORE0001~CORE9999ï¼‰ -RSC-50
+	F1052_PARENT_CODE			char(48)	not null,	--èŠ¯çº¿çš„çˆ¶å¯¹è±¡å¯ä»¥æ˜¯å±æŸœæˆ–å…‰ç¼† -RSC-50
+	F1052_TYPE			number(3)	not null, 	--èŠ¯çº¿ç±»å‹ -RSC-50
+	F1052_NO			number(3)	null,  --èŠ¯çº¿åºå·ï¼Œå½“ç±»å‹æ˜¯èŠ¯çº¿æ—¶æœ‰æ•ˆï¼Œè¡¨ç¤ºèŠ¯çº¿åœ¨çº¿ç¼†ä¸­çš„ç¼–å· -RSC-50
+	F1048_CODE_A		char(48)	null,		--Aç«¯è¿æ¥çš„ç«¯å£ä»£ç  -RSC-50
+	F1048_CODE_B		char(48)	null		--Bç«¯è¿æ¥çš„ç«¯å£ä»£ç  -RSC-50
 );
 alter table TB1052_CORE
 add constraint   TB1052_COREindex1 primary key (F1052_CODE);
 
 
 
---==============´´½¨¹ı³Ì²ãÎïÀíÍøÂç»ØÂ·±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè¿‡ç¨‹å±‚ç‰©ç†ç½‘ç»œå›è·¯è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1053_PHYSCONN;
 create table TB1053_PHYSCONN
 (
-	F1053_CODE			char(48)	not null,	--ÎïÀíÍøÂç»ØÂ·´úÂë£¨PHC0001~PHC9999£© -RSC-50
-	F1041_CODE			char(48)	not null,	--±äµçÕ¾´úÂë -RSC-50
-	F1048_CODE_A		char(48)	not null, 	--¶Ë¿ÚA´úÂë -RSC-50
-	F1048_CODE_B		char(48)	not null	--¶Ë¿ÚB´úÂë -RSC-50
+	F1053_CODE			char(48)	not null,	--ç‰©ç†ç½‘ç»œå›è·¯ä»£ç ï¼ˆPHC0001~PHC9999ï¼‰ -RSC-50
+	F1041_CODE			char(48)	not null,	--å˜ç”µç«™ä»£ç  -RSC-50
+	F1048_CODE_A		char(48)	not null, 	--ç«¯å£Aä»£ç  -RSC-50
+	F1048_CODE_B		char(48)	not null	--ç«¯å£Bä»£ç  -RSC-50
 );
 alter table TB1053_PHYSCONN
 add constraint   TB1053_PHYSCONNindex1 primary key (F1053_CODE);
@@ -433,22 +433,22 @@ from
 where 
  TB1053_PHYSCONNVIEW1.F1048_CODE_B=TB1048_PORT.F1048_CODE;
 
---==============´´½¨MMSÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºMMSæ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1054_RCB;
 create table TB1054_RCB
 (
-	F1054_CODE			char(48)	not null,	--±¨¸æ¿ØÖÆ¿é´úÂë£¨RCB0001~RCB9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIED´úÂë -RSC-50
-	F1054_RPTID			char(48)	not null, 	--±¨¸æ¿ØÖÆ¿éID -RSC-50
-	F1054_DATASET		char(48)	not null,	--¶ÔÓ¦µÄÊı¾İ¼¯Ãû³Æ -RSC-50
-	F1054_DSDESC		char(96)	null,		--¶ÔÓ¦µÄÊı¾İ¼¯ÃèÊö -RSC-50
-	F1054_ISBRCB		number(3)	not null,	--ÊÇ·ñ»º´æÊı¾İ¿ØÖÆ¿é -RSC-50
-	F1054_CBTYPE		number(3)	not null	--±¨¸æ¿ØÖÆ¿éÀàĞÍ 
+	F1054_CODE			char(48)	not null,	--æŠ¥å‘Šæ§åˆ¶å—ä»£ç ï¼ˆRCB0001~RCB9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDä»£ç  -RSC-50
+	F1054_RPTID			char(48)	not null, 	--æŠ¥å‘Šæ§åˆ¶å—ID -RSC-50
+	F1054_DATASET		char(48)	not null,	--å¯¹åº”çš„æ•°æ®é›†åç§° -RSC-50
+	F1054_DSDESC		char(96)	null,		--å¯¹åº”çš„æ•°æ®é›†æè¿° -RSC-50
+	F1054_ISBRCB		number(3)	not null,	--æ˜¯å¦ç¼“å­˜æ•°æ®æ§åˆ¶å— -RSC-50
+	F1054_CBTYPE		number(3)	not null	--æŠ¥å‘Šæ§åˆ¶å—ç±»å‹ 
 );
 alter table TB1054_RCB
 add constraint   TB1054_RCBindex1 primary key (F1054_CODE);
 
---==============´´½¨MMSÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºMMSæ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆè§†å›¾ï¼‰====================
 drop view TB1054_RCBVIEW;
 create view TB1054_RCBVIEW
 (
@@ -477,59 +477,59 @@ from
 where 
 TB1054_RCB.F1046_CODE = TB1046_IED.F1046_CODE;
 
---==============´´½¨GOOSEÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºGOOSEæ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1055_GCB;
 create table TB1055_GCB
 (
-	F1055_CODE			char(48)	not null,	--GOOSEÊı¾İ¼¯´úÂë£¨GCB0001~GCB9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIEDµÄ´úÂë -RSC-50
-	F1055_CBNAME		char(48)	not null,	--GOOSE¿ØÖÆ¿éÃû³Æ -RSC-50
-	F1055_CBID			char(48)	not null,	--GOOSE¿ØÖÆ¿éID -RSC-50
-	F1055_MACADDR		char(24)	not null,	--MACµØÖ· -RSC-50
+	F1055_CODE			char(48)	not null,	--GOOSEæ•°æ®é›†ä»£ç ï¼ˆGCB0001~GCB9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDçš„ä»£ç  -RSC-50
+	F1055_CBNAME		char(48)	not null,	--GOOSEæ§åˆ¶å—åç§° -RSC-50
+	F1055_CBID			char(48)	not null,	--GOOSEæ§åˆ¶å—ID -RSC-50
+	F1055_MACADDR		char(24)	not null,	--MACåœ°å€ -RSC-50
 	F1055_VLANID		char(24)	not null,	--VLAN ID -RSC-50
-	F1055_VLANPRIORITY	char(24)	not null,	--VLANÓÅÏÈ¼¶ -RSC-50
+	F1055_VLANPRIORITY	char(24)	not null,	--VLANä¼˜å…ˆçº§ -RSC-50
 	F1055_APPID			char(24)	not null,	--APPID -RSC-50
-	F1055_DATASET		char(24)	not null,	--¶ÔÓ¦µÄÊı¾İ¼¯Ãû³Æ -RSC-50
-	F1055_DESC			char(96)	null,		--¶ÔÓ¦µÄÊı¾İ¼¯ÃèÊö -RSC-50
-	F1071_CODE			char(48)	null		--¶ÔÓ¦µÄ²É¼¯Æ÷´úÂë -RSC-50
+	F1055_DATASET		char(24)	not null,	--å¯¹åº”çš„æ•°æ®é›†åç§° -RSC-50
+	F1055_DESC			char(96)	null,		--å¯¹åº”çš„æ•°æ®é›†æè¿° -RSC-50
+	F1071_CODE			char(48)	null		--å¯¹åº”çš„é‡‡é›†å™¨ä»£ç  -RSC-50
 );
 alter table TB1055_GCB
 add constraint   TB1055_GCBindex1 primary key (F1055_CODE);
 
---==============´´½¨SVÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºSVæ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1056_SVCB;
 create table TB1056_SVCB
 (
-	F1056_CODE			char(48)	not null,	--SVÊı¾İ¼¯´úÂë£¨SVCB0001~SVCB9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIEDµÄ´úÂë -RSC-50
-	F1056_CBNAME		char(48)	not null,	--SV¿ØÖÆ¿éÃû³Æ -RSC-50
-	F1056_CBID			char(48)	not null,	--SV¿ØÖÆ¿éID -RSC-50
-	F1056_MACADDR		char(24)	not null,	--MACµØÖ· -RSC-50
+	F1056_CODE			char(48)	not null,	--SVæ•°æ®é›†ä»£ç ï¼ˆSVCB0001~SVCB9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDçš„ä»£ç  -RSC-50
+	F1056_CBNAME		char(48)	not null,	--SVæ§åˆ¶å—åç§° -RSC-50
+	F1056_CBID			char(48)	not null,	--SVæ§åˆ¶å—ID -RSC-50
+	F1056_MACADDR		char(24)	not null,	--MACåœ°å€ -RSC-50
 	F1056_VLANID		char(24)	not null,	--VLAN ID -RSC-50
-	F1056_VLANPriority	char(24)	not null,	--VLANÓÅÏÈ¼¶ -RSC-50
+	F1056_VLANPriority	char(24)	not null,	--VLANä¼˜å…ˆçº§ -RSC-50
 	F1056_APPID			char(24)	not null,	--APPID -RSC-50
-	F1056_DATASET		char(24)	not null,	--¶ÔÓ¦µÄÊı¾İ¼¯Ãû³Æ -RSC-50
-	F1056_DSDESC		char(96)	null,		--¶ÔÓ¦µÄÊı¾İ¼¯ÃèÊö -RSC-50
-	F1071_CODE			char(48)	null		--¶ÔÓ¦µÄ²É¼¯Æ÷´úÂë -RSC-50
+	F1056_DATASET		char(24)	not null,	--å¯¹åº”çš„æ•°æ®é›†åç§° -RSC-50
+	F1056_DSDESC		char(96)	null,		--å¯¹åº”çš„æ•°æ®é›†æè¿° -RSC-50
+	F1071_CODE			char(48)	null		--å¯¹åº”çš„é‡‡é›†å™¨ä»£ç  -RSC-50
 );
 alter table TB1056_SVCB
 add constraint   TB1056_SVCBindex1 primary key (F1056_CODE);
 
---==============´´½¨¶¨ÖµÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå®šå€¼æ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1057_SGCB;
 create table TB1057_SGCB
 (
-	F1057_CODE			char(48)	not null,	--¶¨ÖµÊı¾İ¼¯´úÂë£¨SGCB0001~SGCB9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIEDµÄ´úÂë -RSC-50
-	F1057_CBNAME		char(48)	not null,	--¶¨Öµ¿ØÖÆ¿éÃû³Æ -RSC-50
-	F1057_DATASET		char(48)	not null,	--¶ÔÓ¦µÄÊı¾İ¼¯Ãû³Æ -RSC-50
-	F1057_DSDESC		char(96)	null		--¶ÔÓ¦µÄÊı¾İ¼¯ÃèÊö -RSC-50
+	F1057_CODE			char(48)	not null,	--å®šå€¼æ•°æ®é›†ä»£ç ï¼ˆSGCB0001~SGCB9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDçš„ä»£ç  -RSC-50
+	F1057_CBNAME		char(48)	not null,	--å®šå€¼æ§åˆ¶å—åç§° -RSC-50
+	F1057_DATASET		char(48)	not null,	--å¯¹åº”çš„æ•°æ®é›†åç§° -RSC-50
+	F1057_DSDESC		char(96)	null		--å¯¹åº”çš„æ•°æ®é›†æè¿° -RSC-50
 );
 alter table TB1057_SGCB
     add constraint   TB1057_SGCBindex1 primary key (F1057_CODE);
 
 
---==============´´½¨´´½¨¶¨ÖµÊı¾İ¼¯ºÍ¿ØÖÆ¿é±í£¨²ÎÊı±í)£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºåˆ›å»ºå®šå€¼æ•°æ®é›†å’Œæ§åˆ¶å—è¡¨ï¼ˆå‚æ•°è¡¨)ï¼ˆè§†å›¾ï¼‰====================
 drop view TB1057_SGCBVIEW;
 create view TB1057_SGCBVIEW
 (
@@ -555,24 +555,24 @@ where
  TB1057_SGCB.F1046_CODE=TB1046_IED.F1046_CODE;
 
 
---==============´´½¨MMSFCDA±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºMMSFCDAè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1058_MMSFCDA;
 create table TB1058_MMSFCDA
 (
-	F1058_CODE			char(48)	not null,	--FCDA´úÂë£¨FCDA000001~FCDA999999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIED´úÂë -RSC-50
-	F1054_CODE			char(48)	not null,	--¶ÔÓ¦µÄ±¨¸æ¿ØÖÆ¿é´úÂë -RSC-50
-	F1058_REFADDR		char(48)	not null,	--FCDA²ÎÒıµØÖ·µÄ²ÎÒıµØÖ· -RSC-50
-	F1058_INDEX			number(3)	not null,	--FCDAÔÚÊı¾İ¼¯ÖĞµÄĞòºÅ -RSC-50
-	F1058_DESC			char(96)	null,		--Êı¾İµãÃèÊö -RSC-50
-	F1058_DATATYPE		number(3)	not null,	--Êı¾İÖµÀàĞÍ -RSC-50
-	DATA_CODE			char(48)	not null	--FCDA¶ÔÓ¦µÄÊı¾İµã´úÂë£¬¸ù¾İÊı¾İÖµÀàĞÍ·Ö±ğ¶Ô×´Ì¬Á¿±íTB1016¡¢Ä£ÄâÁ¿±íTB1006ºÍ×Ö·û´®Á¿±íTB1026ÖĞ¶ÔÓ¦µãµÄ´úÂë -RSC-50
+	F1058_CODE			char(48)	not null,	--FCDAä»£ç ï¼ˆFCDA000001~FCDA999999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDä»£ç  -RSC-50
+	F1054_CODE			char(48)	not null,	--å¯¹åº”çš„æŠ¥å‘Šæ§åˆ¶å—ä»£ç  -RSC-50
+	F1058_REFADDR		char(48)	not null,	--FCDAå‚å¼•åœ°å€çš„å‚å¼•åœ°å€ -RSC-50
+	F1058_INDEX			number(3)	not null,	--FCDAåœ¨æ•°æ®é›†ä¸­çš„åºå· -RSC-50
+	F1058_DESC			char(96)	null,		--æ•°æ®ç‚¹æè¿° -RSC-50
+	F1058_DATATYPE		number(3)	not null,	--æ•°æ®å€¼ç±»å‹ -RSC-50
+	DATA_CODE			char(48)	not null	--FCDAå¯¹åº”çš„æ•°æ®ç‚¹ä»£ç ï¼Œæ ¹æ®æ•°æ®å€¼ç±»å‹åˆ†åˆ«å¯¹çŠ¶æ€é‡è¡¨TB1016ã€æ¨¡æ‹Ÿé‡è¡¨TB1006å’Œå­—ç¬¦ä¸²é‡è¡¨TB1026ä¸­å¯¹åº”ç‚¹çš„ä»£ç  -RSC-50
 );
 alter table TB1058_MMSFCDA
 add constraint   TB1058_MMSFCDAindex1 primary key (F1058_CODE);
 
 
---==============´´½¨MMSFCDA±í£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºMMSFCDAè¡¨ï¼ˆè§†å›¾ï¼‰====================
 drop view TB1058_MMSFCDAVIEW;
 create view TB1058_MMSFCDAVIEW
 (
@@ -602,28 +602,28 @@ where
  TB1058_MMSFCDA.F1046_CODE=TB1046_IED.F1046_CODE;
 
 
---==============´´½¨¶¨ÖµFCDA±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå®šå€¼FCDAè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1059_SGFCDA;
 create table TB1059_SGFCDA
 (
-	F1059_CODE			char(48)	not null,	--¶¨ÖµFCDA´úÂë£¨SG00001~SG99999£© -RSC-50
-	F1057_CODE			char(48)	not null,	--¶¨Öµ¿ØÖÆ¿é´úÂë -RSC-50
-	F1059_REFADDR		char(48)	not null,	--FCDA²ÎÒıµØÖ·µÄ²ÎÒıµØÖ· -RSC-50
-	F1059_INDEX			number(3)	not null,	--¶¨ÖµĞòºÅ£¨ÔÚÊı¾İ¼¯ÖĞµÄĞòºÅ£© -RSC-50
-	F1059_DATATYPE		number(3)	not null,	--Êı¾İÖµÀàĞÍ -RSC-50
-	F1059_DESC			char(96)	null,		--¶¨ÖµÃû³Æ£¨ÖĞÎÄÃèÊö£© -RSC-50
-	F1059_UNIT			char(24)	null,		--¶¨Öµµ¥Î» 
-	F1059_STEPSIZE		float		null,		--¶¨Öµ²½³¤ 
-	F1059_VALUEMIN		float		null,		--¶¨Öµ×îĞ¡Öµ
-	F1059_VALUEMAX		float		null,		--¶¨Öµ×î´óÖµ
-	F1059_BASEVALUE		float		null		--¶¨Öµ»ù×¼Öµ
+	F1059_CODE			char(48)	not null,	--å®šå€¼FCDAä»£ç ï¼ˆSG00001~SG99999ï¼‰ -RSC-50
+	F1057_CODE			char(48)	not null,	--å®šå€¼æ§åˆ¶å—ä»£ç  -RSC-50
+	F1059_REFADDR		char(48)	not null,	--FCDAå‚å¼•åœ°å€çš„å‚å¼•åœ°å€ -RSC-50
+	F1059_INDEX			number(3)	not null,	--å®šå€¼åºå·ï¼ˆåœ¨æ•°æ®é›†ä¸­çš„åºå·ï¼‰ -RSC-50
+	F1059_DATATYPE		number(3)	not null,	--æ•°æ®å€¼ç±»å‹ -RSC-50
+	F1059_DESC			char(96)	null,		--å®šå€¼åç§°ï¼ˆä¸­æ–‡æè¿°ï¼‰ -RSC-50
+	F1059_UNIT			char(24)	null,		--å®šå€¼å•ä½ 
+	F1059_STEPSIZE		float		null,		--å®šå€¼æ­¥é•¿ 
+	F1059_VALUEMIN		float		null,		--å®šå€¼æœ€å°å€¼
+	F1059_VALUEMAX		float		null,		--å®šå€¼æœ€å¤§å€¼
+	F1059_BASEVALUE		float		null		--å®šå€¼åŸºå‡†å€¼
 );
 alter table TB1059_SGFCDA
     add constraint   TB1059_SGFCDAindex1 primary key (F1059_CODE);
 
 
 
---==============´´½¨¶¨ÖµFCDA±í£¨²ÎÊı±í)£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºå®šå€¼FCDAè¡¨ï¼ˆå‚æ•°è¡¨)ï¼ˆè§†å›¾ï¼‰====================
 drop view TB1059_SGFCDAVIEW;
 create view TB1059_SGFCDAVIEW
 (
@@ -663,27 +663,27 @@ where
  TB1059_SGFCDA.F1057_CODE=TB1057_SGCBVIEW.F1057_CODE;
 
 
---==============´´½¨²ÎÊıFCDA±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå‚æ•°FCDAè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1060_SPFCDA;
 create table TB1060_SPFCDA
 (
-	F1060_CODE			char(48)	not null,	--²ÎÊıFCDA´úÂë£¨SP00001~SP99999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIEDµÄ´úÂë -RSC-50
-	F1060_REFADDR		char(48)	not null,	--FCDA²ÎÒıµØÖ·µÄ²ÎÒıµØÖ· -RSC-50
-	F1060_INDEX			number(3)	not null,	--²ÎÊıÔÚÊı¾İ¼¯ÖĞµÄĞòºÅ -RSC-50
-	F1060_DATATYPE		number(3)	not null,	--Êı¾İÖµÀàĞÍ -RSC-50
-	F1060_DESC			char(96)	null,		--²ÎÊıÃû³Æ£¨ÖĞÎÄÃèÊö£© -RSC-50
-	F1060_UNIT			char(24)	null,		--²ÎÊıµ¥Î»
-	F1060_STEPSIZE		float		null,		--²ÎÊı²½³¤
-	F1060_VALUEMIN		float		null,		--²ÎÊı×îĞ¡Öµ
-	F1060_VALUEMAX		float		null		--²ÎÊı×î´óÖµ
+	F1060_CODE			char(48)	not null,	--å‚æ•°FCDAä»£ç ï¼ˆSP00001~SP99999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDçš„ä»£ç  -RSC-50
+	F1060_REFADDR		char(48)	not null,	--FCDAå‚å¼•åœ°å€çš„å‚å¼•åœ°å€ -RSC-50
+	F1060_INDEX			number(3)	not null,	--å‚æ•°åœ¨æ•°æ®é›†ä¸­çš„åºå· -RSC-50
+	F1060_DATATYPE		number(3)	not null,	--æ•°æ®å€¼ç±»å‹ -RSC-50
+	F1060_DESC			char(96)	null,		--å‚æ•°åç§°ï¼ˆä¸­æ–‡æè¿°ï¼‰ -RSC-50
+	F1060_UNIT			char(24)	null,		--å‚æ•°å•ä½
+	F1060_STEPSIZE		float		null,		--å‚æ•°æ­¥é•¿
+	F1060_VALUEMIN		float		null,		--å‚æ•°æœ€å°å€¼
+	F1060_VALUEMAX		float		null		--å‚æ•°æœ€å¤§å€¼
 );
 alter table TB1060_SPFCDA
 add constraint   TB1060_SPFCDAindex1 primary key (F1060_CODE);
 
 
 
---==============´´½¨²ÎÊıFCDA±í£¨ÊÓÍ¼£©====================
+--==============åˆ›å»ºå‚æ•°FCDAè¡¨ï¼ˆè§†å›¾ï¼‰====================
 drop view TB1060_SPFCDAVIEW;
 create view TB1060_SPFCDAVIEW
 (
@@ -719,362 +719,362 @@ where
  TB1060_SPFCDA.F1046_CODE=TB1046_IED.F1046_CODE;
 
 
---==============´´½¨GOOSE/SVÊä³öĞé¶Ë×Ó±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºGOOSE/SVè¾“å‡ºè™šç«¯å­è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1061_POUT;
 create table TB1061_POUT
 (
-	F1061_CODE			char(48)	not null,	--Êä³öĞé¶Ë×Ó´úÂë£¨POUT000001 ~ POUT999999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIED´úÂë -RSC-50
-	CB_CODE				char(48)	not null,	--Êı¾İ¼¯ºÍ¿ØÖÆ¿é´úÂë£¨GCB»òSVCBµÄ´úÂë£© -RSC-50
-	F1061_REFADDR		char(48)	not null,	--FCDAµÄ²ÎÒıµØÖ· -RSC-50
-	F1061_INDEX			number(3)	not null,	--ÔÚÊı¾İ¼¯ÖĞµÈ¶îĞòºÅ -RSC-50
-	F1061_DESC			char(96)	null,		--Ğé¶Ë×ÓÃèÊö -RSC-50
-	F1064_CODE			char(48)	null,		--¶ÔÓ¦µÄÈíÑ¹°å´úÂë -RSC-50
-	DATA_CODE			char(48)	not null	--FCDA¶ÔÓ¦µÄÊı¾İµã´úÂë£¬¸ù¾İÊı¾İÖµÀàĞÍ·Ö±ğ¶Ô×´Ì¬Á¿±íTB1016¡¢Ä£ÄâÁ¿±íTB1006ºÍ×Ö·û´®Á¿±íTB1026ÖĞ¶ÔÓ¦µãµÄ´úÂë -RSC-50
+	F1061_CODE			char(48)	not null,	--è¾“å‡ºè™šç«¯å­ä»£ç ï¼ˆPOUT000001 ~ POUT999999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDä»£ç  -RSC-50
+	CB_CODE				char(48)	not null,	--æ•°æ®é›†å’Œæ§åˆ¶å—ä»£ç ï¼ˆGCBæˆ–SVCBçš„ä»£ç ï¼‰ -RSC-50
+	F1061_REFADDR		char(48)	not null,	--FCDAçš„å‚å¼•åœ°å€ -RSC-50
+	F1061_INDEX			number(3)	not null,	--åœ¨æ•°æ®é›†ä¸­ç­‰é¢åºå· -RSC-50
+	F1061_DESC			char(96)	null,		--è™šç«¯å­æè¿° -RSC-50
+	F1064_CODE			char(48)	null,		--å¯¹åº”çš„è½¯å‹æ¿ä»£ç  -RSC-50
+	DATA_CODE			char(48)	not null	--FCDAå¯¹åº”çš„æ•°æ®ç‚¹ä»£ç ï¼Œæ ¹æ®æ•°æ®å€¼ç±»å‹åˆ†åˆ«å¯¹çŠ¶æ€é‡è¡¨TB1016ã€æ¨¡æ‹Ÿé‡è¡¨TB1006å’Œå­—ç¬¦ä¸²é‡è¡¨TB1026ä¸­å¯¹åº”ç‚¹çš„ä»£ç  -RSC-50
 );
 alter table TB1061_POUT
 add constraint   TB1061_POUTindex1 primary key (F1061_CODE);
 
---==============´´½¨GOOSE/SV½ÓÊÕĞé¶Ë×Ó±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºGOOSE/SVæ¥æ”¶è™šç«¯å­è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1062_PIN;
 create table TB1062_PIN
 (
-	F1062_CODE			char(48)	not null,	--Ğé¶Ë×Ó´úÂë£¨PIN00001~PIN99999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--ËùÊôIEDµÄ´úÂë  -RSC-50
-	F1062_REFADDR		char(48)	not null,	--Ğé¶Ë×ÓµÄ²ÎÒıµØÖ·  -RSC-50
-	F1011_NO			number(3)	not null,	--¶Ë×ÓÀàĞÍ  -RSC-50
-	F1062_DESC			char(96)	null,		--Ğé¶Ë×ÓÃèÊö  -RSC-50
-	F1062_ISUSED		number(3)	not null,	--Ğé¶Ë×ÓÊÇ·ñ±»Ê¹ÓÃ  -RSC-50
-	F1064_CODE			char(48)	null		--¶ÔÓ¦µÄÈíÑ¹°å´úÂë -RSC-50
+	F1062_CODE			char(48)	not null,	--è™šç«¯å­ä»£ç ï¼ˆPIN00001~PIN99999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--æ‰€å±IEDçš„ä»£ç   -RSC-50
+	F1062_REFADDR		char(48)	not null,	--è™šç«¯å­çš„å‚å¼•åœ°å€  -RSC-50
+	F1011_NO			number(3)	not null,	--ç«¯å­ç±»å‹  -RSC-50
+	F1062_DESC			char(96)	null,		--è™šç«¯å­æè¿°  -RSC-50
+	F1062_ISUSED		number(3)	not null,	--è™šç«¯å­æ˜¯å¦è¢«ä½¿ç”¨  -RSC-50
+	F1064_CODE			char(48)	null		--å¯¹åº”çš„è½¯å‹æ¿ä»£ç  -RSC-50
 );
 alter table TB1062_PIN
 add constraint   TB1062_PINindex1 primary key (F1062_CODE);
 
---==============´´½¨GOOSE/SVĞé»ØÂ·±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºGOOSE/SVè™šå›è·¯è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1063_CIRCUIT;
 create table TB1063_CIRCUIT
 (
-	F1063_CODE			char(48)	not null,	--Ğé»ØÂ·´úÂë£¨Circ00001~Circ99999£© -RSC-50
-	F1046_CODE_IEDSEND	char(48)	not null,	--Êä³ö¶ËIED´úÂë  -RSC-50
-	F1061_CODE_PSEND	char(48)	not null,	--Êä³ö¶ËĞé¶Ë×Ó´úÂë  -RSC-50
-	F1046_CODE_IEDRECV	char(48)	not null,	--½ÓÊÕ¶ËIED´úÂë  -RSC-50
-	F1062_CODE_PRECV	char(48)	not null,	--½ÓÊÕ¶ËĞé¶Ë×Ó´úÂë  -RSC-50
-	F1065_CODE			char(48)	not null,	--Ğé»ØÂ·¶ÔÓ¦µÄÂß¼­Á´Â·´úÂë  -RSC-50
-	F1061_CODE_CONVCHK1	char(48)	null,		--ÌøºÏÕ¢ĞÅºÅ½ÓÊÕ·´Ğ£µãĞé¶Ë×Ó1´úÂë -RSC-50
-	F1061_CODE_CONVCHK2	char(48)	null		--ÌøºÏÕ¢ĞÅºÅ³ö¿Ú·´Ğ£µãĞé¶Ë×Ó2´úÂë -RSC-50
+	F1063_CODE			char(48)	not null,	--è™šå›è·¯ä»£ç ï¼ˆCirc00001~Circ99999ï¼‰ -RSC-50
+	F1046_CODE_IEDSEND	char(48)	not null,	--è¾“å‡ºç«¯IEDä»£ç   -RSC-50
+	F1061_CODE_PSEND	char(48)	not null,	--è¾“å‡ºç«¯è™šç«¯å­ä»£ç   -RSC-50
+	F1046_CODE_IEDRECV	char(48)	not null,	--æ¥æ”¶ç«¯IEDä»£ç   -RSC-50
+	F1062_CODE_PRECV	char(48)	not null,	--æ¥æ”¶ç«¯è™šç«¯å­ä»£ç   -RSC-50
+	F1065_CODE			char(48)	not null,	--è™šå›è·¯å¯¹åº”çš„é€»è¾‘é“¾è·¯ä»£ç   -RSC-50
+	F1061_CODE_CONVCHK1	char(48)	null,		--è·³åˆé—¸ä¿¡å·æ¥æ”¶åæ ¡ç‚¹è™šç«¯å­1ä»£ç  -RSC-50
+	F1061_CODE_CONVCHK2	char(48)	null		--è·³åˆé—¸ä¿¡å·å‡ºå£åæ ¡ç‚¹è™šç«¯å­2ä»£ç  -RSC-50
 );
 alter table TB1063_CIRCUIT
 add constraint   TB1063_CIRCUITindex1 primary key (F1063_CODE);
 
---==============´´½¨Ñ¹°å±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå‹æ¿è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1064_STRAP;
 create table TB1064_STRAP
 (
-	F1064_CODE				char(48)	not null,	--Ñ¹°å´úÂë£¨Strap00001~99999£© -RSC-50
-	F1046_CODE				char(48)	not null,	--ËùÊôIED´úÂë -RSC-50
-	F1011_NO				number(3)	not null,	--Ñ¹°åÀàĞÍ -RSC-50
-	F1064_NUM				char(48)	null,		--Ñ¹°åµ÷¶È±àºÅ -RSC-50
-	F1064_DESC				char(96)	not null,	--Ñ¹°åµ÷¶ÈÃû³Æ -RSC-50
-	F1042_CODE_RELATEDBAY	char(48)	null		--Ñ¹°åËù¹ØÁªµÄ¼ä¸ô´úÂë 
+	F1064_CODE				char(48)	not null,	--å‹æ¿ä»£ç ï¼ˆStrap00001~99999ï¼‰ -RSC-50
+	F1046_CODE				char(48)	not null,	--æ‰€å±IEDä»£ç  -RSC-50
+	F1011_NO				number(3)	not null,	--å‹æ¿ç±»å‹ -RSC-50
+	F1064_NUM				char(48)	null,		--å‹æ¿è°ƒåº¦ç¼–å· -RSC-50
+	F1064_DESC				char(96)	not null,	--å‹æ¿è°ƒåº¦åç§° -RSC-50
+	F1042_CODE_RELATEDBAY	char(48)	null		--å‹æ¿æ‰€å…³è”çš„é—´éš”ä»£ç  
 );
 alter table TB1064_STRAP
 add constraint   TB1064_STRAPindex1 primary key (F1064_CODE);
 
---==============´´½¨¹ı³Ì²ãÂß¼­Á´Â·±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè¿‡ç¨‹å±‚é€»è¾‘é“¾è·¯è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1065_LOGICALLINK;
 create table TB1065_LOGICALLINK
 (
-	F1065_CODE			char(48)	not null,	--Âß¼­Á´Â·´úÂë(LLink0001~LLink9999) -RSC-50
-	F1065_TYPE			number(3)	not null,	--Á´Â·ÀàĞÍ -RSC-50
-	F1046_CODE_IEDSEND	char(48)	not null,	--·¢ËÍ×°ÖÃ -RSC-50
-	F1046_CODE_IEDRECV	char(48)	null,		--½ÓÊÕ×°ÖÃ, Âß¼­Á´Â·µÄ¸¸¶ÔÏó -RSC-50
-	F1065_CBCODDE			char(24)	not null	--¹ı³Ì²ãÁ´Â·¶ÔÓ¦µÄGCB»òSVCB¶ÔÏó´úÂë -RSC-50
+	F1065_CODE			char(48)	not null,	--é€»è¾‘é“¾è·¯ä»£ç (LLink0001~LLink9999) -RSC-50
+	F1065_TYPE			number(3)	not null,	--é“¾è·¯ç±»å‹ -RSC-50
+	F1046_CODE_IEDSEND	char(48)	not null,	--å‘é€è£…ç½® -RSC-50
+	F1046_CODE_IEDRECV	char(48)	null,		--æ¥æ”¶è£…ç½®, é€»è¾‘é“¾è·¯çš„çˆ¶å¯¹è±¡ -RSC-50
+	F1065_CBCODDE			char(24)	not null	--è¿‡ç¨‹å±‚é“¾è·¯å¯¹åº”çš„GCBæˆ–SVCBå¯¹è±¡ä»£ç  -RSC-50
 );
 alter table TB1065_LOGICALLINK
 add constraint   TB1065_LOGICALLINKindex1 primary key (F1065_CODE);
 
---==============´´½¨¹ı³Ì²ãÂß¼­Á´Â·ÓëÎïÀí»ØÂ·µÄ¹ØÏµ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè¿‡ç¨‹å±‚é€»è¾‘é“¾è·¯ä¸ç‰©ç†å›è·¯çš„å…³ç³»è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1073_LLINKPHYRELATION;
 create table TB1073_LLINKPHYRELATION
 (
-	F1073_CODE			char(48)	not null,	--¹ØÁª¹ØÏµ´úÂë(LPRelation0001 ~LPRelation9999) -RSC-50
-	F1065_CODE			char(48)	not null,	--Âß¼­Á´Â·´úÂë(LLink0001~LLink9999) -RSC-50
-	F1053_CODE	                                char(48)	not null	--ÎïÀíÍøÂç»ØÂ·´úÂë£¨PHC0001~PHC9999£© -RSC-50
+	F1073_CODE			char(48)	not null,	--å…³è”å…³ç³»ä»£ç (LPRelation0001 ~LPRelation9999) -RSC-50
+	F1065_CODE			char(48)	not null,	--é€»è¾‘é“¾è·¯ä»£ç (LLink0001~LLink9999) -RSC-50
+	F1053_CODE	                                char(48)	not null	--ç‰©ç†ç½‘ç»œå›è·¯ä»£ç ï¼ˆPHC0001~PHC9999ï¼‰ -RSC-50
 );
 alter table TB1073_LLINKPHYRELATION
 add constraint   TB1073_LLINKPHYRELATIONindex1 primary key (F1073_CODE);
 
---==============´´½¨µçÁ÷/µçÑ¹±£»¤²ÉÑùÖµ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºç”µæµ/ç”µå‹ä¿æŠ¤é‡‡æ ·å€¼è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1066_PROTMMXU;
 create table TB1066_PROTMMXU
 (
-	F1066_CODE			char(48)	not null,	--²ÉÑùÖµ´úÂë£¨Meas0001~Meas9999£© -RSC-50
-	F1067_CODE			char(48)	null,		--¶ÔÓ¦µÄ»¥¸ĞÆ÷´Î¼¶´úÂë -RSC-50
-	F1006_CODE		                char(48)	not null	--²ÉÑùÖµÊı¾İµã
+	F1066_CODE			char(48)	not null,	--é‡‡æ ·å€¼ä»£ç ï¼ˆMeas0001~Meas9999ï¼‰ -RSC-50
+	F1067_CODE			char(48)	null,		--å¯¹åº”çš„äº’æ„Ÿå™¨æ¬¡çº§ä»£ç  -RSC-50
+	F1006_CODE		                char(48)	not null	--é‡‡æ ·å€¼æ•°æ®ç‚¹
 );
 alter table TB1066_PROTMMXU
 add constraint   TB1066_PROTMMXUindex1 primary key (F1066_CODE);
 
---==============´´½¨µçÁ÷/µçÑ¹»¥¸ĞÆ÷´Î¼¶±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºç”µæµ/ç”µå‹äº’æ„Ÿå™¨æ¬¡çº§è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1067_CTVTSECONDARY;
 create table TB1067_CTVTSECONDARY
 (
-	F1067_CODE			char(48)	not null,	--»¥¸ĞÆ÷´Î¼¶´úÂë£¨CVTSnd0001 ~ CVTSnd9999£© -RSC-50
-	F1043_CODE			char(48)	not null,	--»¥¸ĞÆ÷´Î¼¶¶ÔÓ¦µÄ»¥¸ĞÆ÷¶ÔÏó´úÂë -RSC-50
-                F1067_NAME			char(24)	null,	--»¥¸ĞÆ÷´Î¼¶Ãû³Æ -RSC-50
-	F1067_INDEX			number(3)	null,	--´Î¼¶ĞòºÅ£¨È±Ê¡Îª¿Õ£© -RSC-50
-	F1067_TYPE			number(3)	not null,	--SVĞé¶Ë×Ó·Ö×éÀàĞÍ -RSC-50	
-	F1067_TERMNO		char(96)	null,		--´Î¼¶¶ÔÓ¦µÄ¶Ë×Ó±àºÅ -RSC-50
-	F1067_CIRCNO		char(96)	null,		--´Î¼¶¶ÔÓ¦µÄ»ØÂ·±àºÅ -RSC-50
-	F1067_DESC			char(96)	null		--´Î¼¶ÓÃÍ¾ÃèÊö£¨ÈçÏßÂ·±£»¤ÓÃµçÁ÷»ØÂ·£© -RSC-50
+	F1067_CODE			char(48)	not null,	--äº’æ„Ÿå™¨æ¬¡çº§ä»£ç ï¼ˆCVTSnd0001 ~ CVTSnd9999ï¼‰ -RSC-50
+	F1043_CODE			char(48)	not null,	--äº’æ„Ÿå™¨æ¬¡çº§å¯¹åº”çš„äº’æ„Ÿå™¨å¯¹è±¡ä»£ç  -RSC-50
+                F1067_NAME			char(24)	null,	--äº’æ„Ÿå™¨æ¬¡çº§åç§° -RSC-50
+	F1067_INDEX			number(3)	null,	--æ¬¡çº§åºå·ï¼ˆç¼ºçœä¸ºç©ºï¼‰ -RSC-50
+	F1067_TYPE			number(3)	not null,	--SVè™šç«¯å­åˆ†ç»„ç±»å‹ -RSC-50	
+	F1067_TERMNO		char(96)	null,		--æ¬¡çº§å¯¹åº”çš„ç«¯å­ç¼–å· -RSC-50
+	F1067_CIRCNO		char(96)	null,		--æ¬¡çº§å¯¹åº”çš„å›è·¯ç¼–å· -RSC-50
+	F1067_DESC			char(96)	null		--æ¬¡çº§ç”¨é€”æè¿°ï¼ˆå¦‚çº¿è·¯ä¿æŠ¤ç”¨ç”µæµå›è·¯ï¼‰ -RSC-50
 );
 alter table TB1067_CTVTSECONDARY
 add constraint   TB1067_CTVTSECONDARYindex1 primary key (F1067_CODE);
 
---==============´´½¨SVĞé¶Ë×ÓÓë»¥¸ĞÆ÷µÄ¶ÔÓ¦¹ØÏµ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºSVè™šç«¯å­ä¸äº’æ„Ÿå™¨çš„å¯¹åº”å…³ç³»è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1074_SVCTVTRELATION;
 create table TB1074_SVCTVTRELATION
 (
-	F1074_CODE			char(48)	not null,	--¹ØÏµ´úÂë£¨SVCVR00001 ~ SVCVR99999£© -RSC-50
-	F1067_CODE			char(48)	not null,	--»¥¸ĞÆ÷´Î¼¶¶ÔÏó´úÂë -RSC-50
-                F1061_CODE			char(48)	not null	--SVÊä³öÍ¨µÀĞé¶Ë×Ó´úÂë -RSC-50
+	F1074_CODE			char(48)	not null,	--å…³ç³»ä»£ç ï¼ˆSVCVR00001 ~ SVCVR99999ï¼‰ -RSC-50
+	F1067_CODE			char(48)	not null,	--äº’æ„Ÿå™¨æ¬¡çº§å¯¹è±¡ä»£ç  -RSC-50
+                F1061_CODE			char(48)	not null	--SVè¾“å‡ºé€šé“è™šç«¯å­ä»£ç  -RSC-50
 );
 alter table TB1074_SVCTVTRELATION
 add constraint   TB1074_SVCTVTRELATIONindex1 primary key (F1074_CODE);
 
---==============´´½¨¶ÏÂ·Æ÷±£»¤¿ØÖÆ»ØÂ·±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºæ–­è·¯å™¨ä¿æŠ¤æ§åˆ¶å›è·¯è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1068_PROTCTRL;
 create table TB1068_PROTCTRL
 (
-	F1068_CODE			char(48)	not null,	--¿ØÖÆ»ØÂ·´úÂë£¨Ctrl0001~Ctrl9999£© -RSC-50
-	F1046_CODE_PROT		char(48)	not null,	--±£»¤×°ÖÃ´úÂë -RSC-50
-	F1046_CODE_IO		char(48)	not null,	--ÖÇÄÜÖÕ¶Ë×°ÖÃ´úÂë -RSC-50
-	F1043_CODE			char(48)	not null,	--ÌøºÏÕ¢µÄ¶ÏÂ·Æ÷´úÂë -RSC-50
-	F1065_CODE			char(48)	not null	--ÌøºÏÕ¢»ØÂ·Âß¼­Á´Â·´úÂë -RSC-50
+	F1068_CODE			char(48)	not null,	--æ§åˆ¶å›è·¯ä»£ç ï¼ˆCtrl0001~Ctrl9999ï¼‰ -RSC-50
+	F1046_CODE_PROT		char(48)	not null,	--ä¿æŠ¤è£…ç½®ä»£ç  -RSC-50
+	F1046_CODE_IO		char(48)	not null,	--æ™ºèƒ½ç»ˆç«¯è£…ç½®ä»£ç  -RSC-50
+	F1043_CODE			char(48)	not null,	--è·³åˆé—¸çš„æ–­è·¯å™¨ä»£ç  -RSC-50
+	F1065_CODE			char(48)	not null	--è·³åˆé—¸å›è·¯é€»è¾‘é“¾è·¯ä»£ç  -RSC-50
 );
 alter table TB1068_PROTCTRL
 add constraint   TB1068_PROTCTRLindex1 primary key (F1068_CODE);
 
---==============±£»¤Â¼²¨Ä£ÄâÁ¿Í¨µÀ±í£¨²ÎÊı±í£©====================
+--==============ä¿æŠ¤å½•æ³¢æ¨¡æ‹Ÿé‡é€šé“è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1069_RCDCHANNELA;
 create table TB1069_RCDCHANNELA
 (
-	F1069_CODE			char(48)	not null,	--Â¼²¨Í¨µÀ´úÂë£¨RCDCH00001~RCDCH99999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄ×°ÖÃ´úÂë -RSC-50
-	F1069_INDEX			number(5)	not null,	--Í¨µÀĞòºÅ -RSC-50
-	F1069_TYPE			number(3)	not null,	--Í¨µÀÀàĞÍ -RSC-50
-	F1069_PHASE			number(3)	not null,	--Í¨µÀÏà±ğ -RSC-50
-	F1043_CODE			char(48)	not null,	--¶ÔÓ¦µÄ»¥¸ĞÆ÷´úÂë -RSC-50
-	F1061_CODE			char(48)	null,		--¶ÔÓ¦µÄSVĞé¶Ë×Ó´úÂë -RSC-50
-	F1058_CODE			char(48)	not null	--¶ÔÓ¦µÄMMSµã´úÂë -RSC-50
+	F1069_CODE			char(48)	not null,	--å½•æ³¢é€šé“ä»£ç ï¼ˆRCDCH00001~RCDCH99999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„è£…ç½®ä»£ç  -RSC-50
+	F1069_INDEX			number(5)	not null,	--é€šé“åºå· -RSC-50
+	F1069_TYPE			number(3)	not null,	--é€šé“ç±»å‹ -RSC-50
+	F1069_PHASE			number(3)	not null,	--é€šé“ç›¸åˆ« -RSC-50
+	F1043_CODE			char(48)	not null,	--å¯¹åº”çš„äº’æ„Ÿå™¨ä»£ç  -RSC-50
+	F1061_CODE			char(48)	null,		--å¯¹åº”çš„SVè™šç«¯å­ä»£ç  -RSC-50
+	F1058_CODE			char(48)	not null	--å¯¹åº”çš„MMSç‚¹ä»£ç  -RSC-50
 );
 alter table TB1069_RCDCHANNELA
 add constraint   TB1069_RCDCHANNELAindex1 primary key (F1069_CODE);
 
---==============´´½¨MMS·şÎñÆ÷±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºMMSæœåŠ¡å™¨è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1070_MMSSERVER;
 create table TB1070_MMSSERVER
 (
-	F1070_CODE			char(48)	not null,	--MMS·şÎñÆ÷£¨MMSSvr0001~MMSSvr9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄ×°ÖÃ´úÂë -RSC-50
-	F1070_IP_A			char(24)	not null,	--MMS·şÎñÆ÷IPµØÖ· -RSC-50
-	F1070_IP_B			char(24)	null		--MMS·şÎñÆ÷IPµØÖ· -RSC-50
+	F1070_CODE			char(48)	not null,	--MMSæœåŠ¡å™¨ï¼ˆMMSSvr0001~MMSSvr9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„è£…ç½®ä»£ç  -RSC-50
+	F1070_IP_A			char(24)	not null,	--MMSæœåŠ¡å™¨IPåœ°å€ -RSC-50
+	F1070_IP_B			char(24)	null		--MMSæœåŠ¡å™¨IPåœ°å€ -RSC-50
 );
 alter table TB1070_MMSSERVER
 add constraint   TB1070_MMSSERVERindex1 primary key (F1070_CODE);
 
---==============´´½¨Ç°ÖÃ²É¼¯µ¥Ôª±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºå‰ç½®é‡‡é›†å•å…ƒè¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1071_DAU;
 create table TB1071_DAU
 (
-	F1071_CODE			char(48)	not null,	--²É¼¯Æ÷´úÂë(DAU01~DAU99) -RSC-50
-	F1071_DESC			char(96)	null,		--²É¼¯Æ÷ÃèÊö -RSC-50
-	F1071_IPADDR		char(24)	not null	--²É¼¯Æ÷IPµØÖ· -RSC-50
+	F1071_CODE			char(48)	not null,	--é‡‡é›†å™¨ä»£ç (DAU01~DAU99) -RSC-50
+	F1071_DESC			char(96)	null,		--é‡‡é›†å™¨æè¿° -RSC-50
+	F1071_IPADDR		char(24)	not null	--é‡‡é›†å™¨IPåœ°å€ -RSC-50
 );
 alter table TB1071_DAU
 add constraint   TB1071_DAUindex1 primary key (F1071_CODE);
 
 
---==============´´½¨±£»¤Â¼²¨×´Ì¬Á¿Í¨µÀ±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºä¿æŠ¤å½•æ³¢çŠ¶æ€é‡é€šé“è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1072_RCDCHANNELD;
 create table TB1072_RCDCHANNELD
 (
-	F1072_CODE			char(48)	not null,	--Â¼²¨Í¨µÀ´úÂë£¨RCDCHD00001 ~ RCDCHD99999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄ×°ÖÃ´úÂë -RSC-50
-	F1072_INDEX			number(5)	not null,	--Í¨µÀĞòºÅ -RSC-50
-	F1072_TYPE			number(3)	not null,	--Í¨µÀÀàĞÍ -RSC-50
-	F1061_CODE			char(48)	null,		--¶ÔÓ¦µÄGOOSEĞé¶Ë×Ó´úÂë -RSC-50
-	F1058_CODE			char(48)	not null	--¶ÔÓ¦µÄMMSµã´úÂë -RSC-50
+	F1072_CODE			char(48)	not null,	--å½•æ³¢é€šé“ä»£ç ï¼ˆRCDCHD00001 ~ RCDCHD99999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„è£…ç½®ä»£ç  -RSC-50
+	F1072_INDEX			number(5)	not null,	--é€šé“åºå· -RSC-50
+	F1072_TYPE			number(3)	not null,	--é€šé“ç±»å‹ -RSC-50
+	F1061_CODE			char(48)	null,		--å¯¹åº”çš„GOOSEè™šç«¯å­ä»£ç  -RSC-50
+	F1058_CODE			char(48)	not null	--å¯¹åº”çš„MMSç‚¹ä»£ç  -RSC-50
 );
 alter table TB1072_RCDCHANNELD
 add constraint   TB1072_RCDCHANNELDindex1 primary key (F1072_CODE);
 
 
 
---==============´´½¨ÏßÂ·±£»¤×İÁª¹âÏË±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºçº¿è·¯ä¿æŠ¤çºµè”å…‰çº¤è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1090_LINEPROTFIBER;
 create table TB1090_LINEPROTFIBER
 (
-	F1090_CODE			char(48)	not null,	--ÏßÂ·±£»¤×İÁª¹âÏË´úÂë£¨LPFiber0001~ LPFiber9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄÏßÂ·±£»¤×°ÖÃ´úÂë -RSC-50
-	F1090_DESC			char(96)	not null,	--¹âÏËÃèÊö -RSC-50
-	F1090_FIBERNO		char(24)	null,		--¶ÔÓ¦µÄ¹âÏË±àºÅ -RSC-50
-	F1090_PORTNO		char(24)	null		--¶ÔÓ¦µÄ¶Ë¿Ú±àºÅ -RSC-50
+	F1090_CODE			char(48)	not null,	--çº¿è·¯ä¿æŠ¤çºµè”å…‰çº¤ä»£ç ï¼ˆLPFiber0001~ LPFiber9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„çº¿è·¯ä¿æŠ¤è£…ç½®ä»£ç  -RSC-50
+	F1090_DESC			char(96)	not null,	--å…‰çº¤æè¿° -RSC-50
+	F1090_FIBERNO		char(24)	null,		--å¯¹åº”çš„å…‰çº¤ç¼–å· -RSC-50
+	F1090_PORTNO		char(24)	null		--å¯¹åº”çš„ç«¯å£ç¼–å· -RSC-50
 );
 alter table TB1090_LINEPROTFIBER
 add constraint   TB1090_LINEPROTFIBERindex1 primary key (F1090_CODE);
 
---==============´´½¨ÖÇÄÜÖÕ¶Ë±ÕËøÁíÒ»Ì×ÖØºÏ»ØÂ·¶Ë×Ó±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºæ™ºèƒ½ç»ˆç«¯é—­é”å¦ä¸€å¥—é‡åˆå›è·¯ç«¯å­è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1091_IOTERM;
 create table TB1091_IOTERM
 (
-	F1091_CODE			char(48)	not null,	--ÖÇÄÜÖÕ¶Ë±ÕËøÁíÒ»Ì×ÖØºÏ»ØÂ·¶Ë×Ó´úÂë£¨IOTerm0001~IOTerm9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄÖÇÄÜÖÕ¶Ë×°ÖÃ´úÂë -RSC-50
-	F1091_DESC			char(96)	not null,	--¶Ë×ÓÃèÊö -RSC-50
-	F1091_TERMNO		char(96)	null,		--¶ÔÓ¦µÄ¶Ë×Ó±àºÅ -RSC-50
-	F1091_CIRCNO		char(96)	null		--¶ÔÓ¦µÄ»ØÂ·±àºÅ -RSC-50
+	F1091_CODE			char(48)	not null,	--æ™ºèƒ½ç»ˆç«¯é—­é”å¦ä¸€å¥—é‡åˆå›è·¯ç«¯å­ä»£ç ï¼ˆIOTerm0001~IOTerm9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„æ™ºèƒ½ç»ˆç«¯è£…ç½®ä»£ç  -RSC-50
+	F1091_DESC			char(96)	not null,	--ç«¯å­æè¿° -RSC-50
+	F1091_TERMNO		char(96)	null,		--å¯¹åº”çš„ç«¯å­ç¼–å· -RSC-50
+	F1091_CIRCNO		char(96)	null		--å¯¹åº”çš„å›è·¯ç¼–å· -RSC-50
 );
 alter table TB1091_IOTERM
 add constraint   TB1091_IOTERMindex1 primary key (F1091_CODE);
 
---==============´´½¨×°ÖÃµçÔ´¿ÕÆø¿ª¹Ø±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºè£…ç½®ç”µæºç©ºæ°”å¼€å…³è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1092_POWERKK;
 create table TB1092_POWERKK
 (
-	F1092_CODE			char(48)	not null,	--µçÔ´¿Õ¿ª´úÂë£¨IOTerm0001~IOTerm9999£© -RSC-50
-	F1046_CODE			char(48)	not null,	--¶ÔÓ¦µÄ×°ÖÃ´úÂë -RSC-50
-	F1092_DESC			char(96)	not null,	--¿Õ¿ªÃèÊö -RSC-50
-	F1092_KKNO			char(96)	null		--¿Õ¿ª±àºÅ -RSC-50
+	F1092_CODE			char(48)	not null,	--ç”µæºç©ºå¼€ä»£ç ï¼ˆIOTerm0001~IOTerm9999ï¼‰ -RSC-50
+	F1046_CODE			char(48)	not null,	--å¯¹åº”çš„è£…ç½®ä»£ç  -RSC-50
+	F1092_DESC			char(96)	not null,	--ç©ºå¼€æè¿° -RSC-50
+	F1092_KKNO			char(96)	null		--ç©ºå¼€ç¼–å· -RSC-50
 );
 alter table TB1092_POWERKK
 add constraint   TB1092_POWERKKindex1 primary key (F1092_CODE);
 
---==============´´½¨±£»¤µçÑ¹»ØÂ·¿ÕÆø¿ª¹Ø±í£¨²ÎÊı±í£©====================
+--==============åˆ›å»ºä¿æŠ¤ç”µå‹å›è·¯ç©ºæ°”å¼€å…³è¡¨ï¼ˆå‚æ•°è¡¨ï¼‰====================
 drop table TB1093_VOLTAGEKK;
 create table TB1093_VOLTAGEKK
 (
-	F1093_CODE			char(48)	not null,	--µçÔ´¿Õ¿ª´úÂë£¨IOTerm0001~IOTerm9999£© -RSC-50
-	F1067_CODE			char(48)	not null,	--¶ÔÓ¦µÄµçÑ¹»¥¸ĞÆ÷´Î¼¶´úÂë -RSC-50
-	F1093_DESC			char(96)	not null,	--¿Õ¿ªÃèÊö -RSC-50
-	F1093_KKNO			char(96)	null		--¿Õ¿ª±àºÅ -RSC-50
+	F1093_CODE			char(48)	not null,	--ç”µæºç©ºå¼€ä»£ç ï¼ˆIOTerm0001~IOTerm9999ï¼‰ -RSC-50
+	F1067_CODE			char(48)	not null,	--å¯¹åº”çš„ç”µå‹äº’æ„Ÿå™¨æ¬¡çº§ä»£ç  -RSC-50
+	F1093_DESC			char(96)	not null,	--ç©ºå¼€æè¿° -RSC-50
+	F1093_KKNO			char(96)	null		--ç©ºå¼€ç¼–å· -RSC-50
 );
 alter table TB1093_VOLTAGEKK
 add constraint   TB1093_VOLTAGEKKindex1 primary key (F1093_CODE);
 
---==========´´½¨³ÌĞò×¢²á±í(³ÌĞò×¢²á±í)============
+--==========åˆ›å»ºç¨‹åºæ³¨å†Œè¡¨(ç¨‹åºæ³¨å†Œè¡¨)============
 drop table TB1037_APPREG;
 create table TB1037_APPREG
 (
-  F1037_CODE      char(48)    not null,    --´úÂë
-  F1037_DESC      char(96)    null,        --ÃèÊö
-  F1037_INTVAL    number(10)  null,        --ÕûĞÍÊı¼üÖµ
-  F1037_FLOATVAL  real        null,        --¸¡µãÊı¼üÖµ
-  F1037_STRVAL    char(48)    null         --×Ö·û´®¼üÖµ
+  F1037_CODE      char(48)    not null,    --ä»£ç 
+  F1037_DESC      char(96)    null,        --æè¿°
+  F1037_INTVAL    number(10)  null,        --æ•´å‹æ•°é”®å€¼
+  F1037_FLOATVAL  real        null,        --æµ®ç‚¹æ•°é”®å€¼
+  F1037_STRVAL    char(48)    null         --å­—ç¬¦ä¸²é”®å€¼
 );
 alter table TB1037_APPREG
 add constraint TB1037_APPREG1 primary key (F1037_CODE);
 
 
---=================================================================Öµ±í=================================================================
+--=================================================================å€¼è¡¨=================================================================
 
 
---==============´´½¨Ä£ÄâÁ¿Öµ±í£¨Ä£ÄâÁ¿Öµ±í£©=================
+--==============åˆ›å»ºæ¨¡æ‹Ÿé‡å€¼è¡¨ï¼ˆæ¨¡æ‹Ÿé‡å€¼è¡¨ï¼‰=================
 drop table TB1017_ANALOGVALUE;
 create table TB1017_ANALOGVALUE
 (
-	F1006_CODE			char(48)		not null,	--´úÂë
-	F1017_VAL			float			null,		--Öµ»ò·ùÖµ
-	F1017_REVVAL		float			null,		--²É¼¯Öµ
-	F1017_ANGLE			float			null,		--Ïà½Ç
-	F1017_QUALITY		number(10)		null,		--Êı¾İÖÊÁ¿
-	F1017_TIME			number(10)		null,		--Ê±±ê 
-	F1017_INTERVAL		float			null,		--¼ä¸ôÀÛ¼ÓÖµ   
-	F1017_INTERVALCNT	number(10)		null,		--¼ä¸ôÀÛ¼Ó´ÎÊı 
-	F1017_DAYVAL		float			null,		--ÈÕÀÛ¼ÓÖµ    
-	F1017_DAYCNT		number(10)		null,		--ÈÕÀÛ¼Ó´ÎÊı          
-	F1017_MAXVAL		float			null,		--×î´óÖµ      
-	F1017_MAXVALH		number(3)		null,		--×î´óÖµĞ¡Ê±        
-	F1017_MAXVALM		number(3)		null,		--×î´óÖµ·ÖÖÓ        
-	F1017_MAXVALS		number(3)		null,		--×î´óÖµÃë   
-	F1017_MINVAL		float			null,		--×îĞ¡Öµ     
-	F1017_MINVALH		number(3)		null,		--×îĞ¡ÖµĞ¡Ê±      
-	F1017_MINVALM		number(3)		null,		--×îĞ¡Öµ·ÖÖÓ        
-	F1017_MINVALS		number(3)		null,		--×îĞ¡ÖµÃë  
-	F1017_OVERHCNT		number(5)		null,		--Ô½ÉÏÏŞ´ÎÊı  
-	F1017_OVERLCNT		number(5)		null,		--Ô½ÏÂÏŞ´ÎÊı  
-	F1017_OVERHHCNT		number(5)		null,		--Ô½ÉÏÉÏÏŞ´ÎÊı 
-	F1017_OVERLLCNT		number(5)		null,		--Ô½ÏÂÏÂÏŞ´ÎÊı  
-	F1017_OVERHTIME		number(10)		null,       --Ô½ÉÏÏŞÊ±¼ä   
-	F1017_OVERLTIME		number(10)		null,		--Ô½ÏÂÏŞÊ±¼ä 
-	F1017_OVERHHTIME	number(10)		null,		--Ô½ÉÏÉÏÏŞÊ±¼ä   
-	F1017_OVERLLTIME	number(10)		null,		--Ô½ÏÂÏÂÏŞÊ±¼ä        
-	F1017_DEADTIME		number(10)		null,		--ËÀÊıÊ±¼ä    
-	F1017_DAYDEADTIME	number(10)		null,		--ÈÕËÀÊıÊ±¼ä  
-	F1017_DAYSTOPTIME	number(10)		null,		--ÈÕÍ£ÔËÊ±¼ä  
-	F1017_PREPROCTIME	number(10)		null,		--ÉÏ´Î´¦ÀíÊ±¼ä         
-	F1017_INVALID		number(3)		null,		--·Ç·¨±êÖ¾  
-	F1017_PUTEVTFLAG	number(3)		null,		--ÒÑÉú³ÉÊÂÏî±êÖ¾        
-	F1017_DEADFLAG		number(3)		null,		--ËÀÊı±êÖ¾  
-	F1017_RELIABILITY	number(3)		null,		--²»¿É¿¿±êÖ¾  
-	F1017_ALARMLEVEL	number(3)		null,		--Ô½ÏŞµÈ¼¶        
-	F1017_NOALARM		number(3)		null,		--ÒÖÖÆ¸æ¾¯
-	F1017_UPDATE		number(3)		null,		--¸üĞÂ±êÖ¾
-	F1017_MANSET		number(3)		null,       --ÖÃÈë±êÖ¾
-	F1017_OVERLIMITFLAG	number(3)		null,       --Ô½ÏŞ±êÖ¾
-	F1017_SAMPLECPFLAG	number(3)		null,       --Í¬ÆÚ±È½Ï±êÖ¾
-	F1017_TRENDCPFLAG	number(3)		null,       --Ç÷ÊÆ±È½Ï±êÖ¾
-	F1017_SALTATIONFLAG	number(3)		null        --Í»±ä±êÖ¾
+	F1006_CODE			char(48)		not null,	--ä»£ç 
+	F1017_VAL			float			null,		--å€¼æˆ–å¹…å€¼
+	F1017_REVVAL		float			null,		--é‡‡é›†å€¼
+	F1017_ANGLE			float			null,		--ç›¸è§’
+	F1017_QUALITY		number(10)		null,		--æ•°æ®è´¨é‡
+	F1017_TIME			number(10)		null,		--æ—¶æ ‡ 
+	F1017_INTERVAL		float			null,		--é—´éš”ç´¯åŠ å€¼   
+	F1017_INTERVALCNT	number(10)		null,		--é—´éš”ç´¯åŠ æ¬¡æ•° 
+	F1017_DAYVAL		float			null,		--æ—¥ç´¯åŠ å€¼    
+	F1017_DAYCNT		number(10)		null,		--æ—¥ç´¯åŠ æ¬¡æ•°          
+	F1017_MAXVAL		float			null,		--æœ€å¤§å€¼      
+	F1017_MAXVALH		number(3)		null,		--æœ€å¤§å€¼å°æ—¶        
+	F1017_MAXVALM		number(3)		null,		--æœ€å¤§å€¼åˆ†é’Ÿ        
+	F1017_MAXVALS		number(3)		null,		--æœ€å¤§å€¼ç§’   
+	F1017_MINVAL		float			null,		--æœ€å°å€¼     
+	F1017_MINVALH		number(3)		null,		--æœ€å°å€¼å°æ—¶      
+	F1017_MINVALM		number(3)		null,		--æœ€å°å€¼åˆ†é’Ÿ        
+	F1017_MINVALS		number(3)		null,		--æœ€å°å€¼ç§’  
+	F1017_OVERHCNT		number(5)		null,		--è¶Šä¸Šé™æ¬¡æ•°  
+	F1017_OVERLCNT		number(5)		null,		--è¶Šä¸‹é™æ¬¡æ•°  
+	F1017_OVERHHCNT		number(5)		null,		--è¶Šä¸Šä¸Šé™æ¬¡æ•° 
+	F1017_OVERLLCNT		number(5)		null,		--è¶Šä¸‹ä¸‹é™æ¬¡æ•°  
+	F1017_OVERHTIME		number(10)		null,       --è¶Šä¸Šé™æ—¶é—´   
+	F1017_OVERLTIME		number(10)		null,		--è¶Šä¸‹é™æ—¶é—´ 
+	F1017_OVERHHTIME	number(10)		null,		--è¶Šä¸Šä¸Šé™æ—¶é—´   
+	F1017_OVERLLTIME	number(10)		null,		--è¶Šä¸‹ä¸‹é™æ—¶é—´        
+	F1017_DEADTIME		number(10)		null,		--æ­»æ•°æ—¶é—´    
+	F1017_DAYDEADTIME	number(10)		null,		--æ—¥æ­»æ•°æ—¶é—´  
+	F1017_DAYSTOPTIME	number(10)		null,		--æ—¥åœè¿æ—¶é—´  
+	F1017_PREPROCTIME	number(10)		null,		--ä¸Šæ¬¡å¤„ç†æ—¶é—´         
+	F1017_INVALID		number(3)		null,		--éæ³•æ ‡å¿—  
+	F1017_PUTEVTFLAG	number(3)		null,		--å·²ç”Ÿæˆäº‹é¡¹æ ‡å¿—        
+	F1017_DEADFLAG		number(3)		null,		--æ­»æ•°æ ‡å¿—  
+	F1017_RELIABILITY	number(3)		null,		--ä¸å¯é æ ‡å¿—  
+	F1017_ALARMLEVEL	number(3)		null,		--è¶Šé™ç­‰çº§        
+	F1017_NOALARM		number(3)		null,		--æŠ‘åˆ¶å‘Šè­¦
+	F1017_UPDATE		number(3)		null,		--æ›´æ–°æ ‡å¿—
+	F1017_MANSET		number(3)		null,       --ç½®å…¥æ ‡å¿—
+	F1017_OVERLIMITFLAG	number(3)		null,       --è¶Šé™æ ‡å¿—
+	F1017_SAMPLECPFLAG	number(3)		null,       --åŒæœŸæ¯”è¾ƒæ ‡å¿—
+	F1017_TRENDCPFLAG	number(3)		null,       --è¶‹åŠ¿æ¯”è¾ƒæ ‡å¿—
+	F1017_SALTATIONFLAG	number(3)		null        --çªå˜æ ‡å¿—
 );
 alter table TB1017_ANALOGVALUE add constraint TB1017_ANALOGVALUE1 primary key (F1006_CODE);
 
 
---================´´½¨×´Ì¬Öµ±í£¨×´Ì¬Öµ±í£©=================
+--================åˆ›å»ºçŠ¶æ€å€¼è¡¨ï¼ˆçŠ¶æ€å€¼è¡¨ï¼‰=================
 drop table TB1018_STATEVALUE;
 create table TB1018_STATEVALUE
 (
-	F1016_CODE			char(48)		not null,	--´úÂë
-	F1018_VAL			number(10)		null,		--Öµ
-	F1018_REVVAL		number(3)		null,		--²É¼¯Öµ
-	F1018_QUALITY		number(10)		null,		--Êı¾İÖÊÁ¿
-	F1018_TIME			number(10)		null,		--Ê±±ê
-	F1018_PREPROCTIME	number(10)		null,		--ÉÏ´Î´¦ÀíÊ±¼ä
-	F1018_RUNTIME		number(10)		null,		--ÔËĞĞÊ±¼ä
-	F1018_CHGCNT		number(5)		null,		--±äÎ»¼ÆÊı
-	F1018_CHGFLAG		number(3)		null,		--±äÎ»±êÖ¾
-	F1018_ERRFLAG		number(3)		null,		--Òì³£±êÖ¾
-	F1018_INITFLAG		number(3)		null,		--³õÊ¼»¯±êÖ¾
-	F1018_NOALARM		number(3)		null,		--ÒÖÖÆ¸æ¾¯
-	F1018_UPDATE		number(3)		null,		--¸üĞÂ±êÖ¾
-	F1018_MANSET		number(3)		null        --ÖÃÈë±êÖ¾
+	F1016_CODE			char(48)		not null,	--ä»£ç 
+	F1018_VAL			number(10)		null,		--å€¼
+	F1018_REVVAL		number(3)		null,		--é‡‡é›†å€¼
+	F1018_QUALITY		number(10)		null,		--æ•°æ®è´¨é‡
+	F1018_TIME			number(10)		null,		--æ—¶æ ‡
+	F1018_PREPROCTIME	number(10)		null,		--ä¸Šæ¬¡å¤„ç†æ—¶é—´
+	F1018_RUNTIME		number(10)		null,		--è¿è¡Œæ—¶é—´
+	F1018_CHGCNT		number(5)		null,		--å˜ä½è®¡æ•°
+	F1018_CHGFLAG		number(3)		null,		--å˜ä½æ ‡å¿—
+	F1018_ERRFLAG		number(3)		null,		--å¼‚å¸¸æ ‡å¿—
+	F1018_INITFLAG		number(3)		null,		--åˆå§‹åŒ–æ ‡å¿—
+	F1018_NOALARM		number(3)		null,		--æŠ‘åˆ¶å‘Šè­¦
+	F1018_UPDATE		number(3)		null,		--æ›´æ–°æ ‡å¿—
+	F1018_MANSET		number(3)		null        --ç½®å…¥æ ‡å¿—
 );
 alter table TB1018_STATEVALUE add constraint TB1018_STATEVALUE1 primary key(F1016_CODE);
 
 
---================´´½¨×Ö·û´®Öµ±í£¨×Ö·û´®Öµ±í£©=================
+--================åˆ›å»ºå­—ç¬¦ä¸²å€¼è¡¨ï¼ˆå­—ç¬¦ä¸²å€¼è¡¨ï¼‰=================
 drop table TB1019_STRINGVALUE;
 create table TB1019_STRINGVALUE
 (
-	F1026_CODE			char(96)		not null,	--´úÂë
-	F1019_VAL			char(48)		null,		--Öµ
-	F1019_REVVAL		char(48)		null,		--²É¼¯Öµ
-	F1019_QUALITY		number(10)		null,		--Êı¾İÖÊÁ¿
-	F1019_TIME			number(10)		null,		--Ê±±ê
-	F1019_PREPROCTIME	number(10)		null,		--ÉÏ´Î´¦ÀíÊ±¼ä
-	F1019_RUNTIME		number(10)		null,		--ÔËĞĞÊ±¼ä
-	F1019_CHGCNT		number(5)		null,		--±äÎ»¼ÆÊı
-	F1019_CHGFLAG		number(3)		null,		--±äÎ»±êÖ¾
-	F1019_ERRFLAG		number(3)		null,		--Òì³£±êÖ¾
-	F1019_INITFLAG		number(3)		null,		--³õÊ¼»¯±êÖ¾
-	F1019_NOALARM		number(3)		null,		--ÒÖÖÆ¸æ¾¯
-	F1019_UPDATE		number(3)		null		--¸üĞÂ±êÖ¾
+	F1026_CODE			char(96)		not null,	--ä»£ç 
+	F1019_VAL			char(48)		null,		--å€¼
+	F1019_REVVAL		char(48)		null,		--é‡‡é›†å€¼
+	F1019_QUALITY		number(10)		null,		--æ•°æ®è´¨é‡
+	F1019_TIME			number(10)		null,		--æ—¶æ ‡
+	F1019_PREPROCTIME	number(10)		null,		--ä¸Šæ¬¡å¤„ç†æ—¶é—´
+	F1019_RUNTIME		number(10)		null,		--è¿è¡Œæ—¶é—´
+	F1019_CHGCNT		number(5)		null,		--å˜ä½è®¡æ•°
+	F1019_CHGFLAG		number(3)		null,		--å˜ä½æ ‡å¿—
+	F1019_ERRFLAG		number(3)		null,		--å¼‚å¸¸æ ‡å¿—
+	F1019_INITFLAG		number(3)		null,		--åˆå§‹åŒ–æ ‡å¿—
+	F1019_NOALARM		number(3)		null,		--æŠ‘åˆ¶å‘Šè­¦
+	F1019_UPDATE		number(3)		null		--æ›´æ–°æ ‡å¿—
 );
 alter table TB1019_STRINGVALUE add constraint TB1019_STRINGVALUE1 primary key(F1026_CODE);
 
--- ==================´´½¨²É¼¯×é±í£º TB1200_FEGROUP=================
+-- ==================åˆ›å»ºé‡‡é›†ç»„è¡¨ï¼š TB1200_FEGROUP=================
 drop table TB1200_FEGROUP;
 CREATE TABLE TB1200_FEGROUP
 (
-  F1200_CODE    CHAR(48)            NOT NULL,       --¹Ø¼ü×Ö´úÂë
-  F1200_DESC    CHAR(96)            NULL           --×éÃèÊö
+  F1200_CODE    CHAR(48)            NOT NULL,       --å…³é”®å­—ä»£ç 
+  F1200_DESC    CHAR(96)            NULL           --ç»„æè¿°
 );
 alter table TB1200_FEGROUP add constraint TB1200_FEGROUPindex1 primary key (F1200_CODE);
