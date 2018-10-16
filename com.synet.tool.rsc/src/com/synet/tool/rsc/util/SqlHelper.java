@@ -23,6 +23,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.file.util.FileManager;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.jdbc.ConnParam;
@@ -53,6 +54,7 @@ public class SqlHelper {
 			Connection conn = getConn(param);
 			// 创建ScriptRunner，用于执行SQL脚本
 			ScriptRunner runner = new ScriptRunner(conn);
+			FileManipulate.initDir(Constants.logDir);
 			FileOutputStream fos = new FileOutputStream(Constants.logDir + "/sql.log");
 			OutputStreamWriter logWriter = new OutputStreamWriter(fos);
 			PrintWriter pw = new PrintWriter(logWriter);
