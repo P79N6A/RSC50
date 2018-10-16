@@ -17,6 +17,14 @@ import com.synet.tool.rsc.model.IM109StaInfoEntity;
 
 public class ImprotInfoService extends BaseService {
 	
+	public IM100FileInfoEntity getFileInfoEntityByFileName(String fileName) {
+		return (IM100FileInfoEntity) beanDao.getObject(IM100FileInfoEntity.class, "fileName", fileName);
+	}
+	
+	public void deleteDataByFile(Class<?> clazz, IM100FileInfoEntity fileInfoEntity) {
+		beanDao.deleteAll(clazz, "fileInfoEntity", fileInfoEntity);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public IM100FileInfoEntity existsEntity(IM100FileInfoEntity entity) {
 		List<IM100FileInfoEntity> list = (List<IM100FileInfoEntity>) beanDao.getListByCriteria(IM100FileInfoEntity.class, "filePath", entity.getFilePath());
