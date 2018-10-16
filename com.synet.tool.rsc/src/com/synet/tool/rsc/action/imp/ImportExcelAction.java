@@ -37,9 +37,21 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
 import com.synet.tool.rsc.excel.ExcelImporter;
+import com.synet.tool.rsc.model.IM100FileInfoEntity;
+import com.synet.tool.rsc.model.IM101IEDListEntity;
+import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.IM103IEDBoardEntity;
+import com.synet.tool.rsc.model.IM104StatusInEntity;
+import com.synet.tool.rsc.model.IM105BoardWarnEntity;
+import com.synet.tool.rsc.model.IM106PortLightEntity;
+import com.synet.tool.rsc.model.IM107TerStrapEntity;
+import com.synet.tool.rsc.model.IM108BrkCfmEntity;
+import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.service.ImprotInfoService;
 
 
  /**
@@ -48,6 +60,8 @@ import com.synet.tool.rsc.excel.ExcelImporter;
  * @version 1.0, 2018-8-7
  */
 public class ImportExcelAction extends BaseImportAction {
+	
+	private ImprotInfoService improtInfoService;
 	
 	private static Map<String, String> excelMap = new HashMap<>();
 	static {
@@ -86,9 +100,19 @@ public class ImportExcelAction extends BaseImportAction {
 
 	@Override
 	public void run() {
+		improtInfoService = new ImprotInfoService();
 		final String filePath = DialogHelper.getSaveFilePath(getTitle() + "文件", "", new String[]{"*.xlsx"});
 		if (filePath == null || "".equals(filePath)){
 			return;
+		}
+		//检查文件
+		String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+		final IM100FileInfoEntity fileInfoEntity = improtInfoService.getFileInfoEntityByFileName(fileName);
+		if (fileInfoEntity != null) {
+			boolean b =  DialogHelper.showConfirm("文件已存在，是否覆盖？");
+			if (!b) {//不覆盖，退出
+				return;
+			}
 		}
 		ChooseTableHeadDialog headDialog = new ChooseTableHeadDialog(getShell());
 		headDialog.setExcelFilPath(filePath);
@@ -115,6 +139,13 @@ public class ImportExcelAction extends BaseImportAction {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException,
 							InterruptedException {
+						
+						if (fileInfoEntity != null) {
+							monitor.setTaskName("正在删除原始数据");
+							deleteFile(fileInfoEntity);
+						}
+						
+						monitor.setTaskName("正在导入数据");
 						Display.getDefault().asyncExec(new Runnable() {
 							
 							@Override
@@ -144,6 +175,46 @@ public class ImportExcelAction extends BaseImportAction {
 		ConfigEditorInput input = new ConfigEditorInput(title, "bay.gif", excelMap.get(title), data);
 		EventManager.getDefault().notify(EventConstants.OPEN_CONFIG, input);
 		EventManager.getDefault().notify(EventConstants.REFRESH_EIDTOR, input);
+	}
+	
+	/***
+	 * 删除文件，并删除文件下的数据
+	 */
+	private void deleteFile(IM100FileInfoEntity fileInfoEntity) {
+		if (fileInfoEntity == null) return;
+		int fileType = fileInfoEntity.getFileType();
+		switch (fileType) {
+		case DBConstants.FILE_TYPE101:
+			improtInfoService.deleteDataByFile(IM101IEDListEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE102:
+			improtInfoService.deleteDataByFile(IM102FibreListEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE103:
+			improtInfoService.deleteDataByFile(IM103IEDBoardEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE104:
+			improtInfoService.deleteDataByFile(IM104StatusInEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE105:
+			improtInfoService.deleteDataByFile(IM105BoardWarnEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE106:
+			improtInfoService.deleteDataByFile(IM106PortLightEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE107:
+			improtInfoService.deleteDataByFile(IM107TerStrapEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE108:
+			improtInfoService.deleteDataByFile(IM108BrkCfmEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE109:
+			improtInfoService.deleteDataByFile(IM109StaInfoEntity.class, fileInfoEntity);
+			break;
+		default:
+			break;
+		}
+		improtInfoService.delete(fileInfoEntity);
 	}
 
 }
