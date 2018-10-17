@@ -66,7 +66,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1057_INDEX,
 		// data
 		TB1006_INDEX,
-//		TB1016_INDEX,
+		TB1016_INDEX,
 		TB1026_INDEX,
 		// fcda
 		TB1058_INDEX,
