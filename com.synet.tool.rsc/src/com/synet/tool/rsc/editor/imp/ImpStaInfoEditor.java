@@ -171,12 +171,12 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 			Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
 			if (mmsfcdaEntity != null) {
 				mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
+				mmsfcdaService.update(mmsfcdaEntity);
+				improtInfoService.update(entity);
 			} else {
 				String msg = "Mmsfcda不存在：" + entity.getDevName() + "->" + entity.getMmsRefAddr();
 				appendError("导入监控信息", "FCDA检查", msg);
 			}
-			mmsfcdaService.update(mmsfcdaEntity);
-			improtInfoService.update(entity);
 		}
 	}
 

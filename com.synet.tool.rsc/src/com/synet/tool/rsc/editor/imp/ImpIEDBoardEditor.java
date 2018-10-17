@@ -149,10 +149,12 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		int boardCount = 0;
 		int portCount = 0;
 		List<Tb1046IedEntity> ieds = (List<Tb1046IedEntity>) tableComp.getInput();
+		int iedNum = 0;
 		for (Tb1046IedEntity ied : ieds) {
 			if (!ied.isOverwrite()) {
 				continue;
 			}
+			iedNum++;
 			// 清除原有板卡和端口
 			List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
 			if (iedBoards != null && iedBoards.size() > 0) {
@@ -204,7 +206,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			boardCount += boardNum;
 			beandao.update(ied);
 		}
-		console.append("为 " + ieds.size() +
+		console.append("为 " + iedNum +
 				" 台装置，导入板卡数：" + boardCount + "，导入端口数：" + portCount);
 	}
 
@@ -277,9 +279,9 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 	}
 
 	private void refreshBompIEDTable(List<IM103IEDBoardEntity> iedBoardList) {
-//		IM103IEDBoardEntity iedBoard = (IM103IEDBoardEntity) table.getSelection();
-		if (iedBoardList == null || iedBoardList.size() <= 0) 
+		if (iedBoardList == null || iedBoardList.size() < 1) 
 			return;
+		boards = new ArrayList<>();
 		List<Tb1046IedEntity> inputs = new ArrayList<>();
 		for (IM103IEDBoardEntity iedBoard : iedBoardList) {
 			List<IM103IEDBoardEntity> boardList = getIedBoards(iedBoard);
