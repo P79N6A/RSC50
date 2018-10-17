@@ -1179,7 +1179,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 
 	@Override
 	protected String getTb1074Sql() {
-		return "INSERT INTO TB1093_VOLTAGEKK(F1074_CODE,F1067_CODE,F1061_CODE) VALUES (?,?,?)";
+		return "INSERT INTO TB1074_SVCTVTRELATION(F1074_CODE,F1067_CODE,F1061_CODE) VALUES (?,?,?)";
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public abstract class AbstractExportDataHandler {
 				}
 				PreparedStatement preState = connect.prepareStatement(sql);
 				for (int p = 0; p < ptotal; p++) {
-					List<?> list = beanDao.getListByCriteriaAndPage(clazz, null, p+1, psize);
+					List<?> list = hqlDao.getListByHqlAndPage("from " + clazz.getName(), null, p+1, psize);
 					for (Object obj : list) {
 						setValue(preState, tbIndex, obj);
 						preState.addBatch();
