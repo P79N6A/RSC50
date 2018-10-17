@@ -446,8 +446,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		}
 		stateData.setParentCode(code);
 		mms.setParentCode(code);
-		beandao.update(mms);
-		statedataService.update(stateData);
+		String mmsSql = "update tb1058_mmsfcda set Parent_CODE='" + code + "'" +
+				" where F1058_CODE='" + mms.getF1058Code() + "'";
+		String stSql = "update tb1016_statedata set Parent_CODE='" + code + "'" +
+				" where F1016_CODE='" + stateData.getF1016Code() + "'";
+		hqldao.updateBySql(mmsSql);
+		hqldao.updateBySql(stSql);
 		tableDeviceWarning.refresh();
 		tableDeviceWarning.setSelection(index);
 		ConsoleManager.getInstance().append("关联成功。");
