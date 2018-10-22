@@ -10,6 +10,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="板卡编号" editor="none" name="tb1047BoardByF1047Code.f1047Slot" width="100" default=""/>
   <field desc="端口序号" editor="none" name="f1048No" width="100" default=""/> 
   <field desc="端口描述" editor="none" name="f1048Desc" width="100" default=""/> 
-  <field desc="端口方向" dict="DEV_PORT_DIRECTION" name="f1048Direction" width="100" default=""/> 
-  <field desc="接口型式" dict="DEV_PORT_PLUG" name="f1048Plug" width="100" default=""/> 
+  <field desc="端口方向" dict="PORT_DIRECTION" name="f1048Direction" width="100" default=""/> 
+  <field desc="接口型式" dict="PORT_PLUG" name="f1048Plug" width="100" default=""/> 
 </table>

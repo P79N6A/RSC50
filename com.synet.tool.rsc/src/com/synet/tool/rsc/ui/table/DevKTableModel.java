@@ -22,7 +22,6 @@ import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
 import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
-import com.synet.tool.rsc.dialog.RefAddrSelectDialog;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -81,12 +80,6 @@ public class DevKTableModel extends RKTableModel {
 					return editor;
 				} else if (col == 9) {
 					KTableCellEditor editor = new KTableDialogEditor(PhyConnByPortBDialog.class);
-					return editor;
-				}
-			}
-			if(TableFactory.BOARD_PORT_TABLE.equals(tableName)) {
-				if(col == 6) {
-					KTableCellEditor editor = new KTableDialogEditor(RefAddrSelectDialog.class);
 					return editor;
 				}
 			}

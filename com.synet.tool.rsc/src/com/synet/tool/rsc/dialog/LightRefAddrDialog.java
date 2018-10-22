@@ -13,6 +13,7 @@ import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.table.KTableEditorDialog;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.tool.found.das.BeanDaoService;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
@@ -46,6 +47,7 @@ public class LightRefAddrDialog extends KTableEditorDialog {
 	}
 	
 	private void initData() {
+		beanDao = BeanDaoImpl.getInstance();
 		MmsfcdaService mmsfcdaService = new MmsfcdaService();
 		String[] names = DictManager.getInstance().getDictNames("DS_AIN");
 		mmsList = mmsfcdaService.getMmsdcdaByDataSet(portEntity.getTb1047BoardByF1047Code()
