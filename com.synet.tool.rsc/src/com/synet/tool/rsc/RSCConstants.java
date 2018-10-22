@@ -16,7 +16,7 @@ public interface RSCConstants {
 	
 	//监听事件映射文件地址
 	String EVENT_PATH		= "com/synet/tool/rsc/eventscfg.xml";
-	String DICT_PATH 		= "com/synet/tool/rsc/dict.properties";
+	String DICT_PATH 		= "com/synet/tool/rsc/rscdict.properties";
 	
     String CFGURL 			= "com/synet/tool/rsc/util/rscnavg.xml";
     String RULEURL 			= "com/synet/tool/rsc/util/rules.xml";
