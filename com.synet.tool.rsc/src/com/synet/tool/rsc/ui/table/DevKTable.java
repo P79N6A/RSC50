@@ -63,11 +63,11 @@ public class DevKTable extends RKTable {
 	/**
 	 * 重写父类导出Excel方法，改为导出.xlsx格式
 	 */
-	@Override
-	public void exportExcel(String title) {
+	public boolean exportExcel2007(String title) {
 		String fileName = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
-		if (fileName == null)
-			return;
+		if (fileName == null) {
+			return false;
+		}
 		Map<String, String> mapTitle = new LinkedHashMap<String, String>();
 		mapTitle.put("key0", title);
 		Map<String, String> mapSep = new LinkedHashMap<String, String>();
@@ -108,6 +108,7 @@ public class DevKTable extends RKTable {
 		ExcelUtils.addValue("fields", fields);
 		ExcelUtils.addValue("data", exportData);
 		ExcelFileManager2007.saveExcelFile(getClass(), UICommonConstants.EXCEL_COMM_EXPORT_2007, fileName);
+		return true;
 	}
 
 	@Override

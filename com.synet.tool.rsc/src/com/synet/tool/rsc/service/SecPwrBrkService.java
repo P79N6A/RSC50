@@ -17,14 +17,14 @@ public class SecPwrBrkService extends BaseService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Tb1092PowerkkEntity> getIotermListByIedParams(String f1046Model, String f1046Name){
+	public List<Tb1092PowerkkEntity> getIotermListByIedParams(String f1046Type, String f1046Name){
 		List<Tb1092PowerkkEntity> result= new ArrayList<>();
-		if (f1046Model == null && f1046Name == null){
+		if (f1046Type == null && f1046Name == null){
 			return result;
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (f1046Model != null) {
-			params.put("f1046Model", f1046Model);
+		if (f1046Type != null) {
+			params.put("f1046Type", Integer.parseInt(f1046Type));
 		}
 		if (f1046Name != null) {
 			params.put("f1046Name", f1046Name);

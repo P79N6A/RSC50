@@ -4,11 +4,11 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1091IotermEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
-  <field desc="回路代码" editor="text" name="f1091Code" width="100" default=""/>
-  <field desc="智能终端代码" editor="text" name="tb1046IedByF1046Code.f1046Code" width="100" default=""/> 
+  <field desc="回路代码" editor="text" name="f1091Code" width="150" default=""/>
+  <field desc="智能终端代码" editor="text" name="tb1046IedByF1046Code.f1046Code" width="150" default=""/> 
   <field desc="智能终端Name" editor="none" name="tb1046IedByF1046Code.f1046Name" width="150" default=""/> 
-  <field desc="智能终端名称" editor="none" name="tb1046IedByF1046Code.f1046Desc" width="200" default=""/> 
-  <field desc="端子描述" editor="text" name="f1091Desc" width="150" default=""/> 
-  <field desc="端子编号" editor="text" name="f1091TermNo" width="150" default=""/> 
+  <field desc="智能终端名称" editor="none" name="tb1046IedByF1046Code.f1046Desc" width="250" default=""/> 
+  <field desc="端子描述" editor="text" name="f1091Desc" width="250" default=""/> 
+  <field desc="端子编号" editor="text" name="f1091TermNo" width="250" default=""/> 
   <field desc="虚回路编号" editor="text" name="f1091CircNo" width="150" default=""/> 
 </table>

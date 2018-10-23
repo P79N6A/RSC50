@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.shrcn.found.common.util.TimeCounter;
 import com.shrcn.found.ui.table.KTableEditorDialog;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -33,14 +34,12 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		initData();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, gridData, 1);
 		composite.setLayout(SwtUtil.getGridLayout(2));
-		SwtUtil.createLabel(composite, "板卡选择：", SwtUtil.bt_gd);
+		SwtUtil.createLabel(composite, "压板选择：", SwtUtil.bt_gd);
 		combo = SwtUtil.createCombo(composite,  SwtUtil.bt_hd);
-		combo.setItems(items);
-		combo.setText(oldData);
+		initData();
 		return super.createDialogArea(parent);
 	}
 	
@@ -49,9 +48,10 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 		strapEntityService = new StrapEntityService();
 		staEntities = strapEntityService.getByIed(iedEntity);
 		int size = staEntities.size();
-		items = new String[size];
-		for (int i = 0; i < size; i++) {
-			items[i] = staEntities.get(i).getF1064Desc();
+		items = new String[size + 1];
+		items[0] = "-空-";
+		for (int i = 1; i < size + 1; i++) {
+			items[i] = staEntities.get(i-1).getF1064Desc();
 		}
 		Tb1064StrapEntity strapEntity = poutEntity.getTb1064StrapByF1064Code();
 		if(strapEntity == null) {
@@ -59,6 +59,8 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 		} else {
 			oldData = strapEntity.getF1064Desc();
 		}
+		combo.setItems(items);
+		combo.setText(oldData);
 	}
 	
 	
@@ -67,7 +69,7 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 		if (buttonId == OK) {
 			int selectionIndex = combo.getSelectionIndex();
 			if(selectionIndex > -1) {
-				Tb1064StrapEntity strapEntity = staEntities.get(selectionIndex);
+				Tb1064StrapEntity strapEntity = (selectionIndex > 0) ? staEntities.get(selectionIndex-1) : null;
 				poutEntity.setTb1064StrapByF1064Code(strapEntity);
 				strapEntityService.update(poutEntity);
 			}
@@ -78,7 +80,7 @@ public class PoutBaordEdtDialog extends KTableEditorDialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("开出虚端子板卡配置"); 
+		newShell.setText("开出虚端子压板配置"); 
 	}
 	
 	@Override

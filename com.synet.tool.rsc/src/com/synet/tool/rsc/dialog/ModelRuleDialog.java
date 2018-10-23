@@ -62,8 +62,7 @@ public class ModelRuleDialog extends WrappedDialog{
 			public void widgetSelected(SelectionEvent e) {
 				Button btn = (Button) e.getSource();
 				if(btn == btnAdd) {
-					table.addRow(table.getDefaultRow());
-					//TODO 焦点移动到这一行
+					table.insertRow(table.getDefaultRow());
 				} else if(btn == btnDel) {
 					table.removeSelected();
 					DialogHelper.showAsynInformation("删除成功");
@@ -83,8 +82,8 @@ public class ModelRuleDialog extends WrappedDialog{
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, "确定", true);
-		createButton(parent, IDialogConstants.CANCEL_ID, "取消", true);
+		createButton(parent, IDialogConstants.OK_ID, "确定", false);
+		createButton(parent, IDialogConstants.CANCEL_ID, "取消", false);
 	}
 	
 	@Override
