@@ -25,6 +25,7 @@ import com.synet.tool.rsc.model.Tb1026StringdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
  /**
  * 
@@ -92,7 +93,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 			String fc = fcdaEl.attributeValue("fc");
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
-			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
+			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());

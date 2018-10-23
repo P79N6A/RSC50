@@ -68,6 +68,7 @@ import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
 /**
  * 保护信息模型->装置树菜单编辑器。
@@ -366,13 +367,22 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			String lnName = getLnName(mmsfcdaEntity.getF1058RefAddr());
 			String doName = getDoName(mmsfcdaEntity.getF1058RefAddr());
 			String doDesc = mmsfcdaEntity.getF1058Desc();
-			F1011_NO f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc);
-			tb1064StrapEntity.setF1064Type(f1011no.getId());
-			statedata.setF1011No(f1011no.getId());
-			mmsfcdaService.save(statedata);
-			mmsfcdaService.save(tb1064StrapEntity);
+			int f1064Type = tb1064StrapEntity.getF1064Type();
+			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
+			int newTypeId = f1011no.getId();
+			if (f1064Type != newTypeId) {
+				tb1064StrapEntity.setF1064Type(newTypeId);
+				statedata.setF1011No(newTypeId);
+				mmsfcdaService.save(statedata);
+				mmsfcdaService.save(tb1064StrapEntity);
+				console.append("压板 \"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
+						")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1064Type) +
+						"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
+						"\" 。");
+			}
 		}
 		tableProtectPlate.setInput(input2);
+		console.append("规则已应用于压板类型！");
 	}
 	
 	private String getDoName(String f1058RefAddr) {

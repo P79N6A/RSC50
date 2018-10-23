@@ -4,10 +4,10 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1092PowerkkEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/> 
-  <field desc="空开代码" editor="text" name="f1092Code" width="100" default=""/>
-  <field desc="装置代码" editor="text" name="tb1046IedByF1046Code.f1046Code" width="100" default=""/>
+  <field desc="空开代码" editor="text" name="f1092Code" width="150" default=""/>
+  <field desc="装置代码" editor="text" name="tb1046IedByF1046Code.f1046Code" width="150" default=""/>
   <field desc="装置Name" editor="none" name="tb1046IedByF1046Code.f1046Name" width="150" default=""/> 
-  <field desc="装置名称" editor="none" name="tb1046IedByF1046Code.f1046Desc" width="200" default=""/> 
-  <field desc="空开描述" editor="text" name="f1092Desc" width="100" default=""/> 
+  <field desc="装置名称" editor="none" name="tb1046IedByF1046Code.f1046Desc" width="250" default=""/> 
+  <field desc="空开描述" editor="text" name="f1092Desc" width="200" default=""/> 
   <field desc="空开编号" editor="text" name="f1092KkNo" width="100" default=""/>  
 </table>

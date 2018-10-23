@@ -6,6 +6,7 @@
 package com.synet.tool.rsc.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
@@ -111,10 +113,11 @@ public class SecFibreEditor extends BaseConfigEditor {
 		nameItems.add(DEV_NAME_TITLE);
 		if (ieds != null && !ieds.isEmpty()) {
 			for (Tb1046IedEntity ied : ieds) {
-				typeItems.add(ied.getF1046Model());
 				nameItems.add(ied.getF1046Name());
 			}
 		}
+		String[] devTypes = DictManager.getInstance().getDictNames("IED_TYPE");
+		typeItems.addAll(Arrays.asList(devTypes));
 		cmbDevType.setItems(typeItems.toArray(new String[0]));
 		cmbDevName.setItems(nameItems.toArray(new String[0]));
 		cmbDevType.select(0);
@@ -122,15 +125,17 @@ public class SecFibreEditor extends BaseConfigEditor {
 	}
 	
 	private void search() {
-		String f1046Model = cmbDevType.getText().trim();
+		String f1046Type = cmbDevType.getText().trim();
 		String f1046Name = cmbDevName.getText().trim();
-		if (DEV_TYPE_TITLE.equals(f1046Model)) {
-			f1046Model = null;
+		if (DEV_TYPE_TITLE.equals(f1046Type)) {
+			f1046Type = null;
+		} else {
+			f1046Type = DictManager.getInstance().getIdByName("IED_TYPE", f1046Type);
 		}
 		if (DEV_NAME_TITLE.equals(f1046Name)) {
 			f1046Name = null;
 		}
-		List<Tb1090LineprotfiberEntity> list = secFibreService.getLineListByIedParams(f1046Model, f1046Name);
+		List<Tb1090LineprotfiberEntity> list = secFibreService.getLineListByIedParams(f1046Type, f1046Name);
 		if (list != null) {
 			table.setInput(list);
 		}
@@ -140,6 +145,7 @@ public class SecFibreEditor extends BaseConfigEditor {
 		String filePath = DialogHelper.getSaveFilePath("文件", "", new String[]{"*.xlsx"});
 		if (filePath == null || "".equals(filePath)){
 			DialogHelper.showAsynError("请选择要导入文件路径");
+			return;
 		}
 		List<Tb1090LineprotfiberEntity> list = secFibreService.importData(filePath);
 		if (list != null) {
@@ -149,8 +155,9 @@ public class SecFibreEditor extends BaseConfigEditor {
 	
 	private void exportData() {
 		try {
-			table.exportExcel(table.getTableDesc());
-			DialogHelper.showAsynInformation("导出成功");
+			if (table.exportExcel2007(table.getTableDesc())) {
+				DialogHelper.showAsynInformation("导出成功");
+			}
 		} catch (Exception e) {
 			DialogHelper.showAsynError("导出失败！");
 		}

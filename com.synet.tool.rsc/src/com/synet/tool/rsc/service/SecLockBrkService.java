@@ -17,15 +17,15 @@ public class SecLockBrkService extends BaseService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Tb1091IotermEntity> getIotermListByIedParams(String f1046Model, String f1046Name){
+	public List<Tb1091IotermEntity> getIotermListByIedParams(String f1046Type, String f1046Name){
 		List<Tb1091IotermEntity> result= new ArrayList<>();
-		if (f1046Model == null && f1046Name == null){
+		if (f1046Type == null && f1046Name == null){
 			result = (List<Tb1091IotermEntity>) beanDao.getAll(Tb1091IotermEntity.class);
 			return result;
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (f1046Model != null) {
-			params.put("f1046Model", f1046Model);
+		if (f1046Type != null) {
+			params.put("f1046Type", Integer.parseInt(f1046Type));
 		}
 		if (f1046Name != null) {
 			params.put("f1046Name", f1046Name);

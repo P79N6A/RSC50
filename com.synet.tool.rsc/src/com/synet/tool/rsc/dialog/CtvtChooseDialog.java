@@ -22,7 +22,6 @@ public class CtvtChooseDialog extends KTableEditorDialog {
 
 	public CtvtChooseDialog(Shell parentShell, Object item) {
 		super(parentShell, item);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -30,7 +29,7 @@ public class CtvtChooseDialog extends KTableEditorDialog {
 		table = TableFactory.getCtvtChooseTable(parent);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		initData();
-		return super.createDialogArea(parent);
+		return parent;
 	}
 	
 	private void initData() {
@@ -64,7 +63,7 @@ public class CtvtChooseDialog extends KTableEditorDialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(480, 410);
+		return new Point(880, 510);
 	}
 
 }

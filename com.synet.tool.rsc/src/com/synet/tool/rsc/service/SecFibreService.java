@@ -18,15 +18,15 @@ public class SecFibreService extends BaseService {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<Tb1090LineprotfiberEntity> getLineListByIedParams(String f1046Model, String f1046Name){
+	public List<Tb1090LineprotfiberEntity> getLineListByIedParams(String f1046Type, String f1046Name){
 		List<Tb1090LineprotfiberEntity> result= new ArrayList<>();
-		if (f1046Model == null && f1046Name == null){
+		if (f1046Type == null && f1046Name == null){
 			result = (List<Tb1090LineprotfiberEntity>) beanDao.getAll(Tb1090LineprotfiberEntity.class);
 			return result;
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (f1046Model != null) {
-			params.put("f1046Model", f1046Model);
+		if (f1046Type != null) {
+			params.put("f1046Type", Integer.parseInt(f1046Type));
 		}
 		if (f1046Name != null) {
 			params.put("f1046Name", f1046Name);

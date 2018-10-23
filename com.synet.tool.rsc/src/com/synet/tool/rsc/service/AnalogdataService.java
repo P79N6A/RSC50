@@ -48,7 +48,7 @@ public class AnalogdataService extends BaseService {
 		List<Tb1006AnalogdataEntity> temp = getAnologByIed(iedEntity);
 		for (Tb1006AnalogdataEntity tb1006AnalogdataEntity : temp) {
 			int f1011No = tb1006AnalogdataEntity.getF1011No();
-			if (f1011No > F1011_NO.IED_WRN_COMMON.getId() && f1011No < F1011_NO.IED_TEMP.getId()) {
+			if (f1011No >= F1011_NO.IED_WRN_COMMON.getId() && f1011No <= F1011_NO.IED_WRN_ALL.getId()) {
 				result.add(tb1006AnalogdataEntity);
 			}
 		}

@@ -6,10 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -18,6 +15,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.file.util.FileManager;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
@@ -27,7 +25,7 @@ import com.synet.tool.rsc.RSCConstants;
 public class RuleManager {
 
 	private static RuleManager rmgr = new RuleManager();
-	private Map<Integer, Rule> rules = new HashMap<>();
+	private List<Rule> rules = new ArrayList<>();
 
 	public static RuleManager getInstance() {
 		return rmgr;
@@ -48,34 +46,27 @@ public class RuleManager {
 			}
 		} 
 		
-		for (Rule rule : ruleList) {
-			rules.put(rule.getId(), rule);
-		}
+		rules.clear();
+		rules.addAll(ruleList);
+		
+		DictManager dictmgr = DictManager.getInstance();
+		String dicttype = F1011_NO.class.getSimpleName();
+		dictmgr.removeDict(dicttype);
+		dictmgr.addDict(dicttype, dicttype, F1011_NO.getDictItems());
+		
 		try {
 			Document doc = XMLFileManager.loadXMLFile(f);
 			doc.remove(doc.getRootElement());
 			Element rootElement = doc.addElement("RuleCfg");
 			rootElement.addAttribute("bundleID", "com.shrcn.tool.ecfg");
-			int j = 0;
-			for (int i = 0; ; i++) {
-				if(j < rules.size()) {
-					Rule rule = rules.get(i);
-					if(rule != null) {
-						j ++;
-						
-						F1011_NO.setRule(i, rule);
-						Element ruleElement = rootElement.addElement("Rule");
-						ruleElement.addAttribute("id", rule.getId()+"");
-						ruleElement.addAttribute("name", rule.getName());
-						ruleElement.addAttribute("datSet", rule.getDatSet());
-						ruleElement.addAttribute("lnName", rule.getLnName());
-						ruleElement.addAttribute("doName", rule.getDoName());
-						ruleElement.addAttribute("doDesc", rule.getDoDesc());
-					}
-				} else {
-					break;
-				}
-				
+			for (Rule rule : rules) {
+					Element ruleElement = rootElement.addElement("Rule");
+					ruleElement.addAttribute("id", rule.getId()+"");
+					ruleElement.addAttribute("name", rule.getName());
+					ruleElement.addAttribute("datSet", rule.getDatSet());
+					ruleElement.addAttribute("lnName", rule.getLnName());
+					ruleElement.addAttribute("doName", rule.getDoName());
+					ruleElement.addAttribute("doDesc", rule.getDoDesc());
 			}
 			OutputFormat format = OutputFormat.createPrettyPrint();
             format.setEncoding("UTF-8");
@@ -112,7 +103,7 @@ public class RuleManager {
 			for (Element el : elements) {
 				Rule rule = new Rule();
 				DOM4JNodeHelper.copyAttributes(el, rule);
-				rules.put(rule.getId(), rule);
+				rules.add(rule);
 			}
 		} catch (FileNotFoundException e) {
 			SCTLogger.error(e.getMessage());
@@ -129,8 +120,7 @@ public class RuleManager {
 	
 	public List<Rule> getRules() {
 		List<Rule> result = new ArrayList<>();
-		Collection<Rule> values = rules.values();
-		for (Rule rule : values) {
+		for (Rule rule : rules) {
 			result.add(rule);
 		}
 		return result;

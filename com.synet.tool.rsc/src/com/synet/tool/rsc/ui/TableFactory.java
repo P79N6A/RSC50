@@ -20,10 +20,10 @@ public class TableFactory {
 	public static final String CUBICLE_TABLE                = "CubicleTable"; 	// 屏柜
 	public static final String CABLE_TABLE                  = "CableTable";		// 光缆
 	public static final String PHYSCONNE_TABLE              = "PhysconnTable";	// 物理回路
-	public static final String LINEPORTFIBER_TABLE			= "LineProtFiberTable";
-	public static final String IOTERM_TABLE 				= "IOTermTable";
-	public static final String POWERKK_TABLE 				= "PowerKKTable";
-	public static final String VOLTAGEKK_TABLE 				= "VoltageKKTable";
+	public static final String LINEPORTFIBER_TABLE			= "LineProtFiberTable"; // 安措-保护纵联光纤
+	public static final String IOTERM_TABLE 				= "IOTermTable"; 	// 安措-重合回路闭锁
+	public static final String POWERKK_TABLE 				= "PowerKKTable"; 	// 安措-装置电源空开
+	public static final String VOLTAGEKK_TABLE 				= "VoltageKKTable"; // 安措-保护电压回路空开
 	public static final String ICD_TABLE 					= "IcdTable";
 	public static final String IEDACCOUNT_TABLE 			= "IEDAccountTable";
 	public static final String CTVT_POUT_TABLE 				= "CtvtPoutTable";
