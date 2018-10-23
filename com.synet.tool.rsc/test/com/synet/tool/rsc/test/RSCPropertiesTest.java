@@ -6,9 +6,11 @@ package com.synet.tool.rsc.test;
 
 import static org.junit.Assert.*;
 
+import org.eclipse.swt.widgets.Shell;
 import org.junit.Test;
 
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.dialog.ModelCompareDialog;
 
  /**
  * 
@@ -25,6 +27,6 @@ public class RSCPropertiesTest {
 			System.out.println(id);
 		}
 	}
-
+	
 }
 

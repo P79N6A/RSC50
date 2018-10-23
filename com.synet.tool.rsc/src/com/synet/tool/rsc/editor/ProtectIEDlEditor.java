@@ -34,6 +34,7 @@ import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -75,7 +76,7 @@ import com.synet.tool.rsc.util.F1011_NO;
  */
 public class ProtectIEDlEditor extends BaseConfigEditor {
 	
-//	private Button btnTempCamp;
+	private Button btnTempCamp;
 	private Button btnTempQuote;
 	private Button btnTempSave;
 	private GridData gridData;
@@ -165,13 +166,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	public void buildUI(Composite container) {
 		super.buildUI(container);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
-		comp.setLayout(SwtUtil.getGridLayout(4));
+		comp.setLayout(SwtUtil.getGridLayout(5));
 		if (!needConfig()) {
 			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
 		} else {
-			SwtUtil.createLabel(comp, "", new GridData(780, SWT.DEFAULT));
+			SwtUtil.createLabel(comp, "", new GridData(700, SWT.DEFAULT));
 			btnApplyRule = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "应用规则");
-//			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
+			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
 			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
 			createCompByEntryName(comp);
@@ -191,19 +192,19 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 	
 	private void createCompByEntryName(Composite comp) {
-		GridData gdSpan_4 = new GridData(GridData.FILL_BOTH);
-		gdSpan_4.horizontalSpan = 4;
+		GridData gdSpan_5 = new GridData(GridData.FILL_BOTH);
+		gdSpan_5.horizontalSpan = 5;
 		int type = iedEntity.getF1046Type();
 		switch (type) {
 		case DBConstants.IED_PROT:
-			createProtectCmp(comp, gdSpan_4);
+			createProtectCmp(comp, gdSpan_5);
 			break;
 		case DBConstants.IED_MU:
 		case DBConstants.IED_MT:
-			createMergeUnitCmp(comp, gdSpan_4);
+			createMergeUnitCmp(comp, gdSpan_5);
 			break;
 		case DBConstants.IED_TERM:
-			createIedCmp(comp, gdSpan_4);
+			createIedCmp(comp, gdSpan_5);
 			break;
 		default:
 			break;
@@ -326,11 +327,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 					
 					
 				} else if(obj == btnApplyRule) {
-					applyRule();
+					if(tableProtectPlate != null) {
+						applyRule();
+					}
+				} else if(obj == btnTempCamp) {
+					//TODO 对比窗口
+					ModelCompareDialog dialog = new ModelCompareDialog(getShell());
+					dialog.open();
 				}
-//				else if(obj == btnTempCamp) {
-//					//TODO
-//				}
 			}
 			
 		};
@@ -340,7 +344,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tabFolder.addSelectionListener(selectionListener);
 		btnAddWarn.addSelectionListener(selectionListener);
 		btnDelWarn.addSelectionListener(selectionListener);
-//		btnTempCamp.addSelectionListener(selectionListener);
+		btnTempCamp.addSelectionListener(selectionListener);
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 		btnApplyRule.addSelectionListener(selectionListener);
