@@ -260,6 +260,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			iedEntity.setF1046OutType(entity.getOutType());
 			//更新
 			updateIEDIPs(iedEntity, entity);
+			entity.setMatched(DBConstants.MATCHED_OK);
 		}
 	}
 

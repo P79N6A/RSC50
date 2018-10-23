@@ -176,6 +176,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				boardEntity.setF1047Desc(entity.getBoardModel());
 				boardEntity.setF1047Type(entity.getBoardType());
 				boardEntityService.insert(boardEntity);
+				entity.setMatched(DBConstants.MATCHED_OK);
 				boardNum++;
 				if (!StringUtil.isEmpty(portNumStr)) {
 					List<Tb1048PortEntity> portList = new ArrayList<>();

@@ -11,4 +11,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="板卡型号" editor="text" name="boardModel" width="100" default=""/> 
   <field desc="板卡类别/用途" editor="text" name="boardType" width="180" default=""/> 
   <field desc="端口数" editor="text" name="portNum" width="100" default=""/>  
+  <field desc="采纳" dict="YESNO" name="matched" width="60" default=""/>
 </table>

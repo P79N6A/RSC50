@@ -4,11 +4,12 @@ class="com.shrcn.found.das/com.synet.tool.rsc.model.IM105BoardWarnEntity"
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
+  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
+  <field desc="采纳" dict="YESNO" name="matched" width="60" default=""/>
   <field desc="装置名称" editor="text" name="devDesc" width="150" default=""/>
   <field desc="装置Name" editor="text" name="devName" width="200" default=""/>
   <field desc="告警信息参引" editor="text" name="alarmRefAddr" width="200" default=""/>
   <field desc="告警信息描述" editor="text" name="alarmDesc" width="200" default=""/> 
   <field desc="板卡编号" editor="text" name="boardCode" width="100" default=""/>  
-  <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
-  <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
 </table>
