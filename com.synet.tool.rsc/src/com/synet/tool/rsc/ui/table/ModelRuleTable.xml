@@ -3,8 +3,9 @@
 class="com.synet.tool.rsc/com.synet.tool.rsc.util.Rule" 
 tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.RuleTable" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <field fixed="true" desc="序号" editor="none" name="index" width="100" default=""/>  
-  <field desc="功能类型" dict="F1011_NO" name="id" width="150" default=""/>
+  <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="类型ID" editor="text" name="id" width="100" default=""/>  
+  <field desc="类型名称" editor="text" name="name" width="250" default=""/>
   <field desc="数据集名称" editor="text" name="datSet" width="200" default=""/> 
   <field desc="LN类型" editor="text" name="lnName" width="100" default=""/> 
   <field desc="DO名称" editor="text" name="doName" width="100" default=""/> 

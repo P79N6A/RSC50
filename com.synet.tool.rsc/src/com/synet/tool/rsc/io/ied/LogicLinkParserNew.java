@@ -11,6 +11,8 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.BaseCbEntity;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -114,12 +116,20 @@ public class LogicLinkParserNew {
 		pin.setF1062RefAddr(pinRefAddr);
 		pin.setF1062Desc(pinDesc);
 		pin.setF1062IsUsed(1);
-		setF1011No(pin);
+		Tb1016StatedataEntity stdata = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", pout.getDataCode());
+		if (stdata != null) {
+			pin.setF1011No(stdata.getF1011No());
+		} else {
+			Tb1006AnalogdataEntity mxdata = (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", pout.getDataCode());
+			pin.setF1011No(mxdata.getF1011No());
+		}
+//		String fc = (pout.getStdata()!=null) ? "ST" : "MX";
+//		setF1011No(pin, fc);
 		beanDao.insert(pin);
 		return circuit;
 	}
 	
-	private void setF1011No(Tb1062PinEntity pin) {
+	private void setF1011No(Tb1062PinEntity pin, String fc) {
 		String intAddr = pin.getF1062RefAddr();
 		int p = intAddr.indexOf('.');
 		if (p < 1) {
@@ -129,7 +139,7 @@ public class LogicLinkParserNew {
 		String temp = intAddr.substring(p + 1);
 		p = temp.indexOf('.');
 		String doName = (p > 0) ? temp.substring(0, p) : temp;
-		int f1011No = F1011_NO.getType("", lnClass, doName, pin.getF1062Desc()).getId();
+		int f1011No = F1011_NO.getType("", lnClass, doName, pin.getF1062Desc(), fc).getId();
 		pin.setF1011No(f1011No);
 	}
 

@@ -39,6 +39,7 @@ import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
 public class IedParserNew {
 
@@ -289,7 +290,7 @@ public class IedParserNew {
 			String fc = fcdaEl.attributeValue("fc");
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
-			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
+			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
@@ -332,13 +333,17 @@ public class IedParserNew {
 			String fc = fcdaEl.attributeValue("fc");
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
-			F1011_NO type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc);
+			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			if ("ST".equals(fc)) {
 				mmsFcda.setF1058DataType(DBConstants.DATA_ST);
+				boolean strap = isStrap(datSet);
+				if (strap) {
+					type = F1011_NO.STRAP_R19;
+				}
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				mmsFcda.setDataCode(statedata.getF1016Code());
 				mmsFcda.setParentCode(statedata.getParentCode());
-				if (isStrap(datSet)) { // 添加压板
+				if (strap) { // 添加压板
 					strapService.addStrap(statedata, fcdaDesc);
 				}
 			} else {

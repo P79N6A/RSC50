@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.util;
 
+import com.shrcn.found.common.util.StringUtil;
+
 public class Rule {
 	private int id;
 	private String name;
@@ -47,5 +49,12 @@ public class Rule {
 
 	public void setDoDesc(String doDesc) {
 		this.doDesc = doDesc;
+	}
+	
+	public boolean isEmpty() {
+		return StringUtil.isEmpty(datSet) &&
+				StringUtil.isEmpty(lnName) && 
+				StringUtil.isEmpty(doName) && 
+				StringUtil.isEmpty(doDesc);
 	}
 }
