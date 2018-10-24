@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -35,6 +36,7 @@ import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ModelCompareDialog;
+import com.synet.tool.rsc.dialog.SelectRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -133,6 +135,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private HashMap<Integer, DevKTable> tableMapper;
 	private CTabFolder tabFdCfg;
 	private Button btnApplyRule;
+	private StatedataService statedataService;
 	
 	
 
@@ -155,6 +158,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		logicallinkEntityService = new LogicallinkEntityService();
 		rcdChnlaService = new RcdchannelaEntityService();
 		rcdChnLdService = new RcdchanneldEntityService();
+		statedataService = new StatedataService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		iedEntityList.add(iedEntity);
@@ -328,12 +332,17 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 					
 					
 				} else if(obj == btnApplyRule) {
-					if(tableProtectPlate != null) {
-						applyRule();
+					SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
+					if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
+						List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
+						List<Integer> rulesId = new ArrayList<>();
+						for (Rule rule : rulesSelect) {
+							rulesId.add(rule.getId());
+						}
+						applyRule(rulesId);
 					}
 				} else if(obj == btnTempCamp) {
-					//TODO 对比窗口
-					ModelCompareDialog dialog = new ModelCompareDialog(getShell());
+					ModelCompareDialog dialog = new ModelCompareDialog(getShell(), iedEntity);
 					dialog.open();
 				}
 			}
@@ -353,14 +362,48 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	/**
 	 * 规则应用
+	 * @param rulesSelect 
 	 */
-	private void applyRule() {
-		@SuppressWarnings("unchecked")
-		List<Tb1064StrapEntity> input2 = (List<Tb1064StrapEntity>) tableProtectPlate.getInput();
-		if(!DataUtils.listNotNull(input2)) {
+	private void applyRule(List<Integer> rulesId) {
+		applyProtectStrapRule(rulesId);
+		applyMmsfcdaRule(rulesId);
+		
+	}
+
+	private void applyMmsfcdaRule(List<Integer> rulesId) {
+		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
+		temp.addAll(mmsfcdasProtcMeaQua);
+		temp.addAll(mmsfcdasProtcAction);
+		if(!DataUtils.listNotNull(temp)) {
 			return;
 		}
-		for (Tb1064StrapEntity tb1064StrapEntity : input2) {
+		for (Tb1058MmsfcdaEntity mmsfcdaEntity : temp) {
+			String datSet = mmsfcdaEntity.getTb1054RcbByF1054Code().getF1054Dataset();
+			String lnName = getLnName(mmsfcdaEntity.getF1058RefAddr());
+			String doName = getDoName(mmsfcdaEntity.getF1058RefAddr());
+			String doDesc = mmsfcdaEntity.getF1058Desc();
+			int f1058DataType = mmsfcdaEntity.getF1058DataType();
+			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
+			if(!rulesId.contains(f1011no.getId())) {
+				continue;
+			}
+			Tb1016StatedataEntity statedata = statedataService.getStateDataByCode(mmsfcdaEntity.getDataCode());
+			int newTypeId = f1011no.getId();
+			if (f1058DataType != newTypeId ) {
+				mmsfcdaEntity.setF1058DataType(newTypeId);
+				statedata.setF1011No(newTypeId);
+				mmsfcdaService.save(statedata);
+				mmsfcdaService.save(mmsfcdaEntity);
+			}
+		}
+	}
+
+	private void applyProtectStrapRule(List<Integer> rulesId) {
+		//保护压板-规则应用
+		if(!DataUtils.listNotNull(staEntities)) {
+			return;
+		}
+		for (Tb1064StrapEntity tb1064StrapEntity : staEntities) {
 			Tb1016StatedataEntity statedata = tb1064StrapEntity.getStatedata();
 			Tb1058MmsfcdaEntity mmsfcdaEntity = statedata.getTb1058FcdaByF1058Code();
 			String datSet = mmsfcdaEntity.getTb1054RcbByF1054Code().getF1054Dataset();
@@ -369,6 +412,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			String doDesc = mmsfcdaEntity.getF1058Desc();
 			int f1064Type = tb1064StrapEntity.getF1064Type();
 			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
+			if(!rulesId.contains(f1011no.getId())) {
+				continue;
+			}
 			int newTypeId = f1011no.getId();
 			if (f1064Type != newTypeId) {
 				tb1064StrapEntity.setF1064Type(newTypeId);
@@ -381,9 +427,10 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 						"\" 。");
 			}
 		}
-		tableProtectPlate.setInput(input2);
+		tableProtectPlate.setInput(staEntities);
 		console.append("规则已应用于压板类型！");
 	}
+
 	
 	private String getDoName(String f1058RefAddr) {
 		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf("$") + 1, f1058RefAddr.length());

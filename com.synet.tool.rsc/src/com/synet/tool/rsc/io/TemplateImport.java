@@ -26,14 +26,12 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.StatedataService;
 
 public class TemplateImport implements IImporter{
 	
-	private MmsfcdaService mmsfcdaService;
 	private StatedataService statedataService;
 	private BeanDaoImpl beanDao;
 	private Tb1046IedEntity tb1046IedEntity;
@@ -42,7 +40,6 @@ public class TemplateImport implements IImporter{
 	
 	public TemplateImport(Tb1046IedEntity tb1046IedEntity) {
 		this.tb1046IedEntity = tb1046IedEntity;
-		mmsfcdaService = new MmsfcdaService();
 		statedataService = new StatedataService();
 		poutEntityService = new PoutEntityService();
 		pinEntityService = new PinEntityService();

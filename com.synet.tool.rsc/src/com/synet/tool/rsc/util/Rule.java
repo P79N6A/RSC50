@@ -10,6 +10,8 @@ public class Rule {
 	private String doName;
 	private String doDesc;
 	
+	private boolean selected;
+	
 	public int getId() {
 		return id;
 	}
@@ -56,5 +58,11 @@ public class Rule {
 				StringUtil.isEmpty(lnName) && 
 				StringUtil.isEmpty(doName) && 
 				StringUtil.isEmpty(doDesc);
+	}
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

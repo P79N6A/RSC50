@@ -71,7 +71,10 @@ public class TemplateExport{
 		if(file.exists()) {
 			ConsoleManager.getInstance().append("模板 " + fileName + " 将被覆盖！");
 		}
-		
+		createXml(createDocument(), path);
+	}
+	
+	public Document createDocument() {
 		Document doc = DocumentHelper.createDocument();
 		Element elementIedEntity = doc.addElement("Tb1046IedEntity");
 		iedAddAttr(tb1046IedEntity, elementIedEntity);
@@ -114,10 +117,10 @@ public class TemplateExport{
 			}
 			param.clear();
 		}
-		createXml(doc, path);
+		return doc;
 	}
 	
-	private void createXml(Document doc, String path) {
+	public void createXml(Document doc, String path) {
         OutputFormat format = OutputFormat.createPrettyPrint();
         format.setEncoding("utf-8");
         Writer out;

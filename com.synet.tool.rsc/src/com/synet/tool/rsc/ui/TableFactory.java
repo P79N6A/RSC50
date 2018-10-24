@@ -68,10 +68,16 @@ public class TableFactory {
 	public static String MMS_FCDA_TABLE						= "MmsFcdaTable";
 	public static final String PROBLEMS		  				= "problems";
 	public static final String MODEL_RULE_TABLE		  		= "ModelRuleTable";
+	public static final String RULE_SELECT_TABLE		  		= "RuleSelectTable";
 	
 	public static final String IED_TABLE		  		    = "IEDTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
+	
+	public static RuleTable getRuleSelectTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(RULE_SELECT_TABLE);
+		return (RuleTable) TableBuilder.createKTable(RuleTable.class, container, tableCfg);
+	}
 	
 	public static RuleTable getModelRuleTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(MODEL_RULE_TABLE);

@@ -19,7 +19,7 @@ public class Tb1060SpfcdaEntity {
     public String getF1060Code() {
         return f1060Code;
     }
-
+    
     public void setF1060Code(String f1060Code) {
         this.f1060Code = f1060Code;
     }

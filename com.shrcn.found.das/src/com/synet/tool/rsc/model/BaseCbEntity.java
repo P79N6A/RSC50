@@ -4,18 +4,18 @@ import java.util.List;
 
 public abstract class BaseCbEntity {
 	
-	private String cbCode;
-    private String cbName;
-    private String cbId;
-    private String macAddr;
-    private String vlanid;
-    private String vlanPriority;
-    private String appid;
-    private String dataset;
-    private String dsDesc;
-    private String f1071Code;
-    private Tb1046IedEntity tb1046IedByF1046Code;
-    private List<Tb1061PoutEntity> tb1061PoutsByCbCode;
+	protected String cbCode;
+    protected String cbName;
+    protected String cbId;
+    protected String macAddr;
+    protected String vlanid;
+    protected String vlanPriority;
+    protected String appid;
+    protected String dataset;
+    protected String dsDesc;
+    protected String f1071Code;
+    protected Tb1046IedEntity tb1046IedByF1046Code;
+    protected List<Tb1061PoutEntity> tb1061PoutsByCbCode;
     
     @Override
     public boolean equals(Object o) {

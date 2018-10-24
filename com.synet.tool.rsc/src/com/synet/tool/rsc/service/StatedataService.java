@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
-import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.util.DataUtils;
 
@@ -33,7 +32,6 @@ public class StatedataService extends BaseService {
 	 * @param iedEntity
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<String> getStateDataByIed(Tb1046IedEntity iedEntity) {
 		List<Tb1016StatedataEntity> temp = getStateDataByParentCode(iedEntity.getF1046Code());
 		List<String> result = new ArrayList<>();
@@ -48,8 +46,10 @@ public class StatedataService extends BaseService {
 	 * @param parentCode
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Tb1016StatedataEntity> getStateDataByParentCode(String parentCode) {
-		return (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", parentCode);
+		return (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, 
+				"parentCode", parentCode);
 	}
 	
 	/**
