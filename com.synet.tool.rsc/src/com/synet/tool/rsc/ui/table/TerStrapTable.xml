@@ -6,6 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
   <field desc="更新" editor="checkbox" name="overwrite" width="60" default=""/> 
   <field desc="冲突" editor="none" name="conflict" dict="YESNO" width="60" default=""/> 
+  <field desc="采纳" dict="YESNO" name="matched" width="60" default=""/>
   <field desc="装置名称" editor="text" name="devDesc" width="200" default=""/>
   <field desc="装置Name" editor="text" name="devName" width="150" default=""/>
   <field desc="压板参引" editor="text" name="strapRefAddr" width="200" default=""/>

@@ -161,6 +161,7 @@ public class ImportFibreListProcessor3 {
 			// 添加光缆和芯线
 			if (existsCable) {
 				addCable(cableCode, cubicleEntityA, cubicleEntityB);	// 1根光缆
+				entity.setMatched(DBConstants.MATCHED_OK);
 			} else {
 				String msg = entity.getDevNameA() + " -> " + entity.getDevNameB() + "之间无光缆！";
 				SCTLogger.info(msg);
@@ -231,6 +232,8 @@ public class ImportFibreListProcessor3 {
 			map.put(portA, entity);
 			map.put(portB, entity);
 		}
+		//端口检查通过则通过
+		entity.setMatched(DBConstants.MATCHED_OK);
 		
 		//处理屏柜A跳线
 		Tb1048PortEntity portEntityAA = portEntityService.getPortEntity(entity.getDistribFrameCodeA(), "X1", entity.getDistribFramePortNoA());

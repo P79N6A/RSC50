@@ -228,6 +228,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 									analogdataEntity.setParentCode(portEntity.getF1048Code());
 									analogdataService.update(analogdataEntity);
 									portLights.put(endMsg, opticalRefAddr);
+									entity.setMatched(DBConstants.MATCHED_OK);
 								} else {
 									String msg = "装置板卡端口不存在：" + endMsg;
 									appendError("导入光强与端口", "端口检查", msg);

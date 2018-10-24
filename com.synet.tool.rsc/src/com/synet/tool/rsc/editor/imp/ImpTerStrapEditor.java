@@ -291,6 +291,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 									if (strapEntity != null) {
 										poutEntity.setTb1064StrapByF1064Code(strapEntity);
 										poutEntityService.save(poutEntity);
+										entity.setMatched(DBConstants.MATCHED_OK);
 									}
 								}
 							} else {

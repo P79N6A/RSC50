@@ -120,8 +120,8 @@ public interface DBConstants {
 	int IN_DOOR = 0; //户内
 	int OUT_DOOR = 1; //户外
 	
-	int MATCHED_OK = 0;//匹配
-	int MATCHED_NO = 1;//未匹配
+	int MATCHED_OK = 1;//匹配（是）
+	int MATCHED_NO = 2;//未匹配（否）
 	
 	int CABLE_TYPE_GL = 1;	//光缆
 	int CABLE_TYPE_WL = 2;	//尾缆
