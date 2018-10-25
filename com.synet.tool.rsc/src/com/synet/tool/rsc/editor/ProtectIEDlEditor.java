@@ -136,7 +136,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private HashMap<Integer, DevKTable> tableMapper;
 	private CTabFolder tabFdCfg;
 	private Button btnApplyRule;
-//	private StatedataService statedataService;
+	private StatedataService statedataService;
 	private AnalogdataService analogdataService;
 	
 	
@@ -160,7 +160,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		logicallinkEntityService = new LogicallinkEntityService();
 		rcdChnlaService = new RcdchannelaEntityService();
 		rcdChnLdService = new RcdchanneldEntityService();
-//		statedataService = new StatedataService();
+		statedataService = new StatedataService();
 		analogdataService = new AnalogdataService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
@@ -379,7 +379,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		if(!DataUtils.listNotNull(poutEntities)) {
 			return;
 		}
+		boolean flag = false;
 		for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
+			flag = false;
 			String datSet = tb1061PoutEntity.getCbEntity().getDataset();
 			String f1061RefAddr = tb1061PoutEntity.getF1061RefAddr();
 			String lnName = getLnName(f1061RefAddr);
@@ -390,26 +392,34 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				continue;
 			}
 			int newTypeId = f1011no.getId();
-			
 			Tb1006AnalogdataEntity algdata = tb1061PoutEntity.getAlgdata();
-			if(algdata.getF1011No() != newTypeId) {
-				algdata.setF1011No(newTypeId);
-				poutEntityService.update(algdata);
+			
+			if(algdata != null) {
+				if(algdata.getF1011No() != newTypeId) {
+					algdata.setF1011No(newTypeId);
+					poutEntityService.update(algdata);
+					flag = true;
+				}
 			}
 			Tb1016StatedataEntity stdata = tb1061PoutEntity.getStdata();
-			if(stdata.getF1011No() != newTypeId) {
-				stdata.setF1011No(newTypeId);
-				poutEntityService.update(stdata);
+			if(stdata != null) {
+				if(stdata.getF1011No() != newTypeId) {
+					stdata.setF1011No(newTypeId);
+					poutEntityService.update(stdata);
+					flag = true;
+				}
+			}
+			if(flag) {
 				console.append("开出虚端子\"" + tb1061PoutEntity.getF1061RefAddr() + "(" + tb1061PoutEntity.getF1061Desc() +
 						")\" 关联的数据集类型已改变，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
 						"\" 。");
 			}
 		}
-		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
-		console.append("规则已应用于开出虚端子！");
+		
 		if(tableVirtualTerminalOut != null) {
 			tableVirtualTerminalOut.setInput(poutEntities);
 		}
+		console.append("规则已应用于开出虚端子！");
 	}
 
 	private void applyMmsfcdaRule(List<Integer> rulesId) {
@@ -441,18 +451,37 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
 				continue;
 			}
+			
 			Tb1006AnalogdataEntity analogdataEntity = analogdataService.
 					getAnologByCodes(mmsfcdaEntity.getDataCode());
+			Tb1016StatedataEntity statedataEntity = statedataService.
+					getStateDataByCode(mmsfcdaEntity.getDataCode());
 			int newTypeId = f1011no.getId();
-			if (f1058DataType != newTypeId ) {
-				mmsfcdaEntity.setF1058DataType(newTypeId);
-				analogdataEntity.setF1011No(newTypeId);
-				mmsfcdaService.save(analogdataEntity);
-				mmsfcdaService.save(mmsfcdaEntity);
-				console.append("动作\"测量量\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
-						")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
-						"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
-						"\" 。");
+			
+			if(analogdataEntity!= null) {
+				if (f1058DataType != newTypeId ) {
+					mmsfcdaEntity.setF1058DataType(newTypeId);
+					analogdataEntity.setF1011No(newTypeId);
+					mmsfcdaService.save(analogdataEntity);
+					mmsfcdaService.save(mmsfcdaEntity);
+					console.append("保护测量量\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
+							")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
+							"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
+							"\" 。");
+				}
+			}
+			
+			if(statedataEntity != null) {
+				if (f1058DataType != newTypeId ) {
+					mmsfcdaEntity.setF1058DataType(newTypeId);
+					statedataEntity.setF1011No(newTypeId);
+					mmsfcdaService.save(statedataEntity);
+					mmsfcdaService.save(mmsfcdaEntity);
+					console.append("保护动作\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
+							")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
+							"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
+							"\" 。");
+				}
 			}
 		}
 		tableProtectAction.setInput(mmsfcdasProtcAction);
