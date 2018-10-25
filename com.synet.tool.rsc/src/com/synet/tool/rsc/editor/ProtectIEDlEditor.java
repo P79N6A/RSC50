@@ -39,6 +39,7 @@ import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.SelectRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -135,7 +136,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private HashMap<Integer, DevKTable> tableMapper;
 	private CTabFolder tabFdCfg;
 	private Button btnApplyRule;
-	private StatedataService statedataService;
+//	private StatedataService statedataService;
+	private AnalogdataService analogdataService;
 	
 	
 
@@ -158,7 +160,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		logicallinkEntityService = new LogicallinkEntityService();
 		rcdChnlaService = new RcdchannelaEntityService();
 		rcdChnLdService = new RcdchanneldEntityService();
-		statedataService = new StatedataService();
+//		statedataService = new StatedataService();
+		analogdataService = new AnalogdataService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		iedEntityList.add(iedEntity);
@@ -367,11 +370,54 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void applyRule(List<Integer> rulesId) {
 		applyProtectStrapRule(rulesId);
 		applyMmsfcdaRule(rulesId);
-		
+		applyPoutRule(rulesId);
+	}
+
+	private void applyPoutRule(List<Integer> rulesId) {
+		PoutEntityService poutEntityService = new PoutEntityService();
+		List<Tb1061PoutEntity> poutEntities = poutEntityService.getByIed(iedEntity);
+		if(!DataUtils.listNotNull(poutEntities)) {
+			return;
+		}
+		for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
+			String datSet = tb1061PoutEntity.getCbEntity().getDataset();
+			String f1061RefAddr = tb1061PoutEntity.getF1061RefAddr();
+			String lnName = getLnName(f1061RefAddr);
+			String doName = getDoName(f1061RefAddr);
+			String doDesc = tb1061PoutEntity.getF1061Desc();
+			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
+			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
+				continue;
+			}
+			int newTypeId = f1011no.getId();
+			
+			Tb1006AnalogdataEntity algdata = tb1061PoutEntity.getAlgdata();
+			if(algdata.getF1011No() != newTypeId) {
+				algdata.setF1011No(newTypeId);
+				poutEntityService.update(algdata);
+			}
+			Tb1016StatedataEntity stdata = tb1061PoutEntity.getStdata();
+			if(stdata.getF1011No() != newTypeId) {
+				stdata.setF1011No(newTypeId);
+				poutEntityService.update(stdata);
+			}
+		}
 	}
 
 	private void applyMmsfcdaRule(List<Integer> rulesId) {
 		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
+		if(!DataUtils.listNotNull(mmsfcdasProtcAction)) {
+			//保护信息-保护动作
+			String[] names = DictManager.getInstance().getDictNames("DS_DIN");
+			mmsfcdasProtcAction = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
+		}
+		if(!DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
+			//保护信息-保护测量量
+			String[] names = DictManager.getInstance().getDictNames("DS_AIN");
+			mmsfcdasProtcMeaQua = 
+					mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
+		}
 		temp.addAll(mmsfcdasProtcMeaQua);
 		temp.addAll(mmsfcdasProtcAction);
 		if(!DataUtils.listNotNull(temp)) {
@@ -384,15 +430,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			String doDesc = mmsfcdaEntity.getF1058Desc();
 			int f1058DataType = mmsfcdaEntity.getF1058DataType();
 			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
-			if(!rulesId.contains(f1011no.getId())) {
+			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
 				continue;
 			}
-			Tb1016StatedataEntity statedata = statedataService.getStateDataByCode(mmsfcdaEntity.getDataCode());
+			Tb1006AnalogdataEntity analogdataEntity = analogdataService.
+					getAnologByCodes(mmsfcdaEntity.getDataCode());
 			int newTypeId = f1011no.getId();
 			if (f1058DataType != newTypeId ) {
 				mmsfcdaEntity.setF1058DataType(newTypeId);
-				statedata.setF1011No(newTypeId);
-				mmsfcdaService.save(statedata);
+				analogdataEntity.setF1011No(newTypeId);
+				mmsfcdaService.save(analogdataEntity);
 				mmsfcdaService.save(mmsfcdaEntity);
 			}
 		}
@@ -412,7 +459,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			String doDesc = mmsfcdaEntity.getF1058Desc();
 			int f1064Type = tb1064StrapEntity.getF1064Type();
 			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
-			if(!rulesId.contains(f1011no.getId())) {
+			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
 				continue;
 			}
 			int newTypeId = f1011no.getId();
@@ -433,9 +480,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 
 	
 	private String getDoName(String f1058RefAddr) {
-		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf("$") + 1, f1058RefAddr.length());
-		String doName = temp.substring(temp.indexOf("$") + 1, temp.length());
-		int p = doName.indexOf('$');
+		char tag = '.';
+		if(f1058RefAddr.contains("$")) {
+			tag = '$';
+		} 
+		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf(tag) + 1, f1058RefAddr.length());
+		String doName = temp.substring(temp.indexOf(tag) + 1, temp.length());
+		int p = doName.indexOf(tag);
 		if (p > 0) {
 			doName = doName.substring(0, p);
 		}
@@ -443,7 +494,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 
 	private String getLnName(String f1058RefAddr) {
-		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf("$"));
+		char tag = '.';
+		if(f1058RefAddr.contains("$")) {
+			tag = '$';
+		} 
+		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf(tag));
 		return DataUtils.getLnClass(temp);
 	}
 
