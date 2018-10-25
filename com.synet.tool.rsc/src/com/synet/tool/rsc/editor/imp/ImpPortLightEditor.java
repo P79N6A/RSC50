@@ -25,6 +25,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.dialog.ExportIedDialog;
@@ -306,6 +307,11 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	protected Object locate(Problem problem) {
+		return null;
 	}
 
 }

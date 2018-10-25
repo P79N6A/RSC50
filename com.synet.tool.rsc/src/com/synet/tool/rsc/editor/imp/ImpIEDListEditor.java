@@ -27,6 +27,7 @@ import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ExportIedDialog;
@@ -344,6 +345,11 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	protected Object locate(Problem problem) {
+		return null;
 	}
 	
 }

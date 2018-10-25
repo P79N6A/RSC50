@@ -20,6 +20,7 @@ import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -324,5 +325,10 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			boards.addAll(boardList);
 		}
 		tableComp.setInput(inputs);
+	}
+
+	@Override
+	protected Object locate(Problem problem) {
+		return null;
 	}
 }
