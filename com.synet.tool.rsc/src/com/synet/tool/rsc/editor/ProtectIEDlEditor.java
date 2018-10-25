@@ -400,7 +400,15 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(stdata.getF1011No() != newTypeId) {
 				stdata.setF1011No(newTypeId);
 				poutEntityService.update(stdata);
+				console.append("开出虚端子\"" + tb1061PoutEntity.getF1061RefAddr() + "(" + tb1061PoutEntity.getF1061Desc() +
+						")\" 关联的数据集类型已改变，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
+						"\" 。");
 			}
+		}
+		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
+		console.append("规则已应用于开出虚端子！");
+		if(tableVirtualTerminalOut != null) {
+			tableVirtualTerminalOut.setInput(poutEntities);
 		}
 	}
 
@@ -441,8 +449,15 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				analogdataEntity.setF1011No(newTypeId);
 				mmsfcdaService.save(analogdataEntity);
 				mmsfcdaService.save(mmsfcdaEntity);
+				console.append("动作\"测量量\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
+						")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
+						"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
+						"\" 。");
 			}
 		}
+		tableProtectAction.setInput(mmsfcdasProtcAction);
+		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
+		console.append("规则已应用于报告FCDA点类型！");
 	}
 
 	private void applyProtectStrapRule(List<Integer> rulesId) {
