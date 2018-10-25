@@ -28,7 +28,6 @@ import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.SubstationService;
@@ -232,22 +231,22 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 				ied.setF1042Code(bayCode);
 				String f1046Code = ied.getF1046Code();
 				iedServ.updateIEDBayCode(f1046Code, bayCode);
-				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
-				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-						Tb1065LogicallinkEntity.class, "f1046CodeIedRecv", f1046Code);
-				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
-					Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend();
-					iedSend.setF1042Code(bayCode);
-					bayIeds.add(iedSend);
-				}
-				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-						Tb1065LogicallinkEntity.class, "f1046CodeIedSend", f1046Code);
-				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
-					Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv();
-					iedResv.setF1042Code(bayCode);
-					bayIeds.add(iedResv);
-				}
-				beanDao.updateBatch(bayIeds);
+//				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
+//				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
+//						Tb1065LogicallinkEntity.class, "f1046CodeIedRecv", f1046Code);
+//				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
+//					Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend();
+//					iedSend.setF1042Code(bayCode);
+//					bayIeds.add(iedSend);
+//				}
+//				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
+//						Tb1065LogicallinkEntity.class, "f1046CodeIedSend", f1046Code);
+//				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
+//					Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv();
+//					iedResv.setF1042Code(bayCode);
+//					bayIeds.add(iedResv);
+//				}
+//				beanDao.updateBatch(bayIeds);
 			}
 		}
 	}
