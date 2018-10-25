@@ -22,5 +22,17 @@
 		<event name="clear problems" />
 		<handler source="com.shrcn.found.ui.view.ProblemView" />
 	</category>
-	
+	<category id="select Problem">
+		<!-- 提示问题位置 -->
+		<event name="select problem" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpBoardWarnEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpFibreListEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpIEDBoardEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpIEDListEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpPortLightEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpStaInfoEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpStatusInEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpTerStrapEditor" />
+	</category>
 </extension>

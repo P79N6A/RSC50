@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -228,4 +229,46 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 			entity.setOverwrite(true);
 		}
 	}
+
+	@Override
+	protected Object locate(Problem problem) {
+		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
+		if (list == null || list.size() <= 0) 
+			return null;
+		String ref = problem.getRef();
+		String desc = problem.getDesc();
+		if (ref.indexOf("->") > 0) {
+			String[] temp = ref.split("->");
+			String iedA = temp[0].trim();
+			String iedB = temp[1].trim();
+			for (IM102FibreListEntity entity : list) {
+				if (iedA.equals(entity.getDevNameA()) && iedB.equals(entity.getDevNameB())) {
+					return entity;
+				}
+			}
+		} else {
+			if (desc.indexOf("重复") > 0) {
+				desc = desc.substring(desc.indexOf('[') + 1, desc.indexOf(']'));
+				String[] temp = desc.split(",");
+				for (IM102FibreListEntity entity : list) {
+					if ((entity.getDevNameA().equals(temp[0]) && 
+							entity.getBoardCodeA().equals(temp[1]) && 
+							entity.getPortCodeA().equals(temp[2])) ||
+							(entity.getDevNameB().equals(temp[0]) && 
+									entity.getBoardCodeB().equals(temp[1]) && 
+									entity.getPortCodeB().equals(temp[2]))) {
+						return entity;
+					}
+				}
+			} else {
+				for (IM102FibreListEntity entity : list) {
+					if (entity.getCableCode().equals(ref)) {
+						return entity;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 }

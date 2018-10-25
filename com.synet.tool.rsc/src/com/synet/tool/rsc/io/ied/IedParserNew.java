@@ -281,7 +281,7 @@ public class IedParserNew {
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
 			pout.setTb1046IedByF1046Code(ied);
 			pout.setCbCode(cbCode);
-			String ref = SCL.getNodeRef(fcdaEl);
+			String ref = SclUtil.getFcdaRef(fcdaEl);
 			pout.setF1061RefAddr(ref);
 			pout.setF1061Index(i);
 			i++;

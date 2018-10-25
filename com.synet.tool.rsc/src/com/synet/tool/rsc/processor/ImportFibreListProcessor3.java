@@ -163,9 +163,10 @@ public class ImportFibreListProcessor3 {
 				addCable(cableCode, cubicleEntityA, cubicleEntityB);	// 1根光缆
 				entity.setMatched(DBConstants.MATCHED_OK);
 			} else {
-				String msg = entity.getDevNameA() + " -> " + entity.getDevNameB() + "之间无光缆！";
+				String ref = entity.getDevNameA() + " -> " + entity.getDevNameB();
+				String msg = ref + "之间无光缆！";
 				SCTLogger.info(msg);
-				pmgr.append(new Problem(0, LEVEL.WARNING, "导入光缆", "光缆检查", entity.getCableCode(), msg));
+				pmgr.append(new Problem(0, LEVEL.WARNING, "导入光缆", "光缆检查", ref, msg));
 			}
 			addCableCores(entity, cubicleEntityA, cubicleEntityB);		// 3根芯线：A、B端跳纤和1根光缆芯线
 		}
@@ -221,12 +222,12 @@ public class ImportFibreListProcessor3 {
 		if (map.containsKey(portA)) {
 			String msg = "端口A重复[" + portA + "]" ;
 			SCTLogger.error(msg);
-			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", "", msg));
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", devNameA, msg));
 			return;
 		} else if (map.containsKey(portB)) {
 			String msg = "端口B重复[" + portB + "]" ;
 			SCTLogger.error(msg);
-			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", "", msg));
+			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", devNameB, msg));
 			return;
 		} else {
 			map.put(portA, entity);

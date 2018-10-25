@@ -14,6 +14,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.shrcn.found.common.event.Context;
+import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.common.event.IEventHandler;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
@@ -22,6 +25,7 @@ import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
+import com.synet.tool.rsc.RscEventConstants;
 import com.synet.tool.rsc.UICommonConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
@@ -30,7 +34,7 @@ import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
 import com.synet.tool.rsc.util.ProblemManager;
 
-public class ExcelImportEditor extends BaseConfigEditor {
+public abstract class ExcelImportEditor extends BaseConfigEditor implements IEventHandler {
 
 	protected static final String CONFLICT = "conflict";
 	protected static final String OVERWITE = "overwrite";
@@ -48,6 +52,13 @@ public class ExcelImportEditor extends BaseConfigEditor {
 
 	public ExcelImportEditor(Composite container, IEditorInput input) {
 		super(container, input);
+		EventManager.getDefault().registEventHandler(this);
+	}
+	
+	@Override
+	public void dispose() {
+		EventManager.getDefault().removeEventHandler(this);
+		super.dispose();
 	}
 	
 	@Override
@@ -217,4 +228,22 @@ public class ExcelImportEditor extends BaseConfigEditor {
 		console.append(fileName + "导出完成");
 		System.out.println("导出耗时：" + time + "秒");
 	}
+
+	@Override
+	public void execute(Context context) {
+		if (RscEventConstants.SELECT_PROBLEM.equals(context.getEventName())) {
+			table.clearSelections();
+			List<Problem> problems = (List<Problem>) context.getData();
+			List<Object> selections = new ArrayList<>();
+			for (Problem problem : problems) {
+				Object target = locate(problem);
+				if (target != null) {
+					selections.add(target);
+				}
+			}
+			table.setSelections(selections);
+		}
+	}
+
+	protected abstract Object locate(Problem problem);
 }
