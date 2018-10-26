@@ -8,7 +8,10 @@ import java.util.Map;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
+import com.synet.tool.rsc.util.Rule;
 
 public class PoutEntityService extends BaseService{
 	
@@ -57,5 +60,16 @@ public class PoutEntityService extends BaseService{
 	@SuppressWarnings("unchecked")
 	public List<Tb1061PoutEntity> getByStraps(List<Tb1064StrapEntity> straps) {
 		return (List<Tb1061PoutEntity>) hqlDao.selectInObjects(Tb1061PoutEntity.class, "tb1064StrapByF1064Code", straps);
+	}
+	
+	public void updatePinF1011No(Tb1061PoutEntity fcda, Rule type) {
+		List<Tb1063CircuitEntity> circuits = (List<Tb1063CircuitEntity>) beanDao.getListByCriteria(Tb1063CircuitEntity.class, "tb1061PoutByF1061CodePSend", fcda);
+		List<Tb1062PinEntity> pins = new ArrayList<>();
+		for (Tb1063CircuitEntity circuit : circuits) {
+			Tb1062PinEntity pin = circuit.getTb1062PinByF1062CodePRecv();
+			pin.setF1011No(type.getId());
+			pins.add(pin);
+		}
+		beanDao.updateBatch(pins);
 	}
 }

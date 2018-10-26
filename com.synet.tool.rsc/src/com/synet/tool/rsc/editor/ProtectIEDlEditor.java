@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventConstants;
@@ -39,7 +40,6 @@ import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.SelectRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
-import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -63,6 +63,7 @@ import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.RcdchannelaEntityService;
 import com.synet.tool.rsc.service.RcdchanneldEntityService;
+import com.synet.tool.rsc.service.RuleEntityService;
 import com.synet.tool.rsc.service.SgfcdaEntityService;
 import com.synet.tool.rsc.service.SpfcdaEntityService;
 import com.synet.tool.rsc.service.StatedataService;
@@ -70,7 +71,6 @@ import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
-import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
 
 /**
@@ -102,11 +102,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableDeviceName;
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkName;
+	private CTabFolder tabFolder;
 	private Tb1046IedEntity iedEntity;
 	private List<Tb1046IedEntity> iedEntityList;
 	private PoutEntityService poutEntityService;
 	private CircuitEntityService circuitEntityService;
-	private CTabFolder tabFolder;
 	private MmsfcdaService mmsfcdaService;
 	private BoardPortService portService;
 	private SgfcdaEntityService sgfcdaEntityService;
@@ -337,12 +337,25 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				} else if(obj == btnApplyRule) {
 					SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
 					if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
-						List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
-						List<Integer> rulesId = new ArrayList<>();
-						for (Rule rule : rulesSelect) {
-							rulesId.add(rule.getId());
-						}
-						applyRule(rulesId);
+						final List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
+						ProgressManager.execute(new IRunnableWithProgress() {
+							@Override
+							public void run(IProgressMonitor monitor) throws InvocationTargetException,
+									InterruptedException {
+								Rule[] rules = rulesSelect.toArray(new Rule[rulesSelect.size()]);
+								RuleEntityService ruleEntityService = new RuleEntityService(iedEntity, rules);
+								ruleEntityService.applyRulesToIED(monitor);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										// 保护信息(压板)
+										initProTbDataByTbName(RSCConstants.PROTECT_BOARD, true);
+										// 虚端子
+										initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
+									}
+								});
+							}
+						});
 					}
 				} else if(obj == btnTempCamp) {
 					ModelCompareDialog dialog = new ModelCompareDialog(getShell(), iedEntity);
@@ -363,189 +376,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnApplyRule.addSelectionListener(selectionListener);
 	}
 	
-	/**
-	 * 规则应用
-	 * @param rulesSelect 
-	 */
-	private void applyRule(List<Integer> rulesId) {
-		applyProtectStrapRule(rulesId);
-		applyMmsfcdaRule(rulesId);
-		applyPoutRule(rulesId);
-	}
-
-	private void applyPoutRule(List<Integer> rulesId) {
-		PoutEntityService poutEntityService = new PoutEntityService();
-		List<Tb1061PoutEntity> poutEntities = poutEntityService.getByIed(iedEntity);
-		if(!DataUtils.listNotNull(poutEntities)) {
-			return;
-		}
-		boolean flag = false;
-		for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
-			flag = false;
-			String datSet = tb1061PoutEntity.getCbEntity().getDataset();
-			String f1061RefAddr = tb1061PoutEntity.getF1061RefAddr();
-			String lnName = getLnName(f1061RefAddr);
-			String doName = getDoName(f1061RefAddr);
-			String doDesc = tb1061PoutEntity.getF1061Desc();
-			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
-			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
-				continue;
-			}
-			int newTypeId = f1011no.getId();
-			Tb1006AnalogdataEntity algdata = tb1061PoutEntity.getAlgdata();
-			
-			if(algdata != null) {
-				if(algdata.getF1011No() != newTypeId) {
-					algdata.setF1011No(newTypeId);
-					poutEntityService.update(algdata);
-					flag = true;
-				}
-			}
-			Tb1016StatedataEntity stdata = tb1061PoutEntity.getStdata();
-			if(stdata != null) {
-				if(stdata.getF1011No() != newTypeId) {
-					stdata.setF1011No(newTypeId);
-					poutEntityService.update(stdata);
-					flag = true;
-				}
-			}
-			if(flag) {
-				console.append("开出虚端子\"" + tb1061PoutEntity.getF1061RefAddr() + "(" + tb1061PoutEntity.getF1061Desc() +
-						")\" 关联的数据集类型已改变，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
-						"\" 。");
-			}
-		}
-		
-		if(tableVirtualTerminalOut != null) {
-			tableVirtualTerminalOut.setInput(poutEntities);
-		}
-		console.append("规则已应用于开出虚端子！");
-	}
-
-	private void applyMmsfcdaRule(List<Integer> rulesId) {
-		List<Tb1058MmsfcdaEntity> temp = new ArrayList<>();
-		if(!DataUtils.listNotNull(mmsfcdasProtcAction)) {
-			//保护信息-保护动作
-			String[] names = DictManager.getInstance().getDictNames("DS_DIN");
-			mmsfcdasProtcAction = 
-					mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
-		}
-		if(!DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
-			//保护信息-保护测量量
-			String[] names = DictManager.getInstance().getDictNames("DS_AIN");
-			mmsfcdasProtcMeaQua = 
-					mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
-		}
-		temp.addAll(mmsfcdasProtcMeaQua);
-		temp.addAll(mmsfcdasProtcAction);
-		if(!DataUtils.listNotNull(temp)) {
-			return;
-		}
-		for (Tb1058MmsfcdaEntity mmsfcdaEntity : temp) {
-			String datSet = mmsfcdaEntity.getTb1054RcbByF1054Code().getF1054Dataset();
-			String lnName = getLnName(mmsfcdaEntity.getF1058RefAddr());
-			String doName = getDoName(mmsfcdaEntity.getF1058RefAddr());
-			String doDesc = mmsfcdaEntity.getF1058Desc();
-			int f1058DataType = mmsfcdaEntity.getF1058DataType();
-			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
-			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
-				continue;
-			}
-			
-			Tb1006AnalogdataEntity analogdataEntity = analogdataService.
-					getAnologByCodes(mmsfcdaEntity.getDataCode());
-			Tb1016StatedataEntity statedataEntity = statedataService.
-					getStateDataByCode(mmsfcdaEntity.getDataCode());
-			int newTypeId = f1011no.getId();
-			
-			if(analogdataEntity!= null) {
-				if (f1058DataType != newTypeId ) {
-					mmsfcdaEntity.setF1058DataType(newTypeId);
-					analogdataEntity.setF1011No(newTypeId);
-					mmsfcdaService.save(analogdataEntity);
-					mmsfcdaService.save(mmsfcdaEntity);
-					console.append("保护测量量\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
-							")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
-							"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
-							"\" 。");
-				}
-			}
-			
-			if(statedataEntity != null) {
-				if (f1058DataType != newTypeId ) {
-					mmsfcdaEntity.setF1058DataType(newTypeId);
-					statedataEntity.setF1011No(newTypeId);
-					mmsfcdaService.save(statedataEntity);
-					mmsfcdaService.save(mmsfcdaEntity);
-					console.append("保护动作\"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
-							")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1058DataType) +
-							"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
-							"\" 。");
-				}
-			}
-		}
-		tableProtectAction.setInput(mmsfcdasProtcAction);
-		tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
-		console.append("规则已应用于报告FCDA点类型！");
-	}
-
-	private void applyProtectStrapRule(List<Integer> rulesId) {
-		//保护压板-规则应用
-		if(!DataUtils.listNotNull(staEntities)) {
-			return;
-		}
-		for (Tb1064StrapEntity tb1064StrapEntity : staEntities) {
-			Tb1016StatedataEntity statedata = tb1064StrapEntity.getStatedata();
-			Tb1058MmsfcdaEntity mmsfcdaEntity = statedata.getTb1058FcdaByF1058Code();
-			String datSet = mmsfcdaEntity.getTb1054RcbByF1054Code().getF1054Dataset();
-			String lnName = getLnName(mmsfcdaEntity.getF1058RefAddr());
-			String doName = getDoName(mmsfcdaEntity.getF1058RefAddr());
-			String doDesc = mmsfcdaEntity.getF1058Desc();
-			int f1064Type = tb1064StrapEntity.getF1064Type();
-			Rule f1011no = F1011_NO.getType(datSet, lnName, doName, doDesc, null);
-			if(f1011no == null || !rulesId.contains(f1011no.getId())) {
-				continue;
-			}
-			int newTypeId = f1011no.getId();
-			if (f1064Type != newTypeId) {
-				tb1064StrapEntity.setF1064Type(newTypeId);
-				statedata.setF1011No(newTypeId);
-				mmsfcdaService.save(statedata);
-				mmsfcdaService.save(tb1064StrapEntity);
-				console.append("压板 \"" + mmsfcdaEntity.getF1058RefAddr() + "(" + mmsfcdaEntity.getF1058Desc() +
-						")\" 类型已改变：原类型为 \"" + F1011_NO.getNameById(f1064Type) +
-						"\" ，新类型为 \"" + F1011_NO.getNameById(newTypeId) +
-						"\" 。");
-			}
-		}
-		tableProtectPlate.setInput(staEntities);
-		console.append("规则已应用于压板类型！");
-	}
-
-	
-	private String getDoName(String f1058RefAddr) {
-		char tag = '.';
-		if(f1058RefAddr.contains("$")) {
-			tag = '$';
-		} 
-		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf(tag) + 1, f1058RefAddr.length());
-		String doName = temp.substring(temp.indexOf(tag) + 1, temp.length());
-		int p = doName.indexOf(tag);
-		if (p > 0) {
-			doName = doName.substring(0, p);
-		}
-		return doName;
-	}
-
-	private String getLnName(String f1058RefAddr) {
-		char tag = '.';
-		if(f1058RefAddr.contains("$")) {
-			tag = '$';
-		} 
-		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf(tag));
-		return DataUtils.getLnClass(temp);
-	}
-
 	/**
 	 * 删除装置告警关联
 	 */
@@ -622,30 +452,34 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param text
 	 */
 	private void initProTbDataByTbName(String text) {
+		initProTbDataByTbName(text, false);
+	}
+	
+	private void initProTbDataByTbName(String text, boolean reload) {
 		switch (text) {
 		case RSCConstants.PROTECT_VALUE:
-			if(!DataUtils.listNotNull(sgfcdaEntities)) {
+			if(reload || !DataUtils.listNotNull(sgfcdaEntities)) {
 				//保护信息-保护定值
 				sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
 				tableProtectValue.setInput(sgfcdaEntities);
 			}
 			break;
 		case RSCConstants.PROTECT_PARAM:
-			if(!DataUtils.listNotNull(spfcdaEntities)) {
+			if(reload || !DataUtils.listNotNull(spfcdaEntities)) {
 				//保护信息-保护参数
 				spfcdaEntities = spfcdaEntityService.getByIed(iedEntity);
 				tableProtParam.setInput(spfcdaEntities);
 			}
 			break;
 		case RSCConstants.PROTECT_BOARD:
-			if(!DataUtils.listNotNull(staEntities)) {
+			if(reload || !DataUtils.listNotNull(staEntities)) {
 				//保护信息-保护压板
 				staEntities = strapEntityService.getByIed(iedEntity);
 				tableProtectPlate.setInput(staEntities);
 			}
 			break;
 		case RSCConstants.PROTECT_ACTION:
-			if(!DataUtils.listNotNull(mmsfcdasProtcAction)) {
+			if(reload || !DataUtils.listNotNull(mmsfcdasProtcAction)) {
 				//保护信息-保护动作
 				String[] names = DictManager.getInstance().getDictNames("DS_DIN");
 				mmsfcdasProtcAction = 
@@ -654,7 +488,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			}
 			break;
 		case RSCConstants.PROTECT_MEAQU:
-			if(!DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
+			if(reload || !DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
 				//保护信息-保护测量量
 				String[] names = DictManager.getInstance().getDictNames("DS_AIN");
 				mmsfcdasProtcMeaQua = 
@@ -673,22 +507,26 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param tabName
 	 */
 	private void initTbDataByTbName(String tabName) {
+		initTbDataByTbName(tabName, false);
+	}
+	
+	private void initTbDataByTbName(String tabName, boolean reload) {
 		switch (tabName) {
 		case RSCConstants.BOARD_PORT:
-			if(!DataUtils.listNotNull(portEntities)) {
+			if(reload || !DataUtils.listNotNull(portEntities)) {
 				portEntities = portService.getBoardPortByIed(iedEntity);
 				tableBoardPort.setInput(portEntities);
 			}
 			break;
 		case RSCConstants.PROTECT_MSG:
-			if(!DataUtils.listNotNull(sgfcdaEntities)) {
+			if(reload || !DataUtils.listNotNull(sgfcdaEntities)) {
 				//保护信息-保护定值
 				sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
 				tableProtectValue.setInput(sgfcdaEntities);
 			}
 			break;
 		case RSCConstants.RUN_STATE:
-			if(!DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
+			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
 				String[] names = DictManager.getInstance().getDictNames("DS_STATE");
 				mmsfcdaEntitiesRun = 
 						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
@@ -697,7 +535,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			
 			break;
 		case RSCConstants.DEV_WARNING:
-			if(!DataUtils.listNotNull(mmsfcdaEntities)) {
+			if(reload || !DataUtils.listNotNull(mmsfcdaEntities)) {
 				String[] names = DictManager.getInstance().getDictNames("DS_WARN");
 				mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
 				// 补充运行工况
@@ -710,17 +548,17 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				tableDeviceWarning.setInput(mmsfcdaEntities);
 				tableDeviceName.setInput(iedEntityList);
 			}
-			if(!DataUtils.listNotNull(boardEntities)) {
+			if(reload || !DataUtils.listNotNull(boardEntities)) {
 					boardEntities = boardEntityService.getByIed(iedEntity);
 					tableBoardName.setInput(boardEntities);	
 			}
-			if(!DataUtils.listNotNull(logicallinkEntities)) {
+			if(reload || !DataUtils.listNotNull(logicallinkEntities)) {
 				logicallinkEntities  = logicallinkEntityService.getByRecvIed(iedEntity);
 			}
 			tableLogLinkName.setInput(logicallinkEntities);
 			break;
 		case RSCConstants.CIRCUI_BOARD:
-			if(!DataUtils.listNotNull(circuitEntities)) {
+			if(reload || !DataUtils.listNotNull(circuitEntities)) {
 				//开出虚端子
 				poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
 				//虚端子压板
@@ -732,19 +570,19 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			}
 			break;
 		case RSCConstants.LOGICAL_LINK:
-			if(!DataUtils.listNotNull(logicallinkEntities)) {
+			if(reload || !DataUtils.listNotNull(logicallinkEntities)) {
 				//逻辑链路
 				logicallinkEntities = logicallinkEntityService.getByRecvIed(iedEntity);
 			}
 			tableLogicalLink.setInput(logicallinkEntities);
 			break;
 		case RSCConstants.PROTECT_WAVE:
-			if(!DataUtils.listNotNull(rcdchannelaEntities)) {
+			if(reload || !DataUtils.listNotNull(rcdchannelaEntities)) {
 				//保护录波-模拟量通道
 				rcdchannelaEntities = rcdChnlaService.getByIed(iedEntity);
 				tableAnalogChn.setInput(rcdchannelaEntities);
 			}
-			if(!DataUtils.listNotNull(rcdchanneldEntities)) {
+			if(reload || !DataUtils.listNotNull(rcdchanneldEntities)) {
 				//保护录波-状态量通道
 				rcdchanneldEntities = rcdChnLdService.getByIed(iedEntity);
 				tableCriteriaChn.setInput(rcdchanneldEntities);

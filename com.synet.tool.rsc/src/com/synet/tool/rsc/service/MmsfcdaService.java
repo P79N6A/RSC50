@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.Rule;
 
 public class MmsfcdaService extends BaseService {
 	
@@ -79,5 +82,33 @@ public class MmsfcdaService extends BaseService {
 	public List<Tb1058MmsfcdaEntity> getByDataCodes(List<String> dataCodes) {
 		return null;
 		
+	}
+	
+	public void updateStateF1011No(String dataCode, Rule type) {
+		String hql = "update " + Tb1016StatedataEntity.class.getName() + " set f1011No=:f1011No where f1016Code=:f1016Code";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("f1011No", type.getId());
+		params.put("f1016Code", dataCode);
+		hqlDao.updateByHql(hql, params);
+	}
+
+	public void updateAnalogF1011No(String dataCode, Rule type) {
+		String hql = "update " + Tb1006AnalogdataEntity.class.getName() + " set f1011No=:f1011No where f1006Code=:f1006Code";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("f1011No", type.getId());
+		params.put("f1006Code", dataCode);
+		hqlDao.updateByHql(hql, params);
+	}
+	
+	public void updateStrapF1011No(String dataCode, Rule type) {
+		Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", dataCode);
+		if (type.getId() == statedataEntity.getF1011No()) {
+			return;
+		}
+		String hql = "update " + Tb1064StrapEntity.class.getName() + " set f1064Type=:f1064Type where f1064Code=:f1064Code";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("f1064Type", type.getId());
+		params.put("f1064Code", statedataEntity.getParentCode());
+		hqlDao.updateByHql(hql, params);
 	}
 }

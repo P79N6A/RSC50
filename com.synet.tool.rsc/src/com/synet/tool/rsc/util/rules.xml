@@ -7,6 +7,7 @@
   <Rule id="4" name="开关分相C相状态" datSet="dsGOOSE" lnName="XCBR" doName="Pos" doDesc="C相"/>
   <Rule id="21" name="刀闸状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="刀"/>
   <Rule id="31" name="地刀状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="地刀"/>
+  <!-- 告警begin -->
   <Rule id="101" name="回路异常" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="102" name="链路中断信息" datSet="dsCommState/dsGOOSE" lnName="GGIO" doName="Alm" doDesc="断链"/>
   <Rule id="103" name="链路告警信号" datSet="" lnName="" doName="" doDesc=""/>
@@ -23,6 +24,7 @@
   <Rule id="173" name="一二次状态不一致预警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="199" name="其他告警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="200" name="告警总" datSet="" lnName="" doName="" doDesc=""/>
+  <!-- 告警end -->
   <Rule id="201" name="监测状态信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="202" name="装置通讯状态" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="203" name="装置运行状态" datSet="" lnName="" doName="" doDesc=""/>
@@ -45,6 +47,7 @@
   <Rule id="551" name="录波信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="591" name="跳闸总" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="592" name="闭锁总" datSet="" lnName="" doName="" doDesc=""/>
+  <!-- 压板begin -->
   <Rule id="601" name="硬压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="602" name="装置检修硬压板" datSet="dsRelayDin" lnName="" doName="" doDesc="检修"/>
   <Rule id="603" name="远方操作硬压板" datSet="" lnName="" doName="" doDesc=""/>
@@ -65,6 +68,7 @@
   <Rule id="634" name="投母联分列软压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="635" name="投分段分列软压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="636" name="主变后备保护投入软压板" datSet="" lnName="" doName="" doDesc=""/>
+  <!-- 压板end -->
   <Rule id="701" name="保护测量值" datSet="dsRelayAin/dsAin" lnName="Mea/MMXU" doName="" doDesc="电流/电压"/>
   <Rule id="702" name="A相电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="703" name="B相电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>

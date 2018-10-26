@@ -3,6 +3,7 @@ package com.synet.tool.rsc.util;
 import java.util.List;
 
 import com.shrcn.found.common.util.StringUtil;
+import com.synet.tool.rsc.io.scd.SclUtil;
 
 
 /**
@@ -26,8 +27,18 @@ public class F1011_NO {
 	public static final Rule IED_TEMP = getRuleById(901); // 装置温度
 	public static final Rule FIB_POWER = getRuleById(950); // 光口光强
 	
+	public static Rule getType(String dataset, String f1058RefAddr, String doDesc, Rule[] types) {
+		String lnName = SclUtil.getLnName(f1058RefAddr);
+		String doName = SclUtil.getDoName(f1058RefAddr);
+		String fc = SclUtil.getFC(f1058RefAddr);
+		return F1011_NO.getType(dataset, lnName, doName, doDesc, fc, types);
+	}
+	
 	public static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc) {
-		Rule[] types = F1011_NO.values();
+		return getType(datSet, lnName, doName, doDesc, fc, F1011_NO.values());
+	}
+
+	public static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc, Rule[] types) {
 		Rule type = null;
 		Rule typeNullDesc = null;
 		for (Rule rule : types) {
@@ -92,10 +103,12 @@ public class F1011_NO {
 			return typeNullDesc;
 		}
 		if ((type == null)) {
-			if (fc != null) {
-				type = "ST".equalsIgnoreCase(fc) ? ST_R19 : MX_R19;
-			} else {
+			if (SclUtil.isStrap(datSet)) {
 				type = STRAP_R19;
+			} else if (SclUtil.isWarning(datSet)) {
+				type = F1011_NO.IED_WRN_COMMON;
+			} else if (fc != null) {
+				type = "ST".equalsIgnoreCase(fc) ? ST_R19 : MX_R19;
 			}
 		}
 		return type;

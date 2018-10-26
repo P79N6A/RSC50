@@ -5,12 +5,10 @@
  */
 package com.synet.tool.rsc.io.scd;
 
-import java.util.List;
-
 import org.dom4j.Element;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
-import com.shrcn.found.file.xml.DOM4JNodeHelper;
 
  /**
  * 
@@ -60,39 +58,73 @@ public class SclUtil {
 		return (empty || index < 1) ? ref : ref.substring(0, index - 1);
 	}
 	
-	/**
-	 * IEDName $ LDName $ LNClass + LNInst $ FC $ doName $ daName
-	 * 
-	 * @param el
-	 * @return
-	 */
-	public static String getRef(String iedName, Element el) {
-		String ldInst = el.attributeValue("ldInst");
-		String prefix = el.attributeValue("prefix");
-		String lnClass = el.attributeValue("lnClass");
-		String lnInst = el.attributeValue("lnInst");
-		String doName = el.attributeValue("doName");
-		String daName = el.attributeValue("daName");
-		String fc = el.attributeValue("fc");
-		StringBuffer sb = new StringBuffer();
-		sb.append(iedName + "$" + ldInst + "$");
-		if (prefix != null)
-			sb.append(prefix);
-		sb.append(lnClass);
-		if (lnInst != null)
-			sb.append(lnInst);
-		sb.append("$" + fc + "$" + doName);
-		if (daName != null)
-			sb.append("$" + daName);
-		return sb.toString();
+	public static String getFC(String f1058RefAddr) {
+		char tag = ' ';
+		if(f1058RefAddr.contains("$")) {
+			tag = '$';
+		} 
+		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf(tag) + 1, f1058RefAddr.length());
+		int p = temp.indexOf(tag);
+		return p>0 ? temp.substring(0, p) : null;
 	}
 	
-	public static void addSAddr(Element fcdaEl, String sAddr) {
-		List<String> addrs = ExportUtil.getSaddrs(sAddr);
-		for (String addr : addrs) {
-			Element item = fcdaEl.addElement("Item");
-			DOM4JNodeHelper.addAttribute(item, "addr", addr);
+	public static String getDoName(String f1058RefAddr) {
+		char tag = '.';
+		if(f1058RefAddr.contains("$")) {
+			tag = '$';
+		} 
+		String temp = f1058RefAddr.substring(f1058RefAddr.indexOf(tag) + 1, f1058RefAddr.length());
+		String doName = "";
+		if ('$' == tag) {
+			doName = temp.substring(temp.indexOf(tag) + 1, temp.length());
+			int p = doName.indexOf(tag);
+			if (p > 0) {
+				doName = doName.substring(0, p);
+			}
+		} else {
+			doName = temp.substring(0, temp.indexOf(tag));	
 		}
+		return doName;
+	}
+
+	public static String getLnName(String f1058RefAddr) {
+		char tag = '.';
+		if(f1058RefAddr.contains("$")) {
+			tag = '$';
+		} 
+		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf(tag));
+		return getLnClass(temp);
+	}
+	
+	public static String getLnClass(String lnName) {
+		String temp = lnName.replaceAll("\\d+","");
+		return temp.substring(temp.length() - 4);
+	}
+	
+	public static boolean isParam(String datSet) {
+		return datSet.startsWith("dsParameter");
+	}
+	
+	public static boolean isSetting(String datSet) {
+		return datSet.startsWith("dsSetting");
+	}
+	
+	public static boolean isWarning(String datSet) {
+		return datSet.startsWith("dsWarning");
+	}
+
+	public static boolean isStrap(String datSet) {
+		return isType(datSet, "DS_STRAP");
+	}
+
+	private static boolean isType(String datSet, String dictType) {
+		String[] names = DictManager.getInstance().getDictNames(dictType);
+		for (String name : names) {
+			if (datSet.equals(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.shrcn.business.scl.check.ModelCheckerNew;
 import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.model.SCL;
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
@@ -118,9 +117,9 @@ public class IedParserNew {
 					List<Element> elDatSets = elLN0.elements("DataSet");
 					for (Element elDatSet : elDatSets) {
 						String datSet = elDatSet.attributeValue("name");
-						if (isSetting(datSet)) {
+						if (SclUtil.isSetting(datSet)) {
 							createSgcb(datSet, elDatSet, elLD);
-						} else if (isParam(datSet)) {
+						} else if (SclUtil.isParam(datSet)) {
 							createSpcb(datSet, elDatSet, elLD);
 						} else {
 							Element elRcb = DOM4JNodeHelper.selectSingleNode(elLN0, "./ReportControl[@datSet='" + datSet + "']");
@@ -336,14 +335,10 @@ public class IedParserNew {
 			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			if ("ST".equals(fc)) {
 				mmsFcda.setF1058DataType(DBConstants.DATA_ST);
-				boolean strap = isStrap(datSet);
-				if (strap) {
-					type = F1011_NO.STRAP_R19;
-				}
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				mmsFcda.setDataCode(statedata.getF1016Code());
 				mmsFcda.setParentCode(statedata.getParentCode());
-				if (strap) { // 添加压板
+				if (SclUtil.isStrap(datSet)) { // 添加压板
 					strapService.addStrap(statedata, fcdaDesc);
 				}
 			} else {
@@ -436,28 +431,6 @@ public class IedParserNew {
 		String lnInst = fcdaEl.attributeValue("lnInst");
 		String doName = fcdaEl.attributeValue("doName");
 		return FcdaDAO.getFCDADesc(elLd, prefix, lnClass, lnInst, doName);
-	}
-	
-	private boolean isParam(String datSet) {
-		return datSet.startsWith("dsParameter");
-	}
-	
-	private boolean isSetting(String datSet) {
-		return datSet.startsWith("dsSetting");
-	}
-
-	private boolean isStrap(String datSet) {
-		return isType(datSet, "DS_STRAP");
-	}
-
-	private boolean isType(String datSet, String dictType) {
-		String[] names = DictManager.getInstance().getDictNames(dictType);
-		for (String name : names) {
-			if (datSet.equals(name)) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	private void addError(String iedName, String subType, String ref, String desc) {

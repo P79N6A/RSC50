@@ -123,24 +123,8 @@ public class LogicLinkParserNew {
 			Tb1006AnalogdataEntity mxdata = (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", pout.getDataCode());
 			pin.setF1011No(mxdata.getF1011No());
 		}
-//		String fc = (pout.getStdata()!=null) ? "ST" : "MX";
-//		setF1011No(pin, fc);
 		beanDao.insert(pin);
 		return circuit;
 	}
 	
-	private void setF1011No(Tb1062PinEntity pin, String fc) {
-		String intAddr = pin.getF1062RefAddr();
-		int p = intAddr.indexOf('.');
-		if (p < 1) {
-			return;
-		}
-		String lnClass = DataUtils.getLnClass(intAddr.substring(0, p));
-		String temp = intAddr.substring(p + 1);
-		p = temp.indexOf('.');
-		String doName = (p > 0) ? temp.substring(0, p) : temp;
-		int f1011No = F1011_NO.getType("", lnClass, doName, pin.getF1062Desc(), fc).getId();
-		pin.setF1011No(f1011No);
-	}
-
 }

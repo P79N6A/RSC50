@@ -32,8 +32,4 @@ public class DataUtils {
 		return arr;
 	}
 	
-	public static String getLnClass(String lnName) {
-		String temp = lnName.replaceAll("\\d+","");
-		return temp.substring(temp.length() - 4);
-	}
 }
