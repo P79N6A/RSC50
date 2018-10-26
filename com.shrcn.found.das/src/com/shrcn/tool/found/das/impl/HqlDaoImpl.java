@@ -167,6 +167,7 @@ public class HqlDaoImpl implements HqlDaoService {
 				name = (String) it.next();
 		}
 		query.executeUpdate();
+		service.flush();
 	}
 	
 	@SuppressWarnings("deprecation")
