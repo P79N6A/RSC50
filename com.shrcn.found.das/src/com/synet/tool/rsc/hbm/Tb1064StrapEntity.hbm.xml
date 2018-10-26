@@ -27,7 +27,7 @@
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
         <many-to-one name="statedata" property-ref="parentCode"
-        	class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false" lazy="false">
+        	class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false">
             <column name="F1064_CODE" not-null="true"/>
         </many-to-one>
     </class>
