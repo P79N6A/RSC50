@@ -133,14 +133,22 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	}
 	
 	protected void appendError(String title, String subType, String msg) {
+		appendError(title, subType, "", msg);
+	}
+	
+	protected void appendError(String title, String subType, String ref, String msg) {
 		SCTLogger.error(msg);
-		pmgr.append(new Problem(0, LEVEL.ERROR, title, subType, "", msg));
+		pmgr.append(new Problem(0, LEVEL.ERROR, title, subType, ref, msg));
 		errorCount++;
 	}
 	
 	protected void appendWarning(String title, String subType, String msg) {
+		appendWarning(title, subType, "", msg);
+	}
+	
+	protected void appendWarning(String title, String subType, String ref, String msg) {
 		SCTLogger.error(msg);
-		pmgr.append(new Problem(0, LEVEL.WARNING, title, subType, "", msg));
+		pmgr.append(new Problem(0, LEVEL.WARNING, title, subType, ref, msg));
 		warningCount++;
 	}
 	
@@ -229,6 +237,7 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		System.out.println("导出耗时：" + time + "秒");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Context context) {
 		if (RscEventConstants.SELECT_PROBLEM.equals(context.getEventName())) {

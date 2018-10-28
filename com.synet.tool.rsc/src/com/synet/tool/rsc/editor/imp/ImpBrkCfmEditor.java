@@ -192,6 +192,7 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 				continue;
 			}
 			try {
+				String ref = entity.getDevName() + "->" + entity.getPinRefAddr();
 				Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(entity.getDevName(), entity.getPinRefAddr());
 				if (pinEntity != null) {
 					Tb1063CircuitEntity circuitEntity = circuitEntityService.getCircuitEntity(pinEntity);
@@ -202,7 +203,7 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 							entity.setMatched(DBConstants.MATCHED_OK);
 						} else {
 							String msg = "命令确认虚端子不存在：" + entity.getDevName() + "->" + entity.getCmdAckVpRefAddr();
-							appendError("导入跳合闸反校", "虚端子检查", msg);
+							appendError("导入跳合闸反校", "虚端子检查", ref, msg);
 						}
 						Tb1061PoutEntity poutEntity2 = poutEntityService.getPoutEntity(entity.getDevName(), entity.getCmdOutVpRefAddr());
 						if (poutEntity2 != null) {
@@ -210,16 +211,16 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 							entity.setMatched(DBConstants.MATCHED_OK);
 						} else {
 							String msg = "命令出口虚端子不存在：" + entity.getDevName() + "->" + entity.getCmdOutVpRefAddr();
-							appendError("导入跳合闸反校", "虚端子检查", msg);
+							appendError("导入跳合闸反校", "虚端子检查", ref, msg);
 						}
 						circuitEntityService.save(circuitEntity);
 					} else {
 						String msg = "开入虚端子虚回路不存在：" + entity.getDevName() + "->" + entity.getPinRefAddr();
-						appendError("导入跳合闸反校", "虚回路检查", msg);
+						appendError("导入跳合闸反校", "虚回路检查", ref, msg);
 					}
 				} else {
 					String msg = "开入虚端子不存在：" + entity.getDevName() + "->" + entity.getPinRefAddr();
-					appendError("导入跳合闸反校", "虚端子检查", msg);
+					appendError("导入跳合闸反校", "虚端子检查", ref, msg);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -285,8 +286,29 @@ public class ImpBrkCfmEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM108BrkCfmEntity> list = (List<IM108BrkCfmEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入跳合闸反校".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null && ref.contains("->")) {
+					String[] refs = ref.split("->");
+					if (refs.length == 2) {
+						String devName = refs[0];
+						String pinRefAddr = refs[1];
+						for (IM108BrkCfmEntity entity : list) {
+							if (devName.equals(entity.getDevName()) 
+									&& pinRefAddr.equals(entity.getPinRefAddr())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 }

@@ -177,7 +177,8 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 				entity.setMatched(DBConstants.MATCHED_OK);
 			} else {
 				String msg = "Mmsfcda不存在：" + entity.getDevName() + "->" + entity.getMmsRefAddr();
-				appendError("导入监控信息", "FCDA检查", msg);
+				String ref = entity.getDevName() + "->" + entity.getMmsRefAddr();
+				appendError("导入监控信息", "FCDA检查", ref, msg);
 			}
 		}
 	}
@@ -241,8 +242,29 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM109StaInfoEntity> list = (List<IM109StaInfoEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入光强与端口".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null && ref.contains("->")) {
+					String[] refs = ref.split("->");
+					if (refs.length == 2) {
+						String devName = refs[0];
+						String mmsRef = refs[1];
+						for (IM109StaInfoEntity entity : list) {
+							if (devName.equals(entity.getDevName()) 
+									&& mmsRef.equals(entity.getMmsRefAddr())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 

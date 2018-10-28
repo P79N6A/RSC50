@@ -228,7 +228,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				}
 				if (type == null) {
 					String msg = entity.getDevName() + "[" + desc +"],装置类型无法识别";
-					appendError("导入设备台账", "装置检查", msg);
+					appendError("导入设备台账", "装置检查", devName, msg);
 					continue;
 				}
 				type = dictMgr.getIdByName("IED_TYPE", type);
@@ -245,14 +245,14 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				iedEntity.setF1042Code(bayEntity.getF1042Code());
 			} else {
 				String msg = "间隔不存在：" + entity.getDevDesc() + "->" + entity.getBay();
-				appendWarning("导入设备台账", "间隔检查", msg);
+				appendWarning("导入设备台账", devName, "间隔检查", msg);
 			}
 			Tb1050CubicleEntity cubicle = (Tb1050CubicleEntity)beandao.getObject(Tb1050CubicleEntity.class, "f1050Name", entity.getCubicle());
 			if (cubicle != null) {
 				iedEntity.setF1050Code(cubicle.getF1050Code());
 			} else {
 				String msg = "屏柜不存在：" + entity.getDevDesc() + "->" + entity.getCubicle();
-				appendWarning("导入设备台账", "屏柜检查", msg);
+				appendWarning("导入设备台账", "屏柜检查", devName, msg);
 			}
 			iedEntity.setF1046OperateDate(entity.getDateService());
 			iedEntity.setF1046productDate(entity.getDateProduct());
@@ -347,8 +347,24 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入设备台账".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null) {
+					for (IM101IEDListEntity entity : list) {
+						if (ref.equals(entity.getDevName())) {
+							return entity;
+						}
+					}
+				}
+			}
+		}
+		
 		return null;
 	}
 	

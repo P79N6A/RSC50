@@ -202,6 +202,8 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				String portCode = entity.getPortCode();
 				String opticalRefAddr = entity.getOpticalRefAddr();
 				
+				String msgRef = devName + "->" + boardCode + "->" + portCode;
+				
 				params.clear();
 				params.put("f1046Name", devName);
 				params.put("f1058RefAddr", opticalRefAddr);
@@ -218,7 +220,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 							if (ref != null) {
 								if (!ref.equals(opticalRefAddr)) {
 									String msg = "同一端口不允许关联多个光强：" + endMsg;
-									appendError("导入光强与端口", "FCDA数据点检查", msg);
+									appendError("导入光强与端口", "FCDA数据点检查", msgRef, msg);
 									// 回复parentCode为ied
 									analogdataEntity.setParentCode(analogdataEntity.getTb1046IedByF1046Code().getF1046Code());
 									analogdataService.update(analogdataEntity);
@@ -232,17 +234,17 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 									entity.setMatched(DBConstants.MATCHED_OK);
 								} else {
 									String msg = "装置板卡端口不存在：" + endMsg;
-									appendError("导入光强与端口", "端口检查", msg);
+									appendError("导入光强与端口", "端口检查", msgRef, msg);
 								}
 							}
 						} else {
 							String msg = "装置[" + devName + "]不存在Mms信号：" + opticalRefAddr;
-							appendError("导入光强与端口", "FCDA检查", msg);
+							appendError("导入光强与端口", "FCDA检查", msgRef, msg);
 						}
 					}
 				} else {
 					String msg = "装置[" + devName + "]不存在Mms信号：" + opticalRefAddr;
-					appendError("导入光强与端口", "FCDA检查", msg);
+					appendError("导入光强与端口", "FCDA检查", msgRef, msg);
 				}
 				
 			}
@@ -309,8 +311,31 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入光强与端口".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null && ref.contains("->")) {
+					String[] refs = ref.split("->");
+					if (refs.length == 3) {
+						String devName = refs[0];
+						String boardCode = refs[1];
+						String portCode = refs[2];
+						for (IM106PortLightEntity entity : list) {
+							if (devName.equals(entity.getDevName()) 
+									&& boardCode.equals(entity.getBoardCode()) 
+									&& portCode.equals(entity.getPortCode())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 

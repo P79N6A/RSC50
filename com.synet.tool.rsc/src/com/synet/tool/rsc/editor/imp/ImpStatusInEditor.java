@@ -213,11 +213,12 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 					pinEntityService.update(pinEntity);
 				} else {
 					String msg = "开入虚端子不存在:" + devDesc + "-> " + pinRefAddr;
-					appendError("导入开入信号", "虚端子检查", msg);
+					String ref = devName + "->" + pinRefAddr;
+					appendError("导入开入信号", "虚端子检查", ref, msg);
 				}
 			} else {
 				String msg = "开入虚端子参引不能为空:装置[" + devDesc+ "]";
-				appendError("导入开入信号", "虚端子检查", msg);
+				appendError("导入开入信号", "虚端子检查", devName, msg);
 			}
 			String mmsRefAddr = entity.getMmsRefAddr();
 			if (!StringUtil.isEmpty(mmsRefAddr)) {
@@ -228,11 +229,12 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 					mmsfcdaService.update(mmsfcdaEntity);
 				} else {
 					String msg = "MMS不存在:" + devDesc + "-> " + mmsRefAddr;
-					appendError("导入开入信号", "FCDA检查", msg);
+					String ref =  devName + "-> " + mmsRefAddr;
+					appendError("导入开入信号", "FCDA检查", ref, msg);
 				}
 			} else {
 				String msg = "MMS信号参引不能为空:装置[" + devDesc + "]";
-				appendError("导入开入信号", "FCDA检查", msg);
+				appendError("导入开入信号", "FCDA检查", devName, msg);
 			}
 		}
 	}
@@ -293,8 +295,37 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM104StatusInEntity> list = (List<IM104StatusInEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入光强与端口".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null) {
+					if (ref.contains("->")) {
+						String[] refs = ref.split("->");
+						if (refs.length == 2) {
+							String devName = refs[0];
+							String refStr = refs[1];
+							for (IM104StatusInEntity entity : list) {
+								if (devName.equals(entity.getDevName()) 
+										&& (refStr.equals(entity.getPinRefAddr()) || refStr.equals(entity.getMmsRefAddr()))) {
+									return entity;
+								}
+							}
+						}
+					} else {
+						for (IM104StatusInEntity entity : list) {
+							if (ref.equals(entity.getDevName())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 

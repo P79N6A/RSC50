@@ -178,6 +178,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				continue;
 			}
 			try {
+				String ref = entity.getDevName() + "->" + entity.getBoardCode();
 				Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
 				if (tempBoard != null) {
 					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(),entity.getAlarmRefAddr());
@@ -194,16 +195,15 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 							}
 						} else {
 							String msg = "FCDA对应的数据点不存在：" + entity.getDevName() + "->" + entity.getBoardCode();
-							appendError("导入告警", "FCDA数据点检查", msg);
-							
+							appendError("导入告警", "FCDA数据点检查",ref, msg);
 						}
 					} else {
 						String msg = "Mmsfcda不存在：" + entity.getDevName() + "->" + entity.getBoardCode();
-						appendError("导入告警", "FCDA数据点检查", msg);
+						appendError("导入告警", "FCDA数据点检查",ref,  msg);
 					}
 				} else {
 					String msg = "装置板卡不存在：" + entity.getDevName() + "->" + entity.getBoardCode();
-					appendError("导入告警", "板卡检查", msg);
+					appendError("导入告警", "板卡检查",ref, msg);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -271,8 +271,29 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM105BoardWarnEntity> list = (List<IM105BoardWarnEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+			String title = problem.getIedName();
+			if ("导入告警".equals(title)) {
+				String ref = problem.getRef();
+				if (ref != null && ref.contains("->")) {
+					String[] refs = ref.split("->");
+					if (refs.length == 2) {
+						String iedName = refs[0];
+						String boardCode = refs[1];
+						for (IM105BoardWarnEntity entity : list) {
+							if (iedName.equals(entity.getDevName()) 
+									&& boardCode.equals(entity.getBoardCode())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 }

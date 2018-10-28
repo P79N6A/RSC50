@@ -252,6 +252,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 			String strapRefAddr = entity.getStrapRefAddr();
 			String endMsg = devName + "->" + vpRefAddr;
 			try {
+				String ref = entity.getDevName() + "->" + entity.getVpRefAddr();
 				if ("开入".equals(vpType)) {
 					Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(devName, vpRefAddr);
 					if (pinEntity != null) {
@@ -271,12 +272,12 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 								}
 							} else {
 								String msg = "FCDA对应的数据点不存在：" + endMsg;
-								appendError("导入压板与虚端子", "FCDA数据点检查", msg);
+								appendError("导入压板与虚端子", "FCDA数据点检查", ref, msg);
 							}
 						}
 					} else {
 						String msg = "开入虚端子不存在:" + endMsg;
-						appendError("导入压板与虚端子", "虚端子检查", msg);
+						appendError("导入压板与虚端子", "虚端子检查", ref, msg);
 					}
 				} else if ("开出".equals(vpType)){
 					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(devName, vpRefAddr);
@@ -297,12 +298,12 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 								}
 							} else {
 								String msg = "FCDA对应的数据点不存在：" + endMsg;
-								appendError("导入压板与虚端子", "FCDA数据点检查", msg);
+								appendError("导入压板与虚端子", ref, "FCDA数据点检查", msg);
 							}
 						}
 					} else {
 						String msg = "开出虚端子不存在:" + endMsg;
-						appendError("导入压板与虚端子", "虚端子检查", msg);
+						appendError("导入压板与虚端子", "虚端子检查", ref, msg);
 					}
 				}
 			} catch (Exception e) {
@@ -399,8 +400,31 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
+		List<IM107TerStrapEntity> list = (List<IM107TerStrapEntity>) table.getInput();
+		if (problem != null && list != null && list.size() > 0) {
+		String title = problem.getIedName();
+		if ("导入光强与端口".equals(title)) {
+			String ref = problem.getRef();
+			if (ref != null) {
+				if (ref.contains("->")) {
+					String[] refs = ref.split("->");
+					if (refs.length == 2) {
+						String devName = refs[0];
+						String vpRef = refs[1];
+						for (IM107TerStrapEntity entity : list) {
+							if (devName.equals(entity.getDevName()) 
+									&& vpRef.equals(entity.getVpRefAddr())) {
+								return entity;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 		return null;
 	}
 
