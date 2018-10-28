@@ -230,6 +230,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
 		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
@@ -262,7 +263,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 				}
 			} else {
 				for (IM102FibreListEntity entity : list) {
-					if (entity.getCableCode().equals(ref)) {
+					if (ref.equals(entity.getCableCode())) {
 						return entity;
 					}
 				}
