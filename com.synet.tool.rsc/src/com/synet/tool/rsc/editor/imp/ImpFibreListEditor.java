@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
@@ -230,7 +231,6 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
 		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
@@ -248,22 +248,33 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 				}
 			}
 		} else {
-			if (desc.indexOf("重复") > 0) {
+			if (desc.indexOf("重复") > 0 && desc.indexOf('[')>0) {
 				desc = desc.substring(desc.indexOf('[') + 1, desc.indexOf(']'));
 				String[] temp = desc.split(",");
-				for (IM102FibreListEntity entity : list) {
-					if ((entity.getDevNameA().equals(temp[0]) && 
-							entity.getBoardCodeA().equals(temp[1]) && 
-							entity.getPortCodeA().equals(temp[2])) ||
-							(entity.getDevNameB().equals(temp[0]) && 
-									entity.getBoardCodeB().equals(temp[1]) && 
-									entity.getPortCodeB().equals(temp[2]))) {
-						return entity;
+				if (temp.length == 3) {
+					for (IM102FibreListEntity entity : list) {
+						if ((entity.getDevNameA().equals(temp[0]) && 
+								entity.getBoardCodeA().equals(temp[1]) && 
+								entity.getPortCodeA().equals(temp[2])) ||
+								(entity.getDevNameB().equals(temp[0]) && 
+										entity.getBoardCodeB().equals(temp[1]) && 
+										entity.getPortCodeB().equals(temp[2]))) {
+							return entity;
+						}
+					}
+				} else {
+					for (IM102FibreListEntity entity : list) {
+						String coreCode = entity.getCoreCode();
+						String cableCode = entity.getCableCode();
+						if ((!StringUtil.isEmpty(coreCode) && coreCode.equals(temp[0]))
+								&& (!StringUtil.isEmpty(cableCode) && cableCode.equals(ref))) {
+							return entity;
+						}
 					}
 				}
 			} else {
 				for (IM102FibreListEntity entity : list) {
-					if (ref.equals(entity.getCableCode())) {
+					if (!StringUtil.isEmpty(ref) && ref.equals(entity.getCableCode())) {
 						return entity;
 					}
 				}
