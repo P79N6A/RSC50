@@ -8,9 +8,12 @@ import java.util.Map;
 import org.dom4j.Element;
 
 import com.shrcn.business.scl.model.SCL;
+import com.shrcn.found.common.cache.CacheFactory;
+import com.shrcn.found.common.cache.CacheWrapper;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.xmldb.XMLDBHelper;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 
 public class Context {
 	// 通信配置
@@ -19,6 +22,8 @@ public class Context {
 	private DatTypTplParser datTypTplParser;
 	// 虚端子关联key=iedName value map:key=desc, ref  value=iedName, ref
 	private Map<String, Map<String, String>> vtLinkMap;
+	// 输出虚端子缓存
+	private CacheWrapper poutCache;
 	// 问题
 	private List<Problem> problems;
 	
@@ -28,6 +33,9 @@ public class Context {
 
 	private void init() {
 		this.vtLinkMap = new HashMap<>();
+		CacheFactory.createHashMapWrapper("pouts");
+		poutCache = CacheFactory.getCacheWrapper("pouts");
+		poutCache.clear();
 		initNetCfgs();
 		initDatTpl();
 	}
@@ -109,6 +117,14 @@ public class Context {
 			vtLinkMap.put(iedName, links);
 		}
 		links.put(intAddr, outAddr);
+	}
+	
+	public void cachePout(String outAddr, Tb1061PoutEntity pout) {
+		poutCache.put(outAddr, pout);
+	}
+	
+	public Tb1061PoutEntity getPout(String outAddr) {
+		return (Tb1061PoutEntity) poutCache.get(outAddr);
 	}
 	
 	public Map<String, Map<String, String>> getVtLinkMap() {

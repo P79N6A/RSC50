@@ -1,8 +1,11 @@
 package com.synet.tool.rsc.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class BaseCbEntity {
+public abstract class BaseCbEntity implements Serializable {
+	
+	private static final long serialVersionUID = -8850845257864591506L;
 	
 	protected String cbCode;
     protected String cbName;

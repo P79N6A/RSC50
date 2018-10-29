@@ -23,6 +23,7 @@ import com.synet.tool.rsc.io.parser.IedParserBase;
 import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
 import com.synet.tool.rsc.io.scd.SclUtil;
+import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
@@ -55,7 +56,7 @@ public class IedParserNew {
 	private Map<String, Element> iedLNMap = new HashMap<String, Element>();
 	// extref 缓存
 	private List<Element> elExtRefAll = new ArrayList<>();
-	
+		
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
 	private StrapEntityService strapService = new StrapEntityService();
@@ -150,6 +151,13 @@ public class IedParserNew {
 		beanDao.insertBatch(agls);
 		beanDao.insertBatch(sts);
 		// 分析虚端子
+		parseInputs();
+		if (monitor != null) {
+			monitor.worked(1);
+		}
+	}
+
+	private void parseInputs() {
 		for (Element extref : elExtRefAll) { // 一个外部信号可被多个内部虚端子接收
 			String intAddr = extref.attributeValue("intAddr");
 			String extIedName = extref.attributeValue("iedName");
@@ -202,9 +210,6 @@ public class IedParserNew {
 				}
 			}
 		}
-		if (monitor != null) {
-			monitor.worked(1);
-		}
 	}
 	
 	private void createSMV(String datSet, Element elDat, Element cbNd, Element elLd) {
@@ -235,7 +240,7 @@ public class IedParserNew {
 		st.setTb1046IedByF1046Code(ied);
 		beanDao.insert(st);
 		// 发送虚端子
-		parsePOuts(elLd, cbNd, elDat, smv.getCbCode());
+		parsePOuts(elLd, cbNd, elDat, smv);
 	}
 	
 	private void createGoose(String datSet, Element elDat, Element cbNd, Element elLd) {
@@ -265,10 +270,10 @@ public class IedParserNew {
 		Tb1016StatedataEntity st = ParserUtil.createStatedata(cbNd.attributeValue("cbRef")+"状态", "", cbCode, ied, F1011_NO.IED_WRN_GOOSE.getId());
 		sts.add(st);
 		// 发送虚端子
-		parsePOuts(elLd, cbNd, elDat, gcb.getCbCode());
+		parsePOuts(elLd, cbNd, elDat, gcb);
 	}
 	
-	private void parsePOuts(Element ldNd, Element cbNd, Element elDat, String cbCode) {
+	private void parsePOuts(Element ldNd, Element cbNd, Element elDat, BaseCbEntity cb) {
 		String datSet = elDat.attributeValue("name");
 		List<Element> fcdaEls = elDat.elements("FCDA");
 		List<Tb1061PoutEntity> pouts = new ArrayList<>();
@@ -278,7 +283,8 @@ public class IedParserNew {
 			pouts.add(pout);
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
 			pout.setTb1046IedByF1046Code(ied);
-			pout.setCbCode(cbCode);
+			pout.setCbEntity(cb);
+			pout.setCbCode(cb.getCbCode());
 			String ref = SclUtil.getFcdaRef(fcdaEl);
 			pout.setF1061RefAddr(ref);
 			pout.setF1061Index(i);
@@ -297,6 +303,7 @@ public class IedParserNew {
 				String algcode = algdata.getF1006Code();
 				pout.setDataCode(algcode);
 			}
+			context.cachePout(SCL.getNodeRef(fcdaEl), pout);
 		}
 		beanDao.insertBatch(pouts);
 	}

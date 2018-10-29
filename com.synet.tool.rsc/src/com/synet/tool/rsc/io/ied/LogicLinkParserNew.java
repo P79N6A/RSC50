@@ -10,6 +10,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -54,10 +55,11 @@ public class LogicLinkParserNew {
 				Tb1046IedEntity resvIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 				Tb1046IedEntity sendIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", outIedName);
 				
-				Map<String, Object> params = new HashMap<>();
-				params.put("tb1046IedByF1046Code", sendIed);
-				params.put("f1061RefAddr", outAddr);
-				Tb1061PoutEntity pout = (Tb1061PoutEntity) beanDao.getObject(Tb1061PoutEntity.class, params);
+//				Map<String, Object> params = new HashMap<>();
+//				params.put("tb1046IedByF1046Code", sendIed);
+//				params.put("f1061RefAddr", outAddr);
+//				Tb1061PoutEntity pout = (Tb1061PoutEntity) beanDao.getObject(Tb1061PoutEntity.class, params);
+				Tb1061PoutEntity pout = context.getPout(outAddr);
 				if (pout == null) {
 					context.addError(iedName, "虚端子关联", intAddr, "找不到外部虚端子" + outAddr + "。");
 					continue;
@@ -67,7 +69,8 @@ public class LogicLinkParserNew {
 				String linkKey = iedName + "." + outIedName + "." + cbEntity.getCbCode();
 				Tb1065LogicallinkEntity logicLink = linkCache.get(linkKey);
 				if (logicLink == null) {
-					params.clear();
+//					params.clear();
+					Map<String, Object> params = new HashMap<>();
 					params.put("baseCbByCdCode", cbEntity);
 					params.put("tb1046IedByF1046CodeIedRecv", resvIed);
 					params.put("tb1046IedByF1046CodeIedSend", sendIed);
@@ -100,6 +103,9 @@ public class LogicLinkParserNew {
 	}
 	
 	private Tb1063CircuitEntity createCircuit(Tb1065LogicallinkEntity logiclink, String pinRefAddr, String pinDesc, Tb1061PoutEntity pout) {
+		String poutRef = pout.getF1061RefAddr();
+		String fc = SclUtil.getFC(poutRef);
+		pinRefAddr = SclUtil.getFcdaRef(pinRefAddr, fc);
 		Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv(); 
 		Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend(); 
 		Tb1063CircuitEntity circuit = new Tb1063CircuitEntity();

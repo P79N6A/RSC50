@@ -52,6 +52,21 @@ public class SclUtil {
 			sb.append("$" + daName);
 		return sb.toString();
 	}
+	
+	/**
+	 * 将intAddr格式参引改成mms格式
+	 * @param intAddr
+	 * @param fc
+	 * @return
+	 */
+	public static String getFcdaRef(String intAddr, String fc) {
+		String[] temp = intAddr.split("\\.");
+		String ref = temp[0] + "$" + fc;
+		for (int i=1; i<temp.length; i++) {
+			ref += "$" + temp[i];
+		}
+		return ref;
+	}
 
 	public static String getDoRef(Element fcdaEl, String daName) {
 		String ref = fcdaEl.attributeValue("ref");

@@ -1,14 +1,20 @@
 package com.synet.tool.rsc.model;
 
+import java.io.Serializable;
+
 
 
 /**
  * 输出虚端子
  * Created by chunc on 2018/8/7.
  */
-public class Tb1061PoutEntity {
-    private String f1061Code;
+public class Tb1061PoutEntity implements Serializable {
+
+	private static final long serialVersionUID = -8908223642402204429L;
+	
+	private String f1061Code;
     private String cbCode;
+    private int f1011No;
     private int f1061Index;
     private String f1061Byname;
     private String f1061Desc;
@@ -54,7 +60,15 @@ public class Tb1061PoutEntity {
         this.f1061RefAddr = f1061RefAddr;
     }
 
-    public int getF1061Index() {
+    public int getF1011No() {
+		return f1011No;
+	}
+
+	public void setF1011No(int f1011No) {
+		this.f1011No = f1011No;
+	}
+
+	public int getF1061Index() {
         return f1061Index;
     }
 
@@ -109,6 +123,7 @@ public class Tb1061PoutEntity {
 
         Tb1061PoutEntity that = (Tb1061PoutEntity) o;
 
+        if (f1011No != that.f1011No) return false;
         if (f1061Index != that.f1061Index) return false;
         if (cbCode != null ? !cbCode.equals(that.cbCode) : that.cbCode != null) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
@@ -124,6 +139,7 @@ public class Tb1061PoutEntity {
         int result = f1061Code != null ? f1061Code.hashCode() : 0;
         result = 31 * result + (cbCode != null ? cbCode.hashCode() : 0);
         result = 31 * result + (f1061RefAddr != null ? f1061RefAddr.hashCode() : 0);
+        result = 31 * result + f1011No;
         result = 31 * result + f1061Index;
         result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);

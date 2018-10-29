@@ -31,5 +31,11 @@ public class SclUtilTest {
 		v = SclUtil.getLnName(pinDataRef);
 		assertEquals("GGIO", v);
 	}
+	
+	@Test
+	public void testGetFcdaRef() {
+		String fcdaRef = SclUtil.getFcdaRef(pinDataRef, "ST");
+		assertEquals("PI/NIGOINGGIO1$ST$IntIn3$stVal", fcdaRef);
+	}
 
 }
