@@ -328,7 +328,17 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,
 								InterruptedException {
 							new TemplateImport(iedEntity).execute(monitor);
-							EventManager.getDefault().notify(EventConstants.REFRESH_EIDTOR, null);
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									// 板卡端口
+									initTbDataByTbName(RSCConstants.BOARD_PORT, true);
+									// 虚端子
+									initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
+									// 装置告警
+									initTbDataByTbName(RSCConstants.DEV_WARNING, true);
+								}
+							});
 						}
 					});
 					DialogHelper.showAsynInformation("引入模版结束！");

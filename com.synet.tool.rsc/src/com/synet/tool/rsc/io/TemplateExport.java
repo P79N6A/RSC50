@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -14,6 +13,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
@@ -21,7 +21,6 @@ import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
-import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
@@ -31,7 +30,6 @@ import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.StatedataService;
-import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.util.DataUtils;
 
 public class TemplateExport{
@@ -41,14 +39,12 @@ public class TemplateExport{
 	private Tb1046IedEntity tb1046IedEntity;
 	private PortEntityService portEntityService;
 	private BoardEntityService boardEntityService;
-	private StrapEntityService strapEntityService;
 
 	public TemplateExport(Tb1046IedEntity tb1046IedEntity) {
 		mmsfcdaService = new MmsfcdaService();
 		statedataService= new StatedataService();
 		portEntityService = new PortEntityService();
 		boardEntityService = new BoardEntityService();
-		strapEntityService = new StrapEntityService();
 		this.tb1046IedEntity = tb1046IedEntity;
 	}
 
@@ -93,31 +89,43 @@ public class TemplateExport{
 		}
 		
 		//获取装置下所有虚端子压板
-		List<Tb1064StrapEntity> straps = strapEntityService.getByIed(tb1046IedEntity);
 		Element elementStraps = elementIedEntity.addElement("Straps");
 		Element elementPouts = elementStraps.addElement("Pouts");
 		Element elementPins = elementStraps.addElement("Pins");
 		PoutEntityService poutEntityService = new PoutEntityService();
 		PinEntityService pinEntityService = new PinEntityService();
-		List<Tb1064StrapEntity> param  = new ArrayList<>();
-		for (Tb1064StrapEntity tb1064StrapEntity : straps) {
-			param.add(tb1064StrapEntity);
-			//获取当前压板所有开出虚端子
-			List<Tb1061PoutEntity> pouts = poutEntityService.getByStraps(param);
-			for (Tb1061PoutEntity tb1061PoutEntity : pouts) {
-				Element elementPoutEntity = elementPouts.addElement("Tb1061PoutEntity");
-				poutAddAttr(tb1064StrapEntity, tb1061PoutEntity, elementPoutEntity);
+		List<Tb1061PoutEntity> pouts = poutEntityService.getByIed(tb1046IedEntity);
+		List<Tb1062PinEntity> pins = pinEntityService.getByIed(tb1046IedEntity);
+		for (Tb1061PoutEntity pout : pouts) {
+			Tb1064StrapEntity strap = pout.getTb1064StrapByF1064Code();
+			if (strap == null) {
+				continue;
 			}
-			
-			//获取当前压板所有开入虚端子
-			List<Tb1062PinEntity> pins = pinEntityService.getByStraps(param);
-			for (Tb1062PinEntity tb1062PinEntity : pins) {
-				Element elementPinEntity = elementPins.addElement("Tb1062PinEntity");
-				pinAddAttr(tb1064StrapEntity, tb1062PinEntity, elementPinEntity);
+			Element elementPoutEntity = elementPouts.addElement("Tb1061PoutEntity");
+			elementPoutEntity.addAttribute("f1061RefAddr", pout.getF1061RefAddr());
+			addStrapRef(elementPoutEntity, strap);
+		}
+		for (Tb1062PinEntity pin : pins) {
+			Tb1064StrapEntity strap = pin.getTb1064StrapByF1064Code();
+			if (strap == null) {
+				continue;
 			}
-			param.clear();
+			Element elementPinEntity = elementPins.addElement("Tb1062PinEntity");
+			elementPinEntity.addAttribute("f1062RefAddr", pin.getF1062RefAddr());
+			addStrapRef(elementPinEntity, strap);
 		}
 		return doc;
+	}
+
+	private void addStrapRef(Element elementPoutEntity, Tb1064StrapEntity strap) {
+		String strapCode = strap.getF1064Code();
+		List<Tb1016StatedataEntity> states = statedataService.getStateDataByParentCode(strapCode);
+		if (states!=null && states.size()>0) {
+			Tb1016StatedataEntity state = states.get(0);
+			elementPoutEntity.addAttribute("strapRefAddr", state.getF1016AddRef());
+		} else {
+			elementPoutEntity.addAttribute("strapRefAddr", "");
+		}
 	}
 	
 	public void createXml(Document doc, String path) {
@@ -136,37 +144,27 @@ public class TemplateExport{
 		
 	}
 
-	private void pinAddAttr(Tb1064StrapEntity tb1064StrapEntity, Tb1062PinEntity tb1062PinEntity,
-			Element elementPinEntity) {
-		elementPinEntity.addAttribute("f1062RefAddr", tb1062PinEntity.getF1062RefAddr());
-		elementPinEntity.addAttribute("strapRefAddr", getRefAddr(tb1064StrapEntity.getF1046Code()));
-	}
-
-	private void poutAddAttr(Tb1064StrapEntity tb1064StrapEntity, Tb1061PoutEntity tb1061PoutEntity,
-			Element elementPoutEntity) {
-		elementPoutEntity.addAttribute("f1061RefAddr", tb1061PoutEntity.getF1061RefAddr());
-		elementPoutEntity.addAttribute("strapRefAddr", getRefAddr(tb1064StrapEntity.getF1046Code()));
-	}
-
-	private void portAddAttr(Tb1048PortEntity tb1048PortEntity,
-			Element elementPortEntity) {
+	private void portAddAttr(Tb1048PortEntity tb1048PortEntity, Element elementPortEntity) {
+		String algRefAddr = getAlgRefAddr(tb1048PortEntity.getF1048Code());
+		if (StringUtil.isEmpty(algRefAddr)) {
+			elementPortEntity.getParent().remove(elementPortEntity);
+			return;
+		}
 		elementPortEntity.addAttribute("f1048No", tb1048PortEntity.getF1048No());
 		elementPortEntity.addAttribute("f1048Desc", tb1048PortEntity.getF1048Desc());
 		elementPortEntity.addAttribute("f1048Direction", tb1048PortEntity.getF1048Direction()+"");
 		elementPortEntity.addAttribute("f1048Plug", tb1048PortEntity.getF1048Plug()+"");
-		elementPortEntity.addAttribute("fbRefAddr", getAlgRefAddr(tb1048PortEntity.getF1048Code()));
+		elementPortEntity.addAttribute("fbRefAddr", algRefAddr);
 	}
 
-	private void boardAddAttr(Tb1047BoardEntity tb1047BoardEntity,
-			Element elementBoardEntity) {
+	private void boardAddAttr(Tb1047BoardEntity tb1047BoardEntity, Element elementBoardEntity) {
 		elementBoardEntity.addAttribute("f1047Slot", tb1047BoardEntity.getF1047Slot());
 		elementBoardEntity.addAttribute("f1047Desc", tb1047BoardEntity.getF1047Desc());
 		elementBoardEntity.addAttribute("f1047Type", tb1047BoardEntity.getF1047Type());
 		elementBoardEntity.addAttribute("warnRefAddr", getRefAddr(tb1047BoardEntity.getF1047Code()));
 	}
 
-	private void iedAddAttr(Tb1046IedEntity tb1046IedEntity,
-			Element elementIedEntity) {
+	private void iedAddAttr(Tb1046IedEntity tb1046IedEntity, Element elementIedEntity) {
 		elementIedEntity.addAttribute("f1046Manufacturor", tb1046IedEntity.getF1046Manufacturor());
 		elementIedEntity.addAttribute("f1046Model", tb1046IedEntity.getF1046Model());
 		elementIedEntity.addAttribute("f1046ConfigVersion", tb1046IedEntity.getF1046ConfigVersion());
@@ -178,12 +176,7 @@ public class TemplateExport{
 		List<Tb1006AnalogdataEntity> algdataEntityList = (List<Tb1006AnalogdataEntity>) 
 				statedataService.getListByCriteria(Tb1006AnalogdataEntity.class, "parentCode", code);
 		if(DataUtils.listNotNull(algdataEntityList)) {
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntityList = (List<Tb1058MmsfcdaEntity>) 
-					mmsfcdaService.getListByCriteria(Tb1058MmsfcdaEntity.class, "dataCode", 
-							algdataEntityList.get(0).getF1006Code());
-			if(DataUtils.listNotNull(mmsfcdaEntityList)) {
-				return mmsfcdaEntityList.get(0).getF1058RefAddr();
-			}
+			return algdataEntityList.get(0).getF1006AddRef();
 		}
 		return "";
 	}
@@ -193,12 +186,7 @@ public class TemplateExport{
 		List<Tb1016StatedataEntity> statedataEntityList = (List<Tb1016StatedataEntity>) 
 				statedataService.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", code);
 		if(DataUtils.listNotNull(statedataEntityList)) {
-			List<Tb1058MmsfcdaEntity> mmsfcdaEntityList = (List<Tb1058MmsfcdaEntity>) 
-					mmsfcdaService.getListByCriteria(Tb1058MmsfcdaEntity.class, 
-							"dataCode", statedataEntityList.get(0).getF1016Code());
-			if(DataUtils.listNotNull(mmsfcdaEntityList)) {
-				return mmsfcdaEntityList.get(0).getF1058RefAddr();
-			}
+			return statedataEntityList.get(0).getF1016AddRef();
 		}
 		return "";
 	}
