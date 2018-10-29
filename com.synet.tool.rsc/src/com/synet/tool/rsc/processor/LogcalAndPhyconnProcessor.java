@@ -69,8 +69,18 @@ public class LogcalAndPhyconnProcessor {
 				return true;
 			//判断是否是交换机
 			} else if (isSwcDevice(sendIed)) {				  //与逻辑链路发送端装置不一致
-				phyconnList.add(physconnEntity);
-				return findSendPhysConns(sendIedName, recvIed, phyconnList);
+				boolean inPath = false; // 避免死循环
+				for (Tb1053PhysconnEntity phyconn : phyconnList) {
+					String phyConSendIed = phyconn.getTb1048PortByF1048CodeA().getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
+					if (sendIed.getF1046Name().equals(phyConSendIed)) {
+						inPath = true;
+						break;
+					}
+				}
+				if (!inPath) {
+					phyconnList.add(physconnEntity);
+					return findSendPhysConns(sendIedName, sendIed, phyconnList);
+				}
 			}
 		}
 		return false;
@@ -84,7 +94,7 @@ public class LogcalAndPhyconnProcessor {
 		for (Tb1065LogicallinkEntity logicallinkEntity : logicallinkEntities) {
 			Tb1046IedEntity recvIed = logicallinkEntity.getTb1046IedByF1046CodeIedRecv();
 			Tb1046IedEntity sendIed = logicallinkEntity.getTb1046IedByF1046CodeIedSend();
-			String appid = recvIed.getF1046Name() + " [" + logicallinkEntity.getBaseCbByCdCode().getCbId() + "] ";
+			String appid = sendIed.getF1046Name() + "->" + recvIed.getF1046Name() + " [" + logicallinkEntity.getBaseCbByCdCode().getCbId() + "] ";
 			if (sendIed == null || recvIed == null) {
 				String msg = "找不到逻辑链路" + appid + "的";
 				if (sendIed == null) {
@@ -116,7 +126,7 @@ public class LogcalAndPhyconnProcessor {
 					llinkphyrelationEntity.setF1073Code(rscp.nextTbCode(DBConstants.PR_LPRELATION));
 					lLinkPhyRelationService.save(llinkphyrelationEntity);
 				}
-				console.append("逻辑链路" + appid + "与" + phyconnList.size() + "条物理回路有关。");
+				console.append("逻辑链路 " + appid + " 关联了" + phyconnList.size() + "条物理回路。");
 			}
 		}
 		console.append("物理回路与逻辑链路联关系分析完毕！");
