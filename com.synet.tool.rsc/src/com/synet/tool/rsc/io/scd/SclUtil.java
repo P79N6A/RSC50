@@ -7,8 +7,10 @@ package com.synet.tool.rsc.io.scd;
 
 import org.dom4j.Element;
 
+import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
+import com.shrcn.found.file.xml.DOM4JNodeHelper;
 
  /**
  * 
@@ -125,6 +127,30 @@ public class SclUtil {
 			}
 		}
 		return false;
+	}
+	
+	public static String getFCDADesc(Element ld,
+			String prefix, String lnClass, String lnInst, String doName) {
+		if(null == ld)
+			return "";
+		String ln = SCL.getLNXPath(prefix, lnClass, lnInst);
+		String doXPath = SCL.getDOXPath(doName);
+		String desc = DOM4JNodeHelper.getAttributeByXPath(ld, 
+					"." + ln + doXPath + "/@desc");
+		if (StringUtil.isEmpty(desc)) {
+			final Element dUNode = DOM4JNodeHelper.selectSingleNode(ld,
+					"." + ln + doXPath + "/*[name()='DAI'][@name='dU']/scl:Val");
+			if (dUNode != null) {
+				desc = dUNode.getStringValue();
+			} else {
+				String lnDesc = DOM4JNodeHelper.getAttributeByXPath(ld, "." + ln + "/@desc");
+				if (!StringUtil.isEmpty(lnDesc)) {
+					desc = lnDesc;
+				}
+			}
+		}
+		desc = StringUtil.toXMLChars(desc == null ? "" : desc);
+		return desc;
 	}
 }
 

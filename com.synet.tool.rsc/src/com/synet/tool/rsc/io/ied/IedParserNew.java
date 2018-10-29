@@ -9,7 +9,6 @@ import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.business.scl.check.ModelCheckerNew;
-import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
@@ -430,7 +429,7 @@ public class IedParserNew {
 		String lnClass = fcdaEl.attributeValue("lnClass");
 		String lnInst = fcdaEl.attributeValue("lnInst");
 		String doName = fcdaEl.attributeValue("doName");
-		return FcdaDAO.getFCDADesc(elLd, prefix, lnClass, lnInst, doName);
+		return SclUtil.getFCDADesc(elLd, prefix, lnClass, lnInst, doName);
 	}
 	
 	private void addError(String iedName, String subType, String ref, String desc) {
