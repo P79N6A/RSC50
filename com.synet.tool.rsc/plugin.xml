@@ -47,10 +47,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.synet.tool.rsc.application"
-            name="RSC50">
+            name="RSC-5000系统配置工具">
          <property
                name="appName"
-               value="RSC50">
+               value="RSC-5000系统配置工具">
          </property>
          <property
                name="preferenceCustomization"
