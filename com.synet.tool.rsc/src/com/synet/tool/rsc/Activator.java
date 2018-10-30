@@ -8,6 +8,7 @@ import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.TaskManager;
 import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.RuleType;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -38,8 +39,7 @@ public class Activator extends AbstractUIPlugin {
 		
 		DictManager dictmgr = DictManager.getInstance();
 		dictmgr.init(getClass(), RSCConstants.DICT_PATH, true);
-		String dicttype = F1011_NO.class.getSimpleName();
-		dictmgr.addDict(dicttype, dicttype, F1011_NO.getDictItems());
+		RuleType.initDicts();
 
 		new TaskManager().start();
 	}

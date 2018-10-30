@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -48,6 +50,7 @@ public class RuleManager {
 		
 		rules.clear();
 		rules.addAll(ruleList);
+		sortRules();
 		
 		DictManager dictmgr = DictManager.getInstance();
 		String dicttype = F1011_NO.class.getSimpleName();
@@ -105,6 +108,7 @@ public class RuleManager {
 				DOM4JNodeHelper.copyAttributes(el, rule);
 				rules.add(rule);
 			}
+			sortRules();
 		} catch (FileNotFoundException e) {
 			SCTLogger.error(e.getMessage());
 		} catch (IOException e) {
@@ -114,15 +118,15 @@ public class RuleManager {
 		}
 	}
 	
-	public Rule getRule(int id) {
-		return rules.get(id);
+	private void sortRules() {
+		Collections.sort(rules, new Comparator<Rule>() {
+			@Override
+			public int compare(Rule r1, Rule r2) {
+				return r1.getId() - r2.getId();
+			}});
 	}
 	
 	public List<Rule> getRules() {
-		List<Rule> result = new ArrayList<>();
-		for (Rule rule : rules) {
-			result.add(rule);
-		}
-		return result;
+		return rules;
 	}
 }
