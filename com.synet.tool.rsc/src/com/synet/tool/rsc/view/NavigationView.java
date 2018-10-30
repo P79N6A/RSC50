@@ -35,6 +35,7 @@ import com.synet.tool.rsc.dialog.HistoryProjectDialog;
 import com.synet.tool.rsc.ui.EcfgTreeViewer;
 import com.synet.tool.rsc.util.NavgTreeFactory;
 import com.synet.tool.rsc.util.ProjectFileManager;
+import com.synet.tool.rsc.util.VersionUtil;
 
 public class NavigationView extends ANavigationView {
 	
@@ -224,6 +225,7 @@ public class NavigationView extends ANavigationView {
 				prjFileMgr.addProject(prjName, null);
 				prjFileMgr.setClosed(false);
 				prjmgr.openDb(prjName);
+				VersionUtil.updateDB();
 //				initIntervalDict();
 				monitor.worked(1);
 				Display.getDefault().asyncExec(new Runnable() {

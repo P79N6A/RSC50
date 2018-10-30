@@ -432,6 +432,7 @@ create table TB1061_POUT
    CB_CODE              varchar(48) not null,
    F1061_RefAddr        varchar(48) not null,
    F1061_Index          INT not null,
+   F1061_Type          INT not null,
    F1061_Desc           varchar(96),
    F1064_CODE           varchar(48),
    DATA_CODE            varchar(48) not null,

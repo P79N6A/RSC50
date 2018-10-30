@@ -186,7 +186,8 @@ public class HqlDaoImpl implements HqlDaoService {
 		} finally {
 			try {
 				if (state != null)
-				state.close();
+					state.close();
+				service.flush();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
@@ -356,9 +357,9 @@ public class HqlDaoImpl implements HqlDaoService {
 	@Override
 	public List<Map<String, Object>> getQueryResultToListMap(String sql, Map<String, Object> params) {
 		List<Map<String, Object>> result = new ArrayList<>();
-//		Session _session = service.get();
-//		Connection conn = _session.connection();
-		Connection conn = FutIdctDbManagerImpl.getInstance().getConn();
+		Session _session = service.get();
+		Connection conn = _session.connection();
+//		Connection conn = FutIdctDbManagerImpl.getInstance().getConn();
 		Statement state = null;
 		try {
 			state = conn.createStatement();
