@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -14,6 +15,7 @@ import com.synet.tool.rsc.model.Tb1055GcbEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
 
@@ -34,7 +36,7 @@ public class RuleEntityService {
 	public void applyRulesToIED(IProgressMonitor monitor) {
 		String prefix = "装置 " + iedEntity.getF1046Name();
 		if (monitor != null) {
-			monitor.beginTask(prefix + " 正在向Rcb应用辨识规则", 3);
+			monitor.beginTask(prefix + " 正在向Rcb应用辨识规则", 4);
 		}
 		applyRulesToRcb();
 		if (monitor != null) {
@@ -47,6 +49,11 @@ public class RuleEntityService {
 			monitor.setTaskName(prefix + " 正在向Svcb应用辨识规则");
 		}
 		applyRulesToSvcb();
+		if (monitor != null) {
+			monitor.worked(1);
+			monitor.setTaskName(prefix + " 正在向Pin应用辨识规则");
+		}
+		applyRulesToPins();
 		if (monitor != null) {
 			monitor.done();
 		}
@@ -71,10 +78,10 @@ public class RuleEntityService {
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
 				if (type != null) {
 					if (DBConstants.DATA_ST == f1058DataType) {
-						mmsfcdaService.updateStateF1011No(dataCode, type);
 						if (SclUtil.isStrap(dataset)) {
 							mmsfcdaService.updateStrapF1011No(dataCode, type);
 						}
+						mmsfcdaService.updateStateF1011No(dataCode, type);
 					} else if (DBConstants.DATA_MX == f1058DataType) {
 						mmsfcdaService.updateAnalogF1011No(dataCode, type);
 					}
@@ -93,6 +100,7 @@ public class RuleEntityService {
 	}
 
 	private void applyRulesToPouts(String dataset, List<Tb1061PoutEntity> fcdas) {
+		List<Tb1061PoutEntity> fcdasUpdate = new ArrayList<>(); 
 		for (Tb1061PoutEntity fcda : fcdas) {
 			String dataCode = fcda.getDataCode();
 			Rule type = getRuleByPout(dataset, fcda);
@@ -102,10 +110,11 @@ public class RuleEntityService {
 				} else if (dataCode.startsWith(DBConstants.PR_Analog)) {
 					mmsfcdaService.updateAnalogF1011No(dataCode, type);
 				}
-				// 更新对侧接收虚端子
-				poutEntityService.updatePinF1011No(fcda, type);
+				fcda.setF1061Type(type.getId());
+				fcdasUpdate.add(fcda);
 			}
 		}
+		beanDao.updateBatch(fcdasUpdate);
 	}
 	
 	public void applyRulesToSvcb() {
@@ -117,4 +126,16 @@ public class RuleEntityService {
 		}
 	}
 	
+	public void applyRulesToPins() {
+		List<Tb1062PinEntity> pins = (List<Tb1062PinEntity>) beanDao.getListByCriteria(Tb1062PinEntity.class, "tb1046IedByF1046Code", iedEntity);
+		List<Tb1062PinEntity> pinsUpdate = new ArrayList<>(); 
+		for (Tb1062PinEntity pin : pins) {
+			Rule type = F1011_NO.getType("", pin.getF1062RefAddr(), pin.getF1062Desc(), rules);
+			if (type != null) {
+				pin.setF1011No(type.getId());
+				pinsUpdate.add(pin);
+			}
+		}
+		beanDao.updateBatch(pinsUpdate);
+	}
 }

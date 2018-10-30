@@ -62,6 +62,7 @@ public class PoutEntityService extends BaseService{
 		return (List<Tb1061PoutEntity>) hqlDao.selectInObjects(Tb1061PoutEntity.class, "tb1064StrapByF1064Code", straps);
 	}
 	
+	@Deprecated
 	public void updatePinF1011No(Tb1061PoutEntity fcda, Rule type) {
 		List<Tb1063CircuitEntity> circuits = (List<Tb1063CircuitEntity>) beanDao.getListByCriteria(Tb1063CircuitEntity.class, "tb1061PoutByF1061CodePSend", fcda);
 		List<Tb1062PinEntity> pins = new ArrayList<>();

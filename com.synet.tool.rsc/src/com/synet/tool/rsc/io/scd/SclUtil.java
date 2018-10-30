@@ -99,7 +99,11 @@ public class SclUtil {
 				doName = doName.substring(0, p);
 			}
 		} else {
-			doName = temp.substring(0, temp.indexOf(tag));	
+			if (temp.indexOf(tag) > -1) {
+				doName = temp.substring(0, temp.indexOf(tag));
+			} else {
+				doName = temp;
+			}
 		}
 		return doName;
 	}

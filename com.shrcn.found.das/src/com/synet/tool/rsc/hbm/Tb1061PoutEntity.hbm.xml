@@ -17,6 +17,9 @@
         <property name="f1061Index">
             <column name="F1061_Index" sql-type="int" not-null="true"/>
         </property>
+        <property name="f1061Type">
+            <column name="F1061_Type" sql-type="int" not-null="true"/>
+        </property>
         <property name="f1061Desc">
             <column name="F1061_Desc" sql-type="varchar" length="96"/>
         </property>
