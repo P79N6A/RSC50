@@ -25,8 +25,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.common.dict.DictManager;
-import com.shrcn.found.common.event.EventConstants;
-import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -209,8 +207,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case DBConstants.IED_MU:
 		case DBConstants.IED_MT:
-			createMergeUnitCmp(comp, gdSpan_5);
-			break;
 		case DBConstants.IED_TERM:
 			createIedCmp(comp, gdSpan_5);
 			break;
@@ -226,34 +222,22 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 * @param gdSpan_4
 	 */
 	private void createIedCmp(Composite comp, GridData gdSpan_4) {
-		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, RSCConstants.LOGICAL_LINK};
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.PROTECT_BOARD, 
+				RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, 
+				RSCConstants.LOGICAL_LINK};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
+		//保护压板
+		createStrapCmp((Composite) controls[1]);
 		//装置告警
-		createDeviceWarningCmp((Composite) controls[1]);
+		createDeviceWarningCmp((Composite) controls[2]);
 		//运行工况
-		createRunStateCmp((Composite) controls[2]);
+		createRunStateCmp((Composite) controls[3]);
 		//虚端子压板
-		createVirtualTerminalPlateCmp((Composite) controls[3]);
+		createVirtualTerminalPlateCmp((Composite) controls[4]);
 		//逻辑链路
-		createLogicalLinkCmp((Composite) controls[4]);
-	}
-
-	/**
-	 * 创建合并单元界面
-	 * @param comp
-	 * @param gdSpan_4
-	 */
-	private void createMergeUnitCmp(Composite comp, GridData gdSpan_4) {
-		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE};
-		Control[] controls = getControls(comp, gdSpan_4, tabNames);
-		//板卡端口
-		createBoardPortCmp((Composite) controls[0]);
-		//装置告警
-		createDeviceWarningCmp((Composite) controls[1]);
-		//运行工况
-		createRunStateCmp((Composite) controls[2]);
+		createLogicalLinkCmp((Composite) controls[5]);
 	}
 
 	/**
@@ -263,23 +247,25 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private void createProtectCmp(Composite comp, GridData gdSpan_4) {
 		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.PROTECT_MSG,
-				RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, 
-				RSCConstants.LOGICAL_LINK, RSCConstants.PROTECT_WAVE};
+				RSCConstants.PROTECT_BOARD, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, 
+				RSCConstants.CIRCUI_BOARD, RSCConstants.LOGICAL_LINK, RSCConstants.PROTECT_WAVE};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
 		//保护信息
 		createProtMsgCmp((Composite) controls[1]);
+		//保护压板
+		createStrapCmp((Composite) controls[2]);
 		//装置告警
-		createDeviceWarningCmp((Composite) controls[2]);
+		createDeviceWarningCmp((Composite) controls[3]);
 		//运行工况
-		createRunStateCmp((Composite) controls[3]);
+		createRunStateCmp((Composite) controls[4]);
 		//虚端子压板
-		createVirtualTerminalPlateCmp((Composite) controls[4]);
+		createVirtualTerminalPlateCmp((Composite) controls[5]);
 		//逻辑链路
-		createLogicalLinkCmp((Composite) controls[5]);
+		createLogicalLinkCmp((Composite) controls[6]);
 		//保护录波
-		createProtWaveCmp((Composite) controls[6]);
+		createProtWaveCmp((Composite) controls[7]);
 	}
 
 	/**
@@ -359,7 +345,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 									@Override
 									public void run() {
 										// 保护信息(压板)
-										initProTbDataByTbName(RSCConstants.PROTECT_BOARD, true);
+										initTbDataByTbName(RSCConstants.PROTECT_BOARD, true);
 										// 虚端子
 										initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
 									}
@@ -481,13 +467,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				tableProtParam.setInput(spfcdaEntities);
 			}
 			break;
-		case RSCConstants.PROTECT_BOARD:
-			if(reload || !DataUtils.listNotNull(staEntities)) {
-				//保护信息-保护压板
-				staEntities = strapEntityService.getByIed(iedEntity);
-				tableProtectPlate.setInput(staEntities);
-			}
-			break;
 		case RSCConstants.PROTECT_ACTION:
 			if(reload || !DataUtils.listNotNull(mmsfcdasProtcAction)) {
 				//保护信息-保护动作
@@ -526,6 +505,13 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(reload || !DataUtils.listNotNull(portEntities)) {
 				portEntities = portService.getBoardPortByIed(iedEntity);
 				tableBoardPort.setInput(portEntities);
+			}
+			break;
+		case RSCConstants.PROTECT_BOARD:
+			if(reload || !DataUtils.listNotNull(staEntities)) {
+				//保护信息-保护压板
+				staEntities = strapEntityService.getByIed(iedEntity);
+				tableProtectPlate.setInput(staEntities);
 			}
 			break;
 		case RSCConstants.PROTECT_MSG:
@@ -649,10 +635,21 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private Composite createBoardPortCmp(Composite com) {
 		Composite cmpBoardPort = SwtUtil.createComposite(com, gridData, 1);
-		cmpBoardPort.setLayout(SwtUtil.getGridLayout(1));
 		tableBoardPort = TableFactory.getBoardPortTable(cmpBoardPort);
 		tableBoardPort.getTable().setLayoutData(gridData);
 		return cmpBoardPort;
+	}
+	
+	/**
+	 * 创建保护压板界面
+	 * @param com
+	 * @return
+	 */
+	private Composite createStrapCmp(Composite com) {
+		Composite cmpProtPlate = SwtUtil.createComposite(com, gridData, 1);
+		tableProtectPlate = TableFactory.getProtectBoardTable(cmpProtPlate);
+		tableProtectPlate.getTable().setLayoutData(gridData);
+		return cmpProtPlate;
 	}
 	
 	/**
@@ -664,7 +661,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpProtMsg = SwtUtil.createComposite(com, gridData, 1);
 		cmpProtMsg.setLayout(SwtUtil.getGridLayout(1));
 		String[] tabNames = new String[]{RSCConstants.PROTECT_VALUE, 
-				RSCConstants.PROTECT_PARAM, RSCConstants.PROTECT_BOARD,
+				RSCConstants.PROTECT_PARAM, 
 				RSCConstants.PROTECT_ACTION, RSCConstants.PROTECT_MEAQU};
 		
 		tabFProtect = SwtUtil.createTab(cmpProtMsg, gridData, tabNames );
@@ -678,16 +675,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpProtParam = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
 		tableProtParam = TableFactory.getProtectParamTable(cmpProtParam);
 		tableProtParam.getTable().setLayoutData(gridData);
-		//保护压板
-		Composite cmpProtPlate = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
-		tableProtectPlate = TableFactory.getProtectBoardTable(cmpProtPlate);
-		tableProtectPlate.getTable().setLayoutData(gridData);
 		//保护动作
-		Composite cmpProtAction = SwtUtil.createComposite((Composite) controls[3], gridData, 1);
+		Composite cmpProtAction = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
 		tableProtectAction = TableFactory.getProtectActionTable(cmpProtAction);
 		tableProtectAction.getTable().setLayoutData(gridData);
 		//保护测量量
-		Composite cmpProtMeaQuantity = SwtUtil.createComposite((Composite) controls[4], gridData, 1);
+		Composite cmpProtMeaQuantity = SwtUtil.createComposite((Composite) controls[3], gridData, 1);
 		tableProtectMeaQuantity = TableFactory.getProtectMeaQuantityTable(cmpProtMeaQuantity);
 		tableProtectMeaQuantity.getTable().setLayoutData(gridData);
 		
