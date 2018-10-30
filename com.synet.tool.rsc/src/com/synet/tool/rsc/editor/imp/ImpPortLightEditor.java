@@ -18,6 +18,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -79,7 +80,9 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
 		
-		Composite btComp = SwtUtil.createComposite(container, btData, 3);
+		Composite btComp = SwtUtil.createComposite(container, btData, 5);
+		btAdd = SwtUtil.createPushButton(btComp, "添加", new GridData());
+		btDelete = SwtUtil.createPushButton(btComp, "删除", new GridData());
 		btExport = SwtUtil.createPushButton(btComp, "导出Excel", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入光强与端口", new GridData());
@@ -89,37 +92,68 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 	
 	protected void addListeners() {
 		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM106PortLightEntity.class));
-		titleList.addSelectionListener(new SelectionAdapter() {
+		
+		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String[] selects = titleList.getSelection();
-				if (selects != null && selects.length > 0) {
-					loadFileItems(selects[0]);
+				Object obj = e.getSource();
+				if (obj == titleList) {
+					String[] selects = titleList.getSelection();
+					if (selects != null && selects.length > 0) {
+						loadFileItems(selects[0]);
+					}
+				} else if (obj == btAdd) {
+					addItemByTable(DBConstants.FILE_TYPE106);
+				} else if (obj == btDelete) {
+					deleteItemsByTable();
+				} else if (obj == btExport) {
+					exportExcel();
+				} else if (obj == btCheck) {
+					//冲突检查
+					checkConflict();
+				} else if (obj == btImport) {
+					importData();
 				}
 			}
-		});
+		};
+		titleList.addSelectionListener(listener);
+		btAdd.addSelectionListener(listener);
+		btDelete.addSelectionListener(listener);
+		btExport.addSelectionListener(listener);
+		btCheck.addSelectionListener(listener);
+		btImport.addSelectionListener(listener);
 		
-		btExport.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				exportExcel();
-			}
-		});
-		
-		btCheck.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//冲突检查
-				checkConflict();
-			}
-		});
-		
-		btImport.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				importData();
-			}
-		});
+//		titleList.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				String[] selects = titleList.getSelection();
+//				if (selects != null && selects.length > 0) {
+//					loadFileItems(selects[0]);
+//				}
+//			}
+//		});
+//		
+//		btExport.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				exportExcel();
+//			}
+//		});
+//		
+//		btCheck.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				//冲突检查
+//				checkConflict();
+//			}
+//		});
+//		
+//		btImport.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				importData();
+//			}
+//		});
 	}
 	
 	protected void exportExcel() {
