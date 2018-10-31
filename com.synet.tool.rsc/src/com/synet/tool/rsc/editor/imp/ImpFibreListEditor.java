@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -19,7 +20,6 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -78,7 +78,9 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
 		
-		Composite btComp = SwtUtil.createComposite(cmpRight, btData, 3);
+		Composite btComp = SwtUtil.createComposite(cmpRight, btData, 5);
+		btAdd = SwtUtil.createPushButton(btComp, "添加", new GridData());
+		btDelete = SwtUtil.createPushButton(btComp, "删除", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入光缆", new GridData());
 		btAnalysis = SwtUtil.createPushButton(btComp, "分析回路", new GridData());
@@ -91,44 +93,78 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 	
 	protected void addListeners() {
 		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM102FibreListEntity.class));
-		titleList.addSelectionListener(new SelectionAdapter() {
+		
+		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String[] selects = titleList.getSelection();
-				if (selects != null && selects.length > 0) {
-					loadFileItems(selects[0]);
+				Object obj = e.getSource();
+				if (obj == titleList) {
+					String[] selects = titleList.getSelection();
+					if (selects != null && selects.length > 0) {
+						loadFileItems(selects[0]);
+					}
+				} else if (obj == btAdd) {
+					addItemByTable(DBConstants.FILE_TYPE102);
+				} else if (obj == btDelete) {
+					deleteItemsByTable();
+				} else if (obj == btCheck) {
+					//冲突检查
+					checkConflict();
+				} else if (obj == btImport) {
+					importData();
+				} else if (obj == btAnalysis) {
+					String[] selects = titleList.getSelection();
+					if (selects != null && selects.length > 0) {
+						doAnalysis();
+					}
 				}
 			}
-		});
+		};
+		titleList.addSelectionListener(listener);
+		btAdd.addSelectionListener(listener);
+		btDelete.addSelectionListener(listener);
+		btCheck.addSelectionListener(listener);
+		btImport.addSelectionListener(listener);
+		btAnalysis.addSelectionListener(listener);
 		
-		btCheck.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//冲突检查
-				checkConflict();
-			}
-		});
-		
-		btImport.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String[] selects = titleList.getSelection();
-				if (selects != null && selects.length > 0) {
-					doImport();
-					ConsoleManager.getInstance().append(titleList.getSelection()[0] + "导入完毕！");
-				}
-			}
-		});
-		
-		btAnalysis.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String[] selects = titleList.getSelection();
-				if (selects != null && selects.length > 0) {
-					doAnalysis();
-				}
-			}
-		});
+//		titleList.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				String[] selects = titleList.getSelection();
+//				if (selects != null && selects.length > 0) {
+//					loadFileItems(selects[0]);
+//				}
+//			}
+//		});
+//		
+//		btCheck.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				//冲突检查
+//				checkConflict();
+//			}
+//		});
+//		
+//		btImport.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				String[] selects = titleList.getSelection();
+//				if (selects != null && selects.length > 0) {
+//					doImport();
+//					ConsoleManager.getInstance().append(titleList.getSelection()[0] + "导入完毕！");
+//				}
+//			}
+//		});
+//		
+//		btAnalysis.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				String[] selects = titleList.getSelection();
+//				if (selects != null && selects.length > 0) {
+//					doAnalysis();
+//				}
+//			}
+//		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -231,6 +267,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object locate(Problem problem) {
 		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
