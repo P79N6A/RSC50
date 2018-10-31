@@ -10,6 +10,7 @@ public class Tb1058MmsfcdaEntity {
     private int f1058Index;
     private String f1058Desc;
     private int f1058DataType;
+    private int f1058Type; // F1101_NO
     private String dataCode;
     private String parentCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
@@ -55,7 +56,15 @@ public class Tb1058MmsfcdaEntity {
         this.f1058DataType = f1058DataType;
     }
 
-    public String getDataCode() {
+    public int getF1058Type() {
+		return f1058Type;
+	}
+
+	public void setF1058Type(int f1058Type) {
+		this.f1058Type = f1058Type;
+	}
+
+	public String getDataCode() {
         return dataCode;
     }
 
@@ -79,6 +88,7 @@ public class Tb1058MmsfcdaEntity {
         Tb1058MmsfcdaEntity that = (Tb1058MmsfcdaEntity) o;
 
         if (f1058DataType != that.f1058DataType) return false;
+        if (f1058Type != that.f1058Type) return false;
         if (f1058Index != that.f1058Index) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
         if (f1058Code != null ? !f1058Code.equals(that.f1058Code) : that.f1058Code != null) return false;
@@ -95,6 +105,7 @@ public class Tb1058MmsfcdaEntity {
         result = 31 * result + f1058Index;
         result = 31 * result + (f1058Desc != null ? f1058Desc.hashCode() : 0);
         result = 31 * result + f1058DataType;
+        result = 31 * result + f1058Type;
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);
         return result;
     }

@@ -380,6 +380,7 @@ create table TB1058_MMSFCDA
    F1058_Index          INT not null,
    F1058_Desc           varchar(96),
    F1058_DataType       INT not null,
+   F1058_Type       INT not null,
    DATA_CODE            varchar(48) not null,
    Parent_CODE            varchar(48) not null,
    primary key (F1058_CODE)

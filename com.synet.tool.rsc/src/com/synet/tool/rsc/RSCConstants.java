@@ -65,6 +65,16 @@ public interface RSCConstants {
      
      String DEV_TYPE_UNIT_TER	= dictMgr.getNameById("IED_TYPE", DBConstants.IED_MT); //"合并智能终端";
      
+     String OTHERS_ID			= "0";
+     String OTHERS_NAME			= "其它";
+     String DICT_IED_EVT		= "DICT_IED_EVT";	//保护动作
+     String DICT_IED_MEAS		= "DICT_IED_MEAS";	//保护测量量
+     String DICT_IED_STRIP		= "DICT_IED_STRIP";	//保护压板
+     String DICT_IED_WARN		= "DICT_IED_WARN";	//装置告警
+     String DICT_IED_STATE		= "DICT_IED_STATE";	//运行工况
+     String DICT_IED_POUT		= "DICT_IED_POUT";	//开出虚端子
+     String DICT_IED_PIN		= "DICT_IED_PIN";	//开入虚端子
+
      String SEARCH				= "查询";
      String DESCRIPTION			= "描述";
     

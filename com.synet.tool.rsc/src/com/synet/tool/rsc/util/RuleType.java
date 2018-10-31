@@ -1,10 +1,12 @@
 package com.synet.tool.rsc.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.shrcn.found.common.dict.DictManager;
+import com.synet.tool.rsc.RSCConstants;
 
 public enum RuleType {
 
@@ -45,6 +47,7 @@ public enum RuleType {
 		List<String[]> dictTemp = new ArrayList<>();
 		List<Rule> rules = RuleManager.getInstance().getRules();
 		RuleType[] types = RuleType.values();
+		Map<RuleType, List<String[]>> rulesMap = new HashMap<>();
 		int curType = 0;
 		for (Rule typ : rules) {
 			String[] dictItem = new String[] {typ.getId()+"", typ.getName()};
@@ -54,7 +57,9 @@ public enum RuleType {
 				RuleType rtyp = types[i];
 				if (typ.getId() > rtyp.max && i==curType) {
 					dictTemp.remove(dictItem);
-					dictmgr.addDict(rtyp.name(), rtyp.name(), dictTemp.toArray(new String[dictTemp.size()][]));
+					List<String[]> dictRules = new ArrayList<>();
+					dictRules.addAll(dictTemp);
+					rulesMap.put(rtyp, dictRules);
 					dictTemp.clear();
 					dictTemp.add(dictItem);
 					curType++;
@@ -62,8 +67,28 @@ public enum RuleType {
 				}
 			}
 		}
-		dictmgr.addDict(IED_STATE.name(), IED_STATE.name(), dictTemp.toArray(new String[dictTemp.size()][]));
+		List<String[]> dictRules = new ArrayList<>();
+		dictRules.addAll(dictTemp);
+		rulesMap.put(IED_STATE, dictRules);
 		String dicttype = F1011_NO.class.getSimpleName();
 		dictmgr.addDict(dicttype, dicttype, dictF1011.toArray(new String[dictF1011.size()][]));
+		addDict(RSCConstants.DICT_IED_EVT, new RuleType[]{PROT_EVENT}, rulesMap);
+		addDict(RSCConstants.DICT_IED_MEAS, new RuleType[]{PROT_MS}, rulesMap);
+		addDict(RSCConstants.DICT_IED_PIN, new RuleType[]{IO_SIGNAL}, rulesMap);
+		addDict(RSCConstants.DICT_IED_POUT, new RuleType[]{EQP_STATE, PROT_SV, IED_STATE}, rulesMap);
+		addDict(RSCConstants.DICT_IED_STATE, new RuleType[]{IED_STATE}, rulesMap);
+		addDict(RSCConstants.DICT_IED_STRIP, new RuleType[]{STRAP}, rulesMap);
+		addDict(RSCConstants.DICT_IED_WARN, new RuleType[]{IED_WARN}, rulesMap);
+	}
+	
+	private static void addDict(String dicttype, RuleType[] rtyps, Map<RuleType, List<String[]>> rulesMap) {
+		DictManager dictmgr = DictManager.getInstance();
+		List<String[]> dictRules = new ArrayList<>();
+		for (RuleType rtyp : rtyps) {
+			dictRules.addAll(rulesMap.get(rtyp));
+		}
+		String[] dictOthers = new String[] {RSCConstants.OTHERS_ID, RSCConstants.OTHERS_NAME};
+		dictRules.add(dictOthers);
+		dictmgr.addDict(dicttype, dicttype, dictRules.toArray(new String[dictRules.size()][]));
 	}
 }

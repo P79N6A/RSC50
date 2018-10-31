@@ -20,6 +20,9 @@
         <property name="f1058DataType">
             <column name="F1058_DataType" sql-type="int" not-null="true"/>
         </property>
+        <property name="f1058Type">
+            <column name="F1058_Type" sql-type="int" not-null="true"/>
+        </property>
         <property name="dataCode">
             <column name="DATA_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>
