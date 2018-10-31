@@ -47,7 +47,6 @@ import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
-import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1069RcdchannelaEntity;
 import com.synet.tool.rsc.model.Tb1072RcdchanneldEntity;
@@ -90,6 +89,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableProtectMeaQuantity;
 	private DevKTable tableDeviceWarning;
 	private DevKTable tableRunState;
+	private DevKTable tableYx;
+	private DevKTable tableQt;
 	private DevKTable tableLogicalLink;
 	private DevKTable tableVirtualTerminalOut;
 	private DevKTable tableVirtualTerminalIn;
@@ -118,10 +119,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1048PortEntity> portEntities;
 	private List<Tb1059SgfcdaEntity> sgfcdaEntities;
 	private List<Tb1060SpfcdaEntity> spfcdaEntities;
-	private List<Tb1064StrapEntity> staEntities;
+	private List<Tb1058MmsfcdaEntity> staEntities;
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction;
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua;
 	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun;
+	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesYx;
+	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesQt;
 	private List<?> mmsfcdaEntities;
 	private List<Tb1047BoardEntity> boardEntities;
 	private List<Tb1065LogicallinkEntity> logicallinkEntities;
@@ -224,8 +227,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private void createIedCmp(Composite comp, GridData gdSpan_4) {
 		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.PROTECT_BOARD, 
-				RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.CIRCUI_BOARD, 
-				RSCConstants.LOGICAL_LINK};
+				RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, RSCConstants.DEV_YX, RSCConstants.DEV_QT,  
+				RSCConstants.CIRCUI_BOARD, RSCConstants.LOGICAL_LINK};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
 		createBoardPortCmp((Composite) controls[0]);
@@ -235,10 +238,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		createDeviceWarningCmp((Composite) controls[2]);
 		//运行工况
 		createRunStateCmp((Composite) controls[3]);
+		//装置遥信
+		createDevYxCmp((Composite) controls[4]);
+		//其他信号
+		createDevQtCmp((Composite) controls[5]);
 		//虚端子压板
-		createVirtualTerminalPlateCmp((Composite) controls[4]);
+		createVirtualTerminalPlateCmp((Composite) controls[6]);
 		//逻辑链路
-		createLogicalLinkCmp((Composite) controls[5]);
+		createLogicalLinkCmp((Composite) controls[7]);
 	}
 
 	/**
@@ -249,6 +256,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void createProtectCmp(Composite comp, GridData gdSpan_4) {
 		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.PROTECT_MSG,
 				RSCConstants.PROTECT_BOARD, RSCConstants.DEV_WARNING, RSCConstants.RUN_STATE, 
+				RSCConstants.DEV_YX, RSCConstants.DEV_QT, 
 				RSCConstants.CIRCUI_BOARD, RSCConstants.LOGICAL_LINK, RSCConstants.PROTECT_WAVE};
 		Control[] controls = getControls(comp, gdSpan_4, tabNames);
 		//板卡端口
@@ -261,12 +269,16 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		createDeviceWarningCmp((Composite) controls[3]);
 		//运行工况
 		createRunStateCmp((Composite) controls[4]);
+		//装置遥信
+		createDevYxCmp((Composite) controls[5]);
+		//其他信号
+		createDevQtCmp((Composite) controls[6]);
 		//虚端子压板
-		createVirtualTerminalPlateCmp((Composite) controls[5]);
+		createVirtualTerminalPlateCmp((Composite) controls[7]);
 		//逻辑链路
-		createLogicalLinkCmp((Composite) controls[6]);
+		createLogicalLinkCmp((Composite) controls[8]);
 		//保护录波
-		createProtWaveCmp((Composite) controls[7]);
+		createProtWaveCmp((Composite) controls[9]);
 	}
 
 	/**
@@ -507,7 +519,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.PROTECT_BOARD:
 			if(reload || !DataUtils.listNotNull(staEntities)) {
 				//保护信息-保护压板
-				staEntities = strapEntityService.getByIed(iedEntity);
+				staEntities = mmsfcdaService.getStrapData(iedEntity);
 				tableProtectPlate.setInput(staEntities);
 			}
 			break;
@@ -522,6 +534,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
 				mmsfcdaEntitiesRun = mmsfcdaService.getStateData(iedEntity);
 				tableRunState.setInput(mmsfcdaEntitiesRun);
+			}
+			break;
+		case RSCConstants.DEV_YX:
+			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesYx)) {
+				mmsfcdaEntitiesYx = mmsfcdaService.getDinData(iedEntity);
+				tableYx.setInput(mmsfcdaEntitiesYx);
+			}
+			break;
+		case RSCConstants.DEV_QT:
+			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesQt)) {
+				mmsfcdaEntitiesQt = mmsfcdaService.getOtherData(iedEntity);
+				tableQt.setInput(mmsfcdaEntitiesQt);
 			}
 			break;
 		case RSCConstants.DEV_WARNING:
@@ -733,6 +757,32 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
 		tableRunState = TableFactory.getRunStateTable(cmpRunState);
 		tableRunState.getTable().setLayoutData(gridData);
+		return cmpRunState;
+	}
+	
+	/**
+	 * 创建装置遥信界面
+	 * @param com
+	 * @return
+	 */
+	private Composite createDevYxCmp(Composite com) {
+		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
+		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
+		tableYx = TableFactory.getDeviceYxTable(cmpRunState);
+		tableYx.getTable().setLayoutData(gridData);
+		return cmpRunState;
+	}
+	
+	/**
+	 * 创建装置遥信界面
+	 * @param com
+	 * @return
+	 */
+	private Composite createDevQtCmp(Composite com) {
+		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
+		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
+		tableQt = TableFactory.getDeviceQtTable(cmpRunState);
+		tableQt.getTable().setLayoutData(gridData);
 		return cmpRunState;
 	}
 	

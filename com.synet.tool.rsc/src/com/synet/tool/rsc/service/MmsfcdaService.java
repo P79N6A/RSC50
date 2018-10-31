@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -116,6 +117,13 @@ public class MmsfcdaService extends BaseService {
 	
 	public List<Tb1058MmsfcdaEntity> getStateData(Tb1046IedEntity iedEntity) {
 		return getByDataType(iedEntity, RuleType.IED_STATE);
+	}
+
+	public List<Tb1058MmsfcdaEntity> getOtherData(Tb1046IedEntity iedEntity) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("tb1046IedByF1046Code", iedEntity);
+		params.put("f1058Type", RSCConstants.OTHERS_ID);
+		return (List<Tb1058MmsfcdaEntity>) beanDao.getListByCriteria(Tb1058MmsfcdaEntity.class, params);
 	}
 	
 	public void updateStateF1011No(String dataCode, int typeId) {

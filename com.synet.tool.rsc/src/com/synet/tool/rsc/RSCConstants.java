@@ -65,13 +65,14 @@ public interface RSCConstants {
      
      String DEV_TYPE_UNIT_TER	= dictMgr.getNameById("IED_TYPE", DBConstants.IED_MT); //"合并智能终端";
      
-     String OTHERS_ID			= "0";
+     int OTHERS_ID				= 9999;
      String OTHERS_NAME			= "其它";
      String DICT_IED_EVT		= "DICT_IED_EVT";	//保护动作
      String DICT_IED_MEAS		= "DICT_IED_MEAS";	//保护测量量
      String DICT_IED_STRIP		= "DICT_IED_STRIP";	//保护压板
      String DICT_IED_WARN		= "DICT_IED_WARN";	//装置告警
      String DICT_IED_STATE		= "DICT_IED_STATE";	//运行工况
+     String DICT_IED_YX			= "DICT_IED_YX";	//运行工况
      String DICT_IED_POUT		= "DICT_IED_POUT";	//开出虚端子
      String DICT_IED_PIN		= "DICT_IED_PIN";	//开入虚端子
 
@@ -85,6 +86,8 @@ public interface RSCConstants {
      String BOARD_PORT 			= "板卡端口";
      String PROTECT_MSG 		= "保护信息";
      String RUN_STATE 			= "运行工况";
+     String DEV_YX		 		= "装置遥信";
+     String DEV_QT 				= "其他信号";
      String DEV_WARNING 		= "装置告警";
      String CIRCUI_BOARD 		= "虚端子压板";
      String LOGICAL_LINK 		= "逻辑链路";

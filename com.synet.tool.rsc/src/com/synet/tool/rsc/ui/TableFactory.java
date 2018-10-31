@@ -41,8 +41,10 @@ public class TableFactory {
 	public static final String PROTECT_ACTION_TABLE 		= "ProtectActionTable"; // 保护动作
 	public static final String PROTECT_QUANT_TABLE 			= "ProtectMeaQuantityTable"; // 保护测量量
 	public static final String DEVICE_WARN_TABLE 			= "DeviceWarnTable";
-	public static final String DEVICE_SUB_WARN_TABLE 			= "DeviceSubWarnTable";
+	public static final String DEVICE_SUB_WARN_TABLE 		= "DeviceSubWarnTable";
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
+	public static final String DEVICE_YX_TABLE 				= "DeviceYxTable";
+	public static final String DEVICE_QT_TABLE 				= "DeviceQtTable";
 	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
 	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
 	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";	// 逻辑链路
@@ -69,7 +71,7 @@ public class TableFactory {
 	public static String MMS_FCDA_TABLE						= "MmsFcdaTable";
 	public static final String PROBLEMS		  				= "problems";
 	public static final String MODEL_RULE_TABLE		  		= "ModelRuleTable";
-	public static final String RULE_SELECT_TABLE		  		= "RuleSelectTable";
+	public static final String RULE_SELECT_TABLE		  	= "RuleSelectTable";
 	
 	public static final String IED_TABLE		  		    = "IEDTable";
 	
@@ -117,6 +119,16 @@ public class TableFactory {
 	
 	public static DevKTable getRunStateTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(RUN_STATE_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getDeviceYxTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_YX_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getDeviceQtTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_QT_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

@@ -113,4 +113,5 @@
   <Rule id="907" name="装置工作电压110V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压@110"/>
   <Rule id="908" name="装置工作电压220V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压"/>
   <Rule id="950" name="光口光强" datSet="" lnName="SCLI" doName="" doDesc="光强"/>
+  <Rule id="9999" name="其它" datSet="" lnName="" doName="" doDesc=""/>
 </RuleCfg>

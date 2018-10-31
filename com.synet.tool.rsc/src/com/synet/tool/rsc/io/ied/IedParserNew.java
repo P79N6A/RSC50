@@ -297,6 +297,7 @@ public class IedParserNew {
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
 			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+			pout.setF1061Type(type.getId());
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
@@ -345,6 +346,7 @@ public class IedParserNew {
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
 			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+			mmsFcda.setF1058Type(type.getId());
 			if ("ST".equals(fc)) {
 				mmsFcda.setF1058DataType(DBConstants.DATA_ST);
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());

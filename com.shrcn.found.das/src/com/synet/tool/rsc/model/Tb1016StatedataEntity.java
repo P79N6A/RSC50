@@ -29,8 +29,8 @@ public class Tb1016StatedataEntity {
     private Integer f1016Revflag;
     private Integer f1016Issta;
     private Tb1046IedEntity tb1046IedByF1046Code;
-    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
-    private Tb1061PoutEntity tb1061PoutEntityByF1061Code;
+//    private Tb1058MmsfcdaEntity tb1058FcdaByF1058Code;
+//    private Tb1061PoutEntity tb1061PoutEntityByF1061Code;
 
     public String getF1016Code() {
         return f1016Code;
@@ -292,22 +292,5 @@ public class Tb1016StatedataEntity {
         result = 31 * result + (tb1046IedByF1046Code != null ? tb1046IedByF1046Code.hashCode() : 0);
         return result;
     }
-
-	public Tb1058MmsfcdaEntity getTb1058FcdaByF1058Code() {
-		return tb1058FcdaByF1058Code;
-	}
-
-	public void setTb1058FcdaByF1058Code(Tb1058MmsfcdaEntity tb1058FcdaByF1058Code) {
-		this.tb1058FcdaByF1058Code = tb1058FcdaByF1058Code;
-	}
-
-	public Tb1061PoutEntity getTb1061PoutEntityByF1061Code() {
-		return tb1061PoutEntityByF1061Code;
-	}
-
-	public void setTb1061PoutEntityByF1061Code(
-			Tb1061PoutEntity tb1061PoutEntityByF1061Code) {
-		this.tb1061PoutEntityByF1061Code = tb1061PoutEntityByF1061Code;
-	}
 
 }

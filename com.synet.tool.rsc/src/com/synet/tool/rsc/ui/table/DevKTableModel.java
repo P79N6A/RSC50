@@ -30,6 +30,7 @@ import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
+import com.synet.tool.rsc.util.RuleType;
 
 import de.kupzog.ktable.KTableCellEditor;
 
@@ -114,17 +115,21 @@ public class DevKTableModel extends RKTableModel {
 
 	@Override
 	protected void saveCellValue(Object data, String property) {
-		if ("overwrite".equals(property)) { // 更新
+		if (!"overwrite".equals(property)) { // 更新
 			saveData(data);
 			// 处理数据类型修改
 			if (data instanceof Tb1058MmsfcdaEntity) {
 				if ("f1058Type".equals(property)) {
 					Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) data;
+					int type = mmsfcdaEntity.getF1058Type();
 					String dataCode = mmsfcdaEntity.getDataCode();
+					if (RuleType.STRAP.getMax()>=type && RuleType.STRAP.getMin()<=type) {
+						mmsService.updateStrapF1011No(dataCode, type);
+					}
 					if (SclUtil.isStData(dataCode)) {
-						mmsService.updateStateF1011No(dataCode, mmsfcdaEntity.getF1058Type());
+						mmsService.updateStateF1011No(dataCode, type);
 					} else if (SclUtil.isAlgData(dataCode)) {
-						mmsService.updateAnalogF1011No(dataCode, mmsfcdaEntity.getF1058Type());
+						mmsService.updateAnalogF1011No(dataCode, type);
 					}
 				}
 			} else if (data instanceof Tb1061PoutEntity) {
@@ -136,11 +141,6 @@ public class DevKTableModel extends RKTableModel {
 					} else if (SclUtil.isAlgData(dataCode)) {
 						mmsService.updateAnalogF1011No(dataCode, poutEntity.getF1061Type());
 					}
-				}
-			} else if (data instanceof Tb1064StrapEntity) {
-				if ("f1064Type".equals(property)) {
-					Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) data;
-					mmsService.updateStrapStateF1011No(strapEntity.getF1064Code(), strapEntity.getF1064Type());
 				}
 			}
 		}

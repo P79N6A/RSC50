@@ -13,7 +13,6 @@ public class Tb1064StrapEntity {
     private String f1064Desc;
     private String f1042CodeRelatedBay;
     private Tb1046IedEntity tb1046IedByF1046Code;
-    private Tb1016StatedataEntity statedata;
 
     public String getF1064Code() {
         return f1064Code;
@@ -98,14 +97,6 @@ public class Tb1064StrapEntity {
 
 	public void setF1064Type(int f1064Type) {
 		this.f1064Type = f1064Type;
-	}
-
-	public Tb1016StatedataEntity getStatedata() {
-		return statedata;
-	}
-
-	public void setStatedata(Tb1016StatedataEntity statedata) {
-		this.statedata = statedata;
 	}
 
 }

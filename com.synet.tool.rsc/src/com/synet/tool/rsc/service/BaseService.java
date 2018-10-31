@@ -71,7 +71,7 @@ public abstract class BaseService {
 	public int saveTableData(Object obj) {
 		try {
 			if (CheckEntityUtils.check(obj)){
-				save(obj);
+				beanDao.update(obj);
 			} else {
 				return 0;
 			}
