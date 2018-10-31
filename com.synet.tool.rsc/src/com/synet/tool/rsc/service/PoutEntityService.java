@@ -8,16 +8,24 @@ import java.util.Map;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
-import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
-import com.synet.tool.rsc.util.Rule;
+import com.synet.tool.rsc.util.RuleType;
 
 public class PoutEntityService extends BaseService{
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1061PoutEntity> getByIed(Tb1046IedEntity ied) {
 		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, "tb1046IedByF1046Code", ied);
+	}
+	
+	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied) {
+		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
+				"and f1061Type between :min and :max";
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", ied);
+		params.put("min", RuleType.IED_WARN.getMin());
+		params.put("max", RuleType.IED_WARN.getMax());
+		return (List<Tb1061PoutEntity>) hqlDao.getListByHql(hql, params);
 	}
 
 	/**
@@ -62,15 +70,4 @@ public class PoutEntityService extends BaseService{
 		return (List<Tb1061PoutEntity>) hqlDao.selectInObjects(Tb1061PoutEntity.class, "tb1064StrapByF1064Code", straps);
 	}
 	
-	@Deprecated
-	public void updatePinF1011No(Tb1061PoutEntity fcda, Rule type) {
-		List<Tb1063CircuitEntity> circuits = (List<Tb1063CircuitEntity>) beanDao.getListByCriteria(Tb1063CircuitEntity.class, "tb1061PoutByF1061CodePSend", fcda);
-		List<Tb1062PinEntity> pins = new ArrayList<>();
-		for (Tb1063CircuitEntity circuit : circuits) {
-			Tb1062PinEntity pin = circuit.getTb1062PinByF1062CodePRecv();
-			pin.setF1011No(type.getId());
-			pins.add(pin);
-		}
-		beanDao.updateBatch(pins);
-	}
 }

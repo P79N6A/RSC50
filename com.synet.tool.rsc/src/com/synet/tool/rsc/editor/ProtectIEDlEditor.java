@@ -122,7 +122,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction;
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua;
 	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun;
-	private List<Tb1058MmsfcdaEntity> mmsfcdaEntities;
+	private List<?> mmsfcdaEntities;
 	private List<Tb1047BoardEntity> boardEntities;
 	private List<Tb1065LogicallinkEntity> logicallinkEntities;
 	private List<Tb1063CircuitEntity> circuitEntities;
@@ -200,20 +200,21 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_5 = new GridData(GridData.FILL_BOTH);
 		gdSpan_5.horizontalSpan = 5;
-		int type = iedEntity.getF1046Type();
-		switch (type) {
-		case DBConstants.IED_PROT:
+		if (isProtIED()) {
 			createProtectCmp(comp, gdSpan_5);
-			break;
-		case DBConstants.IED_MU:
-		case DBConstants.IED_MT:
-		case DBConstants.IED_TERM:
+		} else {
 			createIedCmp(comp, gdSpan_5);
-			break;
-		default:
-			break;
 		}
-		
+	}
+	
+	private boolean isProtIED() {
+		return DBConstants.IED_PROT == iedEntity.getF1046Type();
+	}
+	
+	private boolean isSubIED() {
+		Integer f1046Type = iedEntity.getF1046Type();
+		return DBConstants.IED_MU == f1046Type 
+				|| DBConstants.IED_MT == f1046Type || DBConstants.IED_TERM == f1046Type;
 	}
 
 	/**
@@ -470,18 +471,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.PROTECT_ACTION:
 			if(reload || !DataUtils.listNotNull(mmsfcdasProtcAction)) {
 				//保护信息-保护动作
-				String[] names = DictManager.getInstance().getDictNames("DS_DIN");
-				mmsfcdasProtcAction = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
+				mmsfcdasProtcAction =  mmsfcdaService.getEventData(iedEntity);
 				tableProtectAction.setInput(mmsfcdasProtcAction);
 			}
 			break;
 		case RSCConstants.PROTECT_MEAQU:
 			if(reload || !DataUtils.listNotNull(mmsfcdasProtcMeaQua)) {
 				//保护信息-保护测量量
-				String[] names = DictManager.getInstance().getDictNames("DS_AIN");
-				mmsfcdasProtcMeaQua = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
+				mmsfcdasProtcMeaQua = mmsfcdaService.getAinData(iedEntity);
 				tableProtectMeaQuantity.setInput(mmsfcdasProtcMeaQua);
 			}
 			break;
@@ -523,30 +520,23 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case RSCConstants.RUN_STATE:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
-				String[] names = DictManager.getInstance().getDictNames("DS_STATE");
-				mmsfcdaEntitiesRun = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
-					tableRunState.setInput(mmsfcdaEntitiesRun);	
+				mmsfcdaEntitiesRun = mmsfcdaService.getStateData(iedEntity);
+				tableRunState.setInput(mmsfcdaEntitiesRun);
 			}
-			
 			break;
 		case RSCConstants.DEV_WARNING:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntities)) {
-				String[] names = DictManager.getInstance().getDictNames("DS_WARN");
-				mmsfcdaEntities = mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
-				// 补充运行工况
-				names = DictManager.getInstance().getDictNames("DS_STATE");
-				List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun = 
-						mmsfcdaService.getMmsdcdaByDataSet(iedEntity, names);
-				if (mmsfcdaEntitiesRun!=null && mmsfcdaEntitiesRun.size()>0) {
-					mmsfcdaEntities.addAll(mmsfcdaEntitiesRun);
+				if (isProtIED()) {
+					mmsfcdaEntities = mmsfcdaService.getWarningData(iedEntity);
+				} else {
+					mmsfcdaEntities = poutEntityService.getWarningData(iedEntity);
 				}
 				tableDeviceWarning.setInput(mmsfcdaEntities);
 				tableDeviceName.setInput(iedEntityList);
 			}
 			if(reload || !DataUtils.listNotNull(boardEntities)) {
-					boardEntities = boardEntityService.getByIed(iedEntity);
-					tableBoardName.setInput(boardEntities);	
+				boardEntities = boardEntityService.getByIed(iedEntity);
+				tableBoardName.setInput(boardEntities);	
 			}
 			if(reload || !DataUtils.listNotNull(logicallinkEntities)) {
 				logicallinkEntities  = logicallinkEntityService.getByRecvIed(iedEntity);
@@ -699,7 +689,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Composite cmpLeft = SwtUtil.createComposite(cmpDeviceWarning, gridData, 1);
 		cmpLeft.setLayout(SwtUtil.getGridLayout(1));
 		
-		tableDeviceWarning = TableFactory.getDeviceWarnTable(cmpLeft);
+		tableDeviceWarning = isProtIED() ? TableFactory.getDeviceWarnTable(cmpLeft) : 
+						TableFactory.getDeviceSubWarnTable(cmpLeft);
 		tableDeviceWarning.getTable().setLayoutData(gridData);
 		
 		GridData gdCentor = new GridData(41, SWT.DEFAULT);

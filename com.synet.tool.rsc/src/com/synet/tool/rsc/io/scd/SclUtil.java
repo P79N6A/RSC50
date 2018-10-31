@@ -11,6 +11,7 @@ import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
+import com.synet.tool.rsc.DBConstants;
 
  /**
  * 
@@ -138,6 +139,18 @@ public class SclUtil {
 		return isType(datSet, "DS_STRAP");
 	}
 
+	public static boolean isAIN(String datSet) {
+		return isType(datSet, "DS_AIN");
+	}
+
+	public static boolean isDIN(String datSet) {
+		return isType(datSet, "DS_DIN");
+	}
+
+	public static boolean isState(String datSet) {
+		return datSet.startsWith("dsCommState");
+	}
+
 	private static boolean isType(String datSet, String dictType) {
 		String[] names = DictManager.getInstance().getDictNames(dictType);
 		for (String name : names) {
@@ -171,5 +184,12 @@ public class SclUtil {
 		desc = StringUtil.toXMLChars(desc == null ? "" : desc);
 		return desc;
 	}
+	
+	public static boolean isStData(String dataCode) {
+		return dataCode.startsWith(DBConstants.PR_State);
+	}
+	
+	public static boolean isAlgData(String dataCode) {
+		return dataCode.startsWith(DBConstants.PR_Analog);
+	}
 }
-

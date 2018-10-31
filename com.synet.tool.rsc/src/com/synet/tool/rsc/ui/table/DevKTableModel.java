@@ -5,7 +5,6 @@ import org.eclipse.swt.widgets.Display;
 import com.shrcn.business.ui.NetPortUtil;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
-import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.KTableDialogEditor;
 import com.shrcn.found.ui.table.RKTableModel;
@@ -22,8 +21,14 @@ import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
 import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
+import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.DefaultService;
+import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 import de.kupzog.ktable.KTableCellEditor;
@@ -32,17 +37,16 @@ import de.kupzog.ktable.KTableCellEditor;
 public class DevKTableModel extends RKTableModel {
 	
 	private DefaultService defaultService;
+	private MmsfcdaService mmsService;
+	private PoutEntityService poutService;
 	
 	public DevKTableModel(DevKTable table, TableConfig config) {
 		super(table, config);
 		defaultService = new DefaultService();
+		mmsService = new MmsfcdaService();
+		poutService = new PoutEntityService();
 	}
 	
-	@Override
-	protected void saveCellValue(Object data, String property) {
-	}
-
-
 	protected int getSize(String editor) {
 		int[] limit = NetPortUtil.getNetLimit(editor);
 		return limit[0];
@@ -109,17 +113,40 @@ public class DevKTableModel extends RKTableModel {
 	}
 
 	@Override
-	public void doSetContentAt(int col, int row, Object value) {
-		super.doSetContentAt(col, row, value);
-		Object obj = getItem(row);
-		IField f = fields[col];
-		String title = f.getTitle();
-		if (!"更新".equals(title)) {
-			saveData(obj);
+	protected void saveCellValue(Object data, String property) {
+		if ("overwrite".equals(property)) { // 更新
+			saveData(data);
+			// 处理数据类型修改
+			if (data instanceof Tb1058MmsfcdaEntity) {
+				if ("f1058Type".equals(property)) {
+					Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) data;
+					String dataCode = mmsfcdaEntity.getDataCode();
+					if (SclUtil.isStData(dataCode)) {
+						mmsService.updateStateF1011No(dataCode, mmsfcdaEntity.getF1058Type());
+					} else if (SclUtil.isAlgData(dataCode)) {
+						mmsService.updateAnalogF1011No(dataCode, mmsfcdaEntity.getF1058Type());
+					}
+				}
+			} else if (data instanceof Tb1061PoutEntity) {
+				if ("f1061Type".equals(property)) {
+					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) data;
+					String dataCode = poutEntity.getDataCode();
+					if (SclUtil.isStData(dataCode)) {
+						mmsService.updateStateF1011No(dataCode, poutEntity.getF1061Type());
+					} else if (SclUtil.isAlgData(dataCode)) {
+						mmsService.updateAnalogF1011No(dataCode, poutEntity.getF1061Type());
+					}
+				}
+			} else if (data instanceof Tb1064StrapEntity) {
+				if ("f1064Type".equals(property)) {
+					Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) data;
+					mmsService.updateStrapStateF1011No(strapEntity.getF1064Code(), strapEntity.getF1064Type());
+				}
+			}
 		}
 		if (TableFactory.REGION_LIST_TABLE.equals(tableName)
-				&& "区域名称".equals(title)) {
-			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) obj;
+				&& "f1049Name".equals(property)) { // 区域名称
+			Tb1049RegionEntity regionEntity = (Tb1049RegionEntity) data;
 			if (regionEntity.getF1049Name() != null) {
 				Display.getCurrent().asyncExec(new Runnable() {
 					@Override
@@ -136,18 +163,9 @@ public class DevKTableModel extends RKTableModel {
 	 * @param obj
 	 */
 	private void saveData(Object obj) {
-		if (obj == null)
-			return;
-//		if (TableFactory.LINEPORTFIBER_TABLE.equals(tableName) 
-//				|| TableFactory.IOTERM_TABLE.equals(tableName)
-//				|| TableFactory.POWERKK_TABLE.equals(tableName)
-//				|| TableFactory.VOLTAGEKK_TABLE.equals(tableName) 
-//				|| TableFactory.REGION_LIST_TABLE.equals(tableName) 
-//				|| TableFactory.CUBICLE_TABLE.equals(tableName) 
-//				|| TableFactory.CABLE_TABLE.equals(tableName) 
-//				|| TableFactory.PHYSCONNE_TABLE.equals(tableName)) {
+		if (obj != null) {
 			defaultService.saveTableData(obj);
-//		}
+		}
 	}
 	
 	private void reloadPrj() {

@@ -77,13 +77,13 @@ public class RuleEntityService {
 				String dataCode = mmsFcda.getDataCode();
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
 				if (type != null) {
-					if (DBConstants.DATA_ST == f1058DataType) {
+					if (SclUtil.isStData(dataCode)) {
 						if (SclUtil.isStrap(dataset)) {
-							mmsfcdaService.updateStrapF1011No(dataCode, type);
+							mmsfcdaService.updateStrapF1011No(dataCode, type.getId());
 						}
-						mmsfcdaService.updateStateF1011No(dataCode, type);
-					} else if (DBConstants.DATA_MX == f1058DataType) {
-						mmsfcdaService.updateAnalogF1011No(dataCode, type);
+						mmsfcdaService.updateStateF1011No(dataCode, type.getId());
+					} else if (SclUtil.isAlgData(dataCode)) {
+						mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 					}
 				}
 			}
@@ -105,10 +105,10 @@ public class RuleEntityService {
 			String dataCode = fcda.getDataCode();
 			Rule type = getRuleByPout(dataset, fcda);
 			if (type != null) {
-				if (dataCode.startsWith(DBConstants.PR_State)) {
-					mmsfcdaService.updateStateF1011No(dataCode, type);
-				} else if (dataCode.startsWith(DBConstants.PR_Analog)) {
-					mmsfcdaService.updateAnalogF1011No(dataCode, type);
+				if (SclUtil.isStData(dataCode)) {
+					mmsfcdaService.updateStateF1011No(dataCode, type.getId());
+				} else if (SclUtil.isAlgData(dataCode)) {
+					mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 				}
 				fcda.setF1061Type(type.getId());
 				fcdasUpdate.add(fcda);

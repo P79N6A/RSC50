@@ -17,15 +17,17 @@ public class F1011_NO {
 	public static final Rule ST_DIS = getRuleById(21); // 刀闸状态
 	public static final Rule VT_CRC = getRuleById(153); // 装置过程层配置CRC
 	public static final Rule IED_COMM = getRuleById(202); // 装置通讯状态"
-	public static final Rule ST_R19 = getRuleById(201); // 预留
-	public static final Rule MX_R19 = getRuleById(701); // 预留
-	public static final Rule STRAP_R19 = getRuleById(621); // 预留
 	public static final Rule IED_WRN_SV = getRuleById(104); // SV异常
 	public static final Rule IED_WRN_GOOSE = getRuleById(105); // GOOSE异常
-	public static final Rule IED_WRN_COMMON = getRuleById(151); // 装置一般告警
-	public static final Rule IED_WRN_ALL = getRuleById(200); // 告警总
-	public static final Rule IED_TEMP = getRuleById(901); // 装置温度
-	public static final Rule FIB_POWER = getRuleById(950); // 光口光强
+	
+	public static final Rule IED_WRN_R19 = getRuleById(100); // 告警
+	public static final Rule ST_R19 = getRuleById(200); // 遥信
+	public static final Rule EVENT_R19 = getRuleById(400); // 动作
+	public static final Rule PIN_R19 = getRuleById(500); // 开入虚端子
+	public static final Rule STRAP_R19 = getRuleById(600); // 压板
+	public static final Rule MX_R19 = getRuleById(700); // 保护测量量
+	public static final Rule POUT_R19 = getRuleById(800); // 开出虚端子
+	public static final Rule STATE_R19 = getRuleById(900); // 装置运行工况信号
 	
 	public static Rule getType(String dataset, String f1058RefAddr, String doDesc, Rule[] types) {
 		String lnName = SclUtil.getLnName(f1058RefAddr);
@@ -103,13 +105,7 @@ public class F1011_NO {
 			return typeNullDesc;
 		}
 		if ((type == null)) {
-			if (SclUtil.isStrap(datSet)) {
-				type = STRAP_R19;
-			} else if (SclUtil.isWarning(datSet)) {
-				type = F1011_NO.IED_WRN_COMMON;
-			} else if (fc != null) {
-				type = "ST".equalsIgnoreCase(fc) ? ST_R19 : MX_R19;
-			}
+			type = getDefault(datSet, fc);
 		}
 		return type;
 	}
@@ -147,4 +143,19 @@ public class F1011_NO {
 		return rules.toArray(new Rule[rules.size()]);
 	}
 	
+	public static Rule getDefault(String datSet, String fc) {
+		if (SclUtil.isAIN(datSet)) {
+			return MX_R19;
+		} else if (SclUtil.isDIN(datSet)) {
+			return ST_R19;
+		} else if (SclUtil.isStrap(datSet)) {
+			return STRAP_R19;
+		} else if (SclUtil.isWarning(datSet)) {
+			return IED_WRN_R19;
+		} else if (SclUtil.isState(datSet)) {
+			return STATE_R19;
+		} else {
+			return "ST".equals(fc) ? ST_R19 : MX_R19;
+		}
+	}
 }

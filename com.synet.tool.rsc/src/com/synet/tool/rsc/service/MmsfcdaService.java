@@ -12,7 +12,7 @@ import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.DataUtils;
-import com.synet.tool.rsc.util.Rule;
+import com.synet.tool.rsc.util.RuleType;
 
 public class MmsfcdaService extends BaseService {
 	
@@ -79,36 +79,80 @@ public class MmsfcdaService extends BaseService {
 		return result;
 	}
 	
-	public List<Tb1058MmsfcdaEntity> getByDataCodes(List<String> dataCodes) {
-		return null;
-		
+	public List<Tb1058MmsfcdaEntity> getByDataType(Tb1046IedEntity iedEntity, RuleType...types) {
+		List<Tb1058MmsfcdaEntity> mmsList = new ArrayList<>();
+		for (RuleType rtyp : types) {
+			String hql = "from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
+					"and f1058Type between :min and :max";
+			Map<String, Object> params = new HashMap<>();
+			params.put("ied", iedEntity);
+			params.put("min", rtyp.getMin());
+			params.put("max", rtyp.getMax());
+			List<Tb1058MmsfcdaEntity> list = (List<Tb1058MmsfcdaEntity>) hqlDao.getListByHql(hql, params);
+			mmsList.addAll(list);
+		}
+		return mmsList;
 	}
 	
-	public void updateStateF1011No(String dataCode, Rule type) {
+	public List<Tb1058MmsfcdaEntity> getEventData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.PROT_EVENT);
+	}
+	
+	public List<Tb1058MmsfcdaEntity> getDinData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.IED_YX);
+	}
+	
+	public List<Tb1058MmsfcdaEntity> getAinData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.PROT_MS);
+	}
+	
+	public List<Tb1058MmsfcdaEntity> getStrapData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.STRAP);
+	}
+	
+	public List<Tb1058MmsfcdaEntity> getWarningData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.IED_WARN);
+	}
+	
+	public List<Tb1058MmsfcdaEntity> getStateData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.IED_STATE);
+	}
+	
+	public void updateStateF1011No(String dataCode, int typeId) {
 		String hql = "update " + Tb1016StatedataEntity.class.getName() + " set f1011No=:f1011No where f1016Code=:f1016Code";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("f1011No", type.getId());
+		params.put("f1011No", typeId);
 		params.put("f1016Code", dataCode);
 		hqlDao.updateByHql(hql, params);
 	}
+	
+	public void updateStrapStateF1011No(String strapCode, int typeId) {
+		String hql = "update " + Tb1016StatedataEntity.class.getName() + " set f1011No=:f1011No where parentCode=:strapCode";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("f1011No", typeId);
+		params.put("strapCode", strapCode);
+		hqlDao.updateByHql(hql, params);
+	}
 
-	public void updateAnalogF1011No(String dataCode, Rule type) {
+	public void updateAnalogF1011No(String dataCode, int typeId) {
 		String hql = "update " + Tb1006AnalogdataEntity.class.getName() + " set f1011No=:f1011No where f1006Code=:f1006Code";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("f1011No", type.getId());
+		params.put("f1011No", typeId);
 		params.put("f1006Code", dataCode);
 		hqlDao.updateByHql(hql, params);
 	}
 	
-	public void updateStrapF1011No(String dataCode, Rule type) {
+	public void updateStrapF1011No(String dataCode, int typeId) {
 		Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", dataCode);
-		if (type.getId() == statedataEntity.getF1011No()) {
+		if (typeId == statedataEntity.getF1011No()) {
 			return;
 		}
 		String hql = "update " + Tb1064StrapEntity.class.getName() + " set f1064Type=:f1064Type where f1064Code=:f1064Code";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("f1064Type", type.getId());
+		params.put("f1064Type", typeId);
 		params.put("f1064Code", statedataEntity.getParentCode());
 		hqlDao.updateByHql(hql, params);
 	}
+	
+	
 }

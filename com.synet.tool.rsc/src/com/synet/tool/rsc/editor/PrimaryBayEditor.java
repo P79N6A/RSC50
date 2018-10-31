@@ -308,7 +308,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 							for (Object o : selections) {
 								Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) o;
 								statedataEntity.setParentCode(iedEntity.getF1046Code());
-								statedataEntity.setF1011No(F1011_NO.IED_WRN_COMMON.getId());
+								statedataEntity.setF1011No(F1011_NO.IED_WRN_R19.getId());
 							}
 						}
 					}

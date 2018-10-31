@@ -8,5 +8,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="压板参引" editor="none" name="statedata.tb1058FcdaByF1058Code.f1058RefAddr" width="250" default=""/> 
   <field desc="压板类型" dict="DICT_IED_STRIP" name="f1064Type" width="250" default=""/>
   <field desc="所属数据集" editor="none" name="statedata.tb1058FcdaByF1058Code.tb1054RcbByF1054Code.f1054Dataset" width="150" default=""/> 
-  <field desc="数据集中的序号" editor="none" name="statedata.tb1058FcdaByF1058Code.f1058Index" width="150" default=""/> 
+  <field desc="数据序号" editor="none" name="statedata.tb1058FcdaByF1058Code.f1058Index" width="150" default=""/> 
 </table>

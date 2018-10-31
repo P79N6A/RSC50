@@ -43,17 +43,17 @@ public class AnalogdataService extends BaseService {
 		return (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", code);
 	}
 	
-	public List<Tb1006AnalogdataEntity> getMeasDataByIed(Tb1046IedEntity iedEntity) {
-		List<Tb1006AnalogdataEntity> result = new ArrayList<>();
-		List<Tb1006AnalogdataEntity> temp = getAnologByIed(iedEntity);
-		for (Tb1006AnalogdataEntity tb1006AnalogdataEntity : temp) {
-			int f1011No = tb1006AnalogdataEntity.getF1011No();
-			if (f1011No >= F1011_NO.IED_WRN_COMMON.getId() && f1011No <= F1011_NO.IED_WRN_ALL.getId()) {
-				result.add(tb1006AnalogdataEntity);
-			}
-		}
-		return result;
-	}
+//	public List<Tb1006AnalogdataEntity> getMeasDataByIed(Tb1046IedEntity iedEntity) {
+//		List<Tb1006AnalogdataEntity> result = new ArrayList<>();
+//		List<Tb1006AnalogdataEntity> temp = getAnologByIed(iedEntity);
+//		for (Tb1006AnalogdataEntity tb1006AnalogdataEntity : temp) {
+//			int f1011No = tb1006AnalogdataEntity.getF1011No();
+//			if (f1011No >= F1011_NO.IED_WRN_COMMON.getId() && f1011No <= F1011_NO.IED_WRN_ALL.getId()) {
+//				result.add(tb1006AnalogdataEntity);
+//			}
+//		}
+//		return result;
+//	}
 	
 	public List<Tb1006AnalogdataEntity> getAnologByIed(Tb1046IedEntity iedEntity) {
 		return (List<Tb1006AnalogdataEntity>) beanDao.getListByCriteria(Tb1006AnalogdataEntity.class, "tb1046IedByF1046Code", iedEntity);

@@ -41,6 +41,7 @@ public class TableFactory {
 	public static final String PROTECT_ACTION_TABLE 		= "ProtectActionTable"; // 保护动作
 	public static final String PROTECT_QUANT_TABLE 			= "ProtectMeaQuantityTable"; // 保护测量量
 	public static final String DEVICE_WARN_TABLE 			= "DeviceWarnTable";
+	public static final String DEVICE_SUB_WARN_TABLE 			= "DeviceSubWarnTable";
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
 	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
 	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
@@ -106,6 +107,11 @@ public class TableFactory {
 	
 	public static DevKTable getDeviceWarnTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_WARN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getDeviceSubWarnTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_SUB_WARN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

@@ -55,7 +55,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	private List<Tb1046IedEntity> iedEntities;
 	private List<Tb1006AnalogdataEntity> analogdataEntities;
 	private Text textDesc;
-	private Button btFilter;
+//	private Button btFilter;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1006AnalogdataEntity> selectedAnalog;
 	private ProtmmxuService protmmxuService;
@@ -100,10 +100,10 @@ public class SampleConnectDialog extends WrappedDialog {
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
 		textDesc.setMessage("描述");		
 		btnSearch = SwtUtil.createButton(comRight, new GridData(50, 25), SWT.BUTTON1, RSCConstants.SEARCH);
-		btFilter = SwtUtil.createCheckBox(comRight, "按类型过滤", null);
+//		btFilter = SwtUtil.createCheckBox(comRight, "按类型过滤", null);
 		
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
-		gdSpan_3.horizontalSpan = 4;
+		gdSpan_3.horizontalSpan = 3;
 		tableSample = TableFactory.getAnalogTable(comRight);
 		tableSample.getTable().setLayoutData(gdSpan_3);
 		initData();
@@ -113,7 +113,7 @@ public class SampleConnectDialog extends WrappedDialog {
 	
 
 	private void initData() {		
-		btFilter.setSelection(true);
+//		btFilter.setSelection(true);
 		if(!DataUtils.listNotNull(iedEntities)) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -137,11 +137,11 @@ public class SampleConnectDialog extends WrappedDialog {
 
 	private void loadAnalogByIed(Tb1046IedEntity defSel) {
 		analogdataService = new AnalogdataService();
-		if (btFilter.getSelection()) {
-			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
-		} else {
+//		if (btFilter.getSelection()) {
+//			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
+//		} else {
 			analogdataEntities = analogdataService.getAnologByIed(defSel);
-		}
+//		}
 		tableSample.setInput(analogdataEntities);
 	}
 	
@@ -211,18 +211,18 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					tableSample.setInput(searchRes);
 					tableSample.getTable().layout();
-				} else if(obj == btFilter) {
+				} /*else if(obj == btFilter) {
 					int curComboSel = comboDevice.getSelectionIndex();
 					Tb1046IedEntity curSelIed = getSelIedByName(comboDevice.getItem(curComboSel));
 					loadAnalogByIed(curSelIed);
-				}
+				}*/
 			}
 
 			
 		};
 		btnSearch.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
-		btFilter.addSelectionListener(selectionListener);
+//		btFilter.addSelectionListener(selectionListener);
 	}
 	
 

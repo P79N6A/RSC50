@@ -8,5 +8,5 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="信号参引" editor="none" name="f1058RefAddr" width="250" default=""/> 
   <field desc="信号类型" dict="DICT_IED_EVT" name="f1058Type" width="200" default=""/> 
   <field desc="所属数据集" editor="none" name="tb1054RcbByF1054Code.f1054Dataset" width="150" default=""/> 
-  <field desc="数据集中的序号" editor="none" name="f1058Index" width="150" default=""/> 
+  <field desc="数据序号" editor="none" name="f1058Index" width="150" default=""/> 
 </table>

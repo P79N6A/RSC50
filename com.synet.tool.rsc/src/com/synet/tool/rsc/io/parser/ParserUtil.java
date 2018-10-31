@@ -51,7 +51,11 @@ public class ParserUtil {
 	}
 	
 	public static String getCbRef(String iedName, String ldInst, String cbName, String fc) {
-		return iedName + ldInst + "/LLN0$" + fc + "$" + cbName;//PL6602PIGO/LLN0$GO$gocb0，IL6602MUSV/LLN0$MS$smvcb1
+		return iedName + getCbId(ldInst, cbName, fc);
+	}
+	
+	public static String getCbId(String ldInst, String cbName, String fc) {
+		return ldInst + "/LLN0$" + fc + "$" + cbName;//PL6602PIGO/LLN0$GO$gocb0，IL6602MUSV/LLN0$MS$smvcb1
 	}
 	
 }
