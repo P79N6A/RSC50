@@ -45,6 +45,7 @@ public class TableFactory {
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
 	public static final String DEVICE_YX_TABLE 				= "DeviceYxTable";
 	public static final String DEVICE_QT_TABLE 				= "DeviceQtTable";
+	public static final String DEVICE_QTSUB_TABLE 			= "DeviceQtSubTable";
 	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
 	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
 	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";	// 逻辑链路
@@ -129,6 +130,11 @@ public class TableFactory {
 	
 	public static DevKTable getDeviceQtTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_QT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getDeviceQtSubTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_QTSUB_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

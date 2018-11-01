@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.common.util.ObjectUtil;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -162,5 +163,14 @@ public class MmsfcdaService extends BaseService {
 		hqlDao.updateByHql(hql, params);
 	}
 	
+	public void updateWarnParent(Object warnObj, String parendCode) {
+		String dataCode = (String) ObjectUtil.getProperty(warnObj, "dataCode");
+		StatedataService statedataService = new StatedataService();
+		Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(dataCode);
+		stateData.setParentCode(parendCode);
+		ObjectUtil.setProperty(warnObj, "parentCode", parendCode);
+		beanDao.update(stateData);
+		beanDao.update(warnObj);
+	}
 	
 }

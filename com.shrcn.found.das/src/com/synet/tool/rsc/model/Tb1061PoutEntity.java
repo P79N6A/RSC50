@@ -20,6 +20,7 @@ public class Tb1061PoutEntity implements Serializable {
     private String f1061Desc;
     private String f1061RefAddr;
     private String dataCode;
+    private String parentCode;
     private Tb1046IedEntity tb1046IedByF1046Code;
     private BaseCbEntity cbEntity;
     private Tb1064StrapEntity tb1064StrapByF1064Code;
@@ -100,7 +101,15 @@ public class Tb1061PoutEntity implements Serializable {
         this.dataCode = dataCode;
     }
 
-    public Tb1016StatedataEntity getStdata() {
+    public String getParentCode() {
+		return parentCode;
+	}
+
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
+
+	public Tb1016StatedataEntity getStdata() {
 		return stdata;
 	}
 
@@ -127,6 +136,7 @@ public class Tb1061PoutEntity implements Serializable {
         if (f1061Type != that.f1061Type) return false;
         if (cbCode != null ? !cbCode.equals(that.cbCode) : that.cbCode != null) return false;
         if (dataCode != null ? !dataCode.equals(that.dataCode) : that.dataCode != null) return false;
+        if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
         if (f1061Code != null ? !f1061Code.equals(that.f1061Code) : that.f1061Code != null) return false;
         if (f1061Desc != null ? !f1061Desc.equals(that.f1061Desc) : that.f1061Desc != null) return false;
         if (f1061RefAddr != null ? !f1061RefAddr.equals(that.f1061RefAddr) : that.f1061RefAddr != null) return false;
@@ -143,6 +153,7 @@ public class Tb1061PoutEntity implements Serializable {
         result = 31 * result + f1061Type;
         result = 31 * result + (f1061Desc != null ? f1061Desc.hashCode() : 0);
         result = 31 * result + (dataCode != null ? dataCode.hashCode() : 0);
+        result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         return result;
     }
 

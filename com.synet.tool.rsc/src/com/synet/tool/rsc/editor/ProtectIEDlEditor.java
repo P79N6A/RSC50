@@ -7,6 +7,7 @@ package com.synet.tool.rsc.editor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -25,6 +28,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import com.shrcn.found.common.dict.DictManager;
+import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -38,7 +42,6 @@ import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.SelectRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
-import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -64,7 +67,6 @@ import com.synet.tool.rsc.service.RuleEntityService;
 import com.synet.tool.rsc.service.SgfcdaEntityService;
 import com.synet.tool.rsc.service.SpfcdaEntityService;
 import com.synet.tool.rsc.service.StatedataService;
-import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
@@ -78,8 +80,12 @@ import com.synet.tool.rsc.util.Rule;
 public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	private Button btnTempCamp;
+	private Button btnApplyRule;
 	private Button btnTempQuote;
 	private Button btnTempSave;
+	private Button btnRefresh;
+	private Button btnAddWarn;
+	private Button btnDelWarn;
 	private GridData gridData;
 	private DevKTable tableBoardPort;
 	private DevKTable tableProtectValue;
@@ -96,12 +102,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableVirtualTerminalIn;
 	private DevKTable tableAnalogChn;
 	private DevKTable tableCriteriaChn;
-	private Button btnAddWarn;
-	private Button btnDelWarn;
 	private DevKTable tableDeviceName;
 	private DevKTable tableBoardName;
 	private DevKTable tableLogLinkName;
 	private CTabFolder tabFolder;
+	private CTabFolder tabFProtect;
+	private CTabFolder tabFdCfg;
+	private Object eventSource;
+
 	private Tb1046IedEntity iedEntity;
 	private List<Tb1046IedEntity> iedEntityList;
 	private PoutEntityService poutEntityService;
@@ -110,7 +118,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private BoardPortService portService;
 	private SgfcdaEntityService sgfcdaEntityService;
 	private SpfcdaEntityService spfcdaEntityService;
-	private StrapEntityService strapEntityService;
 	private BoardEntityService boardEntityService;
 	private LogicallinkEntityService logicallinkEntityService;
 	private RcdchannelaEntityService rcdChnlaService;
@@ -124,7 +131,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua;
 	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun;
 	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesYx;
-	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesQt;
+	private List<?> mmsfcdaEntitiesQt;
 	private List<?> mmsfcdaEntities;
 	private List<Tb1047BoardEntity> boardEntities;
 	private List<Tb1065LogicallinkEntity> logicallinkEntities;
@@ -132,15 +139,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1061PoutEntity> poutEntities;
 	private List<Tb1069RcdchannelaEntity> rcdchannelaEntities;
 	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
-	private CTabFolder tabFProtect;
 	private DictManager dic;
 	private HashMap<Integer, DevKTable> tableMapper;
-	private CTabFolder tabFdCfg;
-	private Button btnApplyRule;
-	private StatedataService statedataService;
-	private AnalogdataService analogdataService;
-	
-	
+	private static final int TB_IED = 0;
+	private static final int TB_BOARD = 1;
+	private static final int TB_LLINK = 2;
 
 	public ProtectIEDlEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -154,15 +157,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		portService = new BoardPortService();
 		sgfcdaEntityService = new SgfcdaEntityService();
 		spfcdaEntityService = new SpfcdaEntityService();
-		strapEntityService = new StrapEntityService();
 		poutEntityService = new PoutEntityService();
 		circuitEntityService = new CircuitEntityService();
 		boardEntityService = new BoardEntityService();
 		logicallinkEntityService = new LogicallinkEntityService();
 		rcdChnlaService = new RcdchannelaEntityService();
 		rcdChnLdService = new RcdchanneldEntityService();
-		statedataService = new StatedataService();
-		analogdataService = new AnalogdataService();
 		ConfigEditorInput input = (ConfigEditorInput) getInput();
 		iedEntity = ((Tb1046IedEntity) ((EditorConfigData)input.getData()).getData());
 		iedEntityList.add(iedEntity);
@@ -170,16 +170,45 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tableMapper = new HashMap<Integer, DevKTable>();
 		super.init();
 	}
+	
+	private void clearTables() {
+		tableBoardPort.clear();
+		if (tableProtectValue != null)
+			tableProtectValue.clear();
+		if (tableProtParam != null)
+			tableProtParam.clear();
+		if (tableProtectPlate != null)
+			tableProtectPlate.clear();
+		if (tableProtectAction != null)
+			tableProtectAction.clear();
+		if (tableProtectMeaQuantity != null)
+			tableProtectMeaQuantity.clear();
+		tableDeviceWarning.clear();
+		tableRunState.clear();
+		tableYx.clear();
+		tableQt.clear();
+		tableLogicalLink.clear();
+		tableVirtualTerminalOut.clear();
+		tableVirtualTerminalIn.clear();
+		if (tableAnalogChn != null)
+			tableAnalogChn.clear();
+		if (tableCriteriaChn != null)
+			tableCriteriaChn.clear();
+		tableDeviceName.clear();
+		tableBoardName.clear();
+		tableLogLinkName.clear();
+	}
 
 	@Override
 	public void buildUI(Composite container) {
 		super.buildUI(container);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
-		comp.setLayout(SwtUtil.getGridLayout(5));
+		comp.setLayout(SwtUtil.getGridLayout(6));
 		if (!needConfig()) {
 			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
 		} else {
 			SwtUtil.createLabel(comp, "", new GridData(700, SWT.DEFAULT));
+			btnRefresh = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "刷新");
 			btnApplyRule = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "应用规则");
 			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
@@ -202,7 +231,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_5 = new GridData(GridData.FILL_BOTH);
-		gdSpan_5.horizontalSpan = 5;
+		gdSpan_5.horizontalSpan = 6;
 		if (isProtIED()) {
 			createProtectCmp(comp, gdSpan_5);
 		} else {
@@ -295,84 +324,92 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Control[] controls = tabFolder.getChildren();
 		return controls;
 	}
+	
+	class ConfigListener extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			Object obj = e.getSource();
+			if(obj == tabFolder) {
+				initTbDataByTbName(tabFolder.getSelection().getText());
+			} else if(obj == tabFProtect) {
+				initProTbDataByTbName(tabFProtect.getSelection().getText());
+			} else if(obj == btnAddWarn) {
+				addWarning();
+			} else if(obj == btnDelWarn) {
+				delWarning();
+			} else if(obj == btnTempSave) {
+				ProgressManager.execute(new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						new TemplateExport(iedEntity).execute();
+					}
+				});
+				DialogHelper.showAsynInformation("保存模版结束！");
+			} else if(obj == btnTempQuote) {
+				ProgressManager.execute(new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						new TemplateImport(iedEntity).execute(monitor);
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								// 板卡端口
+								initTbDataByTbName(RSCConstants.BOARD_PORT, true);
+								// 虚端子
+								initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
+								// 装置告警
+								initTbDataByTbName(RSCConstants.DEV_WARNING, true);
+							}
+						});
+					}
+				});
+				DialogHelper.showAsynInformation("引入模版结束！");
+			} else if(obj == btnApplyRule) {
+				SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
+				if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
+					final List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
+					ProgressManager.execute(new IRunnableWithProgress() {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							Rule[] rules = rulesSelect.toArray(new Rule[rulesSelect.size()]);
+							RuleEntityService ruleEntityService = new RuleEntityService(iedEntity, rules);
+							ruleEntityService.applyRulesToIED(monitor);
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									// 保护信息(压板)
+									initTbDataByTbName(RSCConstants.PROTECT_BOARD, true);
+									// 虚端子
+									initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
+								}
+							});
+						}
+					});
+				}
+			} else if(obj == btnTempCamp) {
+				ModelCompareDialog dialog = new ModelCompareDialog(getShell(), iedEntity);
+				dialog.open();
+			} else if(obj == btnRefresh) {
+				clearTables();
+				String tabText = tabFolder.getSelection().getText();
+				if (RSCConstants.PROTECT_MSG.equals(tabText)) {
+					String protText = tabFProtect.getSelection().getText();
+					initProTbDataByTbName(protText, true);
+				} else {
+					initTbDataByTbName(tabText, true);
+				}
+			}
+		}
+	}
 
 	protected void addListeners() {
 		if (!needConfig()) {
 			return;
 		}
-		SelectionListener selectionListener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object obj = e.getSource();
-				if(obj == tabFolder) {
-					initTbDataByTbName(tabFolder.getSelection().getText());
-				} else if(obj == tabFProtect) {
-					initProTbDataByTbName(tabFProtect.getSelection().getText());
-				} else if(obj == btnAddWarn) {
-					config();
-				} else if(obj == btnDelWarn) {
-					delConfig();
-				} else if(obj == btnTempSave) {
-					ProgressManager.execute(new IRunnableWithProgress() {
-						@Override
-						public void run(IProgressMonitor monitor) throws InvocationTargetException,
-								InterruptedException {
-							new TemplateExport(iedEntity).execute();
-						}
-					});
-					DialogHelper.showAsynInformation("保存模版结束！");
-				} else if(obj == btnTempQuote) {
-					ProgressManager.execute(new IRunnableWithProgress() {
-						@Override
-						public void run(IProgressMonitor monitor) throws InvocationTargetException,
-								InterruptedException {
-							new TemplateImport(iedEntity).execute(monitor);
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									// 板卡端口
-									initTbDataByTbName(RSCConstants.BOARD_PORT, true);
-									// 虚端子
-									initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
-									// 装置告警
-									initTbDataByTbName(RSCConstants.DEV_WARNING, true);
-								}
-							});
-						}
-					});
-					DialogHelper.showAsynInformation("引入模版结束！");
-					
-					
-				} else if(obj == btnApplyRule) {
-					SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
-					if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
-						final List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
-						ProgressManager.execute(new IRunnableWithProgress() {
-							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException,
-									InterruptedException {
-								Rule[] rules = rulesSelect.toArray(new Rule[rulesSelect.size()]);
-								RuleEntityService ruleEntityService = new RuleEntityService(iedEntity, rules);
-								ruleEntityService.applyRulesToIED(monitor);
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										// 保护信息(压板)
-										initTbDataByTbName(RSCConstants.PROTECT_BOARD, true);
-										// 虚端子
-										initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
-									}
-								});
-							}
-						});
-					}
-				} else if(obj == btnTempCamp) {
-					ModelCompareDialog dialog = new ModelCompareDialog(getShell(), iedEntity);
-					dialog.open();
-				}
-			}
-			
-		};
+		SelectionListener selectionListener = new ConfigListener();
 		if(tabFProtect != null) {
 			tabFProtect.addSelectionListener(selectionListener);
 		}
@@ -383,12 +420,90 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempQuote.addSelectionListener(selectionListener);
 		btnTempSave.addSelectionListener(selectionListener);
 		btnApplyRule.addSelectionListener(selectionListener);
+		btnRefresh.addSelectionListener(selectionListener);
+		
+		tableDeviceWarning.getTable().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				List<Object> selections = tableDeviceWarning.getSelections();
+				DevKTable devKTable = tableMapper.get(tabFdCfg.getSelectionIndex());
+				List<?> items = devKTable.getInput();
+				List<Object> targets = new ArrayList<>();
+				for (Object selection : selections) {
+					String parentCode = (String) ObjectUtil.getProperty(selection, "parentCode");
+					for (Object item : items) {
+						String targetCode = getTargetCode(item);
+						if (targetCode.equals(parentCode)) {
+							targets.add(item);
+						}
+					}
+				}
+				if (targets.size() > 0) {
+					devKTable.clearSelections();
+					devKTable.setSelections(targets);
+				}
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
+		Collection<DevKTable> tables = tableMapper.values();
+		for (DevKTable table : tables) {
+			table.getTable().addMouseListener(new WarningSelectListener());
+		}
+//		tableDeviceWarning.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
+//			@Override
+//			public void fixedCellSelected(int col, int row, int statemask) {
+//			}
+//			@Override
+//			public void cellSelected(int col, int row, int statemask) {
+//				
+//			}
+//		});
+	}
+	
+	class WarningSelectListener implements MouseListener {
+		@Override
+		public void mouseDoubleClick(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseDown(MouseEvent e) {
+			DevKTable devKTable = tableMapper.get(tabFdCfg.getSelectionIndex());
+			List<Object> selections = devKTable.getSelections();
+			List<?> items = tableDeviceWarning.getInput();
+			List<Object> warnings = new ArrayList<>();
+			for (Object selection : selections) {
+				String targetCode = getTargetCode(selection);
+				for (Object item : items) {
+					String parentCode = (String) ObjectUtil.getProperty(item, "parentCode");
+					if (targetCode.equals(parentCode)) {
+						warnings.add(item);
+					}
+				}
+			}
+			if (warnings.size() > 0) {
+				tableDeviceWarning.clearSelections();
+				tableDeviceWarning.setSelections(warnings);
+			}
+		}
+
+		@Override
+		public void mouseUp(MouseEvent e) {
+		}
+		
 	}
 	
 	/**
 	 * 删除装置告警关联
 	 */
-	private void delConfig() {
+	private void delWarning() {
 		String code = iedEntity.getF1046Code();
 		if(code == null) {
 			return;
@@ -397,65 +512,45 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(objMms == null) {
 				return;
 			}
-			Tb1058MmsfcdaEntity mms = (Tb1058MmsfcdaEntity) objMms;
-			StatedataService statedataService = new StatedataService();
-			Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(mms.getDataCode());
-			if(stateData == null) {
-				ConsoleManager.getInstance().append("关联失败！没有找到状态量数据对象");
-				return;
-			}
-			stateData.setParentCode(code);
-			mms.setParentCode(code);
-			beandao.update(mms);
-			statedataService.update(stateData);
+			mmsfcdaService.updateWarnParent(objMms, code);
 		}
 		tableDeviceWarning.refresh();
 		ConsoleManager.getInstance().append("关联已取消。");
 	}
+	
+	private String getTargetCode(Object target) {
+		String code = null;
+		if(target instanceof Tb1046IedEntity) {
+			code = ((Tb1046IedEntity) target).getF1046Code();
+		} else if(target instanceof Tb1047BoardEntity) {
+			code = ((Tb1047BoardEntity) target).getF1047Code();
+		} else if(target instanceof Tb1065LogicallinkEntity) {
+			code = ((Tb1065LogicallinkEntity) target).getF1065Code();
+		}
+		return code;
+	}
+	
 	/**
 	 * 添加装置告警关联
 	 */
-	private void config() {
+	private void addWarning() {
 		Object selection = tableMapper.get(tabFdCfg.getSelectionIndex()).getSelection();
 		if(selection == null) {
 			 return;
 		}
-		String code = null;
-		if(selection instanceof Tb1046IedEntity) {
-			code = ((Tb1046IedEntity) selection).getF1046Code();
-		} else if(selection instanceof Tb1047BoardEntity) {
-			code = ((Tb1047BoardEntity) selection).getF1047Code();
-		} else if(selection instanceof Tb1065LogicallinkEntity) {
-			code = ((Tb1065LogicallinkEntity) selection).getF1065Code();
-		} 
+		String code = getTargetCode(selection);
 		if(code == null) {
 			return;
 		}
-		Object objMms = tableDeviceWarning.getSelection();
-		if(objMms == null) {
-			return;
+		List<Object> selections = tableDeviceWarning.getSelections();
+		for (Object objMms : selections) {
+			mmsfcdaService.updateWarnParent(objMms, code);
 		}
-		int index = tableDeviceWarning.getSelectRowNums()[0];
-		Tb1058MmsfcdaEntity mms = (Tb1058MmsfcdaEntity) objMms;
-		StatedataService statedataService = new StatedataService();
-		Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(mms.getDataCode());
-		if(stateData == null) {
-			ConsoleManager.getInstance().append("关联失败！没有找到状态量数据对象");
-			return;
-		}
-		stateData.setParentCode(code);
-		mms.setParentCode(code);
-		String mmsSql = "update tb1058_mmsfcda set Parent_CODE='" + code + "'" +
-				" where F1058_CODE='" + mms.getF1058Code() + "'";
-		String stSql = "update tb1016_statedata set Parent_CODE='" + code + "'" +
-				" where F1016_CODE='" + stateData.getF1016Code() + "'";
-		hqldao.updateBySql(mmsSql);
-		hqldao.updateBySql(stSql);
 		tableDeviceWarning.refresh();
-		tableDeviceWarning.setSelection(index);
+		tableDeviceWarning.setSelections(selections);
 		ConsoleManager.getInstance().append("关联成功。");
 	}
-
+	
 	/**
 	 * 保护信息-根据tb标签名称加载数据
 	 * @param text
@@ -524,11 +619,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			}
 			break;
 		case RSCConstants.PROTECT_MSG:
-			if(reload || !DataUtils.listNotNull(sgfcdaEntities)) {
-				//保护信息-保护定值
-				sgfcdaEntities = sgfcdaEntityService.getSgfcdaByIed(iedEntity);
-				tableProtectValue.setInput(sgfcdaEntities);
-			}
+			String protText = tabFProtect.getSelection().getText();
+			initProTbDataByTbName(protText, reload);
 			break;
 		case RSCConstants.RUN_STATE:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
@@ -544,7 +636,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case RSCConstants.DEV_QT:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesQt)) {
-				mmsfcdaEntitiesQt = mmsfcdaService.getOtherData(iedEntity);
+				if (isProtIED()) {
+					mmsfcdaEntitiesQt = mmsfcdaService.getOtherData(iedEntity);
+				} else {
+					mmsfcdaEntitiesQt = poutEntityService.getOtherData(iedEntity);
+				}
 				tableQt.setInput(mmsfcdaEntitiesQt);
 			}
 			break;
@@ -741,9 +837,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tableLogLinkName = TableFactory.getLogicalLinkNameTable((Composite) contros[2]);
 		tableLogLinkName.getTable().setLayoutData(gridData);
 		
-		tableMapper.put(0, tableDeviceName);
-		tableMapper.put(1, tableBoardName);
-		tableMapper.put(2, tableLogLinkName);
+		tableMapper.put(TB_IED, tableDeviceName);
+		tableMapper.put(TB_BOARD, tableBoardName);
+		tableMapper.put(TB_LLINK, tableLogLinkName);
 		return cmpDeviceWarning;
 	}
 	
@@ -781,7 +877,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createDevQtCmp(Composite com) {
 		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
-		tableQt = TableFactory.getDeviceQtTable(cmpRunState);
+		tableQt = isProtIED() ? TableFactory.getDeviceQtTable(cmpRunState) : 
+			 TableFactory.getDeviceQtSubTable(cmpRunState);
 		tableQt.getTable().setLayoutData(gridData);
 		return cmpRunState;
 	}

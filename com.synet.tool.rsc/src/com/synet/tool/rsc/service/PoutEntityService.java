@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -19,15 +20,28 @@ public class PoutEntityService extends BaseService{
 	}
 	
 	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied) {
+		return getWarningData(ied, RuleType.IED_WARN);
+	}
+	
+	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied, RuleType rtyp) {
 		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
 				"and f1061Type between :min and :max";
 		Map<String, Object> params = new HashMap<>();
 		params.put("ied", ied);
-		params.put("min", RuleType.IED_WARN.getMin());
-		params.put("max", RuleType.IED_WARN.getMax());
+		params.put("min", rtyp.getMin());
+		params.put("max", rtyp.getMax());
 		return (List<Tb1061PoutEntity>) hqlDao.getListByHql(hql, params);
 	}
-
+	
+	public List<Tb1061PoutEntity> getOtherData(Tb1046IedEntity ied) {
+		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
+				"and f1061Type=:type";
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", ied);
+		params.put("type", RSCConstants.OTHERS_ID);
+		return (List<Tb1061PoutEntity>) hqlDao.getListByHql(hql, params);
+	}
+	
 	/**
 	 * 根据条件查找虚端子
 	 * @param iedEntity
