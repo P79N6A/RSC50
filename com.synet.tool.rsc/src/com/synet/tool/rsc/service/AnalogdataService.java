@@ -12,31 +12,6 @@ import com.synet.tool.rsc.util.RuleType;
 
 public class AnalogdataService extends BaseService {
 	
-//	/**
-//	 * 根据codes查找
-//	 * @param codes
-//	 * @return
-//	 */
-//	@SuppressWarnings("unchecked")
-//	public List<Tb1006AnalogdataEntity> getAnologByCodes(List<String> codes) {
-//		if(!DataUtils.listNotNull(codes)) {
-//			return new ArrayList<>();
-//		}
-//		StringBuilder sbObjs = new StringBuilder();
-//		Map<String, Object> params = new HashMap<String, Object>();
-//		int ldSize = codes.size();
-//		for (int i = 1; i <=ldSize; i++) {
-//			Object obj = codes.get(i-1);
-//			String key = "ld" + i;
-//			params.put(key, obj);
-//			sbObjs.append(":" + key);
-//			if (i < ldSize)
-//				sbObjs.append(", ");
-//		}
-//		String hql = "from " + Tb1006AnalogdataEntity.class.getName() + " where f1006Code in (" + sbObjs + ") and f1011No=" + F1011_NO.PROT_MEAR.getId();
-//		return (List<Tb1006AnalogdataEntity>) hqlDao.getListByHql(hql, params);
-//	}
-	
 	/**
 	 * 根据codes查找
 	 * @param codes

@@ -25,6 +25,7 @@ import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.service.MmsfcdaService;
@@ -141,6 +142,13 @@ public class DevKTableModel extends RKTableModel {
 					} else if (SclUtil.isAlgData(dataCode)) {
 						mmsService.updateAnalogF1011No(dataCode, poutEntity.getF1061Type());
 					}
+				}
+			} else if (data instanceof Tb1063CircuitEntity) {
+				if ("tb1062PinByF1062CodePRecv.f1011No".equals(property)) {
+					Tb1063CircuitEntity circuit = (Tb1063CircuitEntity) data;
+					saveData(circuit.getTb1062PinByF1062CodePRecv());
+					int type = circuit.getTb1062PinByF1062CodePRecv().getF1011No();
+					System.out.println(type);
 				}
 			}
 		}

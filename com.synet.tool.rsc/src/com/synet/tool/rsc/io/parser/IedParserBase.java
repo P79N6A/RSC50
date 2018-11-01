@@ -19,6 +19,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
@@ -113,7 +114,7 @@ public abstract class IedParserBase<T> implements IIedParser {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SCL.getNodeRef(fcdaEl),
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SclUtil.getFcdaRef(fcdaEl),
 				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;

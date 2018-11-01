@@ -155,6 +155,12 @@ public interface DBConstants {
 	int YES = 1; 	// 是
 	int NO = 2; 	// 否
 
+	int DTYPE_ST 	= 1; 	//状态 
+	int DTYPE_ALG 	= 2; 	//模拟
+	int DTYPE_STRAP = 3; 	//压板
+	int DTYPE_POUT 	= 4; 	//输出虚端子
+	int DTYPE_PIN 	= 5; 	//输入虚端子
+
 	String sqlPath = "com/synet/tool/rsc/das/rsc-oracle.sql";
 //	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.sql";
 //	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.txt";

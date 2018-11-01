@@ -5,7 +5,6 @@
 package com.synet.tool.rsc.action.imp;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -16,9 +15,7 @@ import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.io.SCDImporterNew;
-import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
  /**
@@ -43,12 +40,8 @@ public class ImportSCDAction extends BaseImportAction {
 						InterruptedException {
 					new SCDImporterNew(path).execute(monitor); 
 					ProjectFileManager.getInstance().renameScd(Constants.CURRENT_PRJ_NAME, path);
-					@SuppressWarnings("unchecked")
-					List<Tb1065LogicallinkEntity> cbs = (List<Tb1065LogicallinkEntity>) BeanDaoImpl.getInstance().getAll(Tb1065LogicallinkEntity.class);
-					if (cbs.size() > 0) {
-						DialogHelper.showAsynInformation("SCD导入成功！");
-						EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
-					}
+					DialogHelper.showAsynInformation("SCD导入成功！");
+					EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 				}
 			});
 		}

@@ -301,10 +301,12 @@ public class IedParserNew {
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
+				pout.setParentCode(statedata.getParentCode());
 			} else {
 				Tb1006AnalogdataEntity algdata = addAlgdata(ref, fcdaDesc, type.getId());
 				String algcode = algdata.getF1006Code();
 				pout.setDataCode(algcode);
+				pout.setParentCode(algdata.getParentCode());
 			}
 			context.cachePout(SCL.getNodeRef(fcdaEl), pout);
 		}
@@ -420,7 +422,7 @@ public class IedParserNew {
 	 * @return
 	 */
 	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SCL.getNodeRef(fcdaEl),
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SclUtil.getFcdaRef(fcdaEl),
 				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;

@@ -96,7 +96,6 @@ public class HqlDaoImpl implements HqlDaoService {
 	 */
 	public int getCount(String hql, Map<String, Object> params) {
 		Session _session = service.get();
-//		service.flush();
 		String tmpHql = hql.toLowerCase();
 		if (!tmpHql.startsWith("select")) {
 			hql = "select count(*) " + hql;
@@ -142,7 +141,6 @@ public class HqlDaoImpl implements HqlDaoService {
 	 */
 	public List<?> getListByHql(String hql, Map<String, Object> params) {
 		Session _session = service.get();
-//		service.flush();
 		try {
 			Query query = _session.createQuery(hql);
 			if (params != null) {
@@ -153,7 +151,7 @@ public class HqlDaoImpl implements HqlDaoService {
 			}
 			return query.setCacheable(true).list();
 		} finally {
-//			service.flush();
+			service.flush();
 		}
 	}
 	
@@ -207,7 +205,6 @@ public class HqlDaoImpl implements HqlDaoService {
 	public List<?> getListByHqlAndPage(String hql, Map<String, Object> params, int currentPage,
 			int pageSize) {
 		Session _session = service.get();
-//		service.flush();
 		try {
 			Query query = _session.createQuery(hql);
 			if (params != null) {

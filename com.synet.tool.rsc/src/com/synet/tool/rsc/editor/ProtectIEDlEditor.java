@@ -108,7 +108,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private CTabFolder tabFolder;
 	private CTabFolder tabFProtect;
 	private CTabFolder tabFdCfg;
-	private Object eventSource;
 
 	private Tb1046IedEntity iedEntity;
 	private List<Tb1046IedEntity> iedEntityList;

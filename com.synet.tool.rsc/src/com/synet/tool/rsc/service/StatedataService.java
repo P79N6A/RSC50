@@ -36,12 +36,21 @@ public class StatedataService extends BaseService {
 	 * @return
 	 */
 	public List<String> getStateDataByIed(Tb1046IedEntity iedEntity) {
-		List<Tb1016StatedataEntity> temp = getStateDataByParentCode(iedEntity.getF1046Code());
+		List<Tb1016StatedataEntity> temp = getStatesByIed(iedEntity);
 		List<String> result = new ArrayList<>();
 		for (Tb1016StatedataEntity tb1016StatedataEntity : temp) {
 			result.add(tb1016StatedataEntity.getF1016Byname());
 		}
 		return result;
+	}
+	
+	/**
+	 * 根据ied查询状态量
+	 * @param iedEntity
+	 * @return
+	 */
+	public List<Tb1016StatedataEntity> getStatesByIed(Tb1046IedEntity iedEntity) {
+		return (List<Tb1016StatedataEntity>) beanDao.getListByCriteria(Tb1016StatedataEntity.class, "tb1046IedByF1046Code", iedEntity);
 	}
 
 	/**

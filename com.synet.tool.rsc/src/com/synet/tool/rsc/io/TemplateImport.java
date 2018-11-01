@@ -1,6 +1,10 @@
 package com.synet.tool.rsc.io;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +14,18 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.hibernate.Session;
 
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.tool.found.das.SessionService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -90,8 +98,190 @@ public class TemplateImport implements IImporter{
 			for (Element elementPinEntity : elementsPinEntity) {
 				savePin(elementPinEntity);
 			}
+			Element elementDType = rootElement.element("DataType");
+			Element elementSts = elementDType.element("State");
+			Element elementAlgs = elementDType.element("Analog");
+			Element elementPin = elementDType.element("Pin");
+			saveStates(elementSts);
+			saveAnalogs(elementAlgs);
+			savePins(elementPin);
 		} catch (DocumentException e) {
-			ConsoleManager.getInstance().append("文件读取失败");
+			ConsoleManager.getInstance().append("文件读取失败" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	private void saveStates(Element elementSts) {
+		try {
+			List<Element> stList = elementSts.elements();
+			List<Element> poutList = new ArrayList<>();
+			List<Element> strapList = new ArrayList<>();
+			List<Element> mmsList = new ArrayList<>();
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1016_StateData set F1011_NO=? where F1016_ADDREF=? and F1046_CODE=?");
+			for (Element elementSt : stList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				String typeStr = elementSt.attributeValue("type");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				int type = Integer.parseInt(typeStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+				if (DBConstants.DTYPE_POUT == type) {
+					poutList.add(elementSt);
+				} else { 
+					if (DBConstants.DTYPE_STRAP == type) {
+						strapList.add(elementSt);
+					}
+					mmsList.add(elementSt);
+				}
+			}
+			pState.executeBatch();
+			conn.commit();
+			savePoutType(poutList);
+			saveStrapType(strapList);
+			saveMmsType(mmsList);
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void savePoutType(List<Element> poutList) {
+		try {
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1061_POUT set F1061_Type=? where F1061_RefAddr=? and F1046_CODE=?");
+			for (Element elementSt : poutList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+			}
+			pState.executeBatch();
+			conn.commit();
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveMmsType(List<Element> mmsList) {
+		try {
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1058_MMSFCDA set F1058_Type=? where F1058_RefAddr=? and F1046_CODE=?");
+			for (Element elementSt : mmsList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+			}
+			pState.executeBatch();
+			conn.commit();
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveStrapType(List<Element> strapList) {
+		try {
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1064_Strap a set a.F1064_TYPE=? where a.F1064_CODE=" +
+					"(select b.Parent_CODE from TB1016_StateData b where b.F1016_ADDREF=? and b.F1046_CODE=?)");
+			for (Element elementSt : strapList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+			}
+			pState.executeBatch();
+			conn.commit();
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveAnalogs(Element elementAlgs) {
+		try {
+			List<Element> algList = elementAlgs.elements();
+			List<Element> poutList = new ArrayList<>();
+			List<Element> mmsList = new ArrayList<>();
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1006_AnalogData set F1011_NO=? where F1006_ADDREF=? and F1046_CODE=?");
+			for (Element elementSt : algList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				String typeStr = elementSt.attributeValue("type");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				int type = Integer.parseInt(typeStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+				if (DBConstants.DTYPE_POUT == type) {
+					poutList.add(elementSt);
+				} else { 
+					mmsList.add(elementSt);
+				}
+			}
+			pState.executeBatch();
+			conn.commit();
+			saveMmsType(mmsList);
+			savePoutType(poutList);
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void savePins(Element elementPin) {
+		try {
+			List<Element> algList = elementPin.elements();
+			SessionService service = SessionRsc.getInstance();
+			Session _session = service.get();
+			Connection conn = _session.connection();
+			conn.setAutoCommit(false);
+			PreparedStatement pState = conn.prepareStatement("update TB1062_PIN set F1011_NO=? where F1062_RefAddr=? and F1046_CODE=?");
+			for (Element elementSt : algList) {
+				String ref = elementSt.attributeValue("ref");
+				String f1011NoStr = elementSt.attributeValue("f1011No");
+				int f1011No = Integer.parseInt(f1011NoStr);
+				pState.setInt(1, f1011No);
+				pState.setString(2, ref);
+				pState.setString(3, tb1046IedEntity.getF1046Code());
+				pState.addBatch();
+			}
+			pState.executeBatch();
+			conn.commit();
+		} catch (SQLException e) {
+			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
 			e.printStackTrace();
 		}
 	}

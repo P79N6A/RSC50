@@ -192,4 +192,8 @@ public class SclUtil {
 	public static boolean isAlgData(String dataCode) {
 		return dataCode.startsWith(DBConstants.PR_Analog);
 	}
+
+	public static boolean isStrapData(String parentCode) {
+		return parentCode.startsWith(DBConstants.PR_STRAP);
+	}
 }
