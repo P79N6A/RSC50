@@ -155,7 +155,10 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 					bayEntry.setData(bayEntity);
 					int iedIndex = 0;
 					for (Tb1046IedEntity iedEntity : iedEntities) {
-						ConfigTreeEntry proEntry = createConfigEntry(bayEntry, iedEntity.getF1046Name(), "device.png", ET_PT_IED, ++iedIndex);
+						String name = iedEntity.getF1046Name();
+						String desc = iedEntity.getF1046Desc();
+						ConfigTreeEntry proEntry = createConfigEntry(bayEntry, name, "device.png", ET_PT_IED, ++iedIndex);
+						proEntry.setDesc(desc);
 						proEntry.setData(iedEntity);
 					}
 					if (DBConstants.BAY_OTHER.equals(bayName)) {

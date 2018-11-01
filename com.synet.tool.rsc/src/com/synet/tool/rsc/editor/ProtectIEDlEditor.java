@@ -457,15 +457,6 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		for (DevKTable table : tables) {
 			table.getTable().addMouseListener(new WarningSelectListener());
 		}
-//		tableDeviceWarning.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
-//			@Override
-//			public void fixedCellSelected(int col, int row, int statemask) {
-//			}
-//			@Override
-//			public void cellSelected(int col, int row, int statemask) {
-//				
-//			}
-//		});
 	}
 	
 	class WarningSelectListener implements MouseListener {
