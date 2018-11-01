@@ -167,7 +167,8 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.beginTask("开始导出", ieds.size());
+						int totalWork = ieds.size() * 2;
+						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -187,6 +188,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 									list.add(entity);
 								}
 							}
+							monitor.worked(1);
 							if (list.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "告警与板卡关联表" + dateStr + ".xlsx";
@@ -205,10 +207,16 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM105BoardWarnEntity> list = (List<IM105BoardWarnEntity>) table.getInput();
+		if (list == null || list.size() <= 0) return;
+		monitor.beginTask("正在导入数据...", list.size());
 		for (IM105BoardWarnEntity entity : list) {
+			if (monitor.isCanceled()) {
+				break;
+			}
 			if (!entity.isOverwrite()) {
+				monitor.worked(1);
 				continue;
 			}
 			try {
@@ -243,7 +251,9 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				e.printStackTrace();
 			}
 			improtInfoService.update(entity);
+			monitor.worked(1);
 		}
+		monitor.done();
 	}
 
 	@Override

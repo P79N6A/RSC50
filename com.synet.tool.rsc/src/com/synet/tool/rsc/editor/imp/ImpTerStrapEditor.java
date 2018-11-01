@@ -175,7 +175,8 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.beginTask("开始导出", ieds.size());
+						int totalWork = ieds.size() * 2;
+						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -184,13 +185,16 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 							monitor.setTaskName("正在导出装置[" + ied.getF1046Name() + "]数据");
 							//导出压板部分
 							List<Object> strapList = getStrapData(ied);
+							monitor.worked(1);
 							if (strapList.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "压板与虚端子关联表(压板部分)" + dateStr + ".xlsx";
 								exportTemplateExcel(fileName, "压板与虚端子关联表", vfields, strapList);
 							}
+							monitor.worked(1);
 							//导出虚端子部分
 							List<Object> vpList = getVpData(ied);
+							monitor.worked(1);
 							if (vpList.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "压板与虚端子关联表(虚端子部分)" + dateStr + ".xlsx";
@@ -272,12 +276,17 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM107TerStrapEntity> list = (List<IM107TerStrapEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		monitor.beginTask("正在导入数据...", list.size());
 		for (IM107TerStrapEntity entity : list) {
+			if (monitor.isCanceled()) {
+				break;
+			}
 			if (!entity.isOverwrite()) {
+				monitor.worked(1);
 				continue;
 			}
 			String devName = entity.getDevName();
@@ -313,6 +322,7 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 						String msg = "开入虚端子不存在:" + endMsg;
 						appendError("导入压板与虚端子", "虚端子检查", ref, msg);
 					}
+					monitor.worked(1);
 				} else if ("开出".equals(vpType)){
 					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(devName, vpRefAddr);
 					if (poutEntity != null) {
@@ -339,11 +349,13 @@ public class ImpTerStrapEditor extends ExcelImportEditor {
 						String msg = "开出虚端子不存在:" + endMsg;
 						appendError("导入压板与虚端子", "虚端子检查", ref, msg);
 					}
+					monitor.worked(1);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		monitor.done();
 	}
 
 	@Override

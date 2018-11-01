@@ -137,25 +137,24 @@ public class ImportExcelAction extends BaseImportAction {
 				ProgressManager.execute(new IRunnableWithProgress() {
 					
 					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException,
 							InterruptedException {
-						
+						monitor.beginTask("正在导入...", 3);
 						if (fileInfoEntity != null) {
 							monitor.setTaskName("正在删除原始数据");
 							deleteFile(fileInfoEntity);
 						}
-						
+						monitor.worked(1);
 						monitor.setTaskName("正在导入数据");
+						final boolean b = ExcelImporter.importExcelData(monitor, getTitle(), filePath, excelHeadRow, excelColInfo);
+						
+						//跳转界面
 						Display.getDefault().asyncExec(new Runnable() {
 							
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
-								
-								boolean b = ExcelImporter.importExcelData(getTitle(), filePath, excelHeadRow, excelColInfo);
 								if (b) {
 									openImportEditor(filePath);
-//								DialogHelper.showAsynInformation("导入成功！");
 								} else {
 									DialogHelper.showAsynError("导入失败，请检查文件格式");
 								}

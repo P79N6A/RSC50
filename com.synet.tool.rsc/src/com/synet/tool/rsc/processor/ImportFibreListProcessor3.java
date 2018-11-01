@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.common.valid.DataTypeChecker;
@@ -71,7 +73,7 @@ public class ImportFibreListProcessor3 {
 		return true;
 	}
 	
-	public void importData(List<IM102FibreListEntity> list) {
+	public void importData(List<IM102FibreListEntity> list, IProgressMonitor monitor) {
 		cableEntitieList.clear();
 		coreEntitieList.clear();
 		physconnEntitieList.clear();
@@ -81,20 +83,42 @@ public class ImportFibreListProcessor3 {
 		
 		if (list == null || list.size() <= 0) 
 			return;
+		monitor.beginTask("正在导入数据", 7);
 		List<Tb1041SubstationEntity> substationList = substationService.getAllSubstation();
 		if (substationList == null || substationList.size() <= 0) 
 			return;
 		substation = substationList.get(0);
+		monitor.worked(1);
+		if (monitor.isCanceled()) {
+			return;
+		}
 		//处理光缆、芯线、物理回路
 		analysisCable(substation);
+		monitor.worked(2);
+		if (monitor.isCanceled()) {
+			return;
+		}
 		//保存光缆、芯线、物理回路
 		cableEntityService.saveBatch(cableEntitieList);
+		monitor.worked(2);
+		if (monitor.isCanceled()) {
+			return;
+		}
 		coreEntityService.saveBatch(coreEntitieList);
+		monitor.worked(1);
+		if (monitor.isCanceled()) {
+			return;
+		}
 		phyconnEntityService.saveBatch(physconnEntitieList);
+		monitor.worked(1);
+		if (monitor.isCanceled()) {
+			return;
+		}
 		ConsoleManager console = ConsoleManager.getInstance();
 		console.append("导入光缆数：" + cableEntitieList.size());
 		console.append("导入芯线数：" + coreEntitieList.size());
 		console.append("导入物理回路数：" + physconnEntitieList.size());
+		monitor.done();
 	}
 	
 	//处理物理回路

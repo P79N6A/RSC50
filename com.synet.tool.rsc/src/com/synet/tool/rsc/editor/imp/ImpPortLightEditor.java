@@ -169,7 +169,8 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.beginTask("开始导出", ieds.size());
+						int totalWork = ieds.size() * 2;
+						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -200,6 +201,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 									list.add(entity);
 								}
 							}
+							monitor.worked(1);
 							if (list.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "光强与端口关联表" + dateStr + ".xlsx";
@@ -219,16 +221,21 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM106PortLightEntity> list = (List<IM106PortLightEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		monitor.beginTask("正在导入数据...", list.size());
 		try {
 			Map<String, String> portLights = new HashMap<>();
 			HqlDaoImpl hqlDao = HqlDaoImpl.getInstance();
 			Map<String, Object> params = new HashMap<>();
 			for (IM106PortLightEntity entity : list) {
+				if (monitor.isCanceled()) {
+					break;
+				}
 				if (!entity.isOverwrite()) {
+					monitor.worked(1);
 					continue;
 				}
 				String devName = entity.getDevName();
@@ -280,11 +287,12 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 					String msg = "装置[" + devName + "]不存在Mms信号：" + opticalRefAddr;
 					appendError("导入光强与端口", "FCDA检查", msgRef, msg);
 				}
-				
+				monitor.worked(1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		monitor.done();
 	}
 
 	@Override

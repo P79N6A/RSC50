@@ -118,14 +118,14 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		ProgressManager.execute(new IRunnableWithProgress() {
 			
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException,
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
 					InterruptedException {
 				Display.getDefault().asyncExec(new Runnable() {
 					
 					@Override
 					public void run() {
 						clearMsgCount();
-						doImport();
+						doImport(monitor);
 //						console.append(titleList.getSelection()[0] + "导入完毕！");
 						printMsg(titleList.getSelection()[0] + "导入完毕");
 					}
@@ -134,7 +134,7 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		});
 	}
 	
-	protected void doImport(){
+	protected void doImport(IProgressMonitor monitor){
 		
 	}
 	

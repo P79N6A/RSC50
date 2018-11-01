@@ -3,6 +3,8 @@ package com.synet.tool.rsc.excel;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
@@ -26,52 +28,81 @@ import com.synet.tool.rsc.processor.ImportTerStrapProcessor;
 public class ExcelImporter {
 	
 	@SuppressWarnings("unchecked")
-	public static boolean importExcelData(String title, String filePath, int excelHeadRow, Map<Integer, String> excelColInfo) {
+	public static boolean importExcelData(IProgressMonitor monitor, String title, String filePath, int excelHeadRow, Map<Integer, String> excelColInfo) {
 		ImportInfoParser parser = new ImportInfoParser();
 		ImportResult result = null;
+		boolean b = false;
 		switch (title) {
 		case ExcelConstants.IM101_IED_LIST:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM101_IED_LIST);
-			return new ImportIEDListProcessor().processor(result.getFileInfoEntity(),
+			monitor.worked(1);
+			b = new ImportIEDListProcessor().processor(result.getFileInfoEntity(),
 					(List<IM101IEDListEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM102_FIBRE_LIST:
 //			result = parser.getFibreList(filePath, excelHeadRow, excelColInfo);
 //			return new ImportFibreListProcessor().processor(result.getFileInfoEntity(), 
 //					(Map<String, List<IM102FibreListEntity>>) result.getResult());
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM102_FIBRE_LIST);
-			return new ImportFibreListProcessor3().processor(result.getFileInfoEntity(), 
+			monitor.worked(1);
+			b = new ImportFibreListProcessor3().processor(result.getFileInfoEntity(), 
 					(List<IM102FibreListEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM103_IED_BOARD:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM103_IED_BOARD);
-			return new ImportIEDBoardProcessor().processor(result.getFileInfoEntity(), 
+			monitor.worked(1);
+			b = new ImportIEDBoardProcessor().processor(result.getFileInfoEntity(), 
 					(List<IM103IEDBoardEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM104_STATUS_IN:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM104_STATUS_IN);
-			return new ImportStatusInProcessor().processor(result.getFileInfoEntity(), 
+			monitor.worked(1);
+			b = new ImportStatusInProcessor().processor(result.getFileInfoEntity(), 
 					(List<IM104StatusInEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM105_BOARD_WARN:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM105_BOARD_WARN);
-			return new ImportBoardWarnProcessor().processor(result.getFileInfoEntity(),
+			monitor.worked(1);
+			b = new ImportBoardWarnProcessor().processor(result.getFileInfoEntity(),
 					(List<IM105BoardWarnEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM106_PORT_LIGHT:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM106_PORT_LIGHT);
-			return new ImportPortLightProcessor().processor(result.getFileInfoEntity(), 
+			monitor.worked(1);
+			b = new ImportPortLightProcessor().processor(result.getFileInfoEntity(), 
 					(List<IM106PortLightEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM107_TER_STRAP:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM107_TER_STRAP);
-			return new ImportTerStrapProcessor().processor(result.getFileInfoEntity(),
+			monitor.worked(1);
+			b = new ImportTerStrapProcessor().processor(result.getFileInfoEntity(),
 					(List<IM107TerStrapEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM108_BRK_CFM:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM108_BRK_CFM);
-			return new ImportBrkCfmProcessor().processor(result.getFileInfoEntity(),
+			monitor.worked(1);
+			b = new ImportBrkCfmProcessor().processor(result.getFileInfoEntity(),
 					(List<IM108BrkCfmEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		case ExcelConstants.IM109_STA_INFO:
 			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM109_STA_INFO);
-			return new ImportStaInfoProcessor().processor(result.getFileInfoEntity(),
+			monitor.worked(1);
+			b = new ImportStaInfoProcessor().processor(result.getFileInfoEntity(),
 					(List<IM109StaInfoEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		default:
 			return false;
 		}
+		return b;
 	}
 
 	public static String[] getExcelFields(String title) {

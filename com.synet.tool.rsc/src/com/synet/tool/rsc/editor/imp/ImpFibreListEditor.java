@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -169,7 +170,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM102FibreListEntity> temp = new ArrayList<>();
 		List<IM102FibreListEntity> list = (List<IM102FibreListEntity>) table.getInput();
 		if (list == null || list.size() <= 0) return;
@@ -180,7 +181,7 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		}
 		//导入数据
 		if (temp.size() > 0) {
-			new ImportFibreListProcessor3().importData(temp);
+			new ImportFibreListProcessor3().importData(temp, monitor);
 		}
 	}
 	

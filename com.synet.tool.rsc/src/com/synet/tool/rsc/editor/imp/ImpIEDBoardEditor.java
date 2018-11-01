@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -146,13 +147,19 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		int boardCount = 0;
 		int portCount = 0;
 		List<Tb1046IedEntity> ieds = (List<Tb1046IedEntity>) tableComp.getInput();
+		if (ieds == null || ieds.size() <= 0) return;
+		monitor.beginTask("正在导入数据...", ieds.size() * 3);
 		int iedNum = 0;
 		for (Tb1046IedEntity ied : ieds) {
+			if (monitor.isCanceled()) {
+				break;
+			}
 			if (!ied.isOverwrite()) {
+				monitor.worked(4);
 				continue;
 			}
 			iedNum++;
@@ -161,6 +168,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			if (iedBoards != null && iedBoards.size() > 0) {
 				iedEntityService.deleteBoards(ied);
 			}
+			monitor.worked(1);
 			// 创建板卡和端口
 			int boardNum = 0;
 			for (IM103IEDBoardEntity entity : boards) {
@@ -203,10 +211,12 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 					portCount += portList.size();
 				}
 			}
+			monitor.worked(1);
 			// 更新板卡数量
 			ied.setF1046boardNum(boardNum);
 			boardCount += boardNum;
 			beandao.update(ied);
+			monitor.worked(1);
 		}
 		console.append("为 " + iedNum +
 				" 台装置，导入板卡数：" + boardCount + "，导入端口数：" + portCount);

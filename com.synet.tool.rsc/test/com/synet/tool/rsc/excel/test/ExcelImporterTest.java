@@ -41,7 +41,7 @@ public class ExcelImporterTest {
 		String path = dir + "装置板卡与端口整理09201523(1).xlsx";
 		int excelHeadRow = 0;
 		Map<Integer, String> excelColInfo = new TableHeadParser().getTableHeadInfo(path, excelHeadRow);
-		assertTrue(ExcelImporter.importExcelData(ExcelConstants.IM103_IED_BOARD, path, excelHeadRow, excelColInfo));
+		assertTrue(ExcelImporter.importExcelData(null, ExcelConstants.IM103_IED_BOARD, path, excelHeadRow, excelColInfo));
 		List<Tb1046IedEntity> ieds = (List<Tb1046IedEntity>) 
 				beandao.getListByCriteria(Tb1046IedEntity.class, "f1046Model", "UDC_501A_0001");
 		assertTrue(ieds.size()>0);

@@ -189,7 +189,8 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.beginTask("开始导出", ieds.size());
+						int totalWork = ieds.size() * 2;
+						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -208,6 +209,7 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 									list.add(staInfoEntity);
 								}
 							}
+							monitor.worked(1);
 							if (list.size() > 0) {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "监控信息点表" + dateStr + ".xlsx";
@@ -226,13 +228,19 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM109StaInfoEntity> list = (List<IM109StaInfoEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		monitor.beginTask("正在导入数据...", list.size());
 		for (IM109StaInfoEntity entity : list) {
-			if (!entity.isOverwrite())
+			if (monitor.isCanceled()) {
+				break;
+			}
+			if (!entity.isOverwrite()) {
+				monitor.worked(1);
 				continue;
+			}
 			Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getMmsRefAddr());
 			if (mmsfcdaEntity != null) {
 				mmsfcdaEntity.setF1058Desc(entity.getMmsDesc());
@@ -244,7 +252,9 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 				String ref = entity.getDevName() + "->" + entity.getMmsRefAddr();
 				appendError("导入监控信息", "FCDA检查", ref, msg);
 			}
+			monitor.worked(1);
 		}
+		monitor.done();
 	}
 
 	@Override

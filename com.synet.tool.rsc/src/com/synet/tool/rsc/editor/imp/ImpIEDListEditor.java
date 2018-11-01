@@ -169,7 +169,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.setTaskName("正在导出");
+						monitor.beginTask("正在导出", ieds.size() + (ieds.size()/3));
 						List<Object> list = new ArrayList<>();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -203,6 +203,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 							entity.setProtModel(ied.getF1046protectModel());
 							entity.setProtType(ied.getF1046protectType());
 							list.add(entity);
+							monitor.worked(1);
 						}
 						long start = System.currentTimeMillis();
 						if (list.size() > 0) {
@@ -211,6 +212,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 							exportTemplateExcel(fileName, "设备台账", vfields, list);
 						}
 						long time = (System.currentTimeMillis() - start) / 1000;
+						monitor.worked(ieds.size()/3);
 						monitor.setTaskName("导出耗时：" + time + "秒");
 						monitor.done();
 					}
@@ -237,13 +239,18 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		monitor.beginTask("正在导入数据...", list.size() * 2);
 		DictManager dictMgr = DictManager.getInstance();
 		for (IM101IEDListEntity entity : list) {
+			if (monitor.isCanceled()) {
+				break;
+			}
 			if (!entity.isOverwrite()) {
+				monitor.worked(1);
 				continue;
 			}
 			String devName = entity.getDevName();
@@ -273,6 +280,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				iedEntity.setF1046Model(entity.getDevType());
 				iedEntity.setF1046boardNum(0);
 			}
+			monitor.worked(1);
 			Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 			if (bayEntity != null) {
 				iedEntity.setF1042Code(bayEntity.getF1042Code());
@@ -295,7 +303,9 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			//更新
 			updateIEDIPs(iedEntity, entity);
 			entity.setMatched(DBConstants.MATCHED_OK);
+			monitor.worked(1);
 		}
+		monitor.done();
 	}
 
 	@Override

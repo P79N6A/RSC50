@@ -162,7 +162,8 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				InterruptedException {
 					IField[] vfields = getExportFields();
 					if (ieds != null && ieds.size() > 0) {
-						monitor.beginTask("开始导出", ieds.size());
+						int totalWork = ieds.size() * 4;
+						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
@@ -172,12 +173,15 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 							String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 							//导出虚端子部分
 							List<Object> vpList = getVpData(ied);
+							monitor.worked(1);
 							if (vpList.size() > 0) {
 								String fileName = filePath + "/" + ied.getF1046Name() + "开入信号映射表(虚端子部分)" + dateStr + ".xlsx";
 								exportTemplateExcel(fileName, "开入信号映射表", vfields, vpList);
 							}
+							monitor.worked(1);
 							//导出MMS部分
 							List<Object> mmsList = getMssData(ied);
+							monitor.worked(1);
 							if (mmsList.size() > 0) {
 								String fileName = filePath + "/" + ied.getF1046Name() + "开入信号映射表(MMS信号部分)" + dateStr + ".xlsx";
 								exportTemplateExcel(fileName, "开入信号映射表", vfields, mmsList);
@@ -228,14 +232,20 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doImport() {
+	protected void doImport(IProgressMonitor monitor) {
 		List<IM104StatusInEntity> list = (List<IM104StatusInEntity>) table.getInput();
 		if (list == null || list.size() <= 0)
 			return;
+		monitor.beginTask("正在导入数据...", list.size() * 2);
 		for (IM104StatusInEntity entity : list) {
+			if (monitor.isCanceled()) {
+				break;
+			}
 			String devName = entity.getDevName();
-			if (devName == null || !entity.isOverwrite())
+			if (devName == null || !entity.isOverwrite()) {
+				monitor.worked(1);
 				continue;
+			}
 			String pinRefAddr = entity.getPinRefAddr();
 			String devDesc = entity.getDevDesc();
 			devDesc = devName + ":" + devDesc;
@@ -254,6 +264,7 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				String msg = "开入虚端子参引不能为空:装置[" + devDesc+ "]";
 				appendError("导入开入信号", "虚端子检查", devName, msg);
 			}
+			monitor.worked(1);
 			String mmsRefAddr = entity.getMmsRefAddr();
 			if (!StringUtil.isEmpty(mmsRefAddr)) {
 				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(devName, mmsRefAddr);
@@ -270,7 +281,9 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				String msg = "MMS信号参引不能为空:装置[" + devDesc + "]";
 				appendError("导入开入信号", "FCDA检查", devName, msg);
 			}
+			monitor.worked(1);
 		}
+		monitor.done();
 	}
 
 	@Override
