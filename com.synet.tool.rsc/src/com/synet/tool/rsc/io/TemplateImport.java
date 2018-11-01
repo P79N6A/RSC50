@@ -34,6 +34,8 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.StatedataService;
@@ -287,17 +289,53 @@ public class TemplateImport implements IImporter{
 	}
 
 	private void savePin(Element elementPinEntity) {
-		String f1062RefAddr = elementPinEntity.attributeValue("f1062RefAddr");
 		String strapRefAddr = elementPinEntity.attributeValue("strapRefAddr");
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1016AddRef", strapRefAddr);
+		params.put("tb1046IedByF1046Code", tb1046IedEntity);
+		Tb1016StatedataEntity stateEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, params);
+		if(stateEntity == null) {
+			return;
+		}
+		Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) beanDao.getObject(Tb1064StrapEntity.class, "f1064Code", stateEntity.getParentCode());
+		String f1062RefAddr = elementPinEntity.attributeValue("f1062RefAddr");
+		String convChk1 = elementPinEntity.attributeValue("convChk1");
+		String convChk2 = elementPinEntity.attributeValue("convChk2");
 		Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(tb1046IedEntity.getF1046Name(), f1062RefAddr);
-		updateStateDataByRefAddr(strapRefAddr, pinEntity.getF1062Code());
+		if(pinEntity != null) {
+			if (strapEntity == null) {
+				System.err.println("压板为空：" + strapRefAddr);
+			}
+			pinEntity.setTb1064StrapByF1064Code(strapEntity);
+			Tb1063CircuitEntity circuitEntity = (Tb1063CircuitEntity) beanDao.getObject(Tb1063CircuitEntity.class, "tb1062PinByF1062CodePRecv", pinEntity);
+			Tb1061PoutEntity poutEntityChk1 = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), convChk1);
+			Tb1061PoutEntity poutEntityChk2 = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), convChk2);
+			circuitEntity.setTb1061PoutByF1061CodeConvChk1(poutEntityChk1);
+			circuitEntity.setTb1061PoutByF1061CodeConvChk2(poutEntityChk2);
+			beanDao.update(circuitEntity);
+			pinEntityService.update(pinEntity);
+		}
 	}
 
 	private void savePout(Element elementPoutEntity) {
-		String f1061RefAddr = elementPoutEntity.attributeValue("f1061RefAddr");
 		String strapRefAddr = elementPoutEntity.attributeValue("strapRefAddr");
+		Map<String, Object> params = new HashMap<>();
+		params.put("f1016AddRef", strapRefAddr);
+		params.put("tb1046IedByF1046Code", tb1046IedEntity);
+		Tb1016StatedataEntity stateEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, params);
+		if(stateEntity == null) {
+			return;
+		}
+		Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) beanDao.getObject(Tb1064StrapEntity.class, "f1064Code", stateEntity.getParentCode());
+		String f1061RefAddr = elementPoutEntity.attributeValue("f1061RefAddr");
 		Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), f1061RefAddr);
-		updateStateDataByRefAddr(strapRefAddr, poutEntity.getF1061Code());
+		if(poutEntity != null) {
+			if (strapEntity == null) {
+				System.err.println("压板为空：" + strapRefAddr);
+			}
+			poutEntity.setTb1064StrapByF1064Code(strapEntity);
+			poutEntityService.update(poutEntity);
+		}
 	}
 
 	private void savePort(Tb1047BoardEntity boardEntity, Element elementPortEntity) {

@@ -541,8 +541,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	}
 	@Override
 	protected String getTb1052Sql() {
-		return "INSERT INTO TB1052_CORE(F1052_CODE,F1052_PARENT_CODE,F1052_TYPE,F1052_NO,F1048_CODE_A,F1048_CODE_B)" +
-				" VALUES (?,?,?,?,?,?)";
+		return "INSERT INTO TB1052_CORE(F1052_CODE,F1052_PARENT_CODE,F1052_TYPE,F1052_NO,F1048_CODE_A,F1048_CODE_B,F1053_CODE)" +
+				" VALUES (?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -555,6 +555,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1052No());
 		setSring(preState, index++, entity.getF1048CodeA());
 		setSring(preState, index++, entity.getF1048CodeB());
+		setSring(preState, index++, entity.getTb1053ByF1053Code().getF1053Code());
 	}
 	
 	@Override
@@ -582,7 +583,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1054Sql() {
-		return "INSERT INTO TB1054_RCB(F1054_CODE,F1046_CODE,F1054_RPTID,F1054_DATASET,F1054_DSDESC," +
+		return "INSERT INTO TB1054_RCB(F1054_CODE,F1046_CODE,F1054_RPTRef,F1054_DATASET,F1054_DSDESC," +
 				"F1054_ISBRCB,F1054_CBTYPE) VALUES (?,?,?,?,?,?,?)";
 	}
 	
@@ -605,7 +606,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1055Sql() {
-		return "INSERT INTO TB1055_GCB(F1055_CODE,F1046_CODE,F1055_CBNAME,F1055_CBID,F1055_MACADDR,F1055_VLANID,F1055_VLANPRIORITY,F1055_APPID," +
+		return "INSERT INTO TB1055_GCB(F1055_CODE,F1046_CODE,F1055_CBNAME,F1055_CBRef,F1055_MACADDR,F1055_VLANID,F1055_VLANPRIORITY,F1055_APPID," +
 				"F1055_DATASET,F1055_DESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	
@@ -632,7 +633,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1056Sql() {
-		return "INSERT INTO TB1056_SVCB(F1056_CODE,F1046_CODE,F1056_CBNAME,F1056_CBID,F1056_MACADDR,F1056_VLANID,F1056_VLANPRIORITY,F1056_APPID,F1056_DATASET," +
+		return "INSERT INTO TB1056_SVCB(F1056_CODE,F1046_CODE,F1056_CBNAME,F1056_CBRef,F1056_MACADDR,F1056_VLANID,F1056_VLANPRIORITY,F1056_APPID,F1056_DATASET," +
 				"F1056_DESC,F1071_CODE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	

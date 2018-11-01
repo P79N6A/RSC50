@@ -5,6 +5,7 @@ package com.synet.tool.rsc.model;
  */
 public class Tb1052CoreEntity {
     private String f1052Code;
+    private Tb1053PhysconnEntity tb1053ByF1053Code;
     private String parentCode;
     private int f1052Type;
     private Integer f1052No;
@@ -21,7 +22,7 @@ public class Tb1052CoreEntity {
         this.f1052Code = f1052Code;
     }
 
-    public String getParentCode() {
+	public String getParentCode() {
         return parentCode;
     }
 
@@ -56,6 +57,7 @@ public class Tb1052CoreEntity {
         if (tb1048PortByF1048CodeA != null ? !tb1048PortByF1048CodeA.equals(that.tb1048PortByF1048CodeA) : that.tb1048PortByF1048CodeA != null) return false;
         if (tb1048PortByF1048CodeB != null ? !tb1048PortByF1048CodeB.equals(that.tb1048PortByF1048CodeB) : that.tb1048PortByF1048CodeB != null) return false;
         if (f1052Code != null ? !f1052Code.equals(that.f1052Code) : that.f1052Code != null) return false;
+        if (tb1053ByF1053Code != null ? !tb1053ByF1053Code.equals(that.tb1053ByF1053Code) : that.tb1053ByF1053Code != null) return false;
         if (f1052No != null ? !f1052No.equals(that.f1052No) : that.f1052No != null) return false;
         if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
 
@@ -70,6 +72,7 @@ public class Tb1052CoreEntity {
         result = 31 * result + (f1052No != null ? f1052No.hashCode() : 0);
         result = 31 * result + (tb1048PortByF1048CodeA != null ? tb1048PortByF1048CodeA.hashCode() : 0);
         result = 31 * result + (tb1048PortByF1048CodeB != null ? tb1048PortByF1048CodeB.hashCode() : 0);
+        result = 31 * result + (tb1053ByF1053Code != null ? tb1053ByF1053Code.hashCode() : 0);
         return result;
     }
 
@@ -104,6 +107,14 @@ public class Tb1052CoreEntity {
     public void setTb1050CubicleByParentCode(Tb1050CubicleEntity tb1050CubicleByParentCode) {
         this.tb1050CubicleByParentCode = tb1050CubicleByParentCode;
     }
+
+	public Tb1053PhysconnEntity getTb1053ByF1053Code() {
+		return tb1053ByF1053Code;
+	}
+
+	public void setTb1053ByF1053Code(Tb1053PhysconnEntity tb1053ByF1053Code) {
+		this.tb1053ByF1053Code = tb1053ByF1053Code;
+	}
 
 	public String getF1048CodeA() {
 		return tb1048PortByF1048CodeA==null ? "" : tb1048PortByF1048CodeA.getF1048Code();

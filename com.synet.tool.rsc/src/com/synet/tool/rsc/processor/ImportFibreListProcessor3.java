@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.shrcn.found.ui.view.ConsoleManager;
-import com.shrcn.found.ui.view.LEVEL;
-import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.common.valid.DataTypeChecker;
+import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.found.ui.view.LEVEL;
+import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
@@ -25,7 +25,6 @@ import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
 import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
-import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.service.CableEntityService;
 import com.synet.tool.rsc.service.CoreEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
@@ -99,7 +98,7 @@ public class ImportFibreListProcessor3 {
 	}
 	
 	//处理物理回路
-	private void addPhyconn(Tb1048PortEntity portEntityA, Tb1048PortEntity portEntityB) {
+	private Tb1053PhysconnEntity addPhyconn(Tb1048PortEntity portEntityA, Tb1048PortEntity portEntityB) {
 		Tb1053PhysconnEntity physconnEntity = new Tb1053PhysconnEntity();
 		physconnEntity.setF1041Code(substation.getF1041Code());
 		physconnEntity.setTb1048PortByF1048CodeA(portEntityA);
@@ -112,6 +111,7 @@ public class ImportFibreListProcessor3 {
 			physconnEntity.setF1053Code(rscp.nextTbCode(DBConstants.PR_PHYSCONN));
 		}
 		physconnEntitieList.add(physconnEntity);
+		return physconnEntity;
 	}
 
 	//处理光缆数据
@@ -236,6 +236,9 @@ public class ImportFibreListProcessor3 {
 		}
 		//端口检查通过则通过
 		entity.setMatched(DBConstants.MATCHED_OK);
+
+		//处理物理回路
+		Tb1053PhysconnEntity phyconn = addPhyconn(portEntityA, portEntityB);
 		
 		//处理屏柜A跳线
 		Tb1048PortEntity portEntityAA = portEntityService.getPortEntity(entity.getDistribFrameCodeA(), "X1", entity.getDistribFramePortNoA());
@@ -248,6 +251,7 @@ public class ImportFibreListProcessor3 {
 			} else {
 				Tb1052CoreEntity coreEntityA = createCore(coreCodeA, portEntityA, portEntityAA, cubicleEntityA);
 				if (coreEntityA != null) {
+					coreEntityA.setTb1053ByF1053Code(phyconn);
 					coreEntitieList.add(coreEntityA);
 				}
 			}
@@ -264,6 +268,7 @@ public class ImportFibreListProcessor3 {
 			} else {
 				Tb1052CoreEntity coreEntityB = createCore(coreCodeB, portEntityBB, portEntityB, cubicleEntityB);
 				if (coreEntityB != null) {
+					coreEntityB.setTb1053ByF1053Code(phyconn);
 					coreEntitieList.add(coreEntityB);
 				}
 			}
@@ -303,6 +308,7 @@ public class ImportFibreListProcessor3 {
 			}
 		}
 		if (coreEntity != null) {
+			coreEntity.setTb1053ByF1053Code(phyconn);
 			coreEntitieList.add(coreEntity);
 		} else {
 			String msg = "端口[" + portA + "]和[" + portB + "]之间无芯线连接。";
@@ -310,8 +316,6 @@ public class ImportFibreListProcessor3 {
 			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", devNameA + " -> " + devNameB, msg));
 		}
 		
-		//处理物理回路
-		addPhyconn(portEntityA, portEntityB);
 	}
 
 	//创建芯线

@@ -18,6 +18,7 @@ import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
@@ -27,6 +28,7 @@ import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.BoardEntityService;
@@ -101,9 +103,7 @@ public class TemplateExport{
 		Element elementPouts = elementStraps.addElement("Pouts");
 		Element elementPins = elementStraps.addElement("Pins");
 		PoutEntityService poutEntityService = new PoutEntityService();
-		PinEntityService pinEntityService = new PinEntityService();
 		List<Tb1061PoutEntity> pouts = poutEntityService.getByIed(tb1046IedEntity);
-		List<Tb1062PinEntity> pins = pinEntityService.getByIed(tb1046IedEntity);
 		for (Tb1061PoutEntity pout : pouts) {
 			poutDataCodes.add(pout.getDataCode());
 			Tb1064StrapEntity strap = pout.getTb1064StrapByF1064Code();
@@ -114,13 +114,20 @@ public class TemplateExport{
 			elementPoutEntity.addAttribute("f1061RefAddr", pout.getF1061RefAddr());
 			addStrapRef(elementPoutEntity, strap);
 		}
-		for (Tb1062PinEntity pin : pins) {
+		List<Tb1063CircuitEntity> circuits = (List<Tb1063CircuitEntity>) BeanDaoImpl
+				.getInstance().getListByCriteria(Tb1063CircuitEntity.class, "tb1046IedByF1046CodeIedRecv", tb1046IedEntity);
+		for (Tb1063CircuitEntity circuit : circuits) {
+			Tb1062PinEntity pin = circuit.getTb1062PinByF1062CodePRecv();
 			Tb1064StrapEntity strap = pin.getTb1064StrapByF1064Code();
 			if (strap == null) {
 				continue;
 			}
 			Element elementPinEntity = elementPins.addElement("Tb1062PinEntity");
 			elementPinEntity.addAttribute("f1062RefAddr", pin.getF1062RefAddr());
+			if (circuit.getTb1061PoutByF1061CodeConvChk1() != null)
+				elementPinEntity.addAttribute("convChk1", circuit.getTb1061PoutByF1061CodeConvChk1().getF1061RefAddr());
+			if (circuit.getTb1061PoutByF1061CodeConvChk2() != null)
+				elementPinEntity.addAttribute("convChk2", circuit.getTb1061PoutByF1061CodeConvChk2().getF1061RefAddr());
 			addStrapRef(elementPinEntity, strap);
 		}
 		addDataTypes(elementIedEntity);

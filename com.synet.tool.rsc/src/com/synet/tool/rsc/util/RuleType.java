@@ -74,7 +74,7 @@ public enum RuleType {
 		dictmgr.addDict(dicttype, dicttype, dictF1011.toArray(new String[dictF1011.size()][]));
 		addDict(RSCConstants.DICT_IED_EVT, new RuleType[]{PROT_EVENT}, rulesMap);
 		addDict(RSCConstants.DICT_IED_MEAS, new RuleType[]{PROT_MS}, rulesMap);
-		addDict(RSCConstants.DICT_IED_PIN, new RuleType[]{IO_SIGNAL}, rulesMap);
+		addDict(RSCConstants.DICT_IED_PIN, new RuleType[]{IO_SIGNAL, PROT_SV, PROT_MS}, rulesMap);
 		addDict(RSCConstants.DICT_IED_POUT, new RuleType[]{EQP_STATE, IED_WARN, IO_SIGNAL, PROT_SV, IED_STATE}, rulesMap);
 		addDict(RSCConstants.DICT_IED_STATE, new RuleType[]{IED_STATE}, rulesMap);
 		addDict(RSCConstants.DICT_IED_YX, new RuleType[]{IED_YX}, rulesMap);

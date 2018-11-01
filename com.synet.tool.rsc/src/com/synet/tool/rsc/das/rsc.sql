@@ -287,6 +287,7 @@ create table TB1052_Core
    F1052_No             INT,
    F1048_CODE_A         varchar(48),
    F1048_CODE_B         varchar(48),
+   F1053_CODE           varchar(48),
    primary key (F1052_CODE)
 );
 

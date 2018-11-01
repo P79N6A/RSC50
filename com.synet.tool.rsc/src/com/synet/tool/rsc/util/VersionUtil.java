@@ -26,6 +26,10 @@ public class VersionUtil {
 			addTableColumn("TB1061_POUT", "Parent_CODE", "varchar(48)");
 			updateParentCode("TB1061_POUT", "Parent_CODE");
 		}
+		// core 增加 F1053_CODE
+		if (!existsColumn("TB1052_Core", "F1053_CODE")) {
+			addTableColumn("TB1052_Core", "F1053_CODE", "varchar(48)");
+		}
 	}
 
 	private static void updateMms() {
