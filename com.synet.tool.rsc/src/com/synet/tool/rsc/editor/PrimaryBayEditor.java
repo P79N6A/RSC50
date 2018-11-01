@@ -34,7 +34,6 @@ import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
@@ -369,7 +368,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	private void initTableSluiceStatus(int curComboSelIdx) {
 		if(DataUtils.listNotNull(comboDvData)) {
 			Tb1046IedEntity iedEntity = comboDvData.get(curComboSelIdx);
-			tableSluiceStatuData = getStateDataByIed(iedEntity);
+			tableSluiceStatuData = statedataService.getEqpStateByIed(iedEntity);
 			tableSluiceStatus.setInput(tableSluiceStatuData);
 		}
 	}
@@ -483,19 +482,5 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		}
 		tableCtvtsecondary.setInput(ctvtsecondaryEntities);
 		super.initData();
-	}
-
-	private List<Tb1016StatedataEntity> getStateDataByIed(
-			Tb1046IedEntity iedEntity) {
-		List<Tb1016StatedataEntity> statedataEntities = new ArrayList<>();
-		List<Tb1061PoutEntity> poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
-		if(DataUtils.listNotNull(poutEntities)) {
-			List<String> stateDataCodes = new ArrayList<>();
-			for (Tb1061PoutEntity tb1061PoutEntity : poutEntities) {
-				stateDataCodes.add(tb1061PoutEntity.getDataCode());
-			}
-			statedataEntities = statedataService.getStatedataByDataCodes(stateDataCodes);
-		}
-		return statedataEntities;
 	}
 }

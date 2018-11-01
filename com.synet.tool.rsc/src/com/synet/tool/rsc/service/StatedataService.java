@@ -1,11 +1,14 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.RuleType;
 
 public class StatedataService extends BaseService {
 	
@@ -67,4 +70,17 @@ public class StatedataService extends BaseService {
 
 	}
 
+	/**
+	 * 获取一次设备状态
+	 * @param iedEntity
+	 * @return
+	 */
+	public List<Tb1016StatedataEntity> getEqpStateByIed(Tb1046IedEntity iedEntity) {
+		String hql = "from " + Tb1016StatedataEntity.class.getName() + " where tb1046IedByF1046Code=:ied and f1011No between :min and :max";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("ied", iedEntity);
+		params.put("min", RuleType.EQP_STATE.getMin());
+		params.put("max", RuleType.EQP_STATE.getMax());
+		return (List<Tb1016StatedataEntity>) hqlDao.getListByHql(hql, params);
+	}
 }

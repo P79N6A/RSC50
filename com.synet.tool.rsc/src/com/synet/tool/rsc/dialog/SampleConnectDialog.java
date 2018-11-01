@@ -138,9 +138,9 @@ public class SampleConnectDialog extends WrappedDialog {
 	private void loadAnalogByIed(Tb1046IedEntity defSel) {
 		analogdataService = new AnalogdataService();
 //		if (btFilter.getSelection()) {
-//			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
+			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
 //		} else {
-			analogdataEntities = analogdataService.getAnologByIed(defSel);
+//			analogdataEntities = analogdataService.getAnologByIed(defSel);
 //		}
 		tableSample.setInput(analogdataEntities);
 	}
