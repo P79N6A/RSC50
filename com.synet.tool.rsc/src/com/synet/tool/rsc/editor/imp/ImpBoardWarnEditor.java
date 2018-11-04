@@ -77,10 +77,11 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
 		
-		Composite btComp = SwtUtil.createComposite(container, btData, 5);
+		Composite btComp = SwtUtil.createComposite(container, btData, 6);
 		btAdd = SwtUtil.createPushButton(btComp, "添加", new GridData());
 		btDelete = SwtUtil.createPushButton(btComp, "删除", new GridData());
-		btExport = SwtUtil.createPushButton(btComp, "导出Excel", new GridData());
+		btExport = SwtUtil.createPushButton(btComp, "导出原始数据", new GridData());
+		btExportCfgData  = SwtUtil.createPushButton(btComp, "导出配置数据", new GridData());
 		btCheck = SwtUtil.createPushButton(btComp, "冲突检查", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入告警", new GridData());
 		
@@ -111,6 +112,8 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 					checkConflict();
 				} else if (obj == btImport) {
 					importData();
+				} else if (obj == btExportCfgData) {
+					exportProcessorData();
 				}
 			}
 		};
@@ -120,6 +123,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 		btExport.addSelectionListener(listener);
 		btCheck.addSelectionListener(listener);
 		btImport.addSelectionListener(listener);
+		btExportCfgData.addSelectionListener(listener);
 		
 //		titleList.addSelectionListener(new SelectionAdapter() {
 //			@Override
