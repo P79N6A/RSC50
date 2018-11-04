@@ -87,6 +87,7 @@
         <mapping resource="com/synet/tool/rsc/hbm/IM107TerStrapEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/IM108BrkCfmEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/IM109StaInfoEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/IM110LinkWarnEntity.hbm.xml"/>
 			
 	</session-factory>
 </hibernate-configuration>

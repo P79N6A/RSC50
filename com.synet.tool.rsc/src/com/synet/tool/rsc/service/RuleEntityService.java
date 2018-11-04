@@ -73,18 +73,19 @@ public class RuleEntityService {
 			String dataset = rcb.getF1054Dataset();
 			List<Tb1058MmsfcdaEntity> mmsFcdas = rcb.getTb1058MmsfcdasByF1054Code();
 			for (Tb1058MmsfcdaEntity mmsFcda : mmsFcdas) {
-				int f1058DataType = mmsFcda.getF1058DataType();
 				String dataCode = mmsFcda.getDataCode();
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
 				if (type != null) {
 					if (SclUtil.isStData(dataCode)) {
 						if (SclUtil.isStrap(dataset)) {
-							mmsfcdaService.updateStrapF1011No(dataCode, type.getId());
+							mmsfcdaService.saveStrapF1011No(dataCode, type.getId());
 						}
 						mmsfcdaService.updateStateF1011No(dataCode, type.getId());
 					} else if (SclUtil.isAlgData(dataCode)) {
 						mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 					}
+					mmsFcda.setF1058Type(type.getId());
+					beanDao.update(mmsFcda);
 				}
 			}
 		}

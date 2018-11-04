@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.shrcn.found.common.util.ObjectUtil;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -151,26 +152,34 @@ public class MmsfcdaService extends BaseService {
 		hqlDao.updateByHql(hql, params);
 	}
 	
-	public void updateStrapF1011No(String dataCode, int typeId) {
+	public void saveStrapF1011No(String dataCode, int typeId) {
 		Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", dataCode);
-		if (typeId == statedataEntity.getF1011No()) {
+		if (statedataEntity == null)
 			return;
+		Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) beanDao.getObject(Tb1064StrapEntity.class, "f1064Code", statedataEntity.getParentCode());
+		if (strapEntity == null) {
+			new StrapEntityService().addStrap(statedataEntity);
+		} else {
+			strapEntity.setF1064Type(typeId);
+			beanDao.update(strapEntity);
 		}
-		String hql = "update " + Tb1064StrapEntity.class.getName() + " set f1064Type=:f1064Type where f1064Code=:f1064Code";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("f1064Type", typeId);
-		params.put("f1064Code", statedataEntity.getParentCode());
-		hqlDao.updateByHql(hql, params);
 	}
 	
-	public void updateWarnParent(Object warnObj, String parendCode) {
-		String dataCode = (String) ObjectUtil.getProperty(warnObj, "dataCode");
-		StatedataService statedataService = new StatedataService();
-		Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(dataCode);
-		stateData.setParentCode(parendCode);
-		ObjectUtil.setProperty(warnObj, "parentCode", parendCode);
-		beanDao.update(stateData);
-		beanDao.update(warnObj);
+	public void updateWarnParent(Object objMms, String parendCode) {
+		String dataCode = (String) ObjectUtil.getProperty(objMms, "dataCode");
+		if (SclUtil.isStData(dataCode)) {
+			StatedataService statedataService = new StatedataService();
+			Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(dataCode);
+			stateData.setParentCode(parendCode);
+			beanDao.update(stateData);
+		} else {
+			AnalogdataService analogdataService = new AnalogdataService();
+			Tb1006AnalogdataEntity anolog = analogdataService.getAnologByCodes(dataCode);
+			anolog.setParentCode(parendCode);
+			beanDao.update(anolog);
+		}
+		ObjectUtil.setProperty(objMms, "parentCode", parendCode);
+		beanDao.update(objMms);
 	}
 	
 }

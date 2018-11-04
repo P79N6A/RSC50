@@ -355,7 +355,7 @@ public class IedParserNew {
 				mmsFcda.setDataCode(statedata.getF1016Code());
 				mmsFcda.setParentCode(statedata.getParentCode());
 				if (SclUtil.isStrap(datSet)) { // 添加压板
-					strapService.addStrap(statedata, fcdaDesc);
+					strapService.addStrap(statedata);
 				}
 			} else {
 				mmsFcda.setF1058DataType(DBConstants.DATA_MX);

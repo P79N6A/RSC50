@@ -8,6 +8,7 @@ import java.util.Map;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.RuleType;
@@ -20,10 +21,22 @@ public class PoutEntityService extends BaseService{
 	}
 	
 	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied) {
-		return getWarningData(ied, RuleType.IED_WARN);
+		return getByDataType(ied, RuleType.IED_WARN);
 	}
 	
-	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied, RuleType rtyp) {
+	public List<Tb1061PoutEntity> getStateData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.IED_STATE);
+	}
+	
+	public List<Tb1061PoutEntity> getDinData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.IED_YX);
+	}
+	
+	public List<Tb1061PoutEntity> getStrapData(Tb1046IedEntity iedEntity) {
+		return getByDataType(iedEntity, RuleType.STRAP);
+	}
+	
+	public List<Tb1061PoutEntity> getByDataType(Tb1046IedEntity ied, RuleType rtyp) {
 		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
 				"and f1061Type between :min and :max";
 		Map<String, Object> params = new HashMap<>();

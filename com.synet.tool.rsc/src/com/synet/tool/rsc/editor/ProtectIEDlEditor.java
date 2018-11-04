@@ -125,11 +125,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1048PortEntity> portEntities;
 	private List<Tb1059SgfcdaEntity> sgfcdaEntities;
 	private List<Tb1060SpfcdaEntity> spfcdaEntities;
-	private List<Tb1058MmsfcdaEntity> staEntities;
+	private List<?> staEntities;
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcAction;
 	private List<Tb1058MmsfcdaEntity> mmsfcdasProtcMeaQua;
-	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesRun;
-	private List<Tb1058MmsfcdaEntity> mmsfcdaEntitiesYx;
+	private List<?> mmsfcdaEntitiesRun;
+	private List<?> mmsfcdaEntitiesYx;
 	private List<?> mmsfcdaEntitiesQt;
 	private List<?> mmsfcdaEntities;
 	private List<Tb1047BoardEntity> boardEntities;
@@ -602,7 +602,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.PROTECT_BOARD:
 			if(reload || !DataUtils.listNotNull(staEntities)) {
 				//保护信息-保护压板
-				staEntities = mmsfcdaService.getStrapData(iedEntity);
+				if (isProtIED()) {
+					staEntities = mmsfcdaService.getStrapData(iedEntity);
+				} else {
+					staEntities = poutEntityService.getStrapData(iedEntity);
+				}
 				tableProtectPlate.setInput(staEntities);
 			}
 			break;
@@ -612,13 +616,21 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			break;
 		case RSCConstants.RUN_STATE:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesRun)) {
-				mmsfcdaEntitiesRun = mmsfcdaService.getStateData(iedEntity);
+				if (isProtIED()) {
+					mmsfcdaEntitiesRun = mmsfcdaService.getStateData(iedEntity);
+				} else {
+					mmsfcdaEntitiesRun = poutEntityService.getStateData(iedEntity);
+				}
 				tableRunState.setInput(mmsfcdaEntitiesRun);
 			}
 			break;
 		case RSCConstants.DEV_YX:
 			if(reload || !DataUtils.listNotNull(mmsfcdaEntitiesYx)) {
-				mmsfcdaEntitiesYx = mmsfcdaService.getDinData(iedEntity);
+				if (isProtIED()) {
+					mmsfcdaEntitiesYx = mmsfcdaService.getDinData(iedEntity);
+				} else {
+					mmsfcdaEntitiesYx = poutEntityService.getDinData(iedEntity);
+				}
 				tableYx.setInput(mmsfcdaEntitiesYx);
 			}
 			break;
@@ -745,7 +757,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	 */
 	private Composite createStrapCmp(Composite com) {
 		Composite cmpProtPlate = SwtUtil.createComposite(com, gridData, 1);
-		tableProtectPlate = TableFactory.getProtectBoardTable(cmpProtPlate);
+		tableProtectPlate = isProtIED() ? TableFactory.getProtectBoardTable(cmpProtPlate)
+				: TableFactory.getProtectBoardSubTable(cmpProtPlate);
 		tableProtectPlate.getTable().setLayoutData(gridData);
 		return cmpProtPlate;
 	}
@@ -839,7 +852,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createRunStateCmp(Composite com) {
 		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
-		tableRunState = TableFactory.getRunStateTable(cmpRunState);
+		tableRunState = isProtIED() ? TableFactory.getRunStateTable(cmpRunState) : 
+			TableFactory.getRunStateSubTable(cmpRunState);
 		tableRunState.getTable().setLayoutData(gridData);
 		return cmpRunState;
 	}
@@ -852,7 +866,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createDevYxCmp(Composite com) {
 		Composite cmpRunState = SwtUtil.createComposite(com, gridData, 1);
 		cmpRunState.setLayout(SwtUtil.getGridLayout(1));
-		tableYx = TableFactory.getDeviceYxTable(cmpRunState);
+		tableYx = isProtIED() ? TableFactory.getDeviceYxTable(cmpRunState) : 
+			TableFactory.getDeviceYxSubTable(cmpRunState);
 		tableYx.getTable().setLayoutData(gridData);
 		return cmpRunState;
 	}

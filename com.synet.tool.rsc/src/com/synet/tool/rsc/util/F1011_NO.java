@@ -3,6 +3,7 @@ package com.synet.tool.rsc.util;
 import java.util.List;
 
 import com.shrcn.found.common.util.StringUtil;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.io.scd.SclUtil;
 
 
@@ -28,6 +29,7 @@ public class F1011_NO {
 	public static final Rule MX_R19 = getRuleById(700); // 保护测量量
 	public static final Rule POUT_R19 = getRuleById(800); // 开出虚端子
 	public static final Rule STATE_R19 = getRuleById(900); // 装置运行工况信号
+	public static final Rule OTHERS = getRuleById(RSCConstants.OTHERS_ID); // 装置运行工况信号
 	
 	public static Rule getType(String dataset, String f1058RefAddr, String doDesc, Rule[] types) {
 		String lnName = SclUtil.getLnName(f1058RefAddr);
@@ -105,7 +107,8 @@ public class F1011_NO {
 			return typeNullDesc;
 		}
 		if ((type == null)) {
-			type = getDefault(datSet, fc);
+//			type = getDefault(datSet, fc);
+			type = OTHERS;
 		}
 		return type;
 	}

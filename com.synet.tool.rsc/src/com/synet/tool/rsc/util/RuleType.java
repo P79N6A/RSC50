@@ -86,7 +86,10 @@ public enum RuleType {
 		DictManager dictmgr = DictManager.getInstance();
 		List<String[]> dictRules = new ArrayList<>();
 		for (RuleType rtyp : rtyps) {
-			dictRules.addAll(rulesMap.get(rtyp));
+			List<String[]> list = rulesMap.get(rtyp);
+			if (list != null) {
+				dictRules.addAll(list);
+			}
 		}
 		String[] dictOthers = new String[] {RSCConstants.OTHERS_ID+"", RSCConstants.OTHERS_NAME};
 		dictRules.add(dictOthers);

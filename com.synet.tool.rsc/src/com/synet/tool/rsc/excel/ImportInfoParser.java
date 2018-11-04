@@ -21,6 +21,7 @@ import com.synet.tool.rsc.excel.handler.BrkCfmHandler;
 import com.synet.tool.rsc.excel.handler.FibreListHandler;
 import com.synet.tool.rsc.excel.handler.IEDBoardHandler;
 import com.synet.tool.rsc.excel.handler.IEDListHandler;
+import com.synet.tool.rsc.excel.handler.LinkWarnHandler;
 import com.synet.tool.rsc.excel.handler.NewFibreListHandler;
 import com.synet.tool.rsc.excel.handler.PortLightHandler;
 import com.synet.tool.rsc.excel.handler.RscSheetHandler;
@@ -252,6 +253,8 @@ public class ImportInfoParser {
 			return new BrkCfmHandler(headRowNum, excelColInfo);
 		case ExcelConstants.IM109_STA_INFO:
 			return new StaInfoHandler(headRowNum, excelColInfo);
+		case ExcelConstants.IM110_LINK_WARN:
+			return new LinkWarnHandler(headRowNum, excelColInfo);
 		default:
 			return null;
 		}
@@ -289,6 +292,9 @@ public class ImportInfoParser {
 			break;
 		case ExcelConstants.IM109_STA_INFO:
 			fileInfoEntity.setFileType(DBConstants.FILE_TYPE109);
+			break;
+		case ExcelConstants.IM110_LINK_WARN:
+			fileInfoEntity.setFileType(DBConstants.FILE_TYPE110);
 			break;
 		default:
 			break;

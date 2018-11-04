@@ -10,6 +10,8 @@ public class Tb1065LogicallinkEntity {
     private String f1065Code;
     private String f1046CodeIedRecv;
     private String f1046CodeIedSend;
+    private String circuits;
+    private String phyconns;
     private int f1065Type;
     private BaseCbEntity baseCbByCdCode;
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
@@ -24,7 +26,23 @@ public class Tb1065LogicallinkEntity {
         this.f1065Code = f1065Code;
     }
 
-    public int getF1065Type() {
+    public String getCircuits() {
+		return circuits;
+	}
+
+	public void setCircuits(String circuits) {
+		this.circuits = circuits;
+	}
+
+	public String getPhyconns() {
+		return phyconns;
+	}
+
+	public void setPhyconns(String phyconns) {
+		this.phyconns = phyconns;
+	}
+
+	public int getF1065Type() {
         return f1065Type;
     }
 

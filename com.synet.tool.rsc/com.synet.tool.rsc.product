@@ -7,9 +7,8 @@
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-Xms512m -Xmx1024m</vmArgs>
+      <vmArgs>-Xms512m -Xmx1024m -XX:PermSize=64M -XX:MaxPermSize=128m -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.region=CN</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
-      <vmArgsWin>-Xms512m -Xmx1024m -XX:PermSize=64M -XX:MaxPermSize=128m -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.region=CN</vmArgsWin>
    </launcherArgs>
 
    <windowImages i16="/com.synet.tool.rsc/icons/ied16.gif" i32="/com.synet.tool.rsc/icons/ied32.gif"/>

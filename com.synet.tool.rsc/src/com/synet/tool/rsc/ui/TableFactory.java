@@ -16,6 +16,7 @@ public class TableFactory {
 	public static final String PROTECT_SAM_TABLE  			= "ProtectSampleTalbe"; // 采样值
 	public static final String SWITCH_STATUS_TABLE  		= "SwitchStatusTable"; // 开关状态-开关
 	public static final String SLUICE_STATUS_TABLE  		= "SluiceStatusTable"; // 开关状态-状态
+	
 	public static final String REGION_LIST_TABLE  			= "RegionListTable"; // 区域
 	public static final String CUBICLE_TABLE                = "CubicleTable"; 	// 屏柜
 	public static final String CABLE_TABLE                  = "CableTable";		// 光缆
@@ -24,6 +25,7 @@ public class TableFactory {
 	public static final String IOTERM_TABLE 				= "IOTermTable"; 	// 安措-重合回路闭锁
 	public static final String POWERKK_TABLE 				= "PowerKKTable"; 	// 安措-装置电源空开
 	public static final String VOLTAGEKK_TABLE 				= "VoltageKKTable"; // 安措-保护电压回路空开
+	
 	public static final String ICD_TABLE 					= "IcdTable";
 	public static final String IEDACCOUNT_TABLE 			= "IEDAccountTable";
 	public static final String CTVT_POUT_TABLE 				= "CtvtPoutTable";
@@ -34,21 +36,27 @@ public class TableFactory {
 	public static final String IED_CHOOSE_TABLE             = "IedChooseTable";
 	public static final String CTVT_CHOOSE_TABLE            = "CtvtChooseTable";
 	public static final String GATHER_TABLE 				= "GatherTable";
+	// 保护信息模型配置
 	public static final String BOARD_PORT_TABLE 			= "BoardPortTable";
 	public static final String PROTECT_PORT_TABLE 			= "ProtectValueTable"; // 保护定值
 	public static final String PROTECT_PARAM_TABLE 			= "ProtectParamTable"; // 保护参数
-	public static final String PROTECT_BOARD_TABLE 			= "ProtectBoardTable"; // 保护压板
+	public static final String PROTECT_BOARD_TABLE 			= "ProtectBoardTable"; // 保护压板-保护
+	public static final String PROTECT_BOARD_SUB_TABLE 		= "ProtectBoardSubTable"; // 保护压板-合并智能终端
 	public static final String PROTECT_ACTION_TABLE 		= "ProtectActionTable"; // 保护动作
 	public static final String PROTECT_QUANT_TABLE 			= "ProtectMeaQuantityTable"; // 保护测量量
 	public static final String DEVICE_WARN_TABLE 			= "DeviceWarnTable";
 	public static final String DEVICE_SUB_WARN_TABLE 		= "DeviceSubWarnTable";
 	public static final String RUN_STATE_TABLE 				= "RunStateTable";
+	public static final String RUN_STATE_SUB_TABLE 			= "RunStateSubTable";
 	public static final String DEVICE_YX_TABLE 				= "DeviceYxTable";
+	public static final String DEVICE_YX_SUB_TABLE 			= "DeviceYxSubTable";
 	public static final String DEVICE_QT_TABLE 				= "DeviceQtTable";
 	public static final String DEVICE_QTSUB_TABLE 			= "DeviceQtSubTable";
 	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
 	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
 	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";	// 逻辑链路
+	public static final String CIRCUITS_VIEW_TABLE 			= "CircuitsViewTable";	// 虚回路
+	public static final String PYHCONNS_VIEW_TABLE 			= "PhyConnsViewTable";	// 物理回路
 	public static final String ANALOG_CHN_TABLE 			= "AnalogChnTable";
 	public static final String CRITER_CHN_TABLE 			= "CriteriaChnTable";
 	
@@ -62,6 +70,7 @@ public class TableFactory {
 	public static String FIBRE_LIST_TABLE                   = "FibreListTable";
 	public static String IED_BOARD_TABLE                    = "IEDBoardTable";
 	public static String STATUS_IN_TABLE                    = "StatusInTable";
+	public static String LINK_WARN_TABLE                    = "LinkWarnTable";
 	public static String STA_INFO_TABLE                     = "StaInfoTable";
 	public static String PORT_LIGHT_YABLE                   = "PortLightTable";
 	public static String TER_STRAP_TABLE                    = "TerStrapTable";
@@ -123,8 +132,18 @@ public class TableFactory {
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
+	public static DevKTable getRunStateSubTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(RUN_STATE_SUB_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
 	public static DevKTable getDeviceYxTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_YX_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getDeviceYxSubTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(DEVICE_YX_SUB_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
@@ -153,6 +172,16 @@ public class TableFactory {
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
+	public static DevKTable getCircuitsViewTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(CIRCUITS_VIEW_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getPyhConnsViewTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PYHCONNS_VIEW_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
 	public static DevKTable getAnalogChnTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(ANALOG_CHN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
@@ -174,6 +203,11 @@ public class TableFactory {
 	
 	public static DevKTable getProtectBoardTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_BOARD_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getProtectBoardSubTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(PROTECT_BOARD_SUB_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
@@ -325,6 +359,11 @@ public class TableFactory {
 	
 	public static DevKTable getStatusInTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(STATUS_IN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getLinkWarnTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(LINK_WARN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

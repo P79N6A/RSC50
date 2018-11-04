@@ -13,7 +13,7 @@ public enum EnumEquipmentType {
 
 	CBR(1, "断路器"),
 	DIS(2, "刀闸"),
-	BUS(3, "母线"),
+	Busbar(3, "母线"),
 	PTR(4, "变压器"),
 	IFL(5, "线路"),
 	CTR(6, "电流互感器"),

@@ -15,11 +15,13 @@ import com.synet.tool.rsc.model.IM106PortLightEntity;
 import com.synet.tool.rsc.model.IM107TerStrapEntity;
 import com.synet.tool.rsc.model.IM108BrkCfmEntity;
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.model.IM110LinkWarnEntity;
 import com.synet.tool.rsc.processor.ImportBoardWarnProcessor;
 import com.synet.tool.rsc.processor.ImportBrkCfmProcessor;
 import com.synet.tool.rsc.processor.ImportFibreListProcessor3;
 import com.synet.tool.rsc.processor.ImportIEDBoardProcessor;
 import com.synet.tool.rsc.processor.ImportIEDListProcessor;
+import com.synet.tool.rsc.processor.ImportLinkWarnProcessor;
 import com.synet.tool.rsc.processor.ImportPortLightProcessor;
 import com.synet.tool.rsc.processor.ImportStaInfoProcessor;
 import com.synet.tool.rsc.processor.ImportStatusInProcessor;
@@ -99,6 +101,13 @@ public class ExcelImporter {
 					(List<IM109StaInfoEntity>) result.getResult());
 			monitor.worked(1);
 			break;
+		case ExcelConstants.IM110_LINK_WARN:
+			result = parser.getImportData(filePath, excelHeadRow, excelColInfo, ExcelConstants.IM110_LINK_WARN);
+			monitor.worked(1);
+			b = new ImportLinkWarnProcessor().processor(result.getFileInfoEntity(),
+					(List<IM110LinkWarnEntity>) result.getResult());
+			monitor.worked(1);
+			break;
 		default:
 			return false;
 		}
@@ -125,6 +134,8 @@ public class ExcelImporter {
 			return ExcelConstants.IM108_BRK_CFM_FIELDS;
 		case ExcelConstants.IM109_STA_INFO:
 			return ExcelConstants.IM109_STA_INFO_FIELDS;
+		case ExcelConstants.IM110_LINK_WARN:
+			return ExcelConstants.IM110_LINK_WARN_FIELDS;
 		default:
 			return null;
 		}

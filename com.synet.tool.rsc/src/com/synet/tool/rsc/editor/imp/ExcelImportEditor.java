@@ -77,8 +77,8 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	
 	@Override
 	public void init() {
-		iedEntityService = new IedEntityService();
 		super.init();
+		iedEntityService = new IedEntityService();
 	}
 
 	@Override
@@ -197,9 +197,6 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	}
 	
 	public void exportTemplateExcel(String fileName, String title, IField[] vfields, List<Object> list) {
-//		String fileName = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
-//		if (fileName == null)
-//			return;
 		long start = System.currentTimeMillis();
 		Map<String, String> mapTitle = new LinkedHashMap<String, String>();
 		mapTitle.put("key0", title);
@@ -208,7 +205,6 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		Map<String, String> mapTime = new LinkedHashMap<String, String>();
 		mapTime.put("printDate", StringUtil.getCurrentTime("yyyy年MM月dd日HH点mm分ss秒"));
 		
-//		IField[] vfields = getExportFields();
 		int fLen = vfields.length;
 		String[] fields = new String[fLen];
 		for (int i = 0; i < fields.length; i++) {

@@ -34,5 +34,6 @@
 		<handler source="com.synet.tool.rsc.editor.imp.ImpStaInfoEditor" />
 		<handler source="com.synet.tool.rsc.editor.imp.ImpStatusInEditor" />
 		<handler source="com.synet.tool.rsc.editor.imp.ImpTerStrapEditor" />
+		<handler source="com.synet.tool.rsc.editor.imp.ImpLinkWarnEditor" />
 	</category>
 </extension>

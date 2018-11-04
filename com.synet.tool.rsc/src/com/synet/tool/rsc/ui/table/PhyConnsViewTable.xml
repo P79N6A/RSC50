@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="PhyConnsViewTable" desc="物理回路查看列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1053PhysconnEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="发送装置" editor="none" name="tb1048PortByF1048CodeA.tb1047BoardByF1047Code.tb1046IedByF1046Code.f1046Name" datType="string" width="150" default=""/>
+  <field desc="发送板卡" editor="none" name="tb1048PortByF1048CodeA.tb1047BoardByF1047Code.f1047Slot" datType="string" width="100" default=""/>
+  <field desc="发送端口" editor="none" name="tb1048PortByF1048CodeA.f1048No" datType="string" width="100" default=""/>  
+  <field desc="接收装置" editor="none" name="tb1048PortByF1048CodeB.tb1047BoardByF1047Code.tb1046IedByF1046Code.f1046Name" datType="string" width="150" default=""/>
+  <field desc="接收板卡" editor="none" name="tb1048PortByF1048CodeB.tb1047BoardByF1047Code.f1047Slot" datType="string" width="100" default=""/>
+  <field desc="接收端口" editor="none" name="tb1048PortByF1048CodeB.f1048No" datType="string" width="100" default=""/>
+</table>

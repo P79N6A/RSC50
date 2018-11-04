@@ -184,7 +184,7 @@ public class NavigationView extends ANavigationView {
 	}
 
 	@Override
-	protected void exportProject() {
+	public void exportProject() {
 		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.SAVE, "*.data");
 		if (StringUtil.isEmpty(path)) {
 			return;
@@ -208,7 +208,7 @@ public class NavigationView extends ANavigationView {
 	}
 
 	@Override
-	protected void importProject() {
+	public void importProject() {
 		final String path = DialogHelper.selectFile(SwtUtil.getDefaultShell(), SWT.OPEN, "*.data");
 		if (StringUtil.isEmpty(path)) {
 			return;

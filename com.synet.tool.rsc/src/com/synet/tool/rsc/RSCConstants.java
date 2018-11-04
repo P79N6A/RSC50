@@ -11,6 +11,7 @@ public interface RSCConstants {
 //	String USR_DIR 	 	    = "D:/develop/eclipse-rcp-indigo-SR2-win32/eclipse" + separator;
 	String RSC_HB_CFG   	= "com/synet/tool/rsc/das/hibernate.rsccfg.xml";
 	String RSC_SQL      	= "com/synet/tool/rsc/das/rsc.sql";
+	String EXCEL_COMM_EXPORT_2007  	= "com/synet/tool/rsc/common.xlsx";
 
 	public static final String PLIN_CFG_FILE  = "com/sieyuan/tool/plin/plincfg.properties";
 	
@@ -48,6 +49,7 @@ public interface RSCConstants {
      String ET_IMP_STRAP	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpTerStrapEditor";
      String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
      String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
+     String ET_IMP_LINKW	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpLinkWarnEditor";
 	
      DictManager dictMgr = DictManager.getInstance();
      

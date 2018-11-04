@@ -12,7 +12,7 @@
   <Rule id="101" name="回路异常" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="102" name="链路中断信息" datSet="dsCommState/dsGOOSE" lnName="GGIO" doName="Alm" doDesc="断链"/>
   <Rule id="103" name="链路告警信号" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="104" name="SV异常" datSet="dsAlarm/dsWarning" lnName="" doName="Alm" doDesc="SV@告警|SMV@告警"/>
+  <Rule id="104" name="SV异常" datSet="dsAlarm/dsWarning" lnName="" doName="Alm" doDesc="SV@告警/SMV@告警"/>
   <Rule id="105" name="GOOSE异常" datSet="dsAlarm/dsWarning/dsGOOSE" lnName="" doName="Alm" doDesc="GOOSE@告警"/>
   <Rule id="106" name="物理回路中断" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="151" name="装置异常Warning" datSet="" lnName="" doName="" doDesc=""/>

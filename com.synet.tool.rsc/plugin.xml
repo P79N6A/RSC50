@@ -108,6 +108,7 @@
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="压板与虚端子关联表"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="跳合闸反校关联表"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="监控信息点表"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="告警与链路关联表"/>
 	       </menu>
        </menu>
        <menu id="menu.exp" text="导出">

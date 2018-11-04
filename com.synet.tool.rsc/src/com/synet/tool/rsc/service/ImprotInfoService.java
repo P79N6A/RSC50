@@ -14,6 +14,7 @@ import com.synet.tool.rsc.model.IM106PortLightEntity;
 import com.synet.tool.rsc.model.IM107TerStrapEntity;
 import com.synet.tool.rsc.model.IM108BrkCfmEntity;
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.model.IM110LinkWarnEntity;
 
 public class ImprotInfoService extends BaseService {
 	
@@ -94,6 +95,11 @@ public class ImprotInfoService extends BaseService {
 	@SuppressWarnings("unchecked")
 	public List<IM109StaInfoEntity> getStaInfoEntityList(IM100FileInfoEntity fileInfoEntity) {
 		return (List<IM109StaInfoEntity>) getFileItems(IM109StaInfoEntity.class, fileInfoEntity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IM110LinkWarnEntity> getLinkWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
+		return (List<IM110LinkWarnEntity>) getFileItems(IM110LinkWarnEntity.class, fileInfoEntity);
 	}
 
 	private List<?> getFileItems(Class<?> itemClass, IM100FileInfoEntity fileInfoEntity) {

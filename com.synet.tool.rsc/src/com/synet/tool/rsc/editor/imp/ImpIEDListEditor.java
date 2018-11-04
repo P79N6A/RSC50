@@ -122,38 +122,6 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		btExport.addSelectionListener(listener);
 		btCheck.addSelectionListener(listener);
 		btImport.addSelectionListener(listener);
-		
-//		titleList.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				String[] selects = titleList.getSelection();
-//				if (selects != null && selects.length > 0) {
-//					loadFileItems(selects[0]);
-//				}
-//			}
-//		});
-//		
-//		btExport.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				exportExcel();
-//			}
-//		});
-//		
-//		btCheck.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				//冲突检查
-//				checkConflict();
-//			}
-//		});
-//		
-//		btImport.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				importData();
-//			}
-//		});
 	}
 	
 	protected void exportExcel() {

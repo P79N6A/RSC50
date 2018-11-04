@@ -83,7 +83,7 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 							mmsFcda.setDataCode(statedata.getF1016Code());
 							mmsFcda.setParentCode(statedata.getParentCode());
 							if (isStrap(datSet)) { // 添加压板
-								strapService.addStrap(statedata, fcdaDesc);
+								strapService.addStrap(statedata);
 							}
 						} else {
 							mmsFcda.setF1058DataType(DBConstants.DATA_MX);

@@ -13,6 +13,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_IMP_IED;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_PORT;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_ST;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STA;
+import static com.synet.tool.rsc.RSCConstants.ET_IMP_LINKW;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
 import static com.synet.tool.rsc.RSCConstants.ET_PR_BAY;
@@ -232,6 +233,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry strapTermEntry = createConfigEntry(importEntry, "压板与虚端子关联表", "bay.gif", ET_IMP_STRAP, 7);
 		ConfigTreeEntry brkCfmEntry = createConfigEntry(importEntry, "跳合闸反校关联表", "bay.gif", ET_IMP_BRK, 8);
 		ConfigTreeEntry staInfoEntry = createConfigEntry(importEntry, "监控信息点表", "bay.gif", ET_IMP_STA, 9);
+		ConfigTreeEntry linkWarnEntry = createConfigEntry(importEntry, "告警与链路关联表", "bay.gif", ET_IMP_LINKW, 9);
 	}
 	
 	private ConfigTreeEntry createConfigEntry(ITreeEntry parent, String name, String icon, String editorId, int index) {

@@ -8,5 +8,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="链路类型" editor="none" name="f1065Type" dict="CB_Type" width="200" default=""/>
   <field desc="CB名称" editor="none" name="baseCbByCdCode.cbName" width="200" default=""/> 
   <field desc="发送装置" editor="none" name="tb1046IedByF1046CodeIedSend.f1046Name" width="250" default=""/>
-  <field desc="接收装置" editor="none" name="tb1046IedByF1046CodeIedRecv.f1046Name" width="150" default=""/>
+  <field desc="链路参引" editor="none" name="baseCbByCdCode.cbId" width="250" default=""/>
+  <field desc="虚回路" editor="CircuitsViewEditor" name="circuits" width="120" default=""/>
+  <field desc="物理回路" editor="PhyConnsViewEditor" name="phyconns" width="120" default=""/>
 </table>

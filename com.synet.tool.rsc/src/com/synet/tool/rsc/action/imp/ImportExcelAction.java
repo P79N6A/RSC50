@@ -13,6 +13,7 @@ import static com.synet.tool.rsc.ExcelConstants.IM106_PORT_LIGHT;
 import static com.synet.tool.rsc.ExcelConstants.IM107_TER_STRAP;
 import static com.synet.tool.rsc.ExcelConstants.IM108_BRK_CFM;
 import static com.synet.tool.rsc.ExcelConstants.IM109_STA_INFO;
+import static com.synet.tool.rsc.ExcelConstants.IM110_LINK_WARN;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRD;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRK;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_FIB;
@@ -22,6 +23,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_IMP_ST;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STA;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
+import static com.synet.tool.rsc.RSCConstants.ET_IMP_LINKW;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ import com.synet.tool.rsc.model.IM106PortLightEntity;
 import com.synet.tool.rsc.model.IM107TerStrapEntity;
 import com.synet.tool.rsc.model.IM108BrkCfmEntity;
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
+import com.synet.tool.rsc.model.IM110LinkWarnEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
 
 
@@ -74,24 +77,7 @@ public class ImportExcelAction extends BaseImportAction {
 		excelMap.put(IM107_TER_STRAP, ET_IMP_STRAP);
 		excelMap.put(IM108_BRK_CFM, ET_IMP_BRK);
 		excelMap.put(IM109_STA_INFO, ET_IMP_STA);
-//		String IM101_IED_LIST = "设备台账";
-//		String IM102_FIBRE_LIST ="光缆清册";
-//		String IM103_IED_BOARD = "装置板卡端口描述";
-//		String IM104_STATUS_IN = "开入信号映射表";
-//		String IM105_BOARD_WARN = "告警与板卡关联表";
-//		String IM106_PORT_LIGHT = "光强与端口关联表";
-//		String IM107_TER_STRAP = "压板与虚端子关联表";
-//		String IM108_BRK_CFM = "跳合闸反校关联表";
-//		String IM109_STA_INFO = "监控信息点表";
-//		String ET_IMP_IED		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpIEDListEditor";
-//	     String ET_IMP_FIB		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpFibreListEditor";
-//	     String ET_IMP_BRD		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpIEDBoardEditor";
-//	     String ET_IMP_ST		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStatusInEditor";
-//	     String ET_IMP_WRN		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBoardWarnEditor";
-//	     String ET_IMP_PORT		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpPortLightEditor";
-//	     String ET_IMP_STRAP	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpTerStrapEditor";
-//	     String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
-//	     String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
+		excelMap.put(IM110_LINK_WARN, ET_IMP_LINKW);
 	}
 			
 	public ImportExcelAction(String title) {
@@ -209,6 +195,9 @@ public class ImportExcelAction extends BaseImportAction {
 			break;
 		case DBConstants.FILE_TYPE109:
 			improtInfoService.deleteDataByFile(IM109StaInfoEntity.class, fileInfoEntity);
+			break;
+		case DBConstants.FILE_TYPE110:
+			improtInfoService.deleteDataByFile(IM110LinkWarnEntity.class, fileInfoEntity);
 			break;
 		default:
 			break;

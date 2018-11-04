@@ -1,10 +1,18 @@
 package com.synet.tool.rsc.util;
 
+import java.io.InputStream;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+
 import com.shrcn.tool.found.das.HqlDaoService;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.das.RscDbManagerImpl;
+import com.synet.tool.rsc.das.SessionRsc;
 
 public class VersionUtil {
 
@@ -13,8 +21,18 @@ public class VersionUtil {
 	public static void updateDB() {
 		updatePout();
 		updateMms();
+		updateExcelImp();
 	}
 	
+	private static void updateExcelImp() {
+		if (!existsTable("IM110_LINK_WARN")) {
+			Session _session = SessionRsc.getInstance().get();
+			Connection conn = _session.connection();
+			InputStream is = ProjectManager.class.getClassLoader().getResourceAsStream(DBConstants.patchSqlPath);
+			RscDbManagerImpl.getInstance().runScript(is, conn);
+		}
+	}
+
 	private static void updatePout() {
 		// pout 增加 f1061type
 		if (!existsColumn("TB1061_POUT", "F1061_TYPE")) {
@@ -27,8 +45,8 @@ public class VersionUtil {
 			updateParentCode("TB1061_POUT", "Parent_CODE");
 		}
 		// core 增加 F1053_CODE
-		if (!existsColumn("TB1052_Core", "F1053_CODE")) {
-			addTableColumn("TB1052_Core", "F1053_CODE", "varchar(48)");
+		if (!existsColumn("TB1052_CORE", "F1053_CODE")) {
+			addTableColumn("TB1052_CORE", "F1053_CODE", "varchar(48)");
 		}
 	}
 
@@ -40,6 +58,12 @@ public class VersionUtil {
 		}
 	}
 	
+	/**
+	 * 是否存在指定字段
+	 * @param tbName
+	 * @param colName
+	 * @return
+	 */
 	private static boolean existsColumn(String tbName, String colName) {
 		String sql = "SELECT t.TABLENAME, c.COLUMNNAME FROM SYS.SYSTABLES t, SYS.SYSCOLUMNS c WHERE c.REFERENCEID = t.TABLEID AND t.TABLENAME = '" + 
 						tbName + "'";
@@ -47,6 +71,25 @@ public class VersionUtil {
 		boolean exists = false;
 		for (Map<String, Object> column : columns) {
 			if (colName.equalsIgnoreCase(column.get("COLUMNNAME").toString())) {
+				exists = true;
+				break;
+			}
+		}
+		return exists;
+	}
+	
+	/**
+	 * 是否存在指定表
+	 * @param tbName
+	 * @param colName
+	 * @return
+	 */
+	private static boolean existsTable(String tbName) {
+		String sql = "SELECT t.TABLENAME FROM SYS.SYSTABLES t";
+		List<Map<String, Object>> columns = (List<Map<String, Object>>) hqlDao.getQueryResultToListMap(sql, null);
+		boolean exists = false;
+		for (Map<String, Object> column : columns) {
+			if (tbName.equalsIgnoreCase(column.get("TABLENAME").toString())) {
 				exists = true;
 				break;
 			}

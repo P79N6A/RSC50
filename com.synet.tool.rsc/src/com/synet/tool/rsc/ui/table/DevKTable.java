@@ -7,8 +7,10 @@ import java.util.Map;
 
 import net.sf.excelutils2007.ExcelUtils;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.business.scl.table.VTViewTable;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.UICommonConstants;
@@ -18,6 +20,7 @@ import com.shrcn.found.ui.table.DefaultKTable;
 import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
@@ -58,11 +61,29 @@ public class DevKTable extends RKTable {
 			public void cellSelected(int row, int col, int mask) {
 			}
 		});
+		actions.add(new ExcelExportAction(this));
+	}
+	
+	class ExcelExportAction extends Action {
+		DevKTable table;
+		public ExcelExportAction(DevKTable table) {
+			setText("导出&Excel");
+			this.table = table;
+		}
+		@Override
+		public void run() {
+//			table.exportExcel(table.getTableDesc());
+			table.exportExcel2007();
+		}
 	}
 	
 	/**
 	 * 重写父类导出Excel方法，改为导出.xlsx格式
 	 */
+	public boolean exportExcel2007() {
+		return exportExcel2007(getTableDesc());
+	}
+	
 	public boolean exportExcel2007(String title) {
 		String fileName = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
 		if (fileName == null) {
@@ -91,10 +112,12 @@ public class DevKTable extends RKTable {
 				for (int i=0; i<fLen; i++) {
 					IField f = vfields[i];
 					String fieldName = f.getName();
-					if ("index".equals(fieldName))
+					if ("index".equals(fieldName)) {
 						row[i] = "" + index;
-					else
-						row[i] = "" + ObjectUtil.getProperty(o, fieldName);
+					} else {
+						Object value = ObjectUtil.getProperty(o, fieldName);
+						row[i] = (value == null) ? "" : value.toString();
+					}
 				}
 				exportData.add(row);
 				index++;
@@ -107,7 +130,7 @@ public class DevKTable extends RKTable {
 		ExcelUtils.addValue("width", fLen - 1);
 		ExcelUtils.addValue("fields", fields);
 		ExcelUtils.addValue("data", exportData);
-		ExcelFileManager2007.saveExcelFile(getClass(), UICommonConstants.EXCEL_COMM_EXPORT_2007, fileName);
+		ExcelFileManager2007.saveExcelFile(getClass(), RSCConstants.EXCEL_COMM_EXPORT_2007, fileName);
 		return true;
 	}
 

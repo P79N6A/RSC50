@@ -48,8 +48,6 @@ public class RuleManager {
 			}
 		} 
 		
-		rules.clear();
-		rules.addAll(ruleList);
 		sortRules();
 		
 		DictManager dictmgr = DictManager.getInstance();

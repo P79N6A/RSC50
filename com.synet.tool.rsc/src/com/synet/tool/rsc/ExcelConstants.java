@@ -12,6 +12,7 @@ public interface ExcelConstants {
 	String IM107_TER_STRAP = "压板与虚端子关联表";
 	String IM108_BRK_CFM = "跳合闸反校关联表";
 	String IM109_STA_INFO = "监控信息点表";
+	String IM110_LINK_WARN = "告警与链路关联表";
 	//表字段信息
 	String IM101_DEV_NAME  = "装置Name";
 	String IM101_DEV_DESC  = "装置名称";
@@ -217,6 +218,21 @@ public interface ExcelConstants {
 			IM109_DEV_DESC,
 			IM109_REF_ADDR,
 			IM109_DESCRIPTION,
+	};
+	
+	String IM110_DEV_NAME = "装置Name";
+	String IM110_DEV_DESC  = "装置名称";
+	String IM110_REF_ADDR = "告警信息参引";
+	String IM110_DESCRIPTION = "告警信息描述";
+	String IM110_SEND_IED = "发送装置";
+	String IM110_CBREF = "CBRef";
+	String[] IM110_LINK_WARN_FIELDS = {
+			IM110_DEV_NAME,
+			IM110_DEV_DESC,
+			IM110_REF_ADDR,
+			IM110_DESCRIPTION,
+			IM110_SEND_IED,
+			IM110_CBREF,
 	};
 	
 	String PORT_TYPE_RX = "RX";//表示发送

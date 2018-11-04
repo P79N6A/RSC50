@@ -11,6 +11,7 @@ import com.shrcn.found.ui.table.RKTableModel;
 import com.synet.tool.rsc.dialog.BaySelectDialog;
 import com.synet.tool.rsc.dialog.CableByCubicleADialog;
 import com.synet.tool.rsc.dialog.CableByCubicleBDialog;
+import com.synet.tool.rsc.dialog.CircuitsViewDialog;
 import com.synet.tool.rsc.dialog.ConvChk1Dialog;
 import com.synet.tool.rsc.dialog.ConvChk2Dialog;
 import com.synet.tool.rsc.dialog.CtvtChooseDialog;
@@ -19,6 +20,7 @@ import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.LightRefAddrDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
+import com.synet.tool.rsc.dialog.PhyConnsViewDialog;
 import com.synet.tool.rsc.dialog.PinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PoutBaordEdtDialog;
 import com.synet.tool.rsc.io.scd.SclUtil;
@@ -26,10 +28,9 @@ import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
-import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.service.MmsfcdaService;
-import com.synet.tool.rsc.service.PoutEntityService;
+import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.util.RuleType;
 
@@ -40,13 +41,12 @@ public class DevKTableModel extends RKTableModel {
 	
 	private DefaultService defaultService;
 	private MmsfcdaService mmsService;
-	private PoutEntityService poutService;
+	private StrapEntityService strapEntityService;
 	
 	public DevKTableModel(DevKTable table, TableConfig config) {
 		super(table, config);
 		defaultService = new DefaultService();
 		mmsService = new MmsfcdaService();
-		poutService = new PoutEntityService();
 	}
 	
 	protected int getSize(String editor) {
@@ -95,7 +95,6 @@ public class DevKTableModel extends RKTableModel {
 	
 	@Override
 	protected KTableCellEditor getCustomEditor(String editor) {
-		
 		if("BaySelectEditor".equals(editor)) {
 			return new KTableDialogEditor(BaySelectDialog.class);
 		} else if("CubicleSelectEditor".equals(editor)) {
@@ -110,6 +109,10 @@ public class DevKTableModel extends RKTableModel {
 			return new KTableDialogEditor(ConvChk1Dialog.class);
 		} else if("ConvChk2Editor".equals(editor)) {
 			return new KTableDialogEditor(ConvChk2Dialog.class);
+		} else if("CircuitsViewEditor".equals(editor)) {
+			return new KTableDialogEditor(CircuitsViewDialog.class);
+		} else if("PhyConnsViewEditor".equals(editor)) {
+			return new KTableDialogEditor(PhyConnsViewDialog.class);
 		}
 		return super.getCustomEditor(editor);
 	}
@@ -118,39 +121,6 @@ public class DevKTableModel extends RKTableModel {
 	protected void saveCellValue(Object data, String property) {
 		if (!"overwrite".equals(property)) { // 更新
 			saveData(data);
-			// 处理数据类型修改
-			if (data instanceof Tb1058MmsfcdaEntity) {
-				if ("f1058Type".equals(property)) {
-					Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) data;
-					int type = mmsfcdaEntity.getF1058Type();
-					String dataCode = mmsfcdaEntity.getDataCode();
-					if (RuleType.STRAP.getMax()>=type && RuleType.STRAP.getMin()<=type) {
-						mmsService.updateStrapF1011No(dataCode, type);
-					}
-					if (SclUtil.isStData(dataCode)) {
-						mmsService.updateStateF1011No(dataCode, type);
-					} else if (SclUtil.isAlgData(dataCode)) {
-						mmsService.updateAnalogF1011No(dataCode, type);
-					}
-				}
-			} else if (data instanceof Tb1061PoutEntity) {
-				if ("f1061Type".equals(property)) {
-					Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) data;
-					String dataCode = poutEntity.getDataCode();
-					if (SclUtil.isStData(dataCode)) {
-						mmsService.updateStateF1011No(dataCode, poutEntity.getF1061Type());
-					} else if (SclUtil.isAlgData(dataCode)) {
-						mmsService.updateAnalogF1011No(dataCode, poutEntity.getF1061Type());
-					}
-				}
-			} else if (data instanceof Tb1063CircuitEntity) {
-				if ("tb1062PinByF1062CodePRecv.f1011No".equals(property)) {
-					Tb1063CircuitEntity circuit = (Tb1063CircuitEntity) data;
-					saveData(circuit.getTb1062PinByF1062CodePRecv());
-					int type = circuit.getTb1062PinByF1062CodePRecv().getF1011No();
-					System.out.println(type);
-				}
-			}
 		}
 		if (TableFactory.REGION_LIST_TABLE.equals(tableName)
 				&& "f1049Name".equals(property)) { // 区域名称
@@ -162,6 +132,53 @@ public class DevKTableModel extends RKTableModel {
 						reloadPrj();
 					}
 				});
+			}
+		}
+	}
+	
+	private boolean isStrapType(int type) {
+		return RuleType.STRAP.getMax()>=type && RuleType.STRAP.getMin()<=type;
+	}
+	
+	@Override
+	protected void updateRelations(Object data, String property,
+			Object oldValue, String newValue) {
+		// 处理数据类型修改
+		if (data instanceof Tb1058MmsfcdaEntity) {
+			if ("f1058Type".equals(property)) {
+				Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) data;
+				int type = mmsfcdaEntity.getF1058Type();
+				String dataCode = mmsfcdaEntity.getDataCode();
+				if (isStrapType(type)) {
+					mmsService.saveStrapF1011No(dataCode, type);
+				}
+				if (SclUtil.isStData(dataCode)) {
+					mmsService.updateStateF1011No(dataCode, type);
+				} else if (SclUtil.isAlgData(dataCode)) {
+					mmsService.updateAnalogF1011No(dataCode, type);
+				}
+			}
+		} else if (data instanceof Tb1061PoutEntity) {
+			if ("f1061Type".equals(property)) {
+				Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) data;
+				String dataCode = poutEntity.getDataCode();
+				int f1061Type = poutEntity.getF1061Type();
+				if (SclUtil.isStData(dataCode)) {
+					mmsService.updateStateF1011No(dataCode, f1061Type);
+				} else if (SclUtil.isAlgData(dataCode)) {
+					mmsService.updateAnalogF1011No(dataCode, f1061Type);
+				}
+				int oldType = Integer.parseInt(oldValue.toString());
+				if (isStrapType(f1061Type)) {
+					mmsService.saveStrapF1011No(dataCode, f1061Type);
+				} else if (isStrapType(oldType)) {
+					new StrapEntityService().removeStrap(poutEntity);
+				}
+			}
+		} else if (data instanceof Tb1063CircuitEntity) {
+			if ("tb1062PinByF1062CodePRecv.f1011No".equals(property)) {
+				Tb1063CircuitEntity circuit = (Tb1063CircuitEntity) data;
+				saveData(circuit.getTb1062PinByF1062CodePRecv());
 			}
 		}
 	}

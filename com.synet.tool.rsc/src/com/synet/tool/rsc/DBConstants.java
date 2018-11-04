@@ -57,6 +57,7 @@ public interface DBConstants {
 	String PR_IEDLIST		= "IEDList";
 	String PR_FIBRELIST		= "FibreList";
 	String PR_STAINFO		= "StaInfo";
+	String PR_LINKW			= "LinkWarn";
 	String PR_BRKCFM		= "BrkCfm";
 	String PR_TERSTRAP		= "TerStrap";
 	String PR_PORTLIGHT		= "PortLight";
@@ -137,6 +138,7 @@ public interface DBConstants {
 	int FILE_TYPE107 = 107;//压板与虚端子关联表
 	int FILE_TYPE108 = 108;//跳合闸反校关联表
 	int FILE_TYPE109 = 109;//监控信息点表
+	int FILE_TYPE110 = 110;//告警与链路关联表
 	
 	int DIRECTION_TX = 1; //表示发送
 	int DIRECTION_RX = 2; //表示接收
@@ -162,6 +164,7 @@ public interface DBConstants {
 	int DTYPE_PIN 	= 5; 	//输入虚端子
 
 	String sqlPath = "com/synet/tool/rsc/das/rsc-oracle.sql";
+	String patchSqlPath = "com/synet/tool/rsc/das/patch.sql";
 //	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.sql";
 //	String sqlPath = "com/synet/tool/rsc/das/ora_scada_script.txt";
 }
