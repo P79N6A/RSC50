@@ -22,6 +22,7 @@ import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
@@ -49,12 +50,14 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 
 	protected static final String CONFLICT = "conflict";
 	protected static final String OVERWITE = "overwrite";
+	protected static final String MATCHED = "matched";
 	protected IedEntityService iedEntityService;
 	protected ImprotInfoService improtInfoService;
 	protected Map<String, IM100FileInfoEntity> map;
 	protected org.eclipse.swt.widgets.List titleList;
 	protected Button btImport;
 	protected Button btExport;
+	protected Button btExportCfgData;
 	protected Button btCheck;
 	protected Button btAdd;
 	protected Button btDelete;
@@ -187,7 +190,8 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		IField[] fields = table.getExportFields();
 		if (fields != null) {
 			for (IField field : fields) {
-				if (CONFLICT.equals(field.getName()) || OVERWITE.equals(field.getName())) {
+				if (CONFLICT.equals(field.getName()) || OVERWITE.equals(field.getName())
+						|| MATCHED.equals(field.getName())) {
 					continue;
 				}
 				list.add(field);
@@ -362,6 +366,35 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		default:
 			break;
 		}
+	}
+	
+	//导出配置后的数据
+	@SuppressWarnings("unchecked")
+	protected void exportProcessorData() {
+		final String fileName = DialogHelper.getSaveFilePath("保存", "", new String[]{"*.xlsx"});
+		if (fileName == null) {
+			return;
+		}
+		final List<Object> list = (List<Object>) table.getInput();
+		if (list == null || list.size() <= 0) {
+			console.append("导出数据不能为空");
+			return;
+		}
+		ProgressManager.execute(new IRunnableWithProgress() {
+
+			@Override
+			public void run(final IProgressMonitor monitor)
+					throws InvocationTargetException, InterruptedException {
+				monitor.setTaskName("正在导出数据...");
+				try {
+					exportTemplateExcel(fileName, table.getTableDesc(), getExportFields(), list);
+				} catch (Exception e) {
+					console.append("导出失败！");
+				}
+
+			}
+
+		});
 	}
 	
 	private void addDbAndTable(Object obj) {

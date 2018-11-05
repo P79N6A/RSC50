@@ -6,10 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import org.apache.derby.iapi.services.io.FileUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -36,9 +35,67 @@ public class RuleManager {
 	private RuleManager() {
 		load();
 	}
-
-	public void modify(List<Rule> ruleList) {
+	
+	public boolean deleteRule(String fileName) {
+		File f = new File(Constants.cfgDir);
+		if (f.exists()) {
+			File[] listFiles = f.listFiles();
+			for (File file : listFiles) {
+				if(file.getName().equals(fileName)) {
+					if(file.isFile()) {
+						return file.delete();
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean copyRuleFile(String fileName) {
 		String path = Constants.cfgDir + "/rules.xml";
+		File f = new File(path);
+		if (!f.exists()) {
+			return false;
+		}
+		String newPath = Constants.cfgDir + File.separator + fileName;
+		File newf = new File(newPath);
+		if (!newf.exists()) {
+			boolean createNewFile;
+			try {
+				createNewFile = newf.createNewFile();
+				if(createNewFile) {
+					return FileUtil.copyFile(f, newf);
+				} else {
+					return createNewFile;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return false;
+		
+	}
+	
+	public String[] getRuleList() {
+		String path = Constants.cfgDir;
+		File f = new File(path);
+		List<String> fileNames = new ArrayList<>();
+		if(f.exists()) {
+			File[] listFiles = f.listFiles();
+			for (int i = 0; i < listFiles.length; i++) {
+				String name = listFiles[i].getName();
+				if(name.contains("rule")) {
+					fileNames.add(name);
+				}
+			}
+			
+		}
+		return fileNames.toArray(new String[fileNames.size()]);
+	}
+
+	public void modify(List<Rule> ruleList, String selName) {
+		String path = Constants.cfgDir + File.separator + selName;
 		File f = new File(path);
 		if (!f.exists()) {
 			try {
@@ -48,7 +105,8 @@ public class RuleManager {
 			}
 		} 
 		
-		sortRules();
+		rules.clear();
+		rules.addAll(ruleList);
 		
 		DictManager dictmgr = DictManager.getInstance();
 		String dicttype = F1011_NO.class.getSimpleName();
@@ -87,6 +145,22 @@ public class RuleManager {
 	
 	private void load() {
 		String path = Constants.cfgDir + "/rules.xml";
+		rules = paseRuleXml(path);
+	}
+	
+	public boolean reNameRuleFile(String oldName, String newName) {
+		String oldpath = Constants.cfgDir + File.separator + oldName;
+		File oldf = new File(oldpath);
+		if (!oldf.exists()) {
+			return false;
+		}
+		String newpath = Constants.cfgDir + File.separator + newName;
+		File newf = new File(newpath);
+		return oldf.renameTo(newf);
+	}
+
+	private List<Rule> paseRuleXml(String path) {
+		List<Rule> rulesData = new ArrayList<>();
 		File f = new File(path);
 		if (!f.exists()) {
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(RSCConstants.RULEURL);
@@ -104,9 +178,8 @@ public class RuleManager {
 			for (Element el : elements) {
 				Rule rule = new Rule();
 				DOM4JNodeHelper.copyAttributes(el, rule);
-				rules.add(rule);
+				rulesData.add(rule);
 			}
-			sortRules();
 		} catch (FileNotFoundException e) {
 			SCTLogger.error(e.getMessage());
 		} catch (IOException e) {
@@ -114,17 +187,23 @@ public class RuleManager {
 		} catch (DocumentException e) {
 			SCTLogger.error(e.getMessage());
 		}
+		return rulesData;
 	}
 	
-	private void sortRules() {
-		Collections.sort(rules, new Comparator<Rule>() {
-			@Override
-			public int compare(Rule r1, Rule r2) {
-				return r1.getId() - r2.getId();
-			}});
+	public List<Rule> getRulesByFileName(String fileName) {
+		String path = Constants.cfgDir + File.separator + fileName;
+		return paseRuleXml(path);
+	}
+	
+	public Rule getRule(int id) {
+		return rules.get(id);
 	}
 	
 	public List<Rule> getRules() {
-		return rules;
+		List<Rule> result = new ArrayList<>();
+		for (Rule rule : rules) {
+			result.add(rule);
+		}
+		return result;
 	}
 }

@@ -69,7 +69,8 @@ public class SelectRuleDialog extends WrappedDialog {
 					rulesSelect.add(rule);
 				}
 			}
-			RuleManager.getInstance().modify(rules);
+			//TODO
+			RuleManager.getInstance().modify(rules, "rules.xml");
 		}
 		super.buttonPressed(buttonId);
 	}

@@ -79,9 +79,11 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		Composite btComp = SwtUtil.createComposite(container, btData, 2);
+		Composite btComp = SwtUtil.createComposite(container, btData, 3);
 		btCheckAll = SwtUtil.createPushButton(btComp, "检查所有装置", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入板卡", new GridData());
+//		btExport = SwtUtil.createPushButton(btComp, "导出原始数据", new GridData());
+		btExportCfgData  = SwtUtil.createPushButton(btComp, "导出配置数据", new GridData());
 		tableComp = TableFactory.getIEDCompListTable(container);
 		tableComp.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
@@ -123,6 +125,12 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			public void widgetSelected(SelectionEvent e) {
 				importData();
 			}
+		});
+		
+		btExportCfgData.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {				
+				exportProcessorData();
+			};
 		});
 	}
 	

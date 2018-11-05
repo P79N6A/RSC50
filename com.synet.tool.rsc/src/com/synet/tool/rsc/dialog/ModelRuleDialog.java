@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.dialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -27,8 +28,11 @@ public class ModelRuleDialog extends WrappedDialog{
 	private Button btnAdd;
 	private Button btnDel;
 	private RuleTable table;
-	private List<Rule> ruleList;
 	private RuleManager ruleManager;
+	private org.eclipse.swt.widgets.List rules;
+	private Button btnAddRule;
+	private Button btnDelRule;
+	private Button btnReNameRule;
 
 	public ModelRuleDialog(Shell parentShell) {
 		super(parentShell);
@@ -38,12 +42,20 @@ public class ModelRuleDialog extends WrappedDialog{
 	protected Control createDialogArea(Composite parent) {
 		GridData griddata = new GridData(GridData.FILL_BOTH);
 		Composite composite = SwtUtil.createComposite(parent, griddata, 2);
-		btnAdd = SwtUtil.createButton(composite, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
-		btnDel = SwtUtil.createButton(composite, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
-		
+		GridData gdLeft = new GridData(260, GridData.FILL_HORIZONTAL);
+		Composite compLeft = SwtUtil.createComposite(composite, gdLeft, 3);
+		btnAddRule = SwtUtil.createButton(compLeft, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
+		btnDelRule = SwtUtil.createButton(compLeft, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
+		btnReNameRule = SwtUtil.createButton(compLeft, SwtUtil.bt_gd, SWT.BUTTON1, "重命名");
+		GridData gdLeft_3 = new GridData(260, GridData.FILL_HORIZONTAL);
+		gdLeft_3.horizontalSpan = 3;
+		rules = SwtUtil.createList(compLeft, gdLeft_3);
+		Composite compRight = SwtUtil.createComposite(composite, griddata, 2);
+		btnAdd = SwtUtil.createButton(compRight, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
+		btnDel = SwtUtil.createButton(compRight, SwtUtil.bt_gd, SWT.BUTTON1, "删除");
 		GridData griddata_2 = new GridData(GridData.FILL_BOTH);
 		griddata_2.horizontalSpan = 2;
-		table = TableFactory.getModelRuleTable(composite);
+		table = TableFactory.getModelRuleTable(compRight);
 		table.getTable().setLayoutData(griddata_2);
 		initData();
 		addListeners();
@@ -52,27 +64,77 @@ public class ModelRuleDialog extends WrappedDialog{
 	
 	private void initData() {
 		ruleManager = RuleManager.getInstance();
-		ruleList = ruleManager.getRules();
-		table.setInput(ruleList);
+		rules.setItems(ruleManager.getRuleList());
 	}
 
 	private void addListeners() {
 		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Button btn = (Button) e.getSource();
-				if(btn == btnAdd) {
+				Object obj =  e.getSource();
+				if(obj == btnAdd) {
 					table.insertRow(table.getDefaultRow());
-				} else if(btn == btnDel) {
+				} else if(obj == btnDel) {
 					table.removeSelected();
 					DialogHelper.showAsynInformation("删除成功");
+				} else if(obj == btnAddRule) {
+					RulesNameDialog rulesNameDialog = new RulesNameDialog(getShell());
+					if(rulesNameDialog.open() == IDialogConstants.OK_ID) {
+						String ruleName = rulesNameDialog.getRuleName();
+						boolean copyRuleFile = ruleManager.copyRuleFile(ruleName);
+						if(copyRuleFile) {
+							table.setInput(ruleManager.getRules());
+							rules.setItems(ruleManager.getRuleList());
+						} else {
+							DialogHelper.showAsynInformation("添加失败，文件复制出错");
+						}
+					}
+				} else if(obj == btnDelRule) {
+					int selIdx = rules.getSelectionIndex();
+					if(selIdx == -1) {
+						return;
+					}
+					String selName = rules.getItem(selIdx);
+					boolean deleteRule = ruleManager.deleteRule(selName);
+					if(deleteRule) {
+						table.setInput(new ArrayList<>());
+						rules.setItems(ruleManager.getRuleList());
+					}
+					
+				} else if(obj == btnReNameRule) {
+					int selIdx = rules.getSelectionIndex();
+					if(selIdx == -1) {
+						return;
+					}
+					String selName = rules.getItem(selIdx);
+					RulesNameDialog rulesNameDialog = new RulesNameDialog(getShell());
+					if(rulesNameDialog.open() == IDialogConstants.OK_ID) {
+						String ruleName = rulesNameDialog.getRuleName();
+						boolean reNameRuleFile = ruleManager.reNameRuleFile(selName, ruleName);
+						if(reNameRuleFile) {
+							rules.setItems(ruleManager.getRuleList());
+						} else {
+							DialogHelper.showAsynInformation("重命名失败");
+						}
+					}
+				} else if(obj == rules) {
+					int selIdx = rules.getSelectionIndex();
+					if(selIdx == -1) {
+						return;
+					}
+					String selName = rules.getItem(rules.getSelectionIndex());
+					List<Rule> rulesByFileName = ruleManager.getRulesByFileName(selName);
+					table.setInput(rulesByFileName);
 				}
 			}
 		};
+		rules.addSelectionListener(listener);
+		btnAddRule.addSelectionListener(listener);
+		btnDelRule.addSelectionListener(listener);
+		btnReNameRule.addSelectionListener(listener);
 		btnAdd.addSelectionListener(listener);
 		btnDel.addSelectionListener(listener);
 	}
-	
 	
 	@Override
 	protected void configureShell(Shell newShell) {
@@ -88,7 +150,7 @@ public class ModelRuleDialog extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(1000, 650);
+		return new Point(1250, 650);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -97,7 +159,8 @@ public class ModelRuleDialog extends WrappedDialog{
 		if (buttonId == IDialogConstants.OK_ID) {
 			boolean confirm = DialogHelper.showConfirm("确定要保存改动？（若无改动请点击\"取消\"按钮）");
 			if(confirm) {//修改rule.xml文件
-				ruleManager.modify((List<Rule>) table.getInput());
+				String selName = rules.getItem(rules.getSelectionIndex());
+				ruleManager.modify((List<Rule>) table.getInput(), selName);
 			}
 		}
 		super.buttonPressed(buttonId);
