@@ -7,6 +7,9 @@ import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.RuleType;
 
@@ -91,5 +94,41 @@ public class StatedataService extends BaseService {
 		params.put("min", RuleType.EQP_STATE.getMin());
 		params.put("max", RuleType.EQP_STATE.getMax());
 		return (List<Tb1016StatedataEntity>) hqlDao.getListByHql(hql, params);
+	}
+	
+	public Tb1016StatedataEntity getStateByIedRef(String iedName, String dataRef) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("ied", iedName);
+		params.put("ref", dataRef);
+		List<?> result = hqlDao.getListByHql("from " + Tb1016StatedataEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1016AddRef=:ref", params);
+		if (result != null && result.size() > 0) {
+			return (Tb1016StatedataEntity) result.get(0);
+		}
+		return null;
+	}
+	
+	public void updateStateF1011No(String iedName, String dataRef, int typeId) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("ied", iedName);
+		params.put("ref", dataRef);
+		List<?> result = hqlDao.getListByHql("from " + Tb1016StatedataEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1016AddRef=:ref", params);
+		if (result != null && result.size() > 0) {
+			Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) result.get(0);
+			statedataEntity.setF1011No(typeId);
+			beanDao.update(statedataEntity);
+		}
+		result = hqlDao.getListByHql("from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1058RefAddr=:ref", params);
+		if (result != null && result.size() > 0) {
+			Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) result.get(0);
+			mmsfcdaEntity.setF1058Type(typeId);
+			beanDao.update(mmsfcdaEntity);
+		} else {
+			result = hqlDao.getListByHql("from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1061RefAddr=:ref", params);
+			if (result != null && result.size() > 0) {
+				Tb1061PoutEntity poutEntity = (Tb1061PoutEntity) result.get(0);
+				poutEntity.setF1061Type(typeId);
+				beanDao.update(poutEntity);
+			}
+		}
 	}
 }

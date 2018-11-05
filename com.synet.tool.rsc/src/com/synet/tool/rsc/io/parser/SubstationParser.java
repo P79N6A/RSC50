@@ -22,6 +22,7 @@ import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.scd.EnumEquipmentType;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
@@ -30,7 +31,10 @@ import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
 import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.service.SubstationService;
+import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
  /**
  * 
@@ -43,6 +47,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
 	private SubstationService staServ = new SubstationService();
 	private IedEntityService iedServ = new IedEntityService();
+	private StatedataService statedataService = new StatedataService();
 	private Context context;
 	
 	public SubstationParser() {
@@ -101,7 +106,6 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 					String stype = eqpEl.attributeValue("type");
 					EnumEquipmentType type = null;
 					String nodeName = eqpEl.getName();
-					List<Tb1044TerminalEntity> terminals = new ArrayList<>();
 					switch(nodeName) {
 					case "PowerTransformer":
 						type = EnumEquipmentType.PTR;
@@ -149,6 +153,44 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 						List<Element> lnodeEls = DOM4JNodeHelper.selectNodes(eqpEl, lnodeXpath);
 						for (Element lnodeEl : lnodeEls) {
 							updateIEDBayInfo(lnodeEl, bay);
+							// 更新开关道闸信号数据类型
+							String lnClass = lnodeEl.attributeValue("lnClass");
+							String ldInst = lnodeEl.attributeValue("ldInst");
+							String prefix = lnodeEl.attributeValue("prefix");
+							String lnInst = lnodeEl.attributeValue("lnInst");
+							String iedName = lnodeEl.attributeValue("iedName");
+							if ("XSWI".equals(lnClass)) { 
+								// 判断是否接地
+								List<Element> terminals = eqpEl.elements("Terminal");
+								boolean isGround = false;
+								for (Element terminal : terminals) {
+									String cNodeName = terminal.attributeValue("cNodeName");
+									if ("grounded".equals(cNodeName)) {
+										isGround = true;
+										break;
+									}
+								}
+								Rule rule = isGround ? F1011_NO.ST_GDIS : F1011_NO.ST_DIS;
+								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
+								updatePosType(iedName, dataRef, rule);
+							} else if ("XCBR".equals(lnClass)) {
+								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
+								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
+								if (stateData != null) {
+									Rule rule = F1011_NO.ST_BRK;
+									String desc = stateData.getF1016Desc();
+									if (!StringUtil.isEmpty(desc)) {
+										if (desc.contains("A")) {
+											rule = F1011_NO.ST_BRK_A;
+										} else if (desc.contains("B")) {
+											rule = F1011_NO.ST_BRK_B;
+										} else if (desc.contains("C")) {
+											rule = F1011_NO.ST_BRK_C;
+										}
+									}
+									updatePosType(iedName, dataRef, rule);
+								}
+							}
 						}
 						eqpNum++;
 					}
@@ -160,6 +202,10 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 		bayNum++;
 		ConsoleManager.getInstance().append("一共导入 " + bayNum +
 				" 个间隔， " + eqpNum + " 台设备， " + conNum + " 个连接点。");
+	}
+	
+	private void updatePosType(String iedName, String dataRef, Rule rule) {
+		statedataService.updateStateF1011No(iedName, dataRef, rule.getId());
 	}
 
 	private void addConnNode(String nodeName,
