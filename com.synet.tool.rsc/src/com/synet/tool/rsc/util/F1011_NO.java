@@ -14,8 +14,12 @@ import com.synet.tool.rsc.io.scd.SclUtil;
  */
 public class F1011_NO {
 	
-	public static final Rule ST_BRK = getRuleById(01); // 开关状态
+	public static final Rule ST_BRK = getRuleById(1); // 开关状态
+	public static final Rule ST_BRK_A = getRuleById(2); // 开关状态A
+	public static final Rule ST_BRK_B = getRuleById(3); // 开关状态B
+	public static final Rule ST_BRK_C = getRuleById(4); // 开关状态C
 	public static final Rule ST_DIS = getRuleById(21); // 刀闸状态
+	public static final Rule ST_GDIS = getRuleById(31); // 接地刀闸状态
 	public static final Rule VT_CRC = getRuleById(153); // 装置过程层配置CRC
 	public static final Rule IED_COMM = getRuleById(202); // 装置通讯状态"
 	public static final Rule IED_WRN_SV = getRuleById(104); // SV异常
@@ -31,6 +35,14 @@ public class F1011_NO {
 	public static final Rule STATE_R19 = getRuleById(900); // 装置运行工况信号
 	public static final Rule OTHERS = getRuleById(RSCConstants.OTHERS_ID); // 装置运行工况信号
 	
+	/**
+	 * 应用规则
+	 * @param dataset
+	 * @param f1058RefAddr
+	 * @param doDesc
+	 * @param types
+	 * @return
+	 */
 	public static Rule getType(String dataset, String f1058RefAddr, String doDesc, Rule[] types) {
 		String lnName = SclUtil.getLnName(f1058RefAddr);
 		String doName = SclUtil.getDoName(f1058RefAddr);
@@ -38,15 +50,50 @@ public class F1011_NO {
 		return F1011_NO.getType(dataset, lnName, doName, doDesc, fc, types);
 	}
 	
+	/**
+	 * 解析辨识
+	 * @param datSet
+	 * @param lnName
+	 * @param doName
+	 * @param doDesc
+	 * @param fc
+	 * @return
+	 */
 	public static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc) {
-		return getType(datSet, lnName, doName, doDesc, fc, F1011_NO.values());
+		Rule type = getType(datSet, lnName, doName, doDesc, fc, F1011_NO.values());
+		return type == null ? OTHERS : type;
+	}
+	
+	private static boolean isMainType(Rule rule) {
+		return getMainType(rule) != null;
+	}
+	
+	private static RuleType getMainType(Rule rule) {
+		for (RuleType rtyp : RuleType.values()) {
+			if (rtyp.getMin() == rule.getId()) {
+				return rtyp;
+			}
+		}
+		return null;
 	}
 
-	public static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc, Rule[] types) {
+	private static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc, Rule[] types) {
+		Rule rule = getType(datSet, lnName, doName, doDesc, fc, types, false);
+		RuleType mainType = getMainType(rule);
+		if (mainType != null) {
+			Rule ruleTemp = getType(datSet, lnName, doName, doDesc, fc, types, true);
+			if (mainType.include(ruleTemp)) {
+				rule = ruleTemp;
+			}
+		}
+		return rule;
+	}
+	
+	private static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc, Rule[] types, boolean ignoreMainType) {
 		Rule type = null;
 		Rule typeNullDesc = null;
 		for (Rule rule : types) {
-			if (rule.isEmpty()) {
+			if (rule.isEmpty() || (isMainType(rule) && ignoreMainType)) {
 				continue;
 			}
 			if (!StringUtil.isEmpty(rule.getDatSet())) {
@@ -62,8 +109,18 @@ public class F1011_NO {
 					continue;
 				}
 			}
-			if (!StringUtil.isEmpty(rule.getLnName()) && !rule.getLnName().contains(lnName)) {
-				continue;
+			if (!StringUtil.isEmpty(rule.getLnName())) {
+				String[] lns = rule.getLnName().split("/");
+				boolean match = false;
+				for (String ln : lns) {
+					if (lnName.contains(ln)) {
+						match = true;
+						break;
+					}
+				}
+				if (!match) {
+					continue;
+				}
 			}
 			if (!StringUtil.isEmpty(rule.getDoName()) && !doName.contains(rule.getDoName())) {
 				continue;
@@ -98,7 +155,7 @@ public class F1011_NO {
 				}
 			} else {
 				typeNullDesc = rule;
-				continue;
+				break;
 			}
 			type = rule;
 			break;
@@ -106,10 +163,10 @@ public class F1011_NO {
 		if (type == null && typeNullDesc != null) {
 			return typeNullDesc;
 		}
-		if ((type == null)) {
+//		if ((type == null)) {
 //			type = getDefault(datSet, fc);
-			type = OTHERS;
-		}
+//			type = OTHERS;
+//		}
 		return type;
 	}
 	
@@ -146,7 +203,7 @@ public class F1011_NO {
 		return rules.toArray(new Rule[rules.size()]);
 	}
 	
-	public static Rule getDefault(String datSet, String fc) {
+	private static Rule getDefault(String datSet, String fc) {
 		if (SclUtil.isAIN(datSet)) {
 			return MX_R19;
 		} else if (SclUtil.isDIN(datSet)) {

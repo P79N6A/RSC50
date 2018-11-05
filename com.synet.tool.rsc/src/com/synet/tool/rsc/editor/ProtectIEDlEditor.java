@@ -369,6 +369,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
 				if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
 					final List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
+					if (rulesSelect==null || rulesSelect.size() < 1) {
+						return;
+					}
 					ProgressManager.execute(new IRunnableWithProgress() {
 						@Override
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,

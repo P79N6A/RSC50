@@ -115,7 +115,8 @@ public class SclUtil {
 			tag = '$';
 		} 
 		String temp = f1058RefAddr.substring(0, f1058RefAddr.indexOf(tag));
-		return getLnClass(temp);
+//		return getLnClass(temp);
+		return temp.split("/")[1];
 	}
 	
 	public static String getLnClass(String lnName) {

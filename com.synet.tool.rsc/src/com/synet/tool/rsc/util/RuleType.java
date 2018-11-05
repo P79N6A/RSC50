@@ -31,6 +31,10 @@ public enum RuleType {
 		this.max = max;
 	}
 	
+	public boolean include(Rule rule) {
+		return rule.getId()<=max && rule.getId()>=min;
+	}
+	
 	public String getType() {
 		return type;
 	}
