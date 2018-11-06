@@ -48,30 +48,31 @@ public class SecFibreListHandler extends RscSheetHandler {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 3: 
+			case 1: 
 				if (value != null){
 					List<Tb1046IedEntity> iedList = (List<Tb1046IedEntity>) service.getListByCriteria(Tb1046IedEntity.class, "f1046Name", value.trim());
 					if (iedList != null) {
 						entity.setTb1046IedByF1046Code(iedList.get(0));
+						console.append("装置[" + value + "]找不到");
 						break;
 					}
 				}
 				entity = null;
-			case 5: 
+			case 3: 
 				if (value != null) {
 					entity.setF1090Desc(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 6: 
+			case 4: 
 				if (value != null) {
 					entity.setF1090FiberNo(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 7: 
+			case 5: 
 				if (value != null) {
 					entity.setF1090PortNo(value);
 					break;

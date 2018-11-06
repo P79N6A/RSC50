@@ -22,6 +22,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.excel.ImportInfoParser;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.service.SecLockBrkService;
@@ -33,7 +34,7 @@ import com.synet.tool.rsc.util.RscObjectUtils;
  * @author 陈春(mailto:cchun@shrcn.com)
  * @version 1.0, 2013-4-3
  */
-public class SecLockEditor extends BaseConfigEditor {
+public class SecLockEditor extends SafetyMeasureEditor {
 	
 	private Combo cmbDevType;
 	private Combo cmbDevName;
@@ -146,19 +147,10 @@ public class SecLockEditor extends BaseConfigEditor {
 		if (filePath == null || "".equals(filePath)){
 			DialogHelper.showAsynError("请选择要导入文件路径");
 		}
-		List<Tb1091IotermEntity> list = secLockBrkService.importData(filePath);
+		List<Tb1091IotermEntity> list = new ImportInfoParser().getIotermList(filePath);
 		if (list != null) {
+			secLockBrkService.save(list);
 			table.setInput(list);
-		}
-	}
-	
-	private void exportData() {
-		try {
-			if (table.exportExcel2007(table.getTableDesc())) {
-				DialogHelper.showAsynInformation("导出成功");
-			}
-		} catch (Exception e) {
-			DialogHelper.showAsynError("导出失败！");
 		}
 	}
 	
