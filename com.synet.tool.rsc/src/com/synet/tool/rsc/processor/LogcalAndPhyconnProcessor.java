@@ -51,7 +51,7 @@ public class LogcalAndPhyconnProcessor {
 	 * @param phyconnList
 	 * @return
 	 */
-	private boolean findSendPhysConns(String sendIedName, Tb1046IedEntity recvIed, List<Tb1053PhysconnEntity> phyconnList) {
+	private boolean findSendPhysConns(String sendIedName, Tb1046IedEntity recvIed, List<Tb1053PhysconnEntity> phyconnList, List<Tb1053PhysconnEntity> phyconnListVisited) {
 		String key = sendIedName + "->" + recvIed.getF1046Name();
 		List<Tb1053PhysconnEntity> temp = phyconnCache.get(key);
 		if (temp != null) {
@@ -70,7 +70,7 @@ public class LogcalAndPhyconnProcessor {
 			//判断是否是交换机
 			} else if (isSwcDevice(sendIed)) {				  //与逻辑链路发送端装置不一致
 				boolean inPath = false; // 避免死循环
-				for (Tb1053PhysconnEntity phyconn : phyconnList) {
+				for (Tb1053PhysconnEntity phyconn : phyconnListVisited) {
 					String phyConSendIed = phyconn.getTb1048PortByF1048CodeA().getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
 					if (sendIed.getF1046Name().equals(phyConSendIed)) {
 						inPath = true;
@@ -79,8 +79,11 @@ public class LogcalAndPhyconnProcessor {
 				}
 				if (!inPath) {
 					phyconnList.add(physconnEntity);
-					if (findSendPhysConns(sendIedName, sendIed, phyconnList)) {
+					phyconnListVisited.add(physconnEntity);
+					if (findSendPhysConns(sendIedName, sendIed, phyconnList, phyconnListVisited)) {
 						return true;
+					} else {
+						phyconnList.clear();
 					}
 				}
 			}
@@ -114,8 +117,9 @@ public class LogcalAndPhyconnProcessor {
 				continue;
 			}
 			List<Tb1053PhysconnEntity> phyconnList = new ArrayList<>();
+			List<Tb1053PhysconnEntity> phyconnListVisited = new ArrayList<>();
 			String sendIedName = sendIed.getF1046Name();
-			boolean success = findSendPhysConns(sendIedName, recvIed, phyconnList);
+			boolean success = findSendPhysConns(sendIedName, recvIed, phyconnList, phyconnListVisited);
 			if (success) {//有与逻辑链路匹配的物理回路
 				for (Tb1053PhysconnEntity physconnEntity : phyconnList) {
 					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();
