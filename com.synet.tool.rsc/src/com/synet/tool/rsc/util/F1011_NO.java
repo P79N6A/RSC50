@@ -79,11 +79,13 @@ public class F1011_NO {
 
 	private static Rule getType(String datSet, String lnName, String doName, String doDesc, String fc, Rule[] types) {
 		Rule rule = getType(datSet, lnName, doName, doDesc, fc, types, false);
-		RuleType mainType = getMainType(rule);
-		if (mainType != null) {
-			Rule ruleTemp = getType(datSet, lnName, doName, doDesc, fc, types, true);
-			if (mainType.include(ruleTemp)) {
-				rule = ruleTemp;
+		if (rule != null) {
+			RuleType mainType = getMainType(rule);
+			if (mainType != null) {
+				Rule ruleTemp = getType(datSet, lnName, doName, doDesc, fc, types, true);
+				if (ruleTemp != null && mainType.include(ruleTemp)) {
+					rule = ruleTemp;
+				}
 			}
 		}
 		return rule;
