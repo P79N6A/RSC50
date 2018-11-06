@@ -11,6 +11,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -228,16 +230,14 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	}
 
 	protected void addListeners() {
-		tableSwitchStatus.getTable().addCellSelectionListener(new KTableCellSelectionListener() {
+		tableSwitchStatus.getTable().addMouseListener(new MouseListener() {
+
 			@Override
-			public void fixedCellSelected(int col, int row, int statemask) {
+			public void mouseDoubleClick(MouseEvent e) {
 			}
-			
+
 			@Override
-			public void cellSelected(int col, int row, int statemask) {
-				if (row < 1) {
-					return;
-				}
+			public void mouseDown(MouseEvent e) {
 				Tb1043EquipmentEntity switchEq = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
 				List<Tb1016StatedataEntity> stateDatas = statedataService.getStateDataByParentCode(switchEq.getF1043Code());
 				if (stateDatas != null && stateDatas.size()>0) {
@@ -253,9 +253,47 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					}
 					tableSluiceStatus.refresh();
 					tableSluiceStatus.setSelections(eqpSts);
+				} else {
+					tableSluiceStatus.clearSelections();
 				}
 			}
-		});
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				
+			}});
+		
+		
+		tableSluiceStatus.getTable().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				List<String> eqpCodes = new ArrayList<>();
+				List<Object> stateDatas = tableSluiceStatus.getSelections();
+				for (Object obj : stateDatas) {
+					Tb1016StatedataEntity st = (Tb1016StatedataEntity) obj;
+					eqpCodes.add(st.getParentCode());
+				}
+				List<?> eqpList = tableSwitchStatus.getInput();
+				List<Tb1043EquipmentEntity> selections = new ArrayList<>();
+				for (Object obj : eqpList) {
+					Tb1043EquipmentEntity switchEq = (Tb1043EquipmentEntity) obj;
+					if (eqpCodes.contains(switchEq.getF1043Code())) {
+						selections.add(switchEq);
+					}
+				}
+				tableSwitchStatus.refresh();
+				tableSwitchStatus.setSelections(selections);
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}});
+		
 		
 		SelectionListener sleListener = new SelectionAdapter() {
 			@Override
