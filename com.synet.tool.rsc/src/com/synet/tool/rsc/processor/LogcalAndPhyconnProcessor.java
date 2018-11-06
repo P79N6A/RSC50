@@ -69,26 +69,30 @@ public class LogcalAndPhyconnProcessor {
 				return true;
 			//判断是否是交换机
 			} else if (isSwcDevice(sendIed)) {				  //与逻辑链路发送端装置不一致
-				boolean inPath = false; // 避免死循环
-				for (Tb1053PhysconnEntity phyconn : phyconnListVisited) {
-					String phyConSendIed = phyconn.getTb1048PortByF1048CodeA().getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
-					if (sendIed.getF1046Name().equals(phyConSendIed)) {
-						inPath = true;
-						break;
-					}
-				}
-				if (!inPath) {
+				if (!hasVisited(sendIed, phyconnListVisited)) {
 					phyconnList.add(physconnEntity);
 					phyconnListVisited.add(physconnEntity);
 					if (findSendPhysConns(sendIedName, sendIed, phyconnList, phyconnListVisited)) {
 						return true;
 					} else {
-						phyconnList.clear();
+						phyconnList.remove(physconnEntity);
 					}
 				}
 			}
 		}
 		return false;
+	}
+	
+	private boolean hasVisited(Tb1046IedEntity sendIed, List<Tb1053PhysconnEntity> phyconnListVisited) {
+		boolean inPath = false; // 避免死循环
+		for (Tb1053PhysconnEntity phyconn : phyconnListVisited) {
+			String phyConSendIed = phyconn.getTb1048PortByF1048CodeA().getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Name();
+			if (sendIed.getF1046Name().equals(phyConSendIed)) {
+				inPath = true;
+				break;
+			}
+		}
+		return inPath;
 	}
 	
 	public void analysis() {
@@ -121,6 +125,19 @@ public class LogcalAndPhyconnProcessor {
 			String sendIedName = sendIed.getF1046Name();
 			boolean success = findSendPhysConns(sendIedName, recvIed, phyconnList, phyconnListVisited);
 			if (success) {//有与逻辑链路匹配的物理回路
+				phyconnListVisited.clear();
+				if (phyconnList.size() > 1) { // 补充直连的物理回路
+					Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
+					if (phyconnMap != null) {
+						for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
+							Tb1046IedEntity sendIed1 = phyconnMap.get(physconnEntity);
+							if (sendIed1.getF1046Name().equals(sendIedName)) { //与逻辑链路发送端装置一致
+								phyconnList.add(physconnEntity);
+								break;
+							}
+						}
+					}
+				}
 				for (Tb1053PhysconnEntity physconnEntity : phyconnList) {
 					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();
 					llinkphyrelationEntity.setTb1065LogicallinkByF1065Code(logicallinkEntity);
