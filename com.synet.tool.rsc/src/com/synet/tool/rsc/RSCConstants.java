@@ -8,7 +8,7 @@ public interface RSCConstants {
 	
 	String RSC_PRJ_NAME  	= "RscData";
 	String USR_DIR 	 	    = System.getProperty("user.dir") + separator;
-//	String USR_DIR 	 	    = "D:/develop/eclipse-rcp-indigo-SR2-win32/eclipse" + separator;
+	String RULES_DIR	    = System.getProperty("user.dir") + separator + "rules" + separator;
 	String RSC_HB_CFG   	= "com/synet/tool/rsc/das/hibernate.rsccfg.xml";
 	String RSC_SQL      	= "com/synet/tool/rsc/das/rsc.sql";
 	String EXCEL_COMM_EXPORT_2007  	= "com/synet/tool/rsc/common.xlsx";
@@ -20,7 +20,8 @@ public interface RSCConstants {
 	String DICT_PATH 		= "com/synet/tool/rsc/rscdict.properties";
 	
     String CFGURL 			= "com/synet/tool/rsc/util/rscnavg.xml";
-    String RULEURL 			= "com/synet/tool/rsc/util/rules.xml";
+    String RULEFILE			= "rules.xml";
+    String RULEURL 			= "com/synet/tool/rsc/util/" + RULEFILE;
 
     String ET_PR_MDL		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryModelEditor";
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";

@@ -39,7 +39,7 @@ import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.dialog.ModelCompareDialog;
-import com.synet.tool.rsc.dialog.SelectRuleDialog;
+import com.synet.tool.rsc.dialog.ModelRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -71,6 +71,7 @@ import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.Rule;
+import com.synet.tool.rsc.util.RuleManager;
 
 /**
  * 保护信息模型->装置树菜单编辑器。
@@ -366,17 +367,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 				});
 				DialogHelper.showAsynInformation("引入模版结束！");
 			} else if(obj == btnApplyRule) {
-				SelectRuleDialog selectRuleDialog = new SelectRuleDialog(getShell());
-				if(selectRuleDialog.open() == IDialogConstants.OK_ID) {
-					final List<Rule> rulesSelect = selectRuleDialog.getRulesSelect();
-					if (rulesSelect==null || rulesSelect.size() < 1) {
-						return;
-					}
+				ModelRuleDialog modelRuleDialog = new ModelRuleDialog(getShell());
+				if(modelRuleDialog.open() == IDialogConstants.OK_ID) {
 					ProgressManager.execute(new IRunnableWithProgress() {
 						@Override
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,
 								InterruptedException {
-							Rule[] rules = rulesSelect.toArray(new Rule[rulesSelect.size()]);
+							List<Rule> rulesList = RuleManager.getInstance().getRules();
+							Rule[] rules = rulesList.toArray(new Rule[rulesList.size()]);
 							RuleEntityService ruleEntityService = new RuleEntityService(iedEntity, rules);
 							ruleEntityService.applyRulesToIED(monitor);
 							Display.getDefault().asyncExec(new Runnable() {

@@ -32,11 +32,16 @@ public class ChooseTableColDialog extends WrappedDialog {
 	private Map<String, Integer> excelColMap = new HashMap<>();
 	//第colNum列[colName]
 	private String[] comboItem;
-	List<Label> labelList;
-	List<Combo> comboList;
+	private List<Label> labelList;
+	private List<Combo> comboList;
 
 	public ChooseTableColDialog(Shell parentShell) {
 		super(parentShell);
+	}
+	
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 	
 	@Override
@@ -49,7 +54,6 @@ public class ChooseTableColDialog extends WrappedDialog {
         scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Composite composite = SwtUtil.createComposite(scrolledComposite, new GridData(GridData.FILL_BOTH), 2);
 		scrolledComposite.setContent(composite);
-		scrolledComposite.setMinSize(scrolledComposite.computeSize(280, 280));
 		SwtUtil.createLabel(composite, "导入字段", new GridData());
 		SwtUtil.createLabel(composite, "Excel列属性", new GridData());
 		GridData gridData = new GridData();
@@ -73,6 +77,14 @@ public class ChooseTableColDialog extends WrappedDialog {
 				}
 			}
 		}
+		Point size = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+		scrolledComposite.setMinSize(size);
+		
+//		Point panelSize = parent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+//		panelSize.y += 70; // 补上按钮区域高度
+//		getShell().setSize(panelSize);
+//		getShell().pack(true);
+//		getShell().layout(true);
 		return super.createDialogArea(parent);
 	}
 	

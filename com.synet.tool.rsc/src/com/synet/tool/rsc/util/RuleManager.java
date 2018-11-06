@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.derby.iapi.services.io.FileUtil;
@@ -15,29 +17,33 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-import com.shrcn.found.common.Constants;
-import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.file.util.FileManager;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.file.xml.XMLFileManager;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.RSCProperties;
 
 public class RuleManager {
 
+	private static final String RULES_DIR = RSCConstants.RULES_DIR;
+	private static final String RULES_DEFAULT = RSCConstants.RULEFILE;
+	private static final String RULES_DEFAULT_PATH = RSCConstants.RULES_DIR + RSCConstants.RULEFILE;
 	private static RuleManager rmgr = new RuleManager();
 	private List<Rule> rules = new ArrayList<>();
+	private RSCProperties rscPro = RSCProperties.getInstance();
 
 	public static RuleManager getInstance() {
 		return rmgr;
 	}
 	
 	private RuleManager() {
-		load();
+		reLoad();
 	}
 	
 	public boolean deleteRule(String fileName) {
-		File f = new File(Constants.cfgDir);
+		File f = new File(RULES_DIR);
 		if (f.exists()) {
 			File[] listFiles = f.listFiles();
 			for (File file : listFiles) {
@@ -52,12 +58,12 @@ public class RuleManager {
 	}
 	
 	public boolean copyRuleFile(String fileName) {
-		String path = Constants.cfgDir + "/rules.xml";
+		String path = RULES_DEFAULT_PATH;
 		File f = new File(path);
 		if (!f.exists()) {
 			return false;
 		}
-		String newPath = Constants.cfgDir + File.separator + fileName;
+		String newPath = RULES_DIR + fileName;
 		File newf = new File(newPath);
 		if (!newf.exists()) {
 			boolean createNewFile;
@@ -73,19 +79,21 @@ public class RuleManager {
 				return false;
 			}
 		}
+		rscPro.setCurrentRule(fileName);
+		reLoad();
+		RuleType.initDicts();
 		return false;
 		
 	}
 	
 	public String[] getRuleList() {
-		String path = Constants.cfgDir;
-		File f = new File(path);
+		File f = new File(RULES_DIR);
 		List<String> fileNames = new ArrayList<>();
 		if(f.exists()) {
 			File[] listFiles = f.listFiles();
 			for (int i = 0; i < listFiles.length; i++) {
 				String name = listFiles[i].getName();
-				if(name.contains("rule")) {
+				if(name.endsWith(".xml")) {
 					fileNames.add(name);
 				}
 			}
@@ -95,7 +103,7 @@ public class RuleManager {
 	}
 
 	public void modify(List<Rule> ruleList, String selName) {
-		String path = Constants.cfgDir + File.separator + selName;
+		String path = RULES_DIR + selName;
 		File f = new File(path);
 		if (!f.exists()) {
 			try {
@@ -105,27 +113,19 @@ public class RuleManager {
 			}
 		} 
 		
-		rules.clear();
-		rules.addAll(ruleList);
-		
-		DictManager dictmgr = DictManager.getInstance();
-		String dicttype = F1011_NO.class.getSimpleName();
-		dictmgr.removeDict(dicttype);
-		dictmgr.addDict(dicttype, dicttype, F1011_NO.getDictItems());
-		
 		try {
 			Document doc = XMLFileManager.loadXMLFile(f);
 			doc.remove(doc.getRootElement());
 			Element rootElement = doc.addElement("RuleCfg");
 			rootElement.addAttribute("bundleID", "com.shrcn.tool.ecfg");
 			for (Rule rule : rules) {
-					Element ruleElement = rootElement.addElement("Rule");
-					ruleElement.addAttribute("id", rule.getId()+"");
-					ruleElement.addAttribute("name", rule.getName());
-					ruleElement.addAttribute("datSet", rule.getDatSet());
-					ruleElement.addAttribute("lnName", rule.getLnName());
-					ruleElement.addAttribute("doName", rule.getDoName());
-					ruleElement.addAttribute("doDesc", rule.getDoDesc());
+				Element ruleElement = rootElement.addElement("Rule");
+				ruleElement.addAttribute("id", rule.getId()+"");
+				ruleElement.addAttribute("name", rule.getName());
+				ruleElement.addAttribute("datSet", rule.getDatSet());
+				ruleElement.addAttribute("lnName", rule.getLnName());
+				ruleElement.addAttribute("doName", rule.getDoName());
+				ruleElement.addAttribute("doDesc", rule.getDoDesc());
 			}
 			OutputFormat format = OutputFormat.createPrettyPrint();
             format.setEncoding("UTF-8");
@@ -143,18 +143,19 @@ public class RuleManager {
 		
 	}
 	
-	private void load() {
-		String path = Constants.cfgDir + "/rules.xml";
+	public void reLoad() {
+		String path = RULES_DIR + rscPro.getCurrentRule();
 		rules = paseRuleXml(path);
+		sortRules(rules);
 	}
 	
 	public boolean reNameRuleFile(String oldName, String newName) {
-		String oldpath = Constants.cfgDir + File.separator + oldName;
+		String oldpath = RULES_DIR + oldName;
 		File oldf = new File(oldpath);
 		if (!oldf.exists()) {
 			return false;
 		}
-		String newpath = Constants.cfgDir + File.separator + newName;
+		String newpath = RULES_DIR + newName;
 		File newf = new File(newpath);
 		return oldf.renameTo(newf);
 	}
@@ -163,6 +164,7 @@ public class RuleManager {
 		List<Rule> rulesData = new ArrayList<>();
 		File f = new File(path);
 		if (!f.exists()) {
+			FileManipulate.initDir(RULES_DIR);
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(RSCConstants.RULEURL);
 			FileManager.saveInputStream(inputStream, f);
 			try {
@@ -190,20 +192,18 @@ public class RuleManager {
 		return rulesData;
 	}
 	
-	public List<Rule> getRulesByFileName(String fileName) {
-		String path = Constants.cfgDir + File.separator + fileName;
-		return paseRuleXml(path);
-	}
-	
-	public Rule getRule(int id) {
-		return rules.get(id);
+	private void sortRules(List<Rule> rules) {
+		Collections.sort(rules, new Comparator<Rule>() {
+			@Override
+			public int compare(Rule r1, Rule r2) {
+				return r1.getId() - r2.getId();
+			}});
 	}
 	
 	public List<Rule> getRules() {
 		List<Rule> result = new ArrayList<>();
-		for (Rule rule : rules) {
-			result.add(rule);
-		}
+		result.addAll(rules);
+		sortRules(result);
 		return result;
 	}
 }

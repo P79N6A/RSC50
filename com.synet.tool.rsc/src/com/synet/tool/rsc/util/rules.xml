@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <RuleCfg bundleID="com.shrcn.tool.ecfg">
-  <Rule id="1" name="开关状态" datSet="dsGOOSE" lnName="XCBR" doName="Pos" doDesc=""/>
+  <Rule id="1" name="开关状态" datSet="dsGOOSE" lnName="XCBR/GOINGGION" doName="Pos" doDesc="位置"/>
   <Rule id="2" name="开关分相A相状态" datSet="dsGOOSE" lnName="XCBR" doName="Pos" doDesc="A相"/>
   <Rule id="3" name="开关分相B相状态" datSet="dsGOOSE" lnName="XCBR" doName="Pos" doDesc="B相"/>
   <Rule id="4" name="开关分相C相状态" datSet="dsGOOSE" lnName="XCBR" doName="Pos" doDesc="C相"/>
-  <Rule id="21" name="刀闸状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="刀"/>
-  <Rule id="31" name="地刀状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="地刀"/>
-  <!-- 告警begin -->
-  <Rule id="100" name="通用告警" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="21" name="刀闸状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="刀/位置"/>
+  <Rule id="31" name="地刀状态" datSet="dsGOOSE" lnName="XSWI" doName="Pos" doDesc="地刀/位置"/>
+  <Rule id="100" name="通用告警" datSet="dsGOOSE" lnName="" doName="Alm" doDesc=""/>
   <Rule id="101" name="回路异常" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="102" name="链路中断信息" datSet="dsCommState/dsGOOSE" lnName="GGIO" doName="Alm" doDesc="断链"/>
+  <Rule id="102" name="链路中断信息" datSet="dsCommState/dsGOOSE/dsWarning" lnName="GGIO" doName="Alm" doDesc="断链/网告警"/>
   <Rule id="103" name="链路告警信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="104" name="SV异常" datSet="dsAlarm/dsWarning" lnName="" doName="Alm" doDesc="SV@告警/SMV@告警"/>
   <Rule id="105" name="GOOSE异常" datSet="dsAlarm/dsWarning/dsGOOSE" lnName="" doName="Alm" doDesc="GOOSE@告警"/>
   <Rule id="106" name="物理回路中断" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="151" name="装置异常Warning" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="152" name="装置告警Alarm" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="151" name="装置异常Warning" datSet="dsWarning" lnName="" doName="Alm" doDesc=""/>
+  <Rule id="152" name="装置告警Alarm" datSet="dsAlarm" lnName="" doName="Alm" doDesc=""/>
   <Rule id="153" name="版本告警（CRC）" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="154" name="定值告警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="171" name="采样同源比对预警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="172" name="采样差流比对预警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="173" name="一二次状态不一致预警" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="199" name="告警总" datSet="" lnName="" doName="" doDesc=""/>
-  <!-- 告警end -->
-  <Rule id="200" name="遥信" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="200" name="遥信" datSet="" lnName="BinInGGIO/ProtInGGIO" doName="" doDesc=""/>
   <Rule id="201" name="监测状态信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="202" name="装置通讯状态" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="203" name="装置运行状态" datSet="" lnName="" doName="" doDesc=""/>
@@ -33,25 +31,21 @@
   <Rule id="206" name="装置闭锁状态灯" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="207" name="装置检修状态灯" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="208" name="装置动作状态灯" datSet="" lnName="" doName="" doDesc=""/>
-  
   <Rule id="300" name="装置缺陷" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="399" name="缺陷总" datSet="" lnName="" doName="" doDesc=""/>
-  
-  <Rule id="400" name="保护动作" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="400" name="保护动作" datSet="TripInfo" lnName="" doName="" doDesc=""/>
   <Rule id="499" name="保护动作总" datSet="" lnName="" doName="" doDesc=""/>
-  
-  <Rule id="500" name="普通开关量开入开出" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="502" name="保护跳闸信号" datSet="dsGOOSE" lnName="PTRC" doName="Tr" doDesc=""/>
-  <Rule id="503" name="跳合闸反校信号" datSet="dsGOOSE" lnName="" doName="" doDesc=""/>
+  <Rule id="500" name="普通开关量开入开出" datSet="" lnName="GOINGGIO" doName="" doDesc=""/>
+  <Rule id="502" name="保护跳闸信号" datSet="dsGOOSE" lnName="PTRC/GOINGGIO" doName="Tr" doDesc="跳闸"/>
+  <Rule id="503" name="跳合闸反校信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="504" name="保护合闸信号" datSet="dsGOOSE" lnName="RREC" doName="Tr" doDesc=""/>
-  <Rule id="505" name="启动失灵信号" datSet="" lnName="RBRF" doName="" doDesc=""/>
+  <Rule id="505" name="启动失灵信号" datSet="" lnName="RBRF/GOINGGIO" doName="" doDesc="失灵@启"/>
   <Rule id="506" name="保护联跳信号" datSet="" lnName="RBRF" doName="" doDesc=""/>
   <Rule id="507" name="保护闭锁信号" datSet="" lnName="RBRF" doName="" doDesc=""/>
   <Rule id="599" name="跳闸总" datSet="" lnName="" doName="" doDesc=""/>
-  <!-- 压板begin -->
-  <Rule id="600" name="压板" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="600" name="压板" datSet="dsRelayEna" lnName="" doName="" doDesc=""/>
   <Rule id="601" name="硬压板" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="602" name="装置检修硬压板" datSet="dsRelayDin" lnName="" doName="" doDesc="检修"/>
+  <Rule id="602" name="装置检修硬压板" datSet="dsRelayDin/dsGOOSE" lnName="" doName="" doDesc="检修"/>
   <Rule id="603" name="远方操作硬压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="604" name="跳合闸出口硬压板" datSet="dsRelayEna" lnName="" doName="" doDesc="出口@压板"/>
   <Rule id="621" name="软压板" datSet="dsRelayEna" lnName="PROT" doName="Ena" doDesc=""/>
@@ -70,28 +64,26 @@
   <Rule id="634" name="投母联分列软压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="635" name="投分段分列软压板" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="636" name="主变后备保护投入软压板" datSet="" lnName="" doName="" doDesc=""/>
-  <!-- 压板end -->
-  <Rule id="700" name="保护测量值" datSet="dsRelayAin/dsAin" lnName="Mea/MMXU" doName="" doDesc="电流/电压"/>
-  <Rule id="702" name="A相电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="703" name="B相电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="704" name="C相电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="705" name="零序或中性点电流保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="706" name="A相电压保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="707" name="B相电压保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="708" name="C相电压保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="709" name="零序或中性点电压保护测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="710" name="A相差动电流测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="711" name="B相差动电流测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="712" name="C相差动电流测量值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="713" name="零序差动电流测量值" datSet="" lnName="" doName="" doDesc=""/>
-  
-  <Rule id="800" name="保护采样" datSet="" lnName="TCTR/TVTR" doName="" doDesc=""/>
-  <Rule id="802" name="A相电流AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="803" name="A相电流AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="804" name="B相电流AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="805" name="B相电流AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="806" name="C相电流AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
-  <Rule id="807" name="C相电流AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="700" name="保护测量值" datSet="" lnName="" doName="" doDesc=""/>
+  <Rule id="702" name="A相电流保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="A" doDesc="A相"/>
+  <Rule id="703" name="B相电流保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="A" doDesc="B相"/>
+  <Rule id="704" name="C相电流保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="A" doDesc="C相"/>
+  <Rule id="705" name="零序或中性点电流保护测量值" datSet="dsRelayAin/dsAin" lnName="" doName="" doDesc=""/>
+  <Rule id="706" name="A相电压保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="Vol" doDesc="A相"/>
+  <Rule id="707" name="B相电压保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="Vol" doDesc="B相"/>
+  <Rule id="708" name="C相电压保护测量值" datSet="dsRelayAin/dsAin" lnName="MMXU" doName="Vol" doDesc="C相"/>
+  <Rule id="709" name="零序或中性点电压保护测量值" datSet="dsRelayAin/dsAin" lnName="" doName="" doDesc=""/>
+  <Rule id="710" name="A相差动电流测量值" datSet="dsRelayAin/dsAin" lnName="" doName="Dif" doDesc="A相"/>
+  <Rule id="711" name="B相差动电流测量值" datSet="dsRelayAin/dsAin" lnName="" doName="Dif" doDesc="B相"/>
+  <Rule id="712" name="C相差动电流测量值" datSet="dsRelayAin/dsAin" lnName="" doName="Dif" doDesc="C相"/>
+  <Rule id="713" name="零序差动电流测量值" datSet="dsRelayAin/dsAin" lnName="" doName="" doDesc=""/>
+  <Rule id="800" name="保护采样" datSet="" lnName="TCTR/TVTR/SVIN" doName="" doDesc=""/>
+  <Rule id="802" name="A相电流AD1采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="A相@1"/>
+  <Rule id="803" name="A相电流AD2采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="A相@2"/>
+  <Rule id="804" name="B相电流AD1采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="B相@1"/>
+  <Rule id="805" name="B相电流AD2采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="B相@2"/>
+  <Rule id="806" name="C相电流AD1采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="C相@1"/>
+  <Rule id="807" name="C相电流AD2采样值" datSet="" lnName="TCTR/TVTR" doName="" doDesc="C相@2"/>
   <Rule id="808" name="单相或零序电流AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="809" name="单相或零序电流AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="810" name="A相电压AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
@@ -102,7 +94,6 @@
   <Rule id="815" name="C相电压AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="816" name="单相或零序电压AD1采样值" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="817" name="单相或零序电压AD2采样值" datSet="" lnName="" doName="" doDesc=""/>
-  
   <Rule id="900" name="装置运行工况信号" datSet="" lnName="" doName="" doDesc=""/>
   <Rule id="901" name="装置温度" datSet="" lnName="STMP" doName="" doDesc="温度/温湿度"/>
   <Rule id="902" name="装置工作电压1.5V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压@1.5"/>
@@ -112,6 +103,6 @@
   <Rule id="906" name="装置工作电压48V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压@48"/>
   <Rule id="907" name="装置工作电压110V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压@110"/>
   <Rule id="908" name="装置工作电压220V" datSet="" lnName="SPVT" doName="" doDesc="电源@电压"/>
-  <Rule id="950" name="光口光强" datSet="" lnName="SCLI" doName="" doDesc="光强"/>
+  <Rule id="950" name="光口光强" datSet="" lnName="SCLI" doName="" doDesc="光强/光@功率"/>
   <Rule id="9999" name="其它" datSet="" lnName="" doName="" doDesc=""/>
 </RuleCfg>

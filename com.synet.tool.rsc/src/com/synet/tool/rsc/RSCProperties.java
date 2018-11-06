@@ -22,6 +22,7 @@ public class RSCProperties extends AProperties {
 	private static final String ORA_DB = "ora.db";
 	private static final String ORA_USR = "ora.usr";
 	private static final String ORA_PWD = "ora.pwd";
+	private static final String RULE = "RULE";
 
 	private RSCProperties() {
 		init(path);
@@ -97,5 +98,13 @@ public class RSCProperties extends AProperties {
 		setProperty(ORA_USR, cp.getUser(), false);
 		setProperty(ORA_PWD, cp.getPassword(), false);
 		saveData();
+	}
+	
+	public String getCurrentRule() {
+		return getProperty(RULE);
+	}
+	
+	public void setCurrentRule(String fileName) {
+		setProperty(RULE, fileName, true);
 	}
 }

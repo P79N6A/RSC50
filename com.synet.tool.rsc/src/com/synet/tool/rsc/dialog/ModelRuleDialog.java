@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.dialog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -18,10 +17,13 @@ import org.eclipse.swt.widgets.Shell;
 import com.shrcn.found.ui.app.WrappedDialog;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.RuleTable;
 import com.synet.tool.rsc.util.Rule;
 import com.synet.tool.rsc.util.RuleManager;
+import com.synet.tool.rsc.util.RuleType;
 
 public class ModelRuleDialog extends WrappedDialog{
 
@@ -59,12 +61,15 @@ public class ModelRuleDialog extends WrappedDialog{
 		table.getTable().setLayoutData(griddata_2);
 		initData();
 		addListeners();
-		return composite;
+		return parent;
 	}
 	
 	private void initData() {
 		ruleManager = RuleManager.getInstance();
 		rules.setItems(ruleManager.getRuleList());
+		String selName = RSCProperties.getInstance().getCurrentRule();
+		selectRule(selName);
+		loadRule(selName);
 	}
 
 	private void addListeners() {
@@ -84,7 +89,8 @@ public class ModelRuleDialog extends WrappedDialog{
 						boolean copyRuleFile = ruleManager.copyRuleFile(ruleName);
 						if(copyRuleFile) {
 							table.setInput(ruleManager.getRules());
-							rules.setItems(ruleManager.getRuleList());
+							rules.add(ruleName);
+							rules.setSelection(rules.getItemCount()-1);
 						} else {
 							DialogHelper.showAsynInformation("添加失败，文件复制出错");
 						}
@@ -95,24 +101,29 @@ public class ModelRuleDialog extends WrappedDialog{
 						return;
 					}
 					String selName = rules.getItem(selIdx);
+					if (RSCConstants.RULEFILE.equals(selName)) {
+						DialogHelper.showWarning("不允许删除缺省辨识规则！");
+						return;
+					}
 					boolean deleteRule = ruleManager.deleteRule(selName);
 					if(deleteRule) {
-						table.setInput(new ArrayList<>());
-						rules.setItems(ruleManager.getRuleList());
+						rules.remove(selName);
+						selectRule(RSCConstants.RULEFILE);
+						loadRule(RSCConstants.RULEFILE);
 					}
-					
 				} else if(obj == btnReNameRule) {
 					int selIdx = rules.getSelectionIndex();
 					if(selIdx == -1) {
 						return;
 					}
-					String selName = rules.getItem(selIdx);
+					String oldName = rules.getItem(selIdx);
 					RulesNameDialog rulesNameDialog = new RulesNameDialog(getShell());
 					if(rulesNameDialog.open() == IDialogConstants.OK_ID) {
-						String ruleName = rulesNameDialog.getRuleName();
-						boolean reNameRuleFile = ruleManager.reNameRuleFile(selName, ruleName);
+						String newName = rulesNameDialog.getRuleName();
+						boolean reNameRuleFile = ruleManager.reNameRuleFile(oldName, newName);
 						if(reNameRuleFile) {
 							rules.setItems(ruleManager.getRuleList());
+							selectRule(newName);
 						} else {
 							DialogHelper.showAsynInformation("重命名失败");
 						}
@@ -122,9 +133,8 @@ public class ModelRuleDialog extends WrappedDialog{
 					if(selIdx == -1) {
 						return;
 					}
-					String selName = rules.getItem(rules.getSelectionIndex());
-					List<Rule> rulesByFileName = ruleManager.getRulesByFileName(selName);
-					table.setInput(rulesByFileName);
+					String selName = rules.getItem(selIdx);
+					loadRule(selName);
 				}
 			}
 		};
@@ -134,6 +144,26 @@ public class ModelRuleDialog extends WrappedDialog{
 		btnReNameRule.addSelectionListener(listener);
 		btnAdd.addSelectionListener(listener);
 		btnDel.addSelectionListener(listener);
+	}
+	
+	private void selectRule(String selName) {
+		String[] ruleList = rules.getItems();
+		int index = 0;
+		for (int i=0; i<ruleList.length; i++) {
+			String rule = ruleList[i];
+			if (rule.equals(selName)) {
+				index = i;
+				break;
+			}
+		}
+		rules.select(index);
+	}
+	
+	private void loadRule(String selName) {
+		RSCProperties.getInstance().setCurrentRule(selName);
+		ruleManager.reLoad();
+		RuleType.initDicts();
+		table.setInput(ruleManager.getRules());
 	}
 	
 	@Override
@@ -150,7 +180,7 @@ public class ModelRuleDialog extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(1250, 650);
+		return new Point(1250, 850);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -161,6 +191,9 @@ public class ModelRuleDialog extends WrappedDialog{
 			if(confirm) {//修改rule.xml文件
 				String selName = rules.getItem(rules.getSelectionIndex());
 				ruleManager.modify((List<Rule>) table.getInput(), selName);
+				RSCProperties.getInstance().setCurrentRule(selName);
+				ruleManager.reLoad();
+				RuleType.initDicts();
 			}
 		}
 		super.buttonPressed(buttonId);

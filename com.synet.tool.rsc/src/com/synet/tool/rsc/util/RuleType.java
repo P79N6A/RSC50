@@ -79,7 +79,7 @@ public enum RuleType {
 		addDict(RSCConstants.DICT_IED_EVT, new RuleType[]{PROT_EVENT}, rulesMap);
 		addDict(RSCConstants.DICT_IED_MEAS, new RuleType[]{PROT_MS}, rulesMap);
 		addDict(RSCConstants.DICT_IED_PIN, new RuleType[]{IO_SIGNAL, PROT_SV, PROT_MS}, rulesMap);
-		addDict(RSCConstants.DICT_IED_POUT, new RuleType[]{EQP_STATE, IED_WARN, IO_SIGNAL, PROT_SV, IED_STATE}, rulesMap);
+		addDict(RSCConstants.DICT_IED_POUT, new RuleType[]{EQP_STATE, IED_WARN, IO_SIGNAL, PROT_SV, IED_STATE, IED_YX}, rulesMap);
 		addDict(RSCConstants.DICT_IED_STATE, new RuleType[]{IED_STATE}, rulesMap);
 		addDict(RSCConstants.DICT_IED_YX, new RuleType[]{IED_YX}, rulesMap);
 		addDict(RSCConstants.DICT_IED_STRIP, new RuleType[]{STRAP}, rulesMap);
