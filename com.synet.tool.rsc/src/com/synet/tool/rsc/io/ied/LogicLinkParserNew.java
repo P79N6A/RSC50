@@ -62,7 +62,7 @@ public class LogicLinkParserNew {
 				}
 				// 创建虚链路
 				BaseCbEntity cbEntity = pout.getCbEntity();
-				String linkKey = iedName + "." + outIedName + "." + cbEntity.getCbCode();
+				String linkKey = iedName + "." + outIedName + "." + cbEntity.getCbId();
 				Tb1065LogicallinkEntity logicLink = linkCache.get(linkKey);
 				if (logicLink == null) {
 					Map<String, Object> params = new HashMap<>();
