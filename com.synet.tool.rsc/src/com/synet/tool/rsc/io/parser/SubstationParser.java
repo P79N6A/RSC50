@@ -119,7 +119,8 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 					if (type != null) {
 						Tb1043EquipmentEntity equipment = new Tb1043EquipmentEntity();
 						eqpList.add(equipment);
-						equipment.setF1043Code(rscp.nextTbCode(DBConstants.PR_EQP));
+						String eqpCode = rscp.nextTbCode(DBConstants.PR_EQP);
+						equipment.setF1043Code(eqpCode);
 						equipment.setTb1042BayByF1042Code(bay);
 						equipment.setF1043Name(eqpEl.attributeValue("name"));
 						equipment.setF1043Desc(eqpEl.attributeValue("desc"));
@@ -172,7 +173,12 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 								}
 								Rule rule = isGround ? F1011_NO.ST_GDIS : F1011_NO.ST_DIS;
 								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
-								updatePosType(iedName, dataRef, rule);
+								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
+								if (stateData != null) {
+									updatePosType(iedName, dataRef, rule);
+									stateData.setParentCode(eqpCode);
+									beanDao.update(stateData);
+								}
 							} else if ("XCBR".equals(lnClass)) {
 								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
 								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
@@ -189,6 +195,8 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 										}
 									}
 									updatePosType(iedName, dataRef, rule);
+									stateData.setParentCode(eqpCode);
+									beanDao.update(stateData);
 								}
 							}
 						}
