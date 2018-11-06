@@ -55,7 +55,7 @@ public class LogicLinkParserNew {
 				Tb1046IedEntity resvIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 				Tb1046IedEntity sendIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", outIedName);
 				
-				Tb1061PoutEntity pout = context.getPout(outAddr);
+				Tb1061PoutEntity pout = context.getPout(outIedName + outAddr);
 				if (pout == null) {
 					context.addError(iedName, "虚端子关联", intAddr, "找不到外部虚端子" + outAddr + "。");
 					continue;

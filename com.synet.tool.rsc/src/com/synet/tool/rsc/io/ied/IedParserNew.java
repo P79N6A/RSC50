@@ -308,7 +308,7 @@ public class IedParserNew {
 				pout.setDataCode(algcode);
 				pout.setParentCode(algdata.getParentCode());
 			}
-			context.cachePout(SCL.getNodeRef(fcdaEl), pout);
+			context.cachePout(iedName + SCL.getNodeRef(fcdaEl), pout);
 		}
 		beanDao.insertBatch(pouts);
 	}
