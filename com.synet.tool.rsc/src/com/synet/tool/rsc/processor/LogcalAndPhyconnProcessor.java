@@ -79,7 +79,9 @@ public class LogcalAndPhyconnProcessor {
 				}
 				if (!inPath) {
 					phyconnList.add(physconnEntity);
-					return findSendPhysConns(sendIedName, sendIed, phyconnList);
+					if (findSendPhysConns(sendIedName, sendIed, phyconnList)) {
+						return true;
+					}
 				}
 			}
 		}
