@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.synet.tool.rsc.excel.ImportInfoParser;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 
@@ -39,18 +38,5 @@ public class SecFibreService extends BaseService {
 				"tb1046IedByF1046Code", temp);
 		return result;
 	}
-	
-	public List<Tb1090LineprotfiberEntity> importData(String filePath) {
-		List<Tb1090LineprotfiberEntity> result = new ArrayList<>();
-		result = new ImportInfoParser().getLineprotfiberList(filePath);
-		beanDao.insertBatch(result);
-		return result;
-		
-	}
-	
-	public void exportData(List<Tb1090LineprotfiberEntity> list, String filePath) {
-//		ExcelUtils.e
-	}
-	
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.shrcn.found.file.excel.SheetsHandler;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.service.DefaultService;
 
@@ -16,6 +17,7 @@ public abstract class RscSheetHandler extends SheetsHandler {
 	//excel表格列-字段映射
 	protected Map<Integer, String> excelColInfo;
 	protected RSCProperties rscp = RSCProperties.getInstance();
+	protected ConsoleManager console = ConsoleManager.getInstance();
 	
 	public RscSheetHandler(int headRowNum, Map<Integer, String> excelColInfo) {
 		super();

@@ -44,35 +44,31 @@ public class SecLockHandler extends RscSheetHandler {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 3: 
+			case 1: 
 				if (value != null){
 					List<Tb1046IedEntity> iedList = (List<Tb1046IedEntity>) service.getListByCriteria(Tb1046IedEntity.class, "f1046Name", value.trim());
 					if (iedList != null) {
 						entity.setTb1046IedByF1046Code(iedList.get(0));
+						console.append("装置[" + value + "]找不到");
 						break;
 					}
 				}
 				entity = null;
-			case 4: 
-				if (!entity.getTb1046IedByF1046Code().getF1046Desc().equals(value.trim())) {
-					entity = null;
-				}
-				break;
-			case 5: 
+			case 3: 
 				if (value != null) {
 					entity.setF1091Desc(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 6: 
+			case 4: 
 				if (value != null) {
 					entity.setF1091TermNo(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 7: 
+			case 5: 
 				if (value != null) {
 					entity.setF1091CircNo(value);
 					break;
