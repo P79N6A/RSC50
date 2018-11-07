@@ -83,6 +83,19 @@ public class LogcalAndPhyconnProcessor {
 		return false;
 	}
 	
+	private Map<Tb1046IedEntity, Tb1053PhysconnEntity> findSwcDevice(Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap) {
+		Map<Tb1046IedEntity, Tb1053PhysconnEntity> swcDevs = new HashMap<>();
+		if (phyconnMap == null)
+			return swcDevs;
+		for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
+			Tb1046IedEntity sendIed = phyconnMap.get(physconnEntity);
+			if (isSwcDevice(sendIed)) {				  //与逻辑链路发送端装置不一致
+				swcDevs.put(sendIed, physconnEntity);
+			}
+		}
+		return swcDevs;
+	}
+	
 	private boolean hasVisited(Tb1046IedEntity sendIed, List<Tb1053PhysconnEntity> phyconnListVisited) {
 		boolean inPath = false; // 避免死循环
 		for (Tb1053PhysconnEntity phyconn : phyconnListVisited) {
@@ -123,21 +136,28 @@ public class LogcalAndPhyconnProcessor {
 			List<Tb1053PhysconnEntity> phyconnList = new ArrayList<>();
 			List<Tb1053PhysconnEntity> phyconnListVisited = new ArrayList<>();
 			String sendIedName = sendIed.getF1046Name();
-			boolean success = findSendPhysConns(sendIedName, recvIed, phyconnList, phyconnListVisited);
-			if (success) {//有与逻辑链路匹配的物理回路
-				phyconnListVisited.clear();
-				if (phyconnList.size() > 1) { // 补充直连的物理回路
-					Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
-					if (phyconnMap != null) {
-						for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
-							Tb1046IedEntity sendIed1 = phyconnMap.get(physconnEntity);
-							if (sendIed1.getF1046Name().equals(sendIedName)) { //与逻辑链路发送端装置一致
-								phyconnList.add(physconnEntity);
-								break;
-							}
-						}
+			// 直连
+			Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(recvIed);
+			if (phyconnMap != null) {
+				for (Tb1053PhysconnEntity physconnEntity : phyconnMap.keySet()) {
+					Tb1046IedEntity sendIed1 = phyconnMap.get(physconnEntity);
+					if (sendIed1.getF1046Name().equals(sendIedName)) { //与逻辑链路发送端装置一致
+						phyconnList.add(physconnEntity);
+						break;
 					}
 				}
+			}
+			Map<Tb1046IedEntity, Tb1053PhysconnEntity> swcDevices = findSwcDevice(phyconnMap);
+			// 通过交换机连接
+			for (Tb1046IedEntity swcDevice : swcDevices.keySet()) {
+				Tb1053PhysconnEntity physconnEntity = swcDevices.get(swcDevice);
+				phyconnList.add(physconnEntity);
+				phyconnListVisited.add(physconnEntity);
+				if (!findSendPhysConns(sendIedName, swcDevice, phyconnList, phyconnListVisited)) {
+					phyconnList.remove(physconnEntity);
+				}
+			}
+			if (phyconnList.size()>0) {//有与逻辑链路匹配的物理回路
 				for (Tb1053PhysconnEntity physconnEntity : phyconnList) {
 					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();
 					llinkphyrelationEntity.setTb1065LogicallinkByF1065Code(logicallinkEntity);
