@@ -892,7 +892,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1065Sql() {
 		return "INSERT INTO TB1065_LOGICALLINK(F1065_CODE,F1065_TYPE,F1046_CODE_IEDSEND,F1046_CODE_IEDRECV," +
-				"F1065_CBCODDE) VALUES (?,?,?,?,?)";
+				"F1065_CBCODE) VALUES (?,?,?,?,?)";
 	}
 	
 	@Override
