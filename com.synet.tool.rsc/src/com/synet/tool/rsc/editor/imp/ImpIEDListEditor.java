@@ -38,6 +38,7 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1070MmsserverEntity;
+import com.synet.tool.rsc.model.Tb1071DauEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
@@ -200,12 +201,36 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		iedEntity.setF1046bNetIp(netIPB);
 		iedEntityService.save(iedEntity);
 		if (!StringUtil.isEmpty(netIPA)) {
-			Tb1070MmsserverEntity mmsServer = new Tb1070MmsserverEntity();
-			mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
-			mmsServer.setTb1046IedByF1046Code(iedEntity);
-			mmsServer.setF1070IpA(netIPA);
-			mmsServer.setF1070IpB(netIPB);
-			beandao.insert(mmsServer);
+			if (DBConstants.IED_CJQ == iedEntity.getF1046Type()) {
+				Tb1071DauEntity dauEntity = (Tb1071DauEntity) beandao.getObject(Tb1071DauEntity.class, "tb1046IedByF1046Code", iedEntity);
+				if (dauEntity == null) {
+					dauEntity = new Tb1071DauEntity();
+					dauEntity.setF1071Code(rscp.nextTbCode(DBConstants.PR_DAU));
+					dauEntity.setTb1046IedByF1046Code(iedEntity);
+				}
+				dauEntity.setF1071Desc(iedEntity.getF1046Desc());
+				dauEntity.setF1071IpAddr(netIPA);
+				beandao.save(dauEntity);
+			} else {
+				Tb1070MmsserverEntity mmsServer = null;
+				List<?> mmsList = beandao.getListByCriteria(Tb1070MmsserverEntity.class, "tb1046IedByF1046Code", iedEntity);
+				if (mmsList != null && mmsList.size() > 0) {
+					mmsServer = (Tb1070MmsserverEntity) mmsList.get(0);
+					if (mmsList.size() > 1) { // 历史原因，删除多余的mms
+						for (int i=1; i<mmsList.size(); i++) {
+							beandao.delete(mmsList.get(i));
+						}
+					}
+				}
+				if (mmsServer == null) {
+					mmsServer = new Tb1070MmsserverEntity();
+					mmsServer.setF1070Code(rscp.nextTbCode(DBConstants.PR_MMSSvr));
+					mmsServer.setTb1046IedByF1046Code(iedEntity);
+				}
+				mmsServer.setF1070IpA(netIPA);
+				mmsServer.setF1070IpB(netIPB);
+				beandao.save(mmsServer);
+			}
 		}
 	}
 
