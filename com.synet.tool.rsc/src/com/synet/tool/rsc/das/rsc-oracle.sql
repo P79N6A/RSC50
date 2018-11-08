@@ -313,6 +313,7 @@ create table TB1052_Core
    F1052_No             NUMBER(5),
    F1048_CODE_A         VARCHAR(48),
    F1048_CODE_B         VARCHAR(48),
+   F1053_CODE           VARCHAR(48),
    primary key (F1052_CODE)
 );
 
@@ -335,7 +336,7 @@ create table TB1054_RCB
 (
    F1054_CODE           VARCHAR(48) not null, 
    F1046_CODE           VARCHAR(48),
-   F1054_RPTID          VARCHAR(48),
+   F1054_RPTREF          VARCHAR(48),
    F1054_Dataset        VARCHAR(48),
    F1054_DSDesc         VARCHAR(96),
    F1054_IsBRCB         NUMBER(5),
@@ -351,7 +352,7 @@ create table TB1055_GCB
    F1055_CODE          VARCHAR(48) not null,
    F1046_CODE       VARCHAR(48),
    F1055_CBNAME         	VARCHAR(48),
-   F1055_CBID           	VARCHAR(48),
+   F1055_CBREF           	VARCHAR(48),
    F1055_MACAddr        	VARCHAR(24),
    F1055_VLANID         	VARCHAR(24),
    F1055_VLANPriority   	VARCHAR(24),
@@ -370,7 +371,7 @@ create table TB1056_SVCB
    F1056_CODE          VARCHAR(48) not null,
    F1046_CODE       VARCHAR(48),
    F1056_CBName         	VARCHAR(48),
-   F1056_CBID           	VARCHAR(48),
+   F1056_CBREF           	VARCHAR(48),
    F1056_MACAddr        	VARCHAR(24),
    F1056_VLANID         	VARCHAR(24),
    F1056_VLANPriority   	VARCHAR(24),
@@ -389,6 +390,7 @@ create table TB1057_SGCB
    F1057_CODE           VARCHAR(48) not null,
    F1046_CODE           VARCHAR(48),
    F1057_CBName         VARCHAR(48),
+   F1057_CBRef	        VARCHAR(96),
    F1057_Dataset        VARCHAR(48),
    F1057_DSDesc         VARCHAR(96),
    primary key (F1057_CODE)
@@ -471,7 +473,7 @@ create table TB1062_PIN
    F1062_CODE           VARCHAR(48) not null,
    F1046_CODE           VARCHAR(48),
    F1062_RefAddr        VARCHAR(48),
-   F1011_NO				NUMBER(3)	not null,
+   F1011_NO				NUMBER(5)	not null,
    F1062_Desc           VARCHAR(96),
    F1062_IsUsed         NUMBER(5),
    F1064_CODE           VARCHAR(48),
@@ -517,7 +519,7 @@ create table TB1065_LogicalLink
    F1065_Type           NUMBER(5),
    F1046_CODE_IEDSend   VARCHAR(48),
    F1046_CODE_IEDRecv   VARCHAR(48),
-   F1065_CBCODDE        VARCHAR(48),
+   F1065_CBCODE        VARCHAR(48),
    primary key (F1065_CODE)
 );
 
@@ -597,6 +599,8 @@ create table TB1070_MMSServer
    F1046_CODE           VARCHAR(48),
    F1070_IP_A           VARCHAR(24),
    F1070_IP_B           VARCHAR(24),
+   F1070_IEDCRC         VARCHAR(24),
+   F1070_CRCPATH        VARCHAR(96),
    primary key (F1070_CODE)
 );
 
@@ -606,6 +610,7 @@ create table TB1070_MMSServer
 create table TB1071_DAU
 (
    F1071_CODE           VARCHAR(48) not null,
+   F1046_CODE           varchar(48) not null,
    F1071_DESC           VARCHAR(96),
    F1071_IPAddr         VARCHAR(24),
    primary key (F1071_CODE)

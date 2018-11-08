@@ -364,6 +364,7 @@ create table TB1057_SGCB
    F1057_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
    F1057_CBName         varchar(48) not null,
+   F1057_CBRef	        varchar(96) not null,
    F1057_Dataset        varchar(48) not null,
    F1057_DSDesc         varchar(96),
    primary key (F1057_CODE)
@@ -574,6 +575,8 @@ create table TB1070_MMSServer
 (
    F1070_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
+   F1070_IEDCRC         varchar(24),
+   F1070_CRCPATH        varchar(96),
    F1070_IP_A           varchar(24) not null,
    F1070_IP_B           varchar(24),
    primary key (F1070_CODE)
@@ -585,6 +588,7 @@ create table TB1070_MMSServer
 create table TB1071_DAU
 (
    F1071_CODE           varchar(48) not null,
+   F1046_CODE           varchar(48) not null,
    F1071_DESC           varchar(96),
    F1071_IPAddr         varchar(24) not null,
    primary key (F1071_CODE)
