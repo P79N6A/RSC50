@@ -127,7 +127,7 @@ public class F1011_NO {
 			if (!StringUtil.isEmpty(rule.getDoName()) && !doName.contains(rule.getDoName())) {
 				continue;
 			}
-			if (!StringUtil.isEmpty(rule.getDoDesc())) {
+			if (!StringUtil.isEmpty(rule.getDoDesc()) && !StringUtil.isEmpty(doDesc)) {
 				String[] dcs = rule.getDoDesc().split("/");
 				boolean match = false;
 				for (String dc : dcs) {
