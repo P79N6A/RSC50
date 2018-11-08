@@ -301,6 +301,16 @@ public class BeanDaoImpl implements BeanDaoService {
 		} 
 		return false;
 	}
+	
+	public String getIdentifierName(Class<?> clazz) {
+		PersistentClass pc = service.getConfiguration().getClassMapping(
+				clazz.getName());
+		if(pc == null){
+			return null;
+		}
+		Property p = pc.getIdentifierProperty();
+		return p.getName();
+	}
 
 	@Override
 	public boolean isSame(Object obj1, Object obj2) {

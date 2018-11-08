@@ -122,6 +122,24 @@ public class HqlDaoImpl implements HqlDaoService {
 		return i;
 	}
 	
+	public Object getObject(String hql, Map<String, Object> params) {
+		Session _session = service.get();
+		try {
+			Query query = _session.createQuery(hql);
+			if (params != null) {
+				Iterator<String> it = params.keySet().iterator();
+				String name = null;
+				for (; it.hasNext(); query.setParameter(name, params.get(name)))
+					name = (String) it.next();
+			}
+			List<?> list = query.setCacheable(true).list();
+			return (list != null && list.size() > 0) ? list.get(0) : null;
+		} 
+		finally {
+			service.flush();
+		}
+	}
+	
 	public int getCount(Class<?> clazz, String property, Object value) {
 		String fk = property;
 		int p = fk.lastIndexOf('.');

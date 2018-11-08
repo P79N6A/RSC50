@@ -74,6 +74,8 @@ public interface HqlDaoService {
 	 */
 	public int getCount(String hql, Map<String, Object> params);
 	
+	public Object getObject(String hql, Map<String, Object> params);
+	
 	/**
 	 * 统计实体个数。
 	 * 

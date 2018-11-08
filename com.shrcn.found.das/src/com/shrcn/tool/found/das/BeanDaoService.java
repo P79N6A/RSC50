@@ -102,6 +102,13 @@ public interface BeanDaoService {
 	public boolean exists(Object obj);
 	
 	/**
+	 * 得到主键字段值
+	 * @param obj
+	 * @return
+	 */
+	public String getIdentifierName(Class<?> clazz);
+	
+	/**
 	 * 根据主键ID删除持久层对象
 	 * 
 	 * @param po
