@@ -11,6 +11,9 @@
         <property name="f1057CbName">
             <column name="F1057_CBName" sql-type="varchar" length="48" not-null="true"/>
         </property>
+        <property name="f1057CbRef">
+            <column name="F1057_CBRef" sql-type="varchar" length="96" not-null="true"/>
+        </property>
         <property name="f1057Dataset">
             <column name="F1057_Dataset" sql-type="varchar" length="48" not-null="true"/>
         </property>

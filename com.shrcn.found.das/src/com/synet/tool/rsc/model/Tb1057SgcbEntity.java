@@ -11,6 +11,7 @@ public class Tb1057SgcbEntity {
     private String f1057Code;
     private String f1046Code;
     private String f1057CbName;
+    private String f1057CbRef;
     private String f1057Dataset;
     private String f1057DsDesc;
     private Tb1046IedEntity tb1046IedByF1046Code;
@@ -40,7 +41,15 @@ public class Tb1057SgcbEntity {
         this.f1057CbName = f1057CbName;
     }
 
-    public String getF1057Dataset() {
+    public String getF1057CbRef() {
+		return f1057CbRef;
+	}
+
+	public void setF1057CbRef(String f1057CbRef) {
+		this.f1057CbRef = f1057CbRef;
+	}
+
+	public String getF1057Dataset() {
         return f1057Dataset;
     }
 
@@ -65,6 +74,7 @@ public class Tb1057SgcbEntity {
 
         if (f1046Code != null ? !f1046Code.equals(that.f1046Code) : that.f1046Code != null) return false;
         if (f1057CbName != null ? !f1057CbName.equals(that.f1057CbName) : that.f1057CbName != null) return false;
+        if (f1057CbRef != null ? !f1057CbRef.equals(that.f1057CbRef) : that.f1057CbRef != null) return false;
         if (f1057Code != null ? !f1057Code.equals(that.f1057Code) : that.f1057Code != null) return false;
         if (f1057Dataset != null ? !f1057Dataset.equals(that.f1057Dataset) : that.f1057Dataset != null) return false;
         if (f1057DsDesc != null ? !f1057DsDesc.equals(that.f1057DsDesc) : that.f1057DsDesc != null) return false;
@@ -77,6 +87,7 @@ public class Tb1057SgcbEntity {
         int result = f1057Code != null ? f1057Code.hashCode() : 0;
         result = 31 * result + (f1046Code != null ? f1046Code.hashCode() : 0);
         result = 31 * result + (f1057CbName != null ? f1057CbName.hashCode() : 0);
+        result = 31 * result + (f1057CbRef != null ? f1057CbRef.hashCode() : 0);
         result = 31 * result + (f1057Dataset != null ? f1057Dataset.hashCode() : 0);
         result = 31 * result + (f1057DsDesc != null ? f1057DsDesc.hashCode() : 0);
         return result;
