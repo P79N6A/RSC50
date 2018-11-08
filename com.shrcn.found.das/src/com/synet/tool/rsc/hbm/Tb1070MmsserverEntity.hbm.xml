@@ -14,6 +14,12 @@
         <property name="f1070IpB">
             <column name="F1070_IP_B" sql-type="varchar" length="24"/>
         </property>
+        <property name="f1070IedCrc">
+            <column name="F1070_IEDCRC" sql-type="varchar" length="24"/>
+        </property>
+        <property name="f1070CrcPath">
+            <column name="F1070_CRCPATH" sql-type="varchar" length="96"/>
+        </property>
         <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>

@@ -7,6 +7,8 @@ public class Tb1070MmsserverEntity {
     private String f1070Code;
     private String f1070IpA;
     private String f1070IpB;
+    private String f1070IedCrc;
+    private String f1070CrcPath;
     private Tb1046IedEntity tb1046IedByF1046Code;
 
     public String getF1070Code() {
@@ -33,7 +35,23 @@ public class Tb1070MmsserverEntity {
         this.f1070IpB = f1070IpB;
     }
 
-    @Override
+    public String getF1070IedCrc() {
+		return f1070IedCrc;
+	}
+
+	public void setF1070IedCrc(String f1070IedCrc) {
+		this.f1070IedCrc = f1070IedCrc;
+	}
+
+	public String getF1070CrcPath() {
+		return f1070CrcPath;
+	}
+
+	public void setF1070CrcPath(String f1070CrcPath) {
+		this.f1070CrcPath = f1070CrcPath;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -43,6 +61,8 @@ public class Tb1070MmsserverEntity {
         if (f1070Code != null ? !f1070Code.equals(that.f1070Code) : that.f1070Code != null) return false;
         if (f1070IpA != null ? !f1070IpA.equals(that.f1070IpA) : that.f1070IpA != null) return false;
         if (f1070IpB != null ? !f1070IpB.equals(that.f1070IpB) : that.f1070IpB != null) return false;
+        if (f1070IedCrc != null ? !f1070IedCrc.equals(that.f1070IedCrc) : that.f1070IedCrc != null) return false;
+        if (f1070IedCrc != null ? !f1070IedCrc.equals(that.f1070IedCrc) : that.f1070IedCrc != null) return false;
 
         return true;
     }
@@ -52,6 +72,8 @@ public class Tb1070MmsserverEntity {
         int result = f1070Code != null ? f1070Code.hashCode() : 0;
         result = 31 * result + (f1070IpA != null ? f1070IpA.hashCode() : 0);
         result = 31 * result + (f1070IpB != null ? f1070IpB.hashCode() : 0);
+        result = 31 * result + (f1070IedCrc != null ? f1070IedCrc.hashCode() : 0);
+        result = 31 * result + (f1070IedCrc != null ? f1070IedCrc.hashCode() : 0);
         return result;
     }
 
