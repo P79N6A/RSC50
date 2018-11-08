@@ -107,9 +107,11 @@ public class IedParserNew {
 		}
 		String ldXpath = "./AccessPoint/Server/LDevice";
 		List<Element> elLDs = DOM4JNodeHelper.selectNodes(iedNd, ldXpath);
+		IEDPinParser iedPinParser = new IEDPinParser(ied, context);
 		for (Element elLD : elLDs) {
 			String ldInst = elLD.attributeValue("inst");
 			List<Element> elLNs = elLD.elements();
+			iedPinParser.createLDTreeEntry(elLD);
 			for (Element elLN : elLNs) {
 				String ndName = elLN.getName();
 				if ("LN0".equals(ndName)) {
@@ -150,6 +152,7 @@ public class IedParserNew {
 		}
 		beanDao.insertBatch(agls);
 		beanDao.insertBatch(sts);
+		iedPinParser.savePins();
 		// 分析虚端子
 		parseInputs();
 		if (monitor != null) {
@@ -299,7 +302,7 @@ public class IedParserNew {
 			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			pout.setF1061Type(type.getId());
 			if ("ST".equals(fc)) {
-				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
+				Tb1016StatedataEntity statedata = addStatedata(ref, fcdaDesc, type.getId());
 				pout.setDataCode(statedata.getF1016Code());
 				pout.setParentCode(statedata.getParentCode());
 			} else {
@@ -351,7 +354,7 @@ public class IedParserNew {
 			mmsFcda.setF1058Type(type.getId());
 			if ("ST".equals(fc)) {
 				mmsFcda.setF1058DataType(DBConstants.DATA_ST);
-				Tb1016StatedataEntity statedata = addStatedata(fcdaEl, fcdaDesc, type.getId());
+				Tb1016StatedataEntity statedata = addStatedata(ref, fcdaDesc, type.getId());
 				mmsFcda.setDataCode(statedata.getF1016Code());
 				mmsFcda.setParentCode(statedata.getParentCode());
 				if (SclUtil.isStrap(datSet)) { // 添加压板
@@ -372,7 +375,11 @@ public class IedParserNew {
 		Tb1057SgcbEntity sgcb = new Tb1057SgcbEntity();
 		sgcb.setF1057Code(rscp.nextTbCode(DBConstants.PR_SGCB));
 		sgcb.setTb1046IedByF1046Code(ied);
-		sgcb.setF1057CbName("SGCB");
+		String cbName = "SGCB";
+		String ldInst = elLd.attributeValue("inst");
+		String cbRef = ldInst + "/LLN0$SP$SGCB";
+		sgcb.setF1057CbName(cbName);
+		sgcb.setF1057CbRef(cbRef);
 		sgcb.setF1057Dataset(datSet);
 		sgcb.setF1057DsDesc(elDat.attributeValue("desc"));
 		beanDao.insert(sgcb);
@@ -421,8 +428,8 @@ public class IedParserNew {
 	 * @param f1011No
 	 * @return
 	 */
-	protected Tb1016StatedataEntity addStatedata(Element fcdaEl, String fcdaDesc, int f1011No) {
-		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, SclUtil.getFcdaRef(fcdaEl),
+	protected Tb1016StatedataEntity addStatedata(String ref, String fcdaDesc, int f1011No) {
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, ref,
 				ied.getF1046Code(), ied, f1011No);
 		sts.add(statedata);
 		return statedata;
