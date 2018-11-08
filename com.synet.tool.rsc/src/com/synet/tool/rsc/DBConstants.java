@@ -18,6 +18,7 @@ public interface DBConstants {
 	String PR_String 		= "String";
 	String PR_IED 			= "IED";
 	String PR_MMSSvr 		= "MMSSvr";
+	String PR_DAU	 		= "DAU";
 	String PR_GCB 			= "GCB";
 	String PR_SVCB 			= "SVCB";
 	String PR_POUT 			= "POUT";
@@ -48,7 +49,7 @@ public interface DBConstants {
 	String PR_BOARD			= "Board";
 	String PR_PORT			= "Port";
 	String PR_SVCVR			= "SVCVR";
-	String PR_SVCTVT		= "SVCTVT";
+	String PR_LPRELATION    = "LPRelation";
 	//导入信息表主键
 	String PR_IEDBOARD		= "IEDBoard";
 	String PR_FILEINFO	    = "fileInfo";
@@ -61,7 +62,6 @@ public interface DBConstants {
 	String PR_BRKCFM		= "BrkCfm";
 	String PR_TERSTRAP		= "TerStrap";
 	String PR_PORTLIGHT		= "PortLight";
-	String PR_LPRELATION    = "LPRelation";
 
 	String BAY_OTHER		= "其它间隔";	// 未知间隔
 	String BAY_MOT 			= "测控装置";
