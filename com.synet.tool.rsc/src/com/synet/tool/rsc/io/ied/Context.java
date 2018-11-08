@@ -14,6 +14,7 @@ import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 
 public class Context {
 	// 通信配置
@@ -24,6 +25,8 @@ public class Context {
 	private Map<String, Map<String, String>> vtLinkMap;
 	// 输出虚端子缓存
 	private CacheWrapper poutCache;
+	// 输入虚端子缓存
+	private CacheWrapper pintCache;
 	// 问题
 	private List<Problem> problems;
 	
@@ -34,8 +37,11 @@ public class Context {
 	private void init() {
 		this.vtLinkMap = new HashMap<>();
 		CacheFactory.createHashMapWrapper("pouts");
+		CacheFactory.createHashMapWrapper("pints");
 		poutCache = CacheFactory.getCacheWrapper("pouts");
 		poutCache.clear();
+		pintCache = CacheFactory.getCacheWrapper("pints");
+		pintCache.clear();
 		initNetCfgs();
 		initDatTpl();
 	}
@@ -123,8 +129,16 @@ public class Context {
 		poutCache.put(outAddr, pout);
 	}
 	
+	public void cachePin(String intAddr, Tb1062PinEntity pint) {
+		pintCache.put(intAddr, pint);
+	}
+	
 	public Tb1061PoutEntity getPout(String outAddr) {
 		return (Tb1061PoutEntity) poutCache.get(outAddr);
+	}
+	
+	public Tb1062PinEntity getPin(String intAddr) {
+		return (Tb1062PinEntity) pintCache.get(intAddr);
 	}
 	
 	public Map<String, Map<String, String>> getVtLinkMap() {
