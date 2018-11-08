@@ -32,7 +32,7 @@ public class SVCTVTRelationEntityService extends BaseService{
 		List<Tb1074SVCTVTRelationEntity> relations = new ArrayList<>();
 		for (Tb1061PoutEntity tb1061PoutEntity : poutList) {
 			Tb1074SVCTVTRelationEntity relationEntity = new Tb1074SVCTVTRelationEntity(secCtvtsecondaryEntity, tb1061PoutEntity);
-			relationEntity.setF1074Code(rscp.nextTbCode(DBConstants.PR_SVCTVT));
+			relationEntity.setF1074Code(rscp.nextTbCode(DBConstants.PR_SVCVR));
 			relations.add(relationEntity);
 		}
 		beanDao.insertBatch(relations);
