@@ -8,6 +8,7 @@ public class Tb1071DauEntity {
     private String f1071Code;
     private String f1071Desc;
     private String f1071IpAddr;
+    private Tb1046IedEntity tb1046IedByF1046Code;
 
     public String getF1071Code() {
         return f1071Code;
@@ -33,7 +34,15 @@ public class Tb1071DauEntity {
         this.f1071IpAddr = f1071IpAddr;
     }
 
-    @Override
+    public Tb1046IedEntity getTb1046IedByF1046Code() {
+		return tb1046IedByF1046Code;
+	}
+
+	public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
+		this.tb1046IedByF1046Code = tb1046IedByF1046Code;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -43,6 +52,7 @@ public class Tb1071DauEntity {
         if (f1071Code != null ? !f1071Code.equals(that.f1071Code) : that.f1071Code != null) return false;
         if (f1071Desc != null ? !f1071Desc.equals(that.f1071Desc) : that.f1071Desc != null) return false;
         if (f1071IpAddr != null ? !f1071IpAddr.equals(that.f1071IpAddr) : that.f1071IpAddr != null) return false;
+        if (tb1046IedByF1046Code != null ? !tb1046IedByF1046Code.equals(that.tb1046IedByF1046Code) : that.tb1046IedByF1046Code != null) return false;
 
         return true;
     }
@@ -52,6 +62,7 @@ public class Tb1071DauEntity {
         int result = f1071Code != null ? f1071Code.hashCode() : 0;
         result = 31 * result + (f1071Desc != null ? f1071Desc.hashCode() : 0);
         result = 31 * result + (f1071IpAddr != null ? f1071IpAddr.hashCode() : 0);
+        result = 31 * result + (tb1046IedByF1046Code != null ? tb1046IedByF1046Code.hashCode() : 0);
         return result;
     }
 }

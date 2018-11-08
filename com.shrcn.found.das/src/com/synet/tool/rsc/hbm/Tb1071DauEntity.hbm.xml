@@ -14,5 +14,8 @@
         <property name="f1071IpAddr">
             <column name="F1071_IPAddr" sql-type="varchar" length="24" not-null="true"/>
         </property>
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>
