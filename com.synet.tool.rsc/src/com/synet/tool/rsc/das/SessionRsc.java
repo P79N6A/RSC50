@@ -22,4 +22,7 @@ public class SessionRsc extends SessionComponent{
 		return session;
 	}
 
+	public String getTableName(Class<?> clazz) {
+		return getConfiguration().getClassMapping(clazz.getName()).getTable().getName();
+	}
 }

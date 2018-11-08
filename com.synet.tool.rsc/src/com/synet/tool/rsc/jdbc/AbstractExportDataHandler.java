@@ -108,7 +108,7 @@ public abstract class AbstractExportDataHandler {
 	public abstract boolean exportData(ConnParam connParam, IProgressMonitor monitor);
 	
 	private String getTableName(Class<?> clazz) {
-		return SessionRsc.getInstance().getConfiguration().getClassMapping(clazz.getName()).getTable().getName();
+		return SessionRsc.getInstance().getTableName(clazz);
 	}
 	
 	protected void clearTableDate(int tbIndex, IProgressMonitor monitor) throws SQLException {
