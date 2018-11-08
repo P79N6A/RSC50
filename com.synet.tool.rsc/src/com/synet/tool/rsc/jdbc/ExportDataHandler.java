@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -92,8 +93,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1049_INDEX,
 		TB1050_INDEX,
 		TB1051_INDEX,
-		TB1052_INDEX,
 		TB1053_INDEX,//TB1053_PhysConn
+		TB1052_INDEX,//TB1052_CORE
 		TB1073_INDEX,//TB1073_LLinkPhyRelation
 		TB1074_INDEX,//TB1074_SVCTVTRelation
 
@@ -103,7 +104,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1093_INDEX,
 
 //		TB1022_INDEX,
-//		TB1071_INDEX, //TB1071_DAU
+		TB1071_INDEX, //TB1071_DAU
 		TB1047_INDEX,
 		TB1048_INDEX
 	};
@@ -381,7 +382,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 //				"F1046_PROTECTCRC,F1046_OPERATEDATE,F1046_PRODUCTDATE,F1046_PRODUCTNO,F1046_DATAGATTYPE," +
 //				"F1046_OUTTYPE,F1046_BOARDNUM) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		return "INSERT INTO TB1046_IED(F1046_CODE,F1042_CODE,F1050_CODE,F1046_NAME,F1046_DESC,F1046_MANUFACTUROR," +
-		"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE,F1046_CRC) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -407,7 +408,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1046AorB());
 		setInt(preState, index++, entity.getF1046IsVirtual());
 		setInt(preState, index++, entity.getF1046Type());
-		setSring(preState, index++, entity.getF1046Crc());
+//		setSring(preState, index++, entity.getF1046Crc());
 //		setSring(preState, index++, entity.getF1046aNetIp());
 //		setSring(preState, index++, entity.getF1046bNetIp());
 //		setSring(preState, index++, entity.getF1046version());
@@ -660,8 +661,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1057Sql() {
-		return "INSERT INTO TB1057_SGCB(F1057_CODE,F1046_CODE,F1057_CBNAME,F1057_DATASET,F1057_DSDESC)" +
-				" VALUES (?,?,?,?,?)";
+		return "INSERT INTO TB1057_SGCB(F1057_CODE,F1046_CODE,F1057_CBNAME,F1057_CBRef,F1057_DATASET,F1057_DSDESC)" +
+				" VALUES (?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -675,6 +676,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 			setSring(preState, index++, null);
 		}
 		setSring(preState, index++, entity.getF1057CbName());
+		setSring(preState, index++, entity.getF1057CbRef());
 		setSring(preState, index++, entity.getF1057Dataset());
 		setSring(preState, index++, entity.getF1057DsDesc());
 	}
@@ -1023,7 +1025,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1070Sql() {
-		return "INSERT INTO TB1070_MMSSERVER(F1070_CODE,F1046_CODE,F1070_IP_A,F1070_IP_B) VALUES (?,?,?,?)";
+		return "INSERT INTO TB1070_MMSSERVER(F1070_CODE,F1046_CODE,F1070_IP_A,F1070_IP_B,F1070_IEDCRC,F1070_CRCPATH) VALUES (?,?,?,?,?,?)";
 	}
 	
 	@Override
@@ -1038,11 +1040,13 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		}
 		setSring(preState, index++, entity.getF1070IpA());
 		setSring(preState, index++, entity.getF1070IpB());
+		setSring(preState, index++, StringUtil.nullToEmpty(entity.getF1070IedCrc()));
+		setSring(preState, index++, StringUtil.nullToEmpty(entity.getF1070CrcPath()));
 	}
 	
 	@Override
 	protected String getTb1071Sql() {
-		return "INSERT INTO TB1071_DAU(F1071_CODE,F1071_DESC,F1071_IPADDR) VALUES (?,?,?)";
+		return "INSERT INTO TB1071_DAU(F1071_CODE,F1046_CODE,F1071_DESC,F1071_IPADDR) VALUES (?,?,?,?)";
 	}
 	
 	@Override
@@ -1050,6 +1054,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		Tb1071DauEntity entity = (Tb1071DauEntity) obj;
 		int index = 1;
 		setSring(preState, index++, entity.getF1071Code());
+		setSring(preState, index++, entity.getTb1046IedByF1046Code().getF1046Code());
 		setSring(preState, index++, entity.getF1071Desc());
 		setSring(preState, index++, entity.getF1071IpAddr());
 	}
