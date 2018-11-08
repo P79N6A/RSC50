@@ -5,6 +5,9 @@ import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
 public class ParserUtil {
 
@@ -58,4 +61,14 @@ public class ParserUtil {
 		return ldInst + "/LLN0$" + fc + "$" + cbName;//PL6602PIGO/LLN0$GO$gocb0，IL6602MUSV/LLN0$MS$smvcb1
 	}
 	
+	public static Tb1062PinEntity createPin(Tb1046IedEntity iedResv, String pinRefAddr, String pinDesc, int f1011No, int f1062IsUsed) {
+		Tb1062PinEntity pin = new Tb1062PinEntity();
+		pin.setF1062Code(rscp.nextTbCode(DBConstants.PR_PIN));
+		pin.setTb1046IedByF1046Code(iedResv);
+		pin.setF1062RefAddr(pinRefAddr);
+		pin.setF1062Desc(pinDesc);
+		pin.setF1011No(f1011No);
+		pin.setF1062IsUsed(f1062IsUsed);
+		return pin;
+	}
 }
