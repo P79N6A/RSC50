@@ -1,12 +1,17 @@
 package com.synet.tool.rsc.model;
 
+import java.io.Serializable;
+
 
 /**
  * 接收虚端子
  * Created by chunc on 2018/8/7.
  */
-public class Tb1062PinEntity {
-    private String f1062Code;
+public class Tb1062PinEntity implements Serializable {
+	
+	private static final long serialVersionUID = -7270686816803539701L;
+
+	private String f1062Code;
     private String f1062RefAddr;
     private String f1062Desc;
     private int f1062IsUsed;
