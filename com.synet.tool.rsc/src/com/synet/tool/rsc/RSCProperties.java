@@ -7,15 +7,24 @@ package com.synet.tool.rsc;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.shrcn.found.file.util.AProperties;
+import com.shrcn.tool.found.das.BeanDaoService;
+import com.shrcn.tool.found.das.HqlDaoService;
+import com.shrcn.tool.found.das.impl.BeanDaoImpl;
+import com.shrcn.tool.found.das.impl.HEntityUtil;
+import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.jdbc.ConnParam;
 
 public class RSCProperties extends AProperties {
 
 	private String path = "com/synet/tool/rsc/rsc.properties";
 	private static volatile RSCProperties instance = new RSCProperties();
+	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
+	private HqlDaoService hqlDao = HqlDaoImpl.getInstance();
 	private Map<String, Integer> codeCache = new HashMap<>();
 	private static final String ORA_IP = "ora.ip";
 	private static final String ORA_PORT = "ora.port";
@@ -57,18 +66,33 @@ public class RSCProperties extends AProperties {
 		String key = "code@" + prefix;
 		Integer icode = codeCache.get(key);
 		if (icode == null) {
-			icode = 0;
+			try {
+				Class<?> clazz = Class.forName("com.synet.tool.rsc.model." + getProperty(prefix + ".class"));
+				int count = hqlDao.getCount(clazz);
+				if (count > 0) {
+					String id = beanDao.getIdentifierName(clazz);
+					String hql = "SELECT MAX(" + id + ") FROM " + clazz.getName();
+					Object obj = hqlDao.getObject(hql, null);
+					if (obj != null) {
+						icode = Integer.parseInt(obj.toString().substring(prefix.length()));
+					} else {
+						icode = 0;
+					}
+				} else {
+					icode = 0;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-		String scode = data.getProperty(key);
+		String scode = getProperty(key);
 		if (scode == null) {
-			data.setProperty(key, DBConstants.CODE_STEP + "");
-			saveData();
+			setProperty(key, icode + "", true);
 		} else {
 			int imax = Integer.parseInt(scode);
-			if (icode == imax) {
+			if (icode >= imax) {
 				imax += DBConstants.CODE_STEP;
-				data.setProperty(key, imax + "");
-				saveData();
+				setProperty(key, imax + "", true);
 			}
 		}
 		icode++;
