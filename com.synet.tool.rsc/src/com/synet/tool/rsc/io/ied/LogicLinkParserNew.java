@@ -10,18 +10,17 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
-import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
-import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
-import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 
 public class LogicLinkParserNew {
 	
@@ -88,7 +87,22 @@ public class LogicLinkParserNew {
 					linkCache.put(linkKey, logicLink);
 				}
 				// 创建虚回路
-				Tb1063CircuitEntity circuit = createCircuit(logicLink, intAddr, inDesc, pout);
+				Tb1062PinEntity pin = context.getPin(iedName + intAddr);
+				if (pin == null) {
+					if (intAddr.endsWith(".q") || intAddr.endsWith(".t")) {
+						continue;
+					} else {
+						String outRef = pout.getF1061RefAddr();
+						String fc = SclUtil.getFC(outRef);
+						String lnName = SclUtil.getLnName(intAddr);
+						String doName = SclUtil.getDoName(intAddr);
+						Rule type = F1011_NO.getType("", lnName, doName, inDesc, fc);
+						intAddr = SclUtil.getFcdaRef(intAddr, fc);
+						pin = ParserUtil.createPin(resvIed, intAddr, inDesc, type.getId(), 1);
+						beanDao.insert(pin);
+					}
+				}
+				Tb1063CircuitEntity circuit = createCircuit(logicLink, pin, pout);
 				circuits.add(circuit);
 			}
 		}
@@ -97,10 +111,10 @@ public class LogicLinkParserNew {
 				" 条逻辑链路，" + circuits.size() + "  条虚回路。");
 	}
 	
-	private Tb1063CircuitEntity createCircuit(Tb1065LogicallinkEntity logiclink, String pinRefAddr, String pinDesc, Tb1061PoutEntity pout) {
-		String poutRef = pout.getF1061RefAddr();
-		String fc = SclUtil.getFC(poutRef);
-		pinRefAddr = SclUtil.getFcdaRef(pinRefAddr, fc);
+	private Tb1063CircuitEntity createCircuit(Tb1065LogicallinkEntity logiclink, Tb1062PinEntity pin, Tb1061PoutEntity pout) {
+//		String poutRef = pout.getF1061RefAddr();
+//		String fc = SclUtil.getFC(poutRef);
+//		pinRefAddr = SclUtil.getFcdaRef(pinRefAddr, fc);
 		Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv(); 
 		Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend(); 
 		Tb1063CircuitEntity circuit = new Tb1063CircuitEntity();
@@ -109,22 +123,22 @@ public class LogicLinkParserNew {
 		circuit.setTb1046IedByF1046CodeIedRecv(iedResv);
 		circuit.setTb1046IedByF1046CodeIedSend(iedSend);
 		circuit.setTb1061PoutByF1061CodePSend(pout);
-		// 接收
-		Tb1062PinEntity pin = new Tb1062PinEntity();
+//		// 接收
+//		Tb1062PinEntity pin = new Tb1062PinEntity();
 		circuit.setTb1062PinByF1062CodePRecv(pin);
-		pin.setF1062Code(rscp.nextTbCode(DBConstants.PR_PIN));
-		pin.setTb1046IedByF1046Code(iedResv);
-		pin.setF1062RefAddr(pinRefAddr);
-		pin.setF1062Desc(pinDesc);
-		pin.setF1062IsUsed(1);
-		Tb1016StatedataEntity stdata = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", pout.getDataCode());
-		if (stdata != null) {
-			pin.setF1011No(stdata.getF1011No());
-		} else {
-			Tb1006AnalogdataEntity mxdata = (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", pout.getDataCode());
-			pin.setF1011No(mxdata.getF1011No());
-		}
-		beanDao.insert(pin);
+//		pin.setF1062Code(rscp.nextTbCode(DBConstants.PR_PIN));
+//		pin.setTb1046IedByF1046Code(iedResv);
+//		pin.setF1062RefAddr(pinRefAddr);
+//		pin.setF1062Desc(pinDesc);
+//		pin.setF1062IsUsed(1);
+//		Tb1016StatedataEntity stdata = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", pout.getDataCode());
+//		if (stdata != null) {
+//			pin.setF1011No(stdata.getF1011No());
+//		} else {
+//			Tb1006AnalogdataEntity mxdata = (Tb1006AnalogdataEntity) beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", pout.getDataCode());
+//			pin.setF1011No(mxdata.getF1011No());
+//		}
+//		beanDao.insert(pin);
 		return circuit;
 	}
 	
