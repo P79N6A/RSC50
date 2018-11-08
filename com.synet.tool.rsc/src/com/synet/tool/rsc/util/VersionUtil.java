@@ -22,6 +22,9 @@ public class VersionUtil {
 		updatePout();
 		updateMms();
 		updateExcelImp();
+		updateTb1057();
+		updateTb1070();
+		updateTb1071();
 	}
 	
 	private static void updateExcelImp() {
@@ -55,6 +58,25 @@ public class VersionUtil {
 		if (!existsColumn("TB1058_MMSFCDA", "F1058_Type")) {
 			addTableColumn("TB1058_MMSFCDA", "F1058_Type", "INT");
 			updateDataType("TB1058_MMSFCDA", "F1058_Type");
+		}
+	}
+	
+	private static void updateTb1057() {
+		if (!existsColumn("TB1057_SGCB", "F1057_CBRef")) {
+			addTableColumn("TB1057_SGCB", "F1057_CBRef", "varchar(96)");
+		}
+	}
+	
+	private static void updateTb1070() {
+		if (!existsColumn("TB1070_MMSServer", "F1070_IEDCRC")) {
+			addTableColumn("TB1070_MMSServer", "F1070_IEDCRC", "varchar(24)");
+			addTableColumn("TB1070_MMSServer", "F1070_CRCPATH", "varchar(96)");
+		}
+	}
+	
+	private static void updateTb1071() {
+		if (!existsColumn("TB1071_DAU", "F1046_CODE")) {
+			addTableColumn("TB1071_DAU", "F1046_CODE", "varchar(48)");
 		}
 	}
 	
