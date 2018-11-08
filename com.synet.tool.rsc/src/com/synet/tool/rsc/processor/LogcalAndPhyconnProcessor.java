@@ -9,6 +9,7 @@ import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
+import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
@@ -18,6 +19,7 @@ import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
+import com.synet.tool.rsc.model.Tb1071DauEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.EnumIedType;
@@ -41,8 +43,10 @@ public class LogcalAndPhyconnProcessor {
 	private BoardEntityService boardEntityService = new BoardEntityService();
 	private PortEntityService portEntityService = new PortEntityService();
 	private IedEntityService iedEntityService = new IedEntityService();
+	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
 
 	private Map<String, List<Tb1053PhysconnEntity>> phyconnCache = new HashMap<>();
+	private Map<Tb1046IedEntity, List<BaseCbEntity>> cbCache = new HashMap<>();
 	
 	/**
 	 * 递归查找
@@ -269,33 +273,59 @@ public class LogcalAndPhyconnProcessor {
 			console.append("当前工程没有采集器，GOOSE/SMV与采集器关联关系分析完毕！");
 			return;//采集器为空，退出
 		}
-		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
-		int cbNum = 0;
+		List<BaseCbEntity> cbsAll = new ArrayList<>();
 		for (Tb1046IedEntity odf : odfDeviceList) {
 			Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMap = getPhysconnEntitiesByPortB(odf);
 			if (phyconnMap == null) 
 				continue;
-			for (Tb1046IedEntity ied : phyconnMap.values()) {
-				if (isSwcDevice(ied)) {//是交换机，则视为交换机汇集口
+			Tb1071DauEntity dauEntity = (Tb1071DauEntity) beanDao.getObject(Tb1071DauEntity.class, "tb1046IedByF1046Code", odf);
+			if (dauEntity == null) {
+				continue;
+			}
+			List<BaseCbEntity> cbsIED = new ArrayList<>();
+			List<Tb1053PhysconnEntity> phyconnListVisited = new ArrayList<>();
+			for (Tb1046IedEntity iedSwc : phyconnMap.values()) {
+				if (isSwcDevice(iedSwc)) {//是交换机，则视为交换机汇集口
 					//搜索端口B相关的物理回路
-					Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMapSwc = getPhysconnEntitiesByPortB(ied);
-					if (phyconnMapSwc == null) 
-						continue;
-					for (Tb1053PhysconnEntity physconnEntity : phyconnMapSwc.keySet()) {
-						Tb1046IedEntity sendIed = phyconnMapSwc.get(physconnEntity);
-						List<BaseCbEntity> cbs = (List<BaseCbEntity>) beanDao.getListByCriteria(BaseCbEntity.class, "tb1046IedByF1046Code", sendIed);
-						if (cbs != null && cbs.size()>0) {
-							for (BaseCbEntity cb : cbs) {
-								cb.setF1071Code(odf.getF1046Code());
-							}
-							beanDao.updateBatch(cbs);
-							cbNum += cbs.size();
-						}
+					findCBs(iedSwc, cbsIED, phyconnListVisited);
+				}
+			}
+			for (BaseCbEntity cb : cbsIED) {
+				if (!cbsAll.contains(cb)) {
+					cb.setF1071Code(dauEntity.getF1071Code());
+					cbsAll.add(cb);
+				} else {
+//					System.out.println("cb加过了");
+				}
+			}
+		}
+		beanDao.updateBatch(cbsAll);
+		console.append("一共更新 " + cbsAll.size() + " 个GOOSE/SMV的采集器编号。");
+		console.append("GOOSE/SMV与采集器关联关系分析完毕！");
+	}
+	
+	private void findCBs(Tb1046IedEntity iedSwc, List<BaseCbEntity> cbsAll, List<Tb1053PhysconnEntity> phyconnListVisited) {
+		Map<Tb1053PhysconnEntity, Tb1046IedEntity> phyconnMapSwc = getPhysconnEntitiesByPortB(iedSwc);
+		if (phyconnMapSwc == null) 
+			return;
+		for (Tb1053PhysconnEntity physconnEntity : phyconnMapSwc.keySet()) {
+			Tb1046IedEntity sendIed = phyconnMapSwc.get(physconnEntity);
+			if (isSwcDevice(iedSwc)) {
+				if (!phyconnListVisited.contains(physconnEntity)) {
+					phyconnListVisited.add(physconnEntity);
+					findCBs(sendIed, cbsAll, phyconnListVisited);
+				} else {
+//					System.out.println("找过了");
+				}
+			} else {
+				if (!cbCache.containsKey(sendIed)) {
+					List<BaseCbEntity> cbs = (List<BaseCbEntity>) beanDao.getListByCriteria(BaseCbEntity.class, "tb1046IedByF1046Code", sendIed);
+					if (cbs != null && cbs.size()>0) {
+						cbsAll.addAll(cbs);
+						cbCache.put(sendIed, cbs);
 					}
 				}
 			}
 		}
-		console.append("一共更新 " + cbNum + " 个GOOSE/SMV的采集器编号。");
-		console.append("GOOSE/SMV与采集器关联关系分析完毕！");
 	}
 }
