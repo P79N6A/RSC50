@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.ui.view.ConsoleManager;
@@ -13,6 +14,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -162,17 +164,12 @@ public class LogcalAndPhyconnProcessor {
 				}
 			}
 			if (phyconnList.size()>0) {//有与逻辑链路匹配的物理回路
+				List<Tb1073LlinkphyrelationEntity> relations = new ArrayList<>();
 				for (Tb1053PhysconnEntity physconnEntity : phyconnList) {
-					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = new Tb1073LlinkphyrelationEntity();
-					llinkphyrelationEntity.setTb1065LogicallinkByF1065Code(logicallinkEntity);
-					llinkphyrelationEntity.setTb1053PhysconnByF1053Code(physconnEntity);
-					//关联关系已存在
-					if (lLinkPhyRelationService.existEntity(llinkphyrelationEntity) != null) {
-						continue;
-					}
-					llinkphyrelationEntity.setF1073Code(rscp.nextTbCode(DBConstants.PR_LPRELATION));
-					lLinkPhyRelationService.save(llinkphyrelationEntity);
+					Tb1073LlinkphyrelationEntity llinkphyrelationEntity = ParserUtil.createLLinkRelation(logicallinkEntity, physconnEntity);
+					relations.add(llinkphyrelationEntity);
 				}
+				beanDao.insertBatch(relations);
 				console.append("逻辑链路 " + appid + " 关联了" + phyconnList.size() + "条物理回路。");
 			}
 		}
@@ -282,10 +279,15 @@ public class LogcalAndPhyconnProcessor {
 			if (dauEntity == null) {
 				continue;
 			}
+			this.currDau = odf;
 			List<BaseCbEntity> cbsIED = new ArrayList<>();
 			List<Tb1053PhysconnEntity> phyconnListVisited = new ArrayList<>();
-			for (Tb1046IedEntity iedSwc : phyconnMap.values()) {
+			for (Entry<Tb1053PhysconnEntity, Tb1046IedEntity> entry : phyconnMap.entrySet()) {
+				Tb1053PhysconnEntity phyconn = entry.getKey();
+				Tb1046IedEntity iedSwc = entry.getValue();
 				if (isSwcDevice(iedSwc)) {//是交换机，则视为交换机汇集口
+					dauPhyConns.clear();
+					dauPhyConns.add(phyconn);
 					//搜索端口B相关的物理回路
 					findCBs(iedSwc, cbsIED, phyconnListVisited);
 				}
@@ -310,8 +312,9 @@ public class LogcalAndPhyconnProcessor {
 			return;
 		for (Tb1053PhysconnEntity physconnEntity : phyconnMapSwc.keySet()) {
 			Tb1046IedEntity sendIed = phyconnMapSwc.get(physconnEntity);
-			if (isSwcDevice(iedSwc)) {
+			if (isSwcDevice(sendIed)) {
 				if (!phyconnListVisited.contains(physconnEntity)) {
+					dauPhyConns.add(physconnEntity);
 					phyconnListVisited.add(physconnEntity);
 					findCBs(sendIed, cbsAll, phyconnListVisited);
 				} else {
@@ -323,9 +326,31 @@ public class LogcalAndPhyconnProcessor {
 					if (cbs != null && cbs.size()>0) {
 						cbsAll.addAll(cbs);
 						cbCache.put(sendIed, cbs);
+						dauPhyConns.add(physconnEntity);
+						// 创建逻辑链路
+						List<Tb1065LogicallinkEntity> links = new ArrayList<>();
+						List<Tb1073LlinkphyrelationEntity> relations = new ArrayList<>();
+						for (BaseCbEntity cb : cbs) {
+							Tb1065LogicallinkEntity logicLink = ParserUtil.createLogicLink(currDau, cb);
+							links.add(logicLink);
+							// 创建逻辑链路与物理回路间管理关系
+							for (Tb1053PhysconnEntity physconn : dauPhyConns) {
+								Tb1073LlinkphyrelationEntity llinkphyrelationEntity = ParserUtil.createLLinkRelation(logicLink, physconn);
+								relations.add(llinkphyrelationEntity);
+							}
+						}
+						beanDao.insertBatch(links);
+						beanDao.insertBatch(relations);
+						// 清理交换机之后的回路，为下一个装置做准备
+						Tb1053PhysconnEntity firstPhysconn = dauPhyConns.get(0);
+						dauPhyConns.clear();
+						dauPhyConns.add(firstPhysconn);
 					}
 				}
 			}
 		}
 	}
+	
+	private List<Tb1053PhysconnEntity> dauPhyConns = new ArrayList<>();
+	private Tb1046IedEntity currDau;
 }
