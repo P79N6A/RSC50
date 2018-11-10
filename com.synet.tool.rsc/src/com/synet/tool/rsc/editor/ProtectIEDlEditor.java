@@ -204,9 +204,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		super.buildUI(container);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
 		comp.setLayout(SwtUtil.getGridLayout(6));
-		if (!needConfig()) {
-			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
-		} else {
+//		if (!needConfig()) {
+//			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
+//		} else {
 			SwtUtil.createLabel(comp, "", new GridData(700, SWT.DEFAULT));
 			btnRefresh = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "刷新");
 			btnApplyRule = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "应用规则");
@@ -214,7 +214,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
 			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
 			createCompByEntryName(comp);
-		}
+			if (!needConfig()) {
+				disableButtons();
+			}
+//		}
+	}
+	
+	private void disableButtons() {
+		btnRefresh.setEnabled(false);
+		btnApplyRule.setEnabled(false);
+		btnTempCamp.setEnabled(false);
+		btnTempQuote.setEnabled(false);
+		btnTempSave.setEnabled(false);
 	}
 	
 	private boolean needConfig() {
@@ -234,8 +245,12 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		gdSpan_5.horizontalSpan = 6;
 		if (isProtIED()) {
 			createProtectCmp(comp, gdSpan_5);
-		} else {
+		} else if (isSubIED()) {
 			createIedCmp(comp, gdSpan_5);
+		} else if (isDauIED()) {
+			createIedDauCmp(comp, gdSpan_5);
+		} else {
+			createOtherIedCmp(comp, gdSpan_5);
 		}
 	}
 	
@@ -247,6 +262,37 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		Integer f1046Type = iedEntity.getF1046Type();
 		return DBConstants.IED_MU == f1046Type 
 				|| DBConstants.IED_MT == f1046Type || DBConstants.IED_TERM == f1046Type;
+	}
+	
+	private boolean isDauIED() {
+		Integer f1046Type = iedEntity.getF1046Type();
+		return DBConstants.IED_CJQ == f1046Type;
+	}
+	
+	/**
+	 * 创建其他装置界面
+	 * @param comp
+	 * @param gdSpan_4
+	 */
+	private void createOtherIedCmp(Composite comp, GridData gdSpan_4) {
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT};
+		Control[] controls = getControls(comp, gdSpan_4, tabNames);
+		//板卡端口
+		createBoardPortCmp((Composite) controls[0]);
+	}
+	
+	/**
+	 * 创建数据采集单元界面
+	 * @param comp
+	 * @param gdSpan_4
+	 */
+	private void createIedDauCmp(Composite comp, GridData gdSpan_4) {
+		String[] tabNames = new String[]{RSCConstants.BOARD_PORT, RSCConstants.LOGICAL_LINK};
+		Control[] controls = getControls(comp, gdSpan_4, tabNames);
+		//板卡端口
+		createBoardPortCmp((Composite) controls[0]);
+		//逻辑链路
+		createLogicalLinkCmp((Composite) controls[1]);
 	}
 
 	/**
@@ -404,14 +450,14 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 
 	protected void addListeners() {
-		if (!needConfig()) {
-			return;
-		}
 		SelectionListener selectionListener = new ConfigListener();
 		if(tabFProtect != null) {
 			tabFProtect.addSelectionListener(selectionListener);
 		}
 		tabFolder.addSelectionListener(selectionListener);
+		if (!needConfig()) {
+			return;
+		}
 		btnAddWarn.addSelectionListener(selectionListener);
 		btnDelWarn.addSelectionListener(selectionListener);
 		btnTempCamp.addSelectionListener(selectionListener);
@@ -702,9 +748,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		
 	@Override
 	public void initData() {
-		if (!needConfig()) {
-			return;
-		}
+//		if (!needConfig()) {
+//			return;
+//		}
 		//板卡端口 
 		List<Tb1048PortEntity> portEntities = portService.getBoardPortByIed(iedEntity);
 		tableBoardPort.setInput(portEntities);
