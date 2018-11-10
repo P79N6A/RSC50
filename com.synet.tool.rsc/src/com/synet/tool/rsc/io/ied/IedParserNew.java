@@ -36,6 +36,7 @@ import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
@@ -52,6 +53,7 @@ public class IedParserNew {
 	private List<Tb1056SvcbEntity> smvs = new ArrayList<>();
 	private List<Tb1006AnalogdataEntity> agls = new ArrayList<>();
 	private List<Tb1016StatedataEntity> sts = new ArrayList<>();
+	private List<Tb1062PinEntity> pins = new ArrayList<>();
 	// LN 映射
 	private Map<String, Element> iedLNMap = new HashMap<String, Element>();
 	// extref 缓存
@@ -107,12 +109,13 @@ public class IedParserNew {
 		}
 		String ldXpath = "./AccessPoint/Server/LDevice";
 		List<Element> elLDs = DOM4JNodeHelper.selectNodes(iedNd, ldXpath);
-		IEDPinParser iedPinParser = new IEDPinParser(ied, context);
+//		IEDPinParser iedPinParser = new IEDPinParser(ied, context);
 		for (Element elLD : elLDs) {
 			String ldInst = elLD.attributeValue("inst");
 			List<Element> elLNs = elLD.elements();
-			iedPinParser.createLDTreeEntry(elLD);
+//			iedPinParser.createLDTreeEntry(elLD);
 			for (Element elLN : elLNs) {
+				parsePins(ldInst, elLN);
 				String ndName = elLN.getName();
 				if ("LN0".equals(ndName)) {
 					Element elLN0 = elLN;
@@ -148,16 +151,52 @@ public class IedParserNew {
 				}
 				String lnName = ldInst + "/" + SCL.getLnName(elLN);
 				iedLNMap.put(lnName, elLN);
+//				parsePins(ldInst, elLN);
 			}
 		}
 		beanDao.insertBatch(agls);
 		beanDao.insertBatch(sts);
-		iedPinParser.savePins();
+		beanDao.insertBatch(pins);
+//		iedPinParser.savePins();
 		// 分析虚端子
 		parseInputs();
 		if (monitor != null) {
 			monitor.worked(1);
 		}
+	}
+	
+	private void parsePins(String ldInst, Element elLN) {
+		String prefix = elLN.attributeValue("prefix");
+		String lnName = SCL.getLnName(elLN);
+		List<Element> dois = elLN.elements("DOI");
+		if ("GOIN".equals(prefix)) {
+			for (Element doi : dois) {
+				addPin(ldInst, lnName, doi, "ST");
+			}
+		} else if ("SVIN".equals(prefix)) {
+			for (Element doi : dois) {
+				addPin(ldInst, lnName, doi, "MX");
+			}
+		}
+	}
+	
+	private void addPin(String ldInst, String lnName, Element doi, String fc) {
+		String doName = doi.attributeValue("name");
+		String doDesc = doi.attributeValue("desc");
+		String pinRef = ldInst + "/" + lnName + "$" + doName;
+		String pinAddr = ldInst + "/" + lnName + "." + doName;
+		if ("ST".equals(fc)) {
+			pinRef += (doName.startsWith("AnIn") ? "$mag$f" : "$stVal");
+			pinAddr += (doName.startsWith("AnIn") ? ".mag.f" : ".stVal");
+		}
+		Rule type = F1011_NO.getType("", lnName, doName, doDesc, fc);
+		Tb1062PinEntity pin = ParserUtil.createPin(ied, pinRef, doDesc, type.getId(), 0);
+		context.cachePin(iedName + pinAddr, pin);
+		pins.add(pin);
+	}
+	
+	private boolean isNullDOI(String doName) {
+		return "Mod".equals(doName) || "Beh".equals(doName) || "Health".equals(doName) || "NamPlt".equals(doName);
 	}
 
 	private void parseInputs() {
@@ -193,10 +232,10 @@ public class IedParserNew {
 							if (inDodaType == null) {
 								addError(iedName, "虚端子关联", intAddr, "数据模板 " + inLnType + " 中不存在 " + inDodaName);
 							} else {
-								Element dodaEl = DOM4JNodeHelper.selectSingleNode(inLN, "." + SCL.getDOXPath(inDodaName));
-								if (dodaEl == null) {
-									addWarning(iedName, "虚端子关联", intAddr, "内部虚端子未实例化");
-								}
+//								Element dodaEl = DOM4JNodeHelper.selectSingleNode(inLN, "." + SCL.getDOXPath(inDodaName));
+//								if (dodaEl == null) {
+//									addWarning(iedName, "虚端子关联", intAddr, "内部虚端子未实例化");
+//								}
 							}
 						} else {
 							addError(iedName, "虚端子关联", intAddr, "无此逻辑节点类型 " + inLnType);
@@ -285,7 +324,6 @@ public class IedParserNew {
 		int i=0;
 		for (Element fcdaEl : fcdaEls) {
 			Tb1061PoutEntity pout = new Tb1061PoutEntity();
-			pouts.add(pout);
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
 			pout.setTb1046IedByF1046Code(ied);
 			pout.setCbEntity(cb);
@@ -299,6 +337,10 @@ public class IedParserNew {
 			String fc = fcdaEl.attributeValue("fc");
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
+			String daName = fcdaEl.attributeValue("daName");
+			if ("q".equals(daName) || "t".equals(daName)) {
+				continue;
+			}
 			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			pout.setF1061Type(type.getId());
 			if ("ST".equals(fc)) {
@@ -312,8 +354,16 @@ public class IedParserNew {
 				pout.setParentCode(algdata.getParentCode());
 			}
 			context.cachePout(iedName + SCL.getNodeRef(fcdaEl), pout);
+			pouts.add(pout);
 		}
 		beanDao.insertBatch(pouts);
+//		for (Tb1061PoutEntity pout : pouts) {
+//			try {
+//				beanDao.insert(pout);
+//			} catch (Exception e) {
+//				System.out.println(e);
+//			}
+//		}
 	}
 	
 	private void createRcb(String datSet, Element elDat, Element elRcb, Element elLd) {

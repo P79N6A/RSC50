@@ -50,10 +50,12 @@ public class LogicLinkParserNew {
 				temp = value.split(",");
 				String outIedName = temp[0];
 				String outAddr = temp[1];
-				
 				Tb1046IedEntity resvIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 				Tb1046IedEntity sendIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", outIedName);
 				
+				if (outAddr.endsWith(".q") || outAddr.endsWith(".t") || intAddr.endsWith(".q") || intAddr.endsWith(".t")) {
+					continue;
+				}
 				Tb1061PoutEntity pout = context.getPout(outIedName + outAddr);
 				if (pout == null) {
 					context.addError(iedName, "虚端子关联", intAddr, "找不到外部虚端子" + outAddr + "。");
@@ -70,18 +72,7 @@ public class LogicLinkParserNew {
 					params.put("tb1046IedByF1046CodeIedSend", sendIed);
 					logicLink = (Tb1065LogicallinkEntity) beanDao.getObject(Tb1065LogicallinkEntity.class, params);
 					if (logicLink == null) {
-						logicLink = new Tb1065LogicallinkEntity();
-						logicLink.setF1065Code(rscp.nextTbCode(DBConstants.PR_LOGICLINK));
-						int cbType = DBConstants.LINK_GOOSE;
-						if (cbEntity instanceof Tb1056SvcbEntity) {
-							cbType = DBConstants.LINK_SMV;
-						}
-						logicLink.setF1065Type(cbType);
-						logicLink.setBaseCbByCdCode(cbEntity);
-						logicLink.setF1046CodeIedRecv(resvIed.getF1046Code());
-						logicLink.setF1046CodeIedSend(sendIed.getF1046Code());
-						logicLink.setTb1046IedByF1046CodeIedRecv(resvIed);
-						logicLink.setTb1046IedByF1046CodeIedSend(sendIed);
+						logicLink = ParserUtil.createLogicLink(resvIed, cbEntity);
 						beanDao.insert(logicLink);
 					}
 					linkCache.put(linkKey, logicLink);
@@ -89,18 +80,31 @@ public class LogicLinkParserNew {
 				// 创建虚回路
 				Tb1062PinEntity pin = context.getPin(iedName + intAddr);
 				if (pin == null) {
-					if (intAddr.endsWith(".q") || intAddr.endsWith(".t")) {
-						continue;
-					} else {
-						String outRef = pout.getF1061RefAddr();
-						String fc = SclUtil.getFC(outRef);
+					// SV到da的情况
+					String[] ins = intAddr.split("\\.");
+					pin = context.getPin(iedName + ins[0] + "." + ins[1]);
+					if (pin == null) {
 						String lnName = SclUtil.getLnName(intAddr);
-						String doName = SclUtil.getDoName(intAddr);
-						Rule type = F1011_NO.getType("", lnName, doName, inDesc, fc);
-						intAddr = SclUtil.getFcdaRef(intAddr, fc);
-						pin = ParserUtil.createPin(resvIed, intAddr, inDesc, type.getId(), 1);
-						beanDao.insert(pin);
+						if (lnName.startsWith("GOIN") || lnName.startsWith("SVIN")) {
+							String outRef = pout.getF1061RefAddr();
+							String fc = SclUtil.getFC(outRef);
+//							String lnName = SclUtil.getLnName(intAddr);
+							String doName = SclUtil.getDoName(intAddr);
+							Rule type = F1011_NO.getType("", lnName, doName, inDesc, fc);
+							intAddr = SclUtil.getFcdaRef(intAddr, fc);
+							pin = ParserUtil.createPin(resvIed, intAddr, inDesc, type.getId(), 1);
+							beanDao.insert(pin);
+						} else {
+//							context.addWarning(iedName, "逻辑链路", outIedName + cbEntity.getCbId(), "找不到接收虚端子" + intAddr);
+							continue;
+						}
+					} else {
+						pin.setF1062IsUsed(1);
+						beanDao.update(pin);
 					}
+				} else {
+					pin.setF1062IsUsed(1);
+					beanDao.update(pin);
 				}
 				Tb1063CircuitEntity circuit = createCircuit(logicLink, pin, pout);
 				circuits.add(circuit);
