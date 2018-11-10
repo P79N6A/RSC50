@@ -88,7 +88,7 @@ public class VersionUtil {
 	 */
 	private static boolean existsColumn(String tbName, String colName) {
 		String sql = "SELECT t.TABLENAME, c.COLUMNNAME FROM SYS.SYSTABLES t, SYS.SYSCOLUMNS c WHERE c.REFERENCEID = t.TABLEID AND t.TABLENAME = '" + 
-						tbName + "'";
+						tbName.toUpperCase() + "'";
 		List<Map<String, Object>> columns = (List<Map<String, Object>>) hqlDao.getQueryResultToListMap(sql, null);
 		boolean exists = false;
 		for (Map<String, Object> column : columns) {
