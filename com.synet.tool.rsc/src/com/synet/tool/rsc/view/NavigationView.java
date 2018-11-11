@@ -159,21 +159,6 @@ public class NavigationView extends ANavigationView {
 		cfgViewer.expandAll();
 	}
 
-	/**
-	 * 初始化间隔字典
-	 */
-//	private void initIntervalDict() {
-//		BeanDaoImpl instance = BeanDaoImpl.getInstance();
-//		@SuppressWarnings("unchecked")
-//		List<Tb1042BayEntity> allBay = (List<Tb1042BayEntity>) instance.getAll(Tb1042BayEntity.class);
-//		if(!DataUtils.listNotNull(allBay)) {
-//			return;
-//		}
-//		for (Tb1042BayEntity tb1042BayEntity : allBay) {
-//			DictManager.getInstance().addItemByType("ALL_INTERVAL", tb1042BayEntity.getF1042Name());
-//		}
-//	}
-
 	@Override
 	protected void closeProject() {
 		Constants.CURRENT_PRJ_NAME  = null;

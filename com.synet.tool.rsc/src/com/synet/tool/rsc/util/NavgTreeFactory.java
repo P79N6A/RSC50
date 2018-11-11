@@ -26,6 +26,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_SEC_FIB;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_LCK;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PRO;
 import static com.synet.tool.rsc.RSCConstants.ET_SEC_PWR;
+import static com.synet.tool.rsc.RSCConstants.ET_PR_MDL;
 
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,7 @@ import com.shrcn.found.ui.tree.TreeViewerBuilder;
 import com.shrcn.found.ui.view.ANavgTreeFactory;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
@@ -44,6 +46,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.ui.PhysicInfoEntry;
 
 /**
  * 
@@ -72,6 +75,12 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		}
 		return factory;
 	}
+	
+	@Override
+	public TreeViewerBuilder getTreeBuilder() {
+		treeBuilder = TreeViewerBuilder.create(getClass(), RSCConstants.CFGURL);
+		return super.getTreeBuilder();
+	}
 
 	/**
 	 * 打开工程节点.
@@ -91,9 +100,11 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		}
 		ProjectEntry projectEntry = new ProjectEntry(staName, "", "project.gif");
 		data.add(projectEntry);
-		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", null, 1);
+		ConfigTreeEntry primaryEntry = createConfigEntry(projectEntry, "一次拓扑模型", "column.gif", ET_PR_MDL, 1);
 		ConfigTreeEntry protectEntry = createConfigEntry(projectEntry, "保护信息模型", "column.gif", null, 2);
-		ConfigTreeEntry physicalEntry = createConfigEntry(projectEntry, "物理信息模型", "column.gif", ET_PY_MDL, 3);
+//		ConfigTreeEntry physicalEntry = createConfigEntry(projectEntry, "物理信息模型", "column.gif", ET_PY_MDL, 3);
+		ConfigTreeEntry physicalEntry = new PhysicInfoEntry(projectEntry, "物理信息模型", "", "column.gif", ET_PY_MDL);
+		physicalEntry.setIndex(3);
 		ConfigTreeEntry securityEntry = createConfigEntry(projectEntry, "安措配置", "column.gif", "", 4);
 		ConfigTreeEntry icdEntry = createConfigEntry(projectEntry, "系统ICD", "column.gif", ET_ICD_MDL, 5);
 		ConfigTreeEntry importEntry = createConfigEntry(projectEntry, "导入信息", "column.gif", "", 6);

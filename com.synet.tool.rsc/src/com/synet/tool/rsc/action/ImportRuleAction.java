@@ -5,7 +5,6 @@
 package com.synet.tool.rsc.action;
 
 import com.shrcn.found.ui.action.ConfigAction;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.synet.tool.rsc.dialog.ModelRuleDialog;
 
  /**

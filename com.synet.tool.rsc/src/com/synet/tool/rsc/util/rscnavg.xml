@@ -1,33 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Navigation bundleID="com.shrcn.tool.ecfg">
-	<IEDRoot class="com.shrcn.found.ui.model.IEDEntry" icon="project.gif">
+<Navigation bundleID="com.synet.tool.rsc">
+	<!-- <IEDRoot class="com.shrcn.found.ui.model.IEDEntry" icon="project.gif">
 		<Popup>
 			<MenuItem class="com.shrcn.tool.ecfg.action.NewDeviceAction" title="新建(&amp;N)" icon="new_device.png"/>
-			<!-- MenuItem class="com.shrcn.tool.ecfg.action.OpenDeviceAction" title="打开(&amp;O)" icon="open_device.png"/ -->
+			MenuItem class="com.shrcn.tool.ecfg.action.OpenDeviceAction" title="打开(&amp;O)" icon="open_device.png"/
 			<MenuItem class="com.shrcn.tool.ecfg.action.ImportSCDAction" title="SCD同步" icon="synced.gif"/>
 		</Popup>
-	</IEDRoot>
-	<IED class="com.shrcn.tool.ecfg.ui.model.BayIEDEntry" icon="device.png">
-		<Configs>
-				<CfgItem index="1" name="网口功能映射" desc="" icon="net_port.png" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.NetMappingEditor"/>
-				<CfgItem index="2" name="通道配置" desc="" icon="channel.png" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.ChnConfigEditor"/>
-				<CfgItem index="3" name="HMI配置" desc="" icon="elements_obj.gif" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.LcdConfigEditor"/>
-				<CfgItem index="4" name="信号引用表" desc="" icon="signal_ref.png" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.SignalRefEditor"/>
-				<CfgItem index="5" name="虚端子关联" desc="" icon="vt_monitor.png" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.VTerminalEditor"/>
-				<CfgItem index="6" name="基本属性" desc="" icon="base_info.png" editorId="com.shrcn.tool.ecfg/com.shrcn.tool.ecfg.editor.BaseInfoEditor"/>
-		</Configs>
+	</IEDRoot> -->
+	<IED class="com.synet.tool.rsc.ui.PhysicInfoEntry" icon="column.gif">
 		<Popup>
-			<MenuItem class="org.eclipse.jface.action.Separator"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.CopyDeviceAction" title="复制(&amp;C)" icon="copy.gif"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.CopyDevicesAction" title="批量复制(&amp;M)" icon="copy.gif"/>
-		    <MenuItem class="com.shrcn.tool.ecfg.action.RenameDeviceAction" title="重命名(&amp;R)" icon="write.gif"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.DeleteDeviceAction" title="删除(&amp;D)" icon="delete.gif"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.OpenDirAction" title="打开文件夹(&amp;P)" icon="explore.gif"/>
-			<MenuItem class="org.eclipse.jface.action.Separator"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.UpdateDeviceAction" title="升级装置(&amp;U)" icon="reload.png"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.ExportDeviceAction" title="导出装置(&amp;E)" icon="editExport.gif"/>
-			<MenuItem class="com.shrcn.tool.ecfg.action.ExportMMSDeviceAction" title="导出装置（六统一）(&amp;X)" icon="editExport.gif"/>
-			<!-- MenuItem class="com.shrcn.tool.ecfg.action.ExportVDescAction" title="导出虚端子描述" icon=""/ -->
+			<MenuItem class="com.synet.tool.rsc.action.ImportRegionAction" title="导入区域屏柜(&amp;I)" icon="import_excel.png"/>
 		</Popup>
 	</IED>
 </Navigation>
