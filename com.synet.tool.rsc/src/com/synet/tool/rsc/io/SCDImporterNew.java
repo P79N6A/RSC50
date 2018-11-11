@@ -149,10 +149,11 @@ public class SCDImporterNew implements IImporter {
 			// 根据解析结果修改装置类型和间隔类型
 			Tb1042BayEntity bay = null;
 			if (iedParser.getRcbs().size() > 0) {		// 保护测控
-				String ldXpath = SCL.getLDXPath(iedName, "PROT");
-				int type = XMLDBHelper.existsNode(ldXpath) ?
-						DBConstants.IED_PROT : DBConstants.IED_MONI;
-				ied.setF1046Type(type);
+//				String ldXpath = SCL.getLDXPath(iedName, "PROT");
+//				int type = XMLDBHelper.existsNode(ldXpath) ?
+//						DBConstants.IED_PROT : DBConstants.IED_MONI;
+//				ied.setF1046Type(type);
+				int type = ied.getF1046Type();
 				if (type == DBConstants.IED_MONI) {
 					bay = getBayByName(DBConstants.BAY_MOT);
 				}
@@ -169,7 +170,7 @@ public class SCDImporterNew implements IImporter {
 					beanDao.insert(mmsServer);
 				}
 			} else {
-				if (iedParser.getSmvs().size() > 0) {	// 合并单元
+				if (iedParser.getSmvs().size() > 0) {			// 合并单元
 					ied.setF1046Type(DBConstants.IED_MU);
 				} else {										// 智能终端
 					ied.setF1046Type(DBConstants.IED_TERM);

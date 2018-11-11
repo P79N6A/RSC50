@@ -31,6 +31,11 @@ public class LogicLinkParserNew {
 	public LogicLinkParserNew(Context context) {
 		this.context = context;
 	}
+	
+	private boolean isMoni(Tb1046IedEntity ied) {
+		Integer f1046Type = ied.getF1046Type();
+		return (f1046Type != null && DBConstants.IED_MONI == f1046Type);
+	}
 
 	// 虚链路与虚回路
 	public void parse() {
@@ -53,7 +58,9 @@ public class LogicLinkParserNew {
 				Tb1046IedEntity resvIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
 				Tb1046IedEntity sendIed = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", outIedName);
 				
-				if (outAddr.endsWith(".q") || outAddr.endsWith(".t") || intAddr.endsWith(".q") || intAddr.endsWith(".t")) {
+				if (outAddr.endsWith(".q") || outAddr.endsWith(".t") 
+						|| intAddr.endsWith(".q") || intAddr.endsWith(".t")
+						|| isMoni(sendIed) || isMoni(resvIed)) {
 					continue;
 				}
 				Tb1061PoutEntity pout = context.getPout(outIedName + outAddr);

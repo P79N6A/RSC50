@@ -89,6 +89,13 @@ public class IedParserNew {
 		ied.setF1046AorB(aOrb);
 		ied.setF1046IsVirtual(0);
 		ied.setF1046boardNum(0);
+		
+		boolean existsS1 = DOM4JNodeHelper.existsNode(iedNd, "./scl:AccessPoint[@name='S1']");
+		boolean existsProt = DOM4JNodeHelper.existsNode(iedNd, "./scl:AccessPoint/scl:Server/scl:LDevice[@inst='PROT']");
+		if (existsS1) {
+			int type = existsProt ? DBConstants.IED_PROT : DBConstants.IED_MONI;
+			ied.setF1046Type(type);
+		}
 		beanDao.insert(ied);
 		// 通信状态点
 		Tb1016StatedataEntity stIedComm = ParserUtil.createStatedata(iedName+"通信状态点", "", iedCode, ied, F1011_NO.IED_COMM.getId());
@@ -107,15 +114,17 @@ public class IedParserNew {
 		if (monitor != null) {
 			monitor.setTaskName("正在导入装置" + iedName);
 		}
+		Integer f1046Type = ied.getF1046Type();
+		boolean isMoni = (f1046Type != null && DBConstants.IED_MONI == f1046Type);
 		String ldXpath = "./AccessPoint/Server/LDevice";
 		List<Element> elLDs = DOM4JNodeHelper.selectNodes(iedNd, ldXpath);
-//		IEDPinParser iedPinParser = new IEDPinParser(ied, context);
 		for (Element elLD : elLDs) {
 			String ldInst = elLD.attributeValue("inst");
 			List<Element> elLNs = elLD.elements();
-//			iedPinParser.createLDTreeEntry(elLD);
 			for (Element elLN : elLNs) {
-				parsePins(ldInst, elLN);
+				if (!isMoni) {
+					parsePins(ldInst, elLN);
+				}
 				String ndName = elLN.getName();
 				if ("LN0".equals(ndName)) {
 					Element elLN0 = elLN;
@@ -132,9 +141,9 @@ public class IedParserNew {
 							Element elSmv = DOM4JNodeHelper.selectSingleNode(elLN0, "./SampledValueControl[@datSet='" + datSet + "']");
 							if (elRcb != null) {
 								createRcb(datSet, elDatSet, elRcb, elLD);
-							} else if (elGoose != null) {
+							} else if (elGoose != null && !isMoni) {
 								createGoose(datSet, elDatSet, elGoose, elLD);
-							} else if (elSmv != null) {
+							} else if (elSmv != null && !isMoni) {
 								createSMV(datSet, elDatSet, elSmv, elLD);
 							} else {
 								SCTLogger.info("装置 " + iedName + " 未被识别的数据集 " + datSet + " 。");
@@ -151,13 +160,11 @@ public class IedParserNew {
 				}
 				String lnName = ldInst + "/" + SCL.getLnName(elLN);
 				iedLNMap.put(lnName, elLN);
-//				parsePins(ldInst, elLN);
 			}
 		}
 		beanDao.insertBatch(agls);
 		beanDao.insertBatch(sts);
 		beanDao.insertBatch(pins);
-//		iedPinParser.savePins();
 		// 分析虚端子
 		parseInputs();
 		if (monitor != null) {
@@ -182,8 +189,11 @@ public class IedParserNew {
 	
 	private void addPin(String ldInst, String lnName, Element doi, String fc) {
 		String doName = doi.attributeValue("name");
+		if (isNullDOI(doName)) {
+			return;
+		}
 		String doDesc = doi.attributeValue("desc");
-		String pinRef = ldInst + "/" + lnName + "$" + doName;
+		String pinRef = ldInst + "/" + lnName + "$" + fc + "$" + doName;
 		String pinAddr = ldInst + "/" + lnName + "." + doName;
 		if ("ST".equals(fc)) {
 			pinRef += (doName.startsWith("AnIn") ? "$mag$f" : "$stVal");
