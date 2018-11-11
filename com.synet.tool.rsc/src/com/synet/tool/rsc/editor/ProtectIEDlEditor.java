@@ -38,6 +38,7 @@ import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.dialog.FuncDefectDialog;
 import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.ModelRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
@@ -87,6 +88,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Button btnApplyRule;
 	private Button btnTempQuote;
 	private Button btnTempSave;
+	private Button btnFunCfg;
 	private Button btnRefresh;
 	private Button btnAddWarn;
 	private Button btnDelWarn;
@@ -223,7 +225,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	public void buildUI(Composite container) {
 		super.buildUI(container);
 		Composite comp = SwtUtil.createComposite(container, gridData, 1);
-		comp.setLayout(SwtUtil.getGridLayout(6));
+		comp.setLayout(SwtUtil.getGridLayout(7));
 //		if (!needConfig()) {
 //			SwtUtil.createLabel(comp, "当前装置无需配置！", new GridData(780, SWT.DEFAULT));
 //		} else {
@@ -233,6 +235,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			btnTempCamp = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "对比模版");
 			btnTempQuote = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "引用模版");
 			btnTempSave = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "保存模版");
+			btnFunCfg = SwtUtil.createButton(comp, SwtUtil.bt_gd, SWT.BUTTON1, "功能配置");
 			createCompByEntryName(comp);
 			if (!needConfig()) {
 				disableButtons();
@@ -246,6 +249,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempCamp.setEnabled(false);
 		btnTempQuote.setEnabled(false);
 		btnTempSave.setEnabled(false);
+		btnFunCfg.setEnabled(false);
 	}
 	
 	private boolean needConfig() {
@@ -262,7 +266,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	
 	private void createCompByEntryName(Composite comp) {
 		GridData gdSpan_5 = new GridData(GridData.FILL_BOTH);
-		gdSpan_5.horizontalSpan = 6;
+		gdSpan_5.horizontalSpan = 7;
 		if (isProtIED()) {
 			createProtectCmp(comp, gdSpan_5);
 		} else if (isSubIED()) {
@@ -456,6 +460,9 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			} else if(obj == btnTempCamp) {
 				ModelCompareDialog dialog = new ModelCompareDialog(getShell(), iedEntity);
 				dialog.open();
+			} else if(obj == btnFunCfg) {
+				FuncDefectDialog defDialog = new FuncDefectDialog(getShell(), iedEntity);
+				defDialog.open();
 			} else if(obj == btnRefresh) {
 				clearTables();
 				String tabText = tabFolder.getSelection().getText();
@@ -485,6 +492,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		btnTempSave.addSelectionListener(selectionListener);
 		btnApplyRule.addSelectionListener(selectionListener);
 		btnRefresh.addSelectionListener(selectionListener);
+		btnFunCfg.addSelectionListener(selectionListener);
 		
 		tableDeviceWarning.getTable().addMouseListener(new MouseListener() {
 			

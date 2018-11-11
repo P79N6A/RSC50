@@ -125,8 +125,8 @@
        </menu>
        <menu id="menu.app" text="应用">
        		<action
-	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ModelCheckAction"
-	              text="模型检查"/>
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.FuncConfigAction"
+	              text="保护功能定义"/>
 	       	<action
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ImportRuleAction"
 	              text="模型辨识规则"/>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.synet.tool.rsc.model.TB1084FuncClassEntity" table="TB1084_FuncClass" schema="rscapp"
+          >
+        <id name="f1084CODE">
+            <column name="F1084_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <property name="f1084DESC">
+            <column name="F1084_DESC" sql-type="varchar" length="96" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

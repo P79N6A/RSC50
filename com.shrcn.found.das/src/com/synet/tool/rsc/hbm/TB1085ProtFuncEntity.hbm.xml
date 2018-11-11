@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.synet.tool.rsc.model.TB1085ProtFuncEntity" table="TB1085_ProtFunc" schema="rscapp"
+          >
+        <id name="f1085CODE">
+            <column name="F1085_CODE" sql-type="varchar" length="48" not-null="true"/>
+        </id>
+        <many-to-one name="tb1046ByF1046CODE" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="tb1804ByF1084CODE" class="com.synet.tool.rsc.model.TB1084FuncClassEntity">
+            <column name="F1084_CODE" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

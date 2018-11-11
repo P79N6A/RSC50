@@ -103,6 +103,9 @@ public class RuleEntityService {
 	private void applyRulesToPouts(String dataset, List<Tb1061PoutEntity> fcdas) {
 		List<Tb1061PoutEntity> fcdasUpdate = new ArrayList<>(); 
 		for (Tb1061PoutEntity fcda : fcdas) {
+			if (fcda == null) {
+				continue;
+			}
 			String dataCode = fcda.getDataCode();
 			Rule type = getRuleByPout(dataset, fcda);
 			if (type != null) {

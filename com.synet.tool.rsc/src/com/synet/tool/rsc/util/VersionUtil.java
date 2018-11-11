@@ -25,15 +25,16 @@ public class VersionUtil {
 		updateTb1057();
 		updateTb1070();
 		updateTb1071();
+//		FuncManager.getInstance();
 	}
 	
 	private static void updateExcelImp() {
-		if (!existsTable("IM110_LINK_WARN")) {
+//		if (!existsTable("IM110_LINK_WARN")) {
 			Session _session = SessionRsc.getInstance().get();
 			Connection conn = _session.connection();
 			InputStream is = ProjectManager.class.getClassLoader().getResourceAsStream(DBConstants.patchSqlPath);
 			RscDbManagerImpl.getInstance().runScript(is, conn);
-		}
+//		}
 	}
 
 	private static void updatePout() {

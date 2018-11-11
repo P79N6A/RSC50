@@ -83,10 +83,22 @@ public class TableFactory {
 	public static final String PROBLEMS		  				= "problems";
 	public static final String MODEL_RULE_TABLE		  		= "ModelRuleTable";
 	public static final String RULE_SELECT_TABLE		  	= "RuleSelectTable";
+	public static final String FUN_CLASS_TABLE			  	= "FuncClassTable";
+	public static final String FUN_DEFECT_TABLE			  	= "FuncDefectRTable";
 	
 	public static final String IED_TABLE		  		    = "IEDTable";
 	
 	private static UIConfig uicfg = UIConfig.getInstance();
+
+	public static DevKTable getFunClassTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(FUN_CLASS_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getFunDefectTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(FUN_DEFECT_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
 	
 	public static RuleTable getRuleSelectTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(RULE_SELECT_TABLE);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="FuncClassTable" desc="功能类型配置列表" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.TB1084FuncClassEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="60" default=""/>  
+  <field desc="功能类型" editor="text" name="f1084DESC" datType="string" width="600" default=""/>
+  <field desc="" editor="none" name="" datType="string" width="30" default=""/>
+</table>

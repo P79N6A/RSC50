@@ -2,6 +2,7 @@ package com.synet.tool.rsc;
 
 import static java.io.File.separator;
 
+import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.dict.DictManager;
 
 public interface RSCConstants {
@@ -22,6 +23,7 @@ public interface RSCConstants {
     String CFGURL 			= "com/synet/tool/rsc/util/rscnavg.xml";
     String RULEFILE			= "rules.xml";
     String RULEURL 			= "com/synet/tool/rsc/util/" + RULEFILE;
+    String FUNCFILE			= Constants.cfgDir + separator + "func.xml";
 
     String ET_PR_MDL		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryModelEditor";
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";

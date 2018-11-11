@@ -28,7 +28,6 @@ import com.synet.tool.rsc.RSCProperties;
 public class RuleManager {
 
 	private static final String RULES_DIR = RSCConstants.RULES_DIR;
-	private static final String RULES_DEFAULT = RSCConstants.RULEFILE;
 	private static final String RULES_DEFAULT_PATH = RSCConstants.RULES_DIR + RSCConstants.RULEFILE;
 	private static RuleManager rmgr = new RuleManager();
 	private List<Rule> rules = new ArrayList<>();

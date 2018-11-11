@@ -50,6 +50,9 @@ public interface DBConstants {
 	String PR_PORT			= "Port";
 	String PR_SVCVR			= "SVCVR";
 	String PR_LPRELATION    = "LPRelation";
+	String PR_FUNCLASS   	= "FuncClass";
+	String PR_FUN    		= "ProtFunc";
+	String PR_FUNDEF    	= "DefectFuncR";
 	//导入信息表主键
 	String PR_IEDBOARD		= "IEDBoard";
 	String PR_FILEINFO	    = "fileInfo";

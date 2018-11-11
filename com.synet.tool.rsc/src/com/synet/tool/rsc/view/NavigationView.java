@@ -137,7 +137,7 @@ public class NavigationView extends ANavigationView {
 					monitor.beginTask("正在打开...", 3);
 					monitor.worked(1);
 					prjmgr.openDb(prjName);
-//					initIntervalDict();
+					VersionUtil.updateDB();
 					monitor.worked(1);
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override

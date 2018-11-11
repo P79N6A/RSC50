@@ -690,3 +690,40 @@ create table TB1093_VoltageKK
    F1093_KKNo           VARCHAR(96),
    primary key (F1093_CODE)
 );
+
+/*==============================================================*/
+/* Table: TB1084_FuncClass                                      */
+/*==============================================================*/
+create table TB1084_FuncClass
+(
+   F1084_CODE           VARCHAR(48) not null,
+   F1084_DESC           VARCHAR(96) not null,
+   primary key (F1084_CODE)
+);
+
+/*==============================================================*/
+/* Table: TB1085_ProtFunc                                       */
+/*==============================================================*/
+create table TB1085_ProtFunc
+(
+   F1085_CODE           VARCHAR(48) not null,
+   F1046_CODE           VARCHAR(48) not null,
+   F1084_CODE           VARCHAR(48) not null,
+   F1085_LEVEL          NUMBER(5),
+   primary key (F1085_CODE)
+);
+
+/*==============================================================*/
+/* Table: TB1086_DefectFuncR                                    */
+/*==============================================================*/
+create table TB1086_DefectFuncR
+(
+   	F1086_CODE           VARCHAR(48) not null,
+  	F1086_OBJ_CODE       VARCHAR(48) not null,
+	F1086_DefectType     NUMBER(5),
+	F1086_SubType        NUMBER(5),
+	F1086_DefectLevel    NUMBER(5),
+	F1085_CODE       	 VARCHAR(48) not null,
+   	primary key (F1086_CODE)
+);
+

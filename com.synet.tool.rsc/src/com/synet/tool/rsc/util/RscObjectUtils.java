@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.model.TB1086DefectFuncREntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
@@ -83,6 +84,12 @@ public class RscObjectUtils {
 		physconnEntity.setTb1048PortByF1048CodeA(new Tb1048PortEntity());
 		physconnEntity.setTb1048PortByF1048CodeB(new Tb1048PortEntity());
 		return physconnEntity;
+	}
+	
+	public static TB1086DefectFuncREntity createDefectFunc() {
+		TB1086DefectFuncREntity defectFunc = new TB1086DefectFuncREntity();
+		defectFunc.setF1086CODE(rscp.nextTbCode(DBConstants.PR_FUNDEF));
+		return defectFunc;
 	}
 
 	@SuppressWarnings("unchecked")

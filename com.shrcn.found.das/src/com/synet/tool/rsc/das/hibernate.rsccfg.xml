@@ -76,6 +76,9 @@
         <mapping resource="com/synet/tool/rsc/hbm/Tb1090LineprotfiberEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1091IotermEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/Tb1092PowerkkEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/TB1084FuncClassEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/TB1085ProtFuncEntity.hbm.xml"/>
+        <mapping resource="com/synet/tool/rsc/hbm/TB1086DefectFuncREntity.hbm.xml"/>
         
         <mapping resource="com/synet/tool/rsc/hbm/IM100FileInfoEntity.hbm.xml"/>
         <mapping resource="com/synet/tool/rsc/hbm/IM101IEDListEntity.hbm.xml"/>
