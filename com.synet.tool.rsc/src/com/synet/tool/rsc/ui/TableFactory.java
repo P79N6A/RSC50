@@ -52,8 +52,9 @@ public class TableFactory {
 	public static final String DEVICE_YX_SUB_TABLE 			= "DeviceYxSubTable";
 	public static final String DEVICE_QT_TABLE 				= "DeviceQtTable";
 	public static final String DEVICE_QTSUB_TABLE 			= "DeviceQtSubTable";
-	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable";
-	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";
+	public static final String VIRTER_OUT_TABLE 			= "VirtualTerminalOutTable"; // 发送虚端子
+	public static final String VIRTER_IN_TABLE				= "VirtualTerminalInTable";	// 二次虚回路
+	public static final String VIRTER_PIN_TABLE				= "VirtualPinTable";		// 接收虚端子
 	public static final String LOGICAL_LINK_TABLE 			= "LogicalLinkTable";	// 逻辑链路
 	public static final String CIRCUITS_VIEW_TABLE 			= "CircuitsViewTable";	// 虚回路
 	public static final String PYHCONNS_VIEW_TABLE 			= "PhyConnsViewTable";	// 物理回路
@@ -164,6 +165,11 @@ public class TableFactory {
 	
 	public static DevKTable getVirtualTerminalInTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_IN_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getVirtualPinTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(VIRTER_PIN_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	

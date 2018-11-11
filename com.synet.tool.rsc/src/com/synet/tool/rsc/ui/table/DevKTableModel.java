@@ -18,6 +18,7 @@ import com.synet.tool.rsc.dialog.CtvtChooseDialog;
 import com.synet.tool.rsc.dialog.CubicleSelectDialog;
 import com.synet.tool.rsc.dialog.IedChooseDialog;
 import com.synet.tool.rsc.dialog.LightRefAddrDialog;
+import com.synet.tool.rsc.dialog.OnlyPinBaordEdtDialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortADialog;
 import com.synet.tool.rsc.dialog.PhyConnByPortBDialog;
 import com.synet.tool.rsc.dialog.PhyConnsViewDialog;
@@ -103,6 +104,8 @@ public class DevKTableModel extends RKTableModel {
 			return new KTableDialogEditor(LightRefAddrDialog.class);
 		} else if("PinBoardEditor".equals(editor)) {
 			return new KTableDialogEditor(PinBaordEdtDialog.class);
+		} else if("OnlyPinBoardEditor".equals(editor)) {
+			return new KTableDialogEditor(OnlyPinBaordEdtDialog.class);
 		} else if("PoutBoardEditor".equals(editor)) {
 			return new KTableDialogEditor(PoutBaordEdtDialog.class);
 		} else if("ConvChk1Editor".equals(editor)) {

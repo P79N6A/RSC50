@@ -42,6 +42,7 @@ import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.ModelRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -49,6 +50,7 @@ import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
+import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.model.Tb1069RcdchannelaEntity;
@@ -60,6 +62,7 @@ import com.synet.tool.rsc.service.CircuitEntityService;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.RcdchannelaEntityService;
 import com.synet.tool.rsc.service.RcdchanneldEntityService;
@@ -101,6 +104,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private DevKTable tableLogicalLink;
 	private DevKTable tableVirtualTerminalOut;
 	private DevKTable tableVirtualTerminalIn;
+	private DevKTable tableVirtualPin;
 	private DevKTable tableAnalogChn;
 	private DevKTable tableCriteriaChn;
 	private DevKTable tableDeviceName;
@@ -109,9 +113,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private CTabFolder tabFolder;
 	private CTabFolder tabFProtect;
 	private CTabFolder tabFdCfg;
-
-	private Tb1046IedEntity iedEntity;
-	private List<Tb1046IedEntity> iedEntityList;
+	
+	private PinEntityService pinEntityService;
 	private PoutEntityService poutEntityService;
 	private CircuitEntityService circuitEntityService;
 	private MmsfcdaService mmsfcdaService;
@@ -123,6 +126,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private RcdchannelaEntityService rcdChnlaService;
 	private RcdchanneldEntityService rcdChnLdService;
 	//
+	private Tb1046IedEntity iedEntity;
+	private List<Tb1046IedEntity> iedEntityList;
 	private List<Tb1048PortEntity> portEntities;
 	private List<Tb1059SgfcdaEntity> sgfcdaEntities;
 	private List<Tb1060SpfcdaEntity> spfcdaEntities;
@@ -136,6 +141,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private List<Tb1047BoardEntity> boardEntities;
 	private List<Tb1065LogicallinkEntity> logicallinkEntities;
 	private List<Tb1063CircuitEntity> circuitEntities;
+	private List<Tb1062PinEntity> pinEntities;
 	private List<Tb1061PoutEntity> poutEntities;
 	private List<Tb1069RcdchannelaEntity> rcdchannelaEntities;
 	private List<Tb1072RcdchanneldEntity> rcdchanneldEntities;
@@ -157,6 +163,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		portService = new BoardPortService();
 		sgfcdaEntityService = new SgfcdaEntityService();
 		spfcdaEntityService = new SpfcdaEntityService();
+		pinEntityService = new PinEntityService();
 		poutEntityService = new PoutEntityService();
 		circuitEntityService = new CircuitEntityService();
 		boardEntityService = new BoardEntityService();
@@ -172,7 +179,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 	
 	private void clearTables() {
-		tableBoardPort.clear();
+		if (tableBoardPort != null)
+			tableBoardPort.clear();
 		if (tableProtectValue != null)
 			tableProtectValue.clear();
 		if (tableProtParam != null)
@@ -183,20 +191,32 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			tableProtectAction.clear();
 		if (tableProtectMeaQuantity != null)
 			tableProtectMeaQuantity.clear();
-		tableDeviceWarning.clear();
-		tableRunState.clear();
-		tableYx.clear();
-		tableQt.clear();
-		tableLogicalLink.clear();
-		tableVirtualTerminalOut.clear();
-		tableVirtualTerminalIn.clear();
+		if (tableDeviceWarning != null)
+			tableDeviceWarning.clear();
+		if (tableRunState != null)
+			tableRunState.clear();
+		if (tableYx != null)
+			tableYx.clear();
+		if (tableQt != null)
+			tableQt.clear();
+		if (tableLogicalLink != null)
+			tableLogicalLink.clear();
+		if (tableVirtualTerminalOut != null)
+			tableVirtualTerminalOut.clear();
+		if (tableVirtualTerminalIn != null)
+			tableVirtualTerminalIn.clear();
+		if (tableVirtualPin != null)
+			tableVirtualPin.clear();
 		if (tableAnalogChn != null)
 			tableAnalogChn.clear();
 		if (tableCriteriaChn != null)
 			tableCriteriaChn.clear();
-		tableDeviceName.clear();
-		tableBoardName.clear();
-		tableLogLinkName.clear();
+		if (tableDeviceName != null)
+			tableDeviceName.clear();
+		if (tableBoardName != null)
+			tableBoardName.clear();
+		if (tableLogLinkName != null)
+			tableLogLinkName.clear();
 	}
 
 	@Override
@@ -255,7 +275,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 	
 	private boolean isProtIED() {
-		return DBConstants.IED_PROT == iedEntity.getF1046Type();
+		return DBConstants.IED_PROT == iedEntity.getF1046Type() || DBConstants.IED_MONI == iedEntity.getF1046Type();
 	}
 	
 	private boolean isSubIED() {
@@ -714,11 +734,15 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 			if(reload || !DataUtils.listNotNull(circuitEntities)) {
 				//开出虚端子
 				poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
-				//虚端子压板
+				//开入虚端子
+				pinEntities = pinEntityService.getByIed(iedEntity);
+				//二次虚回路
 				circuitEntities = circuitEntityService.getByIed(iedEntity);
-				//开出
+				//开出虚端子
 				tableVirtualTerminalOut.setInput(poutEntities);
-				//开入
+				//开入虚端子
+				tableVirtualPin.setInput(pinEntities);
+				//二次虚回路
 				tableVirtualTerminalIn.setInput(circuitEntities);
 			}
 			break;
@@ -941,7 +965,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	private Composite createVirtualTerminalPlateCmp(Composite com) {
 		Composite cmpVirtualTerminalPlate = SwtUtil.createComposite(com, gridData, 1);
 		cmpVirtualTerminalPlate.setLayout(SwtUtil.getGridLayout(1));
-		String[] tabNames = new String[]{"开出虚端子", "开入虚端子"};
+		String[] tabNames = new String[]{"开出虚端子", "开入虚端子", "二次虚回路"};
 		CTabFolder tabFolder = SwtUtil.createTab(cmpVirtualTerminalPlate, gridData, tabNames );
 		tabFolder.setSelection(0);
 		Control[] controls = tabFolder.getChildren();
@@ -950,7 +974,11 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		tableVirtualTerminalOut = TableFactory.getVirtualTerminalOutTable(cmpVirtualTerminalOut);
 		tableVirtualTerminalOut.getTable().setLayoutData(gridData);
 		//开入虚端子
-		Composite cmpVirtualTerminalIn = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
+		Composite cmpVirtualPin = SwtUtil.createComposite((Composite) controls[1], gridData, 1);
+		tableVirtualPin = TableFactory.getVirtualPinTable(cmpVirtualPin);
+		tableVirtualPin.getTable().setLayoutData(gridData);
+		//二次虚回路
+		Composite cmpVirtualTerminalIn = SwtUtil.createComposite((Composite) controls[2], gridData, 1);
 		tableVirtualTerminalIn = TableFactory.getVirtualTerminalInTable(cmpVirtualTerminalIn);
 		tableVirtualTerminalIn.getTable().setLayoutData(gridData);
 		
