@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -131,7 +132,21 @@ public abstract class AbstractExportDataHandler {
 			String tableName = getTableName(clazz);
 			monitor.setTaskName("正在导入" + tableName + "数据");
 			console.append("开始处理:" + tbIndex + "数据导出");
-			int total = hqlDao.getCount(clazz);
+			String hql = "from " + clazz.getName();
+			if (tbIndex == 1016) { // st
+				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+			} else if (tbIndex == 1006) { // ang
+				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+			} else if (tbIndex == 1058) { // mms
+				hql += " where f1058Type!=" + RSCConstants.OTHERS_ID;
+			} else if (tbIndex == 1061) { // pout
+				hql += " where f1061Type!=" + RSCConstants.OTHERS_ID;
+			} else if (tbIndex == 1062) { // pin
+				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+			} else if (tbIndex == 1064) { // strap
+				hql += " where f1064Type!=" + RSCConstants.OTHERS_ID;
+			}
+			int total = hqlDao.getCount(hql, null);
 			int psize = 1000;
 			int ptotal = total / psize;
 			ptotal = (total % psize == 0) ? ptotal : (ptotal + 1);
@@ -144,7 +159,7 @@ public abstract class AbstractExportDataHandler {
 				}
 				PreparedStatement preState = connect.prepareStatement(sql);
 				for (int p = 0; p < ptotal; p++) {
-					List<?> list = hqlDao.getListByHqlAndPage("from " + clazz.getName(), null, p+1, psize);
+					List<?> list = hqlDao.getListByHqlAndPage(hql, null, p+1, psize);
 					for (Object obj : list) {
 						setValue(preState, tbIndex, obj);
 						preState.addBatch();
