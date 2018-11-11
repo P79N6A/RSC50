@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="PrimaryBayTable" desc="一次间隔" 
+class="com.shrcn.found.das/com.synet.tool.rsc.model.Tb1042BayEntity" 
+tableClass="com.synet.tool.rsc/com.synet.tool.rsc.ui.table.DevKTable" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+  <field fixed="true" desc="序号" editor="none" name="index" width="50" default=""/>  
+  <field desc="间隔名称" editor="none" name="f1042Name" width="200" default=""/>
+  <field desc="间隔描述" editor="none" name="f1042Desc" width="200" default=""/>
+  <field desc="电压等级(kV)" editor="none" name="f1042Voltage" width="150" default=""/> 
+  <field desc="接线类型" dict="BayConnType" name="f1042ConnType" width="250" default=""/>
+  <field desc="设备类型" dict="BayDevType" name="f1042DevType" width="250" default=""/>
+  <field desc="IED配置方案" dict="BayIEDSolution" name="f1042IedSolution" width="250" default=""/>
+</table>
