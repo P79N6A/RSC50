@@ -5,11 +5,15 @@
  */
 package com.synet.tool.rsc.editor.imp;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -19,11 +23,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
+import com.synet.tool.rsc.dialog.ExportIedDialog;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -32,8 +39,10 @@ import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
+import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.util.DateUtils;
 import com.synet.tool.rsc.util.RscObjectUtils;
 
 import de.kupzog.ktable.KTableCellSelectionListener;
@@ -50,6 +59,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 
 	private IedEntityService iedEntityService;
 	private BoardEntityService boardEntityService;
+	private PortEntityService portEntityService;
 	private List<IM103IEDBoardEntity> boards; // 用户选择装置型号板卡
 	
 	public ImpIEDBoardEditor(Composite container, IEditorInput input) {
@@ -61,6 +71,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		improtInfoService = new ImprotInfoService();
 		iedEntityService = new IedEntityService();
 		boardEntityService = new BoardEntityService();
+		portEntityService = new PortEntityService();
 		map = new HashMap<String, IM100FileInfoEntity>();
 		super.init();
 	}
@@ -79,10 +90,10 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData btData = new GridData();
 		btData.horizontalAlignment = SWT.RIGHT;
-		Composite btComp = SwtUtil.createComposite(container, btData, 3);
+		Composite btComp = SwtUtil.createComposite(container, btData, 4);
 		btCheckAll = SwtUtil.createPushButton(btComp, "检查所有装置", new GridData());
 		btImport = SwtUtil.createPushButton(btComp, "导入板卡", new GridData());
-//		btExport = SwtUtil.createPushButton(btComp, "导出原始数据", new GridData());
+		btExport = SwtUtil.createPushButton(btComp, "导出原始数据", new GridData());
 		btExportCfgData  = SwtUtil.createPushButton(btComp, "导出配置数据", new GridData());
 		tableComp = TableFactory.getIEDCompListTable(container);
 		tableComp.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -132,6 +143,75 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				exportProcessorData();
 			};
 		});
+		
+		btExport.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {				
+				exportExcel();
+			};
+		});
+	}
+	
+	protected void exportExcel() {
+		ExportIedDialog dialog = new ExportIedDialog(getShell());
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			final String filePath = dialog.getFilePath();
+			final List<Tb1046IedEntity> ieds = dialog.getIeds();
+			if (filePath == null || ieds == null || ieds.size() <= 0){
+				return;
+			}
+			ProgressManager.execute(new IRunnableWithProgress() {
+				
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
+				InterruptedException {
+					IField[] vfields = getExportFields();
+					if (ieds != null && ieds.size() > 0) {
+						monitor.beginTask("正在导出", ieds.size() + (ieds.size()/3));
+						List<Object> list = new ArrayList<>();
+						for (Tb1046IedEntity ied : ieds) {
+							if (monitor.isCanceled()) {
+								break;
+							}
+							List<Tb1047BoardEntity> bList = boardEntityService.getByIed(ied);
+							if (bList != null && bList.size() > 0) {
+								for (Tb1047BoardEntity boardEntity : bList) {
+									IM103IEDBoardEntity entity = new IM103IEDBoardEntity();
+									entity.setDevName(ied.getF1046Name());
+									entity.setDevDesc(ied.getF1046Desc());
+									entity.setManufacturor(ied.getF1046Manufacturor());
+									entity.setConfigVersion(ied.getF1046ConfigVersion());
+									entity.setBoardIndex(boardEntity.getF1047Slot());
+									entity.setBoardModel(boardEntity.getF1047Desc());
+									entity.setBoardType(boardEntity.getF1047Type());
+									int portNum = portEntityService.getCountByBoard(boardEntity);
+									entity.setPortNum(portNum + "");
+									list.add(entity);
+								}
+							} else {
+								console.append("[" + ied.getF1046Name() + "]无板卡信息");
+								IM103IEDBoardEntity entity = new IM103IEDBoardEntity();
+								entity.setDevName(ied.getF1046Name());
+								entity.setDevDesc(ied.getF1046Desc());
+								entity.setManufacturor(ied.getF1046Manufacturor());
+								entity.setConfigVersion(ied.getF1046ConfigVersion());
+								list.add(entity);
+							}
+							monitor.worked(1);
+						}
+						long start = System.currentTimeMillis();
+						if (list.size() > 0) {
+							String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
+							String fileName = filePath + "/" + "装置板卡端口描述" + dateStr + ".xlsx";
+							exportTemplateExcel(fileName, "装置板卡端口描述", vfields, list);
+						}
+						long time = (System.currentTimeMillis() - start) / 1000;
+						monitor.worked(ieds.size()/3);
+						monitor.setTaskName("导出耗时：" + time + "秒");
+						monitor.done();
+					}
+				}
+			});
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

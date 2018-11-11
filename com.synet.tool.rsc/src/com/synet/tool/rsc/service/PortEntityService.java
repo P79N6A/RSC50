@@ -57,6 +57,15 @@ public class PortEntityService extends BaseService{
 	}
 	
 	/**
+	 * 获取板卡对应端口数
+	 * @param boardEntity
+	 * @return
+	 */
+	public int getCountByBoard(Tb1047BoardEntity boardEntity) {
+		return hqlDao.getCount(Tb1048PortEntity.class, "tb1047BoardByF1047Code", boardEntity);
+	}
+	
+	/**
 	 * 获取板卡对应端口
 	 * @param boardEntity
 	 * @return
