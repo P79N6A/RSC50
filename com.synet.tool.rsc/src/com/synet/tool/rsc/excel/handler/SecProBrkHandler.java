@@ -2,12 +2,16 @@ package com.synet.tool.rsc.excel.handler;
 
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
+import com.shrcn.found.common.util.StringUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
+import com.synet.tool.rsc.service.CtvtsecondaryService;
 
 public class SecProBrkHandler extends RscSheetHandler {
 
 	private Tb1093VoltagekkEntity entity = null;
+	private CtvtsecondaryService ctvtsecondaryService = new CtvtsecondaryService();
 	
 	@Override
 	public void startRow(int rowNum) {
@@ -17,11 +21,12 @@ public class SecProBrkHandler extends RscSheetHandler {
 	
 	@Override
 	public void endRow(int rowNum) {
-		if (rowNum <= 5) return;
+		if (rowNum <= 3) return;
 		if (entity == null) {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
 		} else {
+			entity.setF1093Code(rscp.nextTbCode(DBConstants.PR_VOLTAGEKK));
 			result.add(entity);
 		}
 		super.endRow(rowNum);
@@ -31,7 +36,7 @@ public class SecProBrkHandler extends RscSheetHandler {
 	public void cell(String cellReference, String formattedValue,
 			XSSFComment comment) {
 		super.cell(cellReference, formattedValue, comment);
-		if (currentRow > 5 && !isEmpty(formattedValue)) {
+		if (currentRow > 3 && !isEmpty(formattedValue)) {
 			saveValue(currentCol, formattedValue);
 		}
 	}
@@ -40,56 +45,31 @@ public class SecProBrkHandler extends RscSheetHandler {
 		if (entity == null)
 			return;
 		switch(col) {
-			case 1: 
-				if (value != null) {
-					Tb1093VoltagekkEntity temp = 
-							(Tb1093VoltagekkEntity) service.getById(Tb1093VoltagekkEntity.class, value.trim());
-					if (temp == null) {
-						entity.setF1093Code(value);
-						break;
-					}
-				}
-				entity = null;
-				break;
-			case 2: 
-				if (value != null) {
-					String id = value.trim();
-					Tb1067CtvtsecondaryEntity ctv = (Tb1067CtvtsecondaryEntity) service.getById(Tb1067CtvtsecondaryEntity.class, id);
+			case 4: 
+				if (!StringUtil.isEmpty(value.trim()) && StringUtil.isNumeric(value.trim())) {
+					int index = Integer.valueOf(value.trim());
+					Tb1067CtvtsecondaryEntity ctv = ctvtsecondaryService.getCtvtsecondaryEntitiesByIndex(index);
 					if (ctv != null) {
 						entity.setTb1067CtvtsecondaryByF1067Code(ctv);
 						break;
+					} else {
+						console.append("互感器次级[" + value + "]找不到");
 					}
 				}
 				entity = null;
 				break;
-			case 3: 
-				if (!entity.getTb1067CtvtsecondaryByF1067Code().getTb1043EquipmentByF1043Code().getF1043Name().equals(value.trim())) {
-					entity = null;
-				}
-				break;
-			case 4: 
-				if (!entity.getTb1067CtvtsecondaryByF1067Code().getTb1043EquipmentByF1043Code().getF1043Desc().equals(value.trim())) {
-					entity = null;
-				}
-				break;
 			case 5: 
-				if (!entity.getTb1067CtvtsecondaryByF1067Code().getF1067Code().equals(value.trim())) {
-					entity = null;
-				}
-				break;
-			case 6: 
-				if (value != null) {
+				if (!StringUtil.isEmpty(value.trim())) {
 					entity.setF1093Desc(value);
 					break;
 				}
 				entity = null;
 				break;
-			case 7: 
-				if (value != null) {
+			case 6: 
+				if (!StringUtil.isEmpty(value.trim())) {
 					entity.setF1093KkNo(value);
 					break;
 				}
-				entity = null;
 				break;
 		}
 	}
