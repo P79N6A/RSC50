@@ -24,6 +24,7 @@ import com.synet.tool.rsc.excel.handler.IEDListHandler;
 import com.synet.tool.rsc.excel.handler.LinkWarnHandler;
 import com.synet.tool.rsc.excel.handler.NewFibreListHandler;
 import com.synet.tool.rsc.excel.handler.PortLightHandler;
+import com.synet.tool.rsc.excel.handler.RegionHandler;
 import com.synet.tool.rsc.excel.handler.RscSheetHandler;
 import com.synet.tool.rsc.excel.handler.SecFibreListHandler;
 import com.synet.tool.rsc.excel.handler.SecLockHandler;
@@ -34,118 +35,50 @@ import com.synet.tool.rsc.excel.handler.StatusInHandler;
 import com.synet.tool.rsc.excel.handler.TerStrapHandler;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1090LineprotfiberEntity;
 import com.synet.tool.rsc.model.Tb1091IotermEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
 import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
+import com.synet.tool.rsc.util.ExcelReaderUtil;
 
 public class ImportInfoParser {
 	
 	private RscSheetHandler handler;
 	protected RSCProperties rscp = RSCProperties.getInstance();
 
+	
+	
 	@SuppressWarnings("unchecked")
 	public List<Tb1090LineprotfiberEntity> getLineprotfiberList(String xlspath) {
-		 List<Tb1090LineprotfiberEntity> result = null;
-		try {
-			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
-	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
-	        StylesTable styles = xssfReader.getStylesTable();  
-	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
-	        while (iter.hasNext()) {  
-	            InputStream stream = iter.next();
-            	SecFibreListHandler handler = new SecFibreListHandler(0);
-            	setHandler(handler);
-            	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<Tb1090LineprotfiberEntity>) handler.getResult();
-	            stream.close();  
-	            break;
-	        }
-	        xlsxPackage.close();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			SCTLogger.error(e.getMessage());
-		}
-		return result;
+		this.handler = new SecFibreListHandler(0);
+		return (List<Tb1090LineprotfiberEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1091IotermEntity> getIotermList(String xlspath) {
-		 List<Tb1091IotermEntity> result = null;
-		try {
-			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
-	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
-	        StylesTable styles = xssfReader.getStylesTable();  
-	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
-	        while (iter.hasNext()) {  
-	            InputStream stream = iter.next();
-            	SecLockHandler handler = new SecLockHandler();
-            	setHandler(handler);
-            	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<Tb1091IotermEntity>) handler.getResult();
-	            stream.close();  
-	            break;
-	        }
-	        xlsxPackage.close();
-		} catch (Throwable e) {
-			SCTLogger.error(e.getMessage());
-		}
-		return result;
+		this.handler = new SecLockHandler();
+		return (List<Tb1091IotermEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1092PowerkkEntity> getPowerkkList(String xlspath) {
-		 List<Tb1092PowerkkEntity> result = null;
-		try {
-			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
-	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
-	        StylesTable styles = xssfReader.getStylesTable();  
-	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
-	        while (iter.hasNext()) {  
-	            InputStream stream = iter.next();
-            	SecPwrBrkHandler handler = new SecPwrBrkHandler();
-            	setHandler(handler);
-            	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<Tb1092PowerkkEntity>) handler.getResult();
-	            stream.close(); 
-	            break;
-	        }
-	        xlsxPackage.close();
-		} catch (Throwable e) {
-			SCTLogger.error(e.getMessage());
-		}
-		return result;
+		this.handler = new SecPwrBrkHandler();
+		return (List<Tb1092PowerkkEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1093VoltagekkEntity> getVoltagekkList(String xlspath) {
-		 List<Tb1093VoltagekkEntity> result = null;
-		try {
-			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage);  
-	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
-	        StylesTable styles = xssfReader.getStylesTable();  
-	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
-	        while (iter.hasNext()) {  
-	            InputStream stream = iter.next();
-            	SecProBrkHandler handler = new SecProBrkHandler();
-            	setHandler(handler);
-            	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result = (List<Tb1093VoltagekkEntity>) handler.getResult();
-	            stream.close();  
-	            break;
-	        }
-	        xlsxPackage.close();
-		} catch (Throwable e) {
-			SCTLogger.error(e.getMessage());
-		}
-		return result;
+		this.handler = new SecProBrkHandler();
+		return (List<Tb1093VoltagekkEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
 	}
 	
-//	
+	@SuppressWarnings("unchecked")
+	public List<Tb1049RegionEntity> getRegionList(String xlspath) {
+		this.handler = new RegionHandler();
+		return (List<Tb1049RegionEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
+	}
+	
 //	public ImportResult getIEDBoardList(String xlspath, int headRowNum, Map<Integer, String> excelColInfo) {
 //		ImportResult result = new ImportResult();
 //		try {
@@ -210,25 +143,8 @@ public class ImportInfoParser {
 			return result;
 		}
     	setHandler(handler);
-		try {
-			OPCPackage xlsxPackage = OPCPackage.open(xlspath, PackageAccess.READ);
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(xlsxPackage); 
-	        XSSFReader xssfReader = new XSSFReader(xlsxPackage);  
-	        StylesTable styles = xssfReader.getStylesTable();  
-	        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();  
-	        while (iter.hasNext()) {  
-	            InputStream stream = iter.next();
-            	Xls2007Parser.processSheet(styles, strings, handler, stream);
-				result.setResult(handler.getResult());
-	            stream.close();  
-		        result.setFileInfoEntity(getIM100FileInfoEntity(xlspath, fileType));
-	            break;
-	        }
-	        xlsxPackage.close();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			SCTLogger.error(e.getMessage());
-		}
+        result.setResult(ExcelReaderUtil.parseByHandler(xlspath, handler));
+        result.setFileInfoEntity(getIM100FileInfoEntity(xlspath, fileType));
 		return result;
 	}
 
@@ -301,9 +217,9 @@ public class ImportInfoParser {
 		}
 		return fileInfoEntity;
 	}
-
-	public RscSheetHandler getHandler() {
-		return handler;
+	
+	public List<String> getErrorMsg() {
+		return handler.getErrorMsg();
 	}
 
 	public void setHandler(RscSheetHandler handler) {

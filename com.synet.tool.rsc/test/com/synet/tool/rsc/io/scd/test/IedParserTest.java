@@ -7,9 +7,7 @@ package com.synet.tool.rsc.io.scd.test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Element;
 import org.junit.Before;
@@ -21,7 +19,6 @@ import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.RSCProperties;
