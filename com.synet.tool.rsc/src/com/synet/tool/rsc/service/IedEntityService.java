@@ -13,7 +13,6 @@ import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
-import com.synet.tool.rsc.model.Tb1051CableEntity;
 import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
@@ -57,6 +56,7 @@ public class IedEntityService extends BaseService {
 	 * 删除IED关联对象
 	 * @param iedEntity
 	 */
+	@SuppressWarnings("unchecked")
 	public void deleteBoards(Tb1046IedEntity iedEntity) {
 		List<Tb1047BoardEntity> boards = (List<Tb1047BoardEntity>) beanDao.getListByCriteria(Tb1047BoardEntity.class, "tb1046IedByF1046Code", iedEntity);
 		for (Tb1047BoardEntity board : boards) {
@@ -104,6 +104,28 @@ public class IedEntityService extends BaseService {
 		List<Integer> lstType = new ArrayList<>();
 		for (int i : types) {
 			lstType.add(i);
+		}
+		return (List<Tb1046IedEntity>) hqlDao.selectInObjects(Tb1046IedEntity.class, "f1046Type", lstType);
+	}
+	
+	/**
+	 * 根据设备类型查找设备
+	 * @param types
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tb1046IedEntity> getIedEntityByTypes(List<int[]> typeList) {
+		if(typeList.size() <= 0) {
+			return new ArrayList<>();
+		}
+		List<Integer> lstType = new ArrayList<>();
+		for (int[] types : typeList) {
+			for (int i : types) {
+				lstType.add(i);
+			}
+		}
+		if (lstType.size() <= 0) {
+			return new ArrayList<>();
 		}
 		return (List<Tb1046IedEntity>) hqlDao.selectInObjects(Tb1046IedEntity.class, "f1046Type", lstType);
 	}

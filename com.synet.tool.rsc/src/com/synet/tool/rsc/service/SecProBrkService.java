@@ -87,4 +87,11 @@ public class SecProBrkService extends BaseService {
 		return result;
 	}
 
+	public void saveBatch(List<Tb1093VoltagekkEntity> list) {
+		beanDao.insertBatch(list);
+	}
+	
+	public void deleteBatch(List<Tb1093VoltagekkEntity> list) {
+		beanDao.deleteBatch(list);
+	}
 }

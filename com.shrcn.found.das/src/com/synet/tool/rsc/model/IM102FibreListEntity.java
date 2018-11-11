@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.model;
 
+import com.shrcn.found.common.util.StringUtil;
+
 /**
  *光缆清册
  */
@@ -195,6 +197,33 @@ public class IM102FibreListEntity {
 	}
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
+	}
+	
+	public String getCsvStr() {
+		String str = StringUtil.nullToEmpty(im102Code) + ", "
+				+ StringUtil.nullToEmpty(cableCode) + ", " 
+				+ StringUtil.nullToEmpty(coreCode) + ", "
+				+ StringUtil.nullToEmpty(devCodeA) + ", "
+				+ StringUtil.nullToEmpty(devNameA) + ", "
+				+ StringUtil.nullToEmpty(devDescA) + ", "
+				+ StringUtil.nullToEmpty(boardCodeA) + ", "
+				+ StringUtil.nullToEmpty(portCodeA) + ", "
+				+ StringUtil.nullToEmpty(cubicleCodeA) + ", "
+				+ StringUtil.nullToEmpty(cubicleDescA) + ", "
+				+ StringUtil.nullToEmpty(coreCodeA) + ", "
+				+ StringUtil.nullToEmpty(distribFrameCodeA) + ", "
+				+ StringUtil.nullToEmpty(distribFramePortNoA) + ", "
+				+ StringUtil.nullToEmpty(devCodeB) + ", "
+				+ StringUtil.nullToEmpty(devNameB)+ ", "
+				+ StringUtil.nullToEmpty(devDescB) + ", "
+				+ StringUtil.nullToEmpty(portCodeB) + ", "
+				+ StringUtil.nullToEmpty(boardCodeB) + ", "
+				+ StringUtil.nullToEmpty(cubicleCodeB) + ", "
+				+ StringUtil.nullToEmpty(cubicleDescB) + ", "
+				+ StringUtil.nullToEmpty(coreCodeB) + ", "
+				+ StringUtil.nullToEmpty(distribFrameCodeB) + ", "
+				+ StringUtil.nullToEmpty(distribFramePortNoB);
+		return str;
 	}
 	
 }

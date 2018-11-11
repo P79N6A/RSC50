@@ -38,5 +38,13 @@ public class SecFibreService extends BaseService {
 				"tb1046IedByF1046Code", temp);
 		return result;
 	}
+	
+	public void saveBatch(List<Tb1090LineprotfiberEntity> list) {
+		beanDao.insertBatch(list);
+	}
+	
+	public void deleteBatch(List<Tb1090LineprotfiberEntity> list) {
+		beanDao.deleteBatch(list);
+	}
 
 }

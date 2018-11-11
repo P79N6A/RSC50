@@ -87,4 +87,8 @@ public class CtvtsecondaryService extends BaseService{
 //		protmmxu.setF1066Type(DBConstants.MMXU_3I);
 //		beanDao.insert(protmmxu);
 //	}
+	
+	public Tb1067CtvtsecondaryEntity getCtvtsecondaryEntitiesByIndex(Integer f1067Index) {
+		return (Tb1067CtvtsecondaryEntity) beanDao.getObject(Tb1067CtvtsecondaryEntity.class, "f1067Index", f1067Index);
+	}
 }

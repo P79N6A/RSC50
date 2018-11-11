@@ -13,18 +13,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.excel.ImportInfoParser;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1092PowerkkEntity;
+import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.SecPwrBrkService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.util.RscObjectUtils;
@@ -35,13 +35,13 @@ import com.synet.tool.rsc.util.RscObjectUtils;
  * @version 1.0, 2013-4-3
  */
 public class SecPwrBrkEditor extends SafetyMeasureEditor {
-	private Combo cmbDevType;
-	private Combo cmbDevName;
-	private Button btnSearch;
-	private Button btnImport;
-	private Button btnExport;
-	private Button btnAdd;
-	private Button btnDelete;
+//	private Combo cmbDevType;
+//	private Combo cmbDevName;
+//	private Button btnSearch;
+//	private Button btnImport;
+//	private Button btnExport;
+//	private Button btnAdd;
+//	private Button btnDelete;
 	private SecPwrBrkService secPwrBrkService;
 	
 	public SecPwrBrkEditor(Composite container, IEditorInput input) {
@@ -58,11 +58,12 @@ public class SecPwrBrkEditor extends SafetyMeasureEditor {
 	public void buildUI(Composite container) {
 		super.buildUI(container);
 		container.setLayout(SwtUtil.getGridLayout(1));
-		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 8);
+		Composite topComp = SwtUtil.createComposite(container, new GridData(GridData.FILL_HORIZONTAL), 9);
 		cmbDevType = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
 		cmbDevName = SwtUtil.createCombo(topComp, SwtUtil.bt_hd,true);
 		btnSearch = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, RSCConstants.SEARCH);
 		SwtUtil.createLabel(topComp, "", SwtUtil.bt_hd); 
+		btnAutoData = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "自动生成数据");
 		btnImport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导入");
 		btnExport = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "导出");
 		btnAdd = SwtUtil.createButton(topComp, SwtUtil.bt_gd, SWT.BUTTON1, "添加");
@@ -89,6 +90,8 @@ public class SecPwrBrkEditor extends SafetyMeasureEditor {
 					add();
 				} else if (evnet == btnDelete) {
 					delete();
+				} else if(evnet == btnAutoData) {
+					autoData();
 				}
 				super.widgetSelected(e);
 			}
@@ -98,6 +101,42 @@ public class SecPwrBrkEditor extends SafetyMeasureEditor {
 		btnExport.addSelectionListener(listener);
 		btnAdd.addSelectionListener(listener);
 		btnDelete.addSelectionListener(listener);
+		btnAutoData.addSelectionListener(listener);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void autoData() {
+		if (table.getInput().size() > 0) {
+			if (!DialogHelper.showConfirm("该操作会覆盖当前数据，是否继续执行？")) {
+				return;
+			}
+		}
+		List<int[]> typeList = new ArrayList<>();
+		typeList.add(EnumIedType.PROTECT_DEVICE.getTypes());
+		typeList.add(EnumIedType.TERMINAL_DEVICE.getTypes());
+		typeList.add(EnumIedType.UNIT_DEVICE.getTypes());
+		typeList.add(EnumIedType.TER_UNI_DEVICE.getTypes());
+		typeList.add(EnumIedType.RTU_DEVICE.getTypes());
+		typeList.add(EnumIedType.SWC_DEVICE.getTypes());
+		typeList.add(EnumIedType.ODF_DEVICE.getTypes());
+		List<Tb1046IedEntity> ieds = iedEntityService.getIedEntityByTypes(typeList);
+		if (ieds != null && ieds.size() > 0) {
+			List<Tb1092PowerkkEntity> list = new ArrayList<>();
+			int i = 1;
+			for (Tb1046IedEntity ied : ieds) {
+				Tb1092PowerkkEntity entity = new Tb1092PowerkkEntity();
+				entity.setF1092Code(rscp.nextTbCode(DBConstants.PR_POWERKK));
+				entity.setTb1046IedByF1046Code(ied);
+				entity.setF1092Desc("电源空开" + i++);
+//				entity.setF1092KkNo("0");
+				list.add(entity);
+			}
+			if (list.size() > 0) {
+				secPwrBrkService.deleteBatch((List<Tb1092PowerkkEntity>)table.getInput());
+				table.setInput(list);
+				secPwrBrkService.saveBatch(list);
+			}
+		}
 	}
 
 	@Override
@@ -145,11 +184,11 @@ public class SecPwrBrkEditor extends SafetyMeasureEditor {
 	private void importData() {
 		String filePath = DialogHelper.getSaveFilePath("文件", "", new String[]{"*.xlsx"});
 		if (filePath == null || "".equals(filePath)){
-			DialogHelper.showAsynError("请选择要导入文件路径");
+			return;
 		}
 		List<Tb1092PowerkkEntity> list = new ImportInfoParser().getPowerkkList(filePath);
 		if (list != null) {
-			secPwrBrkService.save(list);
+			secPwrBrkService.saveBatch(list);
 			table.setInput(list);
 		}
 	}
@@ -159,8 +198,12 @@ public class SecPwrBrkEditor extends SafetyMeasureEditor {
 	}
 	
 	private void delete() {
-		Tb1092PowerkkEntity entity = (Tb1092PowerkkEntity) table.getSelection();
-		secPwrBrkService.delete(entity);
+		List<Object> list = table.getSelections();
+		if (list != null && list.size() > 0) {
+			for (Object obj : list) {
+				secPwrBrkService.delete(obj);
+			}
+		}
 		table.removeSelected();
 	}
 }

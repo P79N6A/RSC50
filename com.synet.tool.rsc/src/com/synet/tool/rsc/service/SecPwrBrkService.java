@@ -37,4 +37,12 @@ public class SecPwrBrkService extends BaseService {
 		return result;
 	}
 	
+	public void saveBatch(List<Tb1092PowerkkEntity> list) {
+		beanDao.insertBatch(list);
+	}
+	
+	public void deleteBatch(List<Tb1092PowerkkEntity> list) {
+		beanDao.deleteBatch(list);
+	}
+	
 }

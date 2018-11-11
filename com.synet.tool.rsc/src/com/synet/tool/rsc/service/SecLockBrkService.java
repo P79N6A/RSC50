@@ -38,4 +38,11 @@ public class SecLockBrkService extends BaseService {
 		return result;
 	}
 	
+	public void saveBatch(List<Tb1091IotermEntity> list) {
+		beanDao.insertBatch(list);
+	}
+	
+	public void deleteBatch(List<Tb1091IotermEntity> list) {
+		beanDao.deleteBatch(list);
+	}
 }
