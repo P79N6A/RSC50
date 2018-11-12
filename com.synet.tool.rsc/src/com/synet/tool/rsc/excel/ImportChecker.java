@@ -10,6 +10,7 @@ import com.synet.tool.rsc.model.IM107TerStrapEntity;
 import com.synet.tool.rsc.model.IM108BrkCfmEntity;
 import com.synet.tool.rsc.model.IM109StaInfoEntity;
 import com.synet.tool.rsc.model.IM110LinkWarnEntity;
+import com.synet.tool.rsc.model.IM111FibreListEntity;
 
 public class ImportChecker {
 
@@ -45,6 +46,9 @@ public class ImportChecker {
 		} else if (obj instanceof IM110LinkWarnEntity) {
 			IM110LinkWarnEntity entity = (IM110LinkWarnEntity) obj;
 			return (entity.getDevName() != null && entity.getMmsRefAddr() != null);
+		} else if (obj instanceof IM111FibreListEntity) {
+			IM111FibreListEntity entity = (IM111FibreListEntity) obj;
+			return (entity.getBoardCodeA() != null && entity.getPortCodeA() != null);
 		}
 		return true;
 	}

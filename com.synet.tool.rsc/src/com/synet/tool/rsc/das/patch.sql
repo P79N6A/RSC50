@@ -16,6 +16,27 @@ create table IM110_LINK_WARN
    primary key (IM110_CODE)
 );
 
+/*==============================================================*/
+/* Table: IM111_Fibre_List                                      */
+/*==============================================================*/
+create table IM111_Fibre_List
+(
+   IM111_CODE           varchar(48) not null,
+   IM100_CODE           varchar(48) not null,
+   CABLE_CODE           varchar(48),
+   CORE_CODE           	varchar(96),
+   CONN_TYPE            varchar(48),
+   DEV_NAMEA           	varchar(96),
+   DEV_DESCA           	varchar(96),
+   BOARD_CODEA          varchar(96),
+   PORT_CODEA           varchar(96),
+   DEV_NAMEB          	varchar(96),
+   DEV_DESCB           	varchar(96),
+   BOARD_CODEB          varchar(96),
+   PORT_CODEB           varchar(96),
+   MATCHED           	INT,
+   primary key (IM111_CODE)
+);
 
 /*==============================================================*/
 /* Table: TB1084_FuncClass                                      */

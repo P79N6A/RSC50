@@ -4,29 +4,7 @@
  */
 package com.synet.tool.rsc.action.imp;
 
-import static com.synet.tool.rsc.ExcelConstants.IM101_IED_LIST;
-import static com.synet.tool.rsc.ExcelConstants.IM102_FIBRE_LIST;
-import static com.synet.tool.rsc.ExcelConstants.IM103_IED_BOARD;
-import static com.synet.tool.rsc.ExcelConstants.IM104_STATUS_IN;
-import static com.synet.tool.rsc.ExcelConstants.IM105_BOARD_WARN;
-import static com.synet.tool.rsc.ExcelConstants.IM106_PORT_LIGHT;
-import static com.synet.tool.rsc.ExcelConstants.IM107_TER_STRAP;
-import static com.synet.tool.rsc.ExcelConstants.IM108_BRK_CFM;
-import static com.synet.tool.rsc.ExcelConstants.IM109_STA_INFO;
-import static com.synet.tool.rsc.ExcelConstants.IM110_LINK_WARN;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRD;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRK;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_FIB;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_IED;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_PORT;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_ST;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_STA;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_STRAP;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_WRN;
-import static com.synet.tool.rsc.RSCConstants.ET_IMP_LINKW;
-
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,23 +17,12 @@ import com.shrcn.found.ui.editor.ConfigEditorInput;
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
-import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
 import com.synet.tool.rsc.excel.EnumFileType;
 import com.synet.tool.rsc.excel.ExcelImporter;
 import com.synet.tool.rsc.excel.ImportConfigFactory;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
-import com.synet.tool.rsc.model.IM101IEDListEntity;
-import com.synet.tool.rsc.model.IM102FibreListEntity;
-import com.synet.tool.rsc.model.IM103IEDBoardEntity;
-import com.synet.tool.rsc.model.IM104StatusInEntity;
-import com.synet.tool.rsc.model.IM105BoardWarnEntity;
-import com.synet.tool.rsc.model.IM106PortLightEntity;
-import com.synet.tool.rsc.model.IM107TerStrapEntity;
-import com.synet.tool.rsc.model.IM108BrkCfmEntity;
-import com.synet.tool.rsc.model.IM109StaInfoEntity;
-import com.synet.tool.rsc.model.IM110LinkWarnEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
 
 
@@ -68,20 +35,6 @@ public class ImportExcelAction extends BaseImportAction {
 	
 	private ImprotInfoService improtInfoService;
 	
-	private static Map<String, String> excelMap = new HashMap<>();
-	static {
-		excelMap.put(IM101_IED_LIST, ET_IMP_IED);
-		excelMap.put(IM102_FIBRE_LIST, ET_IMP_FIB);
-		excelMap.put(IM103_IED_BOARD, ET_IMP_BRD);
-		excelMap.put(IM104_STATUS_IN, ET_IMP_ST);
-		excelMap.put(IM105_BOARD_WARN, ET_IMP_WRN);
-		excelMap.put(IM106_PORT_LIGHT, ET_IMP_PORT);
-		excelMap.put(IM107_TER_STRAP, ET_IMP_STRAP);
-		excelMap.put(IM108_BRK_CFM, ET_IMP_BRK);
-		excelMap.put(IM109_STA_INFO, ET_IMP_STA);
-		excelMap.put(IM110_LINK_WARN, ET_IMP_LINKW);
-	}
-			
 	public ImportExcelAction(String title) {
 		super(title);
 	}
@@ -159,7 +112,8 @@ public class ImportExcelAction extends BaseImportAction {
 		String title = getTitle();
 		EditorConfigData data = new EditorConfigData(title, null, 0, title);
 		data.setData(filename);
-		ConfigEditorInput input = new ConfigEditorInput(title, "bay.gif", excelMap.get(title), data);
+		ConfigEditorInput input = new ConfigEditorInput(title, "bay.gif", 
+				EnumFileType.getByTitle(title).getEditorId(), data);
 		EventManager.getDefault().notify(EventConstants.OPEN_CONFIG, input);
 		EventManager.getDefault().notify(EventConstants.REFRESH_EIDTOR, input);
 	}

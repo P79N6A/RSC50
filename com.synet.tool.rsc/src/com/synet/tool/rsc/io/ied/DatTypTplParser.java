@@ -99,9 +99,10 @@ public class DatTypTplParser {
 			}
 			return;
 		}
-		if ("DOType".equals(subType.getName())) {
-			subRefs.put(parentName, new Object[] { subType.attributeValue("cdc"), idx} );
-		}
+		boolean isDOType = "DOType".equals(subType.getName());
+//		if ("DOType".equals(subType.getName())) {
+//			subRefs.put(parentName, new Object[] { subType.attributeValue("cdc"), idx} );
+//		}
 		List<?> children = subType.elements();
 		int index = 0;
 		for (Object obj : children) {
@@ -110,14 +111,18 @@ public class DatTypTplParser {
 			String name = child.attributeValue("name"); 
 			String type = child.attributeValue("type");
 			String bType = child.attributeValue("bType");
+			String fc = child.attributeValue("fc");
+			if (isDOType && (!"SP".equals(fc) && !"SG".equals(fc))) {
+				continue;
+			}
 			String parentRef = parentName + Constants.DOT + name;
 			boolean hasSubs = "DO".equals(ndName) || "SDO".equals(ndName);
 			if (!hasSubs) {
 				if ("DA".equals(ndName) || "BDA".equals(ndName)) {
 					hasSubs = "Struct".equals(bType);
-					if (hasSubs) { // 记录Struct类型
-						subRefs.put(parentRef, new Object[] {"Struct", index});
-					}
+//					if (hasSubs) { // 记录Struct类型
+//						subRefs.put(parentRef, new Object[] {"Struct", index});
+//					}
 				}
 			}
 			if (hasSubs) {
@@ -164,13 +169,37 @@ public class DatTypTplParser {
 		String doName = fcdaEl.attributeValue(SCL.FCDA_DONAME);
 		String daName = fcdaEl.attributeValue(SCL.FCDA_DANAME);
 		boolean isSV = StringUtil.isEmpty(daName);
-		String outDodaName = isSV ? doName : (doName + "." + daName);
-		Object[] dodatype = dodaTypeMap.get(outDodaName);
-		if (dodatype == null || dodatype.length < 1) {
+		Object[] dodatype = null;
+		if (isSV) {
+			for (String ref : dodaTypeMap.keySet()) {
+				String bType = (String) dodaTypeMap.get(ref)[0];
+				if (ref.startsWith(doName) && !"Struct".equals(bType)) {
+					dodatype = dodaTypeMap.get(ref);
+					break;
+				}
+			}
+			if (dodatype == null) {
+				System.out.println("未找到类型:" + lnType + "/" + doName);
+				return DBConstants.DAT_TYP_FLOAT;
+			}
+		} else {
+			String outDodaName = (doName + "." + daName);
+			dodatype = dodaTypeMap.get(outDodaName);
+			if (dodatype == null || dodatype.length < 1) {
+				return DBConstants.DAT_TYP_FLOAT;
+			}
+		}
+		String bType = (dodatype==null) ? "" : (String) dodatype[0];
+//		return "FLOAT32".equalsIgnoreCase(bType) ? DBConstants.DAT_TYP_FLOAT : DBConstants.DAT_TYP_INT;
+		if (bType.startsWith("FLOAT")) {
+			return DBConstants.DAT_TYP_FLOAT;
+		} else if (bType.startsWith("INT") || bType.toUpperCase().startsWith("BOOLEAN")) {
+			return DBConstants.DAT_TYP_INT;
+		} else if (bType.startsWith("Unicode")) {
+			return DBConstants.DAT_TYP_STR;
+		} else {
 			return DBConstants.DAT_TYP_FLOAT;
 		}
-		String bType = (String) dodatype[0];
-		return "FLOAT32".equalsIgnoreCase(bType) ? DBConstants.DAT_TYP_FLOAT : DBConstants.DAT_TYP_INT;
 	}
 }
 

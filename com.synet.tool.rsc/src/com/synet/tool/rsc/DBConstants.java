@@ -82,6 +82,7 @@ public interface DBConstants {
 	// 虚端子数据类型
 	int DAT_TYP_INT = 1;
 	int DAT_TYP_FLOAT = 2;
+	int DAT_TYP_STR = 3;
 	
 	// 逻辑链路类型
 	int LINK_GOOSE = 1;

@@ -9,6 +9,7 @@ import static com.synet.tool.rsc.RSCConstants.ET_ICD_MDL;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRD;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_BRK;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_FIB;
+import static com.synet.tool.rsc.RSCConstants.ET_IMP_FIBNew;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_IED;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_PORT;
 import static com.synet.tool.rsc.RSCConstants.ET_IMP_ST;
@@ -237,6 +238,7 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry iedEntry = createConfigEntry(importEntry, "设备台账", "bay.gif", ET_IMP_IED, 1);
 		ConfigTreeEntry boardPortEntry = createConfigEntry(importEntry, "装置板卡端口描述", "bay.gif", ET_IMP_BRD, 3);
 		ConfigTreeEntry ftListEntry = createConfigEntry(importEntry, "光缆清册", "bay.gif", ET_IMP_FIB, 2);
+		ConfigTreeEntry ftListNewEntry = createConfigEntry(importEntry, "新光缆清册", "bay.gif", ET_IMP_FIBNew, 2);
 		ConfigTreeEntry stInEntry = createConfigEntry(importEntry, "开入信号映射表", "bay.gif", ET_IMP_ST, 4);
 		ConfigTreeEntry wmBoardEntry = createConfigEntry(importEntry, "告警与板卡关联表", "bay.gif", ET_IMP_WRN, 5);
 		ConfigTreeEntry lpPortEntry = createConfigEntry(importEntry, "光强与端口关联表", "bay.gif", ET_IMP_PORT, 6);

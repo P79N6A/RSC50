@@ -18,7 +18,7 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
 import com.synet.tool.rsc.RSCProperties;
-import com.synet.tool.rsc.model.IM102FibreListEntity;
+import com.synet.tool.rsc.model.IM111FibreListEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -35,7 +35,7 @@ import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.util.ProblemManager;
 
-public class ImportFibreListProcessor3 {
+public class ImportFibreNewListProcessor {
 	
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProblemManager pmgr = ProblemManager.getInstance();
@@ -48,25 +48,30 @@ public class ImportFibreListProcessor3 {
 	private IedEntityService iedEntityService = new IedEntityService();
 	private BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 	//存放解析出来的光缆（去重）
-	private List<IM102FibreListEntity> fibreListEntitieList = new ArrayList<>();
+	private List<IM111FibreListEntity> fibreListEntitieList = new ArrayList<>();
 	private List<Tb1051CableEntity> cableEntitieList = new ArrayList<>();
 	private List<Tb1052CoreEntity> coreEntitieList = new ArrayList<>();//光缆芯线
 	private List<Tb1053PhysconnEntity> physconnEntitieList = new ArrayList<>();
+	// 芯线连接关系 A@B
+	private Map<String, Tb1052CoreEntity> coreMap = new HashMap<String, Tb1052CoreEntity>();
 	
 	//保存处理过的端口，用于验证端口重复
-	private Map<String, IM102FibreListEntity> map = new HashMap<String, IM102FibreListEntity>();
+	private Map<String, Tb1048PortEntity> portAMap = new HashMap<String, Tb1048PortEntity>();
+	private Map<String, Tb1048PortEntity> portBMap = new HashMap<String, Tb1048PortEntity>();
 	//光缆芯线编号
 	private List<String> cableCores = new ArrayList<>();
 	
 	private Tb1041SubstationEntity substation;
 	
-	public void importData(List<IM102FibreListEntity> list, IProgressMonitor monitor) {
+	public void importData(List<IM111FibreListEntity> list, IProgressMonitor monitor) {
 		cableEntitieList.clear();
 		coreEntitieList.clear();
 		physconnEntitieList.clear();
 		fibreListEntitieList.clear();
 		fibreListEntitieList.addAll(list);
-		map.clear();
+		coreMap.clear();
+		portAMap.clear();
+		portBMap.clear();
 		
 		if (list == null || list.size() <= 0) 
 			return;
@@ -108,6 +113,34 @@ public class ImportFibreListProcessor3 {
 		monitor.done();
 	}
 	
+	private void analysisPhyconns() {
+		List<Tb1052CoreEntity> phyCores = new ArrayList<>();
+		for (int i = 0; i<fibreListEntitieList.size(); i++) {
+			IM111FibreListEntity entity = fibreListEntitieList.get(i);
+			String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+			String portB = entity.getDevNameB() + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
+			String coreName = portA + "@" + portB;
+			if (!coreMap.containsKey(coreName)) {
+				continue;
+			}
+			phyCores.add(coreMap.get(coreName));
+			coreMap.remove(coreName);
+			portAMap.remove(portA);
+			if (portAMap.containsKey(portB)) {
+				continue;
+			} else {
+				Tb1053PhysconnEntity phyconn = null;
+				Tb1052CoreEntity firstCore = phyCores.get(0);
+				Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
+				phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
+				for (Tb1052CoreEntity core : phyCores) {
+					core.setTb1053ByF1053Code(phyconn);
+				}
+				phyCores.clear();
+			}
+		}
+	}
+	
 	//处理物理回路
 	private Tb1053PhysconnEntity addPhyconn(Tb1048PortEntity portEntityA, Tb1048PortEntity portEntityB) {
 		Tb1053PhysconnEntity physconnEntity = new Tb1053PhysconnEntity();
@@ -127,7 +160,7 @@ public class ImportFibreListProcessor3 {
 
 	//处理光缆数据
 	private void analysisCable(Tb1041SubstationEntity substationEntity) {
-		for (IM102FibreListEntity entity : fibreListEntitieList) {
+		for (IM111FibreListEntity entity : fibreListEntitieList) {
 			Tb1046IedEntity iedEntityA = iedEntityService.getIedEntityByDevName(entity.getDevNameA());
 			Tb1046IedEntity iedEntityB = iedEntityService.getIedEntityByDevName(entity.getDevNameB());
 			String cableCode = entity.getCableCode();
@@ -177,6 +210,7 @@ public class ImportFibreListProcessor3 {
 			}
 			addCableCores(entity, cubicleEntityA, cubicleEntityB);		// 3根芯线：A、B端跳纤和1根光缆芯线
 		}
+		analysisPhyconns();
 	}
 	
 	private void addCable(String cableCode, Tb1050CubicleEntity cubicleEntityA, Tb1050CubicleEntity cubicleEntityB) {
@@ -210,12 +244,12 @@ public class ImportFibreListProcessor3 {
 	}
 	
 	/**
-	 * 3根：A、B端跳纤和1根光缆芯线
+	 * 1根：A、B端跳纤或1根光缆芯线
 	 * @param entity
 	 * @param cubicleEntityA
 	 * @param cubicleEntityB
 	 */
-	private void addCableCores(IM102FibreListEntity entity, Tb1050CubicleEntity cubicleEntityA, Tb1050CubicleEntity cubicleEntityB) {
+	private void addCableCores(IM111FibreListEntity entity, Tb1050CubicleEntity cubicleEntityA, Tb1050CubicleEntity cubicleEntityB) {
 		String devNameA = entity.getDevNameA();
 		String devNameB = entity.getDevNameB();
 		Tb1048PortEntity portEntityA = portEntityService.getPortEntity(devNameA, entity.getBoardCodeA(), entity.getPortCodeA());
@@ -235,64 +269,28 @@ public class ImportFibreListProcessor3 {
 			return;
 		}
 		//检查端口是否重复，并记录非重复端口
-		if (map.containsKey(portA)) {
+		if (portAMap.containsKey(portA)) {
 			String msg = "端口A重复[" + portA + "]" ;
 			SCTLogger.error(msg);
 			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", devNameA, msg));
 			return;
-		} else if (map.containsKey(portB)) {
+		} else if (portBMap.containsKey(portB)) {
 			String msg = "端口B重复[" + portB + "]" ;
 			SCTLogger.error(msg);
 			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "端口重复检查", devNameB, msg));
 			return;
 		} else {
-			map.put(portA, entity);
-			map.put(portB, entity);
+			portAMap.put(portA, portEntityA);
+			portBMap.put(portB, portEntityB);
 			// 清理历史导入的芯线和物理回路，避免重复
 			clearPortA(portEntityA);
-			clearPortA(portEntityB);
+			clearPortB(portEntityB);
 		}
 		//端口检查通过则通过
 		entity.setMatched(DBConstants.MATCHED_OK);
 
-		//处理物理回路
-		Tb1053PhysconnEntity phyconn = addPhyconn(portEntityA, portEntityB);
-		
-		//处理屏柜A跳线
-		Tb1048PortEntity portEntityAA = portEntityService.getPortEntity(entity.getDistribFrameCodeA(), "X1", entity.getDistribFramePortNoA());
-		if (portEntityAA != null) {
-			clearPortA(portEntityAA);
-			String coreCodeA = entity.getCoreCodeA();
-			if (StringUtil.isEmpty(coreCodeA) || !DataTypeChecker.checkDigit(coreCodeA)) {
-				String msg = "芯线编号为空或非数字，无法创建端口A[" + portA + "]跳纤。";
-				SCTLogger.error(msg);
-				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", entity.getCableCode(), msg));
-			} else {
-				Tb1052CoreEntity coreEntityA = createCore(coreCodeA, portEntityA, portEntityAA, cubicleEntityA);
-				if (coreEntityA != null) {
-					coreEntityA.setTb1053ByF1053Code(phyconn);
-					coreEntitieList.add(coreEntityA);
-				}
-			}
-		}
-		
-		//处理屏柜B跳线
-		Tb1048PortEntity portEntityBB = portEntityService.getPortEntity(entity.getDistribFrameCodeB(), "X1", entity.getDistribFramePortNoB());
-		if (portEntityBB != null) {
-			clearPortA(portEntityBB);
-			String coreCodeB = entity.getCoreCodeB();
-			if (StringUtil.isEmpty(coreCodeB) || !DataTypeChecker.checkDigit(coreCodeB)) {
-				String msg = "芯线编号为空或非数字，无法创建端口B[" + portB + "]跳纤。";
-				SCTLogger.error(msg);
-				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", entity.getCableCode(), msg));
-			} else {
-				Tb1052CoreEntity coreEntityB = createCore(coreCodeB, portEntityBB, portEntityB, cubicleEntityB);
-				if (coreEntityB != null) {
-					coreEntityB.setTb1053ByF1053Code(phyconn);
-					coreEntitieList.add(coreEntityB);
-				}
-			}
-		}
+//		//处理物理回路
+//		Tb1053PhysconnEntity phyconn = addPhyconn(portEntityA, portEntityB);
 		
 		//处理光缆芯线
 		String cableCode = entity.getCableCode();
@@ -300,12 +298,8 @@ public class ImportFibreListProcessor3 {
 		Tb1052CoreEntity coreEntity = null;
 		if (!StringUtil.isEmpty(cableCode) && !StringUtil.isEmpty(coreCode)) {
 			if (DataTypeChecker.checkDigit(coreCode)) {
-				if ((portEntityAA != null && portEntityBB != null) || (portEntityA != null && portEntityB != null)) {
-					if (portEntityAA != null && portEntityBB != null) {
-						coreEntity = createCore(entity, portEntityAA, portEntityBB);					// 光缆连接
-					} else if (portEntityA != null && portEntityB != null) {
-						coreEntity = createCore(entity, portEntityA, portEntityB);					// 光缆连接
-					}
+				if (portEntityA != null && portEntityB != null) {
+					coreEntity = createCore(entity, portEntityA, portEntityB);					// 光缆连接
 					String key  = cableCode + "." + coreCode;
 					if (cableCores.contains(key)) {
 						String msg = "光缆 " + cableCode + " 存在重复的芯线编号 [" + coreCode + "] 。";
@@ -315,15 +309,13 @@ public class ImportFibreListProcessor3 {
 						cableCores.add(key);
 					}
 				} else {
-					String portAA = entity.getDistribFrameCodeA() + ",X1," + entity.getDistribFramePortNoA();
-					String portBB = entity.getDistribFrameCodeB() + ",X1," + entity.getDistribFramePortNoB();
-					if (portEntityAA == null) {
-						String msg = "端口[" + portAA + "]不存在，无法创建端口[" + portAA + "]和[" + portBB + "]之间光缆芯线。";
+					if (portEntityA == null) {
+						String msg = "端口[" + portA + "]不存在，无法创建端口[" + portA + "]和[" + portB + "]之间光缆芯线。";
 						SCTLogger.error(msg);
 						pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", cableCode, msg));
 					}
-					if (portEntityBB == null) {
-						String msg = "端口[" + portBB + "]不存在，无法创建端口[" + portAA + "]和[" + portBB + "]之间光缆芯线。";
+					if (portEntityB == null) {
+						String msg = "端口[" + portB + "]不存在，无法创建端口[" + portA + "]和[" + portB + "]之间光缆芯线。";
 						SCTLogger.error(msg);
 						pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", cableCode, msg));
 					}
@@ -334,10 +326,6 @@ public class ImportFibreListProcessor3 {
 				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", cableCode, msg));
 			}
 		} else {
-			coreCode = entity.getCoreCodeA();
-			if (StringUtil.isEmpty(coreCode)) {
-				coreCode = entity.getCoreCodeB();
-			}
 			if (!StringUtil.isEmpty(coreCode)) {
 				coreEntity = createCore(coreCode, portEntityA, portEntityB, cubicleEntityA); // 芯线直连
 			} else {
@@ -347,7 +335,8 @@ public class ImportFibreListProcessor3 {
 			}
 		}
 		if (coreEntity != null) {
-			coreEntity.setTb1053ByF1053Code(phyconn);
+//			coreEntity.setTb1053ByF1053Code(phyconn);
+			coreMap.put(portA + "@" + portB, coreEntity);
 			coreEntitieList.add(coreEntity);
 		} else {
 			String msg = "端口[" + portA + "]和[" + portB + "]之间无芯线连接。";
@@ -358,7 +347,7 @@ public class ImportFibreListProcessor3 {
 	}
 
 	//创建芯线
-	private Tb1052CoreEntity createCore(IM102FibreListEntity entity, Tb1048PortEntity portEntityA, 
+	private Tb1052CoreEntity createCore(IM111FibreListEntity entity, Tb1048PortEntity portEntityA, 
 			Tb1048PortEntity portEntityB) {
 		Tb1052CoreEntity coreEntity = new Tb1052CoreEntity();
 		coreEntity.setF1052Type(DBConstants.CORE_TYPE_XX);

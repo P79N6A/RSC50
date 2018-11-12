@@ -53,6 +53,7 @@ public interface RSCConstants {
      String ET_IMP_BRK		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpBrkCfmEditor";
      String ET_IMP_STA		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpStaInfoEditor";
      String ET_IMP_LINKW	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpLinkWarnEditor";
+     String ET_IMP_FIBNew	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.imp.ImpFibreNewListEditor";
 	
      DictManager dictMgr = DictManager.getInstance();
      

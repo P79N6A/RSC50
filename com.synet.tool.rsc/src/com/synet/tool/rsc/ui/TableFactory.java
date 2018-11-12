@@ -69,6 +69,7 @@ public class TableFactory {
 	public static String IED_COMP_LIST_TABLE                = "IEDCompListTable";
 	public static String BOARD_WARN_TABLE                   = "BoardWarnTableTable";
 	public static String FIBRE_LIST_TABLE                   = "FibreListTable";
+	public static String FIBRE_LIST_NEW_TABLE               = "FibreListNewTable";
 	public static String IED_BOARD_TABLE                    = "IEDBoardTable";
 	public static String STATUS_IN_TABLE                    = "StatusInTable";
 	public static String LINK_WARN_TABLE                    = "LinkWarnTable";
@@ -367,6 +368,11 @@ public class TableFactory {
 	
 	public static DevKTable getFibreListTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(FIBRE_LIST_TABLE);
+		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+	}
+	
+	public static DevKTable getFibreListNewTable(Composite container) {
+		TableConfig tableCfg = uicfg.getDefinedTable(FIBRE_LIST_NEW_TABLE);
 		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
 	}
 	
