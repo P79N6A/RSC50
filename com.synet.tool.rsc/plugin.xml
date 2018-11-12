@@ -100,8 +100,8 @@
 	              text="SPCD"/>
 	       <menu id="menu.imp.excel" text="Excel">
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="设备台账"/>
-	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="光缆清册"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="装置板卡端口描述"/>
+	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="光缆清册"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="开入信号映射表"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="告警与板卡关联表"/>
 	            <action class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportExcelAction" text="光强与端口关联表"/>
