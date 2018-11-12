@@ -132,17 +132,6 @@ public interface DBConstants {
 	int CABLE_TYPE_TL = 3;	//跳缆
 	int CABLE_TYPE_SJX = 4;	//双绞线
 	
-	int FILE_TYPE101 = 101;//设备台账
-	int FILE_TYPE102 = 102;//光缆清册
-	int FILE_TYPE103 = 103;//装置板卡端口描述
-	int FILE_TYPE104 = 104;//开入信号映射表
-	int FILE_TYPE105 = 105;//告警与板卡关联表
-	int FILE_TYPE106 = 106;//光强与端口关联表
-	int FILE_TYPE107 = 107;//压板与虚端子关联表
-	int FILE_TYPE108 = 108;//跳合闸反校关联表
-	int FILE_TYPE109 = 109;//监控信息点表
-	int FILE_TYPE110 = 110;//告警与链路关联表
-	
 	int DIRECTION_TX = 1; //表示发送
 	int DIRECTION_RX = 2; //表示接收
 	int DIRECTION_RT = 3; //表示收发

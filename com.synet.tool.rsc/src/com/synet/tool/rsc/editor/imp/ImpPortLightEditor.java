@@ -16,9 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -89,75 +86,6 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		btImport = SwtUtil.createPushButton(btComp, "导入光强与端口", new GridData());
 		table =TableFactory.getPortLightTable(container);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-	}
-	
-	protected void addListeners() {
-		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM106PortLightEntity.class));
-		
-		SelectionListener listener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object obj = e.getSource();
-				if (obj == titleList) {
-					String[] selects = titleList.getSelection();
-					if (selects != null && selects.length > 0) {
-						loadFileItems(selects[0]);
-					}
-				} else if (obj == btAdd) {
-					addItemByTable(DBConstants.FILE_TYPE106);
-				} else if (obj == btDelete) {
-					deleteItemsByTable();
-				} else if (obj == btExport) {
-					exportExcel();
-				} else if (obj == btCheck) {
-					//冲突检查
-					checkConflict();
-				} else if (obj == btImport) {
-					importData();
-				} else if (obj == btExportCfgData) {
-					exportProcessorData();
-				}
-			}
-		};
-		titleList.addSelectionListener(listener);
-		btAdd.addSelectionListener(listener);
-		btDelete.addSelectionListener(listener);
-		btExport.addSelectionListener(listener);
-		btCheck.addSelectionListener(listener);
-		btImport.addSelectionListener(listener);
-		btExportCfgData.addSelectionListener(listener);
-		
-//		titleList.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				String[] selects = titleList.getSelection();
-//				if (selects != null && selects.length > 0) {
-//					loadFileItems(selects[0]);
-//				}
-//			}
-//		});
-//		
-//		btExport.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				exportExcel();
-//			}
-//		});
-//		
-//		btCheck.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				//冲突检查
-//				checkConflict();
-//			}
-//		});
-//		
-//		btImport.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				importData();
-//			}
-//		});
 	}
 	
 	protected void exportExcel() {
@@ -297,31 +225,6 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 			e.printStackTrace();
 		}
 		monitor.done();
-	}
-
-	@Override
-	public void initData() {
-		table.setInput(new ArrayList<>());
-		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE106);
-		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
-			List<String> items = new ArrayList<>();
-			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
-				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
-				items.add(fileInfoEntity.getFileName());
-			}
-			if (items.size() > 0) {
-				titleList.setItems(items.toArray(new String[0]));
-				titleList.setSelection(0);
-				loadFileItems(items.get(0));
-			}
-		}
-	}
-	
-	private void loadFileItems(String filename) {
-		List<IM106PortLightEntity> list = improtInfoService.getPortLightEntityList(map.get(filename));
-		if (list != null && list.size()> 0) {
-			table.setInput(list);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -15,9 +15,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -25,7 +22,6 @@ import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.Problem;
@@ -91,42 +87,6 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		GridData tableGridData = new GridData(GridData.FILL_BOTH);
 		table = TableFactory.getIEDListTable(cmpRight);
 		table.getTable().setLayoutData(tableGridData);
-	}
-	
-	protected void addListeners() {
-		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM101IEDListEntity.class));
-		SelectionListener listener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object obj = e.getSource();
-				if (obj == titleList) {
-					String[] selects = titleList.getSelection();
-					if (selects != null && selects.length > 0) {
-						loadFileItems(selects[0]);
-					}
-				} else if (obj == btAdd) {
-					addItemByTable(DBConstants.FILE_TYPE101);
-				} else if (obj == btDelete) {
-					deleteItemsByTable();
-				} else if (obj == btExport) {
-					exportExcel();
-				} else if (obj == btCheck) {
-					//冲突检查
-					checkConflict();
-				} else if (obj == btImport) {
-					importData();
-				} else if (obj == btExportCfgData) {
-					exportProcessorData();
-				}
-			}
-		};
-		titleList.addSelectionListener(listener);
-		btAdd.addSelectionListener(listener);
-		btDelete.addSelectionListener(listener);
-		btExport.addSelectionListener(listener);
-		btCheck.addSelectionListener(listener);
-		btImport.addSelectionListener(listener);
-		btExportCfgData.addSelectionListener(listener);
 	}
 	
 	protected void exportExcel() {
@@ -305,43 +265,6 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 		monitor.done();
 	}
 
-	@Override
-	public void initData() {
-		table.setInput(new ArrayList<>());
-		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE101);
-		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
-			List<String> items = new ArrayList<>();
-			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
-				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
-				items.add(fileInfoEntity.getFileName());
-			}
-			if (items.size() > 0) {
-				IEditorInput editinput = getInput();
-				int sel = 0;
-				Object data = editinput.getData();
-				if (data != null && data instanceof String) {
-					String filename = (String) data;
-					sel = items.indexOf(filename);
-				}
-				titleList.setItems(items.toArray(new String[0]));
-				titleList.setSelection(sel);
-				loadFileItems(items.get(sel));
-			}
-		}
-	}
-	
-	private void loadFileItems(String filename) {
-		IM100FileInfoEntity fileInfoEntity = map.get(filename);
-		if (fileInfoEntity == null) {
-			DialogHelper.showAsynError("文名错误！");
-		} else {
-			List<IM101IEDListEntity> list = improtInfoService.getIEDListEntityList(fileInfoEntity);
-			if (list != null) {
-				table.setInput(list);
-			}
-		}
-	}
-	
 	@SuppressWarnings("unchecked")
 	protected void checkData() {
 		List<IM101IEDListEntity> list = (List<IM101IEDListEntity>) table.getInput();

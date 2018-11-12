@@ -1,16 +1,18 @@
 package com.synet.tool.rsc.excel;
 
+import java.util.List;
+
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 
 public class ImportResult {
 
 	private IM100FileInfoEntity fileInfoEntity;
-	private Object result; // list
+	private List<?> result; // list
 	
 	public ImportResult() {
 		super();
 	}
-	public ImportResult(IM100FileInfoEntity fileInfoEntity, Object result) {
+	public ImportResult(IM100FileInfoEntity fileInfoEntity, List<?> result) {
 		super();
 		this.fileInfoEntity = fileInfoEntity;
 		this.result = result;
@@ -21,10 +23,10 @@ public class ImportResult {
 	public void setFileInfoEntity(IM100FileInfoEntity fileInfoEntity) {
 		this.fileInfoEntity = fileInfoEntity;
 	}
-	public Object getResult() {
+	public List<?> getResult() {
 		return result;
 	}
-	public void setResult(Object result) {
+	public void setResult(List<?> result) {
 		this.result = result;
 	}
 	

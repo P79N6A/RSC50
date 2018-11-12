@@ -94,83 +94,22 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		table.getTable().setLayoutData(tbData);
 	}
 	
+	@Override
 	protected void addListeners() {
-		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, IM102FibreListEntity.class));
-		
+		super.addListeners();
 		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object obj = e.getSource();
-				if (obj == titleList) {
-					String[] selects = titleList.getSelection();
-					if (selects != null && selects.length > 0) {
-						loadFileItems(selects[0]);
-					}
-				} else if (obj == btAdd) {
-					addItemByTable(DBConstants.FILE_TYPE102);
-				} else if (obj == btDelete) {
-					deleteItemsByTable();
-				} else if (obj == btCheck) {
-					//冲突检查
-					checkConflict();
-				} else if (obj == btImport) {
-					importData();
-				} else if (obj == btAnalysis) {
+				if (obj == btAnalysis) {
 					String[] selects = titleList.getSelection();
 					if (selects != null && selects.length > 0) {
 						doAnalysis();
 					}
-				} else if (obj == btExportCfgData) {
-					exportProcessorData();
 				}
 			}
 		};
-		titleList.addSelectionListener(listener);
-		btAdd.addSelectionListener(listener);
-		btDelete.addSelectionListener(listener);
-		btCheck.addSelectionListener(listener);
-		btImport.addSelectionListener(listener);
 		btAnalysis.addSelectionListener(listener);
-		btExportCfgData.addSelectionListener(listener);
-		
-//		titleList.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				String[] selects = titleList.getSelection();
-//				if (selects != null && selects.length > 0) {
-//					loadFileItems(selects[0]);
-//				}
-//			}
-//		});
-//		
-//		btCheck.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				//冲突检查
-//				checkConflict();
-//			}
-//		});
-//		
-//		btImport.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				String[] selects = titleList.getSelection();
-//				if (selects != null && selects.length > 0) {
-//					doImport();
-//					ConsoleManager.getInstance().append(titleList.getSelection()[0] + "导入完毕！");
-//				}
-//			}
-//		});
-//		
-//		btAnalysis.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				String[] selects = titleList.getSelection();
-//				if (selects != null && selects.length > 0) {
-//					doAnalysis();
-//				}
-//			}
-//		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -197,31 +136,6 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 		new LogcalAndPhyconnProcessor().analysis();
 		//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code
 		new LogcalAndPhyconnProcessor().analysisGCBAndSVCB();
-	}
-
-	@Override
-	public void initData() {
-		table.setInput(new ArrayList<>());
-		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(DBConstants.FILE_TYPE102);
-		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
-			List<String> items = new ArrayList<>();
-			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
-				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
-				items.add(fileInfoEntity.getFileName());
-			}
-			if (items.size() > 0) {
-				titleList.setItems(items.toArray(new String[0]));
-				titleList.setSelection(0);
-				loadFileItems(items.get(0));
-			}
-		}
-	}
-	
-	private void loadFileItems(String filename) {
-		List<IM102FibreListEntity> list = improtInfoService.getFibreListEntityList(map.get(filename));
-		if (list != null && list.size()> 0) {
-			table.setInput(list);
-		}
 	}
 
 	//光缆清册为导入添加数据，只要检查是否添加过和必要参数是否存在即可,数据重复时，导入数据为更新操作
@@ -324,6 +238,11 @@ public class ImpFibreListEditor extends ExcelImportEditor {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected void exportExcel() {
+		table.exportExcel2007();
 	}
 	
 }

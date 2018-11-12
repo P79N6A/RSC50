@@ -7,6 +7,7 @@ import org.osgi.framework.BundleContext;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.TaskManager;
+import com.synet.tool.rsc.excel.ImportConfigFactory;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.RuleType;
 
@@ -40,7 +41,7 @@ public class Activator extends AbstractUIPlugin {
 		DictManager dictmgr = DictManager.getInstance();
 		dictmgr.init(getClass(), RSCConstants.DICT_PATH, true);
 		RuleType.initDicts();
-
+		
 		new TaskManager().start();
 	}
 

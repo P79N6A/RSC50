@@ -52,57 +52,57 @@ public class ImprotInfoService extends BaseService {
 		return (List<IM100FileInfoEntity>) beanDao.getListByCriteria(IM100FileInfoEntity.class, "fileType", fileType);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<IM101IEDListEntity> getIEDListEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM101IEDListEntity>) getFileItems(IM101IEDListEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM102FibreListEntity> getFibreListEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM102FibreListEntity>) getFileItems(IM102FibreListEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM103IEDBoardEntity> getIEDBoardEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM103IEDBoardEntity>) getFileItems(IM103IEDBoardEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM104StatusInEntity> getStatusInEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM104StatusInEntity>) getFileItems(IM104StatusInEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM105BoardWarnEntity> getBoardWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM105BoardWarnEntity>) getFileItems(IM105BoardWarnEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM106PortLightEntity> getPortLightEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM106PortLightEntity>) getFileItems(IM106PortLightEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM107TerStrapEntity> getTerStrapEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM107TerStrapEntity>) getFileItems(IM107TerStrapEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM108BrkCfmEntity> getBrkCfmEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM108BrkCfmEntity>) getFileItems(IM108BrkCfmEntity.class,  fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM109StaInfoEntity> getStaInfoEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM109StaInfoEntity>) getFileItems(IM109StaInfoEntity.class, fileInfoEntity);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IM110LinkWarnEntity> getLinkWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
-		return (List<IM110LinkWarnEntity>) getFileItems(IM110LinkWarnEntity.class, fileInfoEntity);
-	}
+//	@SuppressWarnings("unchecked")
+//	public List<IM101IEDListEntity> getIEDListEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM101IEDListEntity>) getFileItems(IM101IEDListEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM102FibreListEntity> getFibreListEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM102FibreListEntity>) getFileItems(IM102FibreListEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM103IEDBoardEntity> getIEDBoardEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM103IEDBoardEntity>) getFileItems(IM103IEDBoardEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM104StatusInEntity> getStatusInEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM104StatusInEntity>) getFileItems(IM104StatusInEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM105BoardWarnEntity> getBoardWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM105BoardWarnEntity>) getFileItems(IM105BoardWarnEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM106PortLightEntity> getPortLightEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM106PortLightEntity>) getFileItems(IM106PortLightEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM107TerStrapEntity> getTerStrapEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM107TerStrapEntity>) getFileItems(IM107TerStrapEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM108BrkCfmEntity> getBrkCfmEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM108BrkCfmEntity>) getFileItems(IM108BrkCfmEntity.class,  fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM109StaInfoEntity> getStaInfoEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM109StaInfoEntity>) getFileItems(IM109StaInfoEntity.class, fileInfoEntity);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public List<IM110LinkWarnEntity> getLinkWarnEntityList(IM100FileInfoEntity fileInfoEntity) {
+//		return (List<IM110LinkWarnEntity>) getFileItems(IM110LinkWarnEntity.class, fileInfoEntity);
+//	}
 
-	private List<?> getFileItems(Class<?> itemClass, IM100FileInfoEntity fileInfoEntity) {
+	public List<?> getFileItems(Class<?> itemClass, IM100FileInfoEntity fileInfoEntity) {
 		return beanDao.getListByCriteria(itemClass, "fileInfoEntity", fileInfoEntity);
 	}
 }

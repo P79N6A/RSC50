@@ -13,6 +13,7 @@ public interface ExcelConstants {
 	String IM108_BRK_CFM = "跳合闸反校关联表";
 	String IM109_STA_INFO = "监控信息点表";
 	String IM110_LINK_WARN = "告警与链路关联表";
+	String IM111_FIBRE_LIST = "新光缆清册";
 	//表字段信息
 	String IM101_DEV_NAME  = "装置Name";
 	String IM101_DEV_DESC  = "装置名称";

@@ -42,7 +42,9 @@ import com.shrcn.found.ui.util.ProgressManager;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
+import com.synet.tool.rsc.excel.EnumFileType;
 import com.synet.tool.rsc.excel.ExcelImporter;
+import com.synet.tool.rsc.excel.ImportConfigFactory;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM101IEDListEntity;
 import com.synet.tool.rsc.model.IM102FibreListEntity;
@@ -112,7 +114,7 @@ public class ImportExcelAction extends BaseImportAction {
 				return;
 			}
 			colDialog.setExcelColMap(excelColName);
-			String[] fields = ExcelImporter.getExcelFields(getTitle());
+			String[] fields = ImportConfigFactory.getExcelFields(getTitle());
 			if (fields == null) {
 				DialogHelper.showAsynError("系统异常");
 				return;
@@ -166,42 +168,11 @@ public class ImportExcelAction extends BaseImportAction {
 	 * 删除文件，并删除文件下的数据
 	 */
 	private void deleteFile(IM100FileInfoEntity fileInfoEntity) {
-		if (fileInfoEntity == null) return;
+		if (fileInfoEntity == null)
+			return;
 		int fileType = fileInfoEntity.getFileType();
-		switch (fileType) {
-		case DBConstants.FILE_TYPE101:
-			improtInfoService.deleteDataByFile(IM101IEDListEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE102:
-			improtInfoService.deleteDataByFile(IM102FibreListEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE103:
-			improtInfoService.deleteDataByFile(IM103IEDBoardEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE104:
-			improtInfoService.deleteDataByFile(IM104StatusInEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE105:
-			improtInfoService.deleteDataByFile(IM105BoardWarnEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE106:
-			improtInfoService.deleteDataByFile(IM106PortLightEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE107:
-			improtInfoService.deleteDataByFile(IM107TerStrapEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE108:
-			improtInfoService.deleteDataByFile(IM108BrkCfmEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE109:
-			improtInfoService.deleteDataByFile(IM109StaInfoEntity.class, fileInfoEntity);
-			break;
-		case DBConstants.FILE_TYPE110:
-			improtInfoService.deleteDataByFile(IM110LinkWarnEntity.class, fileInfoEntity);
-			break;
-		default:
-			break;
-		}
+		Class<?> entityClass = EnumFileType.getById(fileType).getEntityClass();
+		improtInfoService.deleteDataByFile(entityClass, fileInfoEntity);
 		improtInfoService.delete(fileInfoEntity);
 	}
 

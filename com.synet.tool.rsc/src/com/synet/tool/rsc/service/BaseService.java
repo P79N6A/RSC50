@@ -39,6 +39,10 @@ public abstract class BaseService {
 		beanDao.insert(entity);
 	}
 	
+	public void insertBatch(List<?> objs) {
+		beanDao.insertBatch(objs);
+	}
+	
 	public void delete(Object entity) {
 		beanDao.delete(entity);
 	}

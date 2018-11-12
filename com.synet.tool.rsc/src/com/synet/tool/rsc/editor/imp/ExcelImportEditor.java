@@ -10,6 +10,9 @@ import net.sf.excelutils2007.ExcelUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -24,6 +27,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
+import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
@@ -31,16 +35,10 @@ import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.RscEventConstants;
 import com.synet.tool.rsc.UICommonConstants;
 import com.synet.tool.rsc.editor.BaseConfigEditor;
+import com.synet.tool.rsc.excel.EnumFileType;
+import com.synet.tool.rsc.excel.ImportConfig;
+import com.synet.tool.rsc.excel.ImportConfigFactory;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
-import com.synet.tool.rsc.model.IM101IEDListEntity;
-import com.synet.tool.rsc.model.IM102FibreListEntity;
-import com.synet.tool.rsc.model.IM103IEDBoardEntity;
-import com.synet.tool.rsc.model.IM104StatusInEntity;
-import com.synet.tool.rsc.model.IM105BoardWarnEntity;
-import com.synet.tool.rsc.model.IM106PortLightEntity;
-import com.synet.tool.rsc.model.IM107TerStrapEntity;
-import com.synet.tool.rsc.model.IM108BrkCfmEntity;
-import com.synet.tool.rsc.model.IM109StaInfoEntity;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
@@ -66,10 +64,84 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	protected int errorCount;
 	protected int warningCount; 
 	protected RSCProperties rscp = RSCProperties.getInstance();
+	protected String fileType;
+	protected ImportConfig config;
 
 	public ExcelImportEditor(Composite container, IEditorInput input) {
 		super(container, input);
 		EventManager.getDefault().registEventHandler(this);
+	}
+	
+	@Override
+	public void initData() {
+		this.fileType = input.getEditorName();
+		this.config = ImportConfigFactory.getImportConfig(fileType);
+		table.setInput(new ArrayList<>());
+		List<IM100FileInfoEntity> fileInfoEntities = improtInfoService.getFileInfoEntityList(EnumFileType.getByTitle(fileType).getId());
+		if (fileInfoEntities != null && fileInfoEntities.size() > 0) {
+			List<String> items = new ArrayList<>();
+			for (IM100FileInfoEntity fileInfoEntity : fileInfoEntities) {
+				map.put(fileInfoEntity.getFileName(), fileInfoEntity);
+				items.add(fileInfoEntity.getFileName());
+			}
+			if (items.size() > 0) {
+				IEditorInput editinput = getInput();
+				int sel = 0;
+				Object data = editinput.getData();
+				if (data != null && data instanceof String) {
+					String filename = (String) data;
+					sel = items.indexOf(filename);
+				}
+				titleList.setItems(items.toArray(new String[0]));
+				titleList.setSelection(sel);
+				loadFileItems(items.get(sel));
+			}
+		}
+	}
+	
+	class EditorSelectListener extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			Object obj = e.getSource();
+			if (obj == titleList) {
+				String[] selects = titleList.getSelection();
+				if (selects != null && selects.length > 0) {
+					loadFileItems(selects[0]);
+				}
+			} else if (obj == btAdd) {
+				addItemByTable();
+			} else if (obj == btDelete) {
+				deleteItemsByTable();
+			} else if (obj == btExport) {
+				exportExcel();
+			} else if (obj == btCheck) {
+				//冲突检查
+				checkConflict();
+			} else if (obj == btImport) {
+				importData();
+			} else if (obj == btExportCfgData) {
+				exportProcessorData();
+			}
+			
+		}
+	}
+	
+	protected void addListeners() {
+		SwtUtil.addMenus(titleList, new DeleteFileAction(titleList, config.getEntityClass()));
+		SelectionListener listener = new EditorSelectListener();
+		titleList.addSelectionListener(listener);
+		if (btAdd != null)
+			btAdd.addSelectionListener(listener);
+		if (btDelete != null)
+			btDelete.addSelectionListener(listener);
+		if (btExport != null)
+			btExport.addSelectionListener(listener);
+		if (btCheck != null)
+			btCheck.addSelectionListener(listener);
+		if (btImport != null)
+			btImport.addSelectionListener(listener);
+		if (btExportCfgData != null)
+			btExportCfgData.addSelectionListener(listener);
 	}
 	
 	@Override
@@ -270,6 +342,20 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 
 	protected abstract Object locate(Problem problem);
 	
+	protected abstract void exportExcel();
+	
+	protected void loadFileItems(String filename) {
+		IM100FileInfoEntity fileInfoEntity = map.get(filename);
+		if (fileInfoEntity == null) {
+			DialogHelper.showAsynError("文名错误！");
+		} else {
+			List<?> list = improtInfoService.getFileItems(config.getEntityClass(), fileInfoEntity);
+			if (list != null) {
+				table.setInput(list);
+			}
+		}
+	}
+	
 	protected void deleteItemsByTable() {
 		List<Object> list = table.getSelections();
 		if (list != null && list.size() > 0) {
@@ -280,92 +366,22 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		table.removeSelected();
 	}
 	
-	protected void addItemByTable(int fileType) {
+	protected void addItemByTable() {
 		String fileName = null;
 		String[] selects = titleList.getSelection();
 		if (selects != null && selects.length > 0) {
 			fileName =selects[0];
 		}
-		if (fileName == null) return;
+		if (fileName == null) 
+			return;
 		IM100FileInfoEntity fileInfoEntity = map.get(fileName);
-		if (fileInfoEntity == null) return;
-		
-		switch (fileType) {
-		case DBConstants.FILE_TYPE101:
-			IM101IEDListEntity entity101 = new IM101IEDListEntity();
-			entity101.setFileInfoEntity(fileInfoEntity);
-			entity101.setIm101Code(rscp.nextTbCode(DBConstants.PR_IEDLIST));
-			entity101.setMatched(DBConstants.MATCHED_NO);
-			entity101.setConflict(DBConstants.NO);
-			addDbAndTable(entity101);
-			break;
-		case DBConstants.FILE_TYPE102:
-			IM102FibreListEntity entity102 = new IM102FibreListEntity();
-			entity102.setFileInfoEntity(fileInfoEntity);
-			entity102.setIm102Code(rscp.nextTbCode(DBConstants.PR_FIBRELIST));
-			entity102.setMatched(DBConstants.MATCHED_NO);
-			entity102.setConflict(DBConstants.NO);
-			addDbAndTable(entity102);
-			break;
-		case DBConstants.FILE_TYPE103:
-			IM103IEDBoardEntity entity103 = new IM103IEDBoardEntity();
-			entity103.setFileInfoEntity(fileInfoEntity);
-			entity103.setIm103Code(rscp.nextTbCode(DBConstants.PR_IEDBOARD));
-			entity103.setMatched(DBConstants.MATCHED_NO);
-			addDbAndTable(entity103);
-			break;
-		case DBConstants.FILE_TYPE104:
-			IM104StatusInEntity entity104 = new IM104StatusInEntity();
-			entity104.setFileInfoEntity(fileInfoEntity);
-			entity104.setIm104Code(rscp.nextTbCode(DBConstants.PR_STATUSIN));
-			entity104.setMatched(DBConstants.MATCHED_NO);
-			entity104.setConflict(DBConstants.NO);
-			addDbAndTable(entity104);
-			break;
-		case DBConstants.FILE_TYPE105:
-			IM105BoardWarnEntity entity105 = new IM105BoardWarnEntity();
-			entity105.setFileInfoEntity(fileInfoEntity);
-			entity105.setIm105Code(rscp.nextTbCode(DBConstants.PR_BOARDWARN));
-			entity105.setMatched(DBConstants.MATCHED_NO);
-			entity105.setConflict(DBConstants.NO);
-			addDbAndTable(entity105);
-			break;
-		case DBConstants.FILE_TYPE106:
-			IM106PortLightEntity entity106 = new IM106PortLightEntity();
-			entity106.setFileInfoEntity(fileInfoEntity);
-			entity106.setIm106Code(rscp.nextTbCode(DBConstants.PR_PORTLIGHT));
-			entity106.setMatched(DBConstants.MATCHED_NO);
-			entity106.setConflict(DBConstants.NO);
-			addDbAndTable(entity106);
-			break;
-		case DBConstants.FILE_TYPE107:
-			IM107TerStrapEntity entity107 = new IM107TerStrapEntity();
-			entity107.setFileInfoEntity(fileInfoEntity);
-			entity107.setIm107Code(rscp.nextTbCode(DBConstants.PR_TERSTRAP));
-			entity107.setMatched(DBConstants.MATCHED_NO);
-			entity107.setConflict(DBConstants.NO);
-			addDbAndTable(entity107);
-			break;
-		case DBConstants.FILE_TYPE108:
-			IM108BrkCfmEntity entity108 = new IM108BrkCfmEntity();
-			entity108.setFileInfoEntity(fileInfoEntity);
-			entity108.setIm108Code(rscp.nextTbCode(DBConstants.PR_BRKCFM));
-			entity108.setMatched(DBConstants.MATCHED_NO);
-			entity108.setConflict(DBConstants.NO);
-			addDbAndTable(entity108);
-			break;
-		case DBConstants.FILE_TYPE109:
-			IM109StaInfoEntity entity109 = new IM109StaInfoEntity();
-			entity109.setFileInfoEntity(fileInfoEntity);
-			entity109.setIm109Code(rscp.nextTbCode(DBConstants.PR_STAINFO));
-			entity109.setMatched(DBConstants.MATCHED_NO);
-			entity109.setConflict(DBConstants.NO);
-			addDbAndTable(entity109);
-			break;
-
-		default:
-			break;
-		}
+		if (fileInfoEntity == null) 
+			return;
+		Object entity = config.createEntity();
+		ObjectUtil.setProperty(entity, "fileInfoEntity", fileInfoEntity);
+		ObjectUtil.setProperty(entity, "matched", DBConstants.MATCHED_NO);
+		ObjectUtil.setProperty(entity, "conflict", DBConstants.NO);
+		addDbAndTable(entity);
 	}
 	
 	//导出配置后的数据
