@@ -18,9 +18,15 @@ public class TB1086DefectFuncREntity {
 	public void setF1086CODE(String f1086code) {
 		f1086CODE = f1086code;
 	}
-//	public String getF1086OBJCODE() {
-//		return f1086OBJCODE;
-//	}
+	public String getF1086OBJCODE() {
+		if (tb1006ByMXCODE != null) {
+			return tb1006ByMXCODE.getF1006Code();
+		} else if (tb1006BySTCODE != null) {
+			return tb1006BySTCODE.getF1016Code();
+		} else {
+			return null;
+		}
+	}
 //	
 //	public Object getF1086OBJ() {
 //		if (f1086OBJCODE!=null) {

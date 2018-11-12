@@ -7,6 +7,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.synet.tool.rsc.model.TB1084FuncClassEntity;
+import com.synet.tool.rsc.model.TB1085ProtFuncEntity;
+import com.synet.tool.rsc.model.TB1086DefectFuncREntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -97,6 +100,10 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1052_INDEX,//TB1052_CORE
 		TB1073_INDEX,//TB1073_LLinkPhyRelation
 		TB1074_INDEX,//TB1074_SVCTVTRelation
+
+		TB1084_INDEX,
+		TB1085_INDEX,
+		TB1086_INDEX,
 
 		TB1090_INDEX,
 		TB1091_INDEX,
@@ -1196,5 +1203,53 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1074Code());
 		setSring(preState, index++, entity.getTb1067CtvtsecondaryByF1067Code().getF1067Code());
 		setSring(preState, index++, entity.getF1061Code().getF1061Code());
+	}
+
+	@Override
+	protected String getTb1084Sql() {
+		return "INSERT INTO TB1084_FuncClass(F1084_CODE,F1084_DESC) VALUES (?,?)";
+	}
+
+	@Override
+	protected void setValueByTb1084(PreparedStatement preState, Object obj)
+			throws SQLException {
+		TB1084FuncClassEntity entity = (TB1084FuncClassEntity) obj;
+		int index = 1;
+		setSring(preState, index++, entity.getF1084CODE());
+		setSring(preState, index++, entity.getF1084DESC());
+	}
+
+	@Override
+	protected String getTb1085Sql() {
+		return "INSERT INTO TB1085_ProtFunc(F1085_CODE,F1046_CODE,F1084_CODE) VALUES (?,?,?)";
+	}
+
+	@Override
+	protected void setValueByTb1085(PreparedStatement preState, Object obj)
+			throws SQLException {
+		TB1085ProtFuncEntity entity = (TB1085ProtFuncEntity) obj;
+		int index = 1;
+		setSring(preState, index++, entity.getF1085CODE());
+		setSring(preState, index++, entity.getTb1046ByF1046CODE().getF1046Code());
+		setSring(preState, index++, entity.getTb1804ByF1084CODE().getF1084CODE());
+	}
+
+	@Override
+	protected String getTb1086Sql() {
+		return "INSERT INTO TB1086_DefectFuncR(F1086_CODE,F1086_OBJ_CODE,F1086_DefectType,F1086_SubType,F1086_DefectLevel,F1085_CODE) " +
+				"VALUES (?,?,?,?,?,?)";
+	}
+
+	@Override
+	protected void setValueByTb1086(PreparedStatement preState, Object obj)
+			throws SQLException {
+		TB1086DefectFuncREntity entity = (TB1086DefectFuncREntity) obj;
+		int index = 1;
+		setSring(preState, index++, entity.getF1086CODE());
+		setSring(preState, index++, entity.getF1086OBJCODE());
+		setInt(preState, index++, entity.getF1086DefectType());
+		setInt(preState, index++, entity.getF1086SubType());
+		setInt(preState, index++, entity.getF1086DefectLevel());
+		setSring(preState, index++, entity.getTb1085ByF1085CODE().getF1085CODE());
 	}
 }

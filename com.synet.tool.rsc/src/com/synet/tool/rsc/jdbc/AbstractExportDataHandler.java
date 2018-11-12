@@ -12,6 +12,9 @@ import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.das.SessionRsc;
+import com.synet.tool.rsc.model.TB1084FuncClassEntity;
+import com.synet.tool.rsc.model.TB1085ProtFuncEntity;
+import com.synet.tool.rsc.model.TB1086DefectFuncREntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1022FaultconfigEntity;
@@ -99,6 +102,9 @@ public abstract class AbstractExportDataHandler {
 	protected static final int TB1092_INDEX = 1092;
 	protected static final int TB1093_INDEX = 1093;
 	protected static final int TB1074_INDEX = 1074;
+	protected static final int TB1084_INDEX = 1084;
+	protected static final int TB1085_INDEX = 1085;
+	protected static final int TB1086_INDEX = 1086;
 	
 	protected ExportConnManager exportConnManager;
 	protected Connection connect;
@@ -262,6 +268,12 @@ public abstract class AbstractExportDataHandler {
 			return Tb1093VoltagekkEntity.class;
 		case TB1074_INDEX:
 			return Tb1074SVCTVTRelationEntity.class;
+		case TB1084_INDEX:
+			return TB1084FuncClassEntity.class;
+		case TB1085_INDEX:
+			return TB1085ProtFuncEntity.class;
+		case TB1086_INDEX:
+			return TB1086DefectFuncREntity.class;
 		default:
 			return null;
 		}
@@ -353,6 +365,12 @@ public abstract class AbstractExportDataHandler {
 			return getTb1093Sql();
 		case TB1074_INDEX:
 			return getTb1074Sql();
+		case TB1084_INDEX:
+			return getTb1084Sql();
+		case TB1085_INDEX:
+			return getTb1085Sql();
+		case TB1086_INDEX:
+			return getTb1086Sql();
 		default:
 			return null;
 		}
@@ -486,6 +504,15 @@ public abstract class AbstractExportDataHandler {
 		case TB1074_INDEX:
 			setValueByTb1074(preState, obj);
 			break;
+		case TB1084_INDEX:
+			setValueByTb1084(preState, obj);
+			break;
+		case TB1085_INDEX:
+			setValueByTb1085(preState, obj);
+			break;
+		case TB1086_INDEX:
+			setValueByTb1086(preState, obj);
+			break;
 		default:
 			break;
 		}
@@ -533,6 +560,9 @@ public abstract class AbstractExportDataHandler {
 	protected abstract void setValueByTb1092(PreparedStatement preState, Object obj) throws SQLException;
 	protected abstract void setValueByTb1093(PreparedStatement preState, Object obj) throws SQLException;
 	protected abstract void setValueByTb1074(PreparedStatement preState, Object obj) throws SQLException;
+	protected abstract void setValueByTb1084(PreparedStatement preState, Object obj) throws SQLException;
+	protected abstract void setValueByTb1085(PreparedStatement preState, Object obj) throws SQLException;
+	protected abstract void setValueByTb1086(PreparedStatement preState, Object obj) throws SQLException;
 
 	
 	protected abstract String getTb1006Sql();
@@ -577,6 +607,9 @@ public abstract class AbstractExportDataHandler {
 	protected abstract String getTb1092Sql();
 	protected abstract String getTb1093Sql();
 	protected abstract String getTb1074Sql();
+	protected abstract String getTb1084Sql();
+	protected abstract String getTb1085Sql();
+	protected abstract String getTb1086Sql();
 
 	protected void setInt(PreparedStatement preState, int index,Integer value) throws SQLException{
 		if (value != null) {
