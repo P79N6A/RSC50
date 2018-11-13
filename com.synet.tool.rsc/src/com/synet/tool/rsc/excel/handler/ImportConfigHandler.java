@@ -8,7 +8,6 @@ import org.apache.poi.xssf.usermodel.XSSFComment;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.file.excel.SheetsHandler;
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.excel.ImportChecker;
 import com.synet.tool.rsc.excel.ImportConfig;
 import com.synet.tool.rsc.excel.ImportField;
 
@@ -42,7 +41,7 @@ public class ImportConfigHandler extends SheetsHandler {
 		if (entity == null) {
 			String error = "第" + (rowNum + 1) + "行";
 			errorMsg.add(error);
-		} else if (ImportChecker.isValid(entity)) {
+		} else if (config.isValid(entity)) {
 			ObjectUtil.setProperty(entity, "matched", DBConstants.MATCHED_NO);
 			result.add(entity);
 		}

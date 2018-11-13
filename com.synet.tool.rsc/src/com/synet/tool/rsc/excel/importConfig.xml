@@ -3,7 +3,7 @@
 	<Entity class="com.synet.tool.rsc.model.IM101IEDListEntity" prefix="IEDList">
 		<field col="-1" name="im101Code" title="主键ID"/>
 		<field col="0" name="devName" title="装置Name"/>
-		<field col="1" name="devDesc" title="装置名称"/>
+		<field col="1" name="devDesc" title="装置名称" notnull="true"/>
 		<field col="2" name="bay" title="所属间隔"/>
 		<field col="3" name="cubicle" title="所属屏柜"/>
 		<field col="4" name="netAIP" title="A网IP"/>
@@ -21,26 +21,26 @@
 		<field col="-1" name="im102Code" title="主键ID"/>
 		<field col="0" name="cableCode" title="光缆编号"/>
 		<field col="1" name="coreCode" title="光缆纤芯序号"/>
-		<field col="2" name="devNameA" title="装置A装置Name"/>
+		<field col="2" name="devNameA" title="装置A装置Name" notnull="true"/>
 		<field col="3" name="devDescA" title="装置A装置名称"/>
-		<field col="4" name="boardCodeA" title="装置A端口所属板卡编号"/>
-		<field col="5" name="portCodeA" title="装置A端口编号"/>
+		<field col="4" name="boardCodeA" title="装置A端口所属板卡编号" notnull="true"/>
+		<field col="5" name="portCodeA" title="装置A端口编号" notnull="true"/>
 		<field col="6" name="coreCodeA" title="装置A尾纤纤芯编号"/>
 		<field col="7" name="distribFrameCodeA" title="装置A柜光配单元编号"/>
 		<field col="8" name="distribFramePortNoA" title="装置A柜光配单元端子号"/>
-		<field col="9" name="devNameB" title="装置B装置Name"/>
+		<field col="9" name="devNameB" title="装置B装置Name" notnull="true"/>
 		<field col="10" name="devDescB" title="装置B装置名称"/>
-		<field col="11" name="boardCodeB" title="装置B端口所属板卡编号"/>
-		<field col="12" name="portCodeB" title="装置B端口编号"/>
+		<field col="11" name="boardCodeB" title="装置B端口所属板卡编号" notnull="true"/>
+		<field col="12" name="portCodeB" title="装置B端口编号" notnull="true"/>
 		<field col="13" name="coreCodeB" title="装置B尾纤纤芯编号"/>
 		<field col="14" name="distribFrameCodeB" title="装置B柜光配单元编号"/>
 		<field col="15" name="distribFramePortNoB" title="装置B柜光配单元端子号"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM103IEDBoardEntity" prefix="IEDBoard">
 		<field col="-1" name="im103Code" title="主键ID"/>
-		<field col="0" name="devName" title="保护型号"/>
-		<field col="1" name="manufacturor" title="制造厂家"/>
-		<field col="2" name="configVersion" title="ICD文件版本"/>
+		<field col="0" name="devName" title="保护型号" notnull="true"/>
+		<field col="1" name="manufacturor" title="制造厂家" notnull="true"/>
+		<field col="2" name="configVersion" title="ICD文件版本" notnull="true"/>
 		<field col="3" name="boardIndex" title="板卡序号"/>
 		<field col="4" name="boardCode" title="板卡编号"/>
 		<field col="5" name="boardModel" title="板卡型号"/>
@@ -49,80 +49,80 @@
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM104StatusInEntity" prefix="StatusIn">
 		<field col="-1" name="im104Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="pinRefAddr" title="开入虚端子参引"/>
+		<field col="2" name="pinRefAddr" title="开入虚端子参引" notnull="true"/>
 		<field col="3" name="pinDesc" title="端子描述"/>
-		<field col="4" name="mmsRefAddr" title="MMS信号参引"/>
+		<field col="4" name="mmsRefAddr" title="MMS信号参引" notnull="true"/>
 		<field col="5" name="mmsDesc" title="信号描述"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM105BoardWarnEntity" prefix="BoardWarn">
 		<field col="-1" name="im105Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="alarmRefAddr" title="告警信息参引"/>
+		<field col="2" name="alarmRefAddr" title="告警信息参引" notnull="true"/>
 		<field col="3" name="alarmDesc" title="告警信息描述"/>
 		<field col="4" name="boardCode" title="板卡编号"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM106PortLightEntity" prefix="PortLight">
 		<field col="-1" name="im106Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="opticalRefAddr" title="光强信息参引"/>
+		<field col="2" name="opticalRefAddr" title="光强信息参引" notnull="true"/>
 		<field col="3" name="opticalDesc" title="光强信息描述"/>
-		<field col="4" name="boardCode" title="板卡编号"/>
-		<field col="5" name="portCode" title="端口编号"/>
+		<field col="4" name="boardCode" title="板卡编号" notnull="true"/>
+		<field col="5" name="portCode" title="端口编号" notnull="true"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM107TerStrapEntity" prefix="TerStrap">
 		<field col="-1" name="im107Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="strapRefAddr" title="压板参引"/>
+		<field col="2" name="strapRefAddr" title="压板参引" notnull="true"/>
 		<field col="3" name="strapDesc" title="压板描述"/>
 		<field col="4" name="strapType" title="压板类型"/>
-		<field col="5" name="vpRefAddr" title="虚端子参引"/>
+		<field col="5" name="vpRefAddr" title="虚端子参引" notnull="true"/>
 		<field col="6" name="vpDesc" title="虚端子描述"/>
 		<field col="7" name="vpType" title="虚端子类型(开入、开出)"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM108BrkCfmEntity" prefix="BrkCfm">
 		<field col="-1" name="im108Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="pinRefAddr" title="开入虚端子参引"/>
+		<field col="2" name="pinRefAddr" title="开入虚端子参引" notnull="true"/>
 		<field col="3" name="pinDesc" title="开入虚端子描述"/>
-		<field col="4" name="cmdAckVpRefAddr" title="命令确认虚端子参引"/>
+		<field col="4" name="cmdAckVpRefAddr" title="命令确认虚端子参引" notnull="true"/>
 		<field col="5" name="cmdAckVpDesc" title="命令确认虚端子描述"/>
-		<field col="6" name="cmdOutVpRefAddr" title="命令出口虚端子参引"/>
+		<field col="6" name="cmdOutVpRefAddr" title="命令出口虚端子参引" notnull="true"/>
 		<field col="7" name="cmdOutVpDesc" title="命令出口虚端子描述"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM109StaInfoEntity" prefix="StaInfo">
 		<field col="-1" name="im109Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="mmsRefAddr" title="MMS参引"/>
+		<field col="2" name="mmsRefAddr" title="MMS参引" notnull="true"/>
 		<field col="3" name="mmsDesc" title="MMS描述"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM110LinkWarnEntity" prefix="LinkWarn">
 		<field col="-1" name="im110Code" title="主键ID"/>
-		<field col="0" name="devName" title="装置Name"/>
+		<field col="0" name="devName" title="装置Name" notnull="true"/>
 		<field col="1" name="devDesc" title="装置名称"/>
-		<field col="2" name="mmsRefAddr" title="告警信息参引"/>
+		<field col="2" name="mmsRefAddr" title="告警信息参引" notnull="true"/>
 		<field col="3" name="mmsDesc" title="告警信息描述"/>
-		<field col="4" name="sendDevName" title="发送装置"/>
-		<field col="5" name="cbRef" title="CBRef"/>
+		<field col="4" name="sendDevName" title="发送装置" notnull="true"/>
+		<field col="5" name="cbRef" title="CBRef" notnull="true"/>
 	</Entity>
 	<Entity class="com.synet.tool.rsc.model.IM111FibreListEntity" prefix="FibreNewList">
 		<field col="-1" name="im111Code" title="主键ID"/>
-		<field col="1" name="devNameA" title="端口A装置Name"/>
+		<field col="1" name="devNameA" title="端口A装置Name" notnull="true"/>
 		<field col="2" name="devDescA" title="端口A装置名称"/>
-		<field col="3" name="boardCodeA" title="端口A板卡编号"/>
-		<field col="4" name="portCodeA" title="端口A端口编号"/>
+		<field col="3" name="boardCodeA" title="端口A板卡编号" notnull="true"/>
+		<field col="4" name="portCodeA" title="端口A端口编号" notnull="true"/>
 		<field col="5" name="connType" title="连接线类型"/>
 		<field col="6" name="cableCode" title="缆编号"/>
-		<field col="7" name="coreCode" title="芯编号"/>
-		<field col="8" name="devNameB" title="端口B装置Name"/>
+		<field col="7" name="coreCode" title="芯编号" notnull="true"/>
+		<field col="8" name="devNameB" title="端口B装置Name" notnull="true"/>
 		<field col="9" name="devDescB" title="端口B装置名称"/>
-		<field col="10" name="boardCodeB" title="端口B板卡编号"/>
-		<field col="11" name="portCodeB" title="端口B端口编号"/>
+		<field col="10" name="boardCodeB" title="端口B板卡编号" notnull="true"/>
+		<field col="11" name="portCodeB" title="端口B端口编号" notnull="true"/>
 	</Entity>
 </ImportConfig>

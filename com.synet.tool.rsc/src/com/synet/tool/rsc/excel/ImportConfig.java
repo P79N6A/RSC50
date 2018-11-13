@@ -69,6 +69,20 @@ public class ImportConfig {
 		return titles;
 	}
 	
+	public boolean isValid(Object obj) {
+		boolean valid = true;
+		for (ImportField imf : entityPropties.values()) {
+			if (imf.isNotNull()) {
+				Object fv = ObjectUtil.getProperty(obj, imf.getFieldName());
+				if (fv == null) {
+					valid = false;
+					break;
+				}
+			}
+		}
+		return valid;
+	}
+	
 	public Class<?> getEntityClass() {
 		return entityClass;
 	}

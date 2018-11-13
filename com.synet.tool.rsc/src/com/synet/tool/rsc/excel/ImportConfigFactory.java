@@ -38,12 +38,16 @@ public class ImportConfigFactory {
 					String col = elF.attributeValue("col");
 					String name = elF.attributeValue("name");
 					String title = elF.attributeValue("title");
+					String notnull = elF.attributeValue("notnull");
 					int colInt = Integer.parseInt(col);
 					ImportField field = new ImportField(colInt, title, name);
 					if (colInt < 0) {
 						colInt = Integer.MAX_VALUE;
 						field.setColIndex(colInt);
 						field.setPrefix(prefix);
+					}
+					if (notnull != null) {
+						field.setNotNull(Boolean.parseBoolean(notnull));
 					}
 					entityPropties.put(colInt, field);
 				}

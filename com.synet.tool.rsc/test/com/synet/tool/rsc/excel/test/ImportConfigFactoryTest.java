@@ -1,8 +1,12 @@
-package com.synet.tool.rsc.excel;
+package com.synet.tool.rsc.excel.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.synet.tool.rsc.excel.ImportConfig;
+import com.synet.tool.rsc.excel.ImportConfigFactory;
+import com.synet.tool.rsc.excel.ImportField;
 
 public class ImportConfigFactoryTest {
 

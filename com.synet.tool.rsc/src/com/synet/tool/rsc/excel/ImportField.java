@@ -6,6 +6,7 @@ public class ImportField {
 	private String fieldTitle;
 	private String fieldName;
 	private String prefix;
+	private boolean notNull;
 	
 	public ImportField(int colIndex, String fieldTitle, String fieldName) {
 		this(colIndex, fieldTitle, fieldName, null);
@@ -43,6 +44,14 @@ public class ImportField {
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	public boolean isNotNull() {
+		return notNull;
+	}
+
+	public void setNotNull(boolean notNull) {
+		this.notNull = notNull;
 	}
 	
 }
