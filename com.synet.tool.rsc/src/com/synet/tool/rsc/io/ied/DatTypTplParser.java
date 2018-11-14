@@ -112,8 +112,15 @@ public class DatTypTplParser {
 			String type = child.attributeValue("type");
 			String bType = child.attributeValue("bType");
 			String fc = child.attributeValue("fc");
-			if (isDOType && (!"SP".equals(fc) && !"SG".equals(fc))) {
+			if (isDOType && (!"SP".equals(fc) && !"SG".equals(fc)
+					&& !"ST".equals(fc) && !"MX".equals(fc)
+					)) {
 				continue;
+			}
+			if ("ST".equals(fc) || "MX".equals(fc)) { // 避免SV虚端子检查出错
+				if (!subRefs.containsKey(parentName) && isDOType) {
+					subRefs.put(parentName, new Object[] { subType.attributeValue("cdc"), idx} );
+				}
 			}
 			String parentRef = parentName + Constants.DOT + name;
 			boolean hasSubs = "DO".equals(ndName) || "SDO".equals(ndName);
