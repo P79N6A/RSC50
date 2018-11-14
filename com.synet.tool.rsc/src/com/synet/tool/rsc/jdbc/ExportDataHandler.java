@@ -168,11 +168,12 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1006Sql() {
-		return "INSERT INTO TB1006_ANALOGDATA(F1006_CODE,F1006_DESC,F1006_SAFELEVEL,PARENT_CODE,F1011_NO," +
-				"F1006_BYNAME,F0008_NAME,F0009_NAME,F1006_CALCFLAG,F1006_PICNAME,F1006_PDRMODE,F1006_K,F1006_B," +
-				"F1006_ZERODBAND,F1006_OVERFLOW,F1006_LOWFLOW,F1006_MAXINC,F1006_HIWARN,F1006_LOWARN,F1006_HIALARM," +
-				"F1006_LOALARM,F1006_SAVEPERIOD,F1006_PLANTIME,F1006_DEADTIME,F1006_ALARMLEVEL,F1006_SAVETYPE)" +
-				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";//26个参数
+		return "INSERT INTO TB1006_ANALOGDATA(F1006_CODE,F1006_DESC,F1006_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+//				"F1006_BYNAME,F0008_NAME,F0009_NAME,F1006_CALCFLAG,F1006_PICNAME,F1006_PDRMODE,F1006_K,F1006_B," +
+//				"F1006_ZERODBAND,F1006_OVERFLOW,F1006_LOWFLOW,F1006_MAXINC,F1006_HIWARN,F1006_LOWARN,F1006_HIALARM," +
+//				"F1006_LOALARM,F1006_SAVEPERIOD,F1006_PLANTIME,F1006_DEADTIME,F1006_ALARMLEVEL,F1006_SAVETYPE)" +
+//				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";//26个参数
+				" VALUES (?,?,?,?,?)";//5个参数
 	}
 	
 	@Override
@@ -184,36 +185,37 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1006Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
-		setSring(preState, index++, entity.getF1006Byname());
-		setSring(preState, index++, entity.getF0008Name());
-		setSring(preState, index++, entity.getF0009Name());
-		setInt(preState, index++, entity.getF1006Calcflag());
-		setSring(preState, index++, entity.getF1006Picname());
-		setInt(preState, index++, entity.getF1006Pdrmode());
-		setFloat(preState, index++, entity.getF1006K());
-		setFloat(preState, index++, entity.getF1006B());
-		setFloat(preState, index++, entity.getF1006Zerodband());
-		setFloat(preState, index++, entity.getF1006Overflow());
-		setFloat(preState, index++, entity.getF1006Lowflow());
-		setFloat(preState, index++, entity.getF1006Maxinc());
-		setFloat(preState, index++, entity.getF1006Hiwarn());
-		setFloat(preState, index++, entity.getF1006Lowarn());
-		setFloat(preState, index++, entity.getF1006Hialarm());
-		setFloat(preState, index++, entity.getF1006Loalarm());
-		setInt(preState, index++, entity.getF1006Saveperiod());
-		setInt(preState, index++, entity.getF1006Plantime());
-		setInt(preState, index++, entity.getF1006Deadtime());
-		setInt(preState, index++, entity.getF1006Alarmlevel());
-		setInt(preState, index++, entity.getF1006Savetype());
+//		setSring(preState, index++, entity.getF1006Byname());
+//		setSring(preState, index++, entity.getF0008Name());
+//		setSring(preState, index++, entity.getF0009Name());
+//		setInt(preState, index++, entity.getF1006Calcflag());
+//		setSring(preState, index++, entity.getF1006Picname());
+//		setInt(preState, index++, entity.getF1006Pdrmode());
+//		setFloat(preState, index++, entity.getF1006K());
+//		setFloat(preState, index++, entity.getF1006B());
+//		setFloat(preState, index++, entity.getF1006Zerodband());
+//		setFloat(preState, index++, entity.getF1006Overflow());
+//		setFloat(preState, index++, entity.getF1006Lowflow());
+//		setFloat(preState, index++, entity.getF1006Maxinc());
+//		setFloat(preState, index++, entity.getF1006Hiwarn());
+//		setFloat(preState, index++, entity.getF1006Lowarn());
+//		setFloat(preState, index++, entity.getF1006Hialarm());
+//		setFloat(preState, index++, entity.getF1006Loalarm());
+//		setInt(preState, index++, entity.getF1006Saveperiod());
+//		setInt(preState, index++, entity.getF1006Plantime());
+//		setInt(preState, index++, entity.getF1006Deadtime());
+//		setInt(preState, index++, entity.getF1006Alarmlevel());
+//		setInt(preState, index++, entity.getF1006Savetype());
 	}
 	
 	@Override
 	protected String getTb1016Sql() {
-		return "INSERT INTO TB1016_STATEDATA(F1016_CODE,F1016_DESC,F1016_SAFELEVEL,PARENT_CODE,F1011_NO," +
-				"F1016_BYNAME,F0008_NAME,F0009_NAME,F1016_CALCFLAG,F1016_PICNAME,F1016_ISPDR,F1016_PDRNO," +
-				"F1016_DPSFLAG,F1016_MAINSTFLAG,F1016_DPSCALCFLAG,F1016_SOE,F1016_SGLIMITVAL,F1016_ALARMPROCMODE," +
-				"F1016_PROCBAND,F1016_SGPROCNAME,F1016_REVFLAG,F1016_ISSTA)" +
-				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1016_STATEDATA(F1016_CODE,F1016_DESC,F1016_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+//				"F1016_BYNAME,F0008_NAME,F0009_NAME,F1016_CALCFLAG,F1016_PICNAME,F1016_ISPDR,F1016_PDRNO," +
+//				"F1016_DPSFLAG,F1016_MAINSTFLAG,F1016_DPSCALCFLAG,F1016_SOE,F1016_SGLIMITVAL,F1016_ALARMPROCMODE," +
+//				"F1016_PROCBAND,F1016_SGPROCNAME,F1016_REVFLAG,F1016_ISSTA)" +
+//				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				" VALUES (?,?,?,?,?)";
 	}
 	
 	@Override
@@ -225,23 +227,23 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1016Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
-		setSring(preState, index++, entity.getF1016Byname());
-		setSring(preState, index++, entity.getF0008Name());
-		setSring(preState, index++, entity.getF0009Name());
-		setInt(preState, index++, entity.getF1016Calcflag());
-		setSring(preState, index++, entity.getF1016Picname());
-		setInt(preState, index++, entity.getF1016Ispdr());
-		setInt(preState, index++, entity.getF1016Pdrno());
-		setInt(preState, index++, entity.getF1016Dpsflag());
-		setInt(preState, index++, entity.getF1016Mainstflag());
-		setInt(preState, index++, entity.getF1016Dpscalcflag());
-		setSring(preState, index++, entity.getF1016Soe());
-		setInt(preState, index++, entity.getF1016Sglimitval());
-		setInt(preState, index++, entity.getF1016Alarmprocmode());
-		setInt(preState, index++, entity.getF1016Procband());
-		setSring(preState, index++, entity.getF1016Sgprocname());
-		setInt(preState, index++, entity.getF1016Revflag());
-		setInt(preState, index++, entity.getF1016Issta());
+//		setSring(preState, index++, entity.getF1016Byname());
+//		setSring(preState, index++, entity.getF0008Name());
+//		setSring(preState, index++, entity.getF0009Name());
+//		setInt(preState, index++, entity.getF1016Calcflag());
+//		setSring(preState, index++, entity.getF1016Picname());
+//		setInt(preState, index++, entity.getF1016Ispdr());
+//		setInt(preState, index++, entity.getF1016Pdrno());
+//		setInt(preState, index++, entity.getF1016Dpsflag());
+//		setInt(preState, index++, entity.getF1016Mainstflag());
+//		setInt(preState, index++, entity.getF1016Dpscalcflag());
+//		setSring(preState, index++, entity.getF1016Soe());
+//		setInt(preState, index++, entity.getF1016Sglimitval());
+//		setInt(preState, index++, entity.getF1016Alarmprocmode());
+//		setInt(preState, index++, entity.getF1016Procband());
+//		setSring(preState, index++, entity.getF1016Sgprocname());
+//		setInt(preState, index++, entity.getF1016Revflag());
+//		setInt(preState, index++, entity.getF1016Issta());
 	}
 	
 	@Override
@@ -264,9 +266,10 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1026Sql() {
-		return "INSERT INTO TB1026_STRINGDATA(F1026_CODE,F1026_DESC,F1026_SAFELEVEL,PARENT_CODE,F1011_NO,F1026_BYNAME," +
-				"F0008_NAME,F0009_NAME,F1026_CALCFLAG,F1026_PICNAME,F1026_ISPDR,F1026_PDRNO,F1026_ISSTA)" +
-				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO TB1026_STRINGDATA(F1026_CODE,F1026_DESC,F1026_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+//				"F1026_BYNAME,F0008_NAME,F0009_NAME,F1026_CALCFLAG,F1026_PICNAME,F1026_ISPDR,F1026_PDRNO,F1026_ISSTA)" +
+//				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				" VALUES (?,?,?,?,?)";
 	}
 	
 	@Override
@@ -278,14 +281,14 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1026Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
-		setSring(preState, index++, entity.getF1026Byname());
-		setSring(preState, index++, entity.getF0008Name());
-		setSring(preState, index++, entity.getF0009Name());
-		setInt(preState, index++, entity.getF1026Calcflag());
-		setSring(preState, index++, entity.getF1026Picname());
-		setInt(preState, index++, entity.getF1026Ispdr());
-		setInt(preState, index++, entity.getF1026Pdrno());
-		setInt(preState, index++, entity.getF1026Issta());
+//		setSring(preState, index++, entity.getF1026Byname());
+//		setSring(preState, index++, entity.getF0008Name());
+//		setSring(preState, index++, entity.getF0009Name());
+//		setInt(preState, index++, entity.getF1026Calcflag());
+//		setSring(preState, index++, entity.getF1026Picname());
+//		setInt(preState, index++, entity.getF1026Ispdr());
+//		setInt(preState, index++, entity.getF1026Pdrno());
+//		setInt(preState, index++, entity.getF1026Issta());
 	}
 	
 	@Override
