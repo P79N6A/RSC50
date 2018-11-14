@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.TableBuilder;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.ui.table.FuncCfgTable;
 import com.synet.tool.rsc.ui.table.IEDBoardTable;
 import com.synet.tool.rsc.ui.table.RuleTable;
 
@@ -93,12 +94,12 @@ public class TableFactory {
 
 	public static DevKTable getFunClassTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(FUN_CLASS_TABLE);
-		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+		return (DevKTable) TableBuilder.createKTable(FuncCfgTable.class, container, tableCfg);
 	}
 	
 	public static DevKTable getFunDefectTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(FUN_DEFECT_TABLE);
-		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+		return (DevKTable) TableBuilder.createKTable(FuncCfgTable.class, container, tableCfg);
 	}
 	
 	public static RuleTable getRuleSelectTable(Composite container) {

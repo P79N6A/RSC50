@@ -10,16 +10,13 @@ import net.sf.excelutils2007.ExcelUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Composite;
 
-import com.shrcn.business.scl.table.VTViewTable;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
-import com.shrcn.found.ui.UICommonConstants;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.model.TableConfig;
 import com.shrcn.found.ui.table.DefaultKTable;
 import com.shrcn.found.ui.table.RKTable;
 import com.shrcn.found.ui.util.DialogHelper;
-import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -31,11 +28,8 @@ import de.kupzog.ktable.KTableCellSelectionListener;
 
 public class DevKTable extends RKTable {
 	
-	private BeanDaoService beanDao;
-
 	public DevKTable(Composite parent, TableConfig config) {
 		super(parent, config);
-		beanDao = BeanDaoImpl.getInstance();
 	}
 
 	protected void initUI() {
@@ -135,12 +129,6 @@ public class DevKTable extends RKTable {
 		ExcelUtils.addValue("data", exportData);
 		ExcelFileManager2007.saveExcelFile(getClass(), RSCConstants.EXCEL_COMM_EXPORT_2007, fileName);
 		return true;
-	}
-	
-	@Override
-	public void removeSelected() {
-		beanDao.deleteBatch(getSelections());
-		super.removeSelected();
 	}
 
 	@Override
