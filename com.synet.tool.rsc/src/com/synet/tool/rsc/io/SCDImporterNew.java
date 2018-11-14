@@ -4,6 +4,7 @@
  */
 package com.synet.tool.rsc.io;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,12 @@ import java.util.Map;
 import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.shrcn.business.scl.das.CIDDAO;
 import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
@@ -129,6 +132,10 @@ public class SCDImporterNew implements IImporter {
 		ConsoleManager console = ConsoleManager.getInstance();
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
+		String scdname = new File(scdPath).getName();
+		String scddir = Constants.usrDir + File.separator + "cids" + File.separator + 
+				scdname.substring(0, scdname.lastIndexOf('.')) + File.separator;
+		FileManipulate.initDir(scddir);
 		Context context = new Context();
 		SubstationParser sp = new SubstationParser(context);
 		sp.init();
@@ -169,6 +176,7 @@ public class SCDImporterNew implements IImporter {
 					mmsServer.setF1070CrcPath("LD0/LPHD$SP$IEDPinCrc$setVal");
 					beanDao.insert(mmsServer);
 				}
+				CIDDAO.export(null, iedName, scddir, ".cid");
 			} else {
 				if (iedParser.getSmvs().size() > 0) {			// 合并单元
 					ied.setF1046Type(DBConstants.IED_MU);
