@@ -19,6 +19,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.shrcn.found.common.dict.DictManager;
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
@@ -211,10 +213,10 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				continue;
 			}
 			String devName = entity.getDevName();
+			String desc = entity.getDevDesc();
 			Tb1046IedEntity iedEntity = iedEntityService.getIedEntityByDevName(devName);
 			if (iedEntity == null) {
 				String f1046Code = rscp.nextTbCode(DBConstants.PR_IED);
-				String desc = entity.getDevDesc();
 				String type = null;
 				if (desc.contains(RSCConstants.DEV_TYPE_SWC)) {
 					type = RSCConstants.DEV_TYPE_SWC;
@@ -231,12 +233,12 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 				type = dictMgr.getIdByName("IED_TYPE", type);
 				int f1046Type = Integer.parseInt(type);
 				iedEntity = new Tb1046IedEntity(f1046Code, devName, f1046Type);
-				iedEntity.setF1046Desc(desc);
-				iedEntity.setF1046ConfigVersion(entity.getDevVersion());
-				iedEntity.setF1046Manufacturor(entity.getManufacturor());
-				iedEntity.setF1046Model(entity.getDevType());
 				iedEntity.setF1046boardNum(0);
 			}
+			iedEntity.setF1046Desc(desc);
+			iedEntity.setF1046ConfigVersion(entity.getDevVersion());
+			iedEntity.setF1046Manufacturor(entity.getManufacturor());
+			iedEntity.setF1046Model(entity.getDevType());
 			monitor.worked(1);
 			Tb1042BayEntity bayEntity = bayEntityService.getBayEntityByName(entity.getBay());
 			if (bayEntity != null) {
@@ -263,6 +265,7 @@ public class ImpIEDListEditor extends ExcelImportEditor {
 			monitor.worked(1);
 		}
 		monitor.done();
+		EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 	}
 
 	@SuppressWarnings("unchecked")
