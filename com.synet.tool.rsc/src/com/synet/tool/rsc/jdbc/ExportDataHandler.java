@@ -88,7 +88,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1045_INDEX,
 		TB1067_INDEX,
 		TB1066_INDEX,//TB1066_ProtMMXU
-		TB1068_INDEX,//TB1068_ProtCtrl
+//		TB1068_INDEX,//TB1068_ProtCtrl
 		TB1069_INDEX,//TB1069_RCDChannelA
 		TB1072_INDEX,//TB1072_RCDChannelD
 		
@@ -168,12 +168,12 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1006Sql() {
-		return "INSERT INTO TB1006_ANALOGDATA(F1006_CODE,F1006_DESC,F1006_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+		return "INSERT INTO TB1006_ANALOGDATA(F1006_CODE,F1006_DESC,PARENT_CODE,F1011_NO)" +
 //				"F1006_BYNAME,F0008_NAME,F0009_NAME,F1006_CALCFLAG,F1006_PICNAME,F1006_PDRMODE,F1006_K,F1006_B," +
 //				"F1006_ZERODBAND,F1006_OVERFLOW,F1006_LOWFLOW,F1006_MAXINC,F1006_HIWARN,F1006_LOWARN,F1006_HIALARM," +
 //				"F1006_LOALARM,F1006_SAVEPERIOD,F1006_PLANTIME,F1006_DEADTIME,F1006_ALARMLEVEL,F1006_SAVETYPE)" +
 //				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";//26个参数
-				" VALUES (?,?,?,?,?)";//5个参数
+				" VALUES (?,?,?,?)";//5个参数
 	}
 	
 	@Override
@@ -182,7 +182,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		int index = 1;
 		setSring(preState, index++, entity.getF1006Code());
 		setSring(preState, index++, entity.getF1006Desc());
-		setInt(preState, index++, entity.getF1006Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
 //		setSring(preState, index++, entity.getF1006Byname());
@@ -210,12 +209,12 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1016Sql() {
-		return "INSERT INTO TB1016_STATEDATA(F1016_CODE,F1016_DESC,F1016_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+		return "INSERT INTO TB1016_STATEDATA(F1016_CODE,F1016_DESC,PARENT_CODE,F1011_NO)" +
 //				"F1016_BYNAME,F0008_NAME,F0009_NAME,F1016_CALCFLAG,F1016_PICNAME,F1016_ISPDR,F1016_PDRNO," +
 //				"F1016_DPSFLAG,F1016_MAINSTFLAG,F1016_DPSCALCFLAG,F1016_SOE,F1016_SGLIMITVAL,F1016_ALARMPROCMODE," +
 //				"F1016_PROCBAND,F1016_SGPROCNAME,F1016_REVFLAG,F1016_ISSTA)" +
 //				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				" VALUES (?,?,?,?,?)";
+				" VALUES (?,?,?,?)";
 	}
 	
 	@Override
@@ -224,7 +223,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		int index = 1;
 		setSring(preState, index++, entity.getF1016Code());
 		setSring(preState, index++, entity.getF1016Desc());
-		setInt(preState, index++, entity.getF1016Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
 //		setSring(preState, index++, entity.getF1016Byname());
@@ -266,10 +264,10 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1026Sql() {
-		return "INSERT INTO TB1026_STRINGDATA(F1026_CODE,F1026_DESC,F1026_SAFELEVEL,PARENT_CODE,F1011_NO)" +
+		return "INSERT INTO TB1026_STRINGDATA(F1026_CODE,F1026_DESC,PARENT_CODE,F1011_NO)" +
 //				"F1026_BYNAME,F0008_NAME,F0009_NAME,F1026_CALCFLAG,F1026_PICNAME,F1026_ISPDR,F1026_PDRNO,F1026_ISSTA)" +
 //				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				" VALUES (?,?,?,?,?)";
+				" VALUES (?,?,?,?)";
 	}
 	
 	@Override
@@ -278,7 +276,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		int index = 1;
 		setSring(preState, index++, entity.getF1026Code());
 		setSring(preState, index++, entity.getF1026Desc());
-		setInt(preState, index++, entity.getF1026Safelevel());
 		setSring(preState, index++, entity.getParentCode());
 		setInt(preState, index++, entity.getF1011No());
 //		setSring(preState, index++, entity.getF1026Byname());
