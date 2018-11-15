@@ -235,17 +235,18 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 	 * @param importEntry
 	 */
 	private void loadImport(ITreeEntry importEntry) {
-		ConfigTreeEntry iedEntry = createConfigEntry(importEntry, "设备台账", "bay.gif", ET_IMP_IED, 1);
-		ConfigTreeEntry boardPortEntry = createConfigEntry(importEntry, "装置板卡端口描述", "bay.gif", ET_IMP_BRD, 3);
-		ConfigTreeEntry ftListEntry = createConfigEntry(importEntry, "光缆清册", "bay.gif", ET_IMP_FIB, 2);
-		ConfigTreeEntry ftListNewEntry = createConfigEntry(importEntry, "新光缆清册", "bay.gif", ET_IMP_FIBNew, 2);
-		ConfigTreeEntry stInEntry = createConfigEntry(importEntry, "开入信号映射表", "bay.gif", ET_IMP_ST, 4);
-		ConfigTreeEntry wmBoardEntry = createConfigEntry(importEntry, "告警与板卡关联表", "bay.gif", ET_IMP_WRN, 5);
-		ConfigTreeEntry lpPortEntry = createConfigEntry(importEntry, "光强与端口关联表", "bay.gif", ET_IMP_PORT, 6);
-		ConfigTreeEntry strapTermEntry = createConfigEntry(importEntry, "压板与虚端子关联表", "bay.gif", ET_IMP_STRAP, 7);
-		ConfigTreeEntry brkCfmEntry = createConfigEntry(importEntry, "跳合闸反校关联表", "bay.gif", ET_IMP_BRK, 8);
-		ConfigTreeEntry staInfoEntry = createConfigEntry(importEntry, "监控信息点表", "bay.gif", ET_IMP_STA, 9);
-		ConfigTreeEntry linkWarnEntry = createConfigEntry(importEntry, "告警与链路关联表", "bay.gif", ET_IMP_LINKW, 9);
+		int i = 1;
+		ConfigTreeEntry iedEntry = createConfigEntry(importEntry, "设备台账", "bay.gif", ET_IMP_IED, i++);
+		ConfigTreeEntry boardPortEntry = createConfigEntry(importEntry, "装置板卡端口描述", "bay.gif", ET_IMP_BRD, i++);
+		ConfigTreeEntry ftListEntry = createConfigEntry(importEntry, "光缆清册", "bay.gif", ET_IMP_FIB, i++);
+		ConfigTreeEntry ftListNewEntry = createConfigEntry(importEntry, "新光缆清册", "bay.gif", ET_IMP_FIBNew, i++);
+		ConfigTreeEntry stInEntry = createConfigEntry(importEntry, "开入信号映射表", "bay.gif", ET_IMP_ST, i++);
+		ConfigTreeEntry wmBoardEntry = createConfigEntry(importEntry, "告警与板卡关联表", "bay.gif", ET_IMP_WRN, i++);
+		ConfigTreeEntry lpPortEntry = createConfigEntry(importEntry, "光强与端口关联表", "bay.gif", ET_IMP_PORT, i++);
+		ConfigTreeEntry strapTermEntry = createConfigEntry(importEntry, "压板与虚端子关联表", "bay.gif", ET_IMP_STRAP, i++);
+		ConfigTreeEntry brkCfmEntry = createConfigEntry(importEntry, "跳合闸反校关联表", "bay.gif", ET_IMP_BRK, i++);
+		ConfigTreeEntry staInfoEntry = createConfigEntry(importEntry, "监控信息点表", "bay.gif", ET_IMP_STA, i++);
+		ConfigTreeEntry linkWarnEntry = createConfigEntry(importEntry, "告警与链路关联表", "bay.gif", ET_IMP_LINKW, i++);
 	}
 	
 	private ConfigTreeEntry createConfigEntry(ITreeEntry parent, String name, String icon, String editorId, int index) {
