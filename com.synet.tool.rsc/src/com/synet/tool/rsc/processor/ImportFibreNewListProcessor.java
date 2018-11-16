@@ -222,7 +222,7 @@ public class ImportFibreNewListProcessor {
 			cableEntity.setTb1041SubstationByF1041Code(substation);
 			cableEntity.setTb1050CubicleByF1050CodeA(cubicleEntityA);
 			cableEntity.setTb1050CubicleByF1050CodeB(cubicleEntityB);
-			cableEntity.setF1051CoreNum(0);
+			cableEntity.setF1051CoreNum(1);
 			Tb1051CableEntity oldEntity = cableEntityService.existEntity(cableEntity);
 			// 重复，则更新
 			if (oldEntity != null) {
@@ -230,6 +230,8 @@ public class ImportFibreNewListProcessor {
 			}
 			cableEntity.setF1051Code(rscp.nextTbCode(DBConstants.PR_CABLE));
 			cableEntitieList.add(cableEntity);
+		} else {
+			cableEntity.setF1051CoreNum(cableEntity.getF1051CoreNum() + 1);
 		}
 	}
 	
@@ -243,6 +245,14 @@ public class ImportFibreNewListProcessor {
 		beanDao.deleteAll(Tb1053PhysconnEntity.class, "tb1048PortByF1048CodeB", portEntityB);
 	}
 	
+	private String getPortAName(IM111FibreListEntity entity) {
+		return entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+	}
+	
+	private String getPortBName(IM111FibreListEntity entity) {
+		return entity.getDevNameB() + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
+	}
+	
 	/**
 	 * 1根：A、B端跳纤或1根光缆芯线
 	 * @param entity
@@ -254,8 +264,8 @@ public class ImportFibreNewListProcessor {
 		String devNameB = entity.getDevNameB();
 		Tb1048PortEntity portEntityA = portEntityService.getPortEntity(devNameA, entity.getBoardCodeA(), entity.getPortCodeA());
 		Tb1048PortEntity portEntityB = portEntityService.getPortEntity(devNameB, entity.getBoardCodeB(), entity.getPortCodeB());
-		String portA = devNameA + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
-		String portB = devNameB + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
+		String portA = getPortAName(entity);
+		String portB = getPortBName(entity);
 		if (portEntityA == null || portEntityB == null) {
 			String msg = "无法创建芯线和物理回路：";
 			if (portEntityA == null) {
@@ -289,9 +299,6 @@ public class ImportFibreNewListProcessor {
 		//端口检查通过则通过
 		entity.setMatched(DBConstants.MATCHED_OK);
 
-//		//处理物理回路
-//		Tb1053PhysconnEntity phyconn = addPhyconn(portEntityA, portEntityB);
-		
 		//处理光缆芯线
 		String cableCode = entity.getCableCode();
 		String coreCode = entity.getCoreCode();
@@ -335,7 +342,6 @@ public class ImportFibreNewListProcessor {
 			}
 		}
 		if (coreEntity != null) {
-//			coreEntity.setTb1053ByF1053Code(phyconn);
 			coreMap.put(portA + "@" + portB, coreEntity);
 			coreEntitieList.add(coreEntity);
 		} else {
@@ -383,9 +389,25 @@ public class ImportFibreNewListProcessor {
 		if (oldCableEntity == null) {
 			return null;
 		} else {
-			int num = oldCableEntity.getF1051CoreNum();
-			num++;
-			oldCableEntity.setF1051CoreNum(num);
+			String cubicleA = portEntityA.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getTb1050CubicleEntity().getF1050Name();
+			String cubicleB = portEntityB.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getTb1050CubicleEntity().getF1050Name();
+			String portA = getPortAName(entity);
+			String portB = getPortBName(entity);
+			String cableCubicleA = oldCableEntity.getTb1050CubicleByF1050CodeA().getF1050Name();
+			String cableCubicleB = oldCableEntity.getTb1050CubicleByF1050CodeB().getF1050Name();
+			if (!cubicleA.equals(cableCubicleA)) {
+				String msg = "A端屏柜不同，芯线为[" + cubicleA + "]和光缆为[" + cableCubicleA + "]。";
+				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
+				return null;
+			}
+			if (!cubicleB.equals(cableCubicleB)) {
+				String msg = "B端屏柜不同，芯线为[" + cubicleB + "]和光缆为[" + cableCubicleB + "]。";
+				SCTLogger.error(msg);
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
+				return null;
+			}
+			oldCableEntity.setF1051CoreNum(oldCableEntity.getF1051CoreNum() + 1);
 		}
 		coreEntity.setParentCode(oldCableEntity.getF1051Code());
 		Tb1052CoreEntity oldCoreEntity = coreEntityService.existEntity(coreEntity);
