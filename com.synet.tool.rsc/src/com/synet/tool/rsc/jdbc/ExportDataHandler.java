@@ -308,8 +308,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	@Override
 	protected String getTb1042Sql() {
 		return "INSERT INTO TB1042_BAY(F1042_CODE,F1041_CODE,F1042_NAME,F1042_DESC,F1042_VOLTAGE," +
-				"F1042_ConnType)" +
-				" VALUES (?,?,?,?,?,?)";
+				"F1042_ConnType,F1042_DevType,F1042_IEDSolution)" +
+				" VALUES (?,?,?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -322,6 +322,8 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setSring(preState, index++, entity.getF1042Desc());
 		setInt(preState, index++, entity.getF1042Voltage());
 		setInt(preState, index++, entity.getF1042ConnType());
+		setInt(preState, index++, entity.getF1042DevType());
+		setInt(preState, index++, entity.getF1042IedSolution());
 	}
 	
 	@Override
@@ -383,11 +385,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1046Sql() {
-//		return "INSERT INTO TB1046_IED(F1046_CODE,F1042_CODE,F1050_CODE,F1046_NAME,F1046_DESC,F1046_MANUFACTUROR," +
-//				"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE,F1046_CRC,F1046_ANETIP," +
-//				"F1046_BNETIP,F1046_VERSION,F1046_PROTECTCATEGORY,F1046_PROTECTTYPE,F1046_PROTECTMODEL," +
-//				"F1046_PROTECTCRC,F1046_OPERATEDATE,F1046_PRODUCTDATE,F1046_PRODUCTNO,F1046_DATAGATTYPE," +
-//				"F1046_OUTTYPE,F1046_BOARDNUM) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		return "INSERT INTO TB1046_IED(F1046_CODE,F1042_CODE,F1050_CODE,F1046_NAME,F1046_DESC,F1046_MANUFACTUROR," +
 		"F1046_MODEL,F1046_CONFIGVERSION,F1046_AORB,F1046_ISVIRTUAL,F1046_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	}
@@ -415,20 +412,6 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		setInt(preState, index++, entity.getF1046AorB());
 		setInt(preState, index++, entity.getF1046IsVirtual());
 		setInt(preState, index++, entity.getF1046Type());
-//		setSring(preState, index++, entity.getF1046Crc());
-//		setSring(preState, index++, entity.getF1046aNetIp());
-//		setSring(preState, index++, entity.getF1046bNetIp());
-//		setSring(preState, index++, entity.getF1046version());
-//		setSring(preState, index++, entity.getF1046protectCategory());
-//		setSring(preState, index++, entity.getF1046protectType());
-//		setSring(preState, index++, entity.getF1046protectModel());
-//		setSring(preState, index++, entity.getF1046protectCrc());
-//		setSring(preState, index++, entity.getF1046OperateDate());
-//		setSring(preState, index++, entity.getF1046productDate());
-//		setSring(preState, index++, entity.getF1046productNo());
-//		setSring(preState, index++, entity.getF1046dataGatType());
-//		setSring(preState, index++, entity.getF1046OutType());
-//		setInt(preState, index++, entity.getF1046boardNum());
 	}
 	
 	@Override
