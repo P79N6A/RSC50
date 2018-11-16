@@ -231,7 +231,9 @@ public class ImportFibreNewListProcessor {
 			cableEntity.setF1051Code(rscp.nextTbCode(DBConstants.PR_CABLE));
 			cableEntitieList.add(cableEntity);
 		} else {
-			cableEntity.setF1051CoreNum(cableEntity.getF1051CoreNum() + 1);
+			int num = (oldCableEntity.getF1051CoreNum() == null) ? 
+					0 : oldCableEntity.getF1051CoreNum();
+			cableEntity.setF1051CoreNum(num + 1);
 		}
 	}
 	
@@ -395,19 +397,23 @@ public class ImportFibreNewListProcessor {
 			String portB = getPortBName(entity);
 			String cableCubicleA = oldCableEntity.getTb1050CubicleByF1050CodeA().getF1050Name();
 			String cableCubicleB = oldCableEntity.getTb1050CubicleByF1050CodeB().getF1050Name();
-			if (!cubicleA.equals(cableCubicleA)) {
-				String msg = "A端屏柜不同，芯线为[" + cubicleA + "]和光缆为[" + cableCubicleA + "]。";
+			if (!cubicleA.equals(cableCubicleA) && !cubicleA.equals(cableCubicleB)) {
+				String msg = "A端屏柜不同，芯线为[" + cubicleA + "]，光缆为[" + cableCubicleA + "，" + 
+									cableCubicleB + "]。";
 				SCTLogger.error(msg);
 				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
 				return null;
 			}
-			if (!cubicleB.equals(cableCubicleB)) {
-				String msg = "B端屏柜不同，芯线为[" + cubicleB + "]和光缆为[" + cableCubicleB + "]。";
+			if (!cubicleB.equals(cableCubicleA) && !cubicleB.equals(cableCubicleB)) {
+				String msg = "B端屏柜不同，芯线为[" + cubicleB + "]，光缆为[" + cableCubicleA + "，" + 
+									cableCubicleB + "]。";
 				SCTLogger.error(msg);
 				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
 				return null;
 			}
-			oldCableEntity.setF1051CoreNum(oldCableEntity.getF1051CoreNum() + 1);
+			int num = (oldCableEntity.getF1051CoreNum() == null) ? 
+					0 : oldCableEntity.getF1051CoreNum();
+			oldCableEntity.setF1051CoreNum(num + 1);
 		}
 		coreEntity.setParentCode(oldCableEntity.getF1051Code());
 		Tb1052CoreEntity oldCoreEntity = coreEntityService.existEntity(coreEntity);

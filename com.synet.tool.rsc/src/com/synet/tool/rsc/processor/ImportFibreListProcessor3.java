@@ -394,9 +394,9 @@ public class ImportFibreListProcessor3 {
 		if (oldCableEntity == null) {
 			return null;
 		} else {
-			int num = oldCableEntity.getF1051CoreNum();
-			num++;
-			oldCableEntity.setF1051CoreNum(num);
+			int num = (oldCableEntity.getF1051CoreNum() == null) ? 
+					0 : oldCableEntity.getF1051CoreNum();
+			oldCableEntity.setF1051CoreNum(num + 1);
 		}
 		coreEntity.setParentCode(oldCableEntity.getF1051Code());
 		Tb1052CoreEntity oldCoreEntity = coreEntityService.existEntity(coreEntity);
