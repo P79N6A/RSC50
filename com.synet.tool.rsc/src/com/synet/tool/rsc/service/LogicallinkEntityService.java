@@ -38,7 +38,7 @@ public class LogicallinkEntityService extends BaseService {
 	 * @param cbRef
 	 * @return
 	 */
-	public Tb1065LogicallinkEntity getBySendIedAndRef(String sendDevName, String cbRef) {
+	public Tb1065LogicallinkEntity getBySendIedAndRef(String recvDevName, String sendDevName, String cbRef) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("devName", sendDevName);
 		params.put("cbId", cbRef);
@@ -46,7 +46,13 @@ public class LogicallinkEntityService extends BaseService {
 		List<?> list = hqlDao.getListByHql(hql, params);
 		BaseCbEntity cb = (BaseCbEntity) ((list!=null && list.size()>0) ? list.get(0) : null);
 		if (cb != null) {
-			return (Tb1065LogicallinkEntity) beanDao.getObject(Tb1065LogicallinkEntity.class, "baseCbByCdCode", cb);
+//			return (Tb1065LogicallinkEntity) beanDao.getObject(Tb1065LogicallinkEntity.class, "baseCbByCdCode", cb);
+			params.clear();
+			params.put("baseCbByCdCode", cb);
+			params.put("devName", recvDevName);
+			hql = "from " + Tb1065LogicallinkEntity.class.getName() + " where tb1046IedByF1046CodeIedRecv.f1046Name=:devName and baseCbByCdCode=:baseCbByCdCode";
+			list = hqlDao.getListByHql(hql, params);
+			return (Tb1065LogicallinkEntity) ((list!=null && list.size()>0) ? list.get(0) : null);
 		}
 		return null;
 	}

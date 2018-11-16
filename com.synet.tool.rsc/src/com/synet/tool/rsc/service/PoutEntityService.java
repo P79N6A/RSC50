@@ -8,7 +8,6 @@ import java.util.Map;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1056SvcbEntity;
-import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.RuleType;
@@ -77,14 +76,12 @@ public class PoutEntityService extends BaseService{
 	}
 	
 	public Tb1061PoutEntity getPoutEntity(String devName, String f1061RefAddr) {
-		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
-		if (iedEntity != null) {
-			Map<String, Object> params = new HashMap<>();
-			params.put("tb1046IedByF1046Code", iedEntity);
-			params.put("f1061RefAddr", f1061RefAddr);
-			return (Tb1061PoutEntity) beanDao.getObject(Tb1061PoutEntity.class, params);
-		}
-		return null;
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("devName", devName);
+		params.put("f1061RefAddr", f1061RefAddr);
+		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:devName and f1061RefAddr=:f1061RefAddr";
+		List<?> list = hqlDao.getListByHql(hql, params);
+		return (Tb1061PoutEntity) ((list!=null && list.size()>0) ? list.get(0) : null);
 	}
 	
 	/**

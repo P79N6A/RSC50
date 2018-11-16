@@ -43,7 +43,6 @@ import com.synet.tool.rsc.dialog.ModelCompareDialog;
 import com.synet.tool.rsc.dialog.ModelRuleDialog;
 import com.synet.tool.rsc.io.TemplateExport;
 import com.synet.tool.rsc.io.TemplateImport;
-import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -60,6 +59,7 @@ import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.BoardPortService;
 import com.synet.tool.rsc.service.CircuitEntityService;
+import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
@@ -279,18 +279,18 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 	}
 	
 	private boolean isProtIED() {
-		return DBConstants.IED_PROT == iedEntity.getF1046Type() || DBConstants.IED_MONI == iedEntity.getF1046Type();
+		Integer f1046Type = iedEntity.getF1046Type();
+		return EnumIedType.isBayIED(f1046Type);
 	}
 	
 	private boolean isSubIED() {
 		Integer f1046Type = iedEntity.getF1046Type();
-		return DBConstants.IED_MU == f1046Type 
-				|| DBConstants.IED_MT == f1046Type || DBConstants.IED_TERM == f1046Type;
+		return EnumIedType.isSubIED(f1046Type);
 	}
 	
 	private boolean isDauIED() {
 		Integer f1046Type = iedEntity.getF1046Type();
-		return DBConstants.IED_CJQ == f1046Type;
+		return EnumIedType.ODF_DEVICE.include(f1046Type);
 	}
 	
 	/**

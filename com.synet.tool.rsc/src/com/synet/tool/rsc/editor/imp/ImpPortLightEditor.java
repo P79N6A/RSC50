@@ -33,10 +33,12 @@ import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PortEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.util.DateUtils;
 
@@ -49,6 +51,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 	
 	private PortEntityService portEntityService;
 	private MmsfcdaService mmsfcdaService;
+	private PoutEntityService poutEntityService;
 	private AnalogdataService analogdataService;
 	
 	public ImpPortLightEditor(Composite container, IEditorInput input) {
@@ -61,6 +64,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 		map = new HashMap<String, IM100FileInfoEntity>();
 		portEntityService = new PortEntityService();
 		mmsfcdaService = new MmsfcdaService();
+		poutEntityService = new PoutEntityService();
 		analogdataService = new AnalogdataService();
 		super.init();
 	}
@@ -178,41 +182,40 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				String msgRef = devName + "->" + boardCode + "->" + portCode;
 				
 				params.clear();
-				params.put("f1046Name", devName);
-				params.put("f1058RefAddr", opticalRefAddr);
-				String hql = "from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:f1046Name and f1058RefAddr=:f1058RefAddr";
-				List<?> mmsList = hqlDao.getListByHql(hql, params);
-				if (mmsList!=null && mmsList.size()>0) {
-					Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) mmsList.get(0);
-					if (mmsfcdaEntity != null) {
-						Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) 
-								analogdataService.getById(Tb1006AnalogdataEntity.class, mmsfcdaEntity.getDataCode());
-						String endMsg = devName + "->" + boardCode + "->" + portCode;
-						if (analogdataEntity != null) {
-							String ref = portLights.get(endMsg);
-							if (ref != null) {
-								if (!ref.equals(opticalRefAddr)) {
-									String msg = "同一端口不允许关联多个光强：" + endMsg;
-									appendError("导入光强与端口", "FCDA数据点检查", msgRef, msg);
-									// 回复parentCode为ied
-									analogdataEntity.setParentCode(analogdataEntity.getTb1046IedByF1046Code().getF1046Code());
-									analogdataService.update(analogdataEntity);
-								}
-							} else {
-								Tb1048PortEntity portEntity = portEntityService.getPortEntity(devName, boardCode, portCode);
-								if (portEntity != null) {
-									analogdataEntity.setParentCode(portEntity.getF1048Code());
-									analogdataService.update(analogdataEntity);
-									portLights.put(endMsg, opticalRefAddr);
-									entity.setMatched(DBConstants.MATCHED_OK);
-								} else {
-									String msg = "装置板卡端口不存在：" + endMsg;
-									appendError("导入光强与端口", "端口检查", msgRef, msg);
-								}
-							}
+				Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(devName, opticalRefAddr);
+				String dataCode = (mmsfcdaEntity!=null) ? mmsfcdaEntity.getDataCode() : null;
+				if (dataCode == null) {
+					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(devName, opticalRefAddr);
+					dataCode = (poutEntity!=null) ? poutEntity.getDataCode() : null;
+				}
+				if (dataCode == null) {
+					String msg = "装置[" + devName + "]不存在Mms信号：" + opticalRefAddr;
+					appendError("导入光强与端口", "FCDA检查", msgRef, msg);
+					continue;
+				}
+				Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) 
+						analogdataService.getById(Tb1006AnalogdataEntity.class, dataCode);
+				String endMsg = devName + "->" + boardCode + "->" + portCode;
+				if (analogdataEntity != null) {
+					String ref = portLights.get(endMsg);
+					if (ref != null) {
+						if (!ref.equals(opticalRefAddr)) {
+							String msg = "同一端口不允许关联多个光强：" + endMsg;
+							appendError("导入光强与端口", "FCDA数据点检查", msgRef, msg);
+							// 回复parentCode为ied
+							analogdataEntity.setParentCode(analogdataEntity.getTb1046IedByF1046Code().getF1046Code());
+							analogdataService.update(analogdataEntity);
+						}
+					} else {
+						Tb1048PortEntity portEntity = portEntityService.getPortEntity(devName, boardCode, portCode);
+						if (portEntity != null) {
+							analogdataEntity.setParentCode(portEntity.getF1048Code());
+							analogdataService.update(analogdataEntity);
+							portLights.put(endMsg, opticalRefAddr);
+							entity.setMatched(DBConstants.MATCHED_OK);
 						} else {
-							String msg = "装置[" + devName + "]不存在Mms信号：" + opticalRefAddr;
-							appendError("导入光强与端口", "FCDA检查", msgRef, msg);
+							String msg = "装置板卡端口不存在：" + endMsg;
+							appendError("导入光强与端口", "端口检查", msgRef, msg);
 						}
 					}
 				} else {

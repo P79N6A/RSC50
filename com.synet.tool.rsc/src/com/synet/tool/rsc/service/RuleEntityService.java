@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
@@ -18,6 +17,7 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
+import com.synet.tool.rsc.util.RuleType;
 
 public class RuleEntityService {
 	
@@ -77,7 +77,7 @@ public class RuleEntityService {
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
 				if (type != null) {
 					if (SclUtil.isStData(dataCode)) {
-						if (SclUtil.isStrap(dataset)) {
+						if (RuleType.STRAP.include(type)) {
 							mmsfcdaService.saveStrapF1011No(dataCode, type.getId());
 						}
 						mmsfcdaService.updateStateF1011No(dataCode, type.getId());
@@ -111,6 +111,9 @@ public class RuleEntityService {
 			if (type != null) {
 				if (SclUtil.isStData(dataCode)) {
 					mmsfcdaService.updateStateF1011No(dataCode, type.getId());
+					if (RuleType.STRAP.include(type)) {
+						mmsfcdaService.saveStrapF1011No(dataCode, type.getId());
+					}
 				} else if (SclUtil.isAlgData(dataCode)) {
 					mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 				}

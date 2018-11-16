@@ -40,6 +40,15 @@ public enum EnumIedType {
 		return false;
 	}
 	
+	public static boolean isBayIED(int typ) {
+		return PROTECT_DEVICE.include(typ) || RTU_DEVICE.include(typ);
+	}
+	
+	public static boolean isSubIED(int typ) {
+		return TERMINAL_DEVICE.include(typ) || UNIT_DEVICE.include(typ)
+				 || TER_UNI_DEVICE.include(typ);
+	}
+	
 	public static EnumIedType getTypeByDesc(String desc) {
 		for (EnumIedType type : EnumIedType.values()) {
 			if (type.desc.equals(desc)) {

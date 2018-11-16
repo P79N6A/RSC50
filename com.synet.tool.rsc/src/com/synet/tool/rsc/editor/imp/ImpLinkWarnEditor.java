@@ -21,10 +21,12 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM110LinkWarnEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1065LogicallinkEntity;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 
 /**
@@ -93,7 +95,7 @@ public class ImpLinkWarnEditor extends ExcelImportEditor {
 			devDesc = devName + ":" + devDesc;
 			Tb1065LogicallinkEntity logicLink = null;
 			if (!StringUtil.isEmpty(cbRef)) {
-				logicLink = logicallinkEntityService.getBySendIedAndRef(sendDevName, cbRef);
+				logicLink = logicallinkEntityService.getBySendIedAndRef(devName, sendDevName, cbRef);
 				if (logicLink == null) {
 					String msg = "逻辑链路不存在:" + sendDevName + "-> " + cbRef;
 					String ref = sendDevName + "->" + cbRef;
@@ -112,9 +114,16 @@ public class ImpLinkWarnEditor extends ExcelImportEditor {
 					mmsfcdaService.updateWarnParent(mmsfcdaEntity, logicLink.getF1065Code());
 					entity.setMatched(DBConstants.MATCHED_OK);
 				} else {
-					String msg = "MMS不存在:" + devDesc + "-> " + mmsRefAddr;
-					String ref =  devName + "-> " + mmsRefAddr;
-					appendError(title, "FCDA检查", ref, msg);
+					PoutEntityService poutEntityService = new PoutEntityService();
+					Tb1061PoutEntity poutEntity = poutEntityService.getPoutEntity(devName, mmsRefAddr);
+					if (poutEntity != null) {
+						mmsfcdaService.updateWarnParent(poutEntity, logicLink.getF1065Code());
+						entity.setMatched(DBConstants.MATCHED_OK);
+					} else {
+						String msg = "告警信号不存在:" + devDesc + "-> " + mmsRefAddr;
+						String ref =  devName + "-> " + mmsRefAddr;
+						appendError(title, "FCDA检查", ref, msg);
+					}
 				}
 			} else {
 				String msg = "MMS信号参引不能为空:装置[" + devDesc + "]";
@@ -134,7 +143,7 @@ public class ImpLinkWarnEditor extends ExcelImportEditor {
 				continue;
 			}
 			try {
-				Tb1065LogicallinkEntity logicLink = logicallinkEntityService.getBySendIedAndRef(entity.getSendDevName(), entity.getCbRef());
+				Tb1065LogicallinkEntity logicLink = logicallinkEntityService.getBySendIedAndRef(entity.getDevName(), entity.getSendDevName(), entity.getCbRef());
 				if (logicLink == null) {
 					entity.setConflict(DBConstants.YES);
 					entity.setOverwrite(false);

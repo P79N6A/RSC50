@@ -59,14 +59,12 @@ public class MmsfcdaService extends BaseService {
 	}
 
 	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String devName, String f1058RefAddr) {
-		Tb1046IedEntity iedEntity = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
-		if (iedEntity != null) {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("tb1046IedByF1046Code", iedEntity);
-			params.put("f1058RefAddr", f1058RefAddr);
-			return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
-		}
-		return null;
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("devName", devName);
+		params.put("f1058RefAddr", f1058RefAddr);
+		String hql = "from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:devName and f1058RefAddr=:f1058RefAddr";
+		List<?> list = hqlDao.getListByHql(hql, params);
+		return (Tb1058MmsfcdaEntity) ((list!=null && list.size()>0) ? list.get(0) : null);
 	}
 	
 	

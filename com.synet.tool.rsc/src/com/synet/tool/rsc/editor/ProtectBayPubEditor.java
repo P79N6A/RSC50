@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
-import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.synet.tool.rsc.DBConstants;
@@ -164,15 +163,6 @@ public class ProtectBayPubEditor extends BaseConfigEditor{
 		bayEntity = (Tb1042BayEntity) editorConfigData.getData();
 		int[] types = new int[]{IED_JHJ, IED_GP, IED_CJQ};
 		iedEntityAll = iedEntityService.getIedByTypesAndBay(types, null);
-		IField[] fields = table.getFields();
-		for (IField field : fields) {
-			String title = field.getTitle();
-			if ("保护分类".equals(title)) {
-				field.setEditor("combo");
-			} else if (!"间隔".equals(title) && !"屏柜".equals(title)) {
-				field.setEditor("text");
-			}
-		}
 		table.setInput(iedEntityAll);
 		super.initData();
 	}
