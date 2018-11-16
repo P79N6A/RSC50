@@ -48,9 +48,20 @@ public class SclUtil {
 		sb.append("$");
 		if (!StringUtil.isEmpty(fc))
 			sb.append(fc);
-		sb.append("$" + doName);
-		if (daName != null && !"MX".equals(fc))
-			sb.append("$" + daName);
+		sb.append("$");
+		if (!StringUtil.isEmpty(doName)) {
+			doName = doName.replace('.', '$');
+			sb.append(doName);
+		}
+		sb.append("$");
+		if (!StringUtil.isEmpty(doName)) {
+			doName = doName.replace('.', '$');
+			sb.append(doName);
+		}
+		if (!StringUtil.isEmpty(daName)) {
+			daName = daName.replace('.', '$');
+			sb.append(daName);
+		}
 		return sb.toString();
 	}
 	
