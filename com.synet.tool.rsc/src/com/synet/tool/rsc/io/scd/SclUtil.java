@@ -45,22 +45,16 @@ public class SclUtil {
 		sb.append(lnClass);
 		if (!StringUtil.isEmpty(lnInst))
 			sb.append(lnInst);
-		sb.append("$");
-		if (!StringUtil.isEmpty(fc))
-			sb.append(fc);
-		sb.append("$");
-		if (!StringUtil.isEmpty(doName)) {
-			doName = doName.replace('.', '$');
-			sb.append(doName);
+		if (!StringUtil.isEmpty(fc)) {
+			sb.append("$" + fc);
 		}
-		sb.append("$");
 		if (!StringUtil.isEmpty(doName)) {
 			doName = doName.replace('.', '$');
-			sb.append(doName);
+			sb.append("$" + doName);
 		}
 		if (!StringUtil.isEmpty(daName)) {
 			daName = daName.replace('.', '$');
-			sb.append(daName);
+			sb.append("$" + daName);
 		}
 		return sb.toString();
 	}
