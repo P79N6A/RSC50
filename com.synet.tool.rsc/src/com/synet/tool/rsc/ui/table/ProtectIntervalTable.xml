@@ -13,13 +13,13 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <field desc="版本" editor="none" name="f1046ConfigVersion" datType="string" width="150" default=""/> 
   <field desc="套" editor="none" name="f1046AorB" dict="IED_NO" datType="string" width="50" default=""/> 
   <field desc="板卡数量" editor="none" name="f1046boardNum" datType="string" width="80" default="0"/> 
-  <field desc="A网IP" editor="none" name="f1046aNetIp" datType="string" width="150" default=""/> 
-  <field desc="B网IP" editor="none" name="f1046bNetIp" datType="string" width="150" default=""/> 
-  <field desc="保护分类" editor="none" name="f1046Type" dict="IED_TYPE" datType="string" width="120" default=""/> 
+  <field desc="A网IP" editor="text" name="f1046aNetIp" datType="string" width="150" default=""/> 
+  <field desc="B网IP" editor="text" name="f1046bNetIp" datType="string" width="150" default=""/> 
+  <field desc="保护分类" name="f1046Type" dict="IED_TYPE" datType="string" width="120" default=""/> 
   <field desc="保护CRC码" editor="none" name="f1046Crc" datType="string" width="90" default=""/> 
-  <field desc="投运日期" editor="none" name="f1046OperateDate" datType="string" width="120" default=""/> 
-  <field desc="出厂日期" editor="none" name="f1046productDate" datType="string" width="120" default=""/> 
-  <field desc="出厂编号" editor="none" name="f1046productNo" datType="string" width="80" default=""/> 
-  <field desc="数据采集方式" editor="none" name="f1046dataGatType" datType="string" width="120" default=""/> 
-  <field desc="出口方式" editor="none" name="f1046OutType" datType="string" width="80" default=""/> 
+  <field desc="投运日期" editor="text" name="f1046OperateDate" datType="string" width="120" default=""/> 
+  <field desc="出厂日期" editor="text" name="f1046productDate" datType="string" width="120" default=""/> 
+  <field desc="出厂编号" editor="text" name="f1046productNo" datType="string" width="80" default=""/> 
+  <field desc="数据采集方式" editor="text" name="f1046dataGatType" datType="string" width="120" default=""/> 
+  <field desc="出口方式" editor="text" name="f1046OutType" datType="string" width="80" default=""/> 
 </table>
