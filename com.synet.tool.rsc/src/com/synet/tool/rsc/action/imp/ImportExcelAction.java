@@ -10,6 +10,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
@@ -19,10 +20,13 @@ import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.synet.tool.rsc.dialog.ChooseTableColDialog;
 import com.synet.tool.rsc.dialog.ChooseTableHeadDialog;
+import com.synet.tool.rsc.dialog.FileConflictDialog;
 import com.synet.tool.rsc.excel.EnumFileType;
 import com.synet.tool.rsc.excel.ExcelImporter;
 import com.synet.tool.rsc.excel.ImportConfigFactory;
+import com.synet.tool.rsc.excel.ImportResult;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
+import com.synet.tool.rsc.processor.DefaultImportProcessor;
 import com.synet.tool.rsc.service.ImprotInfoService;
 
 
@@ -49,12 +53,7 @@ public class ImportExcelAction extends BaseImportAction {
 		//检查文件
 		String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
 		final IM100FileInfoEntity fileInfoEntity = improtInfoService.getFileInfoEntityByFileName(fileName);
-		if (fileInfoEntity != null) {
-			boolean b =  DialogHelper.showConfirm("文件已存在，是否覆盖？");
-			if (!b) {//不覆盖，退出
-				return;
-			}
-		}
+		
 		ChooseTableHeadDialog headDialog = new ChooseTableHeadDialog(getShell());
 		headDialog.setExcelFilPath(filePath);
 		if (headDialog.open() == 0) {
@@ -83,21 +82,41 @@ public class ImportExcelAction extends BaseImportAction {
 						monitor.beginTask("正在导入...", 3);
 						if (fileInfoEntity != null) {
 							monitor.setTaskName("正在删除原始数据");
-							deleteFile(fileInfoEntity);
+//							deleteFile(fileInfoEntity);
 						}
 						monitor.worked(1);
 						monitor.setTaskName("正在导入数据");
-						final boolean b = ExcelImporter.importExcelData(monitor, getTitle(), filePath, excelHeadRow, excelColInfo);
 						
-						//跳转界面
-						Display.getDefault().asyncExec(new Runnable() {
+//						final boolean b = ExcelImporter.importExcelData(monitor, getTitle(), filePath, excelHeadRow, excelColInfo, fileInfoEntity != null);
+						
+						
+						Display.getDefault().syncExec(new Runnable() {
 							
 							@Override
 							public void run() {
-								if (b) {
-									openImportEditor(filePath);
-								} else {
-									DialogHelper.showAsynError("导入失败，请检查文件格式");
+								ImportResult result = ExcelImporter.getImportData(filePath, excelHeadRow, excelColInfo, getTitle());
+								//如果文件已存在，默认不导入，需手动确认
+								boolean next = (fileInfoEntity == null);
+								if (!next) {
+									FileConflictDialog dialog = new FileConflictDialog(new Shell());
+									dialog.setData(fileInfoEntity, result, getTitle());
+									if (dialog.open() == 0) {
+										next = dialog.isNext();
+										if (next) {//确认继续导入
+											deleteFile(fileInfoEntity);
+										}
+									}
+								}
+								if (next) {
+									monitor.worked(1);
+									boolean b = new DefaultImportProcessor().processor(result.getFileInfoEntity(), result.getResult());
+									monitor.worked(1);
+									if (b) {
+										//跳转界面
+										openImportEditor(filePath);
+									} else {
+										DialogHelper.showAsynError("导入失败，请检查文件格式");
+									}
 								}
 							}
 						});
