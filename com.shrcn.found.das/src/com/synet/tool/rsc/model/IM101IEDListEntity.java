@@ -192,4 +192,18 @@ public class IM101IEDListEntity {
 		this.overwrite = overwrite;
 	}
 	
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", bay=" + bay + ", cubicle=" + cubicle
+				+ ", manufacturor=" + manufacturor + ", devType=" + devType
+				+ ", devVersion=" + devVersion + ", AorB=" + AorB
+				+ ", protClassify=" + protClassify + ", protModel=" + protModel
+				+ ", protType=" + protType + ", netAIP=" + netAIP + ", netBIP="
+				+ netBIP + ", dateService=" + dateService + ", dateProduct="
+				+ dateProduct + ", productCode=" + productCode
+				+ ", dataCollectType=" + dataCollectType + ", outType="
+				+ outType + ", boardNum=" + boardNum;
+	}
+	
 }

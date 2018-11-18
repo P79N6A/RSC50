@@ -100,4 +100,12 @@ public class IM108BrkCfmEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc=" + devDesc
+				+ ", pinRefAddr=" + pinRefAddr + ", pinDesc=" + pinDesc
+				+ ", cmdAckVpRefAddr=" + cmdAckVpRefAddr + ", cmdAckVpDesc="
+				+ cmdAckVpDesc + ", cmdOutVpRefAddr=" + cmdOutVpRefAddr
+				+ ", cmdOutVpDesc=" + cmdOutVpDesc;
+	}
 }

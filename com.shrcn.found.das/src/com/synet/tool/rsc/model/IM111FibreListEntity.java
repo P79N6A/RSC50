@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import com.shrcn.found.common.util.StringUtil;
 
 /**
  *光缆清册
@@ -185,20 +184,14 @@ public class IM111FibreListEntity {
 	}
 
 
-	public String getCsvStr() {
-		String str = StringUtil.nullToEmpty(im111Code) + ", "
-				+ StringUtil.nullToEmpty(cableCode) + ", " 
-				+ StringUtil.nullToEmpty(coreCode) + ", "
-				+ StringUtil.nullToEmpty(connType) + ", "
-				+ StringUtil.nullToEmpty(devNameA) + ", "
-				+ StringUtil.nullToEmpty(devDescA) + ", "
-				+ StringUtil.nullToEmpty(boardCodeA) + ", "
-				+ StringUtil.nullToEmpty(portCodeA) + ", "
-				+ StringUtil.nullToEmpty(devNameB)+ ", "
-				+ StringUtil.nullToEmpty(devDescB) + ", "
-				+ StringUtil.nullToEmpty(portCodeB) + ", "
-				+ StringUtil.nullToEmpty(boardCodeB);
-		return str;
+	@Override
+	public String toString() {
+		return "cableCode=" + cableCode + ", coreCode="
+				+ coreCode + ", connType=" + connType + ", devNameA="
+				+ devNameA + ", devDescA=" + devDescA + ", boardCodeA="
+				+ boardCodeA + ", portCodeA=" + portCodeA + ", devNameB="
+				+ devNameB + ", devDescB=" + devDescB + ", boardCodeB="
+				+ boardCodeB + ", portCodeB=" + portCodeB;
 	}
-	
+
 }

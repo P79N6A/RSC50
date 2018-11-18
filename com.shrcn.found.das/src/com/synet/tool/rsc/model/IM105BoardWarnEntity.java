@@ -79,5 +79,11 @@ public class IM105BoardWarnEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", alarmRefAddr=" + alarmRefAddr + ", alarmDesc="
+				+ alarmDesc + ", boardCode=" + boardCode;
+	}
 	
 }

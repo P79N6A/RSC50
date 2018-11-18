@@ -86,4 +86,11 @@ public class IM106PortLightEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", opticalRefAddr=" + opticalRefAddr
+				+ ", opticalDesc=" + opticalDesc + ", boardCode=" + boardCode
+				+ ", portCode=" + portCode;
+	}
 }

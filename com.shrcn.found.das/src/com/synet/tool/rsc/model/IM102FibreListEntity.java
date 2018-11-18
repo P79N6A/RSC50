@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.model;
 
-import com.shrcn.found.common.util.StringUtil;
 
 /**
  *光缆清册
@@ -198,32 +197,22 @@ public class IM102FibreListEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
-	
-	public String getCsvStr() {
-		String str = StringUtil.nullToEmpty(im102Code) + ", "
-				+ StringUtil.nullToEmpty(cableCode) + ", " 
-				+ StringUtil.nullToEmpty(coreCode) + ", "
-				+ StringUtil.nullToEmpty(devCodeA) + ", "
-				+ StringUtil.nullToEmpty(devNameA) + ", "
-				+ StringUtil.nullToEmpty(devDescA) + ", "
-				+ StringUtil.nullToEmpty(boardCodeA) + ", "
-				+ StringUtil.nullToEmpty(portCodeA) + ", "
-				+ StringUtil.nullToEmpty(cubicleCodeA) + ", "
-				+ StringUtil.nullToEmpty(cubicleDescA) + ", "
-				+ StringUtil.nullToEmpty(coreCodeA) + ", "
-				+ StringUtil.nullToEmpty(distribFrameCodeA) + ", "
-				+ StringUtil.nullToEmpty(distribFramePortNoA) + ", "
-				+ StringUtil.nullToEmpty(devCodeB) + ", "
-				+ StringUtil.nullToEmpty(devNameB)+ ", "
-				+ StringUtil.nullToEmpty(devDescB) + ", "
-				+ StringUtil.nullToEmpty(portCodeB) + ", "
-				+ StringUtil.nullToEmpty(boardCodeB) + ", "
-				+ StringUtil.nullToEmpty(cubicleCodeB) + ", "
-				+ StringUtil.nullToEmpty(cubicleDescB) + ", "
-				+ StringUtil.nullToEmpty(coreCodeB) + ", "
-				+ StringUtil.nullToEmpty(distribFrameCodeB) + ", "
-				+ StringUtil.nullToEmpty(distribFramePortNoB);
-		return str;
+	@Override
+	public String toString() {
+		return "cableCode=" + cableCode + ", coreCode="
+				+ coreCode + ", devCodeA=" + devCodeA + ", devNameA="
+				+ devNameA + ", devDescA=" + devDescA + ", boardCodeA="
+				+ boardCodeA + ", portCodeA=" + portCodeA + ", cubicleCodeA="
+				+ cubicleCodeA + ", cubicleDescA=" + cubicleDescA
+				+ ", coreCodeA=" + coreCodeA + ", distribFrameCodeA="
+				+ distribFrameCodeA + ", distribFramePortNoA="
+				+ distribFramePortNoA + ", devCodeB=" + devCodeB
+				+ ", devNameB=" + devNameB + ", devDescB=" + devDescB
+				+ ", portCodeB=" + portCodeB + ", boardCodeB=" + boardCodeB
+				+ ", cubicleCodeB=" + cubicleCodeB + ", cubicleDescB="
+				+ cubicleDescB + ", coreCodeB=" + coreCodeB
+				+ ", distribFrameCodeB=" + distribFrameCodeB
+				+ ", distribFramePortNoB=" + distribFramePortNoB;
 	}
 	
 }

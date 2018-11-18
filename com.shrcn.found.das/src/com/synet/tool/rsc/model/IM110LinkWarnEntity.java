@@ -88,5 +88,11 @@ public class IM110LinkWarnEntity {
 	public void setCbRef(String cbRef) {
 		this.cbRef = cbRef;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", mmsRefAddr=" + mmsRefAddr + ", mmsDesc="
+				+ mmsDesc + ", sendDevName=" + sendDevName + ", cbRef=" + cbRef;
+	}
 	
 }

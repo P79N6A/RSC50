@@ -100,4 +100,11 @@ public class IM107TerStrapEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", strapRefAddr=" + strapRefAddr + ", strapDesc="
+				+ strapDesc + ", strapType=" + strapType + ", vpRefAddr="
+				+ vpRefAddr + ", vpDesc=" + vpDesc + ", vpType=" + vpType;
+	}
 }

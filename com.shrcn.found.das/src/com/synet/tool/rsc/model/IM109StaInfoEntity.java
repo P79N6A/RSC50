@@ -73,5 +73,11 @@ public class IM109StaInfoEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", mmsRefAddr=" + mmsRefAddr + ", mmsDesc="
+				+ mmsDesc;
+	}
 	
 }

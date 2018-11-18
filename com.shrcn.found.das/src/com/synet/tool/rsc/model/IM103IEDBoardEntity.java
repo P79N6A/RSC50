@@ -109,14 +109,11 @@ public class IM103IEDBoardEntity {
 	}
 	@Override
 	public String toString() {
-		return "IM103IEDBoardEntity [im103Code=" + im103Code + ", devName="
-				+ devName + ", devDesc=" + devDesc + ", manufacturor="
+		return "devName=" + devName + ", devDesc=" + devDesc + ", manufacturor="
 				+ manufacturor + ", configVersion=" + configVersion
 				+ ", boardIndex=" + boardIndex + ", boardModel=" + boardModel
 				+ ", boardType=" + boardType + ", boardCode=" + boardCode
-				+ ", portNum=" + portNum + ", portCode=" + portCode
-				+ ", matched=" + matched + ", fileInfoEntity=" + fileInfoEntity
-				+ "]";
+				+ ", portNum=" + portNum + ", portCode=" + portCode;
 	}
 	@Override
 	public int hashCode() {

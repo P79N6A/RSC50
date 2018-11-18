@@ -86,5 +86,12 @@ public class IM104StatusInEntity {
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
+	@Override
+	public String toString() {
+		return "devName=" + devName + ", devDesc="
+				+ devDesc + ", pinRefAddr=" + pinRefAddr + ", pinDesc="
+				+ pinDesc + ", mmsRefAddr=" + mmsRefAddr + ", mmsDesc="
+				+ mmsDesc;
+	}
 	
 }
