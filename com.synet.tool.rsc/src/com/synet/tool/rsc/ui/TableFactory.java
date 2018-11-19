@@ -7,6 +7,7 @@ import com.shrcn.found.ui.table.TableBuilder;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.ui.table.FuncCfgTable;
 import com.synet.tool.rsc.ui.table.IEDBoardTable;
+import com.synet.tool.rsc.ui.table.PhyConnsTable;
 import com.synet.tool.rsc.ui.table.RuleTable;
 
 
@@ -199,7 +200,7 @@ public class TableFactory {
 	
 	public static DevKTable getPyhConnsViewTable(Composite container) {
 		TableConfig tableCfg = uicfg.getDefinedTable(PYHCONNS_VIEW_TABLE);
-		return (DevKTable) TableBuilder.createKTable(DevKTable.class, container, tableCfg);
+		return (DevKTable) TableBuilder.createKTable(PhyConnsTable.class, container, tableCfg);
 	}
 	
 	public static DevKTable getAnalogChnTable(Composite container) {

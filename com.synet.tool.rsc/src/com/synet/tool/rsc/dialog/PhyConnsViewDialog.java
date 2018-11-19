@@ -19,10 +19,11 @@ import com.synet.tool.rsc.model.Tb1093VoltagekkEntity;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
+import com.synet.tool.rsc.ui.table.PhyConnsTable;
 
 public class PhyConnsViewDialog extends KTableEditorDialog {
 	
-	private DevKTable table;
+	private PhyConnsTable table;
 	private Tb1065LogicallinkEntity logicLink;
 
 	public PhyConnsViewDialog(Shell parentShell, Object item) {
@@ -32,13 +33,14 @@ public class PhyConnsViewDialog extends KTableEditorDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		table = TableFactory.getPyhConnsViewTable(parent);
+		table = (PhyConnsTable) TableFactory.getPyhConnsViewTable(parent);
 		table.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		initData();
 		return parent;
 	}
 	
 	private void initData() {
+		table.setLogicLink(logicLink);
 		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 		List<Tb1073LlinkphyrelationEntity> relations = (List<Tb1073LlinkphyrelationEntity>) 
 				beanDao.getListByCriteria(Tb1073LlinkphyrelationEntity.class, "tb1065LogicallinkByF1065Code", logicLink);
