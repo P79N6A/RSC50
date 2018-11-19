@@ -22,20 +22,18 @@ import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.SessionService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.das.SessionRsc;
-import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
-import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
+import com.synet.tool.rsc.service.AnalogdataService;
+import com.synet.tool.rsc.service.MmsfcdaService;
 import com.synet.tool.rsc.service.PinEntityService;
 import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.StatedataService;
@@ -43,14 +41,18 @@ import com.synet.tool.rsc.service.StatedataService;
 public class TemplateImport implements IImporter{
 	
 	private StatedataService statedataService;
+	private AnalogdataService analogdataService;
 	private BeanDaoImpl beanDao;
 	private Tb1046IedEntity tb1046IedEntity;
+	private MmsfcdaService mmsfcdaService;
 	private PoutEntityService poutEntityService;
 	private PinEntityService pinEntityService;
 	
 	public TemplateImport(Tb1046IedEntity tb1046IedEntity) {
 		this.tb1046IedEntity = tb1046IedEntity;
 		statedataService = new StatedataService();
+		analogdataService = new AnalogdataService();
+		mmsfcdaService = new MmsfcdaService();
 		poutEntityService = new PoutEntityService();
 		pinEntityService = new PinEntityService();
 		beanDao = BeanDaoImpl.getInstance();
@@ -79,7 +81,6 @@ public class TemplateImport implements IImporter{
 		try {
 			Document document = reader.read(new File(path));
 			Element rootElement = document.getRootElement();
-			saveIed(rootElement);
 			Element elementBoards = rootElement.element("Boards");
 			List<Element> elementsBoardEntity = elementBoards.elements("Tb1047BoardEntity");
 			for (Element elementBoardEntity : elementsBoardEntity) {
@@ -124,6 +125,7 @@ public class TemplateImport implements IImporter{
 			Connection conn = _session.connection();
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1016_StateData set F1011_NO=? where F1016_ADDREF=? and F1046_CODE=?");
+			int i = 0;
 			for (Element elementSt : stList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -142,9 +144,16 @@ public class TemplateImport implements IImporter{
 					}
 					mmsList.add(elementSt);
 				}
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 			savePoutType(poutList);
 			saveStrapType(strapList);
 			saveMmsType(mmsList);
@@ -161,6 +170,7 @@ public class TemplateImport implements IImporter{
 			Connection conn = _session.connection();
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1061_POUT set F1061_Type=? where F1061_RefAddr=? and F1046_CODE=?");
+			int i = 0;
 			for (Element elementSt : poutList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -169,9 +179,16 @@ public class TemplateImport implements IImporter{
 				pState.setString(2, ref);
 				pState.setString(3, tb1046IedEntity.getF1046Code());
 				pState.addBatch();
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 		} catch (SQLException e) {
 			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
 			e.printStackTrace();
@@ -185,6 +202,7 @@ public class TemplateImport implements IImporter{
 			Connection conn = _session.connection();
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1058_MMSFCDA set F1058_Type=? where F1058_RefAddr=? and F1046_CODE=?");
+			int i = 0;
 			for (Element elementSt : mmsList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -193,9 +211,16 @@ public class TemplateImport implements IImporter{
 				pState.setString(2, ref);
 				pState.setString(3, tb1046IedEntity.getF1046Code());
 				pState.addBatch();
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 		} catch (SQLException e) {
 			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
 			e.printStackTrace();
@@ -210,6 +235,7 @@ public class TemplateImport implements IImporter{
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1064_Strap a set a.F1064_TYPE=? where a.F1064_CODE=" +
 					"(select b.Parent_CODE from TB1016_StateData b where b.F1016_ADDREF=? and b.F1046_CODE=?)");
+			int i = 0;
 			for (Element elementSt : strapList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -218,9 +244,16 @@ public class TemplateImport implements IImporter{
 				pState.setString(2, ref);
 				pState.setString(3, tb1046IedEntity.getF1046Code());
 				pState.addBatch();
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 		} catch (SQLException e) {
 			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
 			e.printStackTrace();
@@ -237,6 +270,7 @@ public class TemplateImport implements IImporter{
 			Connection conn = _session.connection();
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1006_AnalogData set F1011_NO=? where F1006_ADDREF=? and F1046_CODE=?");
+			int i = 0;
 			for (Element elementSt : algList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -252,9 +286,16 @@ public class TemplateImport implements IImporter{
 				} else { 
 					mmsList.add(elementSt);
 				}
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 			saveMmsType(mmsList);
 			savePoutType(poutList);
 		} catch (SQLException e) {
@@ -271,6 +312,7 @@ public class TemplateImport implements IImporter{
 			Connection conn = _session.connection();
 			conn.setAutoCommit(false);
 			PreparedStatement pState = conn.prepareStatement("update TB1062_PIN set F1011_NO=? where F1062_RefAddr=? and F1046_CODE=?");
+			int i = 0;
 			for (Element elementSt : algList) {
 				String ref = elementSt.attributeValue("ref");
 				String f1011NoStr = elementSt.attributeValue("f1011No");
@@ -279,9 +321,16 @@ public class TemplateImport implements IImporter{
 				pState.setString(2, ref);
 				pState.setString(3, tb1046IedEntity.getF1046Code());
 				pState.addBatch();
+				i++;
+				if (i % 50 == 0) {
+					pState.executeBatch();
+					conn.commit();
+				}
 			}
-			pState.executeBatch();
-			conn.commit();
+			if (i % 50 > 0) {
+				pState.executeBatch();
+				conn.commit();
+			}
 		} catch (SQLException e) {
 			ConsoleManager.getInstance().append("数据导入错误" + e.getMessage());
 			e.printStackTrace();
@@ -299,20 +348,9 @@ public class TemplateImport implements IImporter{
 		}
 		Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) beanDao.getObject(Tb1064StrapEntity.class, "f1064Code", stateEntity.getParentCode());
 		String f1062RefAddr = elementPinEntity.attributeValue("f1062RefAddr");
-		String convChk1 = elementPinEntity.attributeValue("convChk1");
-		String convChk2 = elementPinEntity.attributeValue("convChk2");
 		Tb1062PinEntity pinEntity = pinEntityService.getPinEntity(tb1046IedEntity.getF1046Name(), f1062RefAddr);
 		if(pinEntity != null) {
-			if (strapEntity == null) {
-				System.err.println("压板为空：" + strapRefAddr);
-			}
 			pinEntity.setTb1064StrapByF1064Code(strapEntity);
-			Tb1063CircuitEntity circuitEntity = (Tb1063CircuitEntity) beanDao.getObject(Tb1063CircuitEntity.class, "tb1062PinByF1062CodePRecv", pinEntity);
-			Tb1061PoutEntity poutEntityChk1 = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), convChk1);
-			Tb1061PoutEntity poutEntityChk2 = poutEntityService.getPoutEntity(tb1046IedEntity.getF1046Name(), convChk2);
-			circuitEntity.setTb1061PoutByF1061CodeConvChk1(poutEntityChk1);
-			circuitEntity.setTb1061PoutByF1061CodeConvChk2(poutEntityChk2);
-			beanDao.update(circuitEntity);
 			pinEntityService.update(pinEntity);
 		}
 	}
@@ -363,7 +401,6 @@ public class TemplateImport implements IImporter{
 		String f1047Slot = elementBoardEntity.attributeValue("f1047Slot");
 		String f1047Desc = elementBoardEntity.attributeValue("f1047Desc");
 		String f1047Type = elementBoardEntity.attributeValue("f1047Type");
-		String warnRefAddr = elementBoardEntity.attributeValue("warnRefAddr");
 		Map<String, Object> params = new HashMap<>();
 		params.put("f1047Slot", f1047Slot);
 		params.put("f1047Desc", f1047Desc);
@@ -376,59 +413,32 @@ public class TemplateImport implements IImporter{
 		}
 		boardEntity.setTb1046IedByF1046Code(tb1046IedEntity);
 		beanDao.save(boardEntity);
-		updateStateDataByRefAddr(warnRefAddr, boardEntity.getF1047Code());
+		
+		Element elWarns = elementBoardEntity.element("Warnings");
+		if (elWarns != null) {
+			List<Element> warnList = elWarns.elements("Item");
+			if (warnList != null) {
+				for (Element warnEl : warnList) {
+					String warnRefAddr = warnEl.attributeValue("warnRefAddr");
+					updateStateDataByRefAddr(warnRefAddr, boardEntity.getF1047Code());
+				}
+			}
+		}
 		return boardEntity;
 	}
 
-	private void saveIed(Element rootElement) {
-		String warnRefAddr = rootElement.attributeValue("warnRefAddr");
-		updateStateDataByRefAddr(warnRefAddr, tb1046IedEntity.getF1046Code());
-	}
-	
 	private void updateStateDataByRefAddr(String warnRefAddr, String code) {
 		if(StringUtil.isEmpty(warnRefAddr)) {
 			return;
 		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("f1058RefAddr", warnRefAddr);
-		params.put("tb1046IedByF1046Code", tb1046IedEntity);
-		Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
-		if(mmsfcdaEntity == null) {
-			return;
-		}
-		Tb1016StatedataEntity statedataEntity = statedataService.getStateDataByCode(mmsfcdaEntity.getDataCode());
-		if(statedataEntity == null) {
-			return;
-		}
-		if(statedataEntity != null) {
-			statedataEntity.setParentCode(code);
-			mmsfcdaEntity.setParentCode(code);
-			beanDao.update(statedataEntity);
-			beanDao.update(mmsfcdaEntity);
-		}
+		statedataService.updateStateParentCode(tb1046IedEntity, warnRefAddr, code);
 	}
 	
 	private void updateAlgDataByRefAddr(String warnRefAddr, String code) {
 		if(StringUtil.isEmpty(warnRefAddr)) {
 			return;
 		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("f1058RefAddr", warnRefAddr);
-		params.put("tb1046IedByF1046Code", tb1046IedEntity);
-		Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, params);
-		if(mmsfcdaEntity == null) {
-			return;
-		}
-		Tb1006AnalogdataEntity algdataEntity = (Tb1006AnalogdataEntity)beanDao.getObject(Tb1006AnalogdataEntity.class, "f1006Code", mmsfcdaEntity.getDataCode());
-		if(algdataEntity == null) {
-			return;
-		}
-		if(algdataEntity != null) {
-			algdataEntity.setParentCode(code);
-			mmsfcdaEntity.setParentCode(code);
-			beanDao.update(algdataEntity);
-			beanDao.update(mmsfcdaEntity);
-		}
+		analogdataService.updateAnologParentCode(tb1046IedEntity, warnRefAddr, code);
 	}
 
 }

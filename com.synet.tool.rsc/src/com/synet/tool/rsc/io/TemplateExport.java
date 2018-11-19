@@ -28,7 +28,6 @@ import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.BoardEntityService;
@@ -114,20 +113,15 @@ public class TemplateExport{
 			elementPoutEntity.addAttribute("f1061RefAddr", pout.getF1061RefAddr());
 			addStrapRef(elementPoutEntity, strap);
 		}
-		List<Tb1063CircuitEntity> circuits = (List<Tb1063CircuitEntity>) BeanDaoImpl
-				.getInstance().getListByCriteria(Tb1063CircuitEntity.class, "tb1046IedByF1046CodeIedRecv", tb1046IedEntity);
-		for (Tb1063CircuitEntity circuit : circuits) {
-			Tb1062PinEntity pin = circuit.getTb1062PinByF1062CodePRecv();
+		List<Tb1062PinEntity> pins = (List<Tb1062PinEntity>) BeanDaoImpl
+				.getInstance().getListByCriteria(Tb1062PinEntity.class, "tb1046IedByF1046Code", tb1046IedEntity);
+		for (Tb1062PinEntity pin : pins) {
 			Tb1064StrapEntity strap = pin.getTb1064StrapByF1064Code();
 			if (strap == null) {
 				continue;
 			}
 			Element elementPinEntity = elementPins.addElement("Tb1062PinEntity");
 			elementPinEntity.addAttribute("f1062RefAddr", pin.getF1062RefAddr());
-			if (circuit.getTb1061PoutByF1061CodeConvChk1() != null)
-				elementPinEntity.addAttribute("convChk1", circuit.getTb1061PoutByF1061CodeConvChk1().getF1061RefAddr());
-			if (circuit.getTb1061PoutByF1061CodeConvChk2() != null)
-				elementPinEntity.addAttribute("convChk2", circuit.getTb1061PoutByF1061CodeConvChk2().getF1061RefAddr());
 			addStrapRef(elementPinEntity, strap);
 		}
 		addDataTypes(elementIedEntity);
@@ -236,14 +230,19 @@ public class TemplateExport{
 		elementBoardEntity.addAttribute("f1047Slot", tb1047BoardEntity.getF1047Slot());
 		elementBoardEntity.addAttribute("f1047Desc", tb1047BoardEntity.getF1047Desc());
 		elementBoardEntity.addAttribute("f1047Type", tb1047BoardEntity.getF1047Type());
-		elementBoardEntity.addAttribute("warnRefAddr", getRefAddr(tb1047BoardEntity.getF1047Code()));
+		Element warnEl = elementBoardEntity.addElement("Warnings");
+		List<Tb1016StatedataEntity> warnList = getStRefAddr(tb1047BoardEntity.getF1047Code());
+		if (warnList != null && warnList.size() > 0) {
+			for (Tb1016StatedataEntity warn : warnList) {
+				Element itemEl = warnEl.addElement("Item");
+				itemEl.addAttribute("warnRefAddr", warn.getF1016AddRef());			}
+		}
 	}
 
 	private void iedAddAttr(Tb1046IedEntity tb1046IedEntity, Element elementIedEntity) {
 		elementIedEntity.addAttribute("f1046Manufacturor", tb1046IedEntity.getF1046Manufacturor());
 		elementIedEntity.addAttribute("f1046Model", tb1046IedEntity.getF1046Model());
 		elementIedEntity.addAttribute("f1046ConfigVersion", tb1046IedEntity.getF1046ConfigVersion());
-		elementIedEntity.addAttribute("warnRefAddr", getRefAddr(tb1046IedEntity.getF1046Code()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -257,13 +256,9 @@ public class TemplateExport{
 	}
 
 	@SuppressWarnings("unchecked")
-	private String getRefAddr(String code) {
-		List<Tb1016StatedataEntity> statedataEntityList = (List<Tb1016StatedataEntity>) 
+	private List<Tb1016StatedataEntity> getStRefAddr(String code) {
+		return (List<Tb1016StatedataEntity>) 
 				statedataService.getListByCriteria(Tb1016StatedataEntity.class, "parentCode", code);
-		if(DataUtils.listNotNull(statedataEntityList)) {
-			return statedataEntityList.get(0).getF1016AddRef();
-		}
-		return "";
 	}
 
 }
