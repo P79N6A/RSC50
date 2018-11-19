@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 开入信号映射
  *
  */
-public class IM104StatusInEntity {
+public class IM104StatusInEntity extends ImportMmsEntity {
 	
 	private String im104Code;
 	private String devName;		//装置Name

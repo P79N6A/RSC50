@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.model;
 
+import com.shrcn.found.common.util.StringUtil;
 
 /**
  *光缆清册
@@ -23,6 +24,7 @@ public class IM111FibreListEntity {
 	
 	private int conflict = 2; // 是否冲突：1-是，2-否
 	private boolean overwrite; // 是否覆盖
+	private boolean used; // 是否已分析
 	
 	public String getIm111Code() {
 		return im111Code;
@@ -184,6 +186,15 @@ public class IM111FibreListEntity {
 	}
 
 
+	public boolean isUsed() {
+		return used;
+	}
+
+
+	public void setUsed(boolean used) {
+		this.used = used;
+	}
+
 	@Override
 	public String toString() {
 		return "cableCode=" + cableCode + ", coreCode="
@@ -193,5 +204,4 @@ public class IM111FibreListEntity {
 				+ devNameB + ", devDescB=" + devDescB + ", boardCodeB="
 				+ boardCodeB + ", portCodeB=" + portCodeB;
 	}
-
 }

@@ -6,7 +6,7 @@ package com.synet.tool.rsc.model;
  * 监控信息点表
  *
  */
-public class IM109StaInfoEntity {
+public class IM109StaInfoEntity extends ImportMmsEntity {
 	
 	private String im109Code;
 	private String devName;		//装置Name

@@ -6,7 +6,7 @@ package com.synet.tool.rsc.model;
  * 告警与链路关联表
  *
  */
-public class IM110LinkWarnEntity {
+public class IM110LinkWarnEntity extends ImportMmsEntity {
 	
 	private String im110Code;
 	private String devName;		//装置Name
