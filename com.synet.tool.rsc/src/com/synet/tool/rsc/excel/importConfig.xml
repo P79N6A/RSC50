@@ -119,7 +119,7 @@
 		<field col="4" name="portCodeA" title="端口A端口编号" notnull="true"/>
 		<field col="5" name="connType" title="连接线类型"/>
 		<field col="6" name="cableCode" title="缆编号"/>
-		<field col="7" name="coreCode" title="芯编号" notnull="true"/>
+		<field col="7" name="coreCode" title="芯编号"/>
 		<field col="8" name="devNameB" title="端口B装置Name" notnull="true"/>
 		<field col="9" name="devDescB" title="端口B装置名称"/>
 		<field col="10" name="boardCodeB" title="端口B板卡编号" notnull="true"/>
