@@ -1,18 +1,13 @@
 package com.synet.tool.rsc.util;
 
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-
-import org.hibernate.Session;
 
 import com.shrcn.tool.found.das.HqlDaoService;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.das.ProjectManager;
-import com.synet.tool.rsc.das.RscDbManagerImpl;
-import com.synet.tool.rsc.das.SessionRsc;
 
 public class VersionUtil {
 
@@ -30,10 +25,8 @@ public class VersionUtil {
 	
 	private static void updateExcelImp() {
 //		if (!existsTable("IM110_LINK_WARN")) {
-			Session _session = SessionRsc.getInstance().get();
-			Connection conn = _session.connection();
 			InputStream is = ProjectManager.class.getClassLoader().getResourceAsStream(DBConstants.patchSqlPath);
-			RscDbManagerImpl.getInstance().runScript(is, conn);
+			SqlHelper.runScript(is);
 //		}
 	}
 
