@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.model;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -17,6 +18,7 @@ public class Tb1065LogicallinkEntity {
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
     private Tb1046IedEntity tb1046IedByF1046CodeIedSend;
     private Set<Tb1063CircuitEntity> tb1063CircuitsByF1065Code;
+    private List<Tb1053PhysconnEntity> phyConns;
 
     public String getF1065Code() {
         return f1065Code;
@@ -121,6 +123,14 @@ public class Tb1065LogicallinkEntity {
 
 	public void setBaseCbByCdCode(BaseCbEntity baseCbByCdCode) {
 		this.baseCbByCdCode = baseCbByCdCode;
+	}
+
+	public List<Tb1053PhysconnEntity> getPhyConns() {
+		return phyConns;
+	}
+
+	public void setPhyConns(List<Tb1053PhysconnEntity> phyConns) {
+		this.phyConns = phyConns;
 	}
 
 }
