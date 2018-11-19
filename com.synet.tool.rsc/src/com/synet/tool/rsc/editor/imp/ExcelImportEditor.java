@@ -24,6 +24,7 @@ import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.FieldBase;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
@@ -268,6 +269,10 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 				}
 				list.add(field);
 			}
+			FieldBase datField = new FieldBase();
+			datField.setName("f1011No");
+			datField.setTitle("数据类型");
+			list.add(datField);
 		}
 		return list.toArray(new IField[0]);
 	}

@@ -18,10 +18,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.dialog.ExportIedDialog;
@@ -93,6 +95,8 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 						int totalWork = ieds.size() * 2;
 						monitor.beginTask("正在导出", totalWork);
 						long start = System.currentTimeMillis();
+						DictManager dict = DictManager.getInstance();
+						ConsoleManager console = ConsoleManager.getInstance();
 						for (Tb1046IedEntity ied : ieds) {
 							if (monitor.isCanceled()) {
 								break;
@@ -107,6 +111,7 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 									staInfoEntity.setDevDesc(ied.getF1046Desc());
 									staInfoEntity.setMmsRefAddr(mms.getF1058RefAddr());
 									staInfoEntity.setMmsDesc(mms.getF1058Desc());
+									staInfoEntity.setF1011No(dict.getNameById("F1011_NO", mms.getF1058Type()));
 									list.add(staInfoEntity);
 								}
 							}
@@ -115,11 +120,14 @@ public class ImpStaInfoEditor extends ExcelImportEditor {
 								String dateStr = DateUtils.getDateStr(new Date(), DateUtils.DATE_DAY_PATTERN_);
 								String fileName = filePath + "/" + ied.getF1046Name() + "监控信息点表" + dateStr + ".xlsx";
 								exportTemplateExcel(fileName, "监控信息点表", vfields, list);
+							} else {
+								console.append("装置 " + ied.getF1046Name() + 
+										" 模型不存在监控信息点！");
 							}
 							monitor.worked(1);
 						}
 						long time = (System.currentTimeMillis() - start) / 1000;
-						monitor.setTaskName("导出耗时：" + time + "秒");
+						console.append("导出耗时：" + time + "秒");
 						monitor.done();
 					}
 				}

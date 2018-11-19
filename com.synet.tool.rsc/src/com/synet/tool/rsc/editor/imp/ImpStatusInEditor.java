@@ -18,6 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
@@ -134,12 +135,14 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 		List<Object> list = new ArrayList<>();
 		List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
 		if (pinList != null && pinList.size() > 0) {
+			DictManager dict = DictManager.getInstance();
 			for (Tb1062PinEntity pinEntity : pinList) {
 				IM104StatusInEntity entity = new IM104StatusInEntity();
 				entity.setDevName(ied.getF1046Name());
 				entity.setDevDesc(ied.getF1046Desc());
 				entity.setPinRefAddr(pinEntity.getF1062RefAddr());
 				entity.setPinDesc(pinEntity.getF1062Desc());
+				entity.setF1011No(dict.getNameById("F1011_NO", pinEntity.getF1011No()));
 				list.add(entity);
 			}
 		}
@@ -150,12 +153,14 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 		List<Object> list = new ArrayList<>();
 		List<Tb1058MmsfcdaEntity> mmsList = mmsfcdaService.getMmsfcdaByIed(ied);
 		if (mmsList != null && mmsList.size() > 0) {
+			DictManager dict = DictManager.getInstance();
 			for (Tb1058MmsfcdaEntity mms : mmsList) {
 				IM104StatusInEntity entity = new IM104StatusInEntity();
 				entity.setDevName(ied.getF1046Name());
 				entity.setDevDesc(ied.getF1046Desc());
 				entity.setMmsRefAddr(mms.getF1058RefAddr());
 				entity.setMmsDesc(mms.getF1058Desc());
+				entity.setF1011No(dict.getNameById("F1011_NO", mms.getF1058Type()));
 				list.add(entity);
 			}
 		}
