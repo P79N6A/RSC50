@@ -199,7 +199,8 @@ public class IedParserNew {
 			pinRef += (doName.startsWith("AnIn") ? "$mag$f" : "$stVal");
 			pinAddr += (doName.startsWith("AnIn") ? ".mag.f" : ".stVal");
 		}
-		Rule type = F1011_NO.getType("", lnName, doName, doDesc, fc);
+//		Rule type = F1011_NO.getType("", lnName, doName, doDesc, fc);
+		Rule type = F1011_NO.OTHERS;
 		Tb1062PinEntity pin = ParserUtil.createPin(ied, pinRef, doDesc, type.getId(), 0);
 		context.cachePin(iedName + pinAddr, pin);
 		pins.add(pin);
@@ -331,7 +332,7 @@ public class IedParserNew {
 		String datSet = elDat.attributeValue("name");
 		List<Element> fcdaEls = elDat.elements("FCDA");
 		List<Tb1061PoutEntity> pouts = new ArrayList<>();
-		int i=0;
+		int i = 0;
 		for (Element fcdaEl : fcdaEls) {
 			Tb1061PoutEntity pout = new Tb1061PoutEntity();
 			pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
@@ -351,7 +352,8 @@ public class IedParserNew {
 			if ("q".equals(daName) || "t".equals(daName)) {
 				continue;
 			}
-			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+//			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+			Rule type = F1011_NO.OTHERS;
 			pout.setF1061Type(type.getId());
 			if ("ST".equals(fc)) {
 				Tb1016StatedataEntity statedata = addStatedata(ref, fcdaDesc, type.getId());
@@ -410,7 +412,8 @@ public class IedParserNew {
 			String fc = fcdaEl.attributeValue("fc");
 			String lnName = fcdaEl.attributeValue("lnClass");
 			String doName = fcdaEl.attributeValue("doName");
-			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+//			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+			Rule type = F1011_NO.OTHERS;
 			mmsFcda.setF1058Type(type.getId());
 			if ("ST".equals(fc)) {
 				mmsFcda.setF1058DataType(DBConstants.DATA_ST);

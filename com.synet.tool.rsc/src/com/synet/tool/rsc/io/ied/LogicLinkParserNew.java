@@ -14,7 +14,6 @@ import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
@@ -97,7 +96,8 @@ public class LogicLinkParserNew {
 							String fc = SclUtil.getFC(outRef);
 //							String lnName = SclUtil.getLnName(intAddr);
 							String doName = SclUtil.getDoName(intAddr);
-							Rule type = F1011_NO.getType("", lnName, doName, inDesc, fc);
+//							Rule type = F1011_NO.getType("", lnName, doName, inDesc, fc);
+							Rule type = F1011_NO.OTHERS;
 							intAddr = SclUtil.getFcdaRef(intAddr, fc);
 							pin = ParserUtil.createPin(resvIed, intAddr, inDesc, type.getId(), 1);
 							beanDao.insert(pin);
