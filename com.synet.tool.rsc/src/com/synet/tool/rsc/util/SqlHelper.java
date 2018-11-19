@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.hibernate.Session;
 
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.log.SCTLogger;
@@ -25,6 +26,9 @@ import com.shrcn.found.file.util.FileManager;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.das.ProjectManager;
+import com.synet.tool.rsc.das.RscDbManagerImpl;
+import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.jdbc.ConnParam;
 
 public class SqlHelper {
@@ -184,5 +188,10 @@ public class SqlHelper {
         return result;
     }
 
+    public static void runScript(InputStream is) {
+    	Session _session = SessionRsc.getInstance().get();
+		Connection conn = _session.connection();
+		RscDbManagerImpl.getInstance().runScript(is, conn);
+    }
 
 }
