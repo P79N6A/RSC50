@@ -120,8 +120,18 @@ public class ImportFibreNewListProcessor {
 //		int f1048Direction = portEntityB.getF1048Direction();
 //		return (DBConstants.DIRECTION_RX == f1048Direction 
 //				|| DBConstants.DIRECTION_RT == f1048Direction);
-		Integer f1046Type = portEntityB.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Type();
-		return !EnumIedType.GAT_DEVICE.include(f1046Type);
+		return isDevicePort(portEntityB);
+	}
+	
+	private boolean isDevicePort(Tb1048PortEntity portEntity) {
+		return (portEntity != null) && !EnumIedType.GAT_DEVICE.include(
+				portEntity.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Type());
+	}
+	
+	private boolean isStartConn(IM111FibreListEntity entryOut) {
+		String portA = entryOut.getDevNameA() + "," + entryOut.getBoardCodeA() + "," + entryOut.getPortCodeA();
+		Tb1048PortEntity portEntityA = portAMap.get(portA);
+		return isDevicePort(portEntityA);
 	}
 	
 	private void analysisPhyconns() {
@@ -166,9 +176,10 @@ public class ImportFibreNewListProcessor {
 					phyCores.clear();
 				} else {
 					String portA = entryFirst.getDevNameA() + "," + entryFirst.getBoardCodeA() + "," + entryFirst.getPortCodeA();
+					String portB = entryFirst.getDevNameB() + "," + entryFirst.getBoardCodeB() + "," + entryFirst.getPortCodeB();
 					String msg = "未找到接收端口，无法创建物理回路。";
 					SCTLogger.error(msg);
-					pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "装置检查", portA, msg));
+					pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "创建回路", portA + " -> " + portB, msg));
 				}
 			} else {
 				System.out.println("分析完毕！");
@@ -211,12 +222,7 @@ public class ImportFibreNewListProcessor {
 	private IM111FibreListEntity findfNextFibreOut(IM111FibreListEntity entryOut) {
 		if (entryOut == null) {
 			for (IM111FibreListEntity entity : fibreListEntitieList) {
-				String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
-				Tb1048PortEntity portEntityA = portAMap.get(portA);
-				int f1048Direction = portEntityA.getF1048Direction();
-				if ((DBConstants.DIRECTION_TX == f1048Direction 
-						|| DBConstants.DIRECTION_RT == f1048Direction)
-						&& !entity.isUsed()) {
+				if (isStartConn(entity) && !entity.isUsed()) {
 					entryOut = entity;
 					entryOut.setUsed(true);
 					return entryOut;
@@ -441,9 +447,9 @@ public class ImportFibreNewListProcessor {
 			coreMap.put(portA + "@" + portB, coreEntity);
 			coreEntitieList.add(coreEntity);
 		} else {
-			String msg = "端口[" + portA + "]和[" + portB + "]之间无芯线连接。";
-			SCTLogger.error(msg);
-			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", devNameA + " -> " + devNameB, msg));
+//			String msg = "端口[" + portA + "]和[" + portB + "]之间无芯线连接。";
+//			SCTLogger.error(msg);
+//			pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
 		}
 		
 	}
