@@ -18,6 +18,7 @@ import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
 import com.shrcn.found.file.util.FileManipulate;
+import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
@@ -171,7 +172,7 @@ public class SCDImporterNew implements IImporter {
 					mmsServer.setTb1046IedByF1046Code(ied);
 					mmsServer.setF1070IpA(netConfig.getIpA());
 					mmsServer.setF1070IpB(netConfig.getIpB());
-					String vtcrc = iedNd.attributeValue("crc");
+					String vtcrc = DOM4JNodeHelper.getNodeValueByXPath(iedNd, "./Private[@type='IED virtual terminal conection CRC']");
 					mmsServer.setF1070IedCrc(vtcrc);
 					mmsServer.setF1070CrcPath("LD0/LPHD$SP$IEDPinCrc$setVal");
 					beanDao.insert(mmsServer);
