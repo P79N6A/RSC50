@@ -28,6 +28,7 @@ import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
 import com.synet.tool.rsc.service.CableEntityService;
 import com.synet.tool.rsc.service.CoreEntityService;
+import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
@@ -113,32 +114,125 @@ public class ImportFibreNewListProcessor {
 		monitor.done();
 	}
 	
+	private boolean isEndConn(IM111FibreListEntity entryOut) {
+		String portB = entryOut.getDevNameB() + "," + entryOut.getBoardCodeB() + "," + entryOut.getPortCodeB();
+		Tb1048PortEntity portEntityB = portBMap.get(portB);
+//		int f1048Direction = portEntityB.getF1048Direction();
+//		return (DBConstants.DIRECTION_RX == f1048Direction 
+//				|| DBConstants.DIRECTION_RT == f1048Direction);
+		Integer f1046Type = portEntityB.getTb1047BoardByF1047Code().getTb1046IedByF1046Code().getF1046Type();
+		return !EnumIedType.GAT_DEVICE.include(f1046Type);
+	}
+	
 	private void analysisPhyconns() {
+		for (IM111FibreListEntity entity : fibreListEntitieList) {
+			entity.setUsed(false);
+		}
+		boolean notUsed = true;
 		List<Tb1052CoreEntity> phyCores = new ArrayList<>();
-		for (int i = 0; i<fibreListEntitieList.size(); i++) {
-			IM111FibreListEntity entity = fibreListEntitieList.get(i);
-			String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
-			String portB = entity.getDevNameB() + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
-			String coreName = portA + "@" + portB;
-			if (!coreMap.containsKey(coreName)) {
-				continue;
-			}
-			phyCores.add(coreMap.get(coreName));
-			coreMap.remove(coreName);
-			portAMap.remove(portA);
-			if (portAMap.containsKey(portB)) {
-				continue;
-			} else {
-				Tb1053PhysconnEntity phyconn = null;
-				Tb1052CoreEntity firstCore = phyCores.get(0);
-				Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
-				phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
-				for (Tb1052CoreEntity core : phyCores) {
-					core.setTb1053ByF1053Code(phyconn);
+		while(fibreListEntitieList.size()>0 && notUsed) {
+			List<IM111FibreListEntity> phyConnList = new ArrayList<>();
+			IM111FibreListEntity entryOut = null;
+			do {
+				entryOut = findfNextFibreOut(entryOut);
+				if (entryOut != null) {
+					phyConnList.add(entryOut);
+					if (isEndConn(entryOut)) {
+						break;
+					}
 				}
-				phyCores.clear();
+			} while (entryOut != null);
+			int size = phyConnList.size();
+			if (size > 0) {
+				IM111FibreListEntity entryFirst = phyConnList.get(0);
+				IM111FibreListEntity entryLast = phyConnList.get(size - 1);
+				if (isEndConn(entryLast)) {
+					for (IM111FibreListEntity entity : phyConnList) {
+						String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+						String portB = entity.getDevNameB() + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
+						String coreName = portA + "@" + portB;
+						if (!coreMap.containsKey(coreName)) {
+							continue;
+						}
+						phyCores.add(coreMap.get(coreName));
+					}
+					Tb1053PhysconnEntity phyconn = null;
+					Tb1052CoreEntity firstCore = phyCores.get(0);
+					Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
+					phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
+					for (Tb1052CoreEntity core : phyCores) {
+						core.setTb1053ByF1053Code(phyconn);
+					}
+					phyCores.clear();
+				} else {
+					String portA = entryFirst.getDevNameA() + "," + entryFirst.getBoardCodeA() + "," + entryFirst.getPortCodeA();
+					String msg = "未找到接收端口，无法创建物理回路。";
+					SCTLogger.error(msg);
+					pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "装置检查", portA, msg));
+				}
+			} else {
+				System.out.println("分析完毕！");
+				break;
+			}
+			notUsed = false;
+			for (IM111FibreListEntity entity : fibreListEntitieList) {
+				if (!entity.isUsed()) {
+					notUsed = true;
+					break;
+				}
 			}
 		}
+//		for (int i = 0; i<fibreListEntitieList.size(); i++) {
+//			IM111FibreListEntity entity = fibreListEntitieList.get(i);
+//			String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+//			String portB = entity.getDevNameB() + "," + entity.getBoardCodeB() + "," + entity.getPortCodeB();
+//			String coreName = portA + "@" + portB;
+//			if (!coreMap.containsKey(coreName)) {
+//				continue;
+//			}
+//			phyCores.add(coreMap.get(coreName));
+//			coreMap.remove(coreName);
+//			portAMap.remove(portA);
+//			if (portAMap.containsKey(portB)) {
+//				continue;
+//			} else {
+//				Tb1053PhysconnEntity phyconn = null;
+//				Tb1052CoreEntity firstCore = phyCores.get(0);
+//				Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
+//				phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
+//				for (Tb1052CoreEntity core : phyCores) {
+//					core.setTb1053ByF1053Code(phyconn);
+//				}
+//				phyCores.clear();
+//			}
+//		}
+	}
+	
+	private IM111FibreListEntity findfNextFibreOut(IM111FibreListEntity entryOut) {
+		if (entryOut == null) {
+			for (IM111FibreListEntity entity : fibreListEntitieList) {
+				String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+				Tb1048PortEntity portEntityA = portAMap.get(portA);
+				int f1048Direction = portEntityA.getF1048Direction();
+				if ((DBConstants.DIRECTION_TX == f1048Direction 
+						|| DBConstants.DIRECTION_RT == f1048Direction)
+						&& !entity.isUsed()) {
+					entryOut = entity;
+					entryOut.setUsed(true);
+					return entryOut;
+				}
+			}
+		} else {
+			String portB = entryOut.getDevNameB() + "," + entryOut.getBoardCodeB() + "," + entryOut.getPortCodeB();
+			for (IM111FibreListEntity entity : fibreListEntitieList) {
+				String portA = entity.getDevNameA() + "," + entity.getBoardCodeA() + "," + entity.getPortCodeA();
+				if (portB.equals(portA) && !entity.isUsed()) {
+					entity.setUsed(true);
+					return entity;
+				}
+			}
+		}
+		return null;
 	}
 	
 	//处理物理回路
@@ -410,6 +504,21 @@ public class ImportFibreNewListProcessor {
 				SCTLogger.error(msg);
 				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
 				return null;
+			}
+			if ("WX".equals(entity.getConnType())) { // 同屏柜
+				if (!cableCubicleA.equals(cableCubicleB)) {
+					String msg = "芯线连接类型为WX，A、B端屏柜须相同，A为[" + cableCubicleA + "]，B为[" + cableCubicleB + "]。";
+					SCTLogger.error(msg);
+					pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
+					return null;
+				}
+			} else if ("WL".equals(entity.getConnType()) || "GL".equals(entity.getConnType())) { // 不同屏柜
+				if (cableCubicleA.equals(cableCubicleB)) {
+					String msg = "芯线连接类型为GL/WL，A、B端屏柜须不同，A、B同为[" + cableCubicleA + "]。";
+					SCTLogger.error(msg);
+					pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "导入芯线", portA + " -> " + portB, msg));
+					return null;
+				}
 			}
 			int num = (oldCableEntity.getF1051CoreNum() == null) ? 
 					0 : oldCableEntity.getF1051CoreNum();
