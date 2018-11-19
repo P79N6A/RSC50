@@ -28,12 +28,9 @@ import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM111FibreListEntity;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
-import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
-import com.synet.tool.rsc.processor.ImportFibreListProcessor3;
 import com.synet.tool.rsc.processor.ImportFibreNewListProcessor;
 import com.synet.tool.rsc.processor.LogcalAndPhyconnProcessor;
-import com.synet.tool.rsc.service.CubicleEntityService;
 import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.SubstationService;
@@ -47,7 +44,6 @@ import com.synet.tool.rsc.ui.TableFactory;
 public class ImpFibreNewListEditor extends ExcelImportEditor {
 	
 	private SubstationService substationService;
-	private CubicleEntityService cubicleService;
 	private PortEntityService portEntityService;
 	private Button btAnalysis;
 	
@@ -60,7 +56,6 @@ public class ImpFibreNewListEditor extends ExcelImportEditor {
 		improtInfoService = new ImprotInfoService();
 		map = new HashMap<String, IM100FileInfoEntity>();
 		substationService = new SubstationService();
-		cubicleService = new CubicleEntityService();
 		portEntityService = new PortEntityService();
 		super.init();
 	}
@@ -190,10 +185,13 @@ public class ImpFibreNewListEditor extends ExcelImportEditor {
 		String desc = problem.getDesc();
 		if (ref.indexOf("->") > 0) {
 			String[] temp = ref.split("->");
-			String iedA = temp[0].trim();
-			String iedB = temp[1].trim();
+			String portA = temp[0].trim();
+			String portB = temp[1].trim();
 			for (IM111FibreListEntity entity : list) {
-				if (iedA.equals(entity.getDevNameA()) && iedB.equals(entity.getDevNameB())) {
+				String[] portAInfo = portA.split(",");
+				String[] portBInfo = portB.split(",");
+				if (portAInfo[0].equals(entity.getDevNameA()) && portAInfo[1].equals(entity.getBoardCodeA()) && portAInfo[2].equals(entity.getPortCodeA()) 
+						&& portBInfo[0].equals(entity.getDevNameB()) && portBInfo[1].equals(entity.getBoardCodeB()) && portBInfo[2].equals(entity.getPortCodeB())) {
 					return entity;
 				}
 			}
