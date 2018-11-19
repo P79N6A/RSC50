@@ -7,7 +7,8 @@ import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.util.RuleType;
 
 public class AnalogdataService extends BaseService {
@@ -48,6 +49,28 @@ public class AnalogdataService extends BaseService {
 		}
 		return result;
 	}
+
 	
+	/**
+	 * 更新模拟量父对象
+	 * @param iedEntity
+	 * @param addRef
+	 * @param parentCode
+	 */
+	public void updateAnologParentCode(Tb1046IedEntity iedEntity, String addRef, String parentCode) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		params.put("addRef", addRef);
+		params.put("parentCode", parentCode);
+		String hql = "update " + Tb1006AnalogdataEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1006AddRef=:addRef";
+		hqlDao.updateByHql(hql, params);
+		hql = "update " + Tb1058MmsfcdaEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1058RefAddr=:addRef";
+		hqlDao.updateByHql(hql, params);
+		hql = "update " + Tb1061PoutEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1061RefAddr=:addRef";
+		hqlDao.updateByHql(hql, params);
+	}
 
 }
