@@ -68,6 +68,28 @@ public class StatedataService extends BaseService {
 	}
 	
 	/**
+	 * 更新状态点父对象
+	 * @param iedEntity
+	 * @param addRef
+	 * @param parentCode
+	 */
+	public void updateStateParentCode(Tb1046IedEntity iedEntity, String addRef, String parentCode) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		params.put("addRef", addRef);
+		params.put("parentCode", parentCode);
+		String hql = "update " + Tb1016StatedataEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1016AddRef=:addRef";
+		hqlDao.updateByHql(hql, params);
+		hql = "update " + Tb1058MmsfcdaEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1058RefAddr=:addRef";
+		hqlDao.updateByHql(hql, params);
+		hql = "update " + Tb1061PoutEntity.class.getName() + " set parentCode=:parentCode " +
+				"where tb1046IedByF1046Code=:ied and f1061RefAddr=:addRef";
+		hqlDao.updateByHql(hql, params);
+	}
+	
+	/**
 	 * getByCode
 	 * @param code
 	 * @return
@@ -79,7 +101,6 @@ public class StatedataService extends BaseService {
 			return listByCriteria.get(0);
 		}
 		return null;
-
 	}
 
 	/**
