@@ -425,12 +425,8 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								// 板卡端口
-								initTbDataByTbName(RSCConstants.BOARD_PORT, true);
-								// 虚端子
-								initTbDataByTbName(RSCConstants.CIRCUI_BOARD, true);
-								// 装置告警
-								initTbDataByTbName(RSCConstants.DEV_WARNING, true);
+								clearTables();
+								initTbDataByTbName(tabFolder.getSelection().getText(), true);
 							}
 						});
 					}
