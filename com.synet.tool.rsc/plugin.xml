@@ -127,7 +127,7 @@
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.ExportLinkPhyConnsAction"
 	              text="链路与物理回路依赖关系表"
 	              icon="editExport.gif"
-	              style="3"/>
+	              style="1"/>
        </menu>
        <menu id="menu.app" text="应用">
        		<action
