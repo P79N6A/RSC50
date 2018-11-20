@@ -1,13 +1,12 @@
 package com.synet.tool.rsc.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1056SvcbEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.RuleType;
@@ -61,18 +60,8 @@ public class PoutEntityService extends BaseService{
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Tb1061PoutEntity> getPoutEntityByProperties(Tb1046IedEntity iedEntity, Tb1056SvcbEntity svcbEntity) {
-		Map<String, Object> params = new HashMap<>();
-		if(iedEntity !=null) {
-			params.put("tb1046IedByF1046Code", iedEntity);
-		}
-		if(svcbEntity != null) {
-			params.put("tb1056SvcbByCbCode", svcbEntity);
-		}
-		if(params.isEmpty()) {
-			return new ArrayList<>();
-		}
-		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, params);
+	public List<Tb1061PoutEntity> getPoutEntityByCb(BaseCbEntity cbEntity) {
+		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, "cbEntity", cbEntity);
 	}
 	
 	public Tb1061PoutEntity getPoutEntity(String devName, String f1061RefAddr) {

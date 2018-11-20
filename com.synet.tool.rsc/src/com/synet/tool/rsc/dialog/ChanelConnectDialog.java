@@ -26,6 +26,7 @@ import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.model.Tb1074SVCTVTRelationEntity;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.service.SVCTVTRelationEntityService;
 import com.synet.tool.rsc.service.SvcbEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
@@ -49,11 +50,12 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private Button chBay;
 	private int preComboDevSelIdx = 0;
 	private List<Tb1046IedEntity> iedEntities;
-	private SvcbEntityService svcbService;
 	private List<Tb1056SvcbEntity> svcbEntities;
 	private Composite comRight;
-	private IedEntityService iedService;
 	private Button btnDel;
+	private SvcbEntityService svcbService;
+	private IedEntityService iedService;
+	private PoutEntityService poutEntityService;
 	private List<Tb1061PoutEntity> selectedPoutList;
 
 	public ChanelConnectDialog(Shell parentShell) {
@@ -114,6 +116,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		selectedPoutList = new ArrayList<>();
 		iedService = new IedEntityService();
 		svcbService = new SvcbEntityService();
+		poutEntityService = new PoutEntityService();
 		
 		for (Tb1074SVCTVTRelationEntity relation : curSel.getSvRelations()) {
 			selectedPoutList.add(relation.getF1061Code());
@@ -166,7 +169,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		svcbEntities = svcbService.getSvcbEntityByIedEntity(iedEntity);
 		List<Tb1061PoutEntity> allPouts = new ArrayList<>();
 		for (Tb1056SvcbEntity tb1056SvcbEntity : svcbEntities) {
-			List<Tb1061PoutEntity> pouts = tb1056SvcbEntity.getTb1061PoutsByCbCode();
+			List<Tb1061PoutEntity> pouts = poutEntityService.getPoutEntityByCb(tb1056SvcbEntity);
 			for (Tb1061PoutEntity pout : pouts) {
 				List<Tb1061PoutEntity> leftTableData = (List<Tb1061PoutEntity>) tableChanel.getInput();
 				if(leftTableData.contains(pout)) {

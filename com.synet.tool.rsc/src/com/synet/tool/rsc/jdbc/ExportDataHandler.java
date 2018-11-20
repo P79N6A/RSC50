@@ -57,11 +57,11 @@ import com.synet.tool.rsc.util.SqlHelper;
 public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	private static final int[] tb_indice = new int[] {
-//		// Substation
+		// Substation
 		TB1041_INDEX,
 		TB1042_INDEX,
-//		
-//		// IED
+		
+		// IED
 		TB1046_INDEX,
 		TB1070_INDEX,//TB1070_MMSServer
 		TB1054_INDEX,
@@ -88,7 +88,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1045_INDEX,
 		TB1067_INDEX,
 		TB1066_INDEX,//TB1066_ProtMMXU
-//		TB1068_INDEX,//TB1068_ProtCtrl
+//		TB1068_INDEX,//TB1068_ProtCtrl (no use)
 		TB1069_INDEX,//TB1069_RCDChannelA
 		TB1072_INDEX,//TB1072_RCDChannelD
 		
@@ -110,7 +110,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 		TB1092_INDEX,
 		TB1093_INDEX,
 
-//		TB1022_INDEX,
+//		TB1022_INDEX, //(no use)
 		TB1071_INDEX, //TB1071_DAU
 		TB1047_INDEX,
 		TB1048_INDEX
@@ -143,7 +143,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 				}
 				tbIndex = tb_indice[idx];
 				monitor.setTaskName("正在导出表" + tbIndex);
-				exprotTableDate(tbIndex, monitor);
+				exprotTableData(tbIndex, monitor);
 				monitor.worked(1);
 			}
 			long time = (System.currentTimeMillis() - start) / 1000;
@@ -1095,7 +1095,7 @@ public class ExportDataHandler extends AbstractExportDataHandler {
 	
 	@Override
 	protected String getTb1090Sql() {
-		return "INSERT INTO TB1090_LINEPROTFIBER(F1090_CODE,F1046_CODE,F1090_DESC,F1090_FIBERNO.F1090_PORTNO)" +
+		return "INSERT INTO TB1090_LINEPROTFIBER(F1090_CODE,F1046_CODE,F1090_DESC,F1090_FIBERNO,F1090_PORTNO)" +
 				" VALUES (?,?,?,?,?)";
 	}
 	

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
@@ -129,7 +131,7 @@ public abstract class AbstractExportDataHandler {
 		preState.executeUpdate();
 	}
 	
-	protected void exprotTableDate(int tbIndex, IProgressMonitor monitor) throws SQLException {
+	protected void exprotTableData(int tbIndex, IProgressMonitor monitor) throws SQLException {
 		try {//目前数据异常任然继续处理后面的数据
 			Long startTime = System.currentTimeMillis();
 			Class<?> clazz = getClazz(tbIndex);
@@ -165,7 +167,8 @@ public abstract class AbstractExportDataHandler {
 				}
 				PreparedStatement preState = connect.prepareStatement(sql);
 				for (int p = 0; p < ptotal; p++) {
-					List<?> list = hqlDao.getListByHqlAndPage(hql, null, p+1, psize);
+//					List<?> list = hqlDao.getListByHqlAndPage(hql, null, p+1, psize);
+					List<?> list = query(clazz, tableName, p * psize, psize);
 					for (Object obj : list) {
 						setValue(preState, tbIndex, obj);
 						preState.addBatch();
@@ -180,6 +183,16 @@ public abstract class AbstractExportDataHandler {
 			e.printStackTrace();
 			console.append(tbIndex + "数据导出异常：" + e.getMessage());
 		}
+	}
+	
+	public List<?> query(Class<?> clazz, String tableName, int rowStart, int numberOfResultsToShow) {
+		Session _session = SessionRsc.getInstance().get();
+		String sql = "select * from " + tableName + " re ";
+		 Query query  = _session.createSQLQuery(sql)
+				 .addEntity("re", clazz); 
+		 query.setFirstResult(rowStart);
+		 query.setMaxResults(numberOfResultsToShow);
+     return  query.list(); 
 	}
 	
 	protected Class<?> getClazz(int tbIndex) {

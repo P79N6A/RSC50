@@ -71,7 +71,7 @@ public class RuleEntityService {
 		List<Tb1054RcbEntity> rcbs = (List<Tb1054RcbEntity>) beanDao.getListByCriteria(Tb1054RcbEntity.class, "tb1046IedByF1046Code", iedEntity);
 		for (Tb1054RcbEntity rcb : rcbs) {
 			String dataset = rcb.getF1054Dataset();
-			List<Tb1058MmsfcdaEntity> mmsFcdas = rcb.getTb1058MmsfcdasByF1054Code();
+			List<Tb1058MmsfcdaEntity> mmsFcdas = (List<Tb1058MmsfcdaEntity>) beanDao.getListByCriteria(Tb1058MmsfcdaEntity.class, "tb1054RcbByF1054Code", rcb);
 			for (Tb1058MmsfcdaEntity mmsFcda : mmsFcdas) {
 				String dataCode = mmsFcda.getDataCode();
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
@@ -95,7 +95,7 @@ public class RuleEntityService {
 		List<Tb1055GcbEntity> cbs = (List<Tb1055GcbEntity>) beanDao.getListByCriteria(Tb1055GcbEntity.class, "tb1046IedByF1046Code", iedEntity);
 		for (Tb1055GcbEntity cb : cbs) {
 			String dataset = cb.getDataset();
-			List<Tb1061PoutEntity> fcdas = cb.getTb1061PoutsByCbCode();
+			List<Tb1061PoutEntity> fcdas = poutEntityService.getPoutEntityByCb(cb);
 			applyRulesToPouts(dataset, fcdas);
 		}
 	}
@@ -128,7 +128,7 @@ public class RuleEntityService {
 		List<Tb1056SvcbEntity> cbs = (List<Tb1056SvcbEntity>) beanDao.getListByCriteria(Tb1056SvcbEntity.class, "tb1046IedByF1046Code", iedEntity);
 		for (Tb1056SvcbEntity cb : cbs) {
 			String dataset = cb.getDataset();
-			List<Tb1061PoutEntity> fcdas = cb.getTb1061PoutsByCbCode();
+			List<Tb1061PoutEntity> fcdas = poutEntityService.getPoutEntityByCb(cb);
 			applyRulesToPouts(dataset, fcdas);
 		}
 	}

@@ -737,7 +737,7 @@ public class ProtectIEDlEditor extends BaseConfigEditor {
 		case RSCConstants.CIRCUI_BOARD:
 			if(reload || !DataUtils.listNotNull(circuitEntities)) {
 				//开出虚端子
-				poutEntities = poutEntityService.getPoutEntityByProperties(iedEntity, null);
+				poutEntities = poutEntityService.getByIed(iedEntity);
 				//开入虚端子
 				pinEntities = pinEntityService.getByIed(iedEntity);
 				//二次虚回路

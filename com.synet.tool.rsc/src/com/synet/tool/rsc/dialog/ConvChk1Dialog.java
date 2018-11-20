@@ -47,7 +47,7 @@ public class ConvChk1Dialog extends KTableEditorDialog {
 	private void initData() {
 		Tb1046IedEntity iedRecv = circuit.getTb1046IedByF1046CodeIedRecv();
 		service = new PoutEntityService();
-		poutEntitys = service.getPoutEntityByProperties(iedRecv, null);
+		poutEntitys = service.getByIed(iedRecv);
 		int size = poutEntitys.size();
 		items = new String[size];
 		for (int i = 0; i < size; i++) {

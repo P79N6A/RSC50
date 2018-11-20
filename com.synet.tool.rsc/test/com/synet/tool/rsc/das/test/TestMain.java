@@ -34,7 +34,7 @@ public class TestMain {
 	
 	@Before
 	public void before() {
-		String dbName = "p97";
+		String dbName = "lqbgcpz111802";
 		ProjectManager instance = ProjectManager.getInstance();
 //		instance.initDb(dbName);
 		instance.openDb(dbName);
