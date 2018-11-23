@@ -146,7 +146,7 @@ public class SelectEquiDialog  extends WrappedDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(270, 150);
+		return new Point(320, 180);
 	}
 	
 	@Override
