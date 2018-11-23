@@ -67,7 +67,6 @@ public class EquipmentEntityService extends BaseService{
 		types.add(EnumEquipmentType.VTR.getCode());
 		List<Tb1043EquipmentEntity> result = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : equipmentEntitys) {
-			System.out.println(tb1043EquipmentEntity.getF1043Type());
 			if(types.contains(tb1043EquipmentEntity.getF1043Type())) {
 				result.add(tb1043EquipmentEntity);
 			}
