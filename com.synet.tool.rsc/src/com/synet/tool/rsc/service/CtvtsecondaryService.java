@@ -14,6 +14,8 @@ import com.synet.tool.rsc.util.DataUtils;
 
 public class CtvtsecondaryService extends BaseService{
 	
+	private SVCTVTRelationEntityService relationEntityService = new SVCTVTRelationEntityService();
+	
 	/**
 	 * 根据互感器查找互感器次级
 	 * @return
@@ -24,9 +26,11 @@ public class CtvtsecondaryService extends BaseService{
 		}
 		List<Tb1067CtvtsecondaryEntity> res = new ArrayList<>();
 		for (Tb1043EquipmentEntity tb1043EquipmentEntity : equipmentEntities) {
-//			List<?> its = beanDao.getListByCriteria(Tb1067CtvtsecondaryEntity.class, "tb1043EquipmentByF1043Code", tb1043EquipmentEntity);
-//			List<?> its = beanDao.getAll(Tb1067CtvtsecondaryEntity.class);
-			res.addAll(tb1043EquipmentEntity.getTb1067SecondarysByF1043Code());
+			Set<Tb1067CtvtsecondaryEntity> tb1067SecondarysByF1043Code = tb1043EquipmentEntity.getTb1067SecondarysByF1043Code();
+			res.addAll(tb1067SecondarysByF1043Code);
+			for (Tb1067CtvtsecondaryEntity  tb1067Secondary : tb1067SecondarysByF1043Code) {
+				tb1067Secondary.setSvRelations(relationEntityService.queryRelationsBySecd(tb1067Secondary));
+			}
 		}
 		return res;
 	}

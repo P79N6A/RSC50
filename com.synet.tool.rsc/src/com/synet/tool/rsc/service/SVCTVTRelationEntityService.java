@@ -2,9 +2,7 @@ package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
@@ -26,6 +24,11 @@ public class SVCTVTRelationEntityService extends BaseService{
 		Object object = beanDao.getObject(Tb1074SVCTVTRelationEntity.class, params);
 		return object == null ? false : true;
 	}
+	
+	public List<Tb1074SVCTVTRelationEntity> queryRelationsBySecd(Tb1067CtvtsecondaryEntity secCtvtsecondaryEntity) {
+		return (List<Tb1074SVCTVTRelationEntity>) 
+				beanDao.getListByCriteria(Tb1074SVCTVTRelationEntity.class, "tb1067CtvtsecondaryByF1067Code", secCtvtsecondaryEntity);
+	}
 
 	public void savePinOuts(Tb1067CtvtsecondaryEntity secCtvtsecondaryEntity, List<Tb1061PoutEntity> poutList) {
 		beanDao.deleteAll(Tb1074SVCTVTRelationEntity.class, "tb1067CtvtsecondaryByF1067Code", secCtvtsecondaryEntity);
@@ -36,7 +39,7 @@ public class SVCTVTRelationEntityService extends BaseService{
 			relations.add(relationEntity);
 		}
 		beanDao.insertBatch(relations);
-		Set<Tb1074SVCTVTRelationEntity> relSet = new HashSet<>();
+		List<Tb1074SVCTVTRelationEntity> relSet = new ArrayList<>();
 		relSet.addAll(relations);
 		secCtvtsecondaryEntity.setSvRelations(relSet);
 	}
