@@ -117,7 +117,7 @@ public class HqlDaoImpl implements HqlDaoService {
 			i = l.intValue();
 		} 
 		finally {
-			service.flush();
+//			service.flush();
 		}
 		return i;
 	}
@@ -136,7 +136,7 @@ public class HqlDaoImpl implements HqlDaoService {
 			return (list != null && list.size() > 0) ? list.get(0) : null;
 		} 
 		finally {
-			service.flush();
+//			service.flush();
 		}
 	}
 	
