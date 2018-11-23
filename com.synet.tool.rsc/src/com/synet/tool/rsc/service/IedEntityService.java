@@ -35,7 +35,6 @@ public class IedEntityService extends BaseService {
 		for (Tb1046IedEntity tb1046IedEntity : iedEntityByTypes) {
 			//匹配对应的间隔
 			String f1042Code = tb1046IedEntity.getTb1042BaysByF1042Code().getF1042Code();
-//			System.out.println(f1042Code);
 			if(f1042Code.equals(bayEntity.getF1042Code())) {
 				result.add(tb1046IedEntity);
 			}
