@@ -66,7 +66,7 @@ public class RcbParser extends IedParserBase<Tb1054RcbEntity> {
 						String fcdaDesc = fcdaDAO.getFCDADesc(iedName, fcdaEl);
 						Tb1058MmsfcdaEntity mmsFcda = new Tb1058MmsfcdaEntity();
 						mmsFcdaList.add(mmsFcda);
-						mmsFcda.setF1058Code(rscp.nextTbCode(DBConstants.PR_RCB));
+						mmsFcda.setF1058Code(rscp.nextTbCode(DBConstants.PR_FCDA));
 						mmsFcda.setTb1046IedByF1046Code(ied);
 						mmsFcda.setTb1054RcbByF1054Code(rcb);
 						mmsFcda.setF1058Index(i);

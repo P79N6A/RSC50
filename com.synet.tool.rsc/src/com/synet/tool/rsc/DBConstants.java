@@ -23,6 +23,7 @@ public interface DBConstants {
 	String PR_SVCB 			= "SVCB";
 	String PR_POUT 			= "POUT";
 	String PR_RCB 			= "RCB";
+	String PR_FCDA 			= "FCDA";
 	String PR_SGCB 			= "SGCB";
 	String PR_SG 			= "SG";
 	String PR_SP 			= "SP";
