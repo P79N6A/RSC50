@@ -39,4 +39,25 @@ public class ProtmmxuService extends BaseService {
 		return (List<Tb1066ProtmmxuEntity>) hqlDao.selectInObjects(Tb1066ProtmmxuEntity.class, "tb1067CtvtsecondaryByF1067Code", ctvtsecondaryEntities);
 	}
 
+	/**
+	 * 查询次级采样值
+	 * @param ctvtsecondaryEntity
+	 * @return
+	 */
+	public List<Tb1006AnalogdataEntity> getAnalogdataByCtvtsecondary(Tb1067CtvtsecondaryEntity ctvtsecondaryEntity) {
+		if(ctvtsecondaryEntity == null) {
+			return new ArrayList<>();
+		}
+		List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities = new ArrayList<>();
+		ctvtsecondaryEntities.add(ctvtsecondaryEntity);
+		List<Tb1066ProtmmxuEntity> protmmxuEntityList = getProtmmxuByCtvtsecondary(ctvtsecondaryEntities);
+		if(!DataUtils.listNotNull(protmmxuEntityList)) {
+			return new ArrayList<>();
+		}
+		List<Tb1006AnalogdataEntity> analogList = new ArrayList<>();
+		for (Tb1066ProtmmxuEntity protmmxuEntity : protmmxuEntityList) {
+			analogList.add(protmmxuEntity.getF1006Code());
+		}
+		return analogList;
+	}
 }
