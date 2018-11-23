@@ -43,20 +43,23 @@ public class ChanelConnectDialog extends WrappedDialog{
 	private DevKTable tableState;
 	private DevKTable tableChanel;
 	private Button btnAdd;
-	private String curEntryName;
-	private String[] comboDevItems;
-	private Tb1067CtvtsecondaryEntity curSel;
 	private Combo comboDevice;
 	private Button chBay;
-	private int preComboDevSelIdx = 0;
-	private List<Tb1046IedEntity> iedEntities;
-	private List<Tb1056SvcbEntity> svcbEntities;
 	private Composite comRight;
 	private Button btnDel;
+	
 	private SvcbEntityService svcbService;
 	private IedEntityService iedService;
 	private PoutEntityService poutEntityService;
+	private SVCTVTRelationEntityService relationService;
+	
+	private int preComboDevSelIdx = 0;
+	private String curEntryName;
+	private String[] comboDevItems;
+	private Tb1067CtvtsecondaryEntity curSel;
 	private List<Tb1061PoutEntity> selectedPoutList;
+	private List<Tb1046IedEntity> iedEntities;
+	private List<Tb1056SvcbEntity> svcbEntities;
 
 	public ChanelConnectDialog(Shell parentShell) {
 		super(parentShell);
@@ -67,9 +70,7 @@ public class ChanelConnectDialog extends WrappedDialog{
 		super(parentShell);
 		this.curEntryName = curEntryName;
 		this.curSel = ctvtsecondaryEntity;
-		
 	}
-	
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -117,8 +118,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 		iedService = new IedEntityService();
 		svcbService = new SvcbEntityService();
 		poutEntityService = new PoutEntityService();
-		
-		for (Tb1074SVCTVTRelationEntity relation : curSel.getSvRelations()) {
+		relationService = new SVCTVTRelationEntityService();
+		List<Tb1074SVCTVTRelationEntity> relations = relationService.queryRelationsBySecd(curSel);
+		for (Tb1074SVCTVTRelationEntity relation : relations) {
 			selectedPoutList.add(relation.getF1061Code());
 		}
 		tableChanel.setInput(selectedPoutList);
@@ -268,10 +270,9 @@ public class ChanelConnectDialog extends WrappedDialog{
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if(buttonId == IDialogConstants.OK_ID){
-			SVCTVTRelationEntityService service = new SVCTVTRelationEntityService();
+		if(buttonId == IDialogConstants.OK_ID) {
 			List<Tb1061PoutEntity> input = (List<Tb1061PoutEntity>) tableChanel.getInput();
-			service.savePinOuts(curSel, input);
+			relationService.savePinOuts(curSel, input);
 		}
 		super.buttonPressed(buttonId);
 	}
