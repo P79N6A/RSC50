@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.RSCConstants;
@@ -50,47 +51,47 @@ import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DataUtils;
 import com.synet.tool.rsc.util.F1011_NO;
 
-import de.kupzog.ktable.KTableCellSelectionListener;
-
 /**
  * 一次拓扑模型树菜单编辑器。
  * @author 陈春(mailto:cchun@shrcn.com)
  * @version 1.0, 2013-4-3
  */
 public class PrimaryBayEditor extends BaseConfigEditor {
-	
+
+	private Combo comboDevice;
+	private Button btnSearch;
 	private Button btnChanelConnect;
 	private Button btnSampleAdd;
-	private String curEntryName;
 	private Button btnAddSwitch;
 	private Button btnDelSwitch;
-	private String[] comboItems;
-	private Button btnSearch;
-	private DevKTable tableCtvtsecondary;
-	private Tb1042BayEntity bayEntity;
+	private Button btnSampleDel;
+	private Button btnAddTsf;
+	private Button btnDelTsf;	
+	private Text textDesc;
+	private CTabFolder tabFolder;
 	private DevKTable tableProtectSample;
 	private DevKTable tableSwitchStatus;
 	private DevKTable tableSluiceStatus;
-	private List<Tb1046IedEntity> iedEntities;
+	private DevKTable tableCtvtsecondary;
+
 	private PoutEntityService poutEntityService;
-	private Combo comboDevice;
-	private int preComboSelIdx = 0;
 	private StatedataService statedataService;
-	private List<Tb1016StatedataEntity> tableSluiceStatuData;
-	private Text textDesc;
 	private IedEntityService iedService;
-	private Button btnAddTsf;
-	private Button btnDelTsf;
-	private CTabFolder tabFolder;
 	private CtvtsecondaryService ctvtsecondaryService;
 	private EquipmentEntityService equipmentEntityService;
 	private ProtmmxuService protmmxuService;
+	
+	private String[] comboItems;
+	private int preComboSelIdx = 0;
+	private Tb1042BayEntity bayEntity;
+	private String curEntryName;
+	private List<Tb1046IedEntity> iedEntities;
+	private List<Tb1016StatedataEntity> tableSluiceStatuData;
 	private List<Tb1066ProtmmxuEntity> protmmxuEntities;
 	private List<Tb1043EquipmentEntity> statedataEntities;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1043EquipmentEntity> entities;
 	private List<Tb1046IedEntity> comboDvData;
-	private Button btnSampleDel;
 	
 	public PrimaryBayEditor(Composite container, IEditorInput input) {
 		super(container, input);
@@ -312,7 +313,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					}
 				} else if(object == btnSampleAdd) {
 					SampleConnectDialog sampleDialog = new SampleConnectDialog(SwtUtil.getDefaultShell(),
-							ctvtsecondaryEntities, curEntryName, iedEntities);
+							bayEntity, ctvtsecondaryEntities);
 					if (SampleConnectDialog.OK == sampleDialog.open()) {
 						tableProtectSample.addRows(sampleDialog.getProtmmxuEntityList(), 0);
 						tableProtectSample.refresh();
@@ -381,11 +382,14 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 					tableCtvtsecondary.addRow(defaultRow);
 					tableCtvtsecondary.refresh();
 				} else if(object == btnDelTsf) {
-					ctvtsecondaryService.delCtvtsecondary((Tb1067CtvtsecondaryEntity) 
-							tableCtvtsecondary.getSelection());
+					if (!DialogHelper.showConfirm("确定删除？", "是", "否")) {
+						return;
+					}
+					for (Object obj : tableCtvtsecondary.getSelections()) {
+						ctvtsecondaryService.delCtvtsecondary((Tb1067CtvtsecondaryEntity) obj);
+					}
 					tableCtvtsecondary.removeSelected();
 					tableCtvtsecondary.refresh();
-					
 				} else if(object == tabFolder) {
 					loadDataByTbItem(tabFolder.getSelectionIndex());
 				}
