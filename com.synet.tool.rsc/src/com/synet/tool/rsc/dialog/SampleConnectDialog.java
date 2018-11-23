@@ -23,12 +23,13 @@ import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1066ProtmmxuEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.service.AnalogdataService;
 import com.synet.tool.rsc.service.EnumIedType;
-import com.synet.tool.rsc.service.MmsfcdaService;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.ProtmmxuService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
@@ -43,36 +44,32 @@ import de.kupzog.ktable.KTableCellSelectionListener;
  */
 public class SampleConnectDialog extends WrappedDialog {
 
-	private String curEntryName;
-	private DevKTable tableProtctSample;
-	private Button btnSearch;
-	private DevKTable tableSample;
-	private String[] comboItems;
 	private Combo comboDevice;
-	private MmsfcdaService mmsfcdaService;
+	private Text textDesc;
+	private Button btFilter;
+	private Button btnSearch;
+	private DevKTable tableProtctSample;
+	private DevKTable tableSample;
+	
+	private ProtmmxuService protmmxuService;
 	private AnalogdataService analogdataService;
+	private IedEntityService iedEntityService;
+	
 	private int preComboDevSel = 0;
+	private String[] comboItems;
+	private Tb1042BayEntity bayEntity;
 	private List<Tb1046IedEntity> iedEntities;
 	private List<Tb1006AnalogdataEntity> analogdataEntities;
-	private Text textDesc;
-//	private Button btFilter;
 	private List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities;
 	private List<Tb1006AnalogdataEntity> selectedAnalog;
-	private ProtmmxuService protmmxuService;
 	private List<Tb1066ProtmmxuEntity> protmmxuEntityList;
 	
-	public SampleConnectDialog(Shell defaultShell, List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities, String curEntryName, 
-			 List<Tb1046IedEntity> bayIeds) {
+	public SampleConnectDialog(Shell defaultShell, Tb1042BayEntity bayEntity, List<Tb1067CtvtsecondaryEntity> ctvtsecondaryEntities) {
 		super(defaultShell);
-		this.curEntryName = curEntryName;
-		iedEntities = new ArrayList<>();
+		this.bayEntity = bayEntity;
 		this.ctvtsecondaryEntities = ctvtsecondaryEntities;
-		for (Tb1046IedEntity bayIed : bayIeds) {
-			if (EnumIedType.PROTECT_DEVICE.include(bayIed.getF1046Type())) {
-				iedEntities.add(bayIed);
-			}
-		}
 	}
+	
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -84,7 +81,7 @@ public class SampleConnectDialog extends WrappedDialog {
 		comLeft.setLayout(SwtUtil.getGridLayout(2));
 		GridData gdlb_2 = new GridData(200,25);
 		gdlb_2.horizontalSpan = 2;
-		String switchLbName = curEntryName + "互感器保护采样值：";
+		String switchLbName = bayEntity.getF1042Name() + "互感器保护采样值：";
 		SwtUtil.createLabel(comLeft, switchLbName, gdlb_2);
 		
 		tableProtctSample = TableFactory.getProtAnalogTable(comLeft);
@@ -99,11 +96,11 @@ public class SampleConnectDialog extends WrappedDialog {
 		
 		textDesc = SwtUtil.createText(comRight, SwtUtil.bt_hd);
 		textDesc.setMessage("描述");		
+		btFilter = SwtUtil.createCheckBox(comRight, "当前间隔", null);
 		btnSearch = SwtUtil.createButton(comRight, new GridData(50, 25), SWT.BUTTON1, RSCConstants.SEARCH);
-//		btFilter = SwtUtil.createCheckBox(comRight, "按类型过滤", null);
 		
 		GridData gdSpan_3 = new GridData(GridData.FILL_BOTH);
-		gdSpan_3.horizontalSpan = 3;
+		gdSpan_3.horizontalSpan = 4;
 		tableSample = TableFactory.getAnalogTable(comRight);
 		tableSample.getTable().setLayoutData(gdSpan_3);
 		initData();
@@ -111,9 +108,13 @@ public class SampleConnectDialog extends WrappedDialog {
 		return composite;
 	}
 	
-
-	private void initData() {		
-//		btFilter.setSelection(true);
+	private void loadIEDList() {
+		boolean curBay = btFilter.getSelection();
+		if (curBay) {
+			iedEntities = iedEntityService.getIedByTypesAndBay(EnumIedType.PROTECT_DEVICE.getTypes(), bayEntity);
+		} else {
+			iedEntities = iedEntityService.getIedByTypesAndBay(EnumIedType.PROTECT_DEVICE.getTypes(), null);
+		}
 		if(!DataUtils.listNotNull(iedEntities)) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -124,33 +125,58 @@ public class SampleConnectDialog extends WrappedDialog {
 			comboItems = new String[lstIedName.size()];
 			comboItems = lstIedName.toArray(comboItems);
 			Tb1046IedEntity defSel = iedEntities.get(0);
-			mmsfcdaService = new MmsfcdaService();
 			loadAnalogByIed(defSel);
 		}
 		comboDevice.setItems(comboItems);
 		comboDevice.select(0);
+	}
+
+	private void initData() {
+		protmmxuService = new ProtmmxuService();	
+		analogdataService = new AnalogdataService();
+		iedEntityService = new IedEntityService();
 		tableProtctSample.setInput(ctvtsecondaryEntities);
-		selectedAnalog = new ArrayList<>();
-		
-		protmmxuService = new ProtmmxuService();
+		btFilter.setSelection(true);
+		loadIEDList();
 	}
 
 	private void loadAnalogByIed(Tb1046IedEntity defSel) {
-		analogdataService = new AnalogdataService();
-//		if (btFilter.getSelection()) {
-			analogdataEntities = analogdataService.getMeasDataByIed(defSel);
-//		} else {
-//			analogdataEntities = analogdataService.getAnologByIed(defSel);
-//		}
+		analogdataEntities = analogdataService.getMeasDataByIed(defSel);
 		tableSample.setInput(analogdataEntities);
+		selectSecondAnalog();
 	}
-	
-	
 	
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("保护采样值关联");
+	}
+	
+	private void selectSecondAnalog() {
+		List<Tb1006AnalogdataEntity> searchRes = (List<Tb1006AnalogdataEntity>) tableSample.getInput();
+		for (Tb1006AnalogdataEntity searchRe : searchRes) {
+			searchRe.setSelected(false);
+		}
+		List<Object> secds = tableProtctSample.getSelections();
+		if (secds==null || secds.size()<1) {
+			return;
+		}
+		List<Tb1067CtvtsecondaryEntity> selections = new ArrayList<>();
+		for (Object o : secds) {
+			Tb1067CtvtsecondaryEntity sec = (Tb1067CtvtsecondaryEntity) o;
+			selections.add(sec);
+		}
+		List<Tb1066ProtmmxuEntity> mmxus = protmmxuService.getProtmmxuByCtvtsecondary(selections);
+		List<Tb1006AnalogdataEntity> algs = new ArrayList<>();
+		for (Tb1066ProtmmxuEntity mmxu : mmxus) {
+			algs.add(mmxu.getF1006Code());
+		}
+		for (Tb1006AnalogdataEntity searchRe : searchRes) {
+			if (algs.contains(searchRe)) {
+				searchRe.setSelected(true);
+			}
+		}
+		tableSample.refresh();
 	}
 	
 	private void addListeners() {
@@ -164,24 +190,7 @@ public class SampleConnectDialog extends WrappedDialog {
 				if (row < 1) {
 					return;
 				}
-				List<Object> secds = tableProtctSample.getSelections();
-				List<Tb1067CtvtsecondaryEntity> selections = new ArrayList<>();
-				for (Object o : secds) {
-					Tb1067CtvtsecondaryEntity sec = (Tb1067CtvtsecondaryEntity) o;
-					selections.add(sec);
-				}
-				List<Tb1066ProtmmxuEntity> mmxus = protmmxuService.getProtmmxuByCtvtsecondary(selections);
-				List<Tb1006AnalogdataEntity> algs = new ArrayList<>();
-				for (Tb1066ProtmmxuEntity mmxu : mmxus) {
-					algs.add(mmxu.getF1006Code());
-				}
-				List<Tb1006AnalogdataEntity> searchRes = (List<Tb1006AnalogdataEntity>) tableSample.getInput();
-				for (Tb1006AnalogdataEntity searchRe : searchRes) {
-					if (algs.contains(searchRe)) {
-						searchRe.setSelected(true);
-					}
-				}
-				tableSample.refresh();
+				selectSecondAnalog();
 			}
 		});
 		
@@ -211,18 +220,14 @@ public class SampleConnectDialog extends WrappedDialog {
 					}
 					tableSample.setInput(searchRes);
 					tableSample.getTable().layout();
-				} /*else if(obj == btFilter) {
-					int curComboSel = comboDevice.getSelectionIndex();
-					Tb1046IedEntity curSelIed = getSelIedByName(comboDevice.getItem(curComboSel));
-					loadAnalogByIed(curSelIed);
-				}*/
+				} else if(obj == btFilter) {
+					loadIEDList();
+				}
 			}
-
-			
 		};
 		btnSearch.addSelectionListener(selectionListener);
 		comboDevice.addSelectionListener(selectionListener);
-//		btFilter.addSelectionListener(selectionListener);
+		btFilter.addSelectionListener(selectionListener);
 	}
 	
 
@@ -255,7 +260,7 @@ public class SampleConnectDialog extends WrappedDialog {
 				return;
 			}
 			protmmxuEntityList = new ArrayList<>();
-			selectedAnalog.clear();
+			selectedAnalog = new ArrayList<>();
 			Tb1067CtvtsecondaryEntity selectedCtvt = (Tb1067CtvtsecondaryEntity) selection;
 			@SuppressWarnings("unchecked")
 			List<Tb1006AnalogdataEntity> input = (List<Tb1006AnalogdataEntity>) tableSample.getInput();
