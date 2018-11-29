@@ -166,12 +166,14 @@ public class ImportFibreNewListProcessor {
 						}
 						phyCores.add(coreMap.get(coreName));
 					}
-					Tb1053PhysconnEntity phyconn = null;
-					Tb1052CoreEntity firstCore = phyCores.get(0);
-					Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
-					phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
-					for (Tb1052CoreEntity core : phyCores) {
-						core.setTb1053ByF1053Code(phyconn);
+					if (phyCores.size() > 0) {
+						Tb1053PhysconnEntity phyconn = null;
+						Tb1052CoreEntity firstCore = phyCores.get(0);
+						Tb1052CoreEntity lastCore = phyCores.get(phyCores.size() - 1);
+						phyconn = addPhyconn(firstCore.getTb1048PortByF1048CodeA(), lastCore.getTb1048PortByF1048CodeB());
+						for (Tb1052CoreEntity core : phyCores) {
+							core.setTb1053ByF1053Code(phyconn);
+						}
 					}
 					phyCores.clear();
 				} else {
