@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class BoardPortService extends BaseService {
 	public List<Tb1048PortEntity> getBoardPortByIed(Tb1046IedEntity iedEntity) {
 		List<Tb1047BoardEntity> boardEntities = (List<Tb1047BoardEntity>) 
 				beanDao.getListByCriteria(Tb1047BoardEntity.class, "tb1046IedByF1046Code", iedEntity);
-		List<Tb1048PortEntity> portList = (List<Tb1048PortEntity>) hqlDao.selectInObjects(Tb1048PortEntity.class, "tb1047BoardByF1047Code", boardEntities);
+//		List<Tb1048PortEntity> portList = (List<Tb1048PortEntity>) hqlDao.selectInObjects(Tb1048PortEntity.class, "tb1047BoardByF1047Code", boardEntities);
 		List<Tb1006AnalogdataEntity> angList = (List<Tb1006AnalogdataEntity>) beanDao.getListByCriteria(Tb1006AnalogdataEntity.class, "tb1046IedByF1046Code", iedEntity);
 		Map<String, Tb1006AnalogdataEntity> angMap = new HashMap<>();
 		for (Tb1006AnalogdataEntity ang : angList) {
@@ -25,10 +26,31 @@ public class BoardPortService extends BaseService {
 				angMap.put(parentCode, ang);
 			}
 		}
-		for (Tb1048PortEntity port : portList) {
-			String f1048Code = port.getF1048Code();
-			Tb1006AnalogdataEntity ang = angMap.get(f1048Code);
-			port.setTb1006AnalogdataByF1048Code(ang);
+//		for (Tb1048PortEntity port : portList) {
+//			String f1048Code = port.getF1048Code();
+//			Tb1006AnalogdataEntity ang = angMap.get(f1048Code);
+//			port.setTb1006AnalogdataByF1048Code(ang);
+//		}
+		List<Tb1048PortEntity> portList = new ArrayList<>();
+		for (Tb1047BoardEntity board : boardEntities) {
+			portList.addAll(getPortByBoard(board, angMap));
+		}
+		return portList;
+	}
+	
+	private List<Tb1048PortEntity> getPortByBoard(Tb1047BoardEntity board, Map<String, Tb1006AnalogdataEntity> angMap) {
+		List<Tb1048PortEntity> portList = (List<Tb1048PortEntity>) beanDao.getListByCriteria(Tb1048PortEntity.class, "tb1047BoardByF1047Code", board);
+		if (portList == null || portList.size() < 1) {
+			portList = new ArrayList<>();
+			Tb1048PortEntity port = new Tb1048PortEntity();
+			port.setTb1047BoardByF1047Code(board);
+			portList.add(port);
+		} else {
+			for (Tb1048PortEntity port : portList) {
+				String f1048Code = port.getF1048Code();
+				Tb1006AnalogdataEntity ang = angMap.get(f1048Code);
+				port.setTb1006AnalogdataByF1048Code(ang);
+			}
 		}
 		return portList;
 	}
