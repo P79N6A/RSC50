@@ -167,8 +167,7 @@ public abstract class AbstractExportDataHandler {
 				}
 				PreparedStatement preState = connect.prepareStatement(sql);
 				for (int p = 0; p < ptotal; p++) {
-//					List<?> list = hqlDao.getListByHqlAndPage(hql, null, p+1, psize);
-					List<?> list = query(clazz, tableName, p * psize, psize);
+					List<?> list = hqlDao.getListByHqlAndPage(hql, null, p+1, psize);
 					for (Object obj : list) {
 						setValue(preState, tbIndex, obj);
 						preState.addBatch();
@@ -183,16 +182,6 @@ public abstract class AbstractExportDataHandler {
 			e.printStackTrace();
 			console.append(tbIndex + "数据导出异常：" + e.getMessage());
 		}
-	}
-	
-	public List<?> query(Class<?> clazz, String tableName, int rowStart, int numberOfResultsToShow) {
-		Session _session = SessionRsc.getInstance().get();
-		String sql = "select * from " + tableName + " re ";
-		 Query query  = _session.createSQLQuery(sql)
-				 .addEntity("re", clazz); 
-		 query.setFirstResult(rowStart);
-		 query.setMaxResults(numberOfResultsToShow);
-     return  query.list(); 
 	}
 	
 	protected Class<?> getClazz(int tbIndex) {
