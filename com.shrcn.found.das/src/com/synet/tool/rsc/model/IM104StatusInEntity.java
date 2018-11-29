@@ -14,6 +14,7 @@ public class IM104StatusInEntity extends ImportMmsEntity {
 	private String pinDesc;		//端子描述
 	private String mmsRefAddr;//MMS信号参引
 	private String mmsDesc;	//信号描述
+	private String datSet;	//数据集
 	private Integer matched;	//是否匹配
 	private IM100FileInfoEntity fileInfoEntity;
 	
@@ -62,6 +63,12 @@ public class IM104StatusInEntity extends ImportMmsEntity {
 	public void setMmsDesc(String mmsDesc) {
 		this.mmsDesc = mmsDesc;
 	}
+	public String getDatSet() {
+		return datSet;
+	}
+	public void setDatSet(String datSet) {
+		this.datSet = datSet;
+	}
 	public Integer getMatched() {
 		return matched;
 	}
@@ -91,7 +98,7 @@ public class IM104StatusInEntity extends ImportMmsEntity {
 		return "devName=" + devName + ", devDesc="
 				+ devDesc + ", pinRefAddr=" + pinRefAddr + ", pinDesc="
 				+ pinDesc + ", mmsRefAddr=" + mmsRefAddr + ", mmsDesc="
-				+ mmsDesc;
+				+ mmsDesc + ", datSet=" + datSet;
 	}
 	
 }

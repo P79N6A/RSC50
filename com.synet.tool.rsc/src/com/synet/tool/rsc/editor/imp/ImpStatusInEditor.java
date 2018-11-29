@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
+import com.shrcn.found.ui.model.FieldBase;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
@@ -131,6 +132,16 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 		}
 	}
 	
+	@Override
+	protected List<IField> getFieldList() {
+		List<IField> list = super.getFieldList();
+		FieldBase datField = new FieldBase();
+		datField.setName("datSet");
+		datField.setTitle("数据集");
+		list.add(datField);
+		return list;
+	}
+	
 	private List<Object> getVpData(Tb1046IedEntity ied) {
 		List<Object> list = new ArrayList<>();
 		List<Tb1062PinEntity> pinList = pinEntityService.getByIed(ied);
@@ -160,6 +171,7 @@ public class ImpStatusInEditor extends ExcelImportEditor {
 				entity.setDevDesc(ied.getF1046Desc());
 				entity.setMmsRefAddr(mms.getF1058RefAddr());
 				entity.setMmsDesc(mms.getF1058Desc());
+				entity.setDatSet(mms.getTb1054RcbByF1054Code().getF1054Dataset());
 				entity.setF1011No(dict.getNameById("F1011_NO", mms.getF1058Type()));
 				list.add(entity);
 			}

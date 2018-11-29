@@ -259,6 +259,10 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	}
 	
 	protected IField[] getExportFields() {
+		return getFieldList().toArray(new IField[0]);
+	}
+	
+	protected List<IField> getFieldList() {
 		List<IField> list = new ArrayList<>();
 		IField[] fields = table.getExportFields();
 		if (fields != null) {
@@ -274,8 +278,9 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 			datField.setTitle("数据类型");
 			list.add(datField);
 		}
-		return list.toArray(new IField[0]);
+		return list;
 	}
+		
 	
 	public void exportTemplateExcel(String fileName, String title, IField[] vfields, List<Object> list) {
 		long start = System.currentTimeMillis();
