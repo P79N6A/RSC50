@@ -151,10 +151,18 @@ public class ProtectBaylEditor extends BaseConfigEditor {
 			searchRes = iedEntityAll;
 		} else {
 			for (Tb1046IedEntity tb1046IedEntity : iedEntityAll) {
-				if(tb1046IedEntity.getF1046Desc().contains(desc)
-						|| tb1046IedEntity.getF1046Name().contains(desc)
-						|| tb1046IedEntity.getF1046Manufacturor().contains(desc)
-						|| tb1046IedEntity.getF1046Model().contains(desc)) {
+				String[] atts = new String[] {tb1046IedEntity.getF1046Desc(),
+						tb1046IedEntity.getF1046Name(),
+						tb1046IedEntity.getF1046Manufacturor(),
+						tb1046IedEntity.getF1046Model()};
+				boolean match = false;
+				for (String att : atts) {
+					if (att != null && att.contains(desc)) {
+						match = true;
+						break;
+					}
+				}
+				if(match) {
 					searchRes.add(tb1046IedEntity);
 				}
 			}
