@@ -278,7 +278,7 @@ public class ImportFibreNewListProcessor {
 					msg += "找不到装置B[" + entity.getDevNameB() + "]";
 				}
 				SCTLogger.error(msg);
-				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "装置检查", "", msg));
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "装置检查", cableCode, msg));
 				continue;
 			}
 			Tb1050CubicleEntity cubicleEntityA = iedEntityA.getTb1050CubicleEntity();
