@@ -295,7 +295,7 @@ public class ImportFibreNewListProcessor {
 					msg += "找不到装置[" + iedEntityB.getF1046Name() + "]所在屏柜B";
 				}
 				SCTLogger.error(msg);
-				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "屏柜检查", "", msg));
+				pmgr.append(new Problem(0, LEVEL.ERROR, "导入光缆", "屏柜检查", cableCode, msg));
 				continue;
 			}
 		
