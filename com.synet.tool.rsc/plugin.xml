@@ -96,6 +96,9 @@
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSCDAction"
 	              text="SCD"/>
 	       <action
+	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSSDAction"
+	              text="SSD"/>
+	       <action
 	              class="com.synet.tool.rsc/com.synet.tool.rsc.action.imp.ImportSPCDAction"
 	              text="SPCD"/>
 	       <menu id="menu.imp.excel" text="Excel">

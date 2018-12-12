@@ -10,13 +10,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 
-import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
-import com.synet.tool.rsc.io.SCDImporterNew;
-import com.synet.tool.rsc.util.ProjectFileManager;
+import com.synet.tool.rsc.io.OnlySCDImporter;
 
  /**
  * 
@@ -38,8 +36,7 @@ public class ImportSCDAction extends BaseImportAction {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					new SCDImporterNew(path).execute(monitor); 
-					ProjectFileManager.getInstance().renameScd(Constants.CURRENT_PRJ_NAME, path);
+					new OnlySCDImporter(path).execute(monitor); 
 					DialogHelper.showAsynInformation("SCD导入成功！");
 					EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 				}

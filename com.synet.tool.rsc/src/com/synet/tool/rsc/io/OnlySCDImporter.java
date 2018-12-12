@@ -29,7 +29,6 @@ import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.ied.IedParserNew;
 import com.synet.tool.rsc.io.ied.LogicLinkParserNew;
 import com.synet.tool.rsc.io.ied.NetConfig;
-import com.synet.tool.rsc.io.parser.SubstationParser;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1026StringdataEntity;
@@ -62,7 +61,7 @@ import com.synet.tool.rsc.util.ProjectFileManager;
  * @author 陈春(mailto:chench80@126.com)
  * @version 1.0, 2018-8-14
  */
-public class SCDImporterNew implements IImporter {
+public class OnlySCDImporter implements IImporter {
 
 	private String scdPath;
 	private RSCProperties rscp = RSCProperties.getInstance();
@@ -71,7 +70,7 @@ public class SCDImporterNew implements IImporter {
 	private SubstationService staServ = new SubstationService();
 	private Map<String, Tb1042BayEntity> bayCache = new HashMap<>();
 	
-	public SCDImporterNew(String scdPath) {
+	public OnlySCDImporter(String scdPath) {
 		this.scdPath = scdPath;
 		clearHistory();
 	}
@@ -126,6 +125,15 @@ public class SCDImporterNew implements IImporter {
 		bayCache.put(bayName, bay);
 		return bay;
 	}
+	
+	// 变电站
+	private void createSubstation() {
+		Tb1041SubstationEntity station = new Tb1041SubstationEntity();
+		station.setF1041Code(rscp.nextTbCode(DBConstants.PR_STA));
+		station.setF1041Name(Constants.CURRENT_PRJ_NAME);
+		station.setF1041Desc(Constants.CURRENT_PRJ_NAME);
+		beanDao.insert(station);
+	}
 
 	@Override
 	public void execute(IProgressMonitor monitor) {
@@ -138,15 +146,14 @@ public class SCDImporterNew implements IImporter {
 				scdname.substring(0, scdname.lastIndexOf('.')) + File.separator;
 		FileManipulate.initDir(scddir);
 		Context context = new Context();
-		SubstationParser sp = new SubstationParser(context);
-		sp.init();
+		createSubstation();
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();
 		if (iedNds == null || iedNds.size() < 1) {
 			return;
 		}
 		if (monitor != null) {
-			monitor.beginTask("开始导入SCD", iedNds.size() + 2);
+			monitor.beginTask("开始导入SCD", iedNds.size() + 1);
 		}
 		for (Element iedNd : iedNds) {
 			String iedName = iedNd.attributeValue("name");
@@ -157,10 +164,6 @@ public class SCDImporterNew implements IImporter {
 			// 根据解析结果修改装置类型和间隔类型
 			Tb1042BayEntity bay = null;
 			if (iedParser.getRcbs().size() > 0) {		// 保护测控
-//				String ldXpath = SCL.getLDXPath(iedName, "PROT");
-//				int type = XMLDBHelper.existsNode(ldXpath) ?
-//						DBConstants.IED_PROT : DBConstants.IED_MONI;
-//				ied.setF1046Type(type);
 				int type = ied.getF1046Type();
 				if (type == DBConstants.IED_MONI) {
 					bay = getBayByName(DBConstants.BAY_MOT);
@@ -195,14 +198,6 @@ public class SCDImporterNew implements IImporter {
 			monitor.setTaskName("正在处理逻辑链路和虚回路");
 		}
 		new LogicLinkParserNew(context).parse();
-		if (monitor != null) {
-			monitor.worked(1);
-		}
-		// 一次部分
-		if (monitor != null) {
-			monitor.setTaskName("正在处理一次拓扑模型");
-		}
-		sp.parse();
 		if (monitor != null) {
 			monitor.done();
 		}

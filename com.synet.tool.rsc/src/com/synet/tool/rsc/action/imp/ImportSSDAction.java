@@ -4,6 +4,18 @@
  */
 package com.synet.tool.rsc.action.imp;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
+
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.ui.util.DialogHelper;
+import com.shrcn.found.ui.util.ProgressManager;
+import com.synet.tool.rsc.io.SSDImporter;
+
 
  /**
  * 
@@ -18,6 +30,18 @@ public class ImportSSDAction extends BaseImportAction {
 
 	@Override
 	public void run() {
+		final String path = DialogHelper.selectFile(getShell(), SWT.OPEN, "*.ssd;*.SSD");
+		if (path != null) {
+			ProgressManager.execute(new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					new SSDImporter(path).execute(monitor);
+					DialogHelper.showAsynInformation("SSD导入成功！");
+					EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
+				}
+			});
+		}
 	}
 
 }
