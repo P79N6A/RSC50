@@ -167,6 +167,14 @@ public class SclUtil {
 		return false;
 	}
 	
+	public static String getFCDADesc(Element elLd, Element fcdaEl) {
+		String prefix = fcdaEl.attributeValue("prefix");
+		String lnClass = fcdaEl.attributeValue("lnClass");
+		String lnInst = fcdaEl.attributeValue("lnInst");
+		String doName = fcdaEl.attributeValue("doName");
+		return SclUtil.getFCDADesc(elLd, prefix, lnClass, lnInst, doName);
+	}
+	
 	public static String getFCDADesc(Element ld,
 			String prefix, String lnClass, String lnInst, String doName) {
 		if(null == ld)

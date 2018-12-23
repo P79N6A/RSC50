@@ -24,6 +24,8 @@ public interface RSCConstants {
     String RULEFILE			= "rules.xml";
     String RULEURL 			= "com/synet/tool/rsc/util/" + RULEFILE;
     String FUNCFILE			= Constants.cfgDir + separator + "func.xml";
+    String CURR_SCD			= "current.scd";
+    String CURR_SSD			= "current.ssd";
 
     String ET_PR_MDL		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryModelEditor";
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";

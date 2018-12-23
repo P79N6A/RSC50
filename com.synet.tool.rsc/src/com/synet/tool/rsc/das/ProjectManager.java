@@ -132,5 +132,23 @@ public class ProjectManager {
 		return getDataDir() + ".project";
 	}
 	
+	/**
+	 * 得到工程SCD文件路径.
+	 * 
+	 * @return
+	 */
+	public static String getProjectScdPath() {
+		return getDataDir() + RSCConstants.CURR_SCD;
+	}
+	
+	/**
+	 * 得到工程SSD文件路径.
+	 * 
+	 * @return
+	 */
+	public static String getProjectSsdPath() {
+		return getDataDir() + RSCConstants.CURR_SSD;
+	}
+	
 }
 

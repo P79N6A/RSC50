@@ -25,6 +25,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.ied.IedParserNew;
 import com.synet.tool.rsc.io.ied.LogicLinkParserNew;
@@ -140,12 +141,15 @@ public class OnlySCDImporter implements IImporter {
 		long begin = System.currentTimeMillis();
 		ConsoleManager console = ConsoleManager.getInstance();
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
+		FileManipulate.copyByChannel(scdPath, ProjectManager.getProjectScdPath());
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
 		String scdname = new File(scdPath).getName();
 		String scddir = Constants.usrDir + File.separator + "cids" + File.separator + 
 				scdname.substring(0, scdname.lastIndexOf('.')) + File.separator;
 		FileManipulate.initDir(scddir);
-		Context context = new Context();
+		Element commEl = XMLDBHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		Context context = new Context(commEl, dtTypeNd);
 		createSubstation();
 		// 二次部分
 		List<Element> iedNds = IEDDAO.getAllIEDWithCRC();

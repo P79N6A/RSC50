@@ -137,7 +137,9 @@ public class SCDImporterNew implements IImporter {
 		String scddir = Constants.usrDir + File.separator + "cids" + File.separator + 
 				scdname.substring(0, scdname.lastIndexOf('.')) + File.separator;
 		FileManipulate.initDir(scddir);
-		Context context = new Context();
+		Element commEl = XMLDBHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
+		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+		Context context = new Context(commEl, dtTypeNd);
 		SubstationParser sp = new SubstationParser(context);
 		sp.init();
 		// 二次部分

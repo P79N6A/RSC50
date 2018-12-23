@@ -7,16 +7,18 @@ import java.util.Map;
 
 import org.dom4j.Element;
 
-import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.cache.CacheFactory;
 import com.shrcn.found.common.cache.CacheWrapper;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.ui.view.Problem;
-import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 
 public class Context {
+	
+	private Element commEl;
+	private Element dtTypeNd;
+	
 	// 通信配置
 	private Map<String, NetConfig> netCfgMap;
 	// 数据模板
@@ -31,25 +33,35 @@ public class Context {
 	private List<Problem> problems;
 	
 	public Context() {
+		this(null, null);
+	}
+	
+	public Context(Element commEl, Element dtTypeNd) {
+		this.commEl = commEl;
+		this.dtTypeNd = dtTypeNd;
 		init();
 	}
 
 	private void init() {
 		this.vtLinkMap = new HashMap<>();
+		problems = new ArrayList<Problem>();
 		CacheFactory.createHashMapWrapper("pouts");
 		CacheFactory.createHashMapWrapper("pints");
 		poutCache = CacheFactory.getCacheWrapper("pouts");
 		poutCache.clear();
 		pintCache = CacheFactory.getCacheWrapper("pints");
 		pintCache.clear();
-		initNetCfgs();
-		initDatTpl();
+		if (commEl != null) {
+			initNetCfgs();
+		}
+		if (dtTypeNd != null) {
+			initDatTpl();
+		}
 	}
 	
 	
 	private void initNetCfgs() {
 		this.netCfgMap = new HashMap<>();
-		Element commEl = XMLDBHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
 		List<Element> subNetList = commEl.elements("SubNetwork");
 		for (Element subNet : subNetList) {
 			List<Element> connApList = subNet.elements("ConnectedAP");
@@ -99,8 +111,6 @@ public class Context {
 	}
 
 	private void initDatTpl() {
-		Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
-		problems = new ArrayList<Problem>();
 		datTypTplParser = new DatTypTplParser(dtTypeNd, problems);
 	}
 	

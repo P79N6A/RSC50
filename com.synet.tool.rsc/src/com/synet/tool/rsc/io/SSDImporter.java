@@ -10,11 +10,13 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.parser.OnlySubstationParser;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -59,8 +61,8 @@ public class SSDImporter implements IImporter {
 		long begin = System.currentTimeMillis();
 		ConsoleManager console = ConsoleManager.getInstance();
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
+		FileManipulate.copyByChannel(scdPath, ProjectManager.getProjectSsdPath());
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
-//		String scdname = new File(scdPath).getName();
 		Context context = new Context();
 		OnlySubstationParser parser = new OnlySubstationParser(context, monitor);
 		parser.parse();
