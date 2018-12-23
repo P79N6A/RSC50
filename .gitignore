@@ -19,3 +19,4 @@ com.synet.tool.rsc/.config
 com.synet.tool.rsc/derby.log
 *.scd
 *.log
+*.rsc
