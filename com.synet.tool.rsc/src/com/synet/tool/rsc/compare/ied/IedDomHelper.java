@@ -83,8 +83,9 @@ public class IedDomHelper {
 	 * @param desc
 	 */
 	public void savePins(String ref, String desc) {
-		ndPins.addAttribute("ref", ref);
-		ndPins.addAttribute("desc", desc);
+		Element ndPin = ndPins.addElement("Pin");
+		ndPin.addAttribute("ref", ref);
+		ndPin.addAttribute("desc", desc);
 	}
 	
 	/**

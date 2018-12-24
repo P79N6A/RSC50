@@ -39,9 +39,6 @@ public class IedCompare {
 			return diffRoot;
 		}
 		String msg = compare(iedNdSrc, iedNdDest);
-//		if (StringUtil.isEmpty(msg)) {
-//			msg = getAttsMsg(iedNdSrc, "name");
-//		}
 		diffRoot.setMsg(msg);
 		diffRoot.setOp(OP.UPDATE);
 		compareRcbs();
@@ -165,21 +162,20 @@ public class IedCompare {
 			String ref = ndPinSrc.attributeValue("ref");
 			Element ndPinDest = destNdMap.get(ref);
 			if (ndPinDest  == null) { // 已删除
-				String desc = ndPinSrc.attributeValue("desc");
-				new Difference(diffPin, "Pin", ref, "desc:" + desc, OP.DELETE);
+				new Difference(diffPin, "Pin", ref, getAttsMsg(ndPinSrc, "ref"), OP.DELETE);
 			} else {
 				String descSrc = ndPinSrc.attributeValue("desc");
 				String descDest = ndPinDest.attributeValue("desc");
 				if (!descSrc.equals(descDest)) {
-					new Difference(diffPin, "Pin", ref, "desc:" + descSrc + "->" + descDest, OP.UPDATE);
+					String msg = compare(ndPinSrc, ndPinDest);
+					new Difference(diffPin, "Pin", ref, msg, OP.UPDATE);
 				}
 				destNdMap.remove(ref);
 			}
 		}
 		for (Element ndPinDest : destNdMap.values()) {
 			String ref = ndPinDest.attributeValue("ref");
-			String desc = ndPinDest.attributeValue("desc");
-			new Difference(diffPin, "Pin", ref, "desc:" + desc, OP.ADD);
+			new Difference(diffPin, "Pin", ref, getAttsMsg(ndPinDest, "ref"), OP.ADD);
 		}
 	}
 	
@@ -210,9 +206,6 @@ public class IedCompare {
 			} else {
 				if (!matchMd5(ndCBSrc, ndCBDest)) {
 					String msg = compare(ndCBSrc, ndCBDest);
-//					if (StringUtil.isEmpty(msg)) {
-//						msg = getAttsMsg(ndCBSrc, keyAtt);
-//					}
 					Difference diffCB = new Difference(diffType, cbName, cbRef, msg, OP.UPDATE);
 					compareFCDAs(diffCB, ndCBSrc, ndCBDest);
 				}
