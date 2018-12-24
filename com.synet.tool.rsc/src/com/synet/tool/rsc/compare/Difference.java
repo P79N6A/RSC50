@@ -81,9 +81,10 @@ public class Difference {
 	
 	private int getLevel() {
 		int level = 0;
-		while (parent != null) {
+		Difference parent1 = getParent();
+		while (parent1 != null) {
 			level++;
-			parent = parent.getParent();
+			parent1 = parent1.getParent();
 		}
 		return level;
 	}
@@ -92,7 +93,7 @@ public class Difference {
 		int level = getLevel();
 		String out = "";
 		for (int i=0; i<level; i++) {
-			out += "\t";
+			out += "---";
 		}
 		out += type + "\t" + name + "\t" + msg + "\t" + (op==null ? "" : op.getDesc());
 		System.out.println(out);

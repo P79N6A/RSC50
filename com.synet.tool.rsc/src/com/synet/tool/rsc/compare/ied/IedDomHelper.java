@@ -6,9 +6,11 @@ import java.util.List;
 import org.dom4j.Element;
 
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.common.dict.DictManager;
 import com.shrcn.found.file.util.FileManager;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.ied.NetConfig;
 import com.synet.tool.rsc.io.parser.ParserUtil;
@@ -19,6 +21,7 @@ import com.synet.tool.rsc.model.Tb1046IedEntity;
 public class IedDomHelper {
 
 	private String iedName;
+	private String iedSaveName;
 	private Context context;
 	
 	private Element root;
@@ -31,7 +34,12 @@ public class IedDomHelper {
 	private Element ndInputs;
 	
 	public IedDomHelper(String iedName, Context context) {
-		this.iedName = iedName;
+		this.iedSaveName = iedName;
+		if (iedName.endsWith("_old") || iedName.endsWith("_new")) {
+			this.iedName = iedName.substring(0, iedName.length() - 4);
+		} else {
+			this.iedName = iedName;
+		}
 		this.context = context;
 		init();
 	}
@@ -56,7 +64,17 @@ public class IedDomHelper {
 		root.addAttribute("manufacturer", ied.getF1046Manufacturor());
 		root.addAttribute("configVersion", ied.getF1046ConfigVersion());
 		root.addAttribute("crc", ied.getF1046Crc());
-		root.addAttribute("iedtype", ied.getF1046Type() + "");
+		root.addAttribute("ipA", ied.getF1046aNetIp());
+		root.addAttribute("ipB", ied.getF1046bNetIp());
+		if (ndRcbs.elements().size() < 1) {
+			if (ndSmvs.elements().size() > 0) {			// 合并单元
+				ied.setF1046Type(DBConstants.IED_MU);
+			} else {										// 智能终端
+				ied.setF1046Type(DBConstants.IED_TERM);
+			}
+		}
+		Integer f1046Type = ied.getF1046Type();
+		root.addAttribute("iedtype", DictManager.getInstance().getNameById("IED_TYPE", f1046Type));
 	}
 	
 	/**
@@ -245,7 +263,7 @@ public class IedDomHelper {
 					ndInputs);
 		root.addAttribute("md5", md5);
 		FileManipulate.initDir(Constants.tempDir);
-		String path = Constants.tempDir + File.separator + iedName + ".rsc";
+		String path = Constants.tempDir + File.separator + iedSaveName + ".rsc";
 		FileManager.saveTextFile(path , root.asXML(), "UTF-8");
 		return path;
 	}

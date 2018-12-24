@@ -39,9 +39,9 @@ public class IedCompare {
 			return diffRoot;
 		}
 		String msg = compare(iedNdSrc, iedNdDest);
-		if (StringUtil.isEmpty(msg)) {
-			msg = getAttsMsg(iedNdSrc, "name");
-		}
+//		if (StringUtil.isEmpty(msg)) {
+//			msg = getAttsMsg(iedNdSrc, "name");
+//		}
 		diffRoot.setMsg(msg);
 		diffRoot.setOp(OP.UPDATE);
 		compareRcbs();
@@ -113,7 +113,7 @@ public class IedCompare {
 		while(iterator.hasNext()) {
 			Element fcda = iterator.next();
 			String ref = fcda.attributeValue("ref");
-			diffParent.addChild(new Difference(diffParent, "FCDA", ref, getFCDAMsg(fcda), op));
+			new Difference(diffParent, "FCDA", ref, getFCDAMsg(fcda), op);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class IedCompare {
 			String ref = ndFCDASrc.attributeValue("ref");
 			Element ndFCDADest = destChildrenMap.get(ref);
 			if (ndFCDADest == null) { // 已删除
-				new Difference(ndParent, "FCDA", ref, OP.DELETE.getDesc(), OP.DELETE);
+				new Difference(ndParent, "FCDA", ref, getFCDAMsg(ndFCDASrc), OP.DELETE);
 			} else {
 				String msg = compare(ndFCDASrc, ndFCDADest);
 				if (!StringUtil.isEmpty(msg)) {	// 修改
@@ -141,9 +141,9 @@ public class IedCompare {
 			}
 		}
 		if (destChildrenMap.size() > 0) {
-			for (Element ndFCDA : destChildrenMap.values()) { // 增加
-				String ref = ndFCDA.attributeValue("ref");
-				new Difference(ndParent, "FCDA", ref , getFCDAMsg(ndFCDA), OP.ADD);
+			for (Element ndFCDADest : destChildrenMap.values()) { // 增加
+				String ref = ndFCDADest.attributeValue("ref");
+				new Difference(ndParent, "FCDA", ref , getFCDAMsg(ndFCDADest), OP.ADD);
 			}
 		}
 	}
@@ -210,6 +210,9 @@ public class IedCompare {
 			} else {
 				if (!matchMd5(ndCBSrc, ndCBDest)) {
 					String msg = compare(ndCBSrc, ndCBDest);
+//					if (StringUtil.isEmpty(msg)) {
+//						msg = getAttsMsg(ndCBSrc, keyAtt);
+//					}
 					Difference diffCB = new Difference(diffType, cbName, cbRef, msg, OP.UPDATE);
 					compareFCDAs(diffCB, ndCBSrc, ndCBDest);
 				}

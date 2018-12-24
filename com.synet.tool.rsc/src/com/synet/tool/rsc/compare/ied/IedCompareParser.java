@@ -14,6 +14,7 @@ import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.ied.Context;
+import com.synet.tool.rsc.io.ied.NetConfig;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 
@@ -36,11 +37,13 @@ public class IedCompareParser {
 		this.context = context;
 		this.iedName = iedNd.attributeValue("name");
 		this.domHelper = new IedDomHelper(iedName, context);
+		if (iedName.endsWith("_old") || iedName.endsWith("_new")) {
+			this.iedName = iedName.substring(0, iedName.length() - 4);
+		}
 	}
 	
 	private void createIed() {
 		this.ied = new Tb1046IedEntity();
-		String iedName = iedNd.attributeValue("name");
 		ied.setF1046Name(iedName);
 		ied.setF1046Desc(iedNd.attributeValue("desc"));
 		ied.setF1046Model(iedNd.attributeValue("type"));
@@ -60,7 +63,11 @@ public class IedCompareParser {
 			int type = existsProt ? DBConstants.IED_PROT : DBConstants.IED_MONI;
 			ied.setF1046Type(type);
 		}
-		domHelper.saveIED(ied);
+		NetConfig netConfig = context.getNetConfig(iedName + ".MMS");
+		if (netConfig != null) {
+			ied.setF1046aNetIp(netConfig.getIpA());
+			ied.setF1046bNetIp(netConfig.getIpB());
+		}
 	}
 	
 	public void parse() {
@@ -115,6 +122,7 @@ public class IedCompareParser {
 		}
 		// 分析虚端子
 		parseInputs();
+		domHelper.saveIED(ied);
 		this.path = domHelper.saveDom();
 	}
 	
@@ -148,10 +156,10 @@ public class IedCompareParser {
 		}
 		String doDesc = doi.attributeValue("desc");
 		String pinRef = ldInst + "/" + lnName + "$" + fc + "$" + doName;
-		String pinAddr = ldInst + "/" + lnName + "." + doName;
+//		String pinAddr = ldInst + "/" + lnName + "." + doName;
 		if ("ST".equals(fc)) {
 			pinRef += (doName.startsWith("AnIn") ? "$mag$f" : "$stVal");
-			pinAddr += (doName.startsWith("AnIn") ? ".mag.f" : ".stVal");
+//			pinAddr += (doName.startsWith("AnIn") ? ".mag.f" : ".stVal");
 		}
 		domHelper.savePins(pinRef, doDesc);
 	}
