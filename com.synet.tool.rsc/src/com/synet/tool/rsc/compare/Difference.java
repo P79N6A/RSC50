@@ -122,7 +122,7 @@ public class Difference {
 		for (int i=0; i<level; i++) {
 			out += "---";
 		}
-		out += type + "\t" + name + "\t" + msg + "\t" + (op==null ? "" : op.getDesc());
+		out += type + "\t" + name + "\t" + desc + "\t" + newName + "\t" + newDesc + "\t" + msg + "\t" + (op==null ? "" : op.getDesc());
 		System.out.println(out);
 		for (Difference diff : getChildren()) {
 			diff.print();

@@ -20,6 +20,7 @@ public interface RSCConstants {
 	String EVENT_PATH		= "com/synet/tool/rsc/eventscfg.xml";
 	String DICT_PATH 		= "com/synet/tool/rsc/rscdict.properties";
 	
+    String SCL_COMPARE 		= "com/synet/tool/rsc/editor/tree/ICDCompare.xlsx";
     String CFGURL 			= "com/synet/tool/rsc/util/rscnavg.xml";
     String RULEFILE			= "rules.xml";
     String RULEURL 			= "com/synet/tool/rsc/util/" + RULEFILE;

@@ -70,7 +70,7 @@ public class SCDComparator extends SCLComparator {
 					if (!srcMd5.equals(destMd5)) {
 						iedNdSrc = srcIedComp.getIedNode();
 						iedNdDest = destIedComp.getIedNode();
-						Difference diff = new IedCompare(srcIedName, iedNdSrc, iedNdDest).execute();
+						Difference diff = new IedCompare(iedNdSrc, iedNdDest).execute();
 						if (diff.getChildren().size() > 0 || !StringUtil.isEmpty(diff.getMsg())) {
 							results.add(diff);
 						}

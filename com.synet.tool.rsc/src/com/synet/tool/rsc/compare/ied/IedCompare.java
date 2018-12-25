@@ -1,10 +1,8 @@
 package com.synet.tool.rsc.compare.ied;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.dom4j.Attribute;
 import org.dom4j.Element;
 
 import com.shrcn.found.common.util.StringUtil;
@@ -15,16 +13,16 @@ import com.synet.tool.rsc.compare.OP;
 
 public class IedCompare implements ICompare {
 	
-	private String iedName;
+//	private String iedName;
 	private Element iedNdSrc;
 	private Element iedNdDest;
 	private Difference diffRoot;
 
-	public IedCompare(String iedName, Element iedNdSrc, Element iedNdDest) {
-		this.iedName = iedName;
+	public IedCompare(Element iedNdSrc, Element iedNdDest) {
+//		this.iedName = iedName;
 		this.iedNdSrc = iedNdSrc;
 		this.iedNdDest = iedNdDest;
-		this.diffRoot = new Difference("IED", iedName);
+		this.diffRoot = CompareUtil.addUpdateDiff(diffRoot, iedNdSrc, iedNdDest);
 	}
 
 	@Override
@@ -45,14 +43,14 @@ public class IedCompare implements ICompare {
 		return diffRoot;
 	}
 	
-	/**
-	 * 获取FCDA除ref之外的属性值
-	 * @param fcda
-	 * @return
-	 */
-	private String getFCDAMsg(Element fcda) {
-		return CompareUtil.getAttsMsg(fcda, "ref");
-	}
+//	/**
+//	 * 获取FCDA除ref之外的属性值
+//	 * @param fcda
+//	 * @return
+//	 */
+//	private String getFCDAMsg(Element fcda) {
+//		return CompareUtil.getAttsMsg(fcda, "ref");
+//	}
 	
 	/**
 	 * FCDA全部删除或者全部新增
@@ -64,18 +62,17 @@ public class IedCompare implements ICompare {
 		Iterator<Element> iterator = ndParent.elementIterator("FCDA");
 		while(iterator.hasNext()) {
 			Element fcda = iterator.next();
-			String ref = fcda.attributeValue("ref");
-			new Difference(diffParent, "FCDA", ref, getFCDAMsg(fcda), op);
+			CompareUtil.addDiffByAttName(diffParent, fcda, "ref", op);
 		}
 	}
 	
 	/**
 	 * 比较FCDA
-	 * @param ndParent
+	 * @param diffParent
 	 * @param srcNd
 	 * @param destNd
 	 */
-	private void compareFCDAs(Difference ndParent, Element srcNd, Element destNd) {
+	private void compareFCDAs(Difference diffParent, Element srcNd, Element destNd) {
 		Iterator<Element> iterator = srcNd.elementIterator();
 		Map<String, Element> destChildrenMap = CompareUtil.getChildrenMapByAtt(destNd, "ref");
 		while (iterator.hasNext()) {
@@ -83,11 +80,11 @@ public class IedCompare implements ICompare {
 			String ref = ndFCDASrc.attributeValue("ref");
 			Element ndFCDADest = destChildrenMap.get(ref);
 			if (ndFCDADest == null) { // 已删除
-				new Difference(ndParent, "FCDA", ref, getFCDAMsg(ndFCDASrc), OP.DELETE);
+				CompareUtil.addDiffByAttName(diffParent, ndFCDASrc, "ref", OP.DELETE);
 			} else {
 				String msg = CompareUtil.compare(ndFCDASrc, ndFCDADest);
 				if (!StringUtil.isEmpty(msg)) {	// 修改
-					new Difference(ndParent, "FCDA", ref, msg, OP.UPDATE);
+					new Difference(diffParent, "FCDA", ref, msg, OP.UPDATE);
 				}
 				destChildrenMap.remove(ref);
 			}
@@ -95,7 +92,7 @@ public class IedCompare implements ICompare {
 		if (destChildrenMap.size() > 0) {
 			for (Element ndFCDADest : destChildrenMap.values()) { // 增加
 				String ref = ndFCDADest.attributeValue("ref");
-				new Difference(ndParent, "FCDA", ref , getFCDAMsg(ndFCDADest), OP.ADD);
+				CompareUtil.addDiffByAttName(diffParent, ndFCDADest, "ref", OP.ADD);
 			}
 		}
 	}
@@ -117,7 +114,8 @@ public class IedCompare implements ICompare {
 			String ref = ndPinSrc.attributeValue("ref");
 			Element ndPinDest = destNdMap.get(ref);
 			if (ndPinDest  == null) { // 已删除
-				new Difference(diffPin, "Pin", ref, CompareUtil.getAttsMsg(ndPinSrc, "ref"), OP.DELETE);
+//				new Difference(diffPin, "Pin", ref, CompareUtil.getAttsMsg(ndPinSrc, "ref"), OP.DELETE);
+				CompareUtil.addDiffByAttName(diffPin, ndPinSrc, "ref", OP.DELETE);
 			} else {
 				String descSrc = ndPinSrc.attributeValue("desc");
 				String descDest = ndPinDest.attributeValue("desc");
@@ -129,8 +127,9 @@ public class IedCompare implements ICompare {
 			}
 		}
 		for (Element ndPinDest : destNdMap.values()) {
-			String ref = ndPinDest.attributeValue("ref");
-			new Difference(diffPin, "Pin", ref, CompareUtil.getAttsMsg(ndPinDest, "ref"), OP.ADD);
+//			String ref = ndPinDest.attributeValue("ref");
+//			new Difference(diffPin, "Pin", ref, CompareUtil.getAttsMsg(ndPinDest, "ref"), OP.ADD);
+			CompareUtil.addDiffByAttName(diffPin, ndPinDest, "ref", OP.ADD);
 		}
 	}
 	
@@ -155,8 +154,7 @@ public class IedCompare implements ICompare {
 			String cbRef = ndCBSrc.attributeValue(keyAtt);
 			Element ndCBDest = destChildrenMap.get(cbRef);
 			if (ndCBDest == null) { // 已删除
-				String msg = CompareUtil.getAttsMsg(ndCBSrc, keyAtt);
-				Difference diffCB = new Difference(diffType, cbName, cbRef, msg, OP.DELETE);
+				Difference diffCB = CompareUtil.addDiffByAttName(diffType, ndCBSrc, keyAtt, OP.DELETE);
 				fillChildrenByFCDAs(diffCB, ndCBSrc, OP.DELETE);
 			} else {
 				if (!matchMd5(ndCBSrc, ndCBDest)) {
@@ -169,9 +167,7 @@ public class IedCompare implements ICompare {
 		}
 		if (destChildrenMap.size() > 0) {
 			for (Element ndCBDest : destChildrenMap.values()) {
-				String cbRef = ndCBDest.attributeValue(keyAtt);
-				String msg = CompareUtil.getAttsMsg(ndCBDest, keyAtt);
-				Difference diffCB = new Difference(diffType, cbName, cbRef, msg, OP.ADD);
+				Difference diffCB = CompareUtil.addDiffByAttName(diffType, ndCBDest, keyAtt, OP.ADD);
 				fillChildrenByFCDAs(diffCB, ndCBDest, OP.ADD);
 			}
 		}
@@ -220,8 +216,9 @@ public class IedCompare implements ICompare {
 			String intAddrSrc = ndInputSrc.attributeValue("intAddr");
 			Element ndInputDest = destChildrenMap.get(intAddrSrc);
 			if (ndInputDest == null) { // 删除
-				String msg = CompareUtil.getAttsMsg(ndInputSrc, "intAddr");
-				new Difference(diffType, "ExtRef", intAddrSrc, msg, OP.DELETE);
+//				String msg = CompareUtil.getAttsMsg(ndInputSrc, "intAddr");
+//				new Difference(diffType, "ExtRef", intAddrSrc, msg, OP.DELETE);
+				CompareUtil.addDiffByAttName(diffType, ndInputSrc, "intAddr", OP.DELETE);
 			} else {
 				String msg = CompareUtil.compare(ndInputSrc, ndInputDest);
 				if (!StringUtil.isEmpty(msg)) {
@@ -232,9 +229,10 @@ public class IedCompare implements ICompare {
 		}
 		if (destChildrenMap.size() > 0) {
 			for (Element ndInputDest : destChildrenMap.values()) {
-				String intAddrDest = ndInputDest.attributeValue("intAddr");
-				String msg = CompareUtil.getAttsMsg(ndInputDest, "intAddr");
-				new Difference(diffType, "ExtRef", intAddrDest, msg, OP.ADD);
+//				String intAddrDest = ndInputDest.attributeValue("intAddr");
+//				String msg = CompareUtil.getAttsMsg(ndInputDest, "intAddr");
+//				new Difference(diffType, "ExtRef", intAddrDest, msg, OP.ADD);
+				CompareUtil.addDiffByAttName(diffType, ndInputDest, "intAddr", OP.ADD);
 			}
 		}
 	}

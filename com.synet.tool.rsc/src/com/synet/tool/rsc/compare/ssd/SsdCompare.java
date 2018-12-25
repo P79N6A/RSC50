@@ -34,10 +34,10 @@ public class SsdCompare implements ICompare {
 	
 	@Override
 	public Difference execute() {
-		Difference diffRoot = new Difference("Substation", getName(ssdNdSrc));
 		if (CompareUtil.matchMd5(ssdNdSrc, ssdNdDest)) {
-			return diffRoot;
+			return null;
 		}
+		Difference diffRoot = CompareUtil.addUpdateDiff(null, ssdNdSrc, ssdNdDest);
 		compareAtts(diffRoot, ssdNdSrc, ssdNdDest);
 		Iterator<Element> volIterator = ssdNdSrc.elementIterator("VoltageLevel");
 		Map<String, Element> destChildrenMap = CompareUtil.getChildrenMapByAtt(ssdNdDest, "name");
@@ -49,13 +49,11 @@ public class SsdCompare implements ICompare {
 				continue;
 			}
 			if (ndVolDest == null) { // 已删除
-				String msg = CompareUtil.getAttsMsg(ndVolSrc, "name");
-				Difference diffVol = new Difference(diffRoot, "VoltageLevel", volName, msg, OP.DELETE);
+				Difference diffVol = CompareUtil.addDiffByAttName(diffRoot, ndVolSrc, "name", OP.DELETE);
 				fillVolDiffs(diffVol, ndVolSrc, OP.DELETE);
 			} else {
 				if (!CompareUtil.matchMd5(ndVolSrc, ndVolDest)) {
-					String msg = CompareUtil.compare(ndVolSrc, ndVolDest);
-					Difference diffVol = new Difference(diffRoot, "VoltageLevel", volName, msg, OP.UPDATE);
+					Difference diffVol = CompareUtil.addUpdateDiff(diffRoot, ndVolSrc, ndVolDest);
 					compareVolDiffs(diffVol, ndVolSrc, ndVolDest);
 				}
 				destChildrenMap.remove(volName);
@@ -63,9 +61,7 @@ public class SsdCompare implements ICompare {
 		}
 		if (destChildrenMap.size() > 0) {
 			for (Element ndVolDest : destChildrenMap.values()) {
-				String volName = ndVolDest.attributeValue("name");
-				String msg = CompareUtil.getAttsMsg(ndVolDest, "name");
-				Difference diffVol = new Difference(diffRoot, "VoltageLevel", volName, msg, OP.ADD);
+				Difference diffVol = CompareUtil.addDiffByAttName(diffRoot, ndVolDest, "name", OP.ADD);
 				fillVolDiffs(diffVol, ndVolDest, OP.ADD);
 			}
 		}
@@ -109,7 +105,7 @@ public class SsdCompare implements ICompare {
 	 * @param ndBayDest
 	 */
 	private void compareBayDiffs(Difference diffVol, Element ndBaySrc, Element ndBayDest) {
-		Difference diffBay = addDiffByName(diffVol, ndBaySrc, OP.UPDATE);
+		Difference diffBay = CompareUtil.addUpdateDiff(diffVol, ndBaySrc, ndBayDest);
 		Map<String, Element> destBaySubMap = CompareUtil.getChildrenMapByAtt(ndBayDest, "name");
 		Iterator<Element> eqpIterator = ndBaySrc.elementIterator();
 		while(eqpIterator.hasNext()) {
@@ -143,16 +139,12 @@ public class SsdCompare implements ICompare {
 		CompareUtil.sortChildren(diffBay);
 	}
 	
-	private String getAttribute(Element nd, String att) {
-		return StringUtil.nullToEmpty(nd.attributeValue(att));
-	}
-	
 	private String getLNodeXpath(Element ndLNode) {
-		String iedName = getAttribute(ndLNode, "iedName");
-		String ldInst = getAttribute(ndLNode, "ldInst");
-		String lnClass = getAttribute(ndLNode, "lnClass"); 
-		String lnInst = getAttribute(ndLNode, "lnInst"); 
-		String prefix = getAttribute(ndLNode, "prefix");
+		String iedName = CompareUtil.getAttribute(ndLNode, "iedName");
+		String ldInst = CompareUtil.getAttribute(ndLNode, "ldInst");
+		String lnClass = CompareUtil.getAttribute(ndLNode, "lnClass"); 
+		String lnInst = CompareUtil.getAttribute(ndLNode, "lnInst"); 
+		String prefix = CompareUtil.getAttribute(ndLNode, "prefix");
 		return "./LNode[@iedName='" + iedName + "'][@ldInst='" + ldInst + "'][@lnClass='" + lnClass + 
 				"'][@lnInst='" + lnInst + "'][@prefix='" + prefix + "']";
 	}
@@ -167,7 +159,7 @@ public class SsdCompare implements ICompare {
 				String xpath = getLNodeXpath(ndEqpSub);
 				eqpSubMap.put(xpath, ndEqpSub);
 			} else if ("Terminal".equals(ndEqpSubName)) {
-				String tName = getAttribute(ndEqpSub, "name");
+				String tName = CompareUtil.getAttribute(ndEqpSub, "name");
 				if (!"".endsWith(tName)) {
 					eqpSubMap.put(tName, ndEqpSub);
 				}
@@ -177,7 +169,7 @@ public class SsdCompare implements ICompare {
 	}
 	
 	private void compareBaySubDiffs(Difference diffBay, Element ndBaySubSrc, Element ndBaySubDest) {
-		Difference diffEqp = addDiffByName(diffBay, ndBaySubSrc, OP.UPDATE);
+		Difference diffEqp = CompareUtil.addUpdateDiff(diffBay, ndBaySubSrc, ndBaySubDest);
 		Iterator<Element> eqpSubIterator = ndBaySubSrc.elementIterator();
 		Map<String, Element> eqpSubDestMap = getEqpSubMap(ndBaySubDest);
 		while(eqpSubIterator.hasNext()) {
@@ -188,7 +180,7 @@ public class SsdCompare implements ICompare {
 				key = getLNodeXpath(ndEqpSubSrc);
 				
 			} else if ("Terminal".equals(ndEqpSubName)) {
-				key = getAttribute(ndEqpSubSrc, "name");
+				key = CompareUtil.getAttribute(ndEqpSubSrc, "name");
 			}
 			if ("".equals(key)) {
 				continue;

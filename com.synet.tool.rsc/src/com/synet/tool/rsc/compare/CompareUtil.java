@@ -113,7 +113,7 @@ public class CompareUtil {
 	}
 	
 	/**
-	 * 根据xml节点属性创建diff
+	 * 根据xml节点属性创建diff(add,delete)
 	 * @param diffParent
 	 * @param ndSub
 	 * @param attName
@@ -123,11 +123,31 @@ public class CompareUtil {
 	public static Difference addDiffByAttName(Difference diffParent, Element ndSub, String attName, OP op) {
 		String ndSubName = ndSub.getName();
 		if (StringUtil.isEmpty(attName)) {
-			return new Difference(diffParent, ndSubName, "", CompareUtil.getAttsMsg(ndSub, ""), op);
+			Difference diff = new Difference(diffParent, ndSubName, "", CompareUtil.getAttsMsg(ndSub, ""), op);
+			setDesc(diff, ndSub);
+			return diff;
 		} else {
 			String subName = ndSub.attributeValue(attName);
-			return new Difference(diffParent, ndSubName, subName, CompareUtil.getAttsMsg(ndSub, attName), op);
+			Difference diff = new Difference(diffParent, ndSubName, subName, CompareUtil.getAttsMsg(ndSub, attName), op);
+			setDesc(diff, ndSub);
+			return diff;
 		}
+	}
+	
+	/**
+	 * 根据xml节点属性创建diff(update)
+	 * @param diffParent
+	 * @param ndSrc
+	 * @param ndDest
+	 */
+	public static Difference addUpdateDiff(Difference diffParent, Element ndSrc, Element ndDest) {
+		String msg = CompareUtil.compare(ndSrc, ndDest);
+		String name = CompareUtil.getAttribute(ndSrc, "name");
+		Difference diff = new Difference(diffParent, ndSrc.getName(), name, msg, OP.UPDATE);
+		CompareUtil.setDesc(diff, ndSrc);
+		diff.setNewName(name);
+		diff.setNewDesc(CompareUtil.getAttribute(ndDest, "desc"));
+		return diff;
 	}
 	
 	/**
@@ -143,5 +163,25 @@ public class CompareUtil {
 				String type2 = diff2.getType() + diff2.getName();
 				return type1.compareTo(type2);
 			}});
+	}
+	
+	/**
+	 * 获取xml节点属性
+	 * @param nd
+	 * @param att
+	 * @return
+	 */
+	public static String getAttribute(Element nd, String att) {
+		return StringUtil.nullToEmpty(nd.attributeValue(att));
+	}
+	
+	/**
+	 * 设置描述
+	 * @param diff
+	 * @param nd
+	 */
+	public static void setDesc(Difference diff, Element nd) {
+		String desc = StringUtil.nullToEmpty(nd.attributeValue("desc"));
+		diff.setDesc(getAttribute(nd, "desc"));
 	}
 }
