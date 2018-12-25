@@ -7,9 +7,9 @@ public class Difference {
 
 	private String type;
 	private String name;
-	private String desc;
-	private String newName;
-	private String newDesc;
+	private String desc = "";
+	private String newName = "";
+	private String newDesc = "";
 	private String msg;
 	private OP op;
 	private Difference parent;

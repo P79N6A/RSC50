@@ -142,12 +142,23 @@ public class CompareUtil {
 	 */
 	public static Difference addUpdateDiff(Difference diffParent, Element ndSrc, Element ndDest) {
 		String msg = CompareUtil.compare(ndSrc, ndDest);
+		Difference diff = new Difference(diffParent, ndSrc.getName(), "", msg, OP.UPDATE);
+		setNameDesc(diff, ndSrc, ndDest);
+		return diff;
+	}
+	
+	/**
+	 * 设置名称、描述
+	 * @param diff
+	 * @param ndSrc
+	 * @param ndDest
+	 */
+	public static void setNameDesc(Difference diff, Element ndSrc, Element ndDest) {
 		String name = CompareUtil.getAttribute(ndSrc, "name");
-		Difference diff = new Difference(diffParent, ndSrc.getName(), name, msg, OP.UPDATE);
+		diff.setName(name);
 		CompareUtil.setDesc(diff, ndSrc);
 		diff.setNewName(name);
 		diff.setNewDesc(CompareUtil.getAttribute(ndDest, "desc"));
-		return diff;
 	}
 	
 	/**
@@ -181,7 +192,6 @@ public class CompareUtil {
 	 * @param nd
 	 */
 	public static void setDesc(Difference diff, Element nd) {
-		String desc = StringUtil.nullToEmpty(nd.attributeValue("desc"));
 		diff.setDesc(getAttribute(nd, "desc"));
 	}
 }

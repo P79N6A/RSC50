@@ -126,8 +126,7 @@ public class SsdCompare implements ICompare {
 				if (isEquipmentNode(ndName)) {	// 设备
 					compareBaySubDiffs(diffBay, ndBaySubSrc, ndBaySubDest);
 				} else {						// 拓扑连接点
-					String msg = CompareUtil.compare(ndBaySubSrc, ndBaySubDest);
-					new Difference(diffBay, ndName, baySubName, msg, OP.UPDATE);
+					CompareUtil.addUpdateDiff(diffBay, ndBaySubSrc, ndBaySubDest);
 				}
 			}
 		}

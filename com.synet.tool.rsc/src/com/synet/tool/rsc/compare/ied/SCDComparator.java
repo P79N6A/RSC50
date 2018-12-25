@@ -59,6 +59,8 @@ public class SCDComparator extends SCLComparator {
 				String srcMd5 = FileManipulate.getMD5CodeForStr(iedNdSrc.asXML());
 				String destMd5 = FileManipulate.getMD5CodeForStr(iedNdDest.asXML());
 				if (!srcMd5.equals(destMd5)) {
+					String desc = CompareUtil.getAttribute(iedNdSrc, "desc");
+					String newdesc = CompareUtil.getAttribute(iedNdDest, "desc");
 					iedNdSrc.addAttribute("name", srcIedName + "_old");
 					iedNdDest.addAttribute("name", srcIedName + "_new");
 					IedCompareParser srcIedComp = new IedCompareParser(iedNdSrc, createContext(srcXmlHelper));
@@ -72,6 +74,10 @@ public class SCDComparator extends SCLComparator {
 						iedNdDest = destIedComp.getIedNode();
 						Difference diff = new IedCompare(iedNdSrc, iedNdDest).execute();
 						if (diff.getChildren().size() > 0 || !StringUtil.isEmpty(diff.getMsg())) {
+							diff.setName(srcIedName);
+							diff.setNewName(srcIedName);
+							diff.setDesc(desc);
+							diff.setNewDesc(newdesc);
 							results.add(diff);
 						}
 					}
