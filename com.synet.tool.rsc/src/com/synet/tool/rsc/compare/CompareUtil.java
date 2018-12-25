@@ -1,0 +1,147 @@
+package com.synet.tool.rsc.compare;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.dom4j.Attribute;
+import org.dom4j.Element;
+
+import com.shrcn.found.common.util.ArrayUtil;
+import com.shrcn.found.common.util.StringUtil;
+import com.shrcn.found.file.util.FileManipulate;
+
+public class CompareUtil {
+
+	/**
+	 * 比较两个xml节点文本md5码是否一致
+	 * @param ndSrc
+	 * @param ndDest
+	 * @return
+	 */
+	public static boolean matchMd5(Element ndSrc, Element ndDest) {
+		String srcMd5 = FileManipulate.getMD5CodeForStr(ndSrc.asXML());
+		String destMd5 = FileManipulate.getMD5CodeForStr(ndDest.asXML());
+		if (srcMd5.equals(destMd5)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 比较两个xml节点属性并返回差异信息
+	 * @param ndSrc
+	 * @param ndDest
+	 * @return
+	 */
+	public static String compare(Element ndSrc, Element ndDest) {
+		return compare(ndSrc, ndDest, null);
+	}
+	
+	/**
+	 * 比较两个xml节点属性并返回差异信息
+	 * @param ndSrc
+	 * @param ndDest
+	 * @param atts
+	 * @return
+	 */
+	public static String compare(Element ndSrc, Element ndDest, String...atts) {
+		String msg = "";
+		Iterator<Attribute> iterator = ndSrc.attributeIterator();
+		while (iterator.hasNext()) {
+			Attribute att = iterator.next();
+			String name = att.getName();
+			if ("md5".equals(name) || 
+					!(atts==null || ArrayUtil.contains(name, atts))) {
+				continue;
+			} else {
+				String valueSrc = att.getValue();
+				String valueDest = ndDest.attributeValue(name);
+				if (!valueSrc.equals(valueDest)) {
+					if (!"".equals(msg)) {
+						msg += ",";
+					}
+					msg += name + ":" + valueSrc + "->" + valueDest;
+				}
+			}
+		}
+		return msg;
+	}
+	
+	/**
+	 * 以指定属性为主键将子节点转成Map，便于查找
+	 * @param ndParent
+	 * @param att
+	 * @return
+	 */
+	public static Map<String, Element> getChildrenMapByAtt(Element ndParent, String att) {
+		Map<String, Element> map = new HashMap<>();
+		Iterator<Element> iterator = ndParent.elementIterator();
+		while (iterator.hasNext()) {
+			Element nd = iterator.next();
+			String ref = nd.attributeValue(att);
+			if (ref != null) {
+				map.put(ref, nd);
+			}
+		}
+		return map;
+	}
+	
+	/**
+	 * 获取任意节点除指定属性名之外的属性值
+	 * @param fcda
+	 * @param except
+	 * @return
+	 */
+	public static String getAttsMsg(Element fcda, String except) {
+		String msg = "";
+		Iterator<Attribute> attributeIterator = fcda.attributeIterator();
+		while(attributeIterator.hasNext()) {
+			Attribute att = attributeIterator.next();
+			String name = att.getName();
+			if (!except.equals(name) && !"md5".equals(name)) {
+				if (!"".equals(msg)) {
+					msg += ",";
+				}
+				msg += name + ":" + att.getValue();
+			}
+		}
+		return msg;
+	}
+	
+	/**
+	 * 根据xml节点属性创建diff
+	 * @param diffParent
+	 * @param ndSub
+	 * @param attName
+	 * @param op
+	 * @return
+	 */
+	public static Difference addDiffByAttName(Difference diffParent, Element ndSub, String attName, OP op) {
+		String ndSubName = ndSub.getName();
+		if (StringUtil.isEmpty(attName)) {
+			return new Difference(diffParent, ndSubName, "", CompareUtil.getAttsMsg(ndSub, ""), op);
+		} else {
+			String subName = ndSub.attributeValue(attName);
+			return new Difference(diffParent, ndSubName, subName, CompareUtil.getAttsMsg(ndSub, attName), op);
+		}
+	}
+	
+	/**
+	 * 子节点排序
+	 * @param diff
+	 */
+	public static void sortChildren(Difference diff) {
+		List<Difference> subDiffs = diff.getChildren();
+		Collections.sort(subDiffs, new Comparator<Difference> () {
+			@Override
+			public int compare(Difference diff1, Difference diff2) {
+				String type1 = diff1.getType() + diff1.getName();
+				String type2 = diff2.getType() + diff2.getName();
+				return type1.compareTo(type2);
+			}});
+	}
+}
