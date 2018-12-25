@@ -7,6 +7,9 @@ public class Difference {
 
 	private String type;
 	private String name;
+	private String desc;
+	private String newName;
+	private String newDesc;
 	private String msg;
 	private OP op;
 	private Difference parent;
@@ -21,7 +24,7 @@ public class Difference {
 		this.type = type;
 		this.name = name;
 		this.msg = msg;
-		this.op = op;
+		this.op = (op == null) ? OP.NONE : op;
 		if (parent != null) {
 			parent.addChild(this);
 		}
@@ -41,6 +44,30 @@ public class Difference {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public String getNewName() {
+		return newName;
+	}
+
+	public void setNewName(String newName) {
+		this.newName = newName;
+	}
+
+	public String getNewDesc() {
+		return newDesc;
+	}
+
+	public void setNewDesc(String newDesc) {
+		this.newDesc = newDesc;
 	}
 
 	public String getMsg() {

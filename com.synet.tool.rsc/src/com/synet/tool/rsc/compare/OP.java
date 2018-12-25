@@ -7,7 +7,7 @@ import com.shrcn.found.ui.util.ImageConstants;
 
 public enum OP {
 	
-	ADD("增加"), DELETE("删除"), RENAME("重命名"), UPDATE("修改");
+	ADD("增加"), DELETE("删除"), RENAME("重命名"), UPDATE("修改"), NONE("忽略");
 	
 	private IconsManager iconMgr = IconsManager.getInstance();
 	private String desc;
