@@ -14,4 +14,5 @@ public class TypeField extends FieldBase {
 		Difference diff = (Difference)element;
 		return diff.getType();
 	}
+	
 }

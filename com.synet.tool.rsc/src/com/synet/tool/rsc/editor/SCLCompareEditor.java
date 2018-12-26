@@ -63,10 +63,10 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		this.cmpDiff = new Composite(container, SWT.NONE);
 		cmpDiff.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		cmpDiff.setLayout(new GridLayout(1, false));
-		IField[] fields = new IField[] {new TypeField(), new NameField(), new DescField(), new NewNameField(), new NewDescField(), 
-				new MsgField(), new OpField()};
-		this.treetable = new TreeTable(cmpDiff, SWT.MULTI | SWT.FULL_SELECTION, fields, new FixedTreeTableAdapterFactory(
-				DiffTreeTableAdapter.instance));
+		IField[] fields = new IField[] {new TypeField(), new NameField(), new DescField(), 
+				new NewNameField(), new NewDescField(),new MsgField(), new OpField()};
+		this.treetable = new TreeTable(cmpDiff, SWT.MULTI | SWT.FULL_SELECTION, fields, 
+				new FixedTreeTableAdapterFactory(DiffTreeTableAdapter.instance));
 		treetable.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		final Composite bottom = new Composite(cmpDiff, SWT.NONE);
