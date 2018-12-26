@@ -156,7 +156,7 @@ public class CompareUtil {
 	public static void setNameDesc(Difference diff, Element ndSrc, Element ndDest) {
 		String name = CompareUtil.getAttribute(ndSrc, "name");
 		diff.setName(name);
-		CompareUtil.setDesc(diff, ndSrc);
+		setDesc(diff, ndSrc);
 		diff.setNewName(name);
 		diff.setNewDesc(CompareUtil.getAttribute(ndDest, "desc"));
 	}
