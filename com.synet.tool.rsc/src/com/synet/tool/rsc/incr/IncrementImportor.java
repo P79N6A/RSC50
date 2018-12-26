@@ -3,6 +3,8 @@ package com.synet.tool.rsc.incr;
 import java.util.List;
 
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.incr.scd.ScdIncreImportor;
+import com.synet.tool.rsc.incr.ssd.SsdIncreImportor;
 
 public class IncrementImportor extends BaseIncreImportor {
 

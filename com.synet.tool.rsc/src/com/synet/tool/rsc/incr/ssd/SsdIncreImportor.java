@@ -1,8 +1,9 @@
-package com.synet.tool.rsc.incr;
+package com.synet.tool.rsc.incr.ssd;
 
 import java.util.List;
 
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.incr.BaseIncreImportor;
 
 public class SsdIncreImportor extends BaseIncreImportor {
 
@@ -17,5 +18,6 @@ public class SsdIncreImportor extends BaseIncreImportor {
 		Difference diffRoot = diffs.get(0);
 //		new ConflictHandler(diff, diffDest).handle();
 //		ConsoleManager.getInstance().append("重命名操作已完成！");
+		
 	}
 }

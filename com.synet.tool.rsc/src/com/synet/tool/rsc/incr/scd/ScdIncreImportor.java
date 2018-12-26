@@ -1,8 +1,9 @@
-package com.synet.tool.rsc.incr;
+package com.synet.tool.rsc.incr.scd;
 
 import java.util.List;
 
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.incr.BaseIncreImportor;
 
 public class ScdIncreImportor extends BaseIncreImportor {
 

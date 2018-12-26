@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.treetable.FixedTreeTableAdapterFactory;
@@ -170,6 +171,28 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		@Override
 		public void run() {
 			Difference diff = getSelectedDiff();
+			if (diff.getOp() == op) {
+				return;
+			}
+			if (OP.RENAME == diff.getOp()) {
+				DialogHelper.showWarning("不允许将重命名改为" + op.getDesc() + "！");
+				return;
+			}
+			String newName = diff.getName();
+			if (!StringUtil.isEmpty(newName)) {
+				Difference diffRename = null;
+				for (Difference brother : diff.getParent().getChildren()) {
+					if (OP.RENAME == brother.getOp() && brother.getType().equals(diff.getType()) 
+							&& newName.equals(brother.getNewName())) {
+						diffRename = brother;
+						break;
+					}
+				}
+				if (diffRename != null) {
+					DialogHelper.showWarning(newName + "已被" + diffRename.getName() + "用作新名称，不允许改为" + op.getDesc() + "！");
+					return;
+				}
+			}
 			diff.setOp(op);
 			refreshParentDiff();
 		}
