@@ -56,7 +56,7 @@ public class BaseImportAction extends ConfigAction {
 						new Object[] {srcpath, destpath, monitor});
 				long t = System.currentTimeMillis();
 				final List<Difference> diffs = cmp.execute();
-				ConsoleManager.getInstance().append("SCD对比耗时：" + (System.currentTimeMillis() - t));
+				ConsoleManager.getInstance().append("SCD对比耗时：" + (System.currentTimeMillis() - t) + "ms");
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {

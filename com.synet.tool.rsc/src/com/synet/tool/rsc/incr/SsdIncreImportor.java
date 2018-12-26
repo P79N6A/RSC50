@@ -15,5 +15,7 @@ public class SsdIncreImportor extends BaseIncreImportor {
 			return;
 		}
 		Difference diffRoot = diffs.get(0);
+//		new ConflictHandler(diff, diffDest).handle();
+//		ConsoleManager.getInstance().append("重命名操作已完成！");
 	}
 }

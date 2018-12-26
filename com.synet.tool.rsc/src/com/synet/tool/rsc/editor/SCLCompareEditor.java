@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.excelutils2007.ExcelUtils;
@@ -24,6 +25,7 @@ import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.treetable.FixedTreeTableAdapterFactory;
 import com.shrcn.found.ui.treetable.TreeTable;
+import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.FileDialogHelper;
 import com.shrcn.found.ui.util.ImageConstants;
 import com.shrcn.found.ui.util.ImgDescManager;
@@ -32,6 +34,7 @@ import com.shrcn.found.ui.util.TaskManager;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.compare.OP;
 import com.synet.tool.rsc.dialog.ConflictHandleDialog;
 import com.synet.tool.rsc.editor.tree.DescField;
 import com.synet.tool.rsc.editor.tree.DiffTreeTableAdapter;
@@ -85,28 +88,90 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		btnImport = SwtUtil.createPushButton(cmpTools, "增量导入", btData);
 		btnImport.setImage(ImgDescManager.getImageDesc(ImageConstants.IMPORT).createImage());
 
-		IField[] fields = new IField[] {new TypeField(), new NameField(), new DescField(), 
-				new NewNameField(), new NewDescField(),new MsgField(), new OpField()};
+		IField[] fields = new IField[] {new TypeField(), new OpField(), new NameField(), new DescField(), 
+				new NewNameField(), new NewDescField(),new MsgField()};
 		this.treetable = new TreeTable(cmpDiff, SWT.MULTI | SWT.FULL_SELECTION, fields, 
 				new FixedTreeTableAdapterFactory(DiffTreeTableAdapter.instance));
 		treetable.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		SwtUtil.createContextMenu(treetable.getTree(), new ConflictAction());
+		SwtUtil.createContextMenu(treetable.getTree(), 
+				new RenameAction(), new UnRenameAction(), new OperationAction(OP.NONE), 
+				new OperationAction(OP.ADD), new OperationAction(OP.DELETE), new OperationAction(OP.UPDATE));
 	}
 	
-	class ConflictAction extends Action {
+	class RenameAction extends Action {
 		
-		public ConflictAction() {
-			setText("冲突处理");
+		public RenameAction() {
+			setText("重命名");
 		}
 		
 		@Override
 		public void run() {
-			Difference diff = (Difference) treetable.getSelection();
-			Difference diffParent = diff.getParent();
-			ConflictHandleDialog conflictDlg = new ConflictHandleDialog(diff, getShell());
-			if (ConflictHandleDialog.OK == conflictDlg.open()) {
-				treetable.getTreeViewer().refresh(diffParent);
+			Difference diff = getSelectedDiff();
+			if (OP.DELETE != diff.getOp()) {
+				DialogHelper.showWarning("只有删除状态才允许重命名！");
+				return;
 			}
+			List<Difference> diffsAdded = new ArrayList<>();
+			List<Difference> brothers = diff.getParent().getChildren();
+			for (Difference brother : brothers) {
+				if (diff.getType().equals(brother.getType())
+						&& brother.getOp() == OP.ADD) {
+					diffsAdded.add(brother);
+				}
+			}
+			if (diffsAdded.size() < 1) {
+				DialogHelper.showWarning("未增加同类型节点，无法重命名！");
+				return;
+			}
+			ConflictHandleDialog conflictDlg = new ConflictHandleDialog(diff, diffsAdded, getShell());
+			if (ConflictHandleDialog.OK == conflictDlg.open()) {
+				refreshParentDiff();
+			}
+		}
+	}
+	
+	class UnRenameAction extends Action {
+		
+		public UnRenameAction() {
+			setText("取消重命名");
+		}
+		
+		@Override
+		public void run() {
+			Difference diff = getSelectedDiff();
+			if (OP.RENAME != diff.getOp()) {
+				DialogHelper.showWarning("当前节点未做重命名操作！");
+				return;
+			}
+			String newName = diff.getNewName();
+			List<Difference> brothers = diff.getParent().getChildren();
+			for (Difference brother : brothers) {
+				if (diff.getType().equals(brother.getType())
+						&& newName.equals(brother.getName())) {
+					brother.setOp(OP.ADD);
+				}
+			}
+			diff.setOp(OP.DELETE);
+			diff.setNewName("");
+			diff.setNewDesc("");
+			refreshParentDiff();
+		}
+	}
+	
+	class OperationAction extends Action {
+		
+		private OP op;
+		
+		public OperationAction(OP op) {
+			setText(op.getDesc());
+			this.op = op;
+		}
+		
+		@Override
+		public void run() {
+			Difference diff = getSelectedDiff();
+			diff.setOp(op);
+			refreshParentDiff();
 		}
 	}
 	
@@ -152,5 +217,15 @@ public class SCLCompareEditor extends BaseConfigEditor {
 			SwtUtil.setVisible(lb, true);
 			SwtUtil.setVisible(cmpDiff, false);
 		}
+	}
+
+	private Difference getSelectedDiff() {
+		return (Difference) treetable.getSelection();
+	}
+	
+	private void refreshParentDiff() {
+		Difference diff = getSelectedDiff();
+		Difference diffParent = diff.getParent();
+		treetable.getTreeViewer().refresh(diffParent);
 	}
 }
