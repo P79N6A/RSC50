@@ -7,16 +7,13 @@ package com.synet.tool.rsc;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.shrcn.found.file.util.AProperties;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.HqlDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
-import com.shrcn.tool.found.das.impl.HEntityUtil;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
-import com.synet.tool.rsc.das.SessionRsc;
 import com.synet.tool.rsc.jdbc.ConnParam;
 
 public class RSCProperties extends AProperties {
@@ -32,6 +29,7 @@ public class RSCProperties extends AProperties {
 	private static final String ORA_USR = "ora.usr";
 	private static final String ORA_PWD = "ora.pwd";
 	private static final String RULE = "RULE";
+	private static final String REPLACE_MODE = "mode.replace";
 
 	private RSCProperties() {
 		init(path);
@@ -130,5 +128,15 @@ public class RSCProperties extends AProperties {
 	
 	public void setCurrentRule(String fileName) {
 		setProperty(RULE, fileName, true);
+	}
+	
+	public boolean isReplaceMode() {
+		return getBoolValue(REPLACE_MODE);
+	}
+	
+	public void switchReplaceMode() {
+		boolean replace = isReplaceMode();
+		replace = !replace;
+		setProperty(REPLACE_MODE, replace + "", true);
 	}
 }

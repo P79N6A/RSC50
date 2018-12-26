@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.dom4j.Element;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.found.common.util.StringUtil;
+import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.synet.tool.rsc.compare.CompareUtil;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.ICompare;
@@ -16,14 +18,12 @@ public class SsdCompare implements ICompare {
 
 	private Element ssdNdSrc;
 	private Element ssdNdDest;
+	private IProgressMonitor monitor;
 
-	public SsdCompare(Element ssdNdSrc, Element ssdNdDest) {
+	public SsdCompare(Element ssdNdSrc, Element ssdNdDest, IProgressMonitor monitor) {
 		this.ssdNdSrc = ssdNdSrc;
 		this.ssdNdDest = ssdNdDest;
-	}
-	
-	private String getName(Element nd) {
-		return nd.attributeValue("name");
+		this.monitor = monitor;
 	}
 	
 	private void compareAtts(Difference diff, Element ndSrc, Element ndDest) {
@@ -37,6 +37,8 @@ public class SsdCompare implements ICompare {
 		if (CompareUtil.matchMd5(ssdNdSrc, ssdNdDest)) {
 			return null;
 		}
+		int volCount = DOM4JNodeHelper.countNodes(ssdNdSrc, "/SCL/Substation/VoltageLevel");
+		monitor.beginTask("开始比较SSD信息", volCount + 1);
 		Difference diffRoot = CompareUtil.addUpdateDiff(null, ssdNdSrc, ssdNdDest);
 		compareAtts(diffRoot, ssdNdSrc, ssdNdDest);
 		Iterator<Element> volIterator = ssdNdSrc.elementIterator("VoltageLevel");
@@ -45,6 +47,7 @@ public class SsdCompare implements ICompare {
 			Element ndVolSrc = volIterator.next();
 			String volName = ndVolSrc.attributeValue("name");
 			Element ndVolDest = destChildrenMap.get(volName);
+			monitor.setTaskName("正在比较电压等级" + volName);
 			if (CompareUtil.matchMd5(ndVolSrc, ndVolDest)) {
 				continue;
 			}
@@ -58,6 +61,7 @@ public class SsdCompare implements ICompare {
 				}
 				destChildrenMap.remove(volName);
 			}
+			monitor.worked(1);
 		}
 		if (destChildrenMap.size() > 0) {
 			for (Element ndVolDest : destChildrenMap.values()) {
@@ -65,6 +69,7 @@ public class SsdCompare implements ICompare {
 				fillVolDiffs(diffVol, ndVolDest, OP.ADD);
 			}
 		}
+		monitor.done();
 		return diffRoot;
 	}
 	

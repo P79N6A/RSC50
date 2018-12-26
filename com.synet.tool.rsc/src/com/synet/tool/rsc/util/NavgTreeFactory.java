@@ -32,7 +32,11 @@ import static com.synet.tool.rsc.RSCConstants.ET_PR_MDL;
 import java.util.List;
 import java.util.Set;
 
+import com.shrcn.found.ui.editor.BaseEditorInput;
+import com.shrcn.found.ui.editor.ConfigEditorInput;
+import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.model.ConfigTreeEntry;
+import com.shrcn.found.ui.model.IEDEntry;
 import com.shrcn.found.ui.model.ITreeEntry;
 import com.shrcn.found.ui.model.ProjectEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
@@ -253,6 +257,16 @@ public class NavgTreeFactory extends ANavgTreeFactory {
 		ConfigTreeEntry configTreeEntry = new ConfigTreeEntry(parent, name, "", icon, editorId);
 		configTreeEntry.setIndex(index);
 		return configTreeEntry;
+	}
+	
+	public static ConfigEditorInput getInput(ConfigTreeEntry configEntry, IEDEntry iedEntry, String editorId) {
+		EditorConfigData data = new EditorConfigData(configEntry.getName(), null, 0, configEntry.getName());
+		data.setData(configEntry.getData());
+		return new ConfigEditorInput(configEntry.getName(), configEntry.getIcon(), editorId, data);
+	}
+	
+	public static BaseEditorInput createEditInput(String name, String icon, String editorId, Object editdata) {
+		return new BaseEditorInput(name, icon, editorId, editdata);
 	}
 	
 }

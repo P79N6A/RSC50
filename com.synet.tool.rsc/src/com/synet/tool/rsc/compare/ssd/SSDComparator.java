@@ -21,7 +21,10 @@ public class SSDComparator extends SCLComparator {
 		Element subSrc = srcXmlHelper.selectSingleNode("/SCL/Substation");
 		Element subDest = destXmlHelper.selectSingleNode("/SCL/Substation");
 		List<Difference> results = new ArrayList<Difference>();
-		results.add(new SsdCompare(subSrc, subDest).execute());
+		Difference diff = new SsdCompare(subSrc, subDest, monitor).execute();
+		if (diff != null) {
+			results.add(diff);
+		}
 		return results;
 	}
 

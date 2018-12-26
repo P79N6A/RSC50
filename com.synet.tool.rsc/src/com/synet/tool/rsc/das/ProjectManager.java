@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 
+import com.shrcn.found.common.Constants;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.tool.found.das.DBManager;
 import com.synet.tool.rsc.RSCConstants;
@@ -137,8 +138,8 @@ public class ProjectManager {
 	 * 
 	 * @return
 	 */
-	public static String getProjectScdPath() {
-		return getDataDir() + RSCConstants.CURR_SCD;
+	public String getProjectScdPath() {
+		return getDataDir() + Constants.CURRENT_PRJ_NAME + File.separator + RSCConstants.CURR_SCD;
 	}
 	
 	/**
@@ -146,8 +147,8 @@ public class ProjectManager {
 	 * 
 	 * @return
 	 */
-	public static String getProjectSsdPath() {
-		return getDataDir() + RSCConstants.CURR_SSD;
+	public String getProjectSsdPath() {
+		return getDataDir() + Constants.CURRENT_PRJ_NAME + File.separator + RSCConstants.CURR_SSD;
 	}
 	
 }

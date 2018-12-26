@@ -18,11 +18,13 @@ import com.shrcn.business.scl.das.FcdaDAO;
 import com.shrcn.business.scl.das.IEDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.Constants;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.parser.DsParameterParser;
 import com.synet.tool.rsc.io.parser.DsSettingParser;
 import com.synet.tool.rsc.io.parser.GooseParser;
@@ -132,6 +134,7 @@ public class SCDImporter implements IImporter {
 
 	@Override
 	public void execute(IProgressMonitor monitor) {
+		FileManipulate.copyByChannel(scdPath, ProjectManager.getInstance().getProjectScdPath());
 		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
 		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
 		SubstationParser sp = new SubstationParser();

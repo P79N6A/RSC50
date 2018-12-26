@@ -21,7 +21,6 @@ import com.shrcn.found.ui.UIConstants;
 import com.shrcn.found.ui.app.MenuToolFactory;
 import com.shrcn.found.ui.dialog.InputDialog;
 import com.shrcn.found.ui.editor.ConfigEditorInput;
-import com.shrcn.found.ui.editor.EditorConfigData;
 import com.shrcn.found.ui.model.ConfigTreeEntry;
 import com.shrcn.found.ui.model.IEDEntry;
 import com.shrcn.found.ui.tree.TreeViewerBuilder;
@@ -51,11 +50,7 @@ public class NavigationView extends ANavigationView {
 	}
 
 	protected ConfigEditorInput getInput(ConfigTreeEntry configEntry, IEDEntry iedEntry, String editorId) {
-//		BayIEDEntry bayEntry = (BayIEDEntry) iedEntry;
-//		EditorConfigData data = new EditorConfigData(bayEntry.getName(), null, 0, ((IEDEntry)bayEntry.getParent()).getType());
-		EditorConfigData data = new EditorConfigData(configEntry.getName(), null, 0, configEntry.getName());
-		data.setData(configEntry.getData());
-		return new ConfigEditorInput(configEntry.getName(), configEntry.getIcon(), editorId, data);
+		return NavgTreeFactory.getInput(configEntry, iedEntry, editorId);
 	}
 	
 	/**

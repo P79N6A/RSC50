@@ -9,7 +9,7 @@ import com.synet.tool.rsc.compare.OP;
 public class OpField extends FieldBase {
 
 	public OpField() {
-		super("操作", 80);
+		super("操作", 120);
 	}
 	
 	@Override

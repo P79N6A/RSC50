@@ -14,6 +14,9 @@ import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
+import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.compare.ssd.SSDComparator;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.SSDImporter;
 
 
@@ -32,15 +35,20 @@ public class ImportSSDAction extends BaseImportAction {
 	public void run() {
 		final String path = DialogHelper.selectFile(getShell(), SWT.OPEN, "*.ssd;*.SSD");
 		if (path != null) {
-			ProgressManager.execute(new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-						InterruptedException {
-					new SSDImporter(path).execute(monitor);
-					DialogHelper.showAsynInformation("SSD导入成功！");
-					EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
-				}
-			});
+			if (!RSCProperties.getInstance().isReplaceMode()) {
+				ProgressManager.execute(new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						new SSDImporter(path).execute(monitor);
+						DialogHelper.showAsynInformation("SSD导入成功！");
+						EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
+					}
+				});
+			} else {
+				String srcpath = ProjectManager.getInstance().getProjectSsdPath();
+				compareImportFile(SSDComparator.class, srcpath, path);
+			}
 		}
 	}
 

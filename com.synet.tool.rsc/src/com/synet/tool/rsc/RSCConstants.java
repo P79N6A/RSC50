@@ -30,6 +30,8 @@ public interface RSCConstants {
 
     String ET_PR_MDL		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryModelEditor";
     String ET_PR_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.PrimaryBayEditor";
+
+    String ET_SCL_COMP		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.SCLCompareEditor";
     
      String ET_PT_BAY		= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectBaylEditor";
      String ET_PT_BAY_PUB	= "com.synet.tool.rsc/com.synet.tool.rsc.editor.ProtectBayPubEditor";

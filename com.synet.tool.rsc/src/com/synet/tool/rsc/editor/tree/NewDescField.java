@@ -6,7 +6,7 @@ import com.synet.tool.rsc.compare.Difference;
 public class NewDescField extends FieldBase {
 
 	public NewDescField() {
-		super("新描述", 360);
+		super("新描述", 180);
 	}
 	
 	@Override

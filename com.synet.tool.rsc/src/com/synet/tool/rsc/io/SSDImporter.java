@@ -36,15 +36,15 @@ import com.synet.tool.rsc.util.ProjectFileManager;
  */
 public class SSDImporter implements IImporter {
 
-	private String scdPath;
+	private String ssdPath;
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
 	private SubstationService staServ = new SubstationService();
 	private Map<String, Tb1042BayEntity> bayCache = new HashMap<>();
 	
-	public SSDImporter(String scdPath) {
-		this.scdPath = scdPath;
+	public SSDImporter(String ssdPath) {
+		this.ssdPath = ssdPath;
 		clearHistory();
 	}
 	
@@ -58,11 +58,11 @@ public class SSDImporter implements IImporter {
 
 	@Override
 	public void execute(IProgressMonitor monitor) {
+		FileManipulate.copyByChannel(ssdPath, ProjectManager.getInstance().getProjectSsdPath());
 		long begin = System.currentTimeMillis();
 		ConsoleManager console = ConsoleManager.getInstance();
-		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, scdPath);
-		FileManipulate.copyByChannel(scdPath, ProjectManager.getProjectSsdPath());
-		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, scdPath);
+		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, ssdPath);
+		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, ssdPath);
 		Context context = new Context();
 		OnlySubstationParser parser = new OnlySubstationParser(context, monitor);
 		parser.parse();

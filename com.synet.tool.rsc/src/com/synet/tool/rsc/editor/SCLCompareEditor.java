@@ -38,19 +38,19 @@ import com.synet.tool.rsc.editor.tree.NameField;
 import com.synet.tool.rsc.editor.tree.NewDescField;
 import com.synet.tool.rsc.editor.tree.NewNameField;
 import com.synet.tool.rsc.editor.tree.OpField;
+import com.synet.tool.rsc.editor.tree.TypeField;
 
 public class SCLCompareEditor extends BaseConfigEditor {
 
 	private Label lb;
 	private Composite cmpDiff;
-	private Button button;
+	private Button btnExport;
 	private TreeTable treetable;
 	
 	private List<Difference> diffs;
 	
 	public SCLCompareEditor(Composite container, IEditorInput input) {
 		super(container, input);
-		this.diffs = (List<Difference>) input.getData();
 	}
 
 	@Override
@@ -58,13 +58,12 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		super.buildUI(container);
 		container.setLayout(new GridLayout(1, false));
 		
-		this.lb = SwtUtil.createLabel(container, "经比较未发现任何差异！", 
-				new GridData(SWT.FILL, SWT.FILL, true, true));
+		this.lb = SwtUtil.createLabel(container, "经比较未发现任何差异！", new GridData(GridData.FILL_HORIZONTAL));
 		
 		this.cmpDiff = new Composite(container, SWT.NONE);
 		cmpDiff.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		cmpDiff.setLayout(new GridLayout(1, false));
-		IField[] fields = new IField[] {new NameField(), new DescField(), new NewNameField(), new NewDescField(), 
+		IField[] fields = new IField[] {new TypeField(), new NameField(), new DescField(), new NewNameField(), new NewDescField(), 
 				new MsgField(), new OpField()};
 		this.treetable = new TreeTable(cmpDiff, SWT.MULTI | SWT.FULL_SELECTION, fields, new FixedTreeTableAdapterFactory(
 				DiffTreeTableAdapter.instance));
@@ -76,14 +75,14 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		layout.marginLeft = -5;
 		layout.marginRight = -5;
 		bottom.setLayout(layout);
-		button = new Button(bottom, SWT.PUSH);
-		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false));
-		button.setImage(ImgDescManager.getImageDesc(ImageConstants.EXCEL).createImage());
-		button.setText("导出Excel文件");
+		btnExport = new Button(bottom, SWT.PUSH);
+		btnExport.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false));
+		btnExport.setImage(ImgDescManager.getImageDesc(ImageConstants.EXCEL).createImage());
+		btnExport.setText("导出Excel文件");
 	}
 	
 	protected void addListeners() {
-		button.addSelectionListener(new SelectionAdapter() {
+		btnExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (diffs == null || diffs.size()==0)
 					return;
@@ -106,6 +105,7 @@ public class SCLCompareEditor extends BaseConfigEditor {
 
 	@Override
 	public void initData() {
+		this.diffs = (List<Difference>) input.getData();
 		boolean hasDiffs = diffs.size() > 0;
 		if (hasDiffs) {
 			SwtUtil.setVisible(lb, false);
