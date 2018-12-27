@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.editor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,6 +32,7 @@ import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.FileDialogHelper;
 import com.shrcn.found.ui.util.ImageConstants;
 import com.shrcn.found.ui.util.ImgDescManager;
+import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.util.TaskManager;
 import com.shrcn.found.ui.view.ConsoleManager;
@@ -221,8 +224,14 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		});
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				new IncrementImportor(diffs).handle();
-				ConsoleManager.getInstance().append("增量导入已完成！");
+				ProgressManager.execute(new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						new IncrementImportor(monitor, diffs).handle();
+						ConsoleManager.getInstance().append("增量导入已完成！");
+					}
+				}, false);
 			}
 		});
 	}

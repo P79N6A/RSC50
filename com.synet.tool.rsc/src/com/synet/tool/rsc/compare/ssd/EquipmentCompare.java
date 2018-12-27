@@ -35,9 +35,13 @@ public class EquipmentCompare extends SSDSubCompare {
 			String key = "";
 			if ("LNode".equals(ndEqpSubName)) {
 				key = getLNodeXpath(ndEqpSubSrc);
-				
 			} else if ("Terminal".equals(ndEqpSubName)) {
 				key = CompareUtil.getAttribute(ndEqpSubSrc, "name");
+			} else if ("TransformerWinding".equals(ndEqpSubName)) {
+				String trw = CompareUtil.getAttribute(ndEqpSubSrc, "name");
+				ndEqpSubSrc = ndEqpSubSrc.element("Terminal");
+				ndEqpSubName = ndEqpSubSrc.getName();
+				key = trw + "/" + CompareUtil.getAttribute(ndEqpSubSrc, "name");
 			}
 			if ("".equals(key)) {
 				continue;
@@ -77,6 +81,13 @@ public class EquipmentCompare extends SSDSubCompare {
 				String tName = CompareUtil.getAttribute(ndEqpSub, "name");
 				if (!"".endsWith(tName)) {
 					eqpSubMap.put(tName, ndEqpSub);
+				}
+			} else if ("TransformerWinding".equals(ndEqpSubName)) {
+				String trw = CompareUtil.getAttribute(ndEqpSub, "name");
+				ndEqpSub = ndEqpSub.element("Terminal");
+				String key = trw + "/" + CompareUtil.getAttribute(ndEqpSub, "name");
+				if (!"".endsWith(key)) {
+					eqpSubMap.put(key, ndEqpSub);
 				}
 			}
 		}

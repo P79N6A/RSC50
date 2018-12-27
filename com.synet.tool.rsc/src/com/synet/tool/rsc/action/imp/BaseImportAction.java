@@ -56,11 +56,11 @@ public class BaseImportAction extends ConfigAction {
 						new Object[] {srcpath, destpath, monitor});
 				long t = System.currentTimeMillis();
 				final List<Difference> diffs = cmp.execute();
-				ConsoleManager.getInstance().append("SCD对比耗时：" + (System.currentTimeMillis() - t) + "ms");
+				ConsoleManager.getInstance().append("SCL对比耗时：" + (System.currentTimeMillis() - t) + "ms");
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						BaseEditorInput input = NavgTreeFactory.createEditInput("SCD增量导入", "compare.gif", RSCConstants.ET_SCL_COMP, diffs);
+						BaseEditorInput input = NavgTreeFactory.createEditInput("SCL增量导入", "compare.gif", RSCConstants.ET_SCL_COMP, diffs);
 						EventManager.getDefault().notify(EventConstants.OPEN_CONFIG, input);
 					}});
 			}
