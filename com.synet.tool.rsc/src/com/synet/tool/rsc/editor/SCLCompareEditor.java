@@ -98,8 +98,10 @@ public class SCLCompareEditor extends BaseConfigEditor {
 				new FixedTreeTableAdapterFactory(DiffTreeTableAdapter.instance));
 		treetable.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		SwtUtil.createContextMenu(treetable.getTree(), 
-				new RenameAction(), new UnRenameAction(), new OperationAction(OP.NONE), 
-				new OperationAction(OP.ADD), new OperationAction(OP.DELETE), new OperationAction(OP.UPDATE));
+				new RenameAction(), new UnRenameAction()
+//				new OperationAction(OP.NONE), 
+//				new OperationAction(OP.ADD), new OperationAction(OP.DELETE), new OperationAction(OP.UPDATE)
+		);
 	}
 	
 	class RenameAction extends Action {
@@ -224,6 +226,10 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		});
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				if (!DialogHelper.showConfirm("导入操作会对当前工程造成不可逆影响，确定执行吗?")) {
+					return;
+				}
+				btnImport.setEnabled(false);
 				ProgressManager.execute(new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException,
