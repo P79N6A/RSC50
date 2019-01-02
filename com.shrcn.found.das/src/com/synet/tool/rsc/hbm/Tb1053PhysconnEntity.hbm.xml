@@ -17,5 +17,8 @@
         <many-to-one name="tb1048PortByF1048CodeB" class="com.synet.tool.rsc.model.Tb1048PortEntity" lazy="false">
             <column name="F1048_CODE_B"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

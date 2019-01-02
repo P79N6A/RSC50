@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 次级-模拟量 关系模型
  * Created by chunc on 2018/8/7.
  */
-public class Tb1066ProtmmxuEntity {
+public class Tb1066ProtmmxuEntity extends Deletable {
     private String f1066Code;
     private Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code;
     private Tb1006AnalogdataEntity f1006Code;

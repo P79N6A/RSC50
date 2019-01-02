@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1053PhysconnEntity {
+public class Tb1053PhysconnEntity extends Deletable {
     private String f1053Code;
     private String f1041Code;
     private Tb1048PortEntity tb1048PortByF1048CodeA;

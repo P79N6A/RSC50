@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 变电站
  * Created by chunc on 2018/8/7.
  */
-public class Tb1041SubstationEntity {
+public class Tb1041SubstationEntity extends Deletable {
     private String f1041Code;
     private String f1041Name;
     private String f1041Desc;

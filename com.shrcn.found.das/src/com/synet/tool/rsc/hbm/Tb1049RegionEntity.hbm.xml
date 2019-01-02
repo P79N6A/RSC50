@@ -20,5 +20,8 @@
         <many-to-one name="tb1041SubstationByF1041Code" class="com.synet.tool.rsc.model.Tb1041SubstationEntity" lazy="false">
             <column name="F1041_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

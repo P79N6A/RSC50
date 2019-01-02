@@ -15,5 +15,8 @@
         <property name="f1045Desc">
             <column name="F1045_Desc" sql-type="varchar" length="96"/>
         </property>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

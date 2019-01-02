@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1022FaultconfigEntity {
+public class Tb1022FaultconfigEntity extends Deletable {
     private String f1022Code;
     private int f1011No;
     private int f1022Faultlevel;

@@ -6,7 +6,7 @@ import java.util.List;
  * 报告数据集和控制块
  * Created by chunc on 2018/8/7.
  */
-public class Tb1054RcbEntity {
+public class Tb1054RcbEntity extends Deletable {
     private String f1054Code;
     private String f1054Rptid;
     private String f1054Dataset;

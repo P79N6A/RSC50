@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 光强与端口
  *
  */
-public class IM106PortLightEntity {
+public class IM106PortLightEntity extends Deletable {
 	
 	private String im106Code;
 	private String devName;			//装置Name

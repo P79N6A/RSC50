@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1092PowerkkEntity {
+public class Tb1092PowerkkEntity extends Deletable {
     private String f1092Code;
     private String f1046Code;
     private String f1092Desc;

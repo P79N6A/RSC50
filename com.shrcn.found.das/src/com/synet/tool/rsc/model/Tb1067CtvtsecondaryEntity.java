@@ -8,7 +8,7 @@ import java.util.Set;
  * 互感器次级
  * Created by chunc on 2018/8/7.
  */
-public class Tb1067CtvtsecondaryEntity {
+public class Tb1067CtvtsecondaryEntity extends Deletable {
     private String f1067Code;
     private String f1067Name;
     private Integer f1067Index;

@@ -25,5 +25,8 @@
         <many-to-one name="fileInfoEntity" class="com.synet.tool.rsc.model.IM100FileInfoEntity" lazy="false">
             <column name="IM100_CODE" not-null="true"/>
         </many-to-one>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
   </class>
 </hibernate-mapping>

@@ -32,6 +32,7 @@ create table TB1006_AnalogData
    F1006_DEADTIME       INT,
    F1006_ALARMLEVEL     INT,
    F1006_SAVETYPE       INT,
+   DELETED       	 INT,
    primary key (F1006_CODE)
 );
 
@@ -64,6 +65,7 @@ create table TB1016_StateData
    F1016_SGPROCNAME     varchar(48),
    F1016_REVFLAG        INT,
    F1016_ISSTA          INT,
+   DELETED       	 INT,
    primary key (F1016_CODE)
 );
 
@@ -78,6 +80,7 @@ create table TB1022_FaultConfig
    F1022_T1             INT,
    F1022_T2             INT,
    F1022_K              INT,
+   DELETED       	 INT,
    primary key (F1022_CODE)
 );
 
@@ -99,6 +102,7 @@ create table TB1026_StringData
    F1026_ISPDR          INT,
    F1026_PDRNO          INT,
    F1026_ISSTA          INT,
+   DELETED       	 INT,
    primary key (F1026_CODE)
 );
 
@@ -116,6 +120,7 @@ create table TB1041_Substation
    F1042_VoltageH       INT,
    F1042_VoltageM       INT,
    F1042_VoltageL       INT,
+   DELETED       	 INT,
    primary key (F1041_CODE)
 );
 
@@ -132,6 +137,7 @@ create table TB1042_Bay
    F1042_ConnType       INT,
    F1042_DevType        INT,
    F1042_IEDSolution    INT,
+   DELETED       	 INT,
    primary key (F1042_CODE)
 );
 
@@ -147,6 +153,7 @@ create table TB1043_Equipment
    F1043_IsVirtual      INT not null,
    F1043_Type           INT not null,
    F1016_Code			varchar(48),
+   DELETED       	 INT,
    primary key (F1043_CODE)
 );
 
@@ -160,6 +167,7 @@ create table TB1044_Terminal
    F1045_CODE           varchar(48),
    F1044_Name           varchar(48) not null,
    F1044_Desc           varchar(96),
+   DELETED       	 INT,
    primary key (F1044_CODE)
 );
 
@@ -171,6 +179,7 @@ create table TB1045_ConnectivityNode
    F1045_CODE           varchar(48) not null,
    F1045_Name           varchar(48) not null,
    F1045_Desc           varchar(96),
+   DELETED       	 INT,
    primary key (F1045_CODE)
 );
 
@@ -204,6 +213,7 @@ create table TB1046_IED
    F1046_DataGatType  	varchar(48),
    F1046_OutType  		varchar(48),
    F1046_BoardNum  		INT, 
+   DELETED       	 INT,
    primary key (F1046_CODE)
 );
 
@@ -217,6 +227,7 @@ create table TB1047_Board
    F1047_Slot           varchar(24) not null,
    F1047_Desc           varchar(96),
    F1047_Type           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1047_CODE)
 );
 
@@ -231,6 +242,7 @@ create table TB1048_Port
    F1048_Desc           varchar(96),
    F1048_Direction      INT not null,
    F1048_Plug           INT not null,
+   DELETED       	 INT,
    primary key (F1048_CODE)
 );
 
@@ -244,6 +256,7 @@ create table TB1049_Region
    F1049_Name           varchar(48) not null,
    F1049_Desc           varchar(96),
    F1049_Area           INT,
+   DELETED       	 INT,
    primary key (F1049_CODE)
 );
 
@@ -256,6 +269,7 @@ create table TB1050_Cubicle
    F1049_CODE           varchar(48) not null,
    F1050_Name           varchar(48) not null,
    F1050_Desc           varchar(96),
+   DELETED       	 INT,
    primary key (F1050_CODE)
 );
 
@@ -273,6 +287,7 @@ create table TB1051_Cable
    F1050_CODE_A         varchar(48) not null,
    F1050_CODE_B         varchar(48) not null,
    F1051_Type           INT not null,
+   DELETED       	 INT,
    primary key (F1051_CODE)
 );
 
@@ -288,6 +303,7 @@ create table TB1052_Core
    F1048_CODE_A         varchar(48),
    F1048_CODE_B         varchar(48),
    F1053_CODE           varchar(48),
+   DELETED       	 INT,
    primary key (F1052_CODE)
 );
 
@@ -300,6 +316,7 @@ create table TB1053_PhysConn
    F1041_CODE           varchar(48) not null,
    F1048_CODE_A         varchar(48),
    F1048_CODE_B         varchar(48),
+   DELETED       	 INT,
    primary key (F1053_CODE)
 );
 
@@ -315,6 +332,7 @@ create table TB1054_RCB
    F1054_DSDesc         varchar(96),
    F1054_IsBRCB         INT not null,
    F1054_CBType         INT not null,
+   DELETED       	 INT,
    primary key (F1054_CODE)
 );
 
@@ -334,6 +352,7 @@ create table TB1055_GCB
    DATASET        	varchar(24) not null,
    DSDesc         	varchar(96),
    F1071_CODE       varchar(48),
+   DELETED       	 INT,
    primary key (CB_CODE)
 );
 
@@ -353,6 +372,7 @@ create table TB1056_SVCB
    Dataset        	varchar(24) not null,
    DSDesc         	varchar(96),
    F1071_CODE           varchar(48),
+   DELETED       	 INT,
    primary key (CB_CODE)
 );
 
@@ -367,6 +387,7 @@ create table TB1057_SGCB
    F1057_CBRef	        varchar(96) not null,
    F1057_Dataset        varchar(48) not null,
    F1057_DSDesc         varchar(96),
+   DELETED       	 INT,
    primary key (F1057_CODE)
 );
 
@@ -385,6 +406,7 @@ create table TB1058_MMSFCDA
    F1058_Type       INT not null,
    DATA_CODE            varchar(48) not null,
    Parent_CODE            varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1058_CODE)
 );
 
@@ -404,6 +426,7 @@ create table TB1059_SGFCDA
    F1059_ValueMin       float,
    F1059_ValueMax       float,
    F1059_BaseValue      float,
+   DELETED       	 INT,
    primary key (F1059_CODE)
 );
 
@@ -422,6 +445,7 @@ create table TB1060_SPFCDA
    F1060_StepSize       float,
    F1060_ValueMin       float,
    F1060_ValueMax       float,
+   DELETED       	 INT,
    primary key (F1060_CODE)
 );
 
@@ -440,6 +464,7 @@ create table TB1061_POUT
    F1064_CODE           varchar(48),
    DATA_CODE            varchar(48) not null,
    Parent_CODE          varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1061_CODE)
 );
 
@@ -455,6 +480,7 @@ create table TB1062_PIN
    F1062_Desc           varchar(96),
    F1062_IsUsed         INT not null,
    F1064_CODE           varchar(48),
+   DELETED       	 INT,
    primary key (F1062_CODE)
 );
 
@@ -471,6 +497,7 @@ create table TB1063_Circuit
    F1065_CODE           varchar(48) not null,
    F1061_CODE_ConvChk1  varchar(48),
    F1061_CODE_ConvChk2  varchar(48),
+   DELETED       	 INT,
    primary key (F1063_CODE)
 );
 
@@ -485,6 +512,7 @@ create table TB1064_Strap
    F1064_NUM            varchar(48),
    F1064_DESC           varchar(96),
    F1042_CODE_RelatedBay varchar(48),
+   DELETED       	 INT,
    primary key (F1064_CODE)
 );
 
@@ -498,6 +526,7 @@ create table TB1065_LogicalLink
    F1046_CODE_IEDSend   varchar(48) not null,
    F1046_CODE_IEDRecv   varchar(48),
    CB_CODE          varchar(48),
+   DELETED       	 INT,
    primary key (F1065_CODE)
 );
 
@@ -509,6 +538,7 @@ create table TB1066_ProtMMXU
    F1066_CODE           varchar(48) not null,
    F1067_CODE           varchar(48),
    F1006_CODE         	varchar(48),
+   DELETED       	 INT,
    primary key (F1066_CODE)
 );
 
@@ -525,6 +555,7 @@ create table TB1067_CTVTSecondary
    F1067_TermNo         varchar(96),
    F1067_CircNo         varchar(96),
    F1067_Desc           varchar(96),
+   DELETED       	 INT,
    primary key (F1067_Code)
 );
 
@@ -536,6 +567,7 @@ create table TB1074_SVCTVTRelation
    F1074_CODE           varchar(48) not null,
    F1067_CODE           varchar(48) not null,
    F1061_CODE           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1074_CODE)
 );
 
@@ -549,6 +581,7 @@ create table TB1068_ProtCtrl
    F1046_CODE_IO        varchar(48) not null,
    F1043_CODE           varchar(48) not null,
    F1065_CODE           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1068_CODE)
 );
 
@@ -565,6 +598,7 @@ create table TB1069_RCDChannelA
    F1043_CODE           varchar(48) not null,
    F1061_CODE           varchar(48),
    F1058_CODE           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1069_CODE)
 );
 
@@ -579,6 +613,7 @@ create table TB1070_MMSServer
    F1070_CRCPATH        varchar(96),
    F1070_IP_A           varchar(24) not null,
    F1070_IP_B           varchar(24),
+   DELETED       	 INT,
    primary key (F1070_CODE)
 );
 
@@ -591,6 +626,7 @@ create table TB1071_DAU
    F1046_CODE           varchar(48) not null,
    F1071_DESC           varchar(96),
    F1071_IPAddr         varchar(24) not null,
+   DELETED       	 INT,
    primary key (F1071_CODE)
 );
 
@@ -605,6 +641,7 @@ create table TB1072_RCDChannelD
    F1072_Type           INT not null,
    F1061_CODE           varchar(48),
    F1058_CODE           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1072_CODE)
 );
 
@@ -616,6 +653,7 @@ create table TB1073_LLinkPhyRelation
    F1073_CODE           varchar(48) not null,
    F1065_CODE           varchar(48),
    F1053_CODE           varchar(48),
+   DELETED       	 INT,
    primary key (F1073_CODE)
 );
 
@@ -629,6 +667,7 @@ create table TB1090_LineProtFiber
    F1090_DESC           varchar(96) not null,
    F1090_FiberNo        varchar(24),
    F1090_PortNo         varchar(24),
+   DELETED       	 INT,
    primary key (F1090_CODE)
 );
 
@@ -642,6 +681,7 @@ create table TB1091_IOTerm
    F1091_DESC           varchar(96) not null,
    F1091_TermNo         varchar(96),
    F1091_CircNo         varchar(96),
+   DELETED       	 INT,
    primary key (F1091_CODE)
 );
 
@@ -654,6 +694,7 @@ create table TB1092_PowerKK
    F1046_CODE           varchar(48) not null,
    F1092_DESC           varchar(96) not null,
    F1092_KKNo           varchar(96),
+   DELETED       	 INT,
    primary key (F1092_CODE)
 );
 
@@ -666,6 +707,7 @@ create table TB1093_VoltageKK
    F1067_CODE           varchar(48) not null,
    F1093_DESC           varchar(96) not null,
    F1093_KKNo           varchar(96),
+   DELETED       	 INT,
    primary key (F1093_CODE)
 );
 
@@ -678,6 +720,7 @@ create table IM100_File_Info
    FILE_NAME           	varchar(96) not null,
    FILE_PATH           	varchar(96),
    FILE_TYPE           	INT not null,
+   DELETED       	 INT,
    primary key (IM100_CODE)
 );
 
@@ -709,6 +752,7 @@ create table IM101_Ied_List
    BOARD_NUM           	varchar(96),
    MATCHED_IED_CODE     varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM101_CODE)
 );
 
@@ -742,6 +786,7 @@ create table IM102_Fibre_List
    DISTRIBFRAME_CODEB  varchar(96),
    DISTRIBFRAME_PORT_NOB varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM102_CODE)
 );
 
@@ -763,6 +808,7 @@ create table IM103_Ied_Board
    BOARD_TYPE			varchar(96),	
    PORT_NUM       		varchar(512),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM103_CODE)
 );
 
@@ -780,6 +826,7 @@ create table IM104_Status_In
    MMS_REF_ADDR         varchar(96),
    MMS_DESC          	varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM104_CODE)
 );
 
@@ -796,6 +843,7 @@ create table IM105_Board_Warn
    ALARM_DESC           varchar(96),
    BOARD_CODE           varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM105_CODE)
 );
 
@@ -813,6 +861,7 @@ create table IM106_Port_Light
    BOARD_CODE           varchar(96),
    PORT_CODE            varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM106_CODE)
 );
 
@@ -832,6 +881,7 @@ create table IM107_Ter_Strap
    VP_DESC         		varchar(96),
    VP_TYPE         		varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM107_CODE)
 );
 
@@ -851,6 +901,7 @@ create table IM108_Brk_Cfm
    CMDOUTVP_REF_ADDR    varchar(96),
    CMDOUTVP_DESC        varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM108_CODE)
 );
 
@@ -866,6 +917,7 @@ create table IM109_Sta_Info
    MMS_DESC	            varchar(96),
    MMS_REF_ADDR     	varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM109_CODE)
 );
 
@@ -884,6 +936,7 @@ create table IM110_LINK_WARN
    SEND_DEV_NAME     	varchar(96),
    CB_REF		     	varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM110_CODE)
 );
 
@@ -907,6 +960,7 @@ create table IM111_Fibre_List
    BOARD_CODEB          varchar(96),
    PORT_CODEB           varchar(96),
    MATCHED           	INT,
+   DELETED       	 INT,
    primary key (IM111_CODE)
 );
 
@@ -917,6 +971,7 @@ create table TB1084_FuncClass
 (
    F1084_CODE           varchar(48) not null,
    F1084_DESC           varchar(96) not null,
+   DELETED       	 INT,
    primary key (F1084_CODE)
 );
 
@@ -928,6 +983,7 @@ create table TB1085_ProtFunc
    F1085_CODE           varchar(48) not null,
    F1046_CODE           varchar(48) not null,
    F1084_CODE           varchar(48) not null,
+   DELETED       	 INT,
    primary key (F1085_CODE)
 );
 
@@ -936,14 +992,15 @@ create table TB1085_ProtFunc
 /*==============================================================*/
 create table TB1086_DefectFuncR
 (
-   	F1086_CODE           varchar(48) not null,
-  	F1086_ST_CODE        varchar(48),
-  	F1086_MX_CODE        varchar(48),
-	F1086_DefectType     INT,
-	F1086_SubType        INT,
-	F1086_DefectLevel    INT,
-	F1085_CODE       	 varchar(48) not null,
-   	primary key (F1086_CODE)
+   F1086_CODE           varchar(48) not null,
+   F1086_ST_CODE        varchar(48),
+   F1086_MX_CODE        varchar(48),
+   F1086_DefectType     INT,
+   F1086_SubType        INT,
+   F1086_DefectLevel    INT,
+   F1085_CODE       	 varchar(48) not null,
+   DELETED       	 INT,
+   primary key (F1086_CODE)
 );
 
 

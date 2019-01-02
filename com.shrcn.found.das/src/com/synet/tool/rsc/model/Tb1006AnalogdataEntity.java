@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 模拟量
  * Created by chunc on 2018/8/7.
  */
-public class Tb1006AnalogdataEntity {
+public class Tb1006AnalogdataEntity extends Deletable {
     private String f1006Code;
     private String f1006Desc;
     private String f1006AddRef;

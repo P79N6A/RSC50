@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1052CoreEntity {
+public class Tb1052CoreEntity extends Deletable {
     private String f1052Code;
     private Tb1053PhysconnEntity tb1053ByF1053Code;
     private String parentCode;

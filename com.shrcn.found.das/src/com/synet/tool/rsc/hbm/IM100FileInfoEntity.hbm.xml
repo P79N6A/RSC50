@@ -16,5 +16,8 @@
         <property name="fileType">
             <column name="FILE_TYPE" sql-type="varchar" length="96"/>
         </property>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
   </class>
 </hibernate-mapping>

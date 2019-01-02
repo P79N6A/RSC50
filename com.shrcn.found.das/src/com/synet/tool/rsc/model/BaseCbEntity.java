@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class BaseCbEntity implements Serializable {
+public abstract class BaseCbEntity extends Deletable implements Serializable {
 	
 	private static final long serialVersionUID = -8850845257864591506L;
 	

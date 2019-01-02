@@ -15,5 +15,8 @@
         <many-to-one name="f1006Code" class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" lazy="false">
             <column name="F1006_CODE"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

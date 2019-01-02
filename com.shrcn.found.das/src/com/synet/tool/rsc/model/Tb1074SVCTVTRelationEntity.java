@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 互感器次级-输出虚端子 关系类
  * Created by chunc on 2018/8/7.
  */
-public class Tb1074SVCTVTRelationEntity {
+public class Tb1074SVCTVTRelationEntity extends Deletable {
     private String f1074Code;
     private Tb1067CtvtsecondaryEntity tb1067CtvtsecondaryByF1067Code;
     private Tb1061PoutEntity f1061Code;

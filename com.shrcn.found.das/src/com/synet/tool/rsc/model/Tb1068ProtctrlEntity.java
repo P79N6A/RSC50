@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1068ProtctrlEntity {
+public class Tb1068ProtctrlEntity extends Deletable {
     private String f1068Code;
     private String f1046CodeProt;
     private String f1046CodeIo;

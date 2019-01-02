@@ -31,5 +31,8 @@
         	<index column="F1058_Index" type="integer"></index>
         	<one-to-many class="com.synet.tool.rsc.model.Tb1058MmsfcdaEntity" />
         </list -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

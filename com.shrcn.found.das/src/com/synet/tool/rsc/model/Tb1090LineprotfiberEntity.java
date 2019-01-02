@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1090LineprotfiberEntity {
+public class Tb1090LineprotfiberEntity extends Deletable {
     private String f1090Code;
 //    private String f1046Code;
     private String f1090Desc;

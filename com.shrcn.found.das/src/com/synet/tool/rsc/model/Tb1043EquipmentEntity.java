@@ -7,7 +7,7 @@ import java.util.Set;
  * 互感器
  * Created by chunc on 2018/8/7.
  */
-public class Tb1043EquipmentEntity {
+public class Tb1043EquipmentEntity extends Deletable {
     private String f1043Code;
     private String f1043Name;
     private String f1043Desc;

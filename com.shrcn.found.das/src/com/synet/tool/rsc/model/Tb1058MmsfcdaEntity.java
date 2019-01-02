@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 报告FCDA点
  * Created by chunc on 2018/8/7.
  */
-public class Tb1058MmsfcdaEntity {
+public class Tb1058MmsfcdaEntity extends Deletable {
     private String f1058Code;
     private String f1058RefAddr;
     private int f1058Index;

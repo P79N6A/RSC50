@@ -1,6 +1,6 @@
 package com.synet.tool.rsc.model;
 
-public class IM100FileInfoEntity {
+public class IM100FileInfoEntity extends Deletable {
 	
 	private String im100Code;
 	private String fileName;

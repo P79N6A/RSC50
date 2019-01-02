@@ -1,6 +1,6 @@
 package com.synet.tool.rsc.model;
 
-public class TB1085ProtFuncEntity {
+public class TB1085ProtFuncEntity extends Deletable {
 	private String f1085CODE;
 	private Tb1046IedEntity tb1046ByF1046CODE;
 	private TB1084FuncClassEntity tb1804ByF1084CODE;

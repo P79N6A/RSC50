@@ -17,5 +17,8 @@
         <many-to-one name="tb1067CtvtsecondaryByF1067Code" class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" lazy="false">
             <column name="F1067_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

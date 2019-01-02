@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 装置端口
  * Created by chunc on 2018/8/7.
  */
-public class Tb1048PortEntity {
+public class Tb1048PortEntity extends Deletable {
     private String f1048Code;
     private String f1047Code;
     private String f1048No;

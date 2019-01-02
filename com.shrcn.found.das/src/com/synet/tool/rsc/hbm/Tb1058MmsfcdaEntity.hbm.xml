@@ -35,5 +35,8 @@
         <many-to-one name="tb1054RcbByF1054Code" class="com.synet.tool.rsc.model.Tb1054RcbEntity" lazy="false">
             <column name="F1054_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

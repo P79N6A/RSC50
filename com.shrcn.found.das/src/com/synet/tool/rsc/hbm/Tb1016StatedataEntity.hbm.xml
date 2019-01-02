@@ -87,5 +87,8 @@
         	property-ref="dataCode" insert="false" update="false" lazy="false">
             <column name="F1016_CODE" not-null="true"/>
         </many-to-one -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

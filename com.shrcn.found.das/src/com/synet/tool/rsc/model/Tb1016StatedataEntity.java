@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 状态量
  * Created by chunc on 2018/8/7.
  */
-public class Tb1016StatedataEntity {
+public class Tb1016StatedataEntity extends Deletable {
     private String f1016Code;
     private String f1016Desc;
     private String f1016AddRef;

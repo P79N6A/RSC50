@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
 /**
  *光缆清册
  */
-public class IM102FibreListEntity {
+public class IM102FibreListEntity extends Deletable {
 	
 	private String im102Code;
 	private String cableCode;			//光缆编号

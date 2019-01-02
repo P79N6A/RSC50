@@ -5,7 +5,7 @@ import com.shrcn.found.common.util.StringUtil;
 /**
  *光缆清册
  */
-public class IM111FibreListEntity {
+public class IM111FibreListEntity extends Deletable {
 	
 	private String im111Code;
 	private String cableCode;			//光缆编号

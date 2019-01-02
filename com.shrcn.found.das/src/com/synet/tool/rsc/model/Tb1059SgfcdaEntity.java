@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 定值FCDA点TB1059_SGFCDA
  * Created by chunc on 2018/8/7.
  */
-public class Tb1059SgfcdaEntity {
+public class Tb1059SgfcdaEntity extends Deletable {
     private String f1059Code;
     private String f1057Code;
     private String f1059RefAddr;

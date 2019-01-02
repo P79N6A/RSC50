@@ -6,7 +6,7 @@ package com.synet.tool.rsc.model;
  * 装置
  * Created by chunc on 2018/8/7.
  */
-public class Tb1046IedEntity {
+public class Tb1046IedEntity extends Deletable {
     private String f1046Code;
     private String f1042Code;
     private String f1050Code;

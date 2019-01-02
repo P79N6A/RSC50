@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1093VoltagekkEntity {
+public class Tb1093VoltagekkEntity extends Deletable {
     private String f1093Code;
     private String f1067Code;
     private String f1093Desc;

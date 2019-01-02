@@ -32,5 +32,8 @@
         <property name="f1042VoltageL">
             <column name="F1042_VoltageL" sql-type="int"/>
         </property>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

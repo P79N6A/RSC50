@@ -21,5 +21,8 @@
         <many-to-one name="tb1043EquipmentByF1043Code" class="com.synet.tool.rsc.model.Tb1043EquipmentEntity" lazy="false">
             <column name="F1043_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

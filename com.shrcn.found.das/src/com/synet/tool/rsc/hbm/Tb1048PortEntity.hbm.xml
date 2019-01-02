@@ -27,5 +27,8 @@
         	class="com.synet.tool.rsc.model.Tb1006AnalogdataEntity" insert="false" update="false" lazy="false">
             <column name="F1048_CODE"/>
         </many-to-one -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

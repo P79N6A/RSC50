@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1026StringdataEntity {
+public class Tb1026StringdataEntity extends Deletable {
     private String f1026Code;
     private String f1026Desc;
     private Integer f1026Safelevel;

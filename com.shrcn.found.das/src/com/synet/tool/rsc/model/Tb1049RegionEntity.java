@@ -7,7 +7,7 @@ import java.util.List;
  * 区域
  * Created by chunc on 2018/8/7.
  */
-public class Tb1049RegionEntity {
+public class Tb1049RegionEntity extends Deletable {
     private String f1049Code;
     private String f1049Name;
     private String f1049Desc;

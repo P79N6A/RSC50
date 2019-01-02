@@ -15,5 +15,8 @@
         <many-to-one name="tb1804ByF1084CODE" class="com.synet.tool.rsc.model.TB1084FuncClassEntity">
             <column name="F1084_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 跳合闸反校关联
  *
  */
-public class IM108BrkCfmEntity {
+public class IM108BrkCfmEntity extends Deletable {
 	
 	private String im108Code;
 	private String devName;				//装置Name

@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 前置采集单元
  * Created by chunc on 2018/8/7.
  */
-public class Tb1071DauEntity {
+public class Tb1071DauEntity extends Deletable {
     private String f1071Code;
     private String f1071Desc;
     private String f1071IpAddr;

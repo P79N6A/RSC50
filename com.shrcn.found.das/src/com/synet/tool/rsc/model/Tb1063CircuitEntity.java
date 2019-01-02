@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1063CircuitEntity {
+public class Tb1063CircuitEntity extends Deletable {
     private String f1063Code;
     private Tb1046IedEntity tb1046IedByF1046CodeIedRecv;
     private Tb1046IedEntity tb1046IedByF1046CodeIedSend;

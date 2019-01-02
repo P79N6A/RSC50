@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1045ConnectivitynodeEntity {
+public class Tb1045ConnectivitynodeEntity extends Deletable {
     private String f1045Code;
     private String f1045Name;
     private String f1045Desc;

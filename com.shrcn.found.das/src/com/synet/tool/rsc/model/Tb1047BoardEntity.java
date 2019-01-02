@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 装置板卡
  * Created by chunc on 2018/8/7.
  */
-public class Tb1047BoardEntity {
+public class Tb1047BoardEntity extends Deletable {
     private String f1047Code;
     private String f1046Code;
     private String f1047Slot;

@@ -3,7 +3,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1073LlinkphyrelationEntity {
+public class Tb1073LlinkphyrelationEntity extends Deletable {
     private String f1073Code;
     private String f1065Code;
     private String f1053Code;

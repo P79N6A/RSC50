@@ -6,7 +6,7 @@ package com.synet.tool.rsc.model;
  * 装置板卡端口描述
  *
  */
-public class IM103IEDBoardEntity {
+public class IM103IEDBoardEntity extends Deletable {
 
 	private String im103Code;
 	private String devName; 	//装置Name 保护型号

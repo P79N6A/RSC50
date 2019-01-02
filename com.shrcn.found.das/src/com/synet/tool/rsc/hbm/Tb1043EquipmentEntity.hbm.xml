@@ -31,5 +31,8 @@
         	<key column="F1043_CODE"></key>
         	<one-to-many class="com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity" />
         </set>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

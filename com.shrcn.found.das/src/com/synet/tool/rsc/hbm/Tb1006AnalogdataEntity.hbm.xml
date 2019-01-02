@@ -94,5 +94,8 @@
         <many-to-one name="tb1061PoutByF1061Code" class="com.synet.tool.rsc.model.Tb1061PoutEntity" insert="false" update="false">
             <column name="F1006_CODE" not-null="true"/>
         </many-to-one> -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

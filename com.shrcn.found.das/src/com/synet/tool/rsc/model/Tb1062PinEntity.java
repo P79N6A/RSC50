@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 接收虚端子
  * Created by chunc on 2018/8/7.
  */
-public class Tb1062PinEntity implements Serializable {
+public class Tb1062PinEntity extends Deletable implements Serializable {
 	
 	private static final long serialVersionUID = -7270686816803539701L;
 

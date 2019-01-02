@@ -30,5 +30,8 @@
         	class="com.synet.tool.rsc.model.Tb1016StatedataEntity" insert="false" update="false">
             <column name="F1064_CODE" not-null="true"/>
         </many-to-one -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

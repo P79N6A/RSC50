@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 保护压板
  * Created by chunc on 2018/8/7.
  */
-public class Tb1064StrapEntity {
+public class Tb1064StrapEntity extends Deletable {
     private String f1064Code;
     private String f1046Code;
     private int f1064Type;

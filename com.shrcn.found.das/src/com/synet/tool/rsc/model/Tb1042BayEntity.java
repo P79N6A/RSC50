@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1042BayEntity {
+public class Tb1042BayEntity extends Deletable {
     private String f1042Code;
     private String f1042Name;
     private String f1042Desc;

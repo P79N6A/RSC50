@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 告警与板卡关联
  *
  */
-public class IM105BoardWarnEntity {
+public class IM105BoardWarnEntity extends Deletable {
 	
 	private String im105Code;
 	private String devName;			//装置Name

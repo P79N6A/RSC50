@@ -7,7 +7,7 @@ import java.util.List;
  * 定值数据集和控制块TB1057_SGCB
  * Created by chunc on 2018/8/7.
  */
-public class Tb1057SgcbEntity {
+public class Tb1057SgcbEntity extends Deletable {
     private String f1057Code;
     private String f1046Code;
     private String f1057CbName;

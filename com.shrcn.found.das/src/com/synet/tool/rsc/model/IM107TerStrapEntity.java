@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 压板与虚端子
  *
  */
-public class IM107TerStrapEntity {
+public class IM107TerStrapEntity extends Deletable {
 	
 	private String im107Code;
 	private String devName;			//装置Name

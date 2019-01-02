@@ -85,5 +85,8 @@
         <many-to-one name="tb1050CubicleEntity" class="com.synet.tool.rsc.model.Tb1050CubicleEntity" lazy="false" insert="false" update="false">
             <column name="F1050_Code"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

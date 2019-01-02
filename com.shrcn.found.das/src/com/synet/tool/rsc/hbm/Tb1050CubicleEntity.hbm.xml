@@ -17,5 +17,8 @@
         <many-to-one name="tb1049RegionByF1049Code" class="com.synet.tool.rsc.model.Tb1049RegionEntity" lazy="false">
             <column name="F1049_CODE" not-null="true"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

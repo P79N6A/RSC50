@@ -1,7 +1,7 @@
 package com.synet.tool.rsc.model;
 
 
-public class TB1086DefectFuncREntity {
+public class TB1086DefectFuncREntity extends Deletable {
 	private String f1086CODE;
 //	private String f1086OBJSTCODE;
 //	private String f1086OBJMXCODE;

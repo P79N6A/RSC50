@@ -44,5 +44,8 @@
         <property name="parentCode">
             <column name="Parent_CODE" sql-type="varchar" length="48" not-null="true"/>
         </property>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

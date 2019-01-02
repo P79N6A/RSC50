@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 保护参数
  * Created by chunc on 2018/8/7.
  */
-public class Tb1060SpfcdaEntity {
+public class Tb1060SpfcdaEntity extends Deletable {
     private String f1060Code;
     private String f1060RefAddr;
     private int f1060Index;

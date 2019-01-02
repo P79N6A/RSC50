@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1051CableEntity {
+public class Tb1051CableEntity extends Deletable {
     private String f1051Code;
     private String f1051Name;
     private String f1051Desc;

@@ -15,5 +15,8 @@
         <many-to-one name="tb1065LogicallinkByF1065Code" class="com.synet.tool.rsc.model.Tb1065LogicallinkEntity">
             <column name="F1065_CODE"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 输出虚端子
  * Created by chunc on 2018/8/7.
  */
-public class Tb1061PoutEntity implements Serializable {
+public class Tb1061PoutEntity extends Deletable implements Serializable {
 
 	private static final long serialVersionUID = -8908223642402204429L;
 	

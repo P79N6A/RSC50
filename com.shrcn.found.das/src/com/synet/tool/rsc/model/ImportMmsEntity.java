@@ -1,6 +1,6 @@
 package com.synet.tool.rsc.model;
 
-public class ImportMmsEntity {
+public class ImportMmsEntity extends Deletable {
 	
 	private String f1011No;		//装置Name
 

@@ -46,5 +46,8 @@
         </many-to-one> -->
         <!-- <one-to-one name="stdata" constrained="true"/>
         <one-to-one name="algdata" constrained="true"/> -->
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

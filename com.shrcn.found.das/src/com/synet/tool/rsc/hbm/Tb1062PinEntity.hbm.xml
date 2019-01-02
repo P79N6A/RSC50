@@ -26,5 +26,8 @@
         <many-to-one name="tb1064StrapByF1064Code" class="com.synet.tool.rsc.model.Tb1064StrapEntity" lazy="false">
             <column name="F1064_CODE"/>
         </many-to-one>
-    </class>
+        <property name="deleted">
+            <column name="DELETED" sql-type="int"/>
+        </property>
+  </class>
 </hibernate-mapping>

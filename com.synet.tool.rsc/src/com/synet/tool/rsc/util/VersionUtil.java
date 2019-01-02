@@ -21,6 +21,7 @@ public class VersionUtil {
 		updateTb1070();
 		updateTb1071();
 //		FuncManager.getInstance();
+		addDeleteColumn();
 	}
 	
 	private static void updateExcelImp() {
@@ -74,6 +75,19 @@ public class VersionUtil {
 		}
 	}
 	
+	private static void addDeleteColumn() {
+		if (!existsColumn("TB1061_POUT", "DELETED")) {
+			String sql = "SELECT t.TABLENAME FROM SYS.SYSTABLES t";
+			List<Map<String, Object>> columns = (List<Map<String, Object>>) hqlDao.getQueryResultToListMap(sql, null);
+			for (Map<String, Object> column : columns) {
+				String tbName = column.get("TABLENAME").toString();
+				if (!tbName.startsWith("SYS")) {
+					addTableColumn(tbName, "DELETED", "INT");
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 是否存在指定字段
 	 * @param tbName
@@ -94,24 +108,24 @@ public class VersionUtil {
 		return exists;
 	}
 	
-	/**
-	 * 是否存在指定表
-	 * @param tbName
-	 * @param colName
-	 * @return
-	 */
-	private static boolean existsTable(String tbName) {
-		String sql = "SELECT t.TABLENAME FROM SYS.SYSTABLES t";
-		List<Map<String, Object>> columns = (List<Map<String, Object>>) hqlDao.getQueryResultToListMap(sql, null);
-		boolean exists = false;
-		for (Map<String, Object> column : columns) {
-			if (tbName.equalsIgnoreCase(column.get("TABLENAME").toString())) {
-				exists = true;
-				break;
-			}
-		}
-		return exists;
-	}
+//	/**
+//	 * 是否存在指定表
+//	 * @param tbName
+//	 * @param colName
+//	 * @return
+//	 */
+//	private static boolean existsTable(String tbName) {
+//		String sql = "SELECT t.TABLENAME FROM SYS.SYSTABLES t";
+//		List<Map<String, Object>> columns = (List<Map<String, Object>>) hqlDao.getQueryResultToListMap(sql, null);
+//		boolean exists = false;
+//		for (Map<String, Object> column : columns) {
+//			if (tbName.equalsIgnoreCase(column.get("TABLENAME").toString())) {
+//				exists = true;
+//				break;
+//			}
+//		}
+//		return exists;
+//	}
 
 	private static void updateParentCode(String tbName, String colName) {
 		String sql = "update " + tbName + " a set a." + colName + "=(select b.Parent_CODE from TB1016_StateData b where b.F1016_CODE=a.DATA_CODE) where a.DATA_CODE like 'State%'";

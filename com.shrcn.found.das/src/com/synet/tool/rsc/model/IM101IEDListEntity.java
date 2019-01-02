@@ -5,7 +5,7 @@ package com.synet.tool.rsc.model;
  * 设备台账
  *
  */
-public class IM101IEDListEntity {
+public class IM101IEDListEntity extends Deletable {
 
 	private String im101Code;
 	private Integer index;				//序号

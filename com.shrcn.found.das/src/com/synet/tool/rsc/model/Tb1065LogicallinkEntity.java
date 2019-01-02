@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by chunc on 2018/8/7.
  */
-public class Tb1065LogicallinkEntity {
+public class Tb1065LogicallinkEntity extends Deletable {
     private String f1065Code;
     private String f1046CodeIedRecv;
     private String f1046CodeIedSend;

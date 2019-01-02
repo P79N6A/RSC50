@@ -4,7 +4,7 @@ package com.synet.tool.rsc.model;
  * 保护录波状态量通道
  * Created by chunc on 2018/8/7.
  */
-public class Tb1072RcdchanneldEntity {
+public class Tb1072RcdchanneldEntity extends Deletable {
     private String f1072Code;
     private String iedCode;
     private String f1072Index;
