@@ -4,6 +4,7 @@
  */
 package com.synet.tool.rsc.action.imp;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -12,6 +13,7 @@ import org.eclipse.swt.SWT;
 
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.synet.tool.rsc.RSCProperties;
@@ -34,7 +36,16 @@ public class ImportSCDAction extends BaseImportAction {
 	public void run() {
 		final String path = DialogHelper.selectFile(getShell(), SWT.OPEN, "*.scd;*.SCD");
 		if (path != null) {
-			if (!RSCProperties.getInstance().isReplaceMode()) {
+			boolean replaceMode = RSCProperties.getInstance().isReplaceMode();
+			String srcpath = ProjectManager.getInstance().getProjectScdPath();
+			boolean notExists = StringUtil.isEmpty(srcpath) || !new File(srcpath).exists();
+			if (replaceMode && notExists) {
+				if (!DialogHelper.showConfirm("当前工程未曾导入过SCD，确定用起始模式导入吗？")) {
+					replaceMode = false;
+					return;
+				}
+			}
+			if (!replaceMode) {
 				ProgressManager.execute(new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException,
@@ -45,7 +56,6 @@ public class ImportSCDAction extends BaseImportAction {
 					}
 				});
 			} else {
-				String srcpath = ProjectManager.getInstance().getProjectScdPath();
 				compareImportFile(SCDComparator.class, srcpath, path);
 			}
 		}
