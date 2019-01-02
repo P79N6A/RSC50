@@ -132,13 +132,7 @@ public class StatedataService extends BaseService {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("ied", iedName);
 		params.put("ref", dataRef);
-		List<?> result = hqlDao.getListByHql("from " + Tb1016StatedataEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1016AddRef=:ref", params);
-		if (result != null && result.size() > 0) {
-			Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) result.get(0);
-			statedataEntity.setF1011No(typeId);
-			beanDao.update(statedataEntity);
-		}
-		result = hqlDao.getListByHql("from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1058RefAddr=:ref", params);
+		List<?> result = hqlDao.getListByHql("from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code.f1046Name=:ied and f1058RefAddr=:ref", params);
 		if (result != null && result.size() > 0) {
 			Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) result.get(0);
 			mmsfcdaEntity.setF1058Type(typeId);

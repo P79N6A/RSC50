@@ -176,6 +176,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
 								if (stateData != null) {
 									updatePosType(iedName, dataRef, rule);
+									stateData.setF1011No(rule.getId());
 									stateData.setParentCode(eqpCode);
 									beanDao.update(stateData);
 								}
@@ -195,6 +196,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 										}
 									}
 									updatePosType(iedName, dataRef, rule);
+									stateData.setF1011No(rule.getId());
 									stateData.setParentCode(eqpCode);
 									beanDao.update(stateData);
 								}
