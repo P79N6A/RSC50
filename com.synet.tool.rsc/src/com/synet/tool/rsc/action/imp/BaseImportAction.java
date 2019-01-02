@@ -16,16 +16,11 @@ import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.ui.action.ConfigAction;
 import com.shrcn.found.ui.editor.BaseEditorInput;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.SCLComparator;
-import com.synet.tool.rsc.compare.ied.SCDComparator;
-import com.synet.tool.rsc.compare.test.PrintMonitor;
-import com.synet.tool.rsc.das.ProjectManager;
-import com.synet.tool.rsc.io.OnlySCDImporter;
 import com.synet.tool.rsc.util.NavgTreeFactory;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
