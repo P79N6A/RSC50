@@ -192,8 +192,13 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			this.iedEntities = iedService.getIedList();
 		} else {
 			this.iedEntities = iedService.getIedEntityByBay(bayEntity);
+////			String hql = "from " + Tb1046IedEntity.class.getName() + " where tb1042BaysByF1042Code=:bay";
+//			String hql = "from " + Tb1046IedEntity.class.getName() + " where f1046Name=:name";
+//			Map<String, Object> params = new HashMap<>();
+////			params.put("bay", bayEntity);
+//			params.put("name", "IL2201A");
+//			this.iedEntities = (List<Tb1046IedEntity>) HqlDaoImpl.getInstance().getListByHql(hql, params);
 		}
-		
 		if(iedEntities.size() < 1) {
 			comboItems = new String[]{"装置为空"};
 		} else {
@@ -217,10 +222,10 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 		List<Integer> types = new ArrayList<>();
 		for (int i : unit) {
 			types.add(i);
-			}
+		}
 		for (int i : terminal) {
 			types.add(i);	
-			}
+		}
 		List<Tb1046IedEntity> filterResult = new ArrayList<>();
 		for (Tb1046IedEntity tb1046IedEntity : ied) {
 			if(types.contains(tb1046IedEntity.getF1046Type())) {
@@ -240,8 +245,12 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				Tb1043EquipmentEntity switchEq = (Tb1043EquipmentEntity) tableSwitchStatus.getSelection();
+				if (switchEq == null) {
+					return;
+				}
 				List<Tb1016StatedataEntity> stateDatas = statedataService.getStateDataByParentCode(switchEq.getF1043Code());
-				if (stateDatas != null && stateDatas.size()>0) {
+				if (stateDatas != null && stateDatas.size()>0
+						&& comboDvData != null && comboDvData.size() > 0) {
 					List<Tb1016StatedataEntity> eqpSts = new ArrayList<>();
 					int sel = comboDvData.indexOf(stateDatas.get(0).getTb1046IedByF1046Code());
 					comboDevice.select(sel);
