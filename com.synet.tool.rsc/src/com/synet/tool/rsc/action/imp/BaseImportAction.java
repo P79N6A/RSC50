@@ -4,6 +4,7 @@
  */
 package com.synet.tool.rsc.action.imp;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -11,16 +12,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
+import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.ObjectUtil;
+import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.ui.action.ConfigAction;
 import com.shrcn.found.ui.editor.BaseEditorInput;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.view.ConsoleManager;
+import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.SCLComparator;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.util.NavgTreeFactory;
 import com.synet.tool.rsc.util.ProjectFileManager;
 
@@ -52,6 +57,7 @@ public class BaseImportAction extends ConfigAction {
 				long t = System.currentTimeMillis();
 				final List<Difference> diffs = cmp.execute();
 				ConsoleManager.getInstance().append("SCL对比耗时：" + (System.currentTimeMillis() - t) + "ms");
+				// 打开增量处理界面
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -60,8 +66,6 @@ public class BaseImportAction extends ConfigAction {
 					}});
 			}
 		});
-		
-		
 	}
 }
 

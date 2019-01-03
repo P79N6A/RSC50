@@ -89,9 +89,15 @@ public class SCDComparator extends SCLComparator {
 		if (destMap.size() > 0) {
 			for (Entry<String, Element> entry : destMap.entrySet()) {
 				Element destIed = entry.getValue();
-				results.add(CompareUtil.addDiffByAttName(null, destIed, "name", OP.ADD));
+				Difference diff = CompareUtil.addDiffByAttName(null, destIed, "name", OP.ADD);
+				results.add(diff);
+				// 为增量处理做准备
+				Element iedNdDest = destXmlHelper.selectSingleNode("/SCL/IED[@name='" + diff.getName() + "']");
+				IedCompareParser destIedComp = new IedCompareParser(iedNdDest, createContext(destXmlHelper));
+				destIedComp.parse();
 			}
 		}
+		CompareUtil.sortDiffs(results);
 		monitor.done();
 		return results;
 	}

@@ -1,6 +1,5 @@
 package com.synet.tool.rsc.compare.ied;
 
-import java.io.File;
 import java.util.List;
 
 import org.dom4j.Element;
@@ -11,6 +10,7 @@ import com.shrcn.found.file.util.FileManager;
 import com.shrcn.found.file.util.FileManipulate;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.ied.NetConfig;
 import com.synet.tool.rsc.io.parser.ParserUtil;
@@ -60,6 +60,7 @@ public class IedDomHelper {
 	 * @param ied
 	 */
 	public void saveIED(Tb1046IedEntity ied) {
+		root.addAttribute("desc", ied.getF1046Desc());
 		root.addAttribute("type", ied.getF1046Model());
 		root.addAttribute("manufacturer", ied.getF1046Manufacturor());
 		root.addAttribute("configVersion", ied.getF1046ConfigVersion());
@@ -210,7 +211,7 @@ public class IedDomHelper {
 	 */
 	public void saveExtRef(String indesc, String intAddr, String extIedName, String fcdaRef) {
 		Element ndExtRef = ndInputs.addElement("ExtRef");
-		ndExtRef.addAttribute("intDesc", indesc);
+		ndExtRef.addAttribute("desc", indesc);
 		ndExtRef.addAttribute("intAddr", intAddr);
 		ndExtRef.addAttribute("iedName", extIedName);
 		ndExtRef.addAttribute("fcdaRef", fcdaRef);
@@ -264,7 +265,7 @@ public class IedDomHelper {
 					ndInputs);
 		root.addAttribute("md5", md5);
 		FileManipulate.initDir(Constants.tempDir);
-		String path = Constants.tempDir + File.separator + iedSaveName + ".rsc";
+		String path = ProjectManager.getRscFilePath(iedSaveName);
 		FileManager.saveTextFile(path , root.asXML(), "UTF-8");
 		return path;
 	}

@@ -9,6 +9,7 @@ import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.business.scl.check.ModelCheckerNew;
+import com.shrcn.business.scl.das.CIDDAO;
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.StringUtil;
@@ -19,6 +20,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.io.parser.IedParserBase;
 import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.io.scd.IedInfoDao;
@@ -26,7 +28,8 @@ import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
-import com.synet.tool.rsc.model.Tb1026StringdataEntity;
+import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1055GcbEntity;
@@ -37,7 +40,9 @@ import com.synet.tool.rsc.model.Tb1059SgfcdaEntity;
 import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
+import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.StrapEntityService;
+import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
 
@@ -58,10 +63,14 @@ public class IedParserNew {
 	private Map<String, Element> iedLNMap = new HashMap<String, Element>();
 	// extref 缓存
 	private List<Element> elExtRefAll = new ArrayList<>();
+	// 间隔缓存
+	private Map<String, Tb1042BayEntity> bayCache = new HashMap<>();
 		
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
 	private StrapEntityService strapService = new StrapEntityService();
+	private IedEntityService iedServ = new IedEntityService();
+	private SubstationService staServ = new SubstationService();
 	
 	public IedParserNew(Element iedNd, Context context, IProgressMonitor monitor) {
 		super();
@@ -79,7 +88,7 @@ public class IedParserNew {
 		ied.setF1046Model(iedNd.attributeValue("type"));
 		ied.setF1046Manufacturor(iedNd.attributeValue("manufacturer"));
 		ied.setF1046ConfigVersion(iedNd.attributeValue("configVersion"));
-		String vtcrc = iedNd.attributeValue("crc");
+		String vtcrc = DOM4JNodeHelper.getNodeValueByXPath(iedNd, "./Private[@type='IED virtual terminal conection CRC']");
 		ied.setF1046Crc(vtcrc);
 		// code
 		String iedCode = rscp.nextTbCode(DBConstants.PR_IED);
@@ -97,16 +106,8 @@ public class IedParserNew {
 			ied.setF1046Type(type);
 		}
 		beanDao.insert(ied);
-		// 通信状态点
-		Tb1016StatedataEntity stIedComm = ParserUtil.createStatedata(iedName+"通信状态点", "", iedCode, ied, F1011_NO.IED_COMM.getId());
-		beanDao.insert(stIedComm);
-		// 虚端子CRC
-		Tb1026StringdataEntity strData = new Tb1026StringdataEntity();
-		strData.setF1011No(F1011_NO.VT_CRC.getId());
-		strData.setF1026Code(rscp.nextTbCode(DBConstants.PR_String));
-		strData.setF1026Desc(vtcrc);
-		strData.setParentCode(iedCode);
-		beanDao.insert(strData);
+		iedServ.addCommState(ied);
+		iedServ.addCRCData(ied);
 	}
 	
 	public void parse() {
@@ -167,9 +168,54 @@ public class IedParserNew {
 		beanDao.insertBatch(pins);
 		// 分析虚端子
 		parseInputs();
+		// 根据解析结果修改装置类型和间隔类型，增加保护测控IP设置
+		Tb1042BayEntity bay = null;
+		if (getRcbs().size() > 0) {		// 保护测控
+			int type = ied.getF1046Type();
+			if (type == DBConstants.IED_MONI) {
+				bay = getBayByName(DBConstants.BAY_MOT);
+			}
+			NetConfig netConfig = context.getNetConfig(iedName + ".MMS");
+			if (netConfig != null) {
+				ied.setF1046aNetIp(netConfig.getIpA());
+				ied.setF1046bNetIp(netConfig.getIpB());
+				iedServ.addMMSServer(ied);
+			}
+			String scddir = ProjectManager.getInstance().getProjectCidPath();
+			CIDDAO.export(null, iedName, scddir , ".cid");
+		} else {
+			if (getSmvs().size() > 0) {			// 合并单元
+				ied.setF1046Type(DBConstants.IED_MU);
+			} else {										// 智能终端
+				ied.setF1046Type(DBConstants.IED_TERM);
+			}
+		}
+		bay = (bay==null) ? getBayByName(DBConstants.BAY_OTHER) : bay;
+		ied.setF1042Code(bay.getF1042Code());
+		beanDao.update(ied);
+		
 		if (monitor != null) {
 			monitor.worked(1);
 		}
+	}
+
+	private Tb1042BayEntity getBayByName(String bayName) {
+		if (bayCache.containsKey(bayName)) {
+			return bayCache.get(bayName);
+		}
+		Tb1042BayEntity bay = (Tb1042BayEntity) beanDao.getObject(Tb1042BayEntity.class, "f1042Name", bayName);
+		if (bay == null) {
+			bay = new Tb1042BayEntity();
+			bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
+			bay.setF1042Name(bayName);
+			Tb1041SubstationEntity station = staServ.getCurrSubstation();
+			if (station != null) {
+				bay.setTb1041SubstationByF1041Code(station);
+			}
+			beanDao.insert(bay);
+		}
+		bayCache.put(bayName, bay);
+		return bay;
 	}
 	
 	private void parsePins(String ldInst, Element elLN) {

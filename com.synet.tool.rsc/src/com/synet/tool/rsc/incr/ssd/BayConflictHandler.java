@@ -2,6 +2,7 @@ package com.synet.tool.rsc.incr.ssd;
 
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
+import com.synet.tool.rsc.incr.EnumConflict;
 
 public class BayConflictHandler extends BaseConflictHandler {
 
@@ -24,12 +25,6 @@ public class BayConflictHandler extends BaseConflictHandler {
 
 	@Override
 	public void handleUpate() {
-		
-
-	}
-
-	@Override
-	public void handleRename() {
 		
 
 	}

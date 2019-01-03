@@ -28,10 +28,4 @@ public class SetConflictHandler extends BaseConflictHandler {
 
 	}
 
-	@Override
-	public void handleRename() {
-		
-
-	}
-
 }

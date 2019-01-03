@@ -14,6 +14,7 @@ public class Difference {
 	private OP op;
 	private Difference parent;
 	private List<Difference> children = new ArrayList<Difference>();
+	private Object data;
 
 	public Difference(String type, String name) {
 		this(null, type, name, null, null);
@@ -92,6 +93,14 @@ public class Difference {
 
 	public void setParent(Difference parent) {
 		this.parent = parent;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 
 	public List<Difference> getChildren() {

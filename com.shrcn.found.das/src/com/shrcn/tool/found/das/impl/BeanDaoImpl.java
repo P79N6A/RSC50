@@ -252,6 +252,22 @@ public class BeanDaoImpl implements BeanDaoService {
 			service.flush();
 		}
 	}
+	
+	@Override
+	public void markDeleted(Object obj) {
+		ObjectUtil.setProperty(obj, "deleted", 1);
+		update(obj);
+	}
+	
+	@Override
+	public void markDeleted(Class<?> clazz, String property, Object value) {
+		String hql = "update " + clazz.getName() +
+			" set deleted = 1" +
+			" where " + property + "=:" + property;
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(property, value);
+		HqlDaoImpl.getInstance().updateByHql(hql, params);
+	}
 
 	@Override
 	public void deleteBatch(List<?> objs) {

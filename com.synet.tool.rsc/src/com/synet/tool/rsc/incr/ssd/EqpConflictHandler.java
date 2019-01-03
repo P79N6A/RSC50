@@ -28,10 +28,4 @@ public class EqpConflictHandler extends BaseConflictHandler {
 
 	}
 
-	@Override
-	public void handleRename() {
-		
-
-	}
-
 }

@@ -28,10 +28,4 @@ public class SmvConflictHandler extends BaseConflictHandler {
 
 	}
 
-	@Override
-	public void handleRename() {
-		
-
-	}
-
 }

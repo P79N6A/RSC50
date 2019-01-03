@@ -167,6 +167,14 @@ public class CompareUtil {
 	 */
 	public static void sortChildren(Difference diff) {
 		List<Difference> subDiffs = diff.getChildren();
+		sortDiffs(subDiffs);
+	}
+
+	/**
+	 * 差异排序
+	 * @param subDiffs
+	 */
+	public static void sortDiffs(List<Difference> subDiffs) {
 		Collections.sort(subDiffs, new Comparator<Difference> () {
 			@Override
 			public int compare(Difference diff1, Difference diff2) {
@@ -193,5 +201,39 @@ public class CompareUtil {
 	 */
 	public static void setDesc(Difference diff, Element nd) {
 		diff.setDesc(getAttribute(nd, "desc"));
+	}
+
+	/**
+	 * 获取更新信息
+	 * @param msg
+	 * @return
+	 */
+	public static Map<String, String> getUpdateInfo(String msg) {
+		Map<String, String> updateInfo = new HashMap<>();
+		if (!StringUtil.isEmpty(msg)) {
+			String[] atts = msg.split(",");
+			for (String att : atts) {
+				String[] temp = att.split(":");
+				updateInfo.put(temp[0], temp[1].split("->")[1]);
+			}
+		}
+		return updateInfo;
+	}
+	
+	/**
+	 * 获取新增信息
+	 * @param msg
+	 * @return
+	 */
+	public static Map<String, String> getDisInfo(String msg) {
+		Map<String, String> updateInfo = new HashMap<>();
+		if (!StringUtil.isEmpty(msg)) {
+			String[] atts = msg.split(",");
+			for (String att : atts) {
+				String[] temp = att.split(":");
+				updateInfo.put(temp[0], temp[1]);
+			}
+		}
+		return updateInfo;
 	}
 }

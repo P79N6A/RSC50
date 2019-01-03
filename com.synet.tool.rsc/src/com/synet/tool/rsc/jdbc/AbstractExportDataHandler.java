@@ -140,19 +140,19 @@ public abstract class AbstractExportDataHandler {
 			String tableName = getTableName(clazz);
 			monitor.setTaskName("正在导入" + tableName + "数据");
 			console.append("开始处理:" + tbIndex + "数据导出");
-			String hql = "from " + clazz.getName();
+			String hql = "from " + clazz.getName() + " where deleted=0";
 			if (tbIndex == 1016) { // st
-				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1011No!=" + RSCConstants.OTHERS_ID;
 			} else if (tbIndex == 1006) { // ang
-				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1011No!=" + RSCConstants.OTHERS_ID;
 			} else if (tbIndex == 1058) { // mms
-				hql += " where f1058Type!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1058Type!=" + RSCConstants.OTHERS_ID;
 			} else if (tbIndex == 1061) { // pout
-				hql += " where f1061Type!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1061Type!=" + RSCConstants.OTHERS_ID;
 			} else if (tbIndex == 1062) { // pin
-				hql += " where f1011No!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1011No!=" + RSCConstants.OTHERS_ID;
 			} else if (tbIndex == 1064) { // strap
-				hql += " where f1064Type!=" + RSCConstants.OTHERS_ID;
+				hql += " and f1064Type!=" + RSCConstants.OTHERS_ID;
 			}
 			int total = hqlDao.getCount(hql, null);
 			int psize = 1000;

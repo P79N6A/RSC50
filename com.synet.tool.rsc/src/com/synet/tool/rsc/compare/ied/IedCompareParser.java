@@ -49,7 +49,7 @@ public class IedCompareParser {
 		ied.setF1046Model(iedNd.attributeValue("type"));
 		ied.setF1046Manufacturor(iedNd.attributeValue("manufacturer"));
 		ied.setF1046ConfigVersion(iedNd.attributeValue("configVersion"));
-		String vtcrc = iedNd.attributeValue("crc");
+		String vtcrc = DOM4JNodeHelper.getNodeValueByXPath(iedNd, "./Private[@type='IED virtual terminal conection CRC']");
 		ied.setF1046Crc(vtcrc);
 		// A/B
 		int aOrb = iedName.endsWith("B") ? 2 : 1;

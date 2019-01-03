@@ -28,10 +28,4 @@ public class InputConflictHandler extends BaseConflictHandler {
 
 	}
 
-	@Override
-	public void handleRename() {
-		
-
-	}
-
 }

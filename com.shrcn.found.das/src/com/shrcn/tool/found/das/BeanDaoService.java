@@ -94,6 +94,20 @@ public interface BeanDaoService {
 
 
 	public void deleteBatch(List<?> obj);
+	
+	/**
+	 * 软删除
+	 * @param obj
+	 */
+	public void markDeleted(Object obj);
+	
+	/**
+	 * 软删除
+	 * @param clazz
+	 * @param property
+	 * @param value
+	 */
+	public void markDeleted(Class<?> clazz, String property, Object value);
 
 	/**
 	 * 判断对象是否存在

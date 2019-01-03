@@ -28,10 +28,4 @@ public class GooseConflictHandler extends BaseConflictHandler {
 
 	}
 
-	@Override
-	public void handleRename() {
-		
-
-	}
-
 }

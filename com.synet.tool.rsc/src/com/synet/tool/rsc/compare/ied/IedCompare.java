@@ -216,9 +216,9 @@ public class IedCompare implements ICompare {
 				String msg = CompareUtil.compare(ndInputSrc, ndInputDest);
 				if (!StringUtil.isEmpty(msg)) {
 					Difference diff = new Difference(diffType, "ExtRef", intAddrSrc, msg, OP.UPDATE);
-					diff.setDesc(CompareUtil.getAttribute(ndInputSrc, "intDesc"));
+					diff.setDesc(CompareUtil.getAttribute(ndInputSrc, "desc"));
 					diff.setNewName(CompareUtil.getAttribute(ndInputDest, "intAddr"));
-					diff.setNewDesc(CompareUtil.getAttribute(ndInputDest, "intDesc"));
+					diff.setNewDesc(CompareUtil.getAttribute(ndInputDest, "desc"));
 				}
 				destChildrenMap.remove(intAddrSrc);
 			}

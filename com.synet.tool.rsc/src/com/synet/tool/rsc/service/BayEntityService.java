@@ -8,7 +8,7 @@ public class BayEntityService extends BaseService {
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1042BayEntity> getBayEntryList() {
-		return (List<Tb1042BayEntity>) beanDao.getAll(Tb1042BayEntity.class);
+		return (List<Tb1042BayEntity>) beanDao.getListByCriteria(Tb1042BayEntity.class, "deleted", 0);
 	}
 	
 	public Tb1042BayEntity getBayEntityByName(String f1042Name) {

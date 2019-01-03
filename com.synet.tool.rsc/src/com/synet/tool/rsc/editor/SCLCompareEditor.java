@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
@@ -236,6 +238,11 @@ public class SCLCompareEditor extends BaseConfigEditor {
 							InterruptedException {
 						new IncrementImportor(monitor, diffs).handle();
 						ConsoleManager.getInstance().append("增量导入已完成！");
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
+							}});
 					}
 				}, false);
 			}

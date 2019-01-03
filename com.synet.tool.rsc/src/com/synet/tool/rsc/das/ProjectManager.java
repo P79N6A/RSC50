@@ -134,6 +134,15 @@ public class ProjectManager {
 	}
 	
 	/**
+	 * 得到工程cid文件导出路径
+	 * @return
+	 */
+	public String getProjectCidPath() {
+		return Constants.usrDir + File.separator + "cids" + File.separator + 
+			Constants.CURRENT_PRJ_NAME + File.separator;
+	}
+	
+	/**
 	 * 得到工程SCD文件路径.
 	 * 
 	 * @return
@@ -151,5 +160,13 @@ public class ProjectManager {
 		return getDataDir() + Constants.CURRENT_PRJ_NAME + File.separator + RSCConstants.CURR_SSD;
 	}
 	
+	/**
+	 * 得到IED RSC文件路径。
+	 * @param iedName
+	 * @return
+	 */
+	public static String getRscFilePath(String iedName) {
+		return Constants.tempDir + File.separator + iedName + ".rsc";
+	}
 }
 

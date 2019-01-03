@@ -40,8 +40,9 @@ public class ImportSCDAction extends BaseImportAction {
 			String srcpath = ProjectManager.getInstance().getProjectScdPath();
 			boolean notExists = StringUtil.isEmpty(srcpath) || !new File(srcpath).exists();
 			if (replaceMode && notExists) {
-				if (!DialogHelper.showConfirm("当前工程未曾导入过SCD，确定用起始模式导入吗？")) {
+				if (DialogHelper.showConfirm("当前工程未曾导入过SCD，确定用起始模式导入吗？")) {
 					replaceMode = false;
+				} else {
 					return;
 				}
 			}
