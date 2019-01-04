@@ -255,7 +255,16 @@ public class BeanDaoImpl implements BeanDaoService {
 	
 	@Override
 	public void markDeleted(Object obj) {
-		ObjectUtil.setProperty(obj, "deleted", 1);
+		updateDeleted(obj, 1);
+	}
+	
+	@Override
+	public void markRecovered(Object obj) {
+		updateDeleted(obj, 0);
+	}
+	
+	private void updateDeleted(Object obj, int tag) {
+		ObjectUtil.setProperty(obj, "deleted", tag);
 		update(obj);
 	}
 	

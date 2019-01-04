@@ -239,8 +239,13 @@ public class IedDomHelper {
 	 */
 	private void saveFCDAs(Element ndDs, Element elDat, Element elLd) {
 		List<Element> elFcdas = elDat.elements("FCDA");
-		int i = 0;
+		int i = -1;
 		for (Element fcdaEl : elFcdas) {
+			i++;
+			String daName = fcdaEl.attributeValue("daName");
+			if ("q".equals(daName) || "t".equals(daName)) {
+				continue;
+			}
 			String fcdaDesc = SclUtil.getFCDADesc(elLd, fcdaEl);
 			Element ndFCDA = ndDs.addElement("FCDA");
 			ndFCDA.addAttribute("index", i + "");
@@ -248,7 +253,6 @@ public class IedDomHelper {
 			ndFCDA.addAttribute("ref", SclUtil.getFcdaRef(fcdaEl));
 			ndFCDA.addAttribute("datType", context.getBType(elLd, fcdaEl) + "");
 			ndFCDA.addAttribute("fc", fcdaEl.attributeValue("fc"));
-			i++;
 		}
 	}
 	

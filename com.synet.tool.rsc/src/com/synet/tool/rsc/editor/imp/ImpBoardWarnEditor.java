@@ -204,7 +204,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				entity.setOverwrite(false);
 				continue;
 			} else {
-				Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getAlarmRefAddr());
+				Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getAlarmRefAddr());
 				if (tempMmsfcdaEntity != null) {
 					String dataCode = tempMmsfcdaEntity.getDataCode();
 					if (dataCode != null) {

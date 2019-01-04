@@ -244,7 +244,7 @@ public class ImpPortLightEditor extends ExcelImportEditor {
 				Tb1048PortEntity portEntity = portEntityService.getPortEntity(entity.getDevName(), 
 						entity.getBoardCode(), entity.getPortCode());
 				if (portEntity != null) {
-					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getOpticalRefAddr());
+					Tb1058MmsfcdaEntity mmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(), entity.getOpticalRefAddr());
 					if (mmsfcdaEntity != null) {
 						Tb1006AnalogdataEntity analogdataEntity = (Tb1006AnalogdataEntity) analogdataService.getById(Tb1006AnalogdataEntity.class,
 								mmsfcdaEntity.getDataCode());

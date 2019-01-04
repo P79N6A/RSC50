@@ -9,6 +9,7 @@ import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.HqlDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.compare.CompareUtil;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.OP;
@@ -21,11 +22,13 @@ public abstract class BaseConflictHandler implements IConflictHandler {
 	protected Difference diff;
 	protected BeanDaoService beanDao;
 	protected HqlDaoService hqlDao;
+	protected RSCProperties rscp;
 	
 	public BaseConflictHandler(Difference diff) {
 		this.diff = diff;
 		this.beanDao = BeanDaoImpl.getInstance();
 		this.hqlDao = HqlDaoImpl.getInstance();
+		this.rscp = RSCProperties.getInstance();
 	}
 
 	@Override

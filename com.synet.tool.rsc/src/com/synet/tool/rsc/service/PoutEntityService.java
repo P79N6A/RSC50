@@ -1,14 +1,24 @@
 package com.synet.tool.rsc.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Element;
+
+import com.shrcn.business.scl.model.SCL;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
+import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 import com.synet.tool.rsc.util.RuleType;
 
 public class PoutEntityService extends BaseService{
@@ -81,6 +91,78 @@ public class PoutEntityService extends BaseService{
 	@SuppressWarnings("unchecked")
 	public List<Tb1061PoutEntity> getByStraps(List<Tb1064StrapEntity> straps) {
 		return (List<Tb1061PoutEntity>) hqlDao.selectInObjects(Tb1061PoutEntity.class, "tb1064StrapByF1064Code", straps);
+	}
+
+	/**
+	 * 增量添加输出虚端子
+	 * @param cb
+	 * @param fcdaRef
+	 * @param disInfo
+	 */
+	public void addFcda(BaseCbEntity cb, String ref, Map<String, String> disInfo) {
+		String fcdaDesc = disInfo.get("desc");
+		String fc = disInfo.get("fc");
+		int i = Integer.parseInt(disInfo.get("index"));
+//		int dtype = Integer.parseInt(disInfo.get("datType"));
+		Tb1046IedEntity ied = cb.getTb1046IedByF1046Code();
+		
+		Tb1061PoutEntity pout = new Tb1061PoutEntity();
+		pout.setF1061Code(rscp.nextTbCode(DBConstants.PR_POUT));
+		pout.setTb1046IedByF1046Code(ied);
+		pout.setCbEntity(cb);
+		pout.setCbCode(cb.getCbCode());
+		pout.setF1061RefAddr(ref);
+		pout.setF1061Index(i);
+		pout.setF1061Desc(fcdaDesc);
+//		Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
+		Rule type = F1011_NO.OTHERS;
+		pout.setF1061Type(type.getId());
+		if ("ST".equals(fc)) {
+			Tb1016StatedataEntity statedata = addStatedata(ied, ref, fcdaDesc, type.getId());
+			pout.setDataCode(statedata.getF1016Code());
+			pout.setParentCode(statedata.getParentCode());
+		} else {
+			Tb1006AnalogdataEntity algdata = addAlgdata(ied, ref, fcdaDesc, type.getId());
+			String algcode = algdata.getF1006Code();
+			pout.setDataCode(algcode);
+			pout.setParentCode(algdata.getParentCode());
+		}
+		beanDao.insert(pout);
+	}
+
+	/**
+	 * 增量删除输出虚端子
+	 * @param cb
+	 * @param fcdaRef
+	 */
+	public void deleteFcda(BaseCbEntity cb, String fcdaRef) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("devName", cb.getTb1046IedByF1046Code().getF1046Name());
+		params.put("f1061RefAddr", fcdaRef);
+		String hql = "update " + Tb1061PoutEntity.class.getName() + 
+				" set deleted=1 where tb1046IedByF1046Code.f1046Name=:devName and f1061RefAddr=:f1061RefAddr";
+		hqlDao.updateByHql(hql, params);
+	}
+
+	/**
+	 * 增量修改输出虚端子
+	 * @param cb
+	 * @param fcdaRef
+	 * @param upInfo
+	 */
+	public void updateFcda(BaseCbEntity cb, String fcdaRef, Map<String, String> upInfo) {
+		Tb1046IedEntity ied = cb.getTb1046IedByF1046Code();
+		Tb1061PoutEntity pout = getPoutEntity(ied.getF1046Name(), fcdaRef);
+		if (pout != null) {
+			if (upInfo.get("desc") != null) {
+				pout.setF1061Desc(upInfo.get("desc"));
+			}
+			if (upInfo.get("index") != null) {
+				int i = Integer.parseInt(upInfo.get("index"));
+				pout.setF1061Index(i);
+			}
+			beanDao.update(pout);
+		}
 	}
 	
 }

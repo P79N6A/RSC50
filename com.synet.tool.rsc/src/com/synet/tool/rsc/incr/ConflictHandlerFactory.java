@@ -13,13 +13,7 @@ public class ConflictHandlerFactory {
 	 */
 	public static IConflictHandler getHandlerByType(Difference diff) {
 		String type = diff.getType();
-		EnumConflict conflict = null;
-		for (EnumConflict cft : EnumConflict.values()) {
-			if (cft.getType().equals(type)) {
-				conflict = cft;
-				break;
-			}
-		}
+		EnumConflict conflict = EnumConflict.getByType(type);
 		if (conflict != null) {
 			return createConflict(conflict, diff);
 		}

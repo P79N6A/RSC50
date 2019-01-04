@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
+import com.synet.tool.rsc.io.parser.ParserUtil;
+import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
+import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1067CtvtsecondaryEntity;
 import com.synet.tool.rsc.RSCProperties;
@@ -83,5 +86,32 @@ public abstract class BaseService {
 			return -1;
 		}
 		return 1;
+	}
+	
+	/**
+	 * 添加状态量数据
+	 * @param fcdaEl
+	 * @param fcdaDesc
+	 * @param f1011No
+	 * @return
+	 */
+	public Tb1016StatedataEntity addStatedata(Tb1046IedEntity ied, String ref, String fcdaDesc, int f1011No) {
+		Tb1016StatedataEntity statedata = ParserUtil.createStatedata(fcdaDesc, ref,
+				ied.getF1046Code(), ied, f1011No);
+		beanDao.insert(statedata);
+		return statedata;
+	}
+	
+	/**
+	 * 添加模拟量数据
+	 * @param fcdaEl
+	 * @param fcdaDesc
+	 * @param f1011No
+	 * @return
+	 */
+	public Tb1006AnalogdataEntity addAlgdata(Tb1046IedEntity ied, String ref, String fcdaDesc, int f1011No) {
+		Tb1006AnalogdataEntity algdata = ParserUtil.createAlgdata(ref, fcdaDesc, ied, f1011No);
+		beanDao.insert(algdata);
+		return algdata;
 	}
 }

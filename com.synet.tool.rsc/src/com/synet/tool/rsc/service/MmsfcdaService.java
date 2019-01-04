@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.shrcn.found.common.util.ObjectUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
@@ -15,9 +16,13 @@ import com.synet.tool.rsc.model.Tb1054RcbEntity;
 import com.synet.tool.rsc.model.Tb1058MmsfcdaEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.DataUtils;
+import com.synet.tool.rsc.util.F1011_NO;
+import com.synet.tool.rsc.util.Rule;
 import com.synet.tool.rsc.util.RuleType;
 
 public class MmsfcdaService extends BaseService {
+	
+	private StrapEntityService strapService = new StrapEntityService();
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1058MmsfcdaEntity> getMmsfcdaByIed(Tb1046IedEntity iedEntitie) {
@@ -54,10 +59,6 @@ public class MmsfcdaService extends BaseService {
 		return fcdas;
 	}
 	
-	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String f1058RefAddr) {
-		return (Tb1058MmsfcdaEntity) beanDao.getObject(Tb1058MmsfcdaEntity.class, "f1058RefAddr", f1058RefAddr);
-	}
-
 	public Tb1058MmsfcdaEntity getMmsfcdaByF1058RedAddr(String devName, String f1058RefAddr) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("devName", devName);
@@ -178,6 +179,80 @@ public class MmsfcdaService extends BaseService {
 		}
 		ObjectUtil.setProperty(objMms, "parentCode", parendCode);
 		beanDao.update(objMms);
+	}
+
+	/**
+	 * 增量添加mms、st、ang
+	 * @param rcb
+	 * @param fcdaRef
+	 * @param disInfo
+	 */
+	public void addFcda(Tb1054RcbEntity rcb, String fcdaRef, Map<String, String> disInfo) {
+		String fcdaDesc = disInfo.get("desc");
+		int i = Integer.parseInt(disInfo.get("index"));
+		Tb1046IedEntity ied = rcb.getTb1046IedByF1046Code();
+
+		Tb1058MmsfcdaEntity mmsFcda = new Tb1058MmsfcdaEntity();
+		mmsFcda.setF1058Code(rscp.nextTbCode(DBConstants.PR_FCDA));
+		mmsFcda.setTb1046IedByF1046Code(ied);
+		mmsFcda.setTb1054RcbByF1054Code(rcb);
+		mmsFcda.setF1058Index(i);
+		mmsFcda.setF1058Desc(fcdaDesc);
+		mmsFcda.setF1058RefAddr(fcdaRef);
+		String fc = disInfo.get("fc");
+		Rule type = F1011_NO.OTHERS;
+		mmsFcda.setF1058Type(type.getId());
+		if ("ST".equals(fc)) {
+			mmsFcda.setF1058DataType(DBConstants.DATA_ST);
+			Tb1016StatedataEntity statedata = addStatedata(ied, fcdaRef, fcdaDesc, type.getId());
+			mmsFcda.setDataCode(statedata.getF1016Code());
+			mmsFcda.setParentCode(statedata.getParentCode());
+			String datSet = rcb.getF1054Dataset();
+			if (SclUtil.isStrap(datSet )) { // 添加压板
+				strapService.addStrap(statedata);
+			}
+		} else {
+			mmsFcda.setF1058DataType(DBConstants.DATA_MX);
+			Tb1006AnalogdataEntity algdata = addAlgdata(ied, fcdaRef, fcdaDesc, type.getId());
+			mmsFcda.setDataCode(algdata.getF1006Code());
+			mmsFcda.setParentCode(algdata.getParentCode());
+		}
+		beanDao.insert(mmsFcda);
+	}
+	
+	/**
+	 * 增量删除mms、st、ang
+	 * @param rcb
+	 * @param fcdaRef
+	 */
+	public void deleteFcda(Tb1054RcbEntity rcb, String fcdaRef) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("devName", rcb.getTb1046IedByF1046Code().getF1046Name());
+		params.put("f1058RefAddr", fcdaRef);
+		String hql = "update " + Tb1058MmsfcdaEntity.class.getName() + 
+				" set deleted=1 where tb1046IedByF1046Code.f1046Name=:devName and f1058RefAddr=:f1058RefAddr";
+		hqlDao.updateByHql(hql, params);
+	}
+
+	/**
+	 * 增量修改mms、st、ang
+	 * @param rcb
+	 * @param fcdaRef
+	 * @param upInfo
+	 */
+	public void updateFcda(Tb1054RcbEntity rcb, String fcdaRef, Map<String, String> upInfo) {
+		Tb1046IedEntity ied = rcb.getTb1046IedByF1046Code();
+		Tb1058MmsfcdaEntity mmsFcda = getMmsfcdaByF1058RedAddr(ied.getF1046Name(), fcdaRef);
+		if (mmsFcda != null) {
+			if (upInfo.get("desc") != null) {
+				mmsFcda.setF1058Desc(upInfo.get("desc"));
+			}
+			if (upInfo.get("index") != null) {
+				int i = Integer.parseInt(upInfo.get("index"));
+				mmsFcda.setF1058Index(i);
+			}
+			beanDao.update(mmsFcda);
+		}
 	}
 	
 }

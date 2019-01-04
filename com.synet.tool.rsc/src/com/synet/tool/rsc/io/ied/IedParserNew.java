@@ -375,7 +375,7 @@ public class IedParserNew {
 	}
 	
 	private void parsePOuts(Element ldNd, Element cbNd, Element elDat, BaseCbEntity cb) {
-		String datSet = elDat.attributeValue("name");
+//		String datSet = elDat.attributeValue("name");
 		List<Element> fcdaEls = elDat.elements("FCDA");
 		List<Tb1061PoutEntity> pouts = new ArrayList<>();
 		int i = 0;
@@ -392,8 +392,8 @@ public class IedParserNew {
 			String fcdaDesc = getFCDADesc(ldNd, fcdaEl);
 			pout.setF1061Desc(fcdaDesc);
 			String fc = fcdaEl.attributeValue("fc");
-			String lnName = fcdaEl.attributeValue("lnClass");
-			String doName = fcdaEl.attributeValue("doName");
+//			String lnName = fcdaEl.attributeValue("lnClass");
+//			String doName = fcdaEl.attributeValue("doName");
 			String daName = fcdaEl.attributeValue("daName");
 			if ("q".equals(daName) || "t".equals(daName)) {
 				continue;
@@ -456,8 +456,8 @@ public class IedParserNew {
 			String ref = SclUtil.getFcdaRef(fcdaEl);
 			mmsFcda.setF1058RefAddr(ref);
 			String fc = fcdaEl.attributeValue("fc");
-			String lnName = fcdaEl.attributeValue("lnClass");
-			String doName = fcdaEl.attributeValue("doName");
+//			String lnName = fcdaEl.attributeValue("lnClass");
+//			String doName = fcdaEl.attributeValue("doName");
 //			Rule type = F1011_NO.getType(datSet, lnName, doName, fcdaDesc, fc);
 			Rule type = F1011_NO.OTHERS;
 			mmsFcda.setF1058Type(type.getId());

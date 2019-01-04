@@ -248,4 +248,10 @@ public interface BeanDaoService {
 	 */
 	public List<?> getListByCriteriaAndPage(Class<?> clazz, Map<String, Object> params, int currentPage,
 			int pageSize);
+	
+	/**
+	 * 改为未删除状态
+	 * @param obj
+	 */
+	void markRecovered(Object obj);
 }

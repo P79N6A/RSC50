@@ -2,36 +2,36 @@ package com.synet.tool.rsc.incr.scd;
 
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
-import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
-import com.synet.tool.rsc.model.Tb1062PinEntity;
-import com.synet.tool.rsc.util.F1011_NO;
-import com.synet.tool.rsc.util.Rule;
+import com.synet.tool.rsc.service.PinEntityService;
 
 public class PinConflictHandler extends BaseConflictHandler {
 
+	private PinEntityService pinServ = new PinEntityService();
+	private Tb1046IedEntity ied;
+	
 	public PinConflictHandler(Difference diff) {
 		super(diff);
-		
+		this.ied = (Tb1046IedEntity) diff.getParent().getParent().getData();
 	}
 
 	@Override
 	public void handleAdd() {
-		Tb1046IedEntity ied = (Tb1046IedEntity) diff.getParent().getParent().getData();
-		Rule type = F1011_NO.OTHERS;
 		String pinRef = diff.getName();
 		String doDesc = diff.getDesc();
-		Tb1062PinEntity pin = ParserUtil.createPin(ied, pinRef , doDesc, type.getId(), 0);
-		beanDao.insert(pin);
+		pinServ.addPin(ied, pinRef, doDesc);
 	}
 
 	@Override
 	public void handleDelete() {
+		String pinRef = diff.getName();
+		pinServ.deletePin(ied, pinRef);
 	}
 
 	@Override
 	public void handleUpate() {
+		String pinRef = diff.getName();
+		String doDesc = diff.getDesc();
+		pinServ.updatePin(ied, pinRef, doDesc);
 	}
-
-
 }
