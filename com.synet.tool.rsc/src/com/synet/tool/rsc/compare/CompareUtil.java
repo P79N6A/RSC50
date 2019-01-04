@@ -122,16 +122,11 @@ public class CompareUtil {
 	 */
 	public static Difference addDiffByAttName(Difference diffParent, Element ndSub, String attName, OP op) {
 		String ndSubName = ndSub.getName();
-		if (StringUtil.isEmpty(attName)) {
-			Difference diff = new Difference(diffParent, ndSubName, "", CompareUtil.getAttsMsg(ndSub, ""), op);
-			setDesc(diff, ndSub);
-			return diff;
-		} else {
-			String subName = ndSub.attributeValue(attName);
-			Difference diff = new Difference(diffParent, ndSubName, subName, CompareUtil.getAttsMsg(ndSub, attName), op);
-			setDesc(diff, ndSub);
-			return diff;
-		}
+		String subName = ndSub.attributeValue(attName);
+		subName = StringUtil.nullToEmpty(subName);
+		Difference diff = new Difference(diffParent, ndSubName, subName, CompareUtil.getAttsMsg(ndSub, attName), op);
+		setDesc(diff, ndSub);
+		return diff;
 	}
 	
 	/**

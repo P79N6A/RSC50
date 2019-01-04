@@ -1,8 +1,12 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.shrcn.found.common.util.StringUtil;
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.io.scd.EnumEquipmentType;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
@@ -74,4 +78,86 @@ public class EquipmentEntityService extends BaseService{
 		return result;
 	}
 	
+	/**
+	 * 增量添加设备
+	 * @param bay
+	 * @param nodeName
+	 * @param eqpName
+	 * @param disInfo
+	 */
+	public void addEquip(Tb1042BayEntity bay, String nodeName, String eqpName, Map<String, String> disInfo) {
+		String stype = disInfo.get("type");
+		EnumEquipmentType type = null;
+		switch(nodeName) {
+		case "PowerTransformer":
+			type = EnumEquipmentType.PTR;
+			break;
+		case "ConductingEquipment":
+			type = EnumEquipmentType.getType(stype);
+			break;
+		default:
+			break;
+		}
+		Tb1043EquipmentEntity equipment = new Tb1043EquipmentEntity();
+		String eqpCode = rscp.nextTbCode(DBConstants.PR_EQP);
+		equipment.setF1043Code(eqpCode);
+		equipment.setTb1042BayByF1042Code(bay);
+		equipment.setF1043Name(eqpName);
+		equipment.setF1043Desc(disInfo.get("desc"));
+		String virtual = disInfo.get("virtual");
+		boolean isv = false;
+		if (!StringUtil.isEmpty(virtual)) {
+			isv = Boolean.parseBoolean(virtual);
+		}
+		equipment.setF1043IsVirtual(isv ? 1 : 0);
+		equipment.setF1043Type(type.getCode());
+		beanDao.insert(equipment);
+	}
+	
+	public void deleteEquip(Tb1042BayEntity bay, String eqpName) {
+		String hql = "update " + Tb1043EquipmentEntity.class.getName() +
+				" set deleted=1 where tb1042BayByF1042Code=:bay and f1043Name=:eqpName";
+		Map<String, Object> params = new HashMap<>();
+		params.put("bay", bay);
+		params.put("eqpName", eqpName);
+		hqlDao.updateByHql(hql, params);
+	}
+	
+	public Tb1043EquipmentEntity getEquipment(Tb1042BayEntity bay, String eqpName) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("bay", bay);
+		params.put("eqpName", eqpName);
+		return (Tb1043EquipmentEntity) beanDao.getObject(Tb1043EquipmentEntity.class, params);
+	}
+	
+	public void udpateEquip(Tb1042BayEntity bay, String nodeName, String eqpName, Map<String, String> disInfo) {
+		Tb1043EquipmentEntity equipment = getEquipment(bay, eqpName);
+		if (disInfo.get("type") != null) {
+		String stype = disInfo.get("type");
+			EnumEquipmentType type = null;
+			switch(nodeName) {
+			case "PowerTransformer":
+				type = EnumEquipmentType.PTR;
+				break;
+			case "ConductingEquipment":
+				type = EnumEquipmentType.getType(stype);
+				break;
+			default:
+				break;
+			}
+			equipment.setF1043Type(type.getCode());
+		}
+		if (disInfo.get("desc") != null) {
+			equipment.setF1043Desc(disInfo.get("desc"));
+		}
+		if (disInfo.get("virtual") != null) {
+			String virtual = disInfo.get("virtual");
+			boolean isv = false;
+			if (!StringUtil.isEmpty(virtual)) {
+				isv = Boolean.parseBoolean(virtual);
+			}
+			equipment.setF1043IsVirtual(isv ? 1 : 0);
+		}
+		beanDao.update(equipment);
+	}
 }

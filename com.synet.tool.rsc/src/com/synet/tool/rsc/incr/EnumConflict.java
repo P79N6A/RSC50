@@ -8,9 +8,11 @@ import com.synet.tool.rsc.incr.scd.PinConflictHandler;
 import com.synet.tool.rsc.incr.scd.RcbConflictHandler;
 import com.synet.tool.rsc.incr.scd.SetConflictHandler;
 import com.synet.tool.rsc.incr.ssd.BayConflictHandler;
+import com.synet.tool.rsc.incr.ssd.CNodeConflictHandler;
 import com.synet.tool.rsc.incr.ssd.EqpConflictHandler;
+import com.synet.tool.rsc.incr.ssd.LNodeConflictHandler;
 import com.synet.tool.rsc.incr.ssd.StaConflictHandler;
-import com.synet.tool.rsc.incr.ssd.VolConflictHandler;
+import com.synet.tool.rsc.incr.ssd.TerminalConflictHandler;
 
 public enum EnumConflict {
 
@@ -34,10 +36,13 @@ public enum EnumConflict {
 	Smv("Smv", BaseCbConflictHandler.class),
 	// 一次
 	Sta("Substation", StaConflictHandler.class),
-	Vol("VoltageLevel", VolConflictHandler.class),
+	Vol("VoltageLevel", NoConflictHandler.class),
 	Bay("Bay", BayConflictHandler.class),
+	CNODE("ConnectivityNode", CNodeConflictHandler.class),
 	EQP("ConductingEquipment", EqpConflictHandler.class),
-	PTR("PowerTransformer", EqpConflictHandler.class);
+	PTR("PowerTransformer", EqpConflictHandler.class),
+	TERM("Terminal", TerminalConflictHandler.class),
+	LNODE("LNode", LNodeConflictHandler.class);
 	
 	private String type;
 	private Class<?> clazz;

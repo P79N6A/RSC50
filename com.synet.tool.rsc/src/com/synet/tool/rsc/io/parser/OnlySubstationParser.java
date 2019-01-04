@@ -29,8 +29,10 @@ import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
 import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
 import com.synet.tool.rsc.service.IedEntityService;
+import com.synet.tool.rsc.service.LNodeEntityService;
 import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.util.F1011_NO;
@@ -46,7 +48,9 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 	private Map<String, Tb1045ConnectivitynodeEntity> connMap = new HashMap<>();
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
 	private SubstationService staServ = new SubstationService();
+	private BayEntityService bayServ = new BayEntityService();
 	private IedEntityService iedServ = new IedEntityService();
+	private LNodeEntityService lnodeServ = new LNodeEntityService();
 	private StatedataService statedataService = new StatedataService();
 	private Context context;
 	private IProgressMonitor monitor;
@@ -119,7 +123,7 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 				if (monitor != null) {
 					monitor.setTaskName("正在导入间隔" + bayName);
 				}
-				Tb1042BayEntity bay = addBay(station, ivol, bayName, bayDesc);
+				Tb1042BayEntity bay = bayServ.addBay(station, ivol, bayName, bayDesc);
 				for (Element eqpEl : eqpEls) {
 					String stype = eqpEl.attributeValue("type");
 					EnumEquipmentType type = null;
@@ -171,54 +175,23 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 						}
 						List<Element> lnodeEls = DOM4JNodeHelper.selectNodes(eqpEl, lnodeXpath);
 						for (Element lnodeEl : lnodeEls) {
-							updateIEDBayInfo(lnodeEl, bay);
-							// 更新开关道闸信号数据类型
+							lnodeServ.updateIEDBayInfo(lnodeEl.attributeValue("iedName"), bay);
+							// 判断是否接地
+							List<Element> terminals = eqpEl.elements("Terminal");
+							boolean isGround = false;
+							for (Element terminal : terminals) {
+								String cNodeName = terminal.attributeValue("cNodeName");
+								if ("grounded".equals(cNodeName)) {
+									isGround = true;
+									break;
+								}
+							}
 							String lnClass = lnodeEl.attributeValue("lnClass");
 							String ldInst = lnodeEl.attributeValue("ldInst");
 							String prefix = lnodeEl.attributeValue("prefix");
 							String lnInst = lnodeEl.attributeValue("lnInst");
 							String iedName = lnodeEl.attributeValue("iedName");
-							if ("XSWI".equals(lnClass)) { 
-								// 判断是否接地
-								List<Element> terminals = eqpEl.elements("Terminal");
-								boolean isGround = false;
-								for (Element terminal : terminals) {
-									String cNodeName = terminal.attributeValue("cNodeName");
-									if ("grounded".equals(cNodeName)) {
-										isGround = true;
-										break;
-									}
-								}
-								Rule rule = isGround ? F1011_NO.ST_GDIS : F1011_NO.ST_DIS;
-								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
-								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
-								if (stateData != null) {
-									updatePosType(iedName, dataRef, rule);
-									stateData.setF1011No(rule.getId());
-									stateData.setParentCode(eqpCode);
-									beanDao.update(stateData);
-								}
-							} else if ("XCBR".equals(lnClass)) {
-								String dataRef = ldInst + "/" + prefix + lnClass + lnInst + "$ST$Pos$stVal";
-								Tb1016StatedataEntity stateData = statedataService.getStateByIedRef(iedName, dataRef);
-								if (stateData != null) {
-									Rule rule = F1011_NO.ST_BRK;
-									String desc = stateData.getF1016Desc();
-									if (!StringUtil.isEmpty(desc)) {
-										if (desc.contains("A")) {
-											rule = F1011_NO.ST_BRK_A;
-										} else if (desc.contains("B")) {
-											rule = F1011_NO.ST_BRK_B;
-										} else if (desc.contains("C")) {
-											rule = F1011_NO.ST_BRK_C;
-										}
-									}
-									updatePosType(iedName, dataRef, rule);
-									stateData.setF1011No(rule.getId());
-									stateData.setParentCode(eqpCode);
-									beanDao.update(stateData);
-								}
-							}
+							lnodeServ.linkStaPoint(eqpCode, iedName, ldInst, prefix, lnClass, lnInst, isGround);
 						}
 						eqpNum++;
 					}
@@ -232,7 +205,7 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 		if (monitor != null) {
 			monitor.setTaskName("正在添加公共间隔");
 		}
-		addBay(station, 0, DBConstants.BAY_PUB, DBConstants.BAY_PUB); // 补充公共间隔用于存放交换机、采集器、配线架
+		bayServ.addBay(station, 0, DBConstants.BAY_PUB, DBConstants.BAY_PUB); // 补充公共间隔用于存放交换机、采集器、配线架
 		bayNum++;
 		ConsoleManager console = ConsoleManager.getInstance();
 		console.append("一共导入 " + bayNum + " 个间隔， " + eqpNum + " 台设备， " + conNum + " 个连接点。");
@@ -253,18 +226,6 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 		conn.setF1045Desc(pathName);
 		conns.add(conn);
 		connMap.put(nodeName, conn);
-	}
-
-	private Tb1042BayEntity addBay(Tb1041SubstationEntity station, int ivol,
-			String bayName, String bayDesc) {
-		Tb1042BayEntity bay = new Tb1042BayEntity();
-		bay.setF1042Code(rscp.nextTbCode(DBConstants.PR_BAY));
-		bay.setF1042Name(bayName);
-		bay.setF1042Desc(bayDesc);
-		bay.setF1042Voltage(ivol);
-		bay.setTb1041SubstationByF1041Code(station);
-		beanDao.insert(bay);	// 避免IED更新bay信息后查询出错
-		return bay;
 	}
 	
 	/**
@@ -302,36 +263,6 @@ public class OnlySubstationParser extends IedParserBase<Tb1042BayEntity> {
 			terminals.add(tm);
 		}
 		equipment.setTb1044TerminalsByF1043Code(terminals);
-	}
-
-	private void updateIEDBayInfo(Element lnodeEl, Tb1042BayEntity bay) {
-		String iedName = lnodeEl.attributeValue("iedName");
-		if (!StringUtil.isEmpty(iedName) && !"None".equalsIgnoreCase(iedName) && !"null".equalsIgnoreCase(iedName)) {
-			Tb1046IedEntity ied = (Tb1046IedEntity) beanDao.getObject(Tb1046IedEntity.class, "f1046Name", iedName);
-			String bayName = ied.getTb1042BaysByF1042Code().getF1042Name();
-			if (DBConstants.BAY_OTHER.equals(bayName)) {
-				String bayCode = bay.getF1042Code();
-				ied.setF1042Code(bayCode);
-				String f1046Code = ied.getF1046Code();
-				iedServ.updateIEDBayCode(f1046Code, bayCode);
-//				List<Tb1046IedEntity> bayIeds = new ArrayList<>();
-//				List<Tb1065LogicallinkEntity> logiclinkIns = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-//						Tb1065LogicallinkEntity.class, "f1046CodeIedRecv", f1046Code);
-//				for (Tb1065LogicallinkEntity logiclink : logiclinkIns) {
-//					Tb1046IedEntity iedSend = logiclink.getTb1046IedByF1046CodeIedSend();
-//					iedSend.setF1042Code(bayCode);
-//					bayIeds.add(iedSend);
-//				}
-//				List<Tb1065LogicallinkEntity> logiclinkOuts = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(
-//						Tb1065LogicallinkEntity.class, "f1046CodeIedSend", f1046Code);
-//				for (Tb1065LogicallinkEntity logiclink : logiclinkOuts) {
-//					Tb1046IedEntity iedResv = logiclink.getTb1046IedByF1046CodeIedRecv();
-//					iedResv.setF1042Code(bayCode);
-//					bayIeds.add(iedResv);
-//				}
-//				beanDao.updateBatch(bayIeds);
-			}
-		}
 	}
 
 }

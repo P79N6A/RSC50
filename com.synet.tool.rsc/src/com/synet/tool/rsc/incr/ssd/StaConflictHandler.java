@@ -8,12 +8,30 @@ import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
 import com.synet.tool.rsc.incr.EnumConflict;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
+import com.synet.tool.rsc.service.SubstationService;
 
 public class StaConflictHandler extends BaseConflictHandler {
 
+	private SubstationService staServ = new SubstationService();
+	private Tb1041SubstationEntity substation;
+	
 	public StaConflictHandler(Difference diff) {
 		super(diff);
-		
+		this.substation = (Tb1041SubstationEntity) 
+				getByName(Tb1041SubstationEntity.class, "f1041Name");
+	}
+	
+	@Override
+	public void setData() {
+		diff.setData(staServ.getCurrSubstation());
+	}
+	
+	@Override
+	public void handle() {
+		int bayNum = getBayNum();
+		monitor.beginTask("开始增量导入SSD配置", bayNum + 1);
+		super.handle();
+		monitor.done();
 	}
 
 	@Override
@@ -26,11 +44,6 @@ public class StaConflictHandler extends BaseConflictHandler {
 
 	@Override
 	public void handleUpate() {
-		int bayNum = getBayNum();
-		monitor.beginTask("开始增量导入SSD配置", bayNum + 1);
-
-		Tb1041SubstationEntity substation = (Tb1041SubstationEntity) 
-				getByName(Tb1041SubstationEntity.class, "f1041Name");
 		Map<String, String> updateInfo = getUpdateInfo();
 		String newName = updateInfo.get("name");
 		String newDesc = updateInfo.get("desc");
@@ -43,12 +56,6 @@ public class StaConflictHandler extends BaseConflictHandler {
 		if (updateInfo.size() > 0) {
 			beanDao.update(substation);
 		}
-		
-		monitor.done();
-	}
-	
-	protected EnumConflict getChildHandlerType() {
-		return null;
 	}
 	
 	private int getBayNum() {
@@ -59,6 +66,4 @@ public class StaConflictHandler extends BaseConflictHandler {
 		}
 		return num + diffs.size();
 	}
-
-
 }

@@ -18,6 +18,10 @@ public abstract class BaseCompare implements ICompare {
 		this.monitor = monitor;
 	}
 	
+	protected String getVol(Element volNd) {
+		return volNd.element("Voltage").getTextTrim();
+	}
+	
 	protected void fillBayDiffs(Difference diffVol, Element ndBay, OP op) {
 		Difference diffBay = addDiffByName(diffVol, ndBay, op);
 		Iterator<Element> eqpIterator = ndBay.elementIterator();

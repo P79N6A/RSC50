@@ -48,7 +48,7 @@ public class EquipmentCompare extends SSDSubCompare {
 			}
 			Element ndEqpSubDest = eqpSubDestMap.get(key);
 			if (ndEqpSubDest == null) {
-				addDifference(diffEqp, ndEqpSubSrc, OP.DELETE);
+				addDiffByName(diffEqp, ndEqpSubSrc, OP.DELETE);
 			} else {
 				if ("Terminal".equals(ndEqpSubName)) {
 					String msg = CompareUtil.compare(ndEqpSubSrc, ndEqpSubDest, "cNodeName", "connectivityNode");
@@ -61,7 +61,7 @@ public class EquipmentCompare extends SSDSubCompare {
 		}
 		if (eqpSubDestMap.size() > 0) {
 			for (Element ndEqpSubDest : eqpSubDestMap.values()) {
-				addDifference(diffEqp, ndEqpSubDest, OP.ADD);
+				addDiffByName(diffEqp, ndEqpSubDest, OP.ADD);
 			}
 		}
 		CompareUtil.sortChildren(diffEqp);

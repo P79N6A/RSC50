@@ -6,6 +6,7 @@ import java.util.Map;
 import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.synet.tool.rsc.compare.BaseCompare;
 import com.synet.tool.rsc.compare.CompareUtil;
@@ -45,6 +46,7 @@ public class SsdCompare extends BaseCompare {
 			}
 			if (ndVolDest == null) { // 已删除
 				Difference diffVol = CompareUtil.addDiffByAttName(diffRoot, ndVolSrc, "name", OP.DELETE);
+				appendVolInfo(diffVol, ndVolSrc);
 				fillVolDiffs(diffVol, ndVolSrc, OP.DELETE);
 			} else {
 				if (!CompareUtil.matchMd5(ndVolSrc, ndVolDest)) {
@@ -57,11 +59,24 @@ public class SsdCompare extends BaseCompare {
 		if (destChildrenMap.size() > 0) {
 			for (Element ndVolDest : destChildrenMap.values()) {
 				Difference diffVol = CompareUtil.addDiffByAttName(diffRoot, ndVolDest, "name", OP.ADD);
+				appendVolInfo(diffVol, ndVolDest);
 				fillVolDiffs(diffVol, ndVolDest, OP.ADD);
 			}
 		}
 		monitor.done();
 		return diffRoot;
+	}
+	
+	private void appendVolInfo(Difference diffVol, Element ndVol) {
+		String vol = getVol(ndVol);
+		String msg = diffVol.getMsg();
+		if (!StringUtil.isEmpty(msg)) {
+			msg += ",";
+		} else {
+			msg = "";
+		}
+		msg += "vol:" + vol;
+		diffVol.setMsg(msg);
 	}
 	
 	private void fillVolDiffs(Difference diffVol, Element ndVol, OP op) {

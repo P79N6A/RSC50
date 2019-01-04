@@ -6,6 +6,7 @@ import java.util.Map;
 import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.shrcn.found.common.util.StringUtil;
 import com.synet.tool.rsc.compare.CompareUtil;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.OP;
@@ -19,12 +20,21 @@ public class VolCompare extends SSDSubCompare {
 
 	public VolCompare(Difference diffParent, Element ndSrc, Element ndDest, IProgressMonitor monitor) {
 		super(diffParent, ndSrc, ndDest, monitor);
-		
 	}
 	
 	@Override
 	public Difference execute() {
 		Difference diffVol = CompareUtil.addUpdateDiff(diffParent, ndSrc, ndDest);
+		String volSrc = getVol(ndSrc);
+		String volDest = getVol(ndDest);
+		String msg = diffVol.getMsg();
+		if (!StringUtil.isEmpty(msg)) {
+			msg += ",";
+		} else {
+			msg = "";
+		}
+		msg += "vol:" + volSrc + "->" + volDest;
+		diffVol.setMsg(msg);
 		Iterator<Element> bayIterator = ndSrc.elementIterator("Bay");
 		Map<String, Element> destBayMap = CompareUtil.getChildrenMapByAtt(ndDest, "name");
 		while(bayIterator.hasNext()) {
