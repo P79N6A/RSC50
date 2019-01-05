@@ -23,7 +23,7 @@
         <property name="f1054CbType">
             <column name="F1054_CBType" sql-type="int" not-null="true"/>
         </property>
-        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity">
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
             <column name="F1046_CODE" not-null="true"/>
         </many-to-one>
         <!-- list name="tb1058MmsfcdasByF1054Code" inverse="false" cascade="save-update" table="tb1058_mmsfcda" lazy="false">

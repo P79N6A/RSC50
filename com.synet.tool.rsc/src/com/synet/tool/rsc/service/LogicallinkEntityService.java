@@ -23,8 +23,11 @@ public class LogicallinkEntityService extends BaseService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1065LogicallinkEntity> getByRecvIed(Tb1046IedEntity iedEntity) {
-		List<Tb1065LogicallinkEntity> linkList = (List<Tb1065LogicallinkEntity>) beanDao.getListByCriteria(Tb1065LogicallinkEntity.class, 
-				"f1046CodeIedRecv", iedEntity.getF1046Code());
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity.getF1046Code());
+		String hql = "from " + Tb1065LogicallinkEntity.class.getName() + 
+				" where f1046CodeIedRecv=:ied and deleted=0";
+		List<Tb1065LogicallinkEntity> linkList = (List<Tb1065LogicallinkEntity>) hqlDao.getListByHql(hql, params);
 		for (Tb1065LogicallinkEntity link : linkList) {
 			link.setCircuits("查看");
 			link.setPhyconns("查看");

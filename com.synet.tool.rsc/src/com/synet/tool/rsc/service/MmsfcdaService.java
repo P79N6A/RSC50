@@ -85,7 +85,7 @@ public class MmsfcdaService extends BaseService {
 		List<Tb1058MmsfcdaEntity> mmsList = new ArrayList<>();
 		for (RuleType rtyp : types) {
 			String hql = "from " + Tb1058MmsfcdaEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
-					"and f1058Type between :min and :max";
+					"and deleted=0 and f1058Type between :min and :max";
 			Map<String, Object> params = new HashMap<>();
 			params.put("ied", iedEntity);
 			params.put("min", rtyp.getMin());
@@ -124,6 +124,7 @@ public class MmsfcdaService extends BaseService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("tb1046IedByF1046Code", iedEntity);
 		params.put("f1058Type", RSCConstants.OTHERS_ID);
+		params.put("deleted", 0);
 		return (List<Tb1058MmsfcdaEntity>) beanDao.getListByCriteria(Tb1058MmsfcdaEntity.class, params);
 	}
 	
@@ -182,20 +183,20 @@ public class MmsfcdaService extends BaseService {
 		beanDao.update(mmsFcda);
 	}
 	
-	public void updateWarnParent(Object objMms, String parendCode) {
+	public void updateWarnParent(Object objMms, String parentCode) {
 		String dataCode = (String) ObjectUtil.getProperty(objMms, "dataCode");
 		if (SclUtil.isStData(dataCode)) {
 			StatedataService statedataService = new StatedataService();
 			Tb1016StatedataEntity stateData = statedataService.getStateDataByCode(dataCode);
-			stateData.setParentCode(parendCode);
+			stateData.setParentCode(parentCode);
 			beanDao.update(stateData);
 		} else {
 			AnalogdataService analogdataService = new AnalogdataService();
 			Tb1006AnalogdataEntity anolog = analogdataService.getAnologByCodes(dataCode);
-			anolog.setParentCode(parendCode);
+			anolog.setParentCode(parentCode);
 			beanDao.update(anolog);
 		}
-		ObjectUtil.setProperty(objMms, "parentCode", parendCode);
+		ObjectUtil.setProperty(objMms, "parentCode", parentCode);
 		beanDao.update(objMms);
 	}
 
@@ -241,10 +242,10 @@ public class MmsfcdaService extends BaseService {
 	 */
 	public void deleteFcda(Tb1054RcbEntity rcb, String fcdaRef) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("devName", rcb.getTb1046IedByF1046Code().getF1046Name());
+		params.put("rcb", rcb);
 		params.put("f1058RefAddr", fcdaRef);
 		String hql = "update " + Tb1058MmsfcdaEntity.class.getName() + 
-				" set deleted=1 where tb1046IedByF1046Code.f1046Name=:devName and f1058RefAddr=:f1058RefAddr";
+				" set deleted=1 where tb1054RcbByF1054Code=:rcb and f1058RefAddr=:f1058RefAddr";
 		hqlDao.updateByHql(hql, params);
 	}
 

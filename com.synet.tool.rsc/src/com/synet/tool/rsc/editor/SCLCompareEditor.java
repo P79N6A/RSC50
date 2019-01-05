@@ -50,6 +50,7 @@ import com.synet.tool.rsc.editor.tree.NewDescField;
 import com.synet.tool.rsc.editor.tree.NewNameField;
 import com.synet.tool.rsc.editor.tree.OpField;
 import com.synet.tool.rsc.editor.tree.TypeField;
+import com.synet.tool.rsc.incr.EnumConflict;
 import com.synet.tool.rsc.incr.IncrementImportor;
 import com.synet.tool.rsc.util.ExcelFileManager2007;
 
@@ -115,12 +116,13 @@ public class SCLCompareEditor extends BaseConfigEditor {
 		@Override
 		public void run() {
 			Difference diff = getSelectedDiff();
-			if (OP.DELETE != diff.getOp()) {
-				DialogHelper.showWarning("只有删除状态才允许重命名！");
+			if (!canRename(diff)) {
+				DialogHelper.showWarning("只有处于删除状态的IED、间隔、设备才允许重命名！");
 				return;
 			}
 			List<Difference> diffsAdded = new ArrayList<>();
-			List<Difference> brothers = diff.getParent().getChildren();
+			Difference parentDiff = diff.getParent();
+			List<Difference> brothers = (parentDiff==null) ? diffs : parentDiff.getChildren();
 			for (Difference brother : brothers) {
 				if (diff.getType().equals(brother.getType())
 						&& brother.getOp() == OP.ADD) {
@@ -135,6 +137,12 @@ public class SCLCompareEditor extends BaseConfigEditor {
 			if (ConflictHandleDialog.OK == conflictDlg.open()) {
 				refreshParentDiff();
 			}
+		}
+
+		private boolean canRename(Difference diff) {
+			EnumConflict conflict = EnumConflict.getByType(diff.getType());
+			return (OP.DELETE == diff.getOp()) && (EnumConflict.IED==conflict
+					 || EnumConflict.Bay==conflict || EnumConflict.EQP==conflict);
 		}
 	}
 	
@@ -152,7 +160,8 @@ public class SCLCompareEditor extends BaseConfigEditor {
 				return;
 			}
 			String newName = diff.getNewName();
-			List<Difference> brothers = diff.getParent().getChildren();
+			Difference diffParent = diff.getParent();
+			List<Difference> brothers = (diffParent==null) ? diffs : diffParent.getChildren();
 			for (Difference brother : brothers) {
 				if (diff.getType().equals(brother.getType())
 						&& newName.equals(brother.getName())) {
@@ -231,7 +240,6 @@ public class SCLCompareEditor extends BaseConfigEditor {
 				if (!DialogHelper.showConfirm("导入操作会对当前工程造成不可逆影响，确定执行吗?")) {
 					return;
 				}
-				btnImport.setEnabled(false);
 				ProgressManager.execute(new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException,
@@ -242,6 +250,7 @@ public class SCLCompareEditor extends BaseConfigEditor {
 							@Override
 							public void run() {
 								EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
+								btnImport.setEnabled(false);
 							}});
 					}
 				}, false);

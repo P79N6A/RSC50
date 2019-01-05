@@ -1,7 +1,9 @@
 package com.synet.tool.rsc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.BaseCbEntity;
@@ -15,7 +17,11 @@ public class CircuitEntityService extends BaseService {
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1063CircuitEntity> getByIed(Tb1046IedEntity iedEntity) {
-		return (List<Tb1063CircuitEntity>) beanDao.getListByCriteria(Tb1063CircuitEntity.class, "tb1046IedByF1046CodeIedRecv", iedEntity);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		String hql = "from " + Tb1063CircuitEntity.class.getName() + 
+				" where tb1046IedByF1046CodeIedRecv=:ied and deleted=0";
+		return (List<Tb1063CircuitEntity>) hqlDao.getListByHql(hql, params);
 	}
 	
 	/**

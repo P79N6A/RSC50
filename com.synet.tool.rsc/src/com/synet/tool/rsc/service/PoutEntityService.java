@@ -22,7 +22,11 @@ public class PoutEntityService extends BaseService {
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1061PoutEntity> getByIed(Tb1046IedEntity ied) {
-		return (List<Tb1061PoutEntity>) beanDao.getListByCriteria(Tb1061PoutEntity.class, "tb1046IedByF1046Code", ied);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", ied);
+		String hql = "from " + Tb1061PoutEntity.class.getName() + 
+				" where tb1046IedByF1046Code=:ied and deleted=0";
+		return (List<Tb1061PoutEntity>) hqlDao.getListByHql(hql, params);
 	}
 	
 	public List<Tb1061PoutEntity> getWarningData(Tb1046IedEntity ied) {
@@ -43,7 +47,7 @@ public class PoutEntityService extends BaseService {
 	
 	public List<Tb1061PoutEntity> getByDataType(Tb1046IedEntity ied, RuleType rtyp) {
 		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
-				"and f1061Type between :min and :max";
+				"and deleted=0 and f1061Type between :min and :max";
 		Map<String, Object> params = new HashMap<>();
 		params.put("ied", ied);
 		params.put("min", rtyp.getMin());
@@ -53,7 +57,7 @@ public class PoutEntityService extends BaseService {
 	
 	public List<Tb1061PoutEntity> getOtherData(Tb1046IedEntity ied) {
 		String hql = "from " + Tb1061PoutEntity.class.getName() + " where tb1046IedByF1046Code=:ied " +
-				"and f1061Type=:type";
+				"and deleted=0 and f1061Type=:type";
 		Map<String, Object> params = new HashMap<>();
 		params.put("ied", ied);
 		params.put("type", RSCConstants.OTHERS_ID);
@@ -134,11 +138,12 @@ public class PoutEntityService extends BaseService {
 	 */
 	public void deleteFcda(BaseCbEntity cb, String fcdaRef) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("devName", cb.getTb1046IedByF1046Code().getF1046Name());
+		params.put("cbEntity", cb);
 		params.put("f1061RefAddr", fcdaRef);
 		String hql = "update " + Tb1061PoutEntity.class.getName() + 
-				" set deleted=1 where tb1046IedByF1046Code.f1046Name=:devName and f1061RefAddr=:f1061RefAddr";
-		hqlDao.updateByHql(hql, params);
+				" set deleted=1 where cbEntity=:cbEntity and f1061RefAddr=:f1061RefAddr";
+		hqlDao.updateByHql(hql, params);   
+//		System.out.println(beanDao.getListByCriteria(Tb1061PoutEntity.class, params));
 	}
 
 	/**

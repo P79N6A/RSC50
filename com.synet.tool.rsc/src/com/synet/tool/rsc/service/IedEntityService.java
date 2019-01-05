@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shrcn.found.common.log.SCTLogger;
+import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.tool.found.das.impl.HqlDaoImpl;
 import com.synet.tool.rsc.DBConstants;
@@ -89,11 +91,20 @@ public class IedEntityService extends BaseService {
 	}
 	
 	private void deleteIedSubEntity(Class<?> clazz, String fname, Tb1046IedEntity ied) {
-		String hql = "update " + clazz.getName() + " set deleted=1" +
+//		String hql = "update " + clazz.getName() + " set deleted=1" +
+//				" where " + fname + "=:ied";
+		String hql = "from " + clazz.getName() + 
 				" where " + fname + "=:ied";
 		Map<String, Object> params = new HashMap<>();
 		params.put("ied", ied);
-		hqlDao.updateByHql(hql, params);
+//		hqlDao.updateByHql(hql, params);
+//		Object entity = hqlDao.getObject(hql, params);
+//		beanDao.markDeleted(entity);
+		List<?> list = hqlDao.getListByHql(hql, params);
+		for (Object o : list) {
+			ObjectUtil.setProperty(o, "deleted", 1);
+		}
+		beanDao.updateBatch(list);
 	}
 	
 	/**
@@ -142,10 +153,15 @@ public class IedEntityService extends BaseService {
 		// 通信服务
 		Tb1070MmsserverEntity mmsServer = (Tb1070MmsserverEntity) 
 				beanDao.getObject(Tb1070MmsserverEntity.class, "tb1046IedByF1046Code", ied);
-		mmsServer.setF1070IpA(ied.getF1046aNetIp());
-		mmsServer.setF1070IpB(ied.getF1046bNetIp());
-		mmsServer.setF1070IedCrc(ied.getF1046Crc());
-		beanDao.update(mmsServer);
+		if (mmsServer != null) {
+			mmsServer.setF1070IpA(ied.getF1046aNetIp());
+			mmsServer.setF1070IpB(ied.getF1046bNetIp());
+			mmsServer.setF1070IedCrc(ied.getF1046Crc());
+			beanDao.update(mmsServer);
+		}/* else {
+			SCTLogger.error("装置 " + ied.getF1046Name() + " " + Tb1070MmsserverEntity.class.getSimpleName() +
+					" 通信配置丢失！");
+		}*/
 	}
 
 	/**
@@ -399,6 +415,7 @@ public class IedEntityService extends BaseService {
 		if (devName == null)
 			return null;
 		Object object = beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
+		System.out.println(beanDao.getAll(Tb1046IedEntity.class));
 		return (Tb1046IedEntity) object;
 	}
 	

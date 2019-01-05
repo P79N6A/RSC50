@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
+import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.model.Tb1064StrapEntity;
 import com.synet.tool.rsc.util.F1011_NO;
@@ -15,7 +16,11 @@ public class PinEntityService extends BaseService {
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1062PinEntity> getByIed(Tb1046IedEntity ied) {
-		return (List<Tb1062PinEntity>) beanDao.getListByCriteria(Tb1062PinEntity.class, "tb1046IedByF1046Code", ied);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", ied);
+		String hql = "from " + Tb1062PinEntity.class.getName() + 
+				" where tb1046IedByF1046Code=:ied and deleted=0";
+		return (List<Tb1062PinEntity>) hqlDao.getListByHql(hql, params);
 	}
 
 	public Tb1062PinEntity getPinEntity(String devName, String f1062RefAddr) {
@@ -43,9 +48,13 @@ public class PinEntityService extends BaseService {
 	 * @return
 	 */
 	public Tb1062PinEntity getPin(Tb1046IedEntity ied, String ref) {
+//		List<?> all = beanDao.getAll(Tb1062PinEntity.class);
+//		System.out.println(all);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("tb1046IedByF1046Code", ied);
 		params.put("f1062RefAddr", ref);
+//		List<?> list = beanDao.getListByCriteria(Tb1062PinEntity.class, params);
+//		System.out.println(list);
 		return (Tb1062PinEntity) beanDao.getObject(Tb1062PinEntity.class, params);
 	}
 	

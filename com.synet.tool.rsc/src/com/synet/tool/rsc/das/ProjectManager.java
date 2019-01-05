@@ -93,7 +93,6 @@ public class ProjectManager {
 	 * @return
 	 */
 	public boolean removeDb(String devName) {
-		dbmgr.shutdown();
 		String path = getDataDir() + devName;
 		return FileManipulate.deleteDir(path);
 	}

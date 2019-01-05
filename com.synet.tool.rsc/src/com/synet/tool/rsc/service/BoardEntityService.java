@@ -6,13 +6,16 @@ import java.util.Map;
 
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
-import com.synet.tool.rsc.model.Tb1048PortEntity;
 
 public class BoardEntityService extends BaseService {
 
 	@SuppressWarnings("unchecked")
 	public List<Tb1047BoardEntity> getByIed(Tb1046IedEntity iedEntity) {
-		return (List<Tb1047BoardEntity>) beanDao.getListByCriteria(Tb1047BoardEntity.class, "tb1046IedByF1046Code", iedEntity);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		String hql = "from " + Tb1047BoardEntity.class.getName() + 
+				" where tb1046IedByF1046Code=:ied and deleted=0";
+		return (List<Tb1047BoardEntity>) hqlDao.getListByHql(hql, params);
 	}
 	
 	public Tb1047BoardEntity existsEntity(Tb1047BoardEntity entity) {

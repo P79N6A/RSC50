@@ -19,8 +19,11 @@ public class SgfcdaEntityService extends BaseService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1059SgfcdaEntity> getSgfcdaByIed(Tb1046IedEntity iedEntity) {
-		List<Tb1057SgcbEntity> sgcbEntities = (List<Tb1057SgcbEntity>) beanDao.getListByCriteria(Tb1057SgcbEntity.class, "tb1046IedByF1046Code", iedEntity);
-		return (List<Tb1059SgfcdaEntity>) hqlDao.selectInObjects(Tb1059SgfcdaEntity.class, "tb1057SgcbByF1057Code", sgcbEntities);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		String hql = "from " + Tb1059SgfcdaEntity.class.getName() + 
+				" where tb1057SgcbByF1057Code.tb1046IedByF1046Code=:ied and deleted=0";
+		return (List<Tb1059SgfcdaEntity>) hqlDao.getListByHql(hql, params);
 	}
 
 	/**
@@ -56,6 +59,7 @@ public class SgfcdaEntityService extends BaseService {
 		params.put("sgcb", sgcb);
 		params.put("fcdaRef", fcdaRef);
 		hqlDao.updateByHql(hql, params);
+//		System.out.println(beanDao.getObject(Tb1059SgfcdaEntity.class, "f1059RefAddr", fcdaRef));
 	}
 	
 	/**

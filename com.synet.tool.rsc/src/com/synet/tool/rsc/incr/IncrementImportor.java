@@ -8,7 +8,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.business.scl.model.SCL;
 import com.shrcn.found.xmldb.XMLDBHelper;
+import com.shrcn.found.xmldb.vtd.VTDXMLDBHelper;
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.compare.XmlHelperCache;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.incr.scd.IEDConflictHandler;
 import com.synet.tool.rsc.io.ied.Context;
@@ -31,8 +33,9 @@ public class IncrementImportor extends BaseIncreImportor {
 		} else {
 			monitor.beginTask("开始增量导入SCD配置", diffs.size() + 1);
 			for (Difference diff : diffs) {
-				Element commEl = XMLDBHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
-				Element dtTypeNd = XMLDBHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
+				VTDXMLDBHelper destXmlHelper = XmlHelperCache.getInstance().getDestXmlHelper();
+				Element commEl = destXmlHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
+				Element dtTypeNd = destXmlHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
 				Context context = new Context(commEl, dtTypeNd);
 				IEDConflictHandler handler = new IEDConflictHandler(diff, context);
 				handler.setMonitor(monitor);

@@ -31,7 +31,7 @@ public class PinConflictHandler extends BaseConflictHandler {
 	@Override
 	public void handleUpate() {
 		String pinRef = diff.getName();
-		String doDesc = diff.getDesc();
+		String doDesc = diff.getNewDesc();
 		pinServ.updatePin(ied, pinRef, doDesc);
 	}
 }

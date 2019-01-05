@@ -209,7 +209,9 @@ public class CompareUtil {
 			String[] atts = msg.split(",");
 			for (String att : atts) {
 				String[] temp = att.split(":");
-				updateInfo.put(temp[0], temp[1].split("->")[1]);
+				String[] change = temp[1].split("->");
+				String newValue = change.length > 1 ? change[1] : "";
+				updateInfo.put(temp[0], newValue);
 			}
 		}
 		return updateInfo;

@@ -17,7 +17,11 @@ public class SpfcdaEntityService extends BaseService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Tb1060SpfcdaEntity> getByIed(Tb1046IedEntity iedEntity) {
-		return (List<Tb1060SpfcdaEntity>) beanDao.getListByCriteria(Tb1060SpfcdaEntity.class, "tb1046IedByF1046Code", iedEntity);
+		Map<String, Object> params = new HashMap<>();
+		params.put("ied", iedEntity);
+		String hql = "from " + Tb1060SpfcdaEntity.class.getName() + 
+				" where tb1046IedByF1046Code=:ied and deleted=0";
+		return (List<Tb1060SpfcdaEntity>) hqlDao.getListByHql(hql, params);
 	}
 	
 	/**
