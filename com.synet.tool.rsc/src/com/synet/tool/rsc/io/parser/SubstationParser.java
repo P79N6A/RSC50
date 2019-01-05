@@ -20,6 +20,7 @@ import com.shrcn.found.file.xml.DOM4JNodeHelper;
 import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.DBConstants;
+import com.synet.tool.rsc.compare.CompareUtil;
 import com.synet.tool.rsc.io.ied.Context;
 import com.synet.tool.rsc.io.scd.EnumEquipmentType;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
@@ -29,9 +30,7 @@ import com.synet.tool.rsc.model.Tb1044TerminalEntity;
 import com.synet.tool.rsc.model.Tb1045ConnectivitynodeEntity;
 import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.CtvtsecondaryService;
-import com.synet.tool.rsc.service.IedEntityService;
 import com.synet.tool.rsc.service.LNodeEntityService;
-import com.synet.tool.rsc.service.StatedataService;
 import com.synet.tool.rsc.service.SubstationService;
 
  /**
@@ -45,9 +44,7 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 	private CtvtsecondaryService secService = new CtvtsecondaryService();
 	private SubstationService staServ = new SubstationService();
 	private BayEntityService bayServ = new BayEntityService();
-	private IedEntityService iedServ = new IedEntityService();
 	private LNodeEntityService lnodeServ = new LNodeEntityService();
-	private StatedataService statedataService = new StatedataService();
 	private Context context;
 	
 	public SubstationParser() {
@@ -206,6 +203,10 @@ public class SubstationParser extends IedParserBase<Tb1042BayEntity> {
 			return;
 		for (Element tmEl : tmEls) {
 			String tmName = tmEl.attributeValue("name");
+			if ("TransformerWinding".equals(eqpEl.getName())) {
+				String trw = CompareUtil.getAttribute(eqpEl, "name");
+				tmName = trw + "/" + tmName;
+			}
 			Tb1044TerminalEntity tm = new Tb1044TerminalEntity();
 			terminals.add(tm);
 			tm.setF1044Code(rscp.nextTbCode(DBConstants.PR_Term));

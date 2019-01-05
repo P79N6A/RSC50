@@ -47,6 +47,8 @@ public abstract class BaseConflictHandler implements IConflictHandler {
 			case RENAME:
 				handleRename();
 				break;
+			case NONE:
+				return;
 		}
 		setData();
 		List<Difference> subDiffs = diff.getChildren();

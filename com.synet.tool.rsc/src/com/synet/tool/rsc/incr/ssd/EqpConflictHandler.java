@@ -4,6 +4,7 @@ import org.dom4j.Element;
 
 import com.shrcn.found.xmldb.vtd.VTDXMLDBHelper;
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.compare.OP;
 import com.synet.tool.rsc.compare.XmlHelperCache;
 import com.synet.tool.rsc.compare.ssd.EquipmentCompare;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
@@ -25,6 +26,7 @@ public class EqpConflictHandler extends BaseConflictHandler {
 	
 	@Override
 	public void setData() {
+//		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
 		Tb1043EquipmentEntity equipment = eqpServ.getEquipment(bay, diff.getName());
 		diff.setData(equipment);
 	}
@@ -51,14 +53,15 @@ public class EqpConflictHandler extends BaseConflictHandler {
 		XmlHelperCache cache = XmlHelperCache.getInstance();
 		VTDXMLDBHelper srcXmlHelper = cache.getSrcXmlHelper();
 		VTDXMLDBHelper destXmlHelper = cache.getDestXmlHelper();
-		Element ndSrc = srcXmlHelper.selectSingleNode("/Substation/VoltageLevel/Bay/*[@name='" + oldName + "']");
-		Element ndDest = destXmlHelper.selectSingleNode("/Substation/VoltageLevel/Bay/*[@name='" + newName + "']");
-		Difference diffNew = new EquipmentCompare(diff.getParent(), ndSrc , ndDest, monitor).execute();
+		Element ndSrc = srcXmlHelper.selectSingleNode("/SCL/Substation/VoltageLevel/Bay/*[@name='" + oldName + "']");
+		Element ndDest = destXmlHelper.selectSingleNode("/SCL/Substation/VoltageLevel/Bay/*[@name='" + newName + "']");
+		Difference diffNew = new EquipmentCompare(null, ndSrc , ndDest, monitor).execute();
 		diffNew.setName(oldName);
 		diffNew.setNewName(newName);
 		diffNew.setDesc(ndSrc.attributeValue("desc"));
 		diffNew.setNewDesc(ndDest.attributeValue("desc"));
-		diff.getParent().getChildren().remove(diff);
+		diffNew.setOp(OP.RENAME);
+//		diff.getParent().getChildren().remove(diff);
 		this.diff = diffNew;
 	}
 }

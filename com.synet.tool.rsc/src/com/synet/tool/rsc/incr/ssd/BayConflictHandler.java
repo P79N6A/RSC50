@@ -7,6 +7,7 @@ import org.dom4j.Element;
 import com.shrcn.found.xmldb.vtd.VTDXMLDBHelper;
 import com.synet.tool.rsc.compare.CompareUtil;
 import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.compare.OP;
 import com.synet.tool.rsc.compare.XmlHelperCache;
 import com.synet.tool.rsc.compare.ssd.BayCompare;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
@@ -24,7 +25,8 @@ public class BayConflictHandler extends BaseConflictHandler {
 
 	@Override
 	public void setData() {
-		Tb1042BayEntity bay = (Tb1042BayEntity) getByName(Tb1042BayEntity.class, "f1042Name");
+//		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
+		Tb1042BayEntity bay = bayServ.getBayEntityByName(diff.getName());
 		diff.setData(bay);
 	}
 	
@@ -54,14 +56,15 @@ public class BayConflictHandler extends BaseConflictHandler {
 		XmlHelperCache cache = XmlHelperCache.getInstance();
 		VTDXMLDBHelper srcXmlHelper = cache.getSrcXmlHelper();
 		VTDXMLDBHelper destXmlHelper = cache.getDestXmlHelper();
-		Element ndSrc = srcXmlHelper.selectSingleNode("/Substation/VoltageLevel/Bay[@name='" + oldName + "']");
-		Element ndDest = destXmlHelper.selectSingleNode("/Substation/VoltageLevel/Bay[@name='" + newName + "']");
-		Difference diffNew = new BayCompare(diff.getParent(), ndSrc , ndDest, monitor).execute();
+		Element ndSrc = srcXmlHelper.selectSingleNode("/SCL/Substation/VoltageLevel/Bay[@name='" + oldName + "']");
+		Element ndDest = destXmlHelper.selectSingleNode("/SCL/Substation/VoltageLevel/Bay[@name='" + newName + "']");
+		Difference diffNew = new BayCompare(null, ndSrc , ndDest, monitor).execute();
 		diffNew.setName(oldName);
 		diffNew.setNewName(newName);
 		diffNew.setDesc(ndSrc.attributeValue("desc"));
 		diffNew.setNewDesc(ndDest.attributeValue("desc"));
-		diff.getParent().getChildren().remove(diff);
+		diffNew.setOp(OP.RENAME);
+//		diff.getParent().getChildren().remove(diff);
 		this.diff = diffNew;
 	}
 

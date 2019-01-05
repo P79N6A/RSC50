@@ -125,8 +125,8 @@ public class EquipmentEntityService extends BaseService{
 	
 	public Tb1043EquipmentEntity getEquipment(Tb1042BayEntity bay, String eqpName) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("bay", bay);
-		params.put("eqpName", eqpName);
+		params.put("tb1042BayByF1042Code", bay);
+		params.put("f1043Name", eqpName);
 		return (Tb1043EquipmentEntity) beanDao.getObject(Tb1043EquipmentEntity.class, params);
 	}
 	

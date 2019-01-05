@@ -41,7 +41,6 @@ import com.synet.tool.rsc.model.Tb1060SpfcdaEntity;
 import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1062PinEntity;
 import com.synet.tool.rsc.service.IedEntityService;
-import com.synet.tool.rsc.service.StrapEntityService;
 import com.synet.tool.rsc.service.SubstationService;
 import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
@@ -68,7 +67,6 @@ public class IedParserNew {
 		
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private BeanDaoService beanDao = BeanDaoImpl.getInstance();
-	private StrapEntityService strapService = new StrapEntityService();
 	private IedEntityService iedServ = new IedEntityService();
 	private SubstationService staServ = new SubstationService();
 	

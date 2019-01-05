@@ -417,7 +417,7 @@ public class PrimaryBayEditor extends BaseConfigEditor {
 	}
 
 	private void initTableSluiceStatus(int curComboSelIdx) {
-		if(DataUtils.listNotNull(comboDvData)) {
+		if(DataUtils.listNotNull(comboDvData) && curComboSelIdx>-1) {
 			Tb1046IedEntity iedEntity = comboDvData.get(curComboSelIdx);
 			tableSluiceStatuData = statedataService.getEqpStateByIed(iedEntity);
 			tableSluiceStatus.setInput(tableSluiceStatuData);
