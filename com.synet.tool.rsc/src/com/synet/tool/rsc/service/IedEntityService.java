@@ -415,7 +415,6 @@ public class IedEntityService extends BaseService {
 		if (devName == null)
 			return null;
 		Object object = beanDao.getObject(Tb1046IedEntity.class, "f1046Name", devName);
-		System.out.println(beanDao.getAll(Tb1046IedEntity.class));
 		return (Tb1046IedEntity) object;
 	}
 	

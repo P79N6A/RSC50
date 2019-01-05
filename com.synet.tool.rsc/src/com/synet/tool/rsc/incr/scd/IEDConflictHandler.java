@@ -63,32 +63,16 @@ public class IEDConflictHandler extends BaseConflictHandler {
 	public void mergeDifference() {
 		String oldName = diff.getName();
 		String newName = diff.getNewName();
-		
 		VTDXMLDBHelper srcXmlHelper = XmlHelperCache.getInstance().getSrcXmlHelper();
 		Element iedNdSrc = srcXmlHelper.selectSingleNode("/SCL/IED[@name='" + oldName + "']");
-//		Element iedNdDest = destXmlHelper.selectSingleNode("/SCL/IED[@name='" + srcIedName + "']");
 		String srcMd5 = FileManipulate.getMD5CodeForStr(iedNdSrc.asXML());
-//		String destMd5 = FileManipulate.getMD5CodeForStr(iedNdDest.asXML());
-//		if (!srcMd5.equals(destMd5)) {
-//			String desc = CompareUtil.getAttribute(iedNdSrc, "desc");
-//			String newdesc = CompareUtil.getAttribute(iedNdDest, "desc");
-			iedNdSrc.addAttribute("name", oldName);
-//			iedNdDest.addAttribute("name", srcIedName + "_new");
-			
-			Element commEl = srcXmlHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
-			Element dtTypeNd = srcXmlHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
-			Context context = new Context(commEl, dtTypeNd);
-			
-			IedCompareParser srcIedComp = new IedCompareParser(iedNdSrc, context);
-//			IedCompareParser destIedComp = new IedCompareParser(iedNdDest, createContext(destXmlHelper));
-			srcIedComp.parse();
-//			destIedComp.parse();
-			srcMd5 = FileManipulate.getMD5Code(srcIedComp.getDomPath());
-//			destMd5 = FileManipulate.getMD5Code(destIedComp.getDomPath());
-			String rscFilePathOld = srcIedComp.getDomPath();
-//		String rscFilePathOld = ProjectManager.getRscFilePath(oldName);
+		iedNdSrc.addAttribute("name", oldName);
+		Context context = XmlHelperCache.getInstance().getSrcContext();
+		IedCompareParser srcIedComp = new IedCompareParser(iedNdSrc, context);
+		srcIedComp.parse();
+		srcMd5 = FileManipulate.getMD5Code(srcIedComp.getDomPath());
+		String rscFilePathOld = srcIedComp.getDomPath();
 		String rscFilePathNew = ProjectManager.getRscFilePath(newName);
-//		String srcMd5 = FileManipulate.getMD5Code(rscFilePathOld);
 		String destMd5 = FileManipulate.getMD5Code(rscFilePathNew);
 		if (!srcMd5.equals(destMd5)) {
 			iedNdSrc = XMLFileManager.loadXMLFile(rscFilePathOld).getRootElement();

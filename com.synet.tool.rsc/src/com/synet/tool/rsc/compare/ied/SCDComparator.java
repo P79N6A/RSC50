@@ -33,12 +33,6 @@ public class SCDComparator extends SCLComparator {
 		return iedMap;
 	}
 	
-	private Context createContext(VTDXMLDBHelper xmldbHelper) {
-		Element commEl = xmldbHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
-		Element dtTypeNd = xmldbHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
-		return new Context(commEl, dtTypeNd);
-	}
-
 	public List<Difference> execute() {
 		List<Difference> results = new ArrayList<Difference>();
 		List<Element> iedsSrc =  srcXmlHelper.selectNodesOnlyAtts("/SCL/IED", "IED");
@@ -63,8 +57,8 @@ public class SCDComparator extends SCLComparator {
 					String newdesc = CompareUtil.getAttribute(iedNdDest, "desc");
 					iedNdSrc.addAttribute("name", srcIedName + "_old");
 					iedNdDest.addAttribute("name", srcIedName + "_new");
-					IedCompareParser srcIedComp = new IedCompareParser(iedNdSrc, createContext(srcXmlHelper));
-					IedCompareParser destIedComp = new IedCompareParser(iedNdDest, createContext(destXmlHelper));
+					IedCompareParser srcIedComp = new IedCompareParser(iedNdSrc, srcContext);
+					IedCompareParser destIedComp = new IedCompareParser(iedNdDest, destContext);
 					srcIedComp.parse();
 					destIedComp.parse();
 					srcMd5 = FileManipulate.getMD5Code(srcIedComp.getDomPath());
@@ -93,7 +87,7 @@ public class SCDComparator extends SCLComparator {
 				results.add(diff);
 				// 为增量处理做准备
 				Element iedNdDest = destXmlHelper.selectSingleNode("/SCL/IED[@name='" + diff.getName() + "']");
-				IedCompareParser destIedComp = new IedCompareParser(iedNdDest, createContext(destXmlHelper));
+				IedCompareParser destIedComp = new IedCompareParser(iedNdDest, destContext);
 				destIedComp.parse();
 			}
 		}

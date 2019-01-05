@@ -32,14 +32,13 @@ public class IncrementImportor extends BaseIncreImportor {
 			handler.handle();
 		} else {
 			monitor.beginTask("开始增量导入SCD配置", diffs.size() + 1);
+			Context destContext = XmlHelperCache.getInstance().getDestContext();
 			for (Difference diff : diffs) {
-				VTDXMLDBHelper destXmlHelper = XmlHelperCache.getInstance().getDestXmlHelper();
-				Element commEl = destXmlHelper.selectSingleNode(SCL.XPATH_COMMUNICATION);
-				Element dtTypeNd = destXmlHelper.selectSingleNode(SCL.XPATH_DATATYPETEMPLATES);
-				Context context = new Context(commEl, dtTypeNd);
-				IEDConflictHandler handler = new IEDConflictHandler(diff, context);
+				monitor.setTaskName("正在处理" + diff.getName());
+				IEDConflictHandler handler = new IEDConflictHandler(diff, destContext);
 				handler.setMonitor(monitor);
 				handler.handle();
+				monitor.worked(1);
 			}
 			monitor.done();
 		}
