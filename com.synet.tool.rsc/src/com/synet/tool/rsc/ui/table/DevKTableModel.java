@@ -31,7 +31,7 @@ import com.synet.tool.rsc.model.Tb1061PoutEntity;
 import com.synet.tool.rsc.model.Tb1063CircuitEntity;
 import com.synet.tool.rsc.service.DefaultService;
 import com.synet.tool.rsc.service.MmsfcdaService;
-import com.synet.tool.rsc.service.StrapEntityService;
+import com.synet.tool.rsc.service.PoutEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.util.RuleType;
 
@@ -42,12 +42,13 @@ public class DevKTableModel extends RKTableModel {
 	
 	private DefaultService defaultService;
 	private MmsfcdaService mmsService;
-	private StrapEntityService strapEntityService;
+	private PoutEntityService poutServ;
 	
 	public DevKTableModel(DevKTable table, TableConfig config) {
 		super(table, config);
 		defaultService = new DefaultService();
 		mmsService = new MmsfcdaService();
+		poutServ = new PoutEntityService();
 	}
 	
 	protected int getSize(String editor) {
@@ -140,7 +141,7 @@ public class DevKTableModel extends RKTableModel {
 	}
 	
 	private boolean isStrapType(int type) {
-		return RuleType.STRAP.getMax()>=type && RuleType.STRAP.getMin()<=type;
+		return RuleType.STRAP.include(type);
 	}
 	
 	@Override
@@ -152,8 +153,11 @@ public class DevKTableModel extends RKTableModel {
 				Tb1058MmsfcdaEntity mmsfcdaEntity = (Tb1058MmsfcdaEntity) data;
 				int type = mmsfcdaEntity.getF1058Type();
 				String dataCode = mmsfcdaEntity.getDataCode();
+				int oldType = Integer.parseInt(oldValue.toString());
 				if (isStrapType(type)) {
-					mmsService.saveStrapF1011No(dataCode, type);
+					mmsService.addStrap(mmsfcdaEntity);
+				} else if (isStrapType(oldType)) {
+					mmsService.removeStrap(mmsfcdaEntity);
 				}
 				if (SclUtil.isStData(dataCode)) {
 					mmsService.updateStateF1011No(dataCode, type);
@@ -173,9 +177,9 @@ public class DevKTableModel extends RKTableModel {
 				}
 				int oldType = Integer.parseInt(oldValue.toString());
 				if (isStrapType(f1061Type)) {
-					mmsService.saveStrapF1011No(dataCode, f1061Type);
+					poutServ.addStrap(poutEntity);
 				} else if (isStrapType(oldType)) {
-					new StrapEntityService().removeStrap(poutEntity);
+					poutServ.removeStrap(poutEntity);
 				}
 			}
 		} else if (data instanceof Tb1063CircuitEntity) {

@@ -6,7 +6,6 @@ import java.util.Map;
 import com.shrcn.found.common.util.StringUtil;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
-import com.synet.tool.rsc.incr.EnumConflict;
 import com.synet.tool.rsc.model.Tb1041SubstationEntity;
 import com.synet.tool.rsc.service.SubstationService;
 
@@ -17,13 +16,12 @@ public class StaConflictHandler extends BaseConflictHandler {
 	
 	public StaConflictHandler(Difference diff) {
 		super(diff);
-		this.substation = (Tb1041SubstationEntity) 
-				getByName(Tb1041SubstationEntity.class, "f1041Name");
+		this.substation = staServ.getCurrSubstation();
 	}
 	
 	@Override
 	public void setData() {
-		diff.setData(staServ.getCurrSubstation());
+		diff.setData(substation);
 	}
 	
 	@Override

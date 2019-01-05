@@ -22,7 +22,7 @@ import com.synet.tool.rsc.util.RuleType;
 
 public class MmsfcdaService extends BaseService {
 	
-	private StrapEntityService strapService = new StrapEntityService();
+	private StrapEntityService strapServ = new StrapEntityService();
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1058MmsfcdaEntity> getMmsfcdaByIed(Tb1046IedEntity iedEntitie) {
@@ -151,17 +151,35 @@ public class MmsfcdaService extends BaseService {
 		hqlDao.updateByHql(hql, params);
 	}
 	
-	public void saveStrapF1011No(String dataCode, int typeId) {
-		Tb1016StatedataEntity statedataEntity = (Tb1016StatedataEntity) beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", dataCode);
-		if (statedataEntity == null)
+	/**
+	 * 添加压板
+	 * @param statedata
+	 */
+	public void addStrap(Tb1058MmsfcdaEntity mmsFcda) {
+		Tb1016StatedataEntity statedata = (Tb1016StatedataEntity) 
+				beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", mmsFcda.getDataCode());
+		if (statedata == null)
 			return;
-		Tb1064StrapEntity strapEntity = (Tb1064StrapEntity) beanDao.getObject(Tb1064StrapEntity.class, "f1064Code", statedataEntity.getParentCode());
-		if (strapEntity == null) {
-			new StrapEntityService().addStrap(statedataEntity);
-		} else {
-			strapEntity.setF1064Type(typeId);
-			beanDao.update(strapEntity);
-		}
+		statedata.setF1011No(mmsFcda.getF1058Type());
+		Tb1064StrapEntity strap = strapServ.addStrap(statedata);
+		mmsFcda.setParentCode(strap.getF1064Code());
+		beanDao.update(mmsFcda);
+	}
+	
+	/**
+	 * 删除压板
+	 * @param statedata
+	 */
+	public void removeStrap(Tb1058MmsfcdaEntity mmsFcda) {
+		Tb1016StatedataEntity statedata = (Tb1016StatedataEntity) 
+				beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", mmsFcda.getDataCode());
+		if (statedata == null)
+			return;
+		statedata.setF1011No(mmsFcda.getF1058Type());
+		strapServ.removeStrap(statedata);
+		String iedCode = statedata.getTb1046IedByF1046Code().getF1046Code();
+		mmsFcda.setParentCode(iedCode);
+		beanDao.update(mmsFcda);
 	}
 	
 	public void updateWarnParent(Object objMms, String parendCode) {
@@ -207,10 +225,6 @@ public class MmsfcdaService extends BaseService {
 			Tb1016StatedataEntity statedata = addStatedata(ied, fcdaRef, fcdaDesc, type.getId());
 			mmsFcda.setDataCode(statedata.getF1016Code());
 			mmsFcda.setParentCode(statedata.getParentCode());
-			String datSet = rcb.getF1054Dataset();
-			if (SclUtil.isStrap(datSet )) { // 添加压板
-				strapService.addStrap(statedata);
-			}
 		} else {
 			mmsFcda.setF1058DataType(DBConstants.DATA_MX);
 			Tb1006AnalogdataEntity algdata = addAlgdata(ied, fcdaRef, fcdaDesc, type.getId());

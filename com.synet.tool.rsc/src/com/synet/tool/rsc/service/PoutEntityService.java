@@ -1,16 +1,11 @@
 package com.synet.tool.rsc.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Element;
-
-import com.shrcn.business.scl.model.SCL;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCConstants;
-import com.synet.tool.rsc.io.scd.SclUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1006AnalogdataEntity;
 import com.synet.tool.rsc.model.Tb1016StatedataEntity;
@@ -21,7 +16,9 @@ import com.synet.tool.rsc.util.F1011_NO;
 import com.synet.tool.rsc.util.Rule;
 import com.synet.tool.rsc.util.RuleType;
 
-public class PoutEntityService extends BaseService{
+public class PoutEntityService extends BaseService {
+	
+	private StrapEntityService strapServ = new StrapEntityService();
 	
 	@SuppressWarnings("unchecked")
 	public List<Tb1061PoutEntity> getByIed(Tb1046IedEntity ied) {
@@ -163,6 +160,37 @@ public class PoutEntityService extends BaseService{
 			}
 			beanDao.update(pout);
 		}
+	}
+
+	/**
+	 * 添加压板
+	 * @param statedata
+	 */
+	public void addStrap(Tb1061PoutEntity poutEntity) {
+		Tb1016StatedataEntity statedata = (Tb1016StatedataEntity) 
+				beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", poutEntity.getDataCode());
+		if (statedata == null)
+			return;
+		statedata.setF1011No(poutEntity.getF1061Type());
+		Tb1064StrapEntity strap = strapServ.addStrap(statedata);
+		poutEntity.setParentCode(strap.getF1064Code());
+		beanDao.update(poutEntity);
+	}
+	
+	/**
+	 * 删除压板
+	 * @param statedata
+	 */
+	public void removeStrap(Tb1061PoutEntity poutEntity) {
+		Tb1016StatedataEntity statedata = (Tb1016StatedataEntity) 
+				beanDao.getObject(Tb1016StatedataEntity.class, "f1016Code", poutEntity.getDataCode());
+		if (statedata == null)
+			return;
+		statedata.setF1011No(poutEntity.getF1061Type());
+		strapServ.removeStrap(statedata);
+		String iedCode = statedata.getTb1046IedByF1046Code().getF1046Code();
+		poutEntity.setParentCode(iedCode);
+		beanDao.update(poutEntity);
 	}
 	
 }

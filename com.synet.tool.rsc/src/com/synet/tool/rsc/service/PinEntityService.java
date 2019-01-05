@@ -58,12 +58,8 @@ public class PinEntityService extends BaseService {
 	public void addPin(Tb1046IedEntity ied, String ref, String desc) {
 		Rule type = F1011_NO.OTHERS;
 		Tb1062PinEntity pin = getPin(ied, ref);
-		if (pin == null) {
-			ParserUtil.createPin(ied, ref , desc, type.getId(), 0);
-			beanDao.insert(pin);
-		} else {
-			beanDao.markRecovered(pin);
-		}
+		ParserUtil.createPin(ied, ref , desc, type.getId(), 0);
+		beanDao.insert(pin);
 	}
 	
 	/**

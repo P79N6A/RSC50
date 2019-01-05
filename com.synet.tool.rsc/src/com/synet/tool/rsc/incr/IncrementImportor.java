@@ -7,15 +7,11 @@ import org.dom4j.Element;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.shrcn.business.scl.model.SCL;
-import com.shrcn.found.common.Constants;
-import com.shrcn.found.file.util.FileManipulate;
-import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.das.ProjectManager;
 import com.synet.tool.rsc.incr.scd.IEDConflictHandler;
 import com.synet.tool.rsc.io.ied.Context;
-import com.synet.tool.rsc.util.ProjectFileManager;
 
 public class IncrementImportor extends BaseIncreImportor {
 	
@@ -25,10 +21,6 @@ public class IncrementImportor extends BaseIncreImportor {
 	
 	public void handle() {
 		if (diffs == null || diffs.size() < 1) {
-			return;
-		}
-		if (!initXmldb()) {
-			DialogHelper.showAsynWarning("未找到增量导入临时文件，导入终止！");
 			return;
 		}
 		Difference diffFirst = diffs.get(0);
@@ -48,18 +40,24 @@ public class IncrementImportor extends BaseIncreImportor {
 			}
 			monitor.done();
 		}
+		resetSclFile();
 	}
 	
-	private boolean initXmldb() {
+	/**
+	 * 替换当前scd或ssd
+	 * @return
+	 */
+	private boolean resetSclFile() {
 		Difference diffFirst = diffs.get(0);
 		String currPath = null;
 		String tempPath = null;
+		ProjectManager prjMgr = ProjectManager.getInstance();
 		if ("Substation".equals(diffFirst.getType())) {
-			currPath = ProjectManager.getInstance().getProjectSsdPath();
-			tempPath = currPath + ".bak";
+			currPath = prjMgr.getProjectSsdPath();
+			tempPath = prjMgr.getProjectSsdTempPath();
 		} else {
-			currPath = ProjectManager.getInstance().getProjectScdPath();
-			tempPath = currPath + ".bak";
+			currPath = prjMgr.getProjectScdPath();
+			tempPath = prjMgr.getProjectScdTempPath();
 		}
 		File tempFile = new File(tempPath);
 		if (!tempFile.exists()) {
@@ -68,12 +66,12 @@ public class IncrementImportor extends BaseIncreImportor {
 		File currFile = new File(currPath);
 		currFile.delete();
 		new File(tempPath).renameTo(currFile);
-		// 更新SCD、SSD
-		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, currPath);
-		ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
-		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, currPath);
-		String scddir = ProjectManager.getInstance().getProjectCidPath();
-		FileManipulate.initDir(scddir);
+//		// 更新SCD、SSD
+//		XMLDBHelper.loadDocument(Constants.DEFAULT_SCD_DOC_NAME, currPath);
+//		ProjectFileManager prjFileMgr = ProjectFileManager.getInstance();
+//		prjFileMgr.renameScd(Constants.CURRENT_PRJ_NAME, currPath);
+//		String scddir = ProjectManager.getInstance().getProjectCidPath();
+//		FileManipulate.initDir(scddir);
 		return true;
 	}
 }

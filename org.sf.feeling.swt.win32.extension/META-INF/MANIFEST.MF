@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.forms,
  com.ibm.icu
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.sf.feeling.swt.win32.extension,
  org.sf.feeling.swt.win32.extension.example,
  org.sf.feeling.swt.win32.extension.example.page,

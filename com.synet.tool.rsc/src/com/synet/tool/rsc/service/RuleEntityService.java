@@ -74,17 +74,20 @@ public class RuleEntityService {
 			List<Tb1058MmsfcdaEntity> mmsFcdas = (List<Tb1058MmsfcdaEntity>) beanDao.getListByCriteria(Tb1058MmsfcdaEntity.class, "tb1054RcbByF1054Code", rcb);
 			for (Tb1058MmsfcdaEntity mmsFcda : mmsFcdas) {
 				String dataCode = mmsFcda.getDataCode();
+				int oldType = mmsFcda.getF1058Type();
 				Rule type = getRuleByMmsfcda(dataset, mmsFcda);
 				if (type != null) {
+					mmsFcda.setF1058Type(type.getId());
 					if (SclUtil.isStData(dataCode)) {
 						if (RuleType.STRAP.include(type)) {
-							mmsfcdaService.saveStrapF1011No(dataCode, type.getId());
+							mmsfcdaService.addStrap(mmsFcda);
+						} else if (RuleType.STRAP.include(oldType)) {
+							mmsfcdaService.removeStrap(mmsFcda);
 						}
 						mmsfcdaService.updateStateF1011No(dataCode, type.getId());
 					} else if (SclUtil.isAlgData(dataCode)) {
 						mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 					}
-					mmsFcda.setF1058Type(type.getId());
 					beanDao.update(mmsFcda);
 				}
 			}
@@ -102,23 +105,26 @@ public class RuleEntityService {
 
 	private void applyRulesToPouts(String dataset, List<Tb1061PoutEntity> fcdas) {
 		List<Tb1061PoutEntity> fcdasUpdate = new ArrayList<>(); 
-		for (Tb1061PoutEntity fcda : fcdas) {
-			if (fcda == null) {
+		for (Tb1061PoutEntity pout : fcdas) {
+			if (pout == null) {
 				continue;
 			}
-			String dataCode = fcda.getDataCode();
-			Rule type = getRuleByPout(dataset, fcda);
+			String dataCode = pout.getDataCode();
+			int oldType = pout.getF1061Type();
+			Rule type = getRuleByPout(dataset, pout);
 			if (type != null) {
 				if (SclUtil.isStData(dataCode)) {
 					mmsfcdaService.updateStateF1011No(dataCode, type.getId());
 					if (RuleType.STRAP.include(type)) {
-						mmsfcdaService.saveStrapF1011No(dataCode, type.getId());
+						poutEntityService.addStrap(pout);
+					} else if (RuleType.STRAP.include(oldType)) {
+						poutEntityService.removeStrap(pout);
 					}
 				} else if (SclUtil.isAlgData(dataCode)) {
 					mmsfcdaService.updateAnalogF1011No(dataCode, type.getId());
 				}
-				fcda.setF1061Type(type.getId());
-				fcdasUpdate.add(fcda);
+				pout.setF1061Type(type.getId());
+				fcdasUpdate.add(pout);
 			}
 		}
 		beanDao.updateBatch(fcdasUpdate);

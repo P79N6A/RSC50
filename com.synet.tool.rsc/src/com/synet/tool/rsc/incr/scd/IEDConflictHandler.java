@@ -64,12 +64,12 @@ public class IEDConflictHandler extends BaseConflictHandler {
 		if (!srcMd5.equals(destMd5)) {
 			Element iedNdSrc = XMLFileManager.loadXMLFile(rscFilePathOld).getRootElement();
 			Element iedNdDest = XMLFileManager.loadXMLFile(rscFilePathNew).getRootElement();
-			Difference diff = new IedCompare(iedNdSrc, iedNdDest).execute();
-			diff.setName(oldName);
-			diff.setNewName(newName);
-			diff.setDesc(iedNdSrc.attributeValue("desc"));
-			diff.setNewDesc(iedNdDest.attributeValue("desc"));
-			this.diff = diff;
+			Difference diffNew = new IedCompare(iedNdSrc, iedNdDest).execute();
+			diffNew.setName(oldName);
+			diffNew.setNewName(newName);
+			diffNew.setDesc(iedNdSrc.attributeValue("desc"));
+			diffNew.setNewDesc(iedNdDest.attributeValue("desc"));
+			this.diff = diffNew;
 		} else {
 			this.diff = null;
 		}

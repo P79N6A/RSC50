@@ -4,7 +4,6 @@
  */
 package com.synet.tool.rsc.action.imp;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
-import com.shrcn.found.common.Constants;
 import com.shrcn.found.common.event.EventConstants;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.ObjectUtil;
@@ -21,7 +19,6 @@ import com.shrcn.found.ui.action.ConfigAction;
 import com.shrcn.found.ui.editor.BaseEditorInput;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.view.ConsoleManager;
-import com.shrcn.found.xmldb.XMLDBHelper;
 import com.synet.tool.rsc.RSCConstants;
 import com.synet.tool.rsc.compare.Difference;
 import com.synet.tool.rsc.compare.SCLComparator;
@@ -46,6 +43,13 @@ public class BaseImportAction extends ConfigAction {
 	}
 
 	protected void compareImportFile(final Class<?> cmpClass, final String srcpath, final String destpath) {
+		String tempPath = null;
+		if (srcpath.toLowerCase().endsWith(".ssd")) {
+			tempPath = ProjectManager.getInstance().getProjectSsdTempPath();
+		} else {
+			tempPath = ProjectManager.getInstance().getProjectScdTempPath();
+		}
+		FileManipulate.copyByChannel(destpath, tempPath);
 		EventManager.getDefault().notify(EventConstants.CLEAR_CONFIG, null);
 		ProgressManager.execute(new IRunnableWithProgress() {
 			@Override

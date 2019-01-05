@@ -32,7 +32,11 @@ public enum RuleType {
 	}
 	
 	public boolean include(Rule rule) {
-		return rule.getId()<=max && rule.getId()>=min;
+		return include(rule.getId());
+	}
+	
+	public boolean include(int ruleId) {
+		return ruleId<=max && ruleId>=min;
 	}
 	
 	public String getType() {

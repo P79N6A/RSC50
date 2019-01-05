@@ -466,9 +466,6 @@ public class IedParserNew {
 				Tb1016StatedataEntity statedata = addStatedata(ref, fcdaDesc, type.getId());
 				mmsFcda.setDataCode(statedata.getF1016Code());
 				mmsFcda.setParentCode(statedata.getParentCode());
-				if (SclUtil.isStrap(datSet)) { // 添加压板
-					strapService.addStrap(statedata);
-				}
 			} else {
 				mmsFcda.setF1058DataType(DBConstants.DATA_MX);
 				Tb1006AnalogdataEntity algdata = addAlgdata(ref, fcdaDesc, type.getId());

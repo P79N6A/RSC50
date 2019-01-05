@@ -66,12 +66,8 @@ public class CircuitEntityService extends BaseService {
 		BaseCbEntity cbEntity = pout.getCbEntity();
 		Tb1065LogicallinkEntity logiclink = (Tb1065LogicallinkEntity) beanDao.getObject(Tb1065LogicallinkEntity.class, "baseCbByCdCode", cbEntity);
 		Tb1063CircuitEntity circuit = getCircuitEntity(pin);
-		if (circuit == null) {
-			createCircuit(logiclink, pin, pout);
-			beanDao.insert(circuit);
-		} else {
-			beanDao.markRecovered(circuit);
-		}
+		createCircuit(logiclink, pin, pout);
+		beanDao.insert(circuit);
 	}
 
 	/**

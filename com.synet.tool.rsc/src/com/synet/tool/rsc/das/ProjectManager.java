@@ -161,6 +161,24 @@ public class ProjectManager {
 	}
 	
 	/**
+	 * 得到工程SCD文件路径.
+	 * 
+	 * @return
+	 */
+	public String getProjectScdTempPath() {
+		return getProjectScdPath() + ".bak";
+	}
+	
+	/**
+	 * 得到工程SSD文件路径.
+	 * 
+	 * @return
+	 */
+	public String getProjectSsdTempPath() {
+		return getProjectSsdPath() + ".bak";
+	}
+	
+	/**
 	 * 得到IED RSC文件路径。
 	 * @param iedName
 	 * @return

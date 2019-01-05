@@ -20,9 +20,10 @@ public abstract class SCLComparator implements IComparator {
 	}
 	
 	private void init() {
-		srcXmlHelper = new VTDXMLDBHelper();
-		destXmlHelper = new VTDXMLDBHelper();
-		srcXmlHelper.loadDocument("", srcPath);
-		destXmlHelper.loadDocument("", destPath);
+		XmlHelperCache cache = XmlHelperCache.getInstance();
+		cache.loadSrcXml(srcPath);
+		cache.loadDestXml(destPath);
+		srcXmlHelper = cache.getSrcXmlHelper();
+		destXmlHelper = cache.getDestXmlHelper();
 	}
 }
