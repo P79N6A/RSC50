@@ -13,7 +13,6 @@ import com.shrcn.found.ui.view.Problem;
 import com.shrcn.tool.found.das.BeanDaoService;
 import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.DBConstants;
-import com.synet.tool.rsc.RSCProperties;
 import com.synet.tool.rsc.io.parser.ParserUtil;
 import com.synet.tool.rsc.model.BaseCbEntity;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
@@ -26,7 +25,6 @@ import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.service.BoardEntityService;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
-import com.synet.tool.rsc.service.LLinkPhyRelationService;
 import com.synet.tool.rsc.service.LogicallinkEntityService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
@@ -37,10 +35,8 @@ import com.synet.tool.rsc.util.ProblemManager;
  */
 public class LogcalAndPhyconnProcessor {
 	
-	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProblemManager pmgr = ProblemManager.getInstance();
 	private LogicallinkEntityService logicallinkEntityService = new LogicallinkEntityService();
-	private LLinkPhyRelationService lLinkPhyRelationService = new LLinkPhyRelationService();
 	private PhyconnEntityService phyconnEntityService = new PhyconnEntityService();
 	private BoardEntityService boardEntityService = new BoardEntityService();
 	private PortEntityService portEntityService = new PortEntityService();

@@ -7,8 +7,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 
 import com.shrcn.business.scl.SCLConstants;
+import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
 import com.shrcn.found.common.event.EventManager;
+import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.ui.util.SwtUtil;
 import com.shrcn.found.ui.view.ViewManager;
 
@@ -57,5 +59,23 @@ public class ProblemManager {
 					EventManager.getDefault().notify(SCLConstants.CLEAR_PROBLEM, null);
 			}
 		});
+	}
+	
+	public void appendError(String title, String subType, String msg) {
+		appendError(title, subType, "", msg);
+	}
+	
+	public void appendError(String title, String subType, String ref, String msg) {
+		SCTLogger.error(msg);
+		append(new Problem(0, LEVEL.ERROR, title, subType, ref, msg));
+	}
+	
+	public void appendWarning(String title, String subType, String msg) {
+		appendWarning(title, subType, "", msg);
+	}
+	
+	public void appendWarning(String title, String subType, String ref, String msg) {
+		SCTLogger.error(msg);
+		append(new Problem(0, LEVEL.WARNING, title, subType, ref, msg));
 	}
 }

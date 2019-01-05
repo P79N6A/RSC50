@@ -9,7 +9,7 @@
 	</IEDRoot> -->
 	<IED class="com.synet.tool.rsc.ui.PhysicInfoEntry" icon="column.gif">
 		<Popup>
-			<MenuItem class="com.synet.tool.rsc.action.ImportRegionAction" title="导入区域屏柜(&amp;I)" icon="import_excel.png"/>
+			<MenuItem class="com.synet.tool.rsc.action.ImportRegionAction" title="导入区域屏柜(&amp;I)"/>
 		</Popup>
 	</IED>
 </Navigation>

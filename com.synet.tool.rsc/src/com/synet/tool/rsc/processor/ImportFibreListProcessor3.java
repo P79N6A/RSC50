@@ -39,7 +39,6 @@ public class ImportFibreListProcessor3 {
 	
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProblemManager pmgr = ProblemManager.getInstance();
-	private ImprotInfoService improtInfoService = new ImprotInfoService();
 	private SubstationService substationService = new SubstationService();
 	private PortEntityService portEntityService = new PortEntityService();
 	private CableEntityService cableEntityService = new CableEntityService();

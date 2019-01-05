@@ -26,11 +26,11 @@ import com.synet.tool.rsc.model.Tb1050CubicleEntity;
 import com.synet.tool.rsc.model.Tb1051CableEntity;
 import com.synet.tool.rsc.model.Tb1052CoreEntity;
 import com.synet.tool.rsc.model.Tb1053PhysconnEntity;
+import com.synet.tool.rsc.model.Tb1073LlinkphyrelationEntity;
 import com.synet.tool.rsc.service.CableEntityService;
 import com.synet.tool.rsc.service.CoreEntityService;
 import com.synet.tool.rsc.service.EnumIedType;
 import com.synet.tool.rsc.service.IedEntityService;
-import com.synet.tool.rsc.service.ImprotInfoService;
 import com.synet.tool.rsc.service.PhyconnEntityService;
 import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.service.SubstationService;
@@ -40,7 +40,6 @@ public class ImportFibreNewListProcessor {
 	
 	private RSCProperties rscp = RSCProperties.getInstance();
 	private ProblemManager pmgr = ProblemManager.getInstance();
-	private ImprotInfoService improtInfoService = new ImprotInfoService();
 	private SubstationService substationService = new SubstationService();
 	private PortEntityService portEntityService = new PortEntityService();
 	private CableEntityService cableEntityService = new CableEntityService();
@@ -85,6 +84,13 @@ public class ImportFibreNewListProcessor {
 		if (monitor.isCanceled()) {
 			return;
 		}
+		// 清除历史数据
+		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
+		beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
+		beanDao.deleteAll(Tb1053PhysconnEntity.class);
+		beanDao.deleteAll(Tb1052CoreEntity.class);
+		beanDao.deleteAll(Tb1051CableEntity.class);
+		
 		//处理光缆、芯线、物理回路
 		analysisCable(substation);
 		monitor.worked(2);

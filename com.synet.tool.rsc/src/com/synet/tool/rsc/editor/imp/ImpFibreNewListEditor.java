@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2007-2013 上海思弘瑞电力控制技术有限公司. All rights reserved. 
- * This program is an eclipse Rich Client Application
- * designed for IED configuration and debuging.
- */
 package com.synet.tool.rsc.editor.imp;
 
 import java.util.ArrayList;
@@ -126,8 +121,6 @@ public class ImpFibreNewListEditor extends ExcelImportEditor {
 	}
 	
 	private void doAnalysis() {
-		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
-		beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
 		//处理逻辑链路与物理回路关联(处理全部)
 		new LogcalAndPhyconnProcessor().analysis();
 		//确定TB1055_GCB和TB1056_SVCB表中F1071_CODE所代表的采集单元Code

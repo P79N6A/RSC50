@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Display;
 import com.shrcn.found.common.event.Context;
 import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.event.IEventHandler;
-import com.shrcn.found.common.log.SCTLogger;
 import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.ui.editor.IEditorInput;
@@ -29,7 +28,6 @@ import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.DialogHelper;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
-import com.shrcn.found.ui.view.LEVEL;
 import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.RSCProperties;
@@ -184,7 +182,6 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	}
 	
 	protected void checkData() {
-		
 	}
 	
 	/**
@@ -192,17 +189,14 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 	 */
 	protected void importData() {
 		ProgressManager.execute(new IRunnableWithProgress() {
-			
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException,
 					InterruptedException {
 				Display.getDefault().asyncExec(new Runnable() {
-					
 					@Override
 					public void run() {
 						clearMsgCount();
 						doImport(monitor);
-//						console.append(titleList.getSelection()[0] + "导入完毕！");
 						printMsg(titleList.getSelection()[0] + "导入完毕");
 					}
 				});
@@ -222,23 +216,13 @@ public abstract class ExcelImportEditor extends BaseConfigEditor implements IEve
 		warningCount = 0;
 	}
 	
-	protected void appendError(String title, String subType, String msg) {
-		appendError(title, subType, "", msg);
-	}
-	
 	protected void appendError(String title, String subType, String ref, String msg) {
-		SCTLogger.error(msg);
-		pmgr.append(new Problem(0, LEVEL.ERROR, title, subType, ref, msg));
+		pmgr.appendError(title, subType, ref, msg);
 		errorCount++;
 	}
 	
-	protected void appendWarning(String title, String subType, String msg) {
-		appendWarning(title, subType, "", msg);
-	}
-	
 	protected void appendWarning(String title, String subType, String ref, String msg) {
-		SCTLogger.error(msg);
-		pmgr.append(new Problem(0, LEVEL.WARNING, title, subType, ref, msg));
+		pmgr.appendWarning(title, subType, ref, msg);
 		warningCount++;
 	}
 	

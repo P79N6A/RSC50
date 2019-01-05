@@ -5,7 +5,6 @@
 package com.synet.tool.rsc.action;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -16,11 +15,9 @@ import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.excel.SheetsHandler;
 import com.shrcn.found.ui.action.ConfigAction;
 import com.shrcn.found.ui.util.DialogHelper;
-import com.shrcn.tool.found.das.BeanDaoService;
-import com.shrcn.tool.found.das.impl.BeanDaoImpl;
 import com.synet.tool.rsc.excel.handler.RegionHandler;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
-import com.synet.tool.rsc.model.Tb1050CubicleEntity;
+import com.synet.tool.rsc.service.CubicleEntityService;
 import com.synet.tool.rsc.util.ExcelReaderUtil;
 
  /**
@@ -43,13 +40,7 @@ public class ImportRegionAction extends ConfigAction {
 		}
 		SheetsHandler handler = new RegionHandler();
 		List<Tb1049RegionEntity> result = (List<Tb1049RegionEntity>) ExcelReaderUtil.parseByHandler(xlspath, handler);
-		List<Tb1050CubicleEntity> cubicles = new ArrayList<>();
-		for (Tb1049RegionEntity reg : result) {
-			cubicles.addAll(reg.getTb1050CubiclesByF1049Code());
-		}
-		BeanDaoService beanDao = BeanDaoImpl.getInstance();
-		beanDao.insertBatch(result);
-		beanDao.insertBatch(cubicles);
+		new CubicleEntityService().doImport(result);
 		EventManager.getDefault().notify(EventConstants.PROJECT_RELOAD, null);
 	}
 

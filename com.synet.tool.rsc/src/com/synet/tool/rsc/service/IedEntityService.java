@@ -310,8 +310,10 @@ public class IedEntityService extends BaseService {
 						"where parentCode=:portCode";
 				hqlDao.updateByHql(hql, params);
 			}
+			// 删除端口
 			beanDao.deleteBatch(ports);
 		}
+		// 删除板卡
 		beanDao.deleteBatch(boards);
 	}
 	
