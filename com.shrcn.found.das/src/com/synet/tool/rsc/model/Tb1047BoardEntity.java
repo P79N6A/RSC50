@@ -1,5 +1,7 @@
 package com.synet.tool.rsc.model;
 
+import java.util.Set;
+
 
 /**
  * 装置板卡
@@ -12,6 +14,7 @@ public class Tb1047BoardEntity extends Deletable {
     private String f1047Desc;
     private String f1047Type;
     private Tb1046IedEntity tb1046IedByF1046Code;
+    private Set<Tb1048PortEntity> tb1048PortsByF1047Code;
     
     public Tb1047BoardEntity() {
 	}
@@ -77,6 +80,8 @@ public class Tb1047BoardEntity extends Deletable {
         if (f1047Desc != null ? !f1047Desc.equals(that.f1047Desc) : that.f1047Desc != null) return false;
         if (f1047Slot != null ? !f1047Slot.equals(that.f1047Slot) : that.f1047Slot != null) return false;
         if (f1047Type != null ? !f1047Type.equals(that.f1047Type) : that.f1047Type != null) return false;
+        if (tb1046IedByF1046Code != null ? !tb1046IedByF1046Code.equals(that.tb1046IedByF1046Code) : that.tb1046IedByF1046Code != null) return false;
+        if (tb1048PortsByF1047Code != null ? !tb1048PortsByF1047Code.equals(that.tb1048PortsByF1047Code) : that.tb1048PortsByF1047Code != null) return false;
 
         return true;
     }
@@ -88,6 +93,8 @@ public class Tb1047BoardEntity extends Deletable {
         result = 31 * result + (f1047Slot != null ? f1047Slot.hashCode() : 0);
         result = 31 * result + (f1047Desc != null ? f1047Desc.hashCode() : 0);
         result = 31 * result + (f1047Type != null ? f1047Type.hashCode() : 0);
+        result = 31 * result + (tb1046IedByF1046Code != null ? tb1046IedByF1046Code.hashCode() : 0);
+        result = 31 * result + (tb1048PortsByF1047Code != null ? tb1048PortsByF1047Code.hashCode() : 0);
         return result;
     }
 
@@ -98,4 +105,14 @@ public class Tb1047BoardEntity extends Deletable {
     public void setTb1046IedByF1046Code(Tb1046IedEntity tb1046IedByF1046Code) {
         this.tb1046IedByF1046Code = tb1046IedByF1046Code;
     }
+
+	public Set<Tb1048PortEntity> getTb1048PortsByF1047Code() {
+		return tb1048PortsByF1047Code;
+	}
+
+	public void setTb1048PortsByF1047Code(
+			Set<Tb1048PortEntity> tb1048PortsByF1047Code) {
+		this.tb1048PortsByF1047Code = tb1048PortsByF1047Code;
+	}
+    
 }

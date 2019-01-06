@@ -279,6 +279,13 @@ public class BeanDaoImpl implements BeanDaoService {
 	}
 
 	@Override
+	public void markAllDeleted(Class<?> clazz) {
+		String hql = "update " + clazz.getName() +
+			" set deleted = 1";
+		HqlDaoImpl.getInstance().updateByHql(hql, null);
+	}
+
+	@Override
 	public void deleteBatch(List<?> objs) {
 		Session _session = service.get();
 		Transaction tx = _session.beginTransaction();

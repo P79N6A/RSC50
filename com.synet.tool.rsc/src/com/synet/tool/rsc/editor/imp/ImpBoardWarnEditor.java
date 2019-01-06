@@ -153,7 +153,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 			}
 			try {
 				String ref = entity.getDevName() + "->" + entity.getBoardCode();
-				Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
+				Tb1047BoardEntity tempBoard = boardEntityService.getBoardEntity(entity.getDevName(), entity.getBoardCode());
 				if (tempBoard != null) {
 					Tb1058MmsfcdaEntity tempMmsfcdaEntity = mmsfcdaService.getMmsfcdaByF1058RedAddr(entity.getDevName(),entity.getAlarmRefAddr());
 					if (tempMmsfcdaEntity != null) {
@@ -198,7 +198,7 @@ public class ImpBoardWarnEditor extends ExcelImportEditor {
 				entity.setOverwrite(false);
 				continue;
 			}
-			Tb1047BoardEntity tempBoard = boardEntityService.existsEntity(entity.getDevName(), entity.getBoardCode());
+			Tb1047BoardEntity tempBoard = boardEntityService.getBoardEntity(entity.getDevName(), entity.getBoardCode());
 			if (tempBoard != null) {
 				entity.setConflict(DBConstants.YES);
 				entity.setOverwrite(false);

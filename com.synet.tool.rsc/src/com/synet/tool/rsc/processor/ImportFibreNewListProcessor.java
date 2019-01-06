@@ -88,8 +88,14 @@ public class ImportFibreNewListProcessor {
 		BeanDaoImpl beanDao = BeanDaoImpl.getInstance();
 		beanDao.deleteAll(Tb1073LlinkphyrelationEntity.class);
 		beanDao.deleteAll(Tb1053PhysconnEntity.class);
-		beanDao.deleteAll(Tb1052CoreEntity.class);
-		beanDao.deleteAll(Tb1051CableEntity.class);
+		boolean replaceMode = RSCProperties.getInstance().isReplaceMode();
+		if (replaceMode) {
+			beanDao.markAllDeleted(Tb1052CoreEntity.class);
+			beanDao.markAllDeleted(Tb1051CableEntity.class);
+		} else {
+			beanDao.deleteAll(Tb1052CoreEntity.class);
+			beanDao.deleteAll(Tb1051CableEntity.class);
+		}
 		
 		//处理光缆、芯线、物理回路
 		analysisCable(substation);
@@ -97,17 +103,50 @@ public class ImportFibreNewListProcessor {
 		if (monitor.isCanceled()) {
 			return;
 		}
-		//保存光缆、芯线、物理回路
-		cableEntityService.saveBatch(cableEntitieList);
-		monitor.worked(2);
-		if (monitor.isCanceled()) {
-			return;
+		//保存光缆、芯线
+		if (replaceMode) { // 增量
+			//保存光缆
+			Map<String, Tb1051CableEntity> cableMap = new HashMap<>();
+			for (Tb1051CableEntity cable : cableEntitieList) {
+				String cableName = cable.getF1051Name();
+				Tb1051CableEntity existEntity = cableEntityService.getCableEntity(cableName);
+				if (existEntity == null) {
+					beanDao.insert(cable);
+					cableMap.put(cableName, cable);
+				} else {
+					beanDao.markRecovered(existEntity);
+					cableMap.put(cableName, existEntity);
+				}
+			}
+			//保存芯线
+			for (Tb1052CoreEntity core : coreEntitieList) {
+				String cableName = core.getTb1051CableByParentCode().getF1051Name();
+				Tb1051CableEntity cable = cableMap.get(cableName);
+				if (cable == null) {
+					SCTLogger.error("保存芯线出错，光缆" + cableName + "丢失！");
+					continue;
+				}
+				core.setTb1051CableByParentCode(cable);
+				Tb1052CoreEntity existEntity = coreEntityService.getCoreEntity(cable, core.getF1052No());
+				if (existEntity == null) {
+					beanDao.insert(core);
+				} else {
+					beanDao.markRecovered(existEntity);
+				}
+			}
+		} else {	// 起始
+			cableEntityService.saveBatch(cableEntitieList);
+			monitor.worked(1);
+			if (monitor.isCanceled()) {
+				return;
+			}
+			coreEntityService.saveBatch(coreEntitieList);
+			monitor.worked(1);
+			if (monitor.isCanceled()) {
+				return;
+			}
 		}
-		coreEntityService.saveBatch(coreEntitieList);
-		monitor.worked(1);
-		if (monitor.isCanceled()) {
-			return;
-		}
+		//保存物理回路
 		phyconnEntityService.saveBatch(physconnEntitieList);
 		monitor.worked(1);
 		if (monitor.isCanceled()) {

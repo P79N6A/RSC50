@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1047BoardEntity;
 import com.synet.tool.rsc.model.Tb1048PortEntity;
@@ -36,10 +37,7 @@ public class PortEntityService extends BaseService{
 			params.put("f1047Slot", slot);
 			Tb1047BoardEntity boardEntity = (Tb1047BoardEntity) beanDao.getObject(Tb1047BoardEntity.class, params);
 			if (boardEntity != null) {
-				params.clear();
-				params.put("tb1047BoardByF1047Code",boardEntity);
-				params.put("f1048No", portNo);
-				return (Tb1048PortEntity) beanDao.getObject(Tb1048PortEntity.class, params);
+				return getPortEntity(boardEntity, portNo);
 			}
 		}
 		return null;
@@ -74,5 +72,36 @@ public class PortEntityService extends BaseService{
 	public List<Tb1048PortEntity> getByBoardList(List<Tb1047BoardEntity> boardEntitys) {
 		return (List<Tb1048PortEntity>) hqlDao.selectInObjects(Tb1048PortEntity.class,
 				"tb1047BoardByF1047Code", boardEntitys);
+	}
+
+	public Tb1048PortEntity getPortEntity(Tb1047BoardEntity board, String portNo) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("tb1047BoardByF1047Code", board);
+		params.put("f1048No", portNo);
+		return (Tb1048PortEntity) beanDao.getObject(Tb1048PortEntity.class, params);
+	}
+
+	public void addPort(Tb1047BoardEntity board, Tb1048PortEntity port) {
+		port.setF1048Code(rscp.nextTbCode(DBConstants.PR_PORT));
+		port.setTb1047BoardByF1047Code(board);
+		beanDao.insert(port);
+	}
+
+	public void deletePort(Tb1047BoardEntity board, String portNo) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("tb1047BoardByF1047Code", board);
+		params.put("f1048No", portNo);
+		String hql = "update " + Tb1048PortEntity.class.getName() +
+				" set deleted=1" +
+				" where tb1047BoardByF1047Code=:tb1047BoardByF1047Code and f1048No=:f1048No";
+		hqlDao.updateByHql(hql, params);
+	}
+
+	public void updatePort(Tb1047BoardEntity board, String portNo, Tb1048PortEntity portNew) {
+		if (portNew.getF1048Desc() != null) {
+			Tb1048PortEntity portOld = getPortEntity(board, portNo);
+			portOld.setF1048Desc(portNew.getF1048Desc());
+			beanDao.update(portOld);
+		}
 	}
 }

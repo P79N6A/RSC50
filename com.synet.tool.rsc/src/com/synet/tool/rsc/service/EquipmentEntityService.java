@@ -150,6 +150,10 @@ public class EquipmentEntityService extends BaseService{
 		if (disInfo.get("desc") != null) {
 			equipment.setF1043Desc(disInfo.get("desc"));
 		}
+		if (disInfo.get("newName") != null) {
+			equipment.setF1043Name(disInfo.get("newName"));
+			equipment.setF1043Desc(disInfo.get("newDesc"));
+		}
 		if (disInfo.get("virtual") != null) {
 			String virtual = disInfo.get("virtual");
 			boolean isv = false;

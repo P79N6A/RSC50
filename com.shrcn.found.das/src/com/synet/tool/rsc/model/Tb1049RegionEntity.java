@@ -1,6 +1,6 @@
 package com.synet.tool.rsc.model;
 
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -13,7 +13,7 @@ public class Tb1049RegionEntity extends Deletable {
     private String f1049Desc;
     private Integer f1049Area;
     private Tb1041SubstationEntity tb1041SubstationByF1041Code;
-    private List<Tb1050CubicleEntity> tb1050CubiclesByF1049Code;
+    private Set<Tb1050CubicleEntity> tb1050CubiclesByF1049Code;
 
     public String getF1049Code() {
         return f1049Code;
@@ -83,12 +83,12 @@ public class Tb1049RegionEntity extends Deletable {
         this.tb1041SubstationByF1041Code = tb1041SubstationByF1041Code;
     }
 
-	public List<Tb1050CubicleEntity> getTb1050CubiclesByF1049Code() {
+	public Set<Tb1050CubicleEntity> getTb1050CubiclesByF1049Code() {
 		return tb1050CubiclesByF1049Code;
 	}
 
 	public void setTb1050CubiclesByF1049Code(
-			List<Tb1050CubicleEntity> tb1050CubiclesByF1049Code) {
+			Set<Tb1050CubicleEntity> tb1050CubiclesByF1049Code) {
 		this.tb1050CubiclesByF1049Code = tb1050CubiclesByF1049Code;
 	}
 

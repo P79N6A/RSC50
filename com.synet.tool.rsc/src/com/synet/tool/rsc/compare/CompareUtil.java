@@ -1,5 +1,6 @@
 package com.synet.tool.rsc.compare;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,9 +11,12 @@ import java.util.Map;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shrcn.found.common.util.ArrayUtil;
+import com.shrcn.found.common.util.ObjectUtil;
 import com.shrcn.found.common.util.StringUtil;
 import com.shrcn.found.file.util.FileManipulate;
+import com.synet.tool.rsc.util.IndexedJSONUtil;
 
 public class CompareUtil {
 
@@ -23,8 +27,28 @@ public class CompareUtil {
 	 * @return
 	 */
 	public static boolean matchMd5(Element ndSrc, Element ndDest) {
-		String srcMd5 = FileManipulate.getMD5CodeForStr(ndSrc.asXML());
-		String destMd5 = FileManipulate.getMD5CodeForStr(ndDest.asXML());
+		return matchMd5(ndSrc.asXML(), ndDest.asXML());
+	}
+	
+	/**
+	 * 比较两个obj节点json文本md5码是否一致
+	 * @param objSrc
+	 * @param objDest
+	 * @return
+	 */
+	public static boolean matchMd5(Object objSrc, Object objDest) {
+		return matchMd5(IndexedJSONUtil.getJson(objSrc), IndexedJSONUtil.getJson(objDest));
+	}
+	
+	/**
+	 * 比较两个字符串md5码是否一致
+	 * @param objSrc
+	 * @param objDest
+	 * @return
+	 */
+	public static boolean matchMd5(String objSrc, String objDest) {
+		String srcMd5 = FileManipulate.getMD5CodeForStr(objSrc);
+		String destMd5 = FileManipulate.getMD5CodeForStr(objDest);
 		if (srcMd5.equals(destMd5)) {
 			return true;
 		}
@@ -72,6 +96,39 @@ public class CompareUtil {
 	}
 	
 	/**
+	 * 比较json对象属性
+	 * @param jsSrc
+	 * @param jsDest
+	 * @return
+	 */
+	public static String compare(JSONObject jsSrc, JSONObject jsDest) {
+		String msg = "";
+		Iterator<String> iterator = jsSrc.keySet().iterator();
+		while (iterator.hasNext()) {
+			String fname = iterator.next();
+			String valueSrc = jsSrc.getString(fname);
+			String valueDest = jsDest.getString(fname);
+			if (!valueSrc.equals(valueDest)) {
+				if (!"".equals(msg)) {
+					msg += ",";
+				}
+				msg += fname + ":" + valueSrc + "->" + valueDest;
+			}
+		}
+		return msg;
+	}
+	
+	/**
+	 * 比较json字符串
+	 * @param jsSrc
+	 * @param jsDest
+	 * @return
+	 */
+	public static String compare(String jsSrc, String jsDest) {
+		return compare(JSONObject.parseObject(jsSrc), JSONObject.parseObject(jsDest));
+	}
+	
+	/**
 	 * 以指定属性为主键将子节点转成Map，便于查找
 	 * @param ndParent
 	 * @param att
@@ -85,6 +142,25 @@ public class CompareUtil {
 			String ref = nd.attributeValue(att);
 			if (ref != null) {
 				map.put(ref, nd);
+			}
+		}
+		return map;
+	}
+	
+	/**
+	 * 以指定属性为主键将子节点转成Map，便于查找
+	 * @param objSet
+	 * @param att
+	 * @return
+	 */
+	public static Map<String, Object> getChildrenMapByAtt(Collection<?> objSet, String att) {
+		Map<String, Object> map = new HashMap<>();
+		Iterator<?> iterator = objSet.iterator();
+		while (iterator.hasNext()) {
+			Object obj = iterator.next();
+			String ref = (String) ObjectUtil.getProperty(obj, att);
+			if (ref != null) {
+				map.put(ref, obj);
 			}
 		}
 		return map;
@@ -130,6 +206,24 @@ public class CompareUtil {
 	}
 	
 	/**
+	 * 根据object属性创建diff(add,delete)
+	 * @param diffParent
+	 * @param type
+	 * @param obj
+	 * @param attName
+	 * @param attDesc
+	 * @param op
+	 * @return
+	 */
+	public static Difference addDiffByAttName(Difference diffParent, String type, Object obj, String attName, String attDesc, OP op) {
+		String subName = (String) ObjectUtil.getProperty(obj, attName);
+		String msg = IndexedJSONUtil.getJson(obj);
+		Difference diff = new Difference(diffParent, type, subName, msg, op);
+		diff.setDesc((String) ObjectUtil.getProperty(obj, attDesc));
+		return diff;
+	}
+	
+	/**
 	 * 根据xml节点属性创建diff(update)
 	 * @param diffParent
 	 * @param ndSrc
@@ -140,6 +234,20 @@ public class CompareUtil {
 		Difference diff = new Difference(diffParent, ndSrc.getName(), "", msg, OP.UPDATE);
 		setNameDesc(diff, ndSrc, ndDest);
 		return diff;
+	}
+	
+	/**
+	 * 根据json数据创建diff(update)
+	 * @param diffParent
+	 * @param type
+	 * @param name
+	 * @param jsSrc
+	 * @param jsDest
+	 * @return
+	 */
+	public static Difference addUpdateDiff(Difference diffParent, String type, String name, String jsSrc, String jsDest) {
+		String msg = CompareUtil.compare(jsSrc, jsDest);
+		return new Difference(diffParent, type, name, msg, OP.UPDATE);
 	}
 	
 	/**

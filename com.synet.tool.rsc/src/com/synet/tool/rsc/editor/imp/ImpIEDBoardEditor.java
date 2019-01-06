@@ -9,7 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -20,15 +24,24 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
+import com.shrcn.found.common.event.EventConstants;
+import com.shrcn.found.common.event.EventManager;
 import com.shrcn.found.common.util.StringUtil;
+import com.shrcn.found.ui.editor.BaseEditorInput;
 import com.shrcn.found.ui.editor.IEditorInput;
 import com.shrcn.found.ui.model.IField;
 import com.shrcn.found.ui.util.ProgressManager;
 import com.shrcn.found.ui.util.SwtUtil;
+import com.shrcn.found.ui.view.ConsoleManager;
 import com.shrcn.found.ui.view.Problem;
 import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.ExcelConstants;
+import com.synet.tool.rsc.RSCConstants;
+import com.synet.tool.rsc.RSCProperties;
+import com.synet.tool.rsc.compare.Difference;
+import com.synet.tool.rsc.compare.board.BoardComparator;
 import com.synet.tool.rsc.dialog.ExportIedDialog;
 import com.synet.tool.rsc.model.IM100FileInfoEntity;
 import com.synet.tool.rsc.model.IM103IEDBoardEntity;
@@ -42,6 +55,7 @@ import com.synet.tool.rsc.service.PortEntityService;
 import com.synet.tool.rsc.ui.TableFactory;
 import com.synet.tool.rsc.ui.table.DevKTable;
 import com.synet.tool.rsc.util.DateUtils;
+import com.synet.tool.rsc.util.NavgTreeFactory;
 import com.synet.tool.rsc.util.RscObjectUtils;
 
 import de.kupzog.ktable.KTableCellSelectionListener;
@@ -214,6 +228,7 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 		if (ieds == null || ieds.size() <= 0) return;
 		monitor.beginTask("正在导入数据...", ieds.size() * 3);
 		int iedNum = 0;
+		final Map<String, List<Tb1047BoardEntity>> iedBoardMap = new HashMap<>();
 		for (Tb1046IedEntity ied : ieds) {
 			if (monitor.isCanceled()) {
 				break;
@@ -223,11 +238,13 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				continue;
 			}
 			iedNum++;
-			// 清除原有板卡和端口
-			List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
-			if (iedBoards != null && iedBoards.size() > 0) {
-				iedEntityService.deleteBoards(ied);
-			}
+			List<Tb1047BoardEntity> boardList = new ArrayList<>();
+			iedBoardMap.put(ied.getF1046Name(), boardList);
+//			// 清除原有板卡和端口
+//			List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
+//			if (iedBoards != null && iedBoards.size() > 0) {
+//				iedEntityService.deleteBoards(ied);
+//			}
 			monitor.worked(1);
 			// 创建板卡和端口
 			int boardNum = 0;
@@ -244,11 +261,12 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 				boardEntity.setF1047Slot(entity.getBoardIndex());
 				boardEntity.setF1047Desc(entity.getBoardModel());
 				boardEntity.setF1047Type(entity.getBoardType());
-				boardEntityService.insert(boardEntity);
+//				boardEntityService.insert(boardEntity);
+				boardList.add(boardEntity);
 				entity.setMatched(DBConstants.MATCHED_OK);
 				boardNum++;
 				if (!StringUtil.isEmpty(portNumStr)) {
-					List<Tb1048PortEntity> portList = new ArrayList<>();
+					Set<Tb1048PortEntity> portSet = new HashSet<>();
 					String[] ports = portNumStr.split(",");
 					for (String port : ports) {
 						if (StringUtil.isEmpty(port)) {
@@ -265,10 +283,11 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 							portEntity.setF1048Direction(DBConstants.DIRECTION_RT);
 						}
 						portEntity.setF1048Plug(DBConstants.PLUG_FC);
-						portList.add(portEntity);
+						portSet.add(portEntity);
 					}
-					beandao.insertBatch(portList);
-					portCount += portList.size();
+//					beandao.insertBatch(portList);
+					boardEntity.setTb1048PortsByF1047Code(portSet);
+					portCount += portSet.size();
 				}
 			}
 			monitor.worked(1);
@@ -278,8 +297,52 @@ public class ImpIEDBoardEditor extends ExcelImportEditor {
 			beandao.update(ied);
 			monitor.worked(1);
 		}
+		monitor.done();
 		console.append("为 " + iedNum +
 				" 台装置，导入板卡数：" + boardCount + "，导入端口数：" + portCount);
+		boolean replaceMode = RSCProperties.getInstance().isReplaceMode();
+		if (replaceMode) {
+			final Map<String, List<Tb1047BoardEntity>> bdsMapSrc = new HashMap<>();
+			Iterator<String> iterator = iedBoardMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				String iedName = iterator.next();
+				List<Tb1047BoardEntity> iedBoardList = iedBoardMap.get(iedName);
+				Tb1046IedEntity ied = iedEntityService.getIedEntityByDevName(iedName);
+				// 清除原有板卡和端口
+				List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
+				bdsMapSrc.put(iedName, iedBoards);
+			}
+			ProgressManager.execute(new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					BoardComparator cmp = new BoardComparator(bdsMapSrc, iedBoardMap, monitor);
+					long t = System.currentTimeMillis();
+					final List<Difference> diffs = cmp.execute();
+					ConsoleManager.getInstance().append("SCL对比耗时：" + (System.currentTimeMillis() - t) + "ms");
+					// 打开增量处理界面
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							BaseEditorInput input = NavgTreeFactory.createEditInput("装置板卡增量导入", "compare.gif", RSCConstants.ET_SCL_COMP, diffs);
+							EventManager.getDefault().notify(EventConstants.OPEN_CONFIG, input);
+						}});
+				}
+			});
+		} else {		// 起始模式
+			Iterator<String> iterator = iedBoardMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				String iedName = iterator.next();
+				List<Tb1047BoardEntity> iedBoardList = iedBoardMap.get(iedName);
+				Tb1046IedEntity ied = iedEntityService.getIedEntityByDevName(iedName);
+				// 清除原有板卡和端口
+				List<Tb1047BoardEntity> iedBoards = boardEntityService.getByIed(ied);
+				if (iedBoards != null && iedBoards.size() > 0) {
+					iedEntityService.deleteBoards(ied);
+				}
+				beandao.insertBatch(iedBoardList);
+			}
+		}
 	}
 
 	private boolean isMatch(Tb1047BoardEntity iedboard, IM103IEDBoardEntity board) {

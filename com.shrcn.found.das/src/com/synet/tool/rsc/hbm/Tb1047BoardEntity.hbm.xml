@@ -17,11 +17,15 @@
         <property name="f1047Type">
             <column name="F1047_Type" sql-type="varchar" length="48" not-null="true"/>
         </property>
-        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
-            <column name="F1046_CODE" not-null="true"/>
-        </many-to-one>
         <property name="deleted">
             <column name="DELETED" sql-type="int"/>
         </property>
+        <many-to-one name="tb1046IedByF1046Code" class="com.synet.tool.rsc.model.Tb1046IedEntity" lazy="false">
+            <column name="F1046_CODE" not-null="true"/>
+        </many-to-one>
+        <set name="tb1048PortsByF1047Code" table="tb1048_port" inverse="true" cascade="save-update" lazy="false">
+        	<key column="F1047_CODE"></key>
+        	<one-to-many class="com.synet.tool.rsc.model.Tb1048PortEntity" />
+        </set>
   </class>
 </hibernate-mapping>

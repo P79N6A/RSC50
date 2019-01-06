@@ -19,4 +19,8 @@ public class CableEntityService extends BaseService{
 		params.put("tb1050CubicleByF1050CodeB", cableEntity.getTb1050CubicleByF1050CodeB());
 		return (Tb1051CableEntity) beanDao.getObject(Tb1051CableEntity.class, params);
 	}
+	
+	public Tb1051CableEntity getCableEntity(String cableName) {
+		return (Tb1051CableEntity) beanDao.getObject(Tb1051CableEntity.class, "f1051Name", cableName);
+	}
 }

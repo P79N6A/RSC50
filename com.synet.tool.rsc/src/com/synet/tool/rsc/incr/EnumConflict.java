@@ -1,5 +1,10 @@
 package com.synet.tool.rsc.incr;
 
+import com.synet.tool.rsc.incr.board.BoardConflictHandler;
+import com.synet.tool.rsc.incr.board.IEDBoardConflictHandler;
+import com.synet.tool.rsc.incr.board.PortConflictHandler;
+import com.synet.tool.rsc.incr.region.CubicleConflictHandler;
+import com.synet.tool.rsc.incr.region.RegionConflictHandler;
 import com.synet.tool.rsc.incr.scd.BaseCbConflictHandler;
 import com.synet.tool.rsc.incr.scd.ExtRefConflictHandler;
 import com.synet.tool.rsc.incr.scd.FCDAConflictHandler;
@@ -25,7 +30,7 @@ public enum EnumConflict {
 	Gooses("Goose控制块", NoConflictHandler.class),
 	Smvs("Smv控制块", NoConflictHandler.class),
 	Inputs("虚回路", NoConflictHandler.class),
-	// 子项
+	// 二次子项
 	Pin("Pin", PinConflictHandler.class),
 	FCDA("FCDA", FCDAConflictHandler.class),
 	ExtRef("ExtRef", ExtRefConflictHandler.class),
@@ -42,7 +47,15 @@ public enum EnumConflict {
 	EQP("ConductingEquipment", EqpConflictHandler.class),
 	PTR("PowerTransformer", EqpConflictHandler.class),
 	TERM("Terminal", TerminalConflictHandler.class),
-	LNODE("LNode", LNodeConflictHandler.class);
+	LNODE("LNode", LNodeConflictHandler.class),
+	// 装置板卡
+	IEDBoard("装置板卡", IEDBoardConflictHandler.class),
+	Board("Board", BoardConflictHandler.class),
+	Port("Port", PortConflictHandler.class),
+	// 区域屏柜
+	Region("Region", RegionConflictHandler.class),
+	Cubicle("Cubicle", CubicleConflictHandler.class),
+	;
 	
 	private String type;
 	private Class<?> clazz;

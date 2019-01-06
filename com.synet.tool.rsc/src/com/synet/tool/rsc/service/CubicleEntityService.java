@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.synet.tool.rsc.DBConstants;
 import com.synet.tool.rsc.model.Tb1046IedEntity;
 import com.synet.tool.rsc.model.Tb1049RegionEntity;
 import com.synet.tool.rsc.model.Tb1050CubicleEntity;
@@ -92,5 +93,36 @@ public class CubicleEntityService extends BaseService {
 			}
 		}
 		beanDao.updateBatch(iedList);
+	}
+	
+	public Tb1050CubicleEntity getCubicleEntity(Tb1049RegionEntity region, String name) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("tb1049RegionByF1049Code", region);
+		params.put("f1050Name", name);
+		return (Tb1050CubicleEntity) beanDao.getObject(Tb1050CubicleEntity.class, params);
+	}
+
+	public void addCubicle(Tb1049RegionEntity region, Tb1050CubicleEntity cub) {
+		cub.setF1050Code(rscp.nextTbCode(DBConstants.PR_CUBICLE));
+		cub.setTb1049RegionByF1049Code(region);
+		beanDao.insert(cub);
+	}
+
+	public void deleteCubicle(Tb1049RegionEntity region, String name) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("tb1049RegionByF1049Code", region);
+		params.put("f1050Name", name);
+		String hql = "update " + Tb1050CubicleEntity.class.getName() +
+				" set deleted=1" +
+				" where tb1049RegionByF1049Code=:tb1049RegionByF1049Code and f1050Name=:f1050Name";
+		hqlDao.updateByHql(hql, params);
+	}
+
+	public void updateCubicle(Tb1049RegionEntity region, String name, Tb1050CubicleEntity cubNew) {
+		if (cubNew.getF1050Desc() != null) {
+			Tb1050CubicleEntity cubOld = getCubicleEntity(region, name);
+			cubOld.setF1050Desc(cubNew.getF1050Desc());
+			beanDao.update(cubOld);
+		}
 	}
 }

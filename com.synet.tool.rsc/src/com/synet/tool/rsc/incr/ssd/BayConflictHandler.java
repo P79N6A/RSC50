@@ -25,8 +25,8 @@ public class BayConflictHandler extends BaseConflictHandler {
 
 	@Override
 	public void setData() {
-//		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
-		Tb1042BayEntity bay = bayServ.getBayEntityByName(diff.getName());
+		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
+		Tb1042BayEntity bay = bayServ.getBayEntityByName(name);
 		diff.setData(bay);
 	}
 	
@@ -46,7 +46,7 @@ public class BayConflictHandler extends BaseConflictHandler {
 
 	@Override
 	public void handleUpate() {
-		bayServ.updateBay(diff.getName(), getDisInfo());
+		bayServ.updateBay(diff.getName(), getUpdateInfo());
 	}
 	
 	@Override
@@ -64,7 +64,6 @@ public class BayConflictHandler extends BaseConflictHandler {
 		diffNew.setDesc(ndSrc.attributeValue("desc"));
 		diffNew.setNewDesc(ndDest.attributeValue("desc"));
 		diffNew.setOp(OP.RENAME);
-//		diff.getParent().getChildren().remove(diff);
 		this.diff = diffNew;
 	}
 

@@ -62,10 +62,14 @@ public class BayEntityService extends BaseService {
 	 * @param disInfo
 	 */
 	public void updateBay(String bayName, Map<String, String> disInfo) {
+		Tb1042BayEntity bayEntity = getBayEntityByName(bayName);
 		if (disInfo.get("desc") != null) {
-			Tb1042BayEntity bayEntity = getBayEntityByName(bayName);
 			bayEntity.setF1042Desc(disInfo.get("desc"));
-			beanDao.update(bayEntity);
 		}
+		if (disInfo.get("newName") != null) {
+			bayEntity.setF1042Name(disInfo.get("newName"));
+			bayEntity.setF1042Desc(disInfo.get("newDesc"));
+		}
+		beanDao.update(bayEntity);
 	}
 }

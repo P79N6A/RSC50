@@ -10,24 +10,22 @@ import com.synet.tool.rsc.compare.ssd.EquipmentCompare;
 import com.synet.tool.rsc.incr.BaseConflictHandler;
 import com.synet.tool.rsc.model.Tb1042BayEntity;
 import com.synet.tool.rsc.model.Tb1043EquipmentEntity;
-import com.synet.tool.rsc.service.BayEntityService;
 import com.synet.tool.rsc.service.EquipmentEntityService;
 
 public class EqpConflictHandler extends BaseConflictHandler {
 
 	private EquipmentEntityService eqpServ = new EquipmentEntityService();
-	private BayEntityService bayServ = new BayEntityService();
 	private Tb1042BayEntity bay;
 	
 	public EqpConflictHandler(Difference diff) {
 		super(diff);
-		this.bay = bayServ.getBayEntityByName(diff.getParent().getName());
+		this.bay = (Tb1042BayEntity) diff.getParent().getData();
 	}
 	
 	@Override
 	public void setData() {
-//		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
-		Tb1043EquipmentEntity equipment = eqpServ.getEquipment(bay, diff.getName());
+		String name = (OP.RENAME==diff.getOp()) ? diff.getNewName() : diff.getName();
+		Tb1043EquipmentEntity equipment = eqpServ.getEquipment(bay, name);
 		diff.setData(equipment);
 	}
 
@@ -61,7 +59,6 @@ public class EqpConflictHandler extends BaseConflictHandler {
 		diffNew.setDesc(ndSrc.attributeValue("desc"));
 		diffNew.setNewDesc(ndDest.attributeValue("desc"));
 		diffNew.setOp(OP.RENAME);
-//		diff.getParent().getChildren().remove(diff);
 		this.diff = diffNew;
 	}
 }

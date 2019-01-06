@@ -1,6 +1,7 @@
 package com.synet.tool.rsc.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.synet.tool.rsc.DBConstants;
@@ -58,7 +59,7 @@ public class RscObjectUtils {
 		Tb1049RegionEntity regionEntity = new Tb1049RegionEntity();
 		regionEntity.setF1049Code(rscp.nextTbCode(DBConstants.PR_REGION));
 		regionEntity.setTb1041SubstationByF1041Code(getSubstation());
-		regionEntity.setTb1050CubiclesByF1049Code(new ArrayList<Tb1050CubicleEntity>());
+		regionEntity.setTb1050CubiclesByF1049Code(new HashSet<Tb1050CubicleEntity>());
 		return regionEntity;
 	}
 	

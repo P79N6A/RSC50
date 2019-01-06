@@ -254,4 +254,10 @@ public interface BeanDaoService {
 	 * @param obj
 	 */
 	void markRecovered(Object obj);
+	
+	/**
+	 * 全部改为已删除状态
+	 * @param clazz
+	 */
+	void markAllDeleted(Class<?> clazz);
 }
